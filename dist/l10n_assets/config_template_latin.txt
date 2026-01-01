@@ -17,3 +17,16 @@ LANGUAGE_CODE = es-ES
 # Example: Use a custom font for better Spanish character support
 # FugazOne-Regular = MyCustomFont
 # Heebo-Black = AnotherCustomFont
+
+# Position adjustments - Optional adjustments for specific UI elements
+# Usually not needed for Latin languages, but available if text doesn't align well
+# Format: Conditions = X,Y,Z offset
+# Conditions: Contains(path), EndsWith(path), StartsWith(path), !Contains(path)
+# Multiple conditions separated by &
+[POSITION_ADJUSTMENTS]
+# Example: Shift HUD labels down slightly
+# Contains(GUI/HUD/) & EndsWith(/HUDLabel) = 0,-0.05,0
+
+# Example: Adjust ATM screen text position
+# Contains(PERAPORTTI/ATMs/MoneyATM/Screen) & EndsWith(/Text) = 0,0.25,0
+

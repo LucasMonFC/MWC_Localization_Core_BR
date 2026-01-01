@@ -30,3 +30,24 @@ DroidSerif-Bold = MaruBuri-Bold
 PlayfairDisplay-Bold = MaruBuri-Bold
 WalterTurncoat-Regular = MaruBuri-Bold
 BLUEHIGD = D2Coding
+
+# Position adjustments - adjust text position for specific UI elements
+# Format: Conditions = X,Y,Z offset
+# Conditions support: Contains(path), EndsWith(path), StartsWith(path), !Contains(path)
+# Multiple conditions separated by &
+# Examples:
+#   Contains(GUI/HUD) & EndsWith(/HUDLabel) = 0,-0.05,0
+#   Contains(Screen) & !Contains(/Row) & EndsWith(/Text) = 0,0.25,0
+# Some elements may be inverted in Y-axis; adjust accordingly
+[POSITION_ADJUSTMENTS]
+## HUD labels
+Contains(GUI/HUD/) & EndsWith(/HUDLabel) = 0,-0.05,0
+## Money ATM screen (excluding row elements)
+Contains(PERAPORTTI/ATMs/MoneyATM/Screen) & !Contains(/Row) & EndsWith(/Text) = 0,0.25,0
+## Fuel ATM screen header
+Contains(PERAPORTTI/ATMs/FuelATM/Screen) & !Contains(/Row) & EndsWith(/Text) = 0,0.45,0
+## Fuel ATM screen rows
+Contains(PERAPORTTI/ATMs/FuelATM/Screen) & Contains(/Row) & EndsWith(/Text) = 0,-0.25,0
+## Teletext TV
+Contains(Systems/TV/Teletext/VKTekstiTV/) = 0,0.25,0
+

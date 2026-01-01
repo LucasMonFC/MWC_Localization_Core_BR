@@ -252,7 +252,7 @@ namespace MWC_Localization_Core
             if (!hasLoadedTranslations)
                 return;
 
-            // F9 key: Reload translations at runtime
+            // F8 key: Reload translations at runtime
             if (Input.GetKeyDown(KeyCode.F8))
             {
                 ReloadTranslations();

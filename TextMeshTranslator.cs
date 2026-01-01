@@ -190,34 +190,20 @@ namespace MWC_Localization_Core
 
         /// <summary>
         /// Adjust text position for localized characters (per-element basis)
+        /// Uses configurable position adjustments from config.txt
+        /// Falls back to hardcoded adjustments if no config matches
         /// </summary>
         void AdjustTextPosition(TextMesh textMesh, string path)
         {
-            // Adjust position for HUD elements
-            if (path.Contains("GUI/HUD/") && path.EndsWith("/HUDLabel"))
+            // Try configured position adjustments first
+            Vector3 configOffset = config.GetPositionOffset(path);
+
+            if (configOffset != Vector3.zero)
             {
+                // Found a matching configuration
                 Vector3 pos = textMesh.transform.localPosition;
-                textMesh.transform.localPosition = new Vector3(pos.x, pos.y - 0.05f, pos.z);
-            }
-            else if (path.Contains("PERAPORTTI/ATMs/MoneyATM/Screen") && !path.Contains("/Row") && path.EndsWith("/Text"))
-            {
-                Vector3 pos = textMesh.transform.localPosition;
-                textMesh.transform.localPosition = new Vector3(pos.x, pos.y + 0.25f, pos.z);
-            }
-            else if (path.Contains("PERAPORTTI/ATMs/FuelATM/Screen") && !path.Contains("/Row") && path.EndsWith("/Text"))
-            {
-                Vector3 pos = textMesh.transform.localPosition;
-                textMesh.transform.localPosition = new Vector3(pos.x, pos.y + 0.45f, pos.z);
-            }
-            else if (path.Contains("PERAPORTTI/ATMs/FuelATM/Screen") && path.Contains("/Row") && path.EndsWith("/Text"))
-            {
-                Vector3 pos = textMesh.transform.localPosition;
-                textMesh.transform.localPosition = new Vector3(pos.x, pos.y - 0.25f, pos.z);
-            }
-            else if (path.Contains("Systems/TV/Teletext/VKTekstiTV/"))
-            {
-                Vector3 pos = textMesh.transform.localPosition;
-                textMesh.transform.localPosition = new Vector3(pos.x, pos.y + 0.25f, pos.z);
+                textMesh.transform.localPosition = pos + configOffset;
+                return;
             }
         }
     }

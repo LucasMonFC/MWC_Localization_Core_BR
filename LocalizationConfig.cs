@@ -15,6 +15,7 @@ namespace MWC_Localization_Core
         public string LanguageCode { get; private set; } = "en-US";
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();
         public List<UnicodeRange> UnicodeRanges { get; private set; } = new List<UnicodeRange>();
+        public List<PositionAdjustment> PositionAdjustments { get; private set; } = new List<PositionAdjustment>();
 
         private ManualLogSource logger;
 
@@ -39,6 +40,7 @@ namespace MWC_Localization_Core
             {
                 string[] lines = File.ReadAllLines(configPath, Encoding.UTF8);
                 bool inFontsSection = false;
+                bool inPositionAdjustmentsSection = false;
 
                 foreach (string line in lines)
                 {
@@ -52,6 +54,13 @@ namespace MWC_Localization_Core
                     if (trimmedLine == "[FONTS]")
                     {
                         inFontsSection = true;
+                        inPositionAdjustmentsSection = false;
+                        continue;
+                    }
+                    else if (trimmedLine == "[POSITION_ADJUSTMENTS]")
+                    {
+                        inPositionAdjustmentsSection = true;
+                        inFontsSection = false;
                         continue;
                     }
 
@@ -59,6 +68,10 @@ namespace MWC_Localization_Core
                     if (inFontsSection)
                     {
                         ParseFontMapping(trimmedLine);
+                    }
+                    else if (inPositionAdjustmentsSection)
+                    {
+                        ParsePositionAdjustment(trimmedLine);
                     }
                     else
                     {
@@ -69,6 +82,7 @@ namespace MWC_Localization_Core
                 logger.LogInfo($"Configuration loaded: {LanguageName} ({LanguageCode})");
                 logger.LogInfo($"Font mappings: {FontMappings.Count}");
                 logger.LogInfo($"Unicode ranges: {UnicodeRanges.Count}");
+                logger.LogInfo($"Position adjustments: {PositionAdjustments.Count}");
 
                 return true;
             }
@@ -122,6 +136,47 @@ namespace MWC_Localization_Core
             if (!string.IsNullOrEmpty(originalFont) && !string.IsNullOrEmpty(localizedFont))
             {
                 FontMappings[originalFont] = localizedFont;
+            }
+        }
+
+        /// <summary>
+        /// Parse position adjustment line (Conditions = X,Y,Z)
+        /// Example: Contains(GUI/HUD) & EndsWith(/HUDLabel) = 0,-0.05,0
+        /// </summary>
+        private void ParsePositionAdjustment(string line)
+        {
+            int equalsIndex = line.IndexOf('=');
+            if (equalsIndex <= 0)
+                return;
+
+            string conditionsString = line.Substring(0, equalsIndex).Trim();
+            string offsetString = line.Substring(equalsIndex + 1).Trim();
+
+            if (string.IsNullOrEmpty(conditionsString) || string.IsNullOrEmpty(offsetString))
+                return;
+
+            // Parse offset (X,Y,Z)
+            string[] offsetParts = offsetString.Split(',');
+            if (offsetParts.Length != 3)
+            {
+                logger.LogWarning($"Invalid position offset format: '{offsetString}'. Expected X,Y,Z");
+                return;
+            }
+
+            try
+            {
+                float x = float.Parse(offsetParts[0].Trim());
+                float y = float.Parse(offsetParts[1].Trim());
+                float z = float.Parse(offsetParts[2].Trim());
+
+                UnityEngine.Vector3 offset = new UnityEngine.Vector3(x, y, z);
+                PositionAdjustment adjustment = new PositionAdjustment(conditionsString, offset);
+
+                PositionAdjustments.Add(adjustment);
+            }
+            catch (System.Exception ex)
+            {
+                logger.LogWarning($"Failed to parse position adjustment '{line}': {ex.Message}");
             }
         }
 
@@ -181,6 +236,23 @@ namespace MWC_Localization_Core
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Get position offset for the given path based on configured adjustments
+        /// Returns Vector3.zero if no matching adjustment found
+        /// </summary>
+        public UnityEngine.Vector3 GetPositionOffset(string path)
+        {
+            foreach (PositionAdjustment adjustment in PositionAdjustments)
+            {
+                if (adjustment.Matches(path))
+                {
+                    return adjustment.Offset;
+                }
+            }
+
+            return UnityEngine.Vector3.zero;
         }
     }
 
