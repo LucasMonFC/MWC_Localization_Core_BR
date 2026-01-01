@@ -109,6 +109,7 @@ namespace MWC_Localization_Core
             if (magazineTranslations.TryGetValue(key, out string translation))
             {
                 textMesh.text = translation;
+                return true; // Handled
             }
 
             return false; // Not handled
