@@ -220,7 +220,7 @@ namespace MWC_Localization_Core
 
         void ReloadTranslations()
         {
-            _logger.LogInfo("[F9] Reloading translations...");
+            _logger.LogInfo("[F8] Reloading translations...");
 
             // Clear existing translations
             translations.Clear();
@@ -244,7 +244,7 @@ namespace MWC_Localization_Core
             hasTranslatedMainMenu = false;
             hasTranslatedGameScene = false;
 
-            _logger.LogInfo($"[F9] Reloaded {translations.Count} translations. Current scene will be re-translated.");
+            _logger.LogInfo($"[F8] Reloaded {translations.Count} translations. Current scene will be re-translated.");
         }
 
         void Update()
@@ -253,7 +253,7 @@ namespace MWC_Localization_Core
                 return;
 
             // F9 key: Reload translations at runtime
-            if (Input.GetKeyDown(KeyCode.F9))
+            if (Input.GetKeyDown(KeyCode.F8))
             {
                 ReloadTranslations();
                 return;
