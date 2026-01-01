@@ -6,7 +6,6 @@ using BepInEx;
 using BepInEx.Logging;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -156,20 +155,11 @@ namespace MWC_Localization_Core
             }
         }
 
-        void LoadTranslations()
+        void InsertTranslationLines(string translationPath)
         {
-            string translationPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate.txt");
-
-            if (!File.Exists(translationPath))
-            {
-                _logger.LogWarning($"Translation file not found: {translationPath}");
-                return;
-            }
-
             try
             {
                 string[] lines = File.ReadAllLines(translationPath, Encoding.UTF8);
-
                 foreach (string line in lines)
                 {
                     // Skip empty lines and comments
@@ -195,13 +185,40 @@ namespace MWC_Localization_Core
                         }
                     }
                 }
-
-                _logger.LogInfo($"Loaded {translations.Count} translations");
+                _logger.LogInfo($"Loaded {translations.Count} translations from {translationPath}");
                 hasLoadedTranslations = true;
             }
             catch (System.Exception ex)
             {
                 _logger.LogError($"Failed to load translations: {ex.Message}");
+            }
+        }
+
+        void LoadTranslations()
+        {
+            // Load translation file used in My Summer Car first
+            string mscTranslationPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_msc.txt");
+            
+            if (!File.Exists(mscTranslationPath))
+            {
+                _logger.LogWarning($"Translation file not found: {mscTranslationPath}");
+            }
+            else 
+            {
+                InsertTranslationLines(mscTranslationPath);
+            }
+
+            // Load main translation file for My Winter Car
+            string translationPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate.txt");
+
+            if (!File.Exists(translationPath))
+            {
+                _logger.LogWarning($"Translation file not found: {translationPath}");
+                return;
+            }
+            else 
+            {
+                InsertTranslationLines(translationPath);
             }
         }
 
@@ -233,6 +250,7 @@ namespace MWC_Localization_Core
 
             _logger.LogInfo($"[F9] Reloaded {translations.Count} translations. Current scene will be re-translated.");
         }
+
         void Update()
         {
             if (!hasLoadedTranslations)
