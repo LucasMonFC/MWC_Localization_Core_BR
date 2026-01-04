@@ -16,7 +16,7 @@ ArchivoBlack-Regular = PaperlogyExtraBold
 Cour10Bd = D2Coding
 RAGE = KyoboHandwriting2019
 Dosis-SemiBold = TmoneyRoundWindExtraBold
-Dosis-SemiBold LowCase = TmoneyRoundWindExtraBold
+Dosis-SemiBold LowCase = NanumSquareRoundEB
 VT323-Regular = GalmuriMono11
 DroidSerif-Bold = MaruBuri-Bold
 PlayfairDisplay-Bold = MaruBuri-Bold
@@ -24,7 +24,7 @@ WalterTurncoat-Regular = MaruBuri-Bold
 BLUEHIGD = D2Coding
 
 # Position adjustments - adjust text position for specific UI elements
-# Format: Conditions = X,Y,Z offset
+# Format: Conditions = X,Y,Z offset + [,FontSize,LineSpacing,WidthScale]
 # Conditions support: Contains(path), EndsWith(path), StartsWith(path), !Contains(path)
 # Multiple conditions separated by &
 # Examples:
@@ -42,4 +42,5 @@ Contains(PERAPORTTI/ATMs/FuelATM/Screen) & !Contains(/Row) & EndsWith(/Text) = 0
 Contains(PERAPORTTI/ATMs/FuelATM/Screen) & Contains(/Row) & EndsWith(/Text) = 0,-0.25,0
 ## Teletext TV
 Contains(Systems/TV/Teletext/VKTekstiTV/) = 0,0.25,0
-
+## TV Chat
+Contains(Systems/TV/TVGraphics/CHAT/Generated/Lines) = 0,0,0,,,0.07
