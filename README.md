@@ -106,13 +106,13 @@ PHONE = 전화
 
 ## Position Adjustments (Optional)
 
-Fine-tune text placement for better alignment without code changes.
+Fine-tune text placement, size, spacing, and width for better appearance without code changes.
 
 ### Configuration
 
 ```ini
 [POSITION_ADJUSTMENTS]
-Conditions = X,Y,Z
+Conditions = X,Y,Z[,FontSize,LineSpacing,WidthScale]
 ```
 
 ### Condition Syntax
@@ -128,24 +128,42 @@ Conditions = X,Y,Z
 ### Examples
 
 ```ini
-# Shift HUD labels down (Y = -0.05)
+# Position adjustment only: Shift HUD labels down (Y = -0.05)
 Contains(GUI/HUD/) & EndsWith(/HUDLabel) = 0,-0.05,0
 
-# Adjust ATM screen (exclude rows, shift up)
+# Make text wider: Scale width to 1.2x (last parameter)
+Contains(Systems/Narrow/Text) = 0,0,0,,,1.2
+
+# Full adjustment: position + size + line spacing + width
+Contains(GUI/Menu/Title) = 0,0.1,0,0.12,1.0,1.3
+
+# Skip parameters with commas: position + width scale (skip font size and line spacing)
+Contains(PERAPORTTI/ATMs/) & EndsWith(/Text) = 0,0.25,0,,,0.9
+
+# Combine multiple conditions with negation
 Contains(PERAPORTTI/ATMs/) & !Contains(/Row) & EndsWith(/Text) = 0,0.25,0
-
-# Teletext TV - shift up
-Contains(Systems/TV/Teletext/VKTekstiTV/) = 0,0.25,0
 ```
 
-### Offset Format
+### Parameter Format
 
 ```
-X,Y,Z
+X,Y,Z[,FontSize,LineSpacing,WidthScale]
 ```
-- **X**: Horizontal (+ right, - left)
-- **Y**: Vertical (+ up, - down)
-- **Z**: Depth (rarely needed)
+
+| Parameter | Type | Purpose | Example Values |
+|-----------|------|---------|----------------|
+| **X** | Required | Horizontal offset (+ right, - left) | `0`, `0.5`, `-0.3` |
+| **Y** | Required | Vertical offset (+ up, - down) | `0`, `0.25`, `-0.05` |
+| **Z** | Required | Depth offset (rarely needed) | `0` |
+| **FontSize** | Optional | Character size (TextMesh.characterSize) | `0.1`, `0.15`, `0.2` |
+| **LineSpacing** | Optional | Line spacing multiplier | `1.0`, `1.2`, `0.8` |
+| **WidthScale** | Optional | Character width scale (transform.localScale.x) | `1.0`, `1.2` (wider), `0.8` (narrower) |
+
+**Tips:**
+- Leave optional parameters empty to skip: `0,0,0,,1.2` (skip FontSize, set LineSpacing)
+- Use `WidthScale > 1.0` to make text wider (good for narrow fonts)
+- Use `WidthScale < 1.0` to make text narrower (good for condensed layouts)
+- Combine with FontSize to control both height and width independently
 
 ## Creating Custom Fonts (Optional)
 

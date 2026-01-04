@@ -141,8 +141,14 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Parse position adjustment line (Conditions = X,Y,Z)
-        /// Example: Contains(GUI/HUD) & EndsWith(/HUDLabel) = 0,-0.05,0
+        /// Parse position adjustment line with support for position, font size, line spacing, and width scale
+        /// Format: Conditions = X,Y,Z[,FontSize,LineSpacing,WidthScale]
+        /// Examples:
+        ///   Contains(GUI/HUD) = 0,-0.05,0                    (position only)
+        ///   Contains(Speedometer) = 0,0,0,0.15               (position + font size)
+        ///   Contains(Menu) = 0,0,0,0.12,1.0                  (position + font size + line spacing)
+        ///   Contains(Narrow) = 0,0,0,,,1.2                   (position + skip font/spacing + width scale 1.2x)
+        ///   Contains(Wide) = 0,0,0,0.1,1.0,1.5               (all adjustments: make wider with 1.5x scale)
         /// </summary>
         private void ParsePositionAdjustment(string line)
         {
@@ -156,23 +162,43 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(conditionsString) || string.IsNullOrEmpty(offsetString))
                 return;
 
-            // Parse offset (X,Y,Z)
-            string[] offsetParts = offsetString.Split(',');
-            if (offsetParts.Length != 3)
+            // Parse adjustment values (X,Y,Z[,FontSize,LineSpacing,WidthScale])
+            string[] parts = offsetString.Split(',');
+            if (parts.Length < 3)
             {
-                logger.LogWarning($"Invalid position offset format: '{offsetString}'. Expected X,Y,Z");
+                logger.LogWarning($"Invalid adjustment format: '{offsetString}'. Expected at least X,Y,Z");
                 return;
             }
 
             try
             {
-                float x = float.Parse(offsetParts[0].Trim());
-                float y = float.Parse(offsetParts[1].Trim());
-                float z = float.Parse(offsetParts[2].Trim());
-
+                // Parse position offset (required)
+                float x = float.Parse(parts[0].Trim());
+                float y = float.Parse(parts[1].Trim());
+                float z = float.Parse(parts[2].Trim());
                 UnityEngine.Vector3 offset = new UnityEngine.Vector3(x, y, z);
-                PositionAdjustment adjustment = new PositionAdjustment(conditionsString, offset);
 
+                // Parse optional font properties
+                float? fontSize = null;
+                float? lineSpacing = null;
+                float? widthScale = null;
+
+                if (parts.Length > 3 && !string.IsNullOrEmpty(parts[3].Trim()))
+                {
+                    fontSize = float.Parse(parts[3].Trim());
+                }
+
+                if (parts.Length > 4 && !string.IsNullOrEmpty(parts[4].Trim()))
+                {
+                    lineSpacing = float.Parse(parts[4].Trim());
+                }
+
+                if (parts.Length > 5 && !string.IsNullOrEmpty(parts[5].Trim()))
+                {
+                    widthScale = float.Parse(parts[5].Trim());
+                }
+
+                PositionAdjustment adjustment = new PositionAdjustment(conditionsString, offset, fontSize, lineSpacing, widthScale);
                 PositionAdjustments.Add(adjustment);
             }
             catch (System.Exception ex)

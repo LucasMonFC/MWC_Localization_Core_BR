@@ -12,13 +12,19 @@ namespace MWC_Localization_Core
     {
         public List<PathCondition> Conditions { get; private set; } = new List<PathCondition>();
         public Vector3 Offset { get; private set; }
+        public float? FontSize { get; private set; }
+        public float? LineSpacing { get; private set; }
+        public float? WidthScale { get; private set; }
 
         // Track which TextMesh objects have been adjusted to prevent duplicate adjustments
         private HashSet<TextMesh> adjustedTextMeshes = new HashSet<TextMesh>();
 
-        public PositionAdjustment(string conditionsString, Vector3 offset)
+        public PositionAdjustment(string conditionsString, Vector3 offset, float? fontSize = null, float? lineSpacing = null, float? widthScale = null)
         {
             Offset = offset;
+            FontSize = fontSize;
+            LineSpacing = lineSpacing;
+            WidthScale = widthScale;
             ParseConditions(conditionsString);
         }
 
@@ -36,9 +42,32 @@ namespace MWC_Localization_Core
             if (adjustedTextMeshes.Contains(textMesh))
                 return false;
 
-            // Apply the offset
+            // Apply the position offset
             Vector3 currentPosition = textMesh.transform.localPosition;
             textMesh.transform.localPosition = currentPosition + Offset;
+
+            // Apply font size if specified
+            if (FontSize.HasValue)
+            {
+                textMesh.characterSize = FontSize.Value;
+            }
+
+            // Apply line spacing if specified
+            if (LineSpacing.HasValue)
+            {
+                textMesh.lineSpacing = LineSpacing.Value;
+            }
+
+            // Apply width scale if specified (scales X axis to make text wider/narrower)
+            if (WidthScale.HasValue)
+            {
+                Vector3 scale = textMesh.transform.localScale;
+                scale.x = WidthScale.Value;
+                textMesh.transform.localScale = scale;
+            }
+
+            // Note: Unity 5.x TextMesh supports: characterSize, fontSize, lineSpacing, transform.localScale
+            // Character width is controlled via transform.localScale.x
 
             // Mark as adjusted
             adjustedTextMeshes.Add(textMesh);
