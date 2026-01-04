@@ -58,6 +58,7 @@ namespace MWC_Localization_Core
             switch (Mode)
             {
                 case TranslationMode.FsmPattern:
+                case TranslationMode.FsmPatternWithTranslation:
                     InitializeFsmPattern();
                     break;
                     
@@ -129,6 +130,7 @@ namespace MWC_Localization_Core
             switch (Mode)
             {
                 case TranslationMode.FsmPattern:
+                case TranslationMode.FsmPatternWithTranslation:
                     return TryExtractFsmValues(text) != null;
                     
                 case TranslationMode.RegexExtract:
@@ -155,6 +157,9 @@ namespace MWC_Localization_Core
             {
                 case TranslationMode.FsmPattern:
                     return TranslateWithFsmPattern(text);
+                    
+                case TranslationMode.FsmPatternWithTranslation:
+                    return TranslateWithFsmPatternAndTranslateParams(text, translations);
                     
                 case TranslationMode.RegexExtract:
                     return TranslateWithRegex(text, translations);
@@ -184,6 +189,32 @@ namespace MWC_Localization_Core
             for (int i = 0; i < values.Length; i++)
             {
                 result = result.Replace("{" + i + "}", values[i]);
+            }
+            
+            return result;
+        }
+
+        private string TranslateWithFsmPatternAndTranslateParams(string text, Dictionary<string, string> translations)
+        {
+            string[] values = TryExtractFsmValues(text);
+            if (values == null)
+                return null;
+            
+            string result = TranslatedTemplate;
+            for (int i = 0; i < values.Length; i++)
+            {
+                string originalValue = values[i];
+                
+                // Try to translate the parameter value
+                string translatedValue = originalValue;
+                string key = StringHelper.FormatUpperKey(originalValue);
+                
+                if (translations.TryGetValue(key, out string translation))
+                {
+                    translatedValue = translation;
+                }
+                
+                result = result.Replace("{" + i + "}", translatedValue);
             }
             
             return result;

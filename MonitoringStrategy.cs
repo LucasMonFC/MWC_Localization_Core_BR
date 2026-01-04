@@ -79,6 +79,13 @@ namespace MWC_Localization_Core
         /// Use custom handler function for complex logic
         /// Example: Magazine price/phone lines with special formatting
         /// </summary>
-        CustomHandler
+        CustomHandler,
+
+        /// <summary>
+        /// Pattern matching with {0}, {1} placeholders AND parameter translation
+        /// Example: "Hello! I would like to order a taxi to {0}." 
+        /// Extracts "Futufon", translates it to Korean, inserts into Korean template
+        /// </summary>
+        FsmPatternWithTranslation
     }
 }
