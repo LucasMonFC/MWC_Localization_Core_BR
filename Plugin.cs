@@ -327,7 +327,7 @@ namespace MWC_Localization_Core
             }
 
             // Clear position adjustment caches
-            config.ClearPositionAdjustmentCaches();
+            //config.ClearPositionAdjustmentCaches(); // Do not reset adjustment
 
             // Reset managers
             sceneManager.ResetAll();
