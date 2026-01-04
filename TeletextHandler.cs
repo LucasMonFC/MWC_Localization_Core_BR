@@ -7,120 +7,6 @@ using UnityEngine;
 namespace MWC_Localization_Core
 {
     /// <summary>
-    /// Represents a translation pattern with placeholders {0}, {1}, {2}
-    /// Example: "pakkasta {0} astetta" -> "영하 {0}도"
-    /// </summary>
-    internal class FsmPattern
-    {
-        public string OriginalPattern { get; private set; }
-        public string TranslationPattern { get; private set; }
-        private string[] originalParts;
-        private string[] translationParts;
-        
-        public FsmPattern(string original, string translation)
-        {
-            OriginalPattern = original;
-            TranslationPattern = translation;
-            
-            // Split patterns by placeholders to get static parts
-            // Example: "pakkasta {0} astetta" -> ["pakkasta ", " astetta"]
-            originalParts = SplitPattern(original);
-            translationParts = SplitPattern(translation);
-        }
-        
-        private string[] SplitPattern(string pattern)
-        {
-            // Split by {0}, {1}, {2} while keeping track of what we split by
-            List<string> parts = new List<string>();
-            string current = pattern;
-            
-            for (int i = 0; i < 10; i++) // Support up to {9}
-            {
-                string placeholder = "{" + i + "}";
-                if (current.Contains(placeholder))
-                {
-                    int idx = current.IndexOf(placeholder);
-                    if (idx >= 0)
-                    {
-                        parts.Add(current.Substring(0, idx));
-                        current = current.Substring(idx + placeholder.Length);
-                    }
-                }
-            }
-            
-            // Add remaining part
-            if (!string.IsNullOrEmpty(current))
-                parts.Add(current);
-            
-            return parts.ToArray();
-        }
-        
-        /// <summary>
-        /// Try to match input text against this pattern and extract variables
-        /// Returns null if no match, otherwise returns extracted values
-        /// </summary>
-        public string[] TryExtractValues(string input)
-        {
-            if (originalParts.Length == 0)
-                return null;
-            
-            List<string> values = new List<string>();
-            string remaining = input;
-            
-            for (int i = 0; i < originalParts.Length; i++)
-            {
-                string part = originalParts[i];
-                
-                if (i == originalParts.Length - 1)
-                {
-                    // Last part - must end with this
-                    if (!remaining.EndsWith(part))
-                        return null;
-                    
-                    // Extract everything before this last part
-                    if (part.Length < remaining.Length)
-                    {
-                        values.Add(remaining.Substring(0, remaining.Length - part.Length));
-                    }
-                }
-                else
-                {
-                    // Middle part - find this part in remaining string
-                    int idx = remaining.IndexOf(part);
-                    if (idx < 0)
-                        return null;
-                    
-                    // Extract value before this part (if any)
-                    if (idx > 0)
-                    {
-                        values.Add(remaining.Substring(0, idx));
-                    }
-                    
-                    // Move past this part
-                    remaining = remaining.Substring(idx + part.Length);
-                }
-            }
-            
-            return values.ToArray();
-        }
-        
-        /// <summary>
-        /// Apply translation pattern with extracted values
-        /// </summary>
-        public string ApplyTranslation(string[] values)
-        {
-            string result = TranslationPattern;
-            
-            for (int i = 0; i < values.Length; i++)
-            {
-                result = result.Replace("{" + i + "}", values[i]);
-            }
-            
-            return result;
-        }
-    }
-
-    /// <summary>
     /// Handles direct translation of Teletext/TV content by modifying underlying data sources
     /// This is MUCH more efficient than constantly updating TextMesh components
     /// Based on My Summer Car's ExtraMod.cs approach
@@ -130,15 +16,12 @@ namespace MWC_Localization_Core
     /// Monday = 월요일
     /// [kotimaa]
     /// News headline = 뉴스 헤드라인
+    /// 
+    /// NOTE: FSM pattern matching moved to unified PatternMatcher system
     /// </summary>
     public class TeletextHandler
     {
         private ManualLogSource logger;
-        
-        // TEMPORARY: Disable FSM monitoring until game developer fixes constant text overwriting
-        // Game constantly regenerates FSM text, fighting against translations and killing performance
-        // Set to true to re-enable when game is fixed
-        private const bool ENABLE_FSM_MONITORING = false;
 
         // Category-based translations: [referenceName][originalText] = translatedText (for key-based lookup)
         private Dictionary<string, Dictionary<string, string>> categoryTranslations = 
@@ -157,60 +40,6 @@ namespace MWC_Localization_Core
         // Retry counter for first message translation (prevent infinite loops)
         private int firstMessageRetryCount = 0;
         private int firstMessageFrameCounter = 0;
-        private const int MAX_FIRST_MESSAGE_RETRIES = 20; // 20 attempts over 3 seconds
-        private const int FIRST_MESSAGE_CHECK_INTERVAL = 9; // Check every 9 frames (~3 sec total at 60fps)
-        
-        // FSM hardcoded string lookup: [originalString] = translatedString
-        // For weather, bottomlines, and other FSM-generated text
-        private Dictionary<string, string> fsmStringLookup = new Dictionary<string, string>();
-        
-        // FSM pattern templates: [originalPattern] = FsmPattern (for dynamic strings with {0}, {1} placeholders)
-        // Example: "pakkasta {0} astetta" -> "영하 {0}도"
-        private Dictionary<string, FsmPattern> fsmPatterns = new Dictionary<string, FsmPattern>();
-        
-        // Cached TextMesh components for FSM-driven paths (to avoid repeated Find() calls)
-        private Dictionary<string, TextMesh> cachedTextMeshes = new Dictionary<string, TextMesh>();
-        
-        // Track successfully translated FSM texts (path -> translated text) to avoid re-translation
-        private Dictionary<string, string> translatedFsmTexts = new Dictionary<string, string>();
-        
-        // Track which warning messages we've already logged (to reduce spam)
-        private HashSet<string> loggedWarnings = new HashSet<string>();
-        
-        // FSM monitoring throttle timer
-        private float fsmTimeSinceLastCheck = 0f;
-        
-        // Paths to monitor for FSM string replacement (lightweight targeted monitoring)
-        // These are hardcoded paths known to have FSM-driven text that constantly overwrites
-        private List<string> fsmMonitorPaths = new List<string>
-        {
-            // Teletext page bottomlines (navigation/status text)
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/241/Texts/Data/Bottomline 1",
-            
-            // Weather display pages
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/181/Texts/Bottomline",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Selite",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Header",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste/Short",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste/WeatherType",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt/WeatherTemp",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste/WeatherTemp",
-            
-            // Add more known FSM-driven paths here as discovered
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1",
-        };
-        
-        // Paths that need pattern matching (dynamic strings with {0} placeholders)
-        // Other paths only use exact/partial matching for better performance
-        private HashSet<string> fsmPatternPaths = new HashSet<string>
-        {
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt/WeatherTemp",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste/WeatherTemp",
-            // Add more pattern-enabled paths here if needed
-        };
         
         // GameObject path to category mapping
         private Dictionary<string, string> pathPrefixes = new Dictionary<string, string>
@@ -242,14 +71,11 @@ namespace MWC_Localization_Core
             {
                 categoryTranslations.Clear();
                 indexBasedTranslations.Clear();
-                fsmStringLookup.Clear();
-                cachedTextMeshes.Clear(); // Clear cache when reloading
                 
                 string currentCategory = null;
                 Dictionary<string, string> currentDict = null;
                 List<string> currentIndexList = null;
                 int loadedCount = 0;
-                int fsmStringsLoaded = 0;
 
                 string[] lines = System.IO.File.ReadAllLines(filePath, System.Text.Encoding.UTF8);
                 
@@ -281,7 +107,7 @@ namespace MWC_Localization_Core
                         
                         currentCategory = trimmed.Substring(1, trimmed.Length - 2);
                         
-                        // Special handling for [fsm] section
+                        // Skip [fsm] section - now handled by PatternMatcher
                         if (currentCategory == "fsm")
                         {
                             currentDict = null;
@@ -325,35 +151,9 @@ namespace MWC_Localization_Core
                     int equalsIndex = FindUnescapedEquals(line);
                     if (equalsIndex > 0 && !readingValue)
                     {
-                        // Handle [fsm] section - direct string lookup
+                        // Skip [fsm] section processing - handled by PatternMatcher
                         if (currentCategory == "fsm")
-                        {
-                            string fsmKey = line.Substring(0, equalsIndex).Trim();
-                            string fsmValue = line.Substring(equalsIndex + 1).Trim();
-                            
-                            // Unescape special characters
-                            fsmKey = UnescapeString(fsmKey);
-                            fsmValue = UnescapeString(fsmValue);
-                            
-                            if (!string.IsNullOrEmpty(fsmKey) && !string.IsNullOrEmpty(fsmValue))
-                            {
-                                // Check if this is a pattern (contains {0}, {1}, etc.)
-                                if (fsmKey.Contains("{0}") || fsmKey.Contains("{1}") || fsmKey.Contains("{2}"))
-                                {
-                                    // Store as pattern
-                                    FsmPattern pattern = new FsmPattern(fsmKey, fsmValue);
-                                    fsmPatterns[fsmKey] = pattern;
-                                    fsmStringsLoaded++;
-                                }
-                                else
-                                {
-                                    // Store as simple string lookup
-                                    fsmStringLookup[fsmKey] = fsmValue;
-                                    fsmStringsLoaded++;
-                                }
-                            }
                             continue;
-                        }
                         
                         // Single-line format: KEY = VALUE
                         string key = line.Substring(0, equalsIndex).Trim();
@@ -400,20 +200,7 @@ namespace MWC_Localization_Core
                 }
 
                 logger.LogInfo($"Loaded {loadedCount} teletext translations across {categoryTranslations.Count} categories");
-                
-                if (fsmStringsLoaded > 0)
-                {
-                    logger.LogInfo($"Loaded {fsmStringsLoaded} FSM hardcoded string translations ({fsmPatterns.Count} patterns, {fsmStringLookup.Count} simple)");
-                    
-                    if (!ENABLE_FSM_MONITORING)
-                    {
-                        logger.LogWarning("[FSM] FSM monitoring is DISABLED - game constantly overwrites FSM text, causing performance issues");
-                        logger.LogWarning("[FSM] Waiting for game developer to fix this issue. Set ENABLE_FSM_MONITORING=true to re-enable.");
-                    }
-                }
-                
-                if (ENABLE_FSM_MONITORING && (fsmStringLookup.Count > 0 || fsmPatterns.Count > 0) && fsmMonitorPaths.Count > 0)
-                    logger.LogInfo($"FSM monitoring enabled: {fsmMonitorPaths.Count} paths configured");
+                logger.LogInfo($"Note: [fsm] patterns now handled by unified PatternMatcher system");
             }
             catch (System.Exception ex)
             {
@@ -456,37 +243,6 @@ namespace MWC_Localization_Core
         }
         
         /// <summary>
-        /// Try to apply FSM pattern matching to input text
-        /// Returns true and sets translatedText if a pattern matches
-        /// Example: "pakkasta 16 astetta" matches pattern "pakkasta {0} astetta" -> "영하 16도"
-        /// </summary>
-        private bool TryApplyFsmPattern(string input, out string translatedText)
-        {
-            translatedText = null;
-            
-            if (string.IsNullOrEmpty(input) || fsmPatterns.Count == 0)
-                return false;
-            
-            // Try each pattern
-            foreach (var kvp in fsmPatterns)
-            {
-                FsmPattern pattern = kvp.Value;
-                
-                // Try to extract values from input using this pattern
-                string[] extractedValues = pattern.TryExtractValues(input);
-                
-                if (extractedValues != null)
-                {
-                    // Pattern matched! Apply translation
-                    translatedText = pattern.ApplyTranslation(extractedValues);
-                    return true;
-                }
-            }
-            
-            return false;
-        }
-        
-        /// <summary>
         /// Helper method to save a multi-line entry
         /// </summary>
         private void SaveEntry(Dictionary<string, string> dict, List<string> indexList, List<string> keyLines, List<string> valueLines, ref int count)
@@ -520,153 +276,6 @@ namespace MWC_Localization_Core
         {
             categoryTranslations.Clear();
             indexBasedTranslations.Clear();
-            fsmStringLookup.Clear();
-            fsmPatterns.Clear();
-            cachedTextMeshes.Clear();
-            // fsmMonitorPaths is now a predefined list, don't clear it
-        }
-        
-        /// <summary>
-        /// Add FSM hardcoded string translation (for weather, bottomlines, etc.)
-        /// These are strings that appear in FSM actions/variables, not in arrays
-        /// Example: AddFsmString("selkeää", "맑음")
-        /// </summary>
-        public void AddFsmString(string original, string translation)
-        {
-            if (!string.IsNullOrEmpty(original) && !string.IsNullOrEmpty(translation))
-            {
-                fsmStringLookup[original] = translation;
-            }
-        }
-        
-        /// <summary>
-        /// Lightweight FSM string monitoring - only checks specified paths
-        /// Call this from Update() with deltaTime - throttled to ~1 second intervals
-        /// Returns number of replacements made this check
-        /// </summary>
-        public int MonitorFsmStrings(float deltaTime)
-        {
-            // DISABLED: FSM monitoring causes performance issues due to game constantly regenerating text
-            if (!ENABLE_FSM_MONITORING)
-                return 0;
-            
-            // Early return if no translations loaded OR no paths to monitor
-            if ((fsmStringLookup.Count == 0 && fsmPatterns.Count == 0) || fsmMonitorPaths.Count == 0)
-                return 0;
-            
-            // Throttle checks to once per second (not every frame)
-            const float CHECK_INTERVAL = 1.0f;
-            fsmTimeSinceLastCheck += deltaTime;
-            
-            if (fsmTimeSinceLastCheck < CHECK_INTERVAL)
-                return 0; // Skip this frame
-            
-            fsmTimeSinceLastCheck = 0f; // Reset timer
-            int replacements = 0;
-            
-            foreach (string path in fsmMonitorPaths)
-            {
-                TextMesh tm = null;
-                GameObject obj = null;
-                
-                // Use cached reference if available
-                if (cachedTextMeshes.ContainsKey(path))
-                {
-                    tm = cachedTextMeshes[path];
-                    if (tm == null) // Component was destroyed
-                    {
-                        cachedTextMeshes.Remove(path);
-                        translatedFsmTexts.Remove(path); // Clear translation tracking
-                        continue;
-                    }
-                    obj = tm.gameObject;
-                }
-                else
-                {
-                    // Find and cache the TextMesh
-                    obj = GameObject.Find(path);
-                    if (obj != null)
-                    {
-                        tm = obj.GetComponent<TextMesh>();
-                        if (tm != null)
-                        {
-                            cachedTextMeshes[path] = tm;
-                            logger.LogInfo($"[FSM] Cached new TextMesh: {path}");
-                        }
-                        else
-                        {
-                            // Only log this warning once per path
-                            string warningKey = $"no_textmesh_{path}";
-                            if (!loggedWarnings.Contains(warningKey))
-                            {
-                                logger.LogWarning($"[FSM] GameObject found but no TextMesh: {path}");
-                                loggedWarnings.Add(warningKey);
-                            }
-                        }
-                    }
-                    
-                    if (tm == null)
-                        continue;
-                }
-                
-                // Skip if GameObject is not active (not visible/in use)
-                if (obj == null || !obj.activeInHierarchy)
-                    continue;
-                
-                // Check if current text needs translation
-                if (!string.IsNullOrEmpty(tm.text))
-                {
-                    string currentText = tm.text;
-                    
-                    // Skip if already translated and unchanged
-                    if (translatedFsmTexts.TryGetValue(path, out string lastTranslated))
-                    {
-                        if (lastTranslated == currentText)
-                        {
-                            continue; // Already translated, no change
-                        }
-                    }
-                    
-                    string originalText = currentText;
-                    bool translated = false;
-                    
-                    // First try exact match in simple lookup
-                    if (fsmStringLookup.ContainsKey(currentText))
-                    {
-                        tm.text = fsmStringLookup[currentText];
-                        logger.LogInfo($"[FSM] Exact match at {path}: '{originalText}' -> '{tm.text}'");
-                        replacements++;
-                        translated = true;
-                        translatedFsmTexts[path] = tm.text; // Track translation
-                    }
-
-                    // Then try pattern matching ONLY for paths that need it (performance optimization)
-                    else if (fsmPatternPaths.Contains(path) && fsmPatterns.Count > 0)
-                    {
-                        if (TryApplyFsmPattern(currentText, out string translatedText))
-                        {
-                            tm.text = translatedText;
-                            logger.LogInfo($"[FSM] Pattern match at {path}: '{originalText}' -> '{tm.text}'");
-                            replacements++;
-                            translated = true;
-                            translatedFsmTexts[path] = tm.text; // Track translation
-                        }
-                    }
-                    
-                    // Log if no translation found (only once per unique text)
-                    if (!translated)
-                    {
-                        string warningKey = $"no_translation_{path}_{currentText}";
-                        if (!loggedWarnings.Contains(warningKey))
-                        {
-                            logger.LogWarning($"[FSM] No translation for: '{currentText}' at {path}");
-                            loggedWarnings.Add(warningKey);
-                        }
-                    }
-                }
-            }
-            
-            return replacements;
         }
 
         /// <summary>
@@ -712,20 +321,20 @@ namespace MWC_Localization_Core
                         {
                             firstMessageFrameCounter++;
                             
-                            // Only check every FIRST_MESSAGE_CHECK_INTERVAL frames (not every frame)
-                            if (firstMessageFrameCounter >= FIRST_MESSAGE_CHECK_INTERVAL)
+                            // Only check every LocalizationConstants.FIRST_MESSAGE_CHECK_INTERVAL frames (not every frame)
+                            if (firstMessageFrameCounter >= LocalizationConstants.FIRST_MESSAGE_CHECK_INTERVAL)
                             {
                                 firstMessageFrameCounter = 0; // Reset counter
                                 firstMessageRetryCount++;
                                 
-                                if (firstMessageRetryCount > MAX_FIRST_MESSAGE_RETRIES)
+                                if (firstMessageRetryCount > LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES)
                                 {
-                                    logger.LogWarning($"[FirstMessage] Exceeded retry limit ({MAX_FIRST_MESSAGE_RETRIES} attempts over ~3 seconds), giving up");
+                                    logger.LogWarning($"[FirstMessage] Exceeded retry limit ({LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES} attempts over ~3 seconds), giving up");
                                     hasTranslatedFirstChatMessage = true; // Stop retrying
                                 }
                                 else
                                 {
-                                    logger.LogInfo($"[FirstMessage] Attempting first message translation (attempt {firstMessageRetryCount}/{MAX_FIRST_MESSAGE_RETRIES})...");
+                                    logger.LogInfo($"[FirstMessage] Attempting first message translation (attempt {firstMessageRetryCount}/{LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES})...");
                                     // ChatMessages.Messages is aliased to ChatMessages.All during loading
                                     if (TranslateFirstNonEmptyChatMessage(proxies[i], categoryName))
                                     {
@@ -733,9 +342,9 @@ namespace MWC_Localization_Core
                                         hasTranslatedFirstChatMessage = true;
                                         logger.LogInfo($"[FirstMessage] Success! Flag set - will not check again");
                                     }
-                                    else if (firstMessageRetryCount >= MAX_FIRST_MESSAGE_RETRIES)
+                                    else if (firstMessageRetryCount >= LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES)
                                     {
-                                        logger.LogWarning($"[FirstMessage] Failed after {MAX_FIRST_MESSAGE_RETRIES} attempts - giving up");
+                                        logger.LogWarning($"[FirstMessage] Failed after {LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES} attempts - giving up");
                                         hasTranslatedFirstChatMessage = true; // Prevent infinite retries
                                     }
                                     // If not at limit yet, will retry after next interval
@@ -1010,8 +619,6 @@ namespace MWC_Localization_Core
             hasTranslatedFirstChatMessage = false;
             firstMessageRetryCount = 0;
             firstMessageFrameCounter = 0;
-            translatedFsmTexts.Clear();
-            loggedWarnings.Clear();
         }
 
         /// <summary>

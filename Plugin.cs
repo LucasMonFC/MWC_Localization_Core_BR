@@ -16,11 +16,7 @@ namespace MWC_Localization_Core
     {
         public const string GUID = "com.potatosalad.mwc_localization_core";
         public const string PluginName = "MWC Localization Core";
-        public const string Version = "0.3.1";
-
-        // Constants for dynamic element scanning
-        private const float MAINMENU_SCAN_INTERVAL = 2.0f;  // Reduced frequency: 2.0s
-        private const float DYNAMIC_UPDATE_INTERVAL = 0.1f;  // Throttle dynamic updates to 10 FPS
+        public const string Version = "0.4.0";
 
         private static ManualLogSource _logger;
 
@@ -28,26 +24,19 @@ namespace MWC_Localization_Core
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private bool hasLoadedTranslations = false;
 
-        // Magazine text handler
+        // Core handlers
         private MagazineTextHandler magazineHandler;
-
-        // Teletext handler (for direct data source translation)
         private TeletextHandler teletextHandler;
-
-        // Translation handler
+        private ArrayListProxyHandler arrayListHandler;
         private TextMeshTranslator translator;
 
-        // Scene translation tracking
-        private bool hasTranslatedSplashScreen = false;
-        private bool hasTranslatedMainMenu = false;
-        private bool hasTranslatedGameScene = false;
+        // NEW: Unified managers
+        private SceneTranslationManager sceneManager;
+        private UnifiedTextMeshMonitor textMeshMonitor;
         
         // Teletext translation tracking
         private float teletextTranslationTime = 0f;
         private int teletextRetryCount = 0;
-        private const float TELETEXT_TRANSLATION_DELAY = 1.0f;  // Wait 1 seconds after scene load
-        private const float TELETEXT_RETRY_INTERVAL = 5.0f;    // Retry every 5 seconds
-        private const int TELETEXT_MAX_RETRIES = 1;             // Try up to 1 times
 
         // Font management
         private AssetBundle fontBundle;
@@ -56,42 +45,47 @@ namespace MWC_Localization_Core
         // Localization configuration
         private LocalizationConfig config;
 
-        // Dynamic UI element tracking
-        private List<TextMesh> dynamicTextMeshes = new List<TextMesh>();
-        private List<TextMesh> priorityTextMeshes = new List<TextMesh>();  // High-priority elements (checked every frame)
-        private HashSet<string> translatedPaths = new HashSet<string>();
-        private float lastMainMenuScanTime = 0f;
-        private float lastDynamicUpdateTime = 0f;
-
         // GameObject path cache for performance
         private Dictionary<GameObject, string> pathCache = new Dictionary<GameObject, string>();
         
-        // Cached GameObject references for priority elements (avoid GameObject.Find)
-        private Dictionary<string, GameObject> priorityObjectCache = new Dictionary<string, GameObject>();
+        // GameObject reference cache (avoid repeated GameObject.Find calls)
+        private Dictionary<string, GameObject> gameObjectCache = new Dictionary<string, GameObject>();
+        private Dictionary<string, TextMesh> textMeshCache = new Dictionary<string, TextMesh>();
         
-        // Track last text content to detect changes (dirty flag system)
-        private Dictionary<TextMesh, string> lastTextContent = new Dictionary<TextMesh, string>();
+        // Cached references for critical UI (EveryFrame monitoring)
+        private class CriticalUIReference
+        {
+            public string Path;
+            public TextMesh TextMesh;
+            public int RetryCount;
+            public float NextRetryTime;
+            public bool IsRegistered;
+        }
+        private List<CriticalUIReference> criticalUIPaths = new List<CriticalUIReference>();
         
-        // Track which TextMesh objects have been translated (language-agnostic detection)
-        private HashSet<TextMesh> translatedTextMeshes = new HashSet<TextMesh>();
+        // Minimal tracking for scene scanning
+        private float lastMainMenuScanTime = 0f;
+        private float lastMonitorUpdateTime = 0f;
+        private float lastArrayCheckTime = 0f;
 
         void Awake()
         {
             _logger = Logger;
-            _logger.LogInfo($"{PluginName} v{Version} loaded!");
+            _logger.LogInfo($"{PluginName} v{Version} - Unified Architecture loaded!");
 
             // Initialize configuration
             config = new LocalizationConfig(_logger);
             string configPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "config.txt");
             config.LoadConfig(configPath);
 
-            // Initialize magazine handler
+            // Initialize handlers
             magazineHandler = new MagazineTextHandler(_logger);
-
-            // Initialize teletext handler
             teletextHandler = new TeletextHandler(_logger);
 
-            // Load translations immediately - this is safe
+            // Initialize scene manager
+            sceneManager = new SceneTranslationManager(_logger);
+
+            // Load translations immediately
             LoadTranslations();
 
             // Load magazine translations from separate file
@@ -101,6 +95,7 @@ namespace MWC_Localization_Core
             // Load teletext translations from separate file
             string teletextPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_teletext.txt");
             teletextHandler.LoadTeletextTranslations(teletextPath);
+            
         }
 
         void Start()
@@ -114,6 +109,51 @@ namespace MWC_Localization_Core
 
             // Initialize translator after fonts are loaded
             translator = new TextMeshTranslator(translations, customFonts, magazineHandler, config, _logger);
+            
+            // Initialize array handler with translation dictionaries and translator
+            arrayListHandler = new ArrayListProxyHandler(_logger, translations, magazineHandler, translator);
+            arrayListHandler.InitializeArrayPaths();
+            
+            // Load FSM patterns into pattern matcher
+            string teletextPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_teletext.txt");
+            translator.LoadFsmPatterns(teletextPath);
+            
+            // Initialize unified text mesh monitor
+            textMeshMonitor = new UnifiedTextMeshMonitor(translator, _logger);
+            
+            // Initialize critical UI paths (EveryFrame monitoring)
+            InitializeCriticalUIPaths();
+            
+            _logger.LogInfo("Unified architecture initialized successfully");
+        }
+        
+        void InitializeCriticalUIPaths()
+        {
+            // Hardcoded list of critical UI paths that need EveryFrame monitoring
+            // These are interaction prompts, part names, subtitles that change constantly
+            string[] paths = new string[]
+            {
+                "GUI/Indicators/Interaction",
+                "GUI/Indicators/Interaction/Shadow",
+                "GUI/Indicators/Partname",
+                "GUI/Indicators/Partname/Shadow",
+                "GUI/Indicators/Subtitles",
+                "GUI/Indicators/Subtitles/Shadow"
+            };
+            
+            foreach (string path in paths)
+            {
+                criticalUIPaths.Add(new CriticalUIReference
+                {
+                    Path = path,
+                    TextMesh = null,
+                    RetryCount = 0,
+                    NextRetryTime = 0f,
+                    IsRegistered = false
+                });
+            }
+            
+            _logger.LogInfo($"Initialized {criticalUIPaths.Count} critical UI paths for monitoring");
         }
 
         bool LoadCustomFonts()
@@ -253,6 +293,7 @@ namespace MWC_Localization_Core
             // Clear existing translations
             translations.Clear();
             magazineHandler.ClearTranslations();
+            arrayListHandler.ClearTranslations();
 
             // Reload from file
             LoadTranslations();
@@ -264,27 +305,39 @@ namespace MWC_Localization_Core
             // Reload teletext translations
             string teletextPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_teletext.txt");
             teletextHandler.LoadTeletextTranslations(teletextPath);
+            
+            // Reload FSM patterns
+            translator.LoadFsmPatterns(teletextPath);
 
-            // Clear all caches to force re-translation
-            translatedPaths.Clear();
+            // Clear all caches
             pathCache.Clear();
-            dynamicTextMeshes.Clear();
-            priorityTextMeshes.Clear();
-            priorityObjectCache.Clear();
-            lastTextContent.Clear();
-            translatedTextMeshes.Clear();
+            gameObjectCache.Clear();
+            textMeshCache.Clear();
+            lastMainMenuScanTime = 0f;
+            lastMonitorUpdateTime = 0f;
+            lastArrayCheckTime = 0f;
+            
+            // Reset critical UI references
+            foreach (var uiRef in criticalUIPaths)
+            {
+                uiRef.TextMesh = null;
+                uiRef.RetryCount = 0;
+                uiRef.NextRetryTime = 0f;
+                uiRef.IsRegistered = false;
+            }
 
             // Clear position adjustment caches
             config.ClearPositionAdjustmentCaches();
 
-            // Reset scene translation flags
-            hasTranslatedSplashScreen = false;
-            hasTranslatedMainMenu = false;
-            hasTranslatedGameScene = false;
+            // Reset managers
+            sceneManager.ResetAll();
+            textMeshMonitor.Clear();
             
             // Reset teletext handler
             teletextHandler.Reset();
+            arrayListHandler.Reset();
             teletextTranslationTime = 0f;
+            teletextRetryCount = 0;
 
             _logger.LogInfo($"[F8] Reloaded {translations.Count} translations. Current scene will be re-translated.");
         }
@@ -302,44 +355,76 @@ namespace MWC_Localization_Core
             }
 
             string currentScene = Application.loadedLevelName;
+            
+            // Update scene manager and handle scene changes
+            bool sceneChanged = sceneManager.UpdateScene(currentScene);
+            
+            // Clear caches when entering a new scene
+            if (sceneChanged)
+            {
+                pathCache.Clear();
+                gameObjectCache.Clear();
+                textMeshCache.Clear();
+                
+                // Reset critical UI references for new scene
+                foreach (var uiRef in criticalUIPaths)
+                {
+                    uiRef.TextMesh = null;
+                    uiRef.RetryCount = 0;
+                    uiRef.NextRetryTime = Time.time + LocalizationConstants.GAMEOBJECT_FIND_RETRY_DELAY;
+                    uiRef.IsRegistered = false;
+                }
+                
+                _logger.LogInfo($"Scene changed to '{currentScene}' - cleared caches");
+            }
 
-            // Initial translation pass for Main Menu
-            if (currentScene == "SplashScreen" && !hasTranslatedSplashScreen)
+            // Initial translation pass for Splash Screen
+            if (currentScene == "SplashScreen" && sceneManager.ShouldTranslateScene("SplashScreen"))
             {
                 _logger.LogInfo("Translating Splash Screen...");
                 TranslateScene();
-                hasTranslatedSplashScreen = true;
+                sceneManager.MarkSceneTranslated("SplashScreen");
             }
 
             // Initial translation pass for Main Menu
-            if (currentScene == "MainMenu" && !hasTranslatedMainMenu)
+            if (currentScene == "MainMenu" && sceneManager.ShouldTranslateScene("MainMenu"))
             {
                 _logger.LogInfo("Translating Main Menu...");
                 TranslateScene();
-                hasTranslatedMainMenu = true;
+                sceneManager.MarkSceneTranslated("MainMenu");
             }
 
             // Initial translation pass for Game scene
-            if (currentScene == "GAME" && !hasTranslatedGameScene)
+            if (currentScene == "GAME" && sceneManager.ShouldTranslateScene("GAME"))
             {
                 _logger.LogInfo("Translating Game scene...");
                 TranslateScene();
-                hasTranslatedGameScene = true;
+                sceneManager.MarkSceneTranslated("GAME");
                 
                 // Reset teletext handler and retry tracking for new scene
                 teletextHandler.Reset();
+                arrayListHandler.Reset();
                 teletextRetryCount = 0;
                 
+                // Translate static arrays immediately (HUD, menus, etc.)
+                int arrayTranslated = arrayListHandler.TranslateAllArrays();
+                if (arrayTranslated > 0)
+                {
+                    _logger.LogInfo($"[Arrays] Initial translation: {arrayTranslated} items");
+                    // Apply Korean fonts to TextMesh components using array data
+                    arrayListHandler.ApplyFontsToArrayElements();
+                }
+                
                 // Schedule teletext translation after delay
-                teletextTranslationTime = Time.time + TELETEXT_TRANSLATION_DELAY;
+                teletextTranslationTime = Time.time + LocalizationConstants.TELETEXT_TRANSLATION_DELAY;
             }
             
             // Translate teletext data after delay (allow scene to fully initialize)
             // Uses retry logic because teletext arrays populate gradually
-            if (currentScene == "GAME" && hasTranslatedGameScene && 
+            if (currentScene == "GAME" && sceneManager.HasSceneBeenTranslated("GAME") && 
                 teletextTranslationTime > 0 && Time.time >= teletextTranslationTime)
             {
-                _logger.LogInfo($"Attempting teletext translation (retry {teletextRetryCount + 1}/{TELETEXT_MAX_RETRIES})...");
+                _logger.LogInfo($"Attempting teletext translation (retry {teletextRetryCount + 1}/{LocalizationConstants.TELETEXT_MAX_RETRIES})...");
                 
                 if (teletextHandler.IsTeletextAvailable())
                 {
@@ -357,10 +442,10 @@ namespace MWC_Localization_Core
                         teletextTranslationTime = 0f;  // Done
                         teletextRetryCount = 0;
                     }
-                    else if (teletextRetryCount >= TELETEXT_MAX_RETRIES - 1)
+                    else if (teletextRetryCount >= LocalizationConstants.TELETEXT_MAX_RETRIES - 1)
                     {
                         // Gave up waiting
-                        _logger.LogWarning($"Arrays still empty after {TELETEXT_MAX_RETRIES} retries ({TELETEXT_TRANSLATION_DELAY + teletextRetryCount * TELETEXT_RETRY_INTERVAL}s total). They may populate later.");
+                        _logger.LogWarning($"Arrays still empty after {LocalizationConstants.TELETEXT_MAX_RETRIES} retries. They may populate later.");
                         // Try anyway in case some arrays have data
                         int translatedCount = teletextHandler.TranslateTeletextData();
                         if (translatedCount > 0)
@@ -374,8 +459,8 @@ namespace MWC_Localization_Core
                     {
                         // Retry - arrays still empty
                         teletextRetryCount++;
-                        teletextTranslationTime = Time.time + TELETEXT_RETRY_INTERVAL;
-                        _logger.LogInfo($"Arrays not yet populated, will retry in {TELETEXT_RETRY_INTERVAL}s... (attempt {teletextRetryCount + 1}/{TELETEXT_MAX_RETRIES})");
+                        teletextTranslationTime = Time.time + LocalizationConstants.TELETEXT_RETRY_INTERVAL;
+                        _logger.LogInfo($"Arrays not yet populated, will retry in {LocalizationConstants.TELETEXT_RETRY_INTERVAL}s...");
                     }
                 }
                 else
@@ -385,111 +470,207 @@ namespace MWC_Localization_Core
                     teletextRetryCount = 0;
                 }
             }
-
-            // Reset flags on scene change
-            if (currentScene == "MainMenu")
-            {
-                hasTranslatedGameScene = false;
-                dynamicTextMeshes.Clear();
-                priorityTextMeshes.Clear();
-                priorityObjectCache.Clear();  // Clear GameObject cache
-                lastTextContent.Clear();  // Clear text tracking
-                translatedTextMeshes.Clear();  // Clear translation tracking
-                // Keep pathCache - reuse across scenes for performance
-            }
-            else if (currentScene == "GAME")
-            {
-                hasTranslatedMainMenu = false;
-                translatedPaths.Clear();
-                priorityTextMeshes.Clear();
-                priorityObjectCache.Clear();  // Clear GameObject cache
-                lastTextContent.Clear();  // Clear text tracking
-                translatedTextMeshes.Clear();  // Clear translation tracking
-                // Keep pathCache - reuse across scenes for performance
-            }
         }
 
         void LateUpdate()
         {
             string currentScene = Application.loadedLevelName;
 
-            if (currentScene == "GAME" && hasTranslatedGameScene)
+            if (currentScene == "GAME" && sceneManager.HasSceneBeenTranslated("GAME"))
             {
-                // Monitor FSM-driven strings (weather, bottomlines, etc.)
-                // Throttled to ~1 second intervals with visibility checks
-                int fsmReplacements = teletextHandler.MonitorFsmStrings(Time.deltaTime);
-                if (fsmReplacements > 0)
-                {
-                    _logger.LogInfo($"[FSM] Made {fsmReplacements} FSM string replacements");
-                }
+                // Register critical UI elements with retry logic (handles timing issues)
+                RegisterCriticalUIElements();
                 
-                // Monitor teletext arrays for lazy-loaded content (MSC approach)
-                // Check frequently to catch arrays as they populate
-                int translated = teletextHandler.MonitorAndTranslateArrays();
-                if (translated > 0)
-                {
-                    _logger.LogInfo($"[Runtime] Translated {translated} newly-loaded teletext items");
-                    // Apply Korean font to teletext display immediately after translation
-                    ApplyTeletextFonts();
-                }
+                // CRITICAL: Check critical UI every frame (game constantly regenerates these)
+                // This prevents flickering between English and translation
+                UpdateCriticalUIEveryFrame();
                 
-                // Check priority elements every frame (no throttling)
-                UpdatePriorityTextMeshes();
+                // Throttle unified TextMesh monitor to 20 FPS for non-critical elements
+                if (Time.time - lastMonitorUpdateTime >= LocalizationConstants.MONITOR_UPDATE_INTERVAL)
+                {
+                    textMeshMonitor.Update(Time.deltaTime);
+                    lastMonitorUpdateTime = Time.time;
+                }
 
-                // Throttle dynamic updates to reduce CPU load
-                if (Time.time - lastDynamicUpdateTime >= DYNAMIC_UPDATE_INTERVAL)
+                // Throttle array monitoring to 1 second instead of every frame
+                if (Time.time - lastArrayCheckTime >= LocalizationConstants.ARRAY_MONITOR_INTERVAL)
                 {
-                    lastDynamicUpdateTime = Time.time;
-                    UpdateDynamicTextMeshes();
+                    // Monitor teletext arrays for lazy-loaded content
+                    int translated = teletextHandler.MonitorAndTranslateArrays();
+                    if (translated > 0)
+                    {
+                        _logger.LogInfo($"[Runtime] Translated {translated} newly-loaded teletext items");
+                        // Apply Korean font to teletext display immediately after translation
+                        ApplyTeletextFonts();
+                    }
+                    
+                    // Monitor generic arrays for lazy-loaded content
+                    int arrayTranslated = arrayListHandler.MonitorAndTranslateArrays();
+                    if (arrayTranslated > 0)
+                    {
+                        _logger.LogInfo($"[Runtime] Translated {arrayTranslated} newly-loaded array items");
+                    }
+                    
+                    // Monitor and apply fonts to late-initialized TextMesh components
+                    arrayListHandler.ApplyFontsToArrayElements();
+                    
+                    lastArrayCheckTime = Time.time;
                 }
             }
-            else if (currentScene == "MainMenu" && hasTranslatedMainMenu)
+            else if (currentScene == "MainMenu" && sceneManager.HasSceneBeenTranslated("MainMenu"))
             {
-                // Handle late-loading MainMenu elements
-                ScanForNewMainMenuElements();
-                
-                // Throttle dynamic updates
-                if (Time.time - lastDynamicUpdateTime >= DYNAMIC_UPDATE_INTERVAL)
+                // Throttle main menu scanning to every 5 seconds
+                if (Time.time - lastMainMenuScanTime >= LocalizationConstants.MAINMENU_SCAN_INTERVAL)
                 {
-                    lastDynamicUpdateTime = Time.time;
-                    UpdateDynamicTextMeshes();
+                    ScanForNewMainMenuElements();
+                    lastMainMenuScanTime = Time.time;
+                }
+                
+                // Throttle monitor update
+                if (Time.time - lastMonitorUpdateTime >= LocalizationConstants.MONITOR_UPDATE_INTERVAL)
+                {
+                    textMeshMonitor.Update(Time.deltaTime);
+                    lastMonitorUpdateTime = Time.time;
                 }
             }
+        }
+        
+        /// <summary>
+        /// Register critical UI elements with cached references and retry logic
+        /// Uses hardcoded allowlist to avoid expensive scene scanning
+        /// </summary>
+        void RegisterCriticalUIElements()
+        {
+            foreach (var uiRef in criticalUIPaths)
+            {
+                // Already registered - skip
+                if (uiRef.IsRegistered && uiRef.TextMesh != null)
+                    continue;
+                
+                // Not yet time for retry - skip
+                if (uiRef.RetryCount > 0 && Time.time < uiRef.NextRetryTime)
+                    continue;
+                
+                // Max retries reached - give up
+                if (uiRef.RetryCount >= LocalizationConstants.GAMEOBJECT_FIND_MAX_RETRIES)
+                    continue;
+                
+                // Try to find GameObject (cached)
+                GameObject obj = FindGameObjectCached(uiRef.Path);
+                if (obj == null)
+                {
+                    // Not found - schedule retry
+                    uiRef.RetryCount++;
+                    uiRef.NextRetryTime = Time.time + LocalizationConstants.GAMEOBJECT_FIND_RETRY_INTERVAL;
+                    continue;
+                }
+                
+                // Get TextMesh component
+                TextMesh textMesh = obj.GetComponent<TextMesh>();
+                if (textMesh == null)
+                {
+                    // No TextMesh - don't retry
+                    uiRef.IsRegistered = true;
+                    continue;
+                }
+                
+                // Cache and register (but DON'T register with UnifiedTextMeshMonitor)
+                // We'll handle these manually every frame to prevent flickering
+                uiRef.TextMesh = textMesh;
+                textMeshCache[uiRef.Path] = textMesh;
+                uiRef.IsRegistered = true;
+                _logger.LogInfo($"[Critical UI] Registered for every-frame checking: {uiRef.Path}");
+            }
+        }
+        
+        /// <summary>
+        /// Update critical UI elements every frame (not throttled)
+        /// Game constantly regenerates interaction prompts, so we need to fight back
+        /// </summary>
+        void UpdateCriticalUIEveryFrame()
+        {
+            foreach (var uiRef in criticalUIPaths)
+            {
+                // Skip if not registered yet
+                if (!uiRef.IsRegistered || uiRef.TextMesh == null)
+                    continue;
+                
+                // Check if TextMesh still exists (might be destroyed)
+                if (uiRef.TextMesh.gameObject == null)
+                {
+                    uiRef.TextMesh = null;
+                    uiRef.IsRegistered = false;
+                    continue;
+                }
+                
+                // Always translate - game regenerates these constantly
+                translator.TranslateAndApplyFont(uiRef.TextMesh, uiRef.Path, null);
+            }
+        }
+        
+        /// <summary>
+        /// Find GameObject with caching to avoid repeated GameObject.Find calls
+        /// </summary>
+        GameObject FindGameObjectCached(string path)
+        {
+            // Check cache first
+            if (gameObjectCache.TryGetValue(path, out GameObject cached))
+            {
+                // Verify object still exists
+                if (cached != null)
+                    return cached;
+                
+                // Object was destroyed - remove from cache
+                gameObjectCache.Remove(path);
+            }
+            
+            // Find and cache
+            GameObject obj = GameObject.Find(path);
+            if (obj != null)
+            {
+                gameObjectCache[path] = obj;
+            }
+            
+            return obj;
         }
 
         void ScanForNewMainMenuElements()
         {
-            // Throttle scanning
-            if (Time.time - lastMainMenuScanTime < MAINMENU_SCAN_INTERVAL)
-                return;
-
-            lastMainMenuScanTime = Time.time;
-
-            // Find all TextMesh components
-            TextMesh[] allTextMeshes = Resources.FindObjectsOfTypeAll<TextMesh>();
-
-            foreach (TextMesh textMesh in allTextMeshes)
+            // Simplified main menu scanning - only check known paths
+            // Avoid expensive Resources.FindObjectsOfTypeAll()
+            
+            // Known main menu UI paths (add more as discovered)
+            string[] knownMainMenuPaths = new string[]
             {
-                if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
+                "GUI/MainMenu",
+                "GUI/OptionsMenu",
+                "GUI/CreditsMenu"
+            };
+            
+            foreach (string basePath in knownMainMenuPaths)
+            {
+                GameObject baseObj = FindGameObjectCached(basePath);
+                if (baseObj == null)
                     continue;
-
-                string path = GetGameObjectPath(textMesh.gameObject);
-
-                // Skip if we've already translated this path
-                if (translatedPaths.Contains(path))
-                    continue;
-
-                // Try to translate
-                if (translator.TranslateAndApplyFont(textMesh, path, translatedTextMeshes))
+                
+                // Get all TextMesh components under this path
+                TextMesh[] textMeshes = baseObj.GetComponentsInChildren<TextMesh>(true);
+                foreach (TextMesh textMesh in textMeshes)
                 {
-                    // Check if this element needs continuous monitoring
-                    if (path.Contains("Interface/Songs/") && !dynamicTextMeshes.Contains(textMesh))
+                    if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
+                        continue;
+                    
+                    // Skip if already cached
+                    string path = GetGameObjectPath(textMesh.gameObject);
+                    if (textMeshCache.ContainsKey(path))
+                        continue;
+                    
+                    // Translate and cache
+                    if (translator.TranslateAndApplyFont(textMesh, path, null))
                     {
-                        dynamicTextMeshes.Add(textMesh);
+                        textMeshCache[path] = textMesh;
+                        textMeshMonitor.Register(textMesh, path);
                     }
-
-                    translatedPaths.Add(path);
-                    translatedTextMeshes.Add(textMesh);  // Mark as translated
                 }
             }
         }
@@ -533,119 +714,6 @@ namespace MWC_Localization_Core
             }
         }
 
-        void UpdatePriorityTextMeshes()
-        {
-            // Check priority elements every frame - no throttling for instant response
-            // Use cached GameObject references to avoid expensive GameObject.Find calls
-            string[] priorityPaths = new string[]
-            {
-                "GUI/Indicators/Interaction",
-                "GUI/Indicators/Interaction/Shadow",
-                "GUI/Indicators/Partname",
-                "GUI/Indicators/Partname/Shadow",
-                "GUI/Indicators/Subtitles",
-                "GUI/Indicators/Subtitles/Shadow",
-                "GUI/HUD/Day/HUDValue"
-            };
-
-            foreach (string path in priorityPaths)
-            {
-                GameObject obj;
-                
-                // Try to get cached reference first
-                if (!priorityObjectCache.TryGetValue(path, out obj) || obj == null)
-                {
-                    // Cache miss or destroyed - find and cache
-                    obj = GameObject.Find(path);
-                    if (obj != null)
-                    {
-                        priorityObjectCache[path] = obj;
-                    }
-                    else
-                    {
-                        continue;  // Object not found
-                    }
-                }
-                
-                TextMesh tm = obj.GetComponent<TextMesh>();
-                if (tm != null && !string.IsNullOrEmpty(tm.text))
-                {
-                    // Add to priority list if not already there
-                    if (!priorityTextMeshes.Contains(tm))
-                    {
-                        priorityTextMeshes.Add(tm);
-                    }
-
-                    // Check if text changed (dirty flag)
-                    string currentText = tm.text;
-                    if (!lastTextContent.TryGetValue(tm, out string lastText) || lastText != currentText)
-                    {
-                        // Text changed - translate it
-                        if (translator.TranslateAndApplyFont(tm, path, translatedTextMeshes))
-                        {
-                            lastTextContent[tm] = tm.text;  // Update tracked content
-                            translatedTextMeshes.Add(tm);  // Mark as translated
-                        }
-                    }
-                }
-            }
-        }
-
-        void UpdateDynamicTextMeshes()
-        {
-            // Monitor cached dynamic UI elements for text changes
-            for (int i = dynamicTextMeshes.Count - 1; i >= 0; i--)
-            {
-                TextMesh textMesh = dynamicTextMeshes[i];
-
-                // Remove null references (destroyed objects)
-                if (textMesh == null)
-                {
-                    dynamicTextMeshes.RemoveAt(i);
-                    lastTextContent.Remove(textMesh);
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(textMesh.text))
-                    continue;
-
-                string path = GetGameObjectPath(textMesh.gameObject);
-                string currentText = textMesh.text;
-
-                // Check if this is magazine text that needs persistent monitoring
-                bool isMagazineText = magazineHandler.IsMagazineText(path);
-
-                // Skip if already translated - remove from monitoring UNLESS it's magazine text
-                // (magazine text can be regenerated by the game, so we need to keep monitoring it)
-                if (translatedTextMeshes.Contains(textMesh) && !isMagazineText)
-                {
-                    // Check if text changed (might have been reset by game)
-                    if (lastTextContent.TryGetValue(textMesh, out string prevText) && prevText == currentText)
-                    {
-                        // Still translated, no change
-                        dynamicTextMeshes.RemoveAt(i);
-                        continue;
-                    }
-                    else
-                    {
-                        // Text changed, needs re-translation
-                        translatedTextMeshes.Remove(textMesh);
-                    }
-                }
-
-                // Only translate if text actually changed (dirty flag check)
-                if (!lastTextContent.TryGetValue(textMesh, out string lastText) || lastText != currentText || isMagazineText)
-                {
-                    // Translate and apply font using unified helper
-                    if (translator.TranslateAndApplyFont(textMesh, path, translatedTextMeshes))
-                    {
-                        lastTextContent[textMesh] = textMesh.text;  // Update tracked content
-                        translatedTextMeshes.Add(textMesh);  // Mark as translated
-                    }
-                }
-            }
-        }
-
         void TranslateScene()
         {
             // Find all TextMesh components in the scene
@@ -660,45 +728,21 @@ namespace MWC_Localization_Core
                 // Get GameObject path
                 string path = GetGameObjectPath(textMesh.gameObject);
 
-                // Check if this is a priority element (instant translation)
-                if (IsPriorityUIElement(path) && !priorityTextMeshes.Contains(textMesh))
-                {
-                    priorityTextMeshes.Add(textMesh);
-                }
-                // Check if this is a dynamic UI element that needs continuous monitoring
-                else if (IsDynamicUIElement(path) && !dynamicTextMeshes.Contains(textMesh))
-                {
-                    dynamicTextMeshes.Add(textMesh);
-                }
-
-                // Translate and apply font using unified helper
-                if (translator.TranslateAndApplyFont(textMesh, path, translatedTextMeshes))
+                // Translate and apply font
+                if (translator.TranslateAndApplyFont(textMesh, path, null))
                 {
                     translatedCount++;
-                    translatedPaths.Add(path);
-                    translatedTextMeshes.Add(textMesh);  // Mark as translated
+                    
+                    // Cache this TextMesh
+                    textMeshCache[path] = textMesh;
+                    
+                    // Register with unified monitor
+                    textMeshMonitor.Register(textMesh, path);
                 }
             }
 
             _logger.LogInfo($"Scene translation complete: {translatedCount} strings translated");
-        }
-
-        bool IsPriorityUIElement(string path)
-        {
-            // Critical UI elements that need instant translation (checked every frame)
-            return path.Contains("GUI/Indicators/Interaction") ||     // Interaction prompts
-                   path.Contains("GUI/Indicators/Partname") ||        // Part names
-                   path.Contains("GUI/Indicators/Subtitles") ||       // Subtitles
-                   path.Contains("GUI/HUD/Day/HUDValue");             // Weekday display
-        }
-
-        bool IsDynamicUIElement(string path)
-        {
-            // These UI elements are frequently updated and need continuous monitoring
-            return path.Contains("GUI/HUD/") ||           // HUD elements (hunger, stress, etc.)
-                   path.Contains("GUI/Indicators/") ||    // Subtitles, interaction prompts
-                   (path.Contains("Sheets/YellowPagesMagazine/Page") && path.EndsWith("/Lines/YellowLine")) ||    // Yellow Pages Magazine
-                   path.Contains("GUI/") && !path.Contains("/Debug/");
+            _logger.LogInfo(textMeshMonitor.GetDiagnostics());
         }
 
         string GetGameObjectPath(GameObject obj)
@@ -710,22 +754,25 @@ namespace MWC_Localization_Core
             if (pathCache.TryGetValue(obj, out string cachedPath))
                 return cachedPath;
 
-            // Build path using StringBuilder for better performance
-            StringBuilder pathBuilder = new StringBuilder();
+            // Build path using List + Reverse (faster than StringBuilder.Insert(0))
+            List<string> pathParts = new List<string>();
             Transform current = obj.transform;
 
             while (current != null)
             {
-                if (pathBuilder.Length > 0)
-                    pathBuilder.Insert(0, "/");
-                pathBuilder.Insert(0, current.name);
+                pathParts.Add(current.name);
                 current = current.parent;
             }
 
-            string path = pathBuilder.ToString();
+            // Reverse and join
+            pathParts.Reverse();
+            string path = string.Join("/", pathParts.ToArray());
 
-            // Cache the path
-            pathCache[obj] = path;
+            // Cache the path (limit cache size to prevent memory bloat)
+            if (pathCache.Count < 1000)
+            {
+                pathCache[obj] = path;
+            }
 
             return path;
         }

@@ -14,6 +14,7 @@ namespace MWC_Localization_Core
         private Dictionary<string, string> translations;
         private Dictionary<string, Font> customFonts;
         private MagazineTextHandler magazineHandler;
+        private PatternMatcher patternMatcher;
         private LocalizationConfig config;
         private ManualLogSource logger;
 
@@ -29,6 +30,9 @@ namespace MWC_Localization_Core
             this.magazineHandler = magazineHandler;
             this.config = config;
             this.logger = logger;
+            
+            // Initialize unified pattern matcher
+            this.patternMatcher = new PatternMatcher(translations, logger);
         }
 
         /// <summary>
@@ -87,31 +91,22 @@ namespace MWC_Localization_Core
 
         /// <summary>
         /// Handle complex text patterns (magazine text, cashier price line)
+        /// Now uses unified pattern matcher for all pattern-based translations
         /// </summary>
         bool HandleComplexTextMesh(TextMesh textMesh, string path)
         {
-            // Check if this is magazine text and handle it
+            // Check magazine text FIRST - it requires special handling (comma-separated words, price/phone format)
             if (magazineHandler.IsMagazineText(path))
             {
                 return magazineHandler.HandleMagazineText(textMesh);
             }
-
-            // Check if this is cashier price line
-            if (path.Contains("GUI/Indicators/Interaction") && textMesh.text.Contains("PRICE TOTAL"))
+            
+            // Try pattern matching for other complex texts (FSM, Price patterns)
+            string patternResult = patternMatcher.TryTranslateWithPattern(textMesh.text, path);
+            if (patternResult != null)
             {
-                // Example format: "PRICE TOTAL: 0.00 MK"
-                string[] parts = textMesh.text.Split(' ');
-                if (parts.Length == 4)
-                {
-                    string pricePart = parts[2]; // e.g., "0.00"
-                    // Get price label from translations (default to "PRICE TOTAL" if not found)
-                    string priceLabel = translations.TryGetValue("PRICETOTAL", out string translation)
-                        ? translation // Found with normalized key
-                        : "PRICE TOTAL";
-
-                    textMesh.text = $"{priceLabel}: {pricePart} MK";
-                    return true; // Handled
-                }
+                textMesh.text = patternResult;
+                return true;
             }
 
             return false; // Not handled, use standard translation
@@ -218,6 +213,14 @@ namespace MWC_Localization_Core
             }
 
             return false;
+        }
+        
+        /// <summary>
+        /// Load FSM patterns from teletext translation file
+        /// </summary>
+        public void LoadFsmPatterns(string filePath)
+        {
+            patternMatcher.LoadPatternsFromFile(filePath);
         }
     }
 }
