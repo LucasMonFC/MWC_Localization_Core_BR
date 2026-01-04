@@ -25,6 +25,7 @@ The plugin is now **language-agnostic** and loads all language-specific settings
 - `Plugin.cs` - Main BepInEx plugin (`LocalizationPlugin` class)
 - `LocalizationConfig.cs` - Loads and manages config.txt settings
 - `TextMeshTranslator.cs` - Handles translation, fonts, position adjustments
+- `TeletextHandler.cs` - Teletext data source translation (runtime array replacement)
 - `PositionAdjustment.cs` - Configurable position adjustment system
 - `MagazineTextHandler.cs` - Complex text handling (comma-separated, price lines)
 - `StringHelper.cs` - String normalization utilities
@@ -34,7 +35,183 @@ The plugin is now **language-agnostic** and loads all language-specific settings
 - `translate.txt` - Main translations
 - `translate_msc.txt` - My Summer Car compatibility
 - `translate_magazine.txt` - Magazine translations
+- `translate_teletext.txt` - Teletext/TV data source translations (category-based)
 - `fonts.unity3d` - Custom font assets (optional)
+
+## Teletext & Data Source Translation
+
+### Teletext System Architecture
+
+**Challenge:** Teletext content is stored in PlayMaker ArrayLists, not TextMesh components. Standard TextMesh translation doesn't work.
+
+**Solution:** Direct data source manipulation - replace ArrayList contents before game displays them.
+
+### Lazy-Loading Problem
+
+Most teletext arrays are **lazy-loaded** (empty until navigated to):
+- `day` - Pre-populated (weekdays)
+- `kotimaa`, `ulkomaat`, `talous`, `urheilu`, `ruoka`, `ajatus`, `kulttuuri` - Lazy-loaded (news, recipes, quotes)
+
+**Why Pre-fill Fails:**
+```csharp
+// ❌ WRONG - Game overwrites preFillStringList
+proxy.preFillStringList.AddRange(translations);  // Game ignores this!
+```
+
+**Why Runtime Replacement Works:**
+```csharp
+// ✓ CORRECT - Replace ArrayList AFTER game populates it
+if (proxy._arrayList.Count > 0) {  // Game just loaded content
+    ArrayList newArrayList = new ArrayList();
+    // Fill with translations by index...
+    proxy._arrayList = newArrayList;  // Replace entire ArrayList
+}
+```
+
+### MSC's Approach (Reference: ExtraMod.cs)
+
+**My Summer Car's teletext translation** (lines 2314-2421):
+1. **Monitor in FixedUpdate** - Check every frame for array population
+2. **Detect population** - `proxy._arrayList.Count > 0`
+3. **Create new ArrayList** - Build replacement with translations
+4. **Replace entire ArrayList** - `proxy._arrayList = newArrayList`
+5. **Track translated arrays** - Prevent re-translation
+
+**Key Insight:** Game reads from `_arrayList` at runtime, not `preFillStringList`.
+
+### Index-Based Translation
+
+Since arrays are lazy-loaded, we can't match by content. Use **index position** instead:
+
+```ini
+# translate_teletext.txt format
+[kotimaa]
+MAKELIN TOIMINNANJOHTAJA EROTETTIIN... = 마켈린 상무이사 해고...
+TAKSIUUDISTUS SUUNNITTEILLA... = 택시 개혁안 계획 중...
+
+# Index 0 = first translation, Index 1 = second translation, etc.
+# Order MUST match dump order from game
+```
+
+**Translation Process:**
+```csharp
+// Load translations in order
+indexBasedTranslations["kotimaa"] = [translation0, translation1, ...]
+
+// When array populates, replace by index
+for (int i = 0; i < originalArray.Count; i++) {
+    if (i < translations.Count) {
+        newArray.Add(translations[i]);  // Replace item at index i
+    }
+}
+```
+
+### TeletextHandler Implementation
+
+**Monitoring Loop (LateUpdate):**
+```csharp
+int translated = teletextHandler.MonitorAndTranslateArrays();
+if (translated > 0) {
+    ApplyTeletextFonts();  // Apply Korean font to display
+}
+```
+
+**Array Replacement:**
+```csharp
+// TeletextHandler.TranslateArrayListProxy()
+ArrayList newArrayList = new ArrayList();
+for (int i = 0; i < proxy._arrayList.Count; i++) {
+    newArrayList.Add(translations[i]);  // Index-based
+}
+proxy._arrayList = newArrayList;  // CRITICAL: Replace entire ArrayList
+```
+
+**Font Application (Separate Step):**
+```csharp
+// After translating data, apply fonts to display
+GameObject teletextRoot = GameObject.Find("Systems/TV/Teletext/VKTekstiTV/PAGES");
+TextMesh[] displays = teletextRoot.GetComponentsInChildren<TextMesh>();
+foreach (var tm in displays) {
+    translator.ApplyFontOnly(tm, path);  // Font + material only
+}
+```
+
+### translate_teletext.txt Format
+
+**Category-Based Structure:**
+```ini
+[day]
+MAANANTAI = 월요일
+TIISTAI = 화요일
+KESKIVIIKKO = 수요일
+
+[kotimaa]
+News headline text
+With possible multiple lines
+=
+Translated headline
+여러 줄로 된 번역
+
+Single line = Single line translation
+
+[ulkomaat]
+...
+```
+
+**Multi-line Support:**
+```ini
+# Multi-line format:
+Original text
+Line 2
+Line 3
+=
+Translated text
+번역 2행
+번역 3행
+
+# Newline escape (within single line):
+Text with\nnewline = 번역\n줄바꿈
+```
+
+**Category Mapping:**
+- `day` → `Systems/TV/Teletext/VKTekstiTV/Database[0]`
+- `kotimaa` → `Database[1]` (domestic news)
+- `ulkomaat` → `Database[2]` (foreign news)
+- `talous` → `Database[3]` (economy)
+- `urheilu` → `Database[4]` (sports)
+- `ruoka` → `Database[5]` (recipes)
+- `ajatus` → `Database[6]` (quotes)
+- `kulttuuri` → `Database[7]` (culture)
+
+### Performance Considerations
+
+**✅ Efficient:**
+- Check every frame (fast - just array count check)
+- Translate once when array populates
+- Track translated arrays to prevent re-translation
+- Skip arrays with no translations
+
+**❌ Avoid:**
+- Throttling monitoring (arrays populate for <1 frame window)
+- Pre-filling (game overwrites it)
+- Key-based matching (arrays are empty until populated)
+
+### Debugging Teletext Issues
+
+**Problem: Text not translating**
+- Check logs for `[Monitor]` messages - confirms detection
+- Verify translation count matches dump count
+- Check index order in translate_teletext.txt
+
+**Problem: Missing Korean font**
+- Ensure `ApplyTeletextFonts()` called after translation
+- Check `Systems/TV/Teletext/VKTekstiTV/PAGES` path exists
+- Verify font bundle loaded correctly
+
+**Problem: Partial translation**
+- Some arrays lazy-load - normal behavior
+- Monitor logs show translation as you navigate pages
+- Check `translatedArrays` HashSet tracking
 
 ## Configuration System
 
@@ -302,6 +479,7 @@ MWC_Localization_Core/
 ├── Plugin.cs                      # Main plugin entry point
 ├── LocalizationConfig.cs          # Config loading system
 ├── TextMeshTranslator.cs          # Translation & font application
+├── TeletextHandler.cs             # Teletext data source translation
 ├── PositionAdjustment.cs          # Position adjustment system
 ├── MagazineTextHandler.cs         # Magazine-specific handling
 ├── StringHelper.cs                # String utilities
@@ -311,6 +489,7 @@ MWC_Localization_Core/
 │   ├── translate.txt              # Main translations
 │   ├── translate_msc.txt          # MSC compatibility
 │   ├── translate_magazine.txt     # Magazine translations
+│   ├── translate_teletext.txt     # Teletext translations
 │   └── fonts.unity3d              # Custom fonts (optional)
 ├── LANGUAGE_PACK_GUIDE.md         # For language pack creators
 ├── POSITION_ADJUSTMENTS_GUIDE.md  # Position adjustment details
@@ -323,11 +502,13 @@ MWC_Localization_Core/
 ### Version History
 - **v0.2.0** - Korean-specific initial implementation
 - **v0.3.0** - Generic multi-language framework with configurable adjustments
+- **v0.3.1** - Teletext/data source translation system (runtime array replacement)
 
 ### Key Classes
 - `LocalizationPlugin` - Main BepInEx plugin
 - `LocalizationConfig` - Configuration management
 - `TextMeshTranslator` - Core translation logic
+- `TeletextHandler` - Teletext data source manipulation
 - `PositionAdjustment` - Position rule matching
 - `MagazineTextHandler` - Complex text handling
 
@@ -339,10 +520,12 @@ MWC_Localization_Core/
 ### Critical Methods
 - `LocalizationConfig.GetPositionOffset(path)` - Find offset for path
 - `TextMeshTranslator.TranslateAndApplyFont(textMesh, path)` - Main translation
+- `TeletextHandler.MonitorAndTranslateArrays()` - Runtime teletext monitoring
+- `TeletextHandler.TranslateArrayListProxy()` - ArrayList replacement
 - `PositionAdjustment.Matches(path)` - Test if rule applies
 
 ---
 
-**Last Updated:** January 2, 2026  
-**Status:** Phase 1 Complete - Generic framework ready for v0.3.0  
+**Last Updated:** January 4, 2026  
+**Status:** Phase 1 Complete - Generic framework with teletext support (v0.3.1+)  
 **Next:** Community language packs, Phase 2 advanced features

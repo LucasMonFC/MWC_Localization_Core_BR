@@ -188,5 +188,36 @@ namespace MWC_Localization_Core
 
             return null;
         }
+
+        /// <summary>
+        /// Apply custom font without translating text (for teletext display)
+        /// </summary>
+        public bool ApplyFontOnly(TextMesh textMesh, string path)
+        {
+            if (textMesh == null)
+                return false;
+
+            string originalFontName = textMesh.font != null ? textMesh.font.name : "unknown";
+            Font customFont = GetCustomFont(originalFontName);
+
+            if (customFont != null)
+            {
+                textMesh.font = customFont;
+
+                // Update material texture
+                MeshRenderer renderer = textMesh.GetComponent<MeshRenderer>();
+                if (renderer != null && renderer.material != null && customFont.material != null && customFont.material.mainTexture != null)
+                {
+                    renderer.material.mainTexture = customFont.material.mainTexture;
+                }
+
+                // Adjust position for better rendering with Korean font
+                config.ApplyPositionAdjustment(textMesh, path);
+                
+                return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace MWC_Localization_Core
         public const string Version = "0.3.1";
 
         // Constants for dynamic element scanning
-        private const float MAINMENU_SCAN_INTERVAL = 2.0f;  // Reduced frequency: 0.5s -> 2.0s
+        private const float MAINMENU_SCAN_INTERVAL = 2.0f;  // Reduced frequency: 2.0s
         private const float DYNAMIC_UPDATE_INTERVAL = 0.1f;  // Throttle dynamic updates to 10 FPS
 
         private static ManualLogSource _logger;
@@ -31,6 +31,9 @@ namespace MWC_Localization_Core
         // Magazine text handler
         private MagazineTextHandler magazineHandler;
 
+        // Teletext handler (for direct data source translation)
+        private TeletextHandler teletextHandler;
+
         // Translation handler
         private TextMeshTranslator translator;
 
@@ -38,6 +41,13 @@ namespace MWC_Localization_Core
         private bool hasTranslatedSplashScreen = false;
         private bool hasTranslatedMainMenu = false;
         private bool hasTranslatedGameScene = false;
+        
+        // Teletext translation tracking
+        private float teletextTranslationTime = 0f;
+        private int teletextRetryCount = 0;
+        private const float TELETEXT_TRANSLATION_DELAY = 1.0f;  // Wait 1 seconds after scene load
+        private const float TELETEXT_RETRY_INTERVAL = 5.0f;    // Retry every 5 seconds
+        private const int TELETEXT_MAX_RETRIES = 1;             // Try up to 1 times
 
         // Font management
         private AssetBundle fontBundle;
@@ -78,12 +88,19 @@ namespace MWC_Localization_Core
             // Initialize magazine handler
             magazineHandler = new MagazineTextHandler(_logger);
 
+            // Initialize teletext handler
+            teletextHandler = new TeletextHandler(_logger);
+
             // Load translations immediately - this is safe
             LoadTranslations();
 
             // Load magazine translations from separate file
             string magazinePath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_magazine.txt");
             magazineHandler.LoadMagazineTranslations(magazinePath);
+            
+            // Load teletext translations from separate file
+            string teletextPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_teletext.txt");
+            teletextHandler.LoadTeletextTranslations(teletextPath);
         }
 
         void Start()
@@ -243,6 +260,10 @@ namespace MWC_Localization_Core
             // Reload magazine translations
             string magazinePath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_magazine.txt");
             magazineHandler.LoadMagazineTranslations(magazinePath);
+            
+            // Reload teletext translations
+            string teletextPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_teletext.txt");
+            teletextHandler.LoadTeletextTranslations(teletextPath);
 
             // Clear all caches to force re-translation
             translatedPaths.Clear();
@@ -260,6 +281,10 @@ namespace MWC_Localization_Core
             hasTranslatedSplashScreen = false;
             hasTranslatedMainMenu = false;
             hasTranslatedGameScene = false;
+            
+            // Reset teletext handler
+            teletextHandler.Reset();
+            teletextTranslationTime = 0f;
 
             _logger.LogInfo($"[F8] Reloaded {translations.Count} translations. Current scene will be re-translated.");
         }
@@ -300,6 +325,65 @@ namespace MWC_Localization_Core
                 _logger.LogInfo("Translating Game scene...");
                 TranslateScene();
                 hasTranslatedGameScene = true;
+                
+                // Reset teletext handler and retry tracking for new scene
+                teletextHandler.Reset();
+                teletextRetryCount = 0;
+                
+                // Schedule teletext translation after delay
+                teletextTranslationTime = Time.time + TELETEXT_TRANSLATION_DELAY;
+            }
+            
+            // Translate teletext data after delay (allow scene to fully initialize)
+            // Uses retry logic because teletext arrays populate gradually
+            if (currentScene == "GAME" && hasTranslatedGameScene && 
+                teletextTranslationTime > 0 && Time.time >= teletextTranslationTime)
+            {
+                _logger.LogInfo($"Attempting teletext translation (retry {teletextRetryCount + 1}/{TELETEXT_MAX_RETRIES})...");
+                
+                if (teletextHandler.IsTeletextAvailable())
+                {
+                    string info = teletextHandler.GetTeletextInfo();
+                    _logger.LogInfo(info);
+                    
+                    // Check if arrays are populated before translating
+                    bool arraysPopulated = teletextHandler.AreTeletextArraysPopulated();
+                    
+                    if (arraysPopulated)
+                    {
+                        // Arrays have data, do the translation
+                        int translatedCount = teletextHandler.TranslateTeletextData();
+                        _logger.LogInfo($"Arrays populated! Translated {translatedCount} items.");
+                        teletextTranslationTime = 0f;  // Done
+                        teletextRetryCount = 0;
+                    }
+                    else if (teletextRetryCount >= TELETEXT_MAX_RETRIES - 1)
+                    {
+                        // Gave up waiting
+                        _logger.LogWarning($"Arrays still empty after {TELETEXT_MAX_RETRIES} retries ({TELETEXT_TRANSLATION_DELAY + teletextRetryCount * TELETEXT_RETRY_INTERVAL}s total). They may populate later.");
+                        // Try anyway in case some arrays have data
+                        int translatedCount = teletextHandler.TranslateTeletextData();
+                        if (translatedCount > 0)
+                        {
+                            _logger.LogInfo($"Translated {translatedCount} items from partially populated arrays.");
+                        }
+                        teletextTranslationTime = 0f;
+                        teletextRetryCount = 0;
+                    }
+                    else
+                    {
+                        // Retry - arrays still empty
+                        teletextRetryCount++;
+                        teletextTranslationTime = Time.time + TELETEXT_RETRY_INTERVAL;
+                        _logger.LogInfo($"Arrays not yet populated, will retry in {TELETEXT_RETRY_INTERVAL}s... (attempt {teletextRetryCount + 1}/{TELETEXT_MAX_RETRIES})");
+                    }
+                }
+                else
+                {
+                    _logger.LogInfo("Teletext not available in this scene.");
+                    teletextTranslationTime = 0f;
+                    teletextRetryCount = 0;
+                }
             }
 
             // Reset flags on scene change
@@ -331,6 +415,24 @@ namespace MWC_Localization_Core
 
             if (currentScene == "GAME" && hasTranslatedGameScene)
             {
+                // Monitor FSM-driven strings (weather, bottomlines, etc.)
+                // Throttled to ~1 second intervals with visibility checks
+                int fsmReplacements = teletextHandler.MonitorFsmStrings(Time.deltaTime);
+                if (fsmReplacements > 0)
+                {
+                    _logger.LogInfo($"[FSM] Made {fsmReplacements} FSM string replacements");
+                }
+                
+                // Monitor teletext arrays for lazy-loaded content (MSC approach)
+                // Check frequently to catch arrays as they populate
+                int translated = teletextHandler.MonitorAndTranslateArrays();
+                if (translated > 0)
+                {
+                    _logger.LogInfo($"[Runtime] Translated {translated} newly-loaded teletext items");
+                    // Apply Korean font to teletext display immediately after translation
+                    ApplyTeletextFonts();
+                }
+                
                 // Check priority elements every frame (no throttling)
                 UpdatePriorityTextMeshes();
 
@@ -388,6 +490,45 @@ namespace MWC_Localization_Core
 
                     translatedPaths.Add(path);
                     translatedTextMeshes.Add(textMesh);  // Mark as translated
+                }
+            }
+        }
+
+        void ApplyTeletextFonts()
+        {
+            List<string> teletextRootPaths = new List<string>
+            {
+                "Systems/TV/Teletext/VKTekstiTV/PAGES",
+                "Systems/TV/TVGraphics/CHAT/Generated/Lines"
+            };
+
+            foreach (string rootPath in teletextRootPaths)
+            {
+                GameObject teletextRoot = GameObject.Find(rootPath);
+                
+                if (teletextRoot == null)
+                    continue;
+
+                TextMesh[] teletextTextMeshes = teletextRoot.GetComponentsInChildren<TextMesh>(true);
+                int fontChangedCount = 0;
+
+                foreach (TextMesh textMesh in teletextTextMeshes)
+                {
+                    if (textMesh == null)
+                        continue;
+
+                    string path = GetGameObjectPath(textMesh.gameObject);
+                    
+                    // Apply font using the translator's font mapping logic
+                    if (translator.ApplyFontOnly(textMesh, path))
+                    {
+                        fontChangedCount++;
+                    }
+                }
+
+                if (fontChangedCount > 0)
+                {
+                    _logger.LogInfo($"[Teletext Fonts] Applied Korean font to {fontChangedCount} teletext elements under {rootPath}");
                 }
             }
         }
