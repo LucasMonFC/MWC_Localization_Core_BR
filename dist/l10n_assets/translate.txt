@@ -95,6 +95,9 @@ manuals box = 설명서 상자
 plastic trays = 플라스틱 트레이 묶음
 plastic tray = 플라스틱 트레이
 packages box = 패키지 상자
+long log = 긴 통나무
+sandbag = 모래주머니
+DISPOSED BATTERY = 다 쓴 배터리
 
 SCRAPE WINDOW = 창문 긁어내기
 BLOWER = 풍량 조절
@@ -244,6 +247,8 @@ Ventilation Box = 환풍기 모듈
 Shifter Automatic = 자동 기어봉
 Center Console = 센터 콘솔
 Rear Window Grille = 후면 유리 그릴
+Steering Rack 26 = 조향 축 26
+Extinguisher Clamp = 소화기 걸이
 
 RADIO CHANNEL = 라디오 채널
 BATTERY NEGATIVE = 배터리 음극
