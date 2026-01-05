@@ -41,6 +41,9 @@ namespace MWC_Localization_Core
         private int firstMessageRetryCount = 0;
         private int firstMessageFrameCounter = 0;
         
+        // Track disabled FSM paths (to avoid re-disabling)
+        private HashSet<string> disabledFsmPaths = new HashSet<string>();
+        
         // GameObject path to category mapping
         private Dictionary<string, string> pathPrefixes = new Dictionary<string, string>
         {
@@ -605,6 +608,104 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
+        /// Disable FSM components on specific teletext paths to prevent text regeneration
+        /// Then translate the TextMesh once - solves flickering issue
+        /// Can be called multiple times (uses tracking to avoid re-processing)
+        /// Only disables FSM when text has valid data (not default/placeholder values)
+        /// Returns number of NEW FSMs disabled this call
+        /// </summary>
+        public int DisableBottomlineFSMs(TextMeshTranslator translator)
+        {
+            // Paths where FSMs constantly regenerate text (causing flickering)
+            string[] bottomlinePaths = new string[]
+            {
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1",
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/241/Texts/Data/Bottomline 1",
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1",
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1",
+            };
+
+            int disabledCount = 0;
+            int translatedCount = 0;
+
+            foreach (string path in bottomlinePaths)
+            {
+                // Skip if already processed
+                if (disabledFsmPaths.Contains(path))
+                    continue;
+                    
+                try
+                {
+                    GameObject obj = GameObject.Find(path);
+                    if (obj == null)
+                        continue; // Not found yet - will retry later
+
+                    // Check TextMesh content FIRST - only proceed if it has valid data
+                    TextMesh textMesh = obj.GetComponent<TextMesh>();
+                    if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
+                        continue; // No text yet - FSM hasn't run
+                    
+                    string currentText = textMesh.text;
+                    
+                    // Extract number from text using regex
+                    // Valid patterns: number should be 1-5
+                    var match = System.Text.RegularExpressions.Regex.Match(currentText, @"\b(\d+)\b");
+                    if (!match.Success)
+                    {
+                        // No number found in text
+                        continue;
+                    }
+                    
+                    int extractedNumber = int.Parse(match.Groups[1].Value);
+                    
+                    // Validate: number must be 1-5
+                    if (extractedNumber < 1 || extractedNumber > 5)
+                    {
+                        // Invalid round number
+                        logger.LogInfo($"[FSM Disable] Waiting for valid number (1-5) at {path} (current: '{currentText}', extracted: {extractedNumber})");
+                        continue;
+                    }
+
+                    // Text looks valid! Disable FSM to prevent regeneration
+                    PlayMakerFSM[] fsms = obj.GetComponents<PlayMakerFSM>();
+                    if (fsms != null && fsms.Length > 0)
+                    {
+                        foreach (var fsm in fsms)
+                        {
+                            fsm.enabled = false;
+                            disabledCount++;
+                            logger.LogInfo($"[FSM Disable] Disabled FSM '{fsm.FsmName}' at {path}");
+                        }
+                    }
+
+                    // Translate the TextMesh once (now that FSM won't fight us)
+                    if (translator != null)
+                    {
+                        if (translator.TranslateAndApplyFont(textMesh, path, null))
+                        {
+                            translatedCount++;
+                            logger.LogInfo($"[FSM Disable] Translated: '{textMesh.text}' at {path}");
+                        }
+                    }
+                    
+                    // Mark as processed
+                    disabledFsmPaths.Add(path);
+                }
+                catch (System.Exception ex)
+                {
+                    logger.LogError($"[FSM Disable] Error processing {path}: {ex.Message}");
+                }
+            }
+
+            if (disabledCount > 0)
+            {
+                logger.LogInfo($"[FSM Disable] Successfully disabled {disabledCount} FSMs and translated {translatedCount} Bottomline texts");
+            }
+            
+            return disabledCount;
+        }
+
+        /// <summary>
         /// Reset translation state (useful for testing or scene changes)
         /// </summary>
         public void Reset()
@@ -613,6 +714,7 @@ namespace MWC_Localization_Core
             hasTranslatedFirstChatMessage = false;
             firstMessageRetryCount = 0;
             firstMessageFrameCounter = 0;
+            disabledFsmPaths.Clear();
         }
 
         /// <summary>

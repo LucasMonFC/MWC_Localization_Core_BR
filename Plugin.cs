@@ -449,6 +449,7 @@ namespace MWC_Localization_Core
                         // Arrays have data, do the translation
                         int translatedCount = teletextHandler.TranslateTeletextData();
                         _logger.LogInfo($"Arrays populated! Translated {translatedCount} items.");
+                        
                         teletextTranslationTime = 0f;  // Done
                         teletextRetryCount = 0;
                     }
@@ -512,6 +513,13 @@ namespace MWC_Localization_Core
                         _logger.LogInfo($"[Runtime] Translated {translated} newly-loaded teletext items");
                         // Apply Korean font to teletext display immediately after translation
                         ApplyTeletextFonts();
+                    }
+                    
+                    // Monitor and disable FSM-driven Bottomlines (handles late initialization)
+                    int fsmDisabled = teletextHandler.DisableBottomlineFSMs(translator);
+                    if (fsmDisabled > 0)
+                    {
+                        _logger.LogInfo($"[Runtime] Disabled {fsmDisabled} Bottomline FSMs");
                     }
                     
                     // Monitor generic arrays for lazy-loaded content
