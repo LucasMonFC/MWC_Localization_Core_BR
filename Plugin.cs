@@ -16,7 +16,7 @@ namespace MWC_Localization_Core
     {
         public const string GUID = "com.potatosalad.mwc_localization_core";
         public const string PluginName = "MWC Localization Core";
-        public const string Version = "0.4.0";
+        public const string Version = "0.4.1";
 
         private static ManualLogSource _logger;
 
