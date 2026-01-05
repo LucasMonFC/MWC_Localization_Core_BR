@@ -144,7 +144,9 @@ namespace MWC_Localization_Core
                 "GUI/Indicators/Subtitles",
                 "GUI/Indicators/Subtitles/Shadow",
                 "GUI/Indicators/TaxiGUI",
-                "GUI/Indicators/TaxiGUI/Shadow"
+                "GUI/Indicators/TaxiGUI/Shadow",
+                "GUI/HUD/Thrist/HUDLabel",
+                "GUI/HUD/Thrist/HUDLabel/Shadow",
             };
             
             foreach (string path in paths)
