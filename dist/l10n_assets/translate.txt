@@ -50,6 +50,7 @@ HISTORIC VEHICLE INSPECTION RECEIPT = 클래식 카 감정 평가서
 RENT A TABLE = 테이블 대여
 TAKE MONEY = 돈 가져가기
 PAY POST ORDER = 택배비 납부
+SALES = 판매 수익
 
 PRICE TOTAL = 총 가격
 BURGER 25 MK = 버거 25 MK
@@ -97,6 +98,7 @@ plastic tray = 플라스틱 트레이
 packages box = 패키지 상자
 long log = 긴 통나무
 sandbag = 모래주머니
+receipt = 영수증
 DISPOSED BATTERY = 다 쓴 배터리
 
 SCRAPE WINDOW = 창문 긁어내기
@@ -791,7 +793,7 @@ ARRIVED = 도착
 "Good evening! Thank you for coming!" = "안녕하세요! 와주셔서 감사합니다!"
 "Thank you and see you later!" = "고맙습니다. 다음에 또 뵙죠!"
 "I would like to get the receipt, thanks." = "영수증도 주세요, 감사합니다."
-"Hello! I would like to order a taxi to {0}." = "안녕하세요, 택시죠? {0}로 와주세요."
+Hello! I would like to order a taxi to {0}. = 안녕하세요, 택시죠? {0}로 와주세요.
 Loppentie 403 = Loppentie 403
 Loppentie 401 = Loppentie 401
 Loppentie 302 = Loppentie 302
