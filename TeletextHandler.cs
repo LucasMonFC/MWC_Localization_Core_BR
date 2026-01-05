@@ -520,17 +520,11 @@ namespace MWC_Localization_Core
                     }
                     else
                     {
-                        // First message found but no translation available
-                        logger.LogWarning($"[FirstMessage] ✗ No exact match in dictionary for:");
-                        logger.LogWarning($"[FirstMessage] '{currentText}'");
-                        logger.LogWarning($"[FirstMessage] Available keys (first 5):");
-                        int count = 0;
-                        foreach (var key in translationDict.Keys)
-                        {
-                            logger.LogWarning($"[FirstMessage]   - '{key}'");
-                            if (++count >= 5) break;
-                        }
-                        return false;
+                        // First message found but no translation available - likely already translated
+                        logger.LogInfo($"[FirstMessage] Message not in dictionary - assuming already translated:");
+                        logger.LogInfo($"[FirstMessage] '{currentText}'");
+                        logger.LogInfo($"[FirstMessage] Stopping retry loop to prevent infinite attempts");
+                        return true; // Return true to stop retrying
                     }
                 }
                 
