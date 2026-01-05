@@ -58,16 +58,6 @@ namespace MWC_Localization_Core
             payPostOrderPattern.PathMatcher = path => path.Contains("GUI/Indicators/Interaction");
             patterns.Add(payPostOrderPattern);
 
-            // Taxi call subtitle pattern (with parameter translation)
-            var taxiSubtitlePattern = new TranslationPattern(
-                "TaxiSubtitle",
-                TranslationMode.FsmPatternWithTranslation,
-                "Hello! I would like to order a taxi to {0}.",
-                "{HELLO!IWOULDLIKETOORDERATAXITO} {0}."
-            );
-            taxiSubtitlePattern.PathMatcher = path => path.Contains("GUI/Indicators/Subtitles");
-            patterns.Add(taxiSubtitlePattern);
-
             // Magazine price/phone pattern (custom handler)
             var magazinePricePattern = new TranslationPattern(
                 "MagazinePrice",
@@ -127,7 +117,7 @@ namespace MWC_Localization_Core
                     // Parse pattern - auto-detects FsmPattern vs FsmPatternWithTranslation
                     if (TryParseFsmPattern(trimmed, out TranslationPattern pattern))
                     {
-                        patterns.Add(pattern);
+                        patterns.Insert(0, pattern);  // Insert at beginning to override built-in patterns
                         loadedCount++;
                     }
                 }
@@ -159,15 +149,15 @@ namespace MWC_Localization_Core
                 return false;
 
             // Check if this is a pattern (contains {0}, {1}, etc.)
-            // Auto-detect: if BOTH original AND translation have placeholders, don't translate params (FSM mode)
-            // If ONLY original has placeholders, translate params (FsmPatternWithTranslation mode)
+            // Auto-detect: if BOTH original AND translation have placeholders, use FsmPattern (just substitute)
+            // If ONLY original has placeholders, use FsmPatternWithTranslation (translate the params)
             if (original.Contains("{0}") || original.Contains("{1}") || original.Contains("{2}"))
             {
                 bool translationHasPlaceholders = translation.Contains("{0}") || translation.Contains("{1}") || translation.Contains("{2}");
                 
                 pattern = new TranslationPattern(
                     "FSM_" + original.Substring(0, System.Math.Min(20, original.Length)),
-                    translationHasPlaceholders ? TranslationMode.FsmPatternWithTranslation : TranslationMode.FsmPattern,
+                    translationHasPlaceholders ? TranslationMode.FsmPattern : TranslationMode.FsmPatternWithTranslation,
                     original,
                     translation
                 );

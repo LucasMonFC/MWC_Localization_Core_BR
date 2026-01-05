@@ -100,6 +100,8 @@ namespace MWC_Localization_Core
             AddPathRule("GUI/Indicators/Partname/Shadow", MonitoringStrategy.EveryFrame);
             AddPathRule("GUI/Indicators/Subtitles", MonitoringStrategy.EveryFrame);
             AddPathRule("GUI/Indicators/Subtitles/Shadow", MonitoringStrategy.EveryFrame);
+            AddPathRule("GUI/Indicators/TaxiGUI", MonitoringStrategy.EveryFrame);
+            AddPathRule("GUI/Indicators/TaxiGUI/Shadow", MonitoringStrategy.EveryFrame);
             
             // Active HUD - fast polling (10 FPS)
             AddPathRule("GUI/HUD/Day/HUDValue", MonitoringStrategy.FastPolling);

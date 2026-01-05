@@ -114,7 +114,11 @@ namespace MWC_Localization_Core
             arrayListHandler = new ArrayListProxyHandler(_logger, translations, magazineHandler, translator);
             arrayListHandler.InitializeArrayPaths();
             
-            // Load FSM patterns into pattern matcher
+            // Load FSM patterns into pattern matcher from main translation file
+            string mainTranslatePath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate.txt");
+            translator.LoadFsmPatterns(mainTranslatePath);
+            
+            // Load additional FSM patterns from teletext file
             string teletextPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_teletext.txt");
             translator.LoadFsmPatterns(teletextPath);
             
@@ -138,7 +142,9 @@ namespace MWC_Localization_Core
                 "GUI/Indicators/Partname",
                 "GUI/Indicators/Partname/Shadow",
                 "GUI/Indicators/Subtitles",
-                "GUI/Indicators/Subtitles/Shadow"
+                "GUI/Indicators/Subtitles/Shadow",
+                "GUI/Indicators/TaxiGUI",
+                "GUI/Indicators/TaxiGUI/Shadow"
             };
             
             foreach (string path in paths)
@@ -306,7 +312,11 @@ namespace MWC_Localization_Core
             string teletextPath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate_teletext.txt");
             teletextHandler.LoadTeletextTranslations(teletextPath);
             
-            // Reload FSM patterns
+            // Reload FSM patterns from main file first
+            string mainTranslatePath = Path.Combine(Path.Combine(Paths.PluginPath, "l10n_assets"), "translate.txt");
+            translator.LoadFsmPatterns(mainTranslatePath);
+            
+            // Reload additional FSM patterns from teletext file
             translator.LoadFsmPatterns(teletextPath);
 
             // Clear all caches
