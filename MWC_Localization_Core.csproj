@@ -1,37 +1,134 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>net35</TargetFramework>
-    <AssemblyName>MWC_Localization_Core</AssemblyName>
-    <Product>My first plugin</Product>
-    <Version>1.0.0</Version>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
-    <RestoreAdditionalProjectSources>
-      https://api.nuget.org/v3/index.json;
-      https://nuget.bepinex.dev/v3/index.json;
-      https://nuget.samboy.dev/v3/index.json
-    </RestoreAdditionalProjectSources>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{83FB4CB2-8D82-D38E-C2AC-05DAAAC6E090}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MWC_Localization_Core</RootNamespace>
+    <AssemblyName>MWC_Localization_Core</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
+    <LangVersion>13</LangVersion>
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
-    <PackageReference Include="BepInEx.Core" Version="5.*" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="UnityEngine.Modules" Version="5.0.0" IncludeAssets="compile" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
-  </ItemGroup>
-  
-  <ItemGroup>
+    <Reference Include="Assembly-UnityScript">
+      <HintPath>D:\SteamLibrary\steamapps\common\My Winter Car\mywintercar_Data\Managed\Assembly-UnityScript.dll</HintPath>
+    </Reference>
+    <Reference Include="MSCLoader.Preloader">
+      <HintPath>D:\SteamLibrary\steamapps\common\My Winter Car\mywintercar_Data\Managed\MSCLoader.Preloader.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>D:\SteamLibrary\steamapps\common\My Winter Car\mywintercar_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MSCLoader">
+      <HintPath>D:\SteamLibrary\steamapps\common\My Winter Car\mywintercar_Data\Managed\MSCLoader.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\SteamLibrary\steamapps\common\My Winter Car\mywintercar_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="PlayMaker">
       <HintPath>D:\SteamLibrary\steamapps\common\My Winter Car\mywintercar_Data\Managed\PlayMaker.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>D:\SteamLibrary\steamapps\common\My Winter Car\mywintercar_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ArrayListProxyHandler.cs" />
+    <Compile Include="CoreConsole.cs" />
+    <Compile Include="LateUpdateHandler.cs" />
+    <Compile Include="LocalizationConfig.cs" />
+    <Compile Include="LocalizationConstants.cs" />
+    <Compile Include="MagazineTextHandler.cs" />
+    <Compile Include="MonitoringStrategy.cs" />
+    <Compile Include="MWC_Localization_Core.cs" />
+    <Compile Include="PatternMatcher.cs" />
+    <Compile Include="PositionAdjustment.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SceneTranslationManager.cs" />
+    <Compile Include="StringHelper.cs" />
+    <Compile Include="TeletextHandler.cs" />
+    <Compile Include="TextMeshTranslator.cs" />
+    <Compile Include="TranslationPattern.cs" />
+    <Compile Include="UnifiedTextMeshMonitor.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <MSCMODSFOLDER>NONE</MSCMODSFOLDER>
+    <MWCMODSFOLDER>NONE</MWCMODSFOLDER>
+    <ABFOLDER>NONE</ABFOLDER>
+    <PostBuildEvent>
+      echo .
+      echo "== Running post build actions for configuration $(ConfigurationName)! ==="
+
+      IF "$(ConfigurationName)" == "Release" (
+      IF NOT "$(MSCMODSFOLDER)" == "NONE" (
+      copy "$(TargetPath)" "$(MSCMODSFOLDER)" /y
+      echo  "Copied dll into MSC mods folder!"        
+      )
+      IF NOT "$(MWCMODSFOLDER)" == "NONE" (
+      copy "$(TargetPath)" "$(MWCMODSFOLDER)" /y
+      echo  "Copied dll into MWC mods folder!"        
+      )
+      )
+      IF "$(ConfigurationName)" == "Debug" (
+      IF NOT "$(MSCMODSFOLDER)" == "NONE" (        
+      copy "$(TargetPath)" "$(MSCMODSFOLDER)" /y
+      copy "$(TargetDir)$(TargetName).pdb" "$(MSCMODSFOLDER)" /y
+      echo  "Copied pdb file into mods folder!"
+      cd "$(MSCMODSFOLDER)"
+      IF exist "$(MSCMODSFOLDER)\debug.bat" (
+      call "$(MSCMODSFOLDER)\debug.bat"
+      ) ELSE (
+      echo "debug.bat not found in "$(MSCMODSFOLDER)". You probably dont have MSCLoader debugging enabled!"
+      )
+      )
+      IF NOT "$(MWCMODSFOLDER)" == "NONE" (        
+      copy "$(TargetPath)" "$(MWCMODSFOLDER)" /y
+      copy "$(TargetDir)$(TargetName).pdb" "$(MWCMODSFOLDER)" /y
+      echo  "Copied pdb file into mods folder!"
+      cd "$(MWCMODSFOLDER)"
+      IF exist "$(MWCMODSFOLDER)\debug.bat" (
+      call "$(MWCMODSFOLDER)\debug.bat"
+      ) ELSE (
+      echo "debug.bat not found in "$(MWCMODSFOLDER)". You probably dont have MSCLoader debugging enabled!"
+      )
+      )      
+      )
+
+      echo "=== Done! ==="
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

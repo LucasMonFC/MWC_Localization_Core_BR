@@ -1,4 +1,6 @@
-using BepInEx.Logging;
+// Configuration file loader
+
+using MSCLoader;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -15,14 +17,10 @@ namespace MWC_Localization_Core
         public string LanguageName { get; private set; } = "Unknown";
         public string LanguageCode { get; private set; } = "en-US";
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();
-        public List<UnicodeRange> UnicodeRanges { get; private set; } = new List<UnicodeRange>();
         public List<PositionAdjustment> PositionAdjustments { get; private set; } = new List<PositionAdjustment>();
 
-        private ManualLogSource logger;
-
-        public LocalizationConfig(ManualLogSource logger)
+        public LocalizationConfig()
         {
-            this.logger = logger;
         }
 
         /// <summary>
@@ -32,8 +30,8 @@ namespace MWC_Localization_Core
         {
             if (!File.Exists(configPath))
             {
-                logger.LogWarning($"Config file not found: {configPath}");
-                logger.LogInfo("Using default configuration (no character detection, no font mappings)");
+                CoreConsole.Warning($"Config file not found: {configPath}");
+                CoreConsole.Warning("Using default configuration (no font mappings)");
                 return false;
             }
 
@@ -80,16 +78,15 @@ namespace MWC_Localization_Core
                     }
                 }
 
-                logger.LogInfo($"Configuration loaded: {LanguageName} ({LanguageCode})");
-                logger.LogInfo($"Font mappings: {FontMappings.Count}");
-                logger.LogInfo($"Unicode ranges: {UnicodeRanges.Count}");
-                logger.LogInfo($"Position adjustments: {PositionAdjustments.Count}");
+                CoreConsole.Print($"Configuration loaded: {LanguageName} ({LanguageCode})");
+                CoreConsole.Print($"Font mappings: {FontMappings.Count}");
+                CoreConsole.Print($"Position adjustments: {PositionAdjustments.Count}");
 
                 return true;
             }
             catch (System.Exception ex)
             {
-                logger.LogError($"Failed to load config: {ex.Message}");
+                CoreConsole.Error($"Failed to load config: {ex.Message}");
                 return false;
             }
         }
@@ -114,10 +111,6 @@ namespace MWC_Localization_Core
 
                 case "LANGUAGE_CODE":
                     LanguageCode = value;
-                    break;
-
-                case "UNICODE_RANGES":
-                    ParseUnicodeRanges(value);
                     break;
             }
         }
@@ -166,7 +159,7 @@ namespace MWC_Localization_Core
             string[] parts = offsetString.Split(',');
             if (parts.Length < 3)
             {
-                logger.LogWarning($"Invalid adjustment format: '{offsetString}'. Expected at least X,Y,Z");
+                CoreConsole.Warning($"Invalid adjustment format: '{offsetString}'. Expected at least X,Y,Z");
                 return;
             }
 
@@ -203,93 +196,8 @@ namespace MWC_Localization_Core
             }
             catch (System.Exception ex)
             {
-                logger.LogWarning($"Failed to parse position adjustment '{line}': {ex.Message}");
+                CoreConsole.Warning($"Failed to parse position adjustment '{line}': {ex.Message}");
             }
-        }
-
-        /// <summary>
-        /// Parse Unicode ranges (format: START-END,START-END)
-        /// Example: AC00-D7AF,1100-11FF,3130-318F
-        /// </summary>
-        private void ParseUnicodeRanges(string rangesString)
-        {
-            if (string.IsNullOrEmpty(rangesString))
-                return;
-
-            string[] ranges = rangesString.Split(',');
-
-            foreach (string range in ranges)
-            {
-                string trimmedRange = range.Trim();
-                string[] parts = trimmedRange.Split('-');
-
-                if (parts.Length == 2)
-                {
-                    try
-                    {
-                        int start = System.Convert.ToInt32(parts[0].Trim(), 16);
-                        int end = System.Convert.ToInt32(parts[1].Trim(), 16);
-
-                        // Guard clause: Warn if range includes ANY Latin Unicode blocks (0000-024F)
-                        // This includes Basic Latin, Latin-1 Supplement, Latin Extended-A/B
-                        // The game contains Finnish characters (Ä, Ö, Å) in original text!
-                        if (start <= 0x024F && end >= 0x0000)
-                        {
-                            logger.LogError("═══════════════════════════════════════════════════════════════");
-                            logger.LogError($"ERROR: Unicode range '{trimmedRange}' includes Latin characters (0000-024F)!");
-                            logger.LogError("This range contains English AND Finnish characters (Ä, Ö, Å, etc.)");
-                            logger.LogError("from the original game and will BREAK translation!");
-                            logger.LogError("");
-                            logger.LogError("For Latin-based languages (Polish, Spanish, French, German, etc.):");
-                            logger.LogError("Leave UNICODE_RANGES empty or commented out in config.txt");
-                            logger.LogError("");
-                            logger.LogError("Unicode ranges are ONLY for non-Latin languages like:");
-                            logger.LogError("- Korean (AC00-D7AF,1100-11FF,3130-318F)");
-                            logger.LogError("- Japanese (3040-309F,30A0-30FF,4E00-9FFF)");
-                            logger.LogError("- Chinese (4E00-9FFF,3400-4DBF)");
-                            logger.LogError("═══════════════════════════════════════════════════════════════");
-                            
-                            // Clear all ranges to prevent translation breaking
-                            UnicodeRanges.Clear();
-                            return;
-                        }
-
-                        UnicodeRanges.Add(new UnicodeRange(start, end));
-                    }
-                    catch (System.Exception ex)
-                    {
-                        logger.LogWarning($"Failed to parse Unicode range '{trimmedRange}': {ex.Message}");
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Check if text contains characters from configured Unicode ranges
-        /// DEPRECATED: Use HashSet-based TextMesh tracking instead for better performance
-        /// Kept for backwards compatibility with Unicode-based detection (Korean, Japanese, Chinese)
-        /// Returns false if no ranges configured (for Latin languages)
-        /// </summary>
-        public bool ContainsLocalizedCharacters(string text)
-        {
-            // Skip detection if no Unicode ranges configured (Latin languages)
-            if (UnicodeRanges.Count == 0)
-                return false;
-
-            if (string.IsNullOrEmpty(text))
-                return false;
-
-            // Simple check without caching (rarely used now)
-            foreach (char c in text)
-            {
-                foreach (UnicodeRange range in UnicodeRanges)
-                {
-                    if (c >= range.Start && c <= range.End)
-                        return true;
-                }
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -342,21 +250,6 @@ namespace MWC_Localization_Core
             {
                 adjustment.ClearCache();
             }
-        }
-    }
-
-    /// <summary>
-    /// Represents a Unicode character range for language detection
-    /// </summary>
-    public struct UnicodeRange
-    {
-        public int Start;
-        public int End;
-
-        public UnicodeRange(int start, int end)
-        {
-            Start = start;
-            End = end;
         }
     }
 }

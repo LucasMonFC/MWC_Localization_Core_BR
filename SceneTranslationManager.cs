@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+using MSCLoader;
 
 namespace MWC_Localization_Core
 {
@@ -8,7 +8,6 @@ namespace MWC_Localization_Core
     /// </summary>
     public class SceneTranslationManager
     {
-        private ManualLogSource logger;
         
         // Scene translation states
         private bool hasTranslatedSplashScreen = false;
@@ -19,9 +18,8 @@ namespace MWC_Localization_Core
         private string currentScene = "";
         private string previousScene = "";
 
-        public SceneTranslationManager(ManualLogSource logger)
+        public SceneTranslationManager()
         {
-            this.logger = logger;
         }
 
         /// <summary>
@@ -54,17 +52,17 @@ namespace MWC_Localization_Core
             {
                 case "SplashScreen":
                     hasTranslatedSplashScreen = true;
-                    logger.LogInfo("Splash Screen marked as translated");
+                    CoreConsole.Print("Splash Screen marked as translated");
                     break;
                     
                 case "MainMenu":
                     hasTranslatedMainMenu = true;
-                    logger.LogInfo("Main Menu marked as translated");
+                    CoreConsole.Print("Main Menu marked as translated");
                     break;
                     
                 case "GAME":
                     hasTranslatedGameScene = true;
-                    logger.LogInfo("Game scene marked as translated");
+                    CoreConsole.Print("Game scene marked as translated");
                     break;
             }
         }
@@ -80,7 +78,7 @@ namespace MWC_Localization_Core
                 previousScene = currentScene;
                 currentScene = newScene;
                 
-                logger.LogInfo($"Scene changed: {previousScene} -> {currentScene}");
+                CoreConsole.Print($"Scene changed: {previousScene} -> {currentScene}");
                 HandleSceneChange(previousScene, currentScene);
                 
                 return true;
@@ -98,13 +96,13 @@ namespace MWC_Localization_Core
             {
                 // Reset game scene when returning to menu
                 hasTranslatedGameScene = false;
-                logger.LogInfo("Scene change: Cleared game scene translation flag");
+                CoreConsole.Print("Scene change: Cleared game scene translation flag");
             }
             else if (to == "GAME")
             {
                 // Reset main menu when entering game
                 hasTranslatedMainMenu = false;
-                logger.LogInfo("Scene change: Cleared main menu translation flag");
+                CoreConsole.Print("Scene change: Cleared main menu translation flag");
             }
         }
 
@@ -116,7 +114,7 @@ namespace MWC_Localization_Core
             hasTranslatedSplashScreen = false;
             hasTranslatedMainMenu = false;
             hasTranslatedGameScene = false;
-            logger.LogInfo("All scene translation flags reset");
+            CoreConsole.Print("All scene translation flags reset");
         }
 
         /// <summary>

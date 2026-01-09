@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+using MSCLoader;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,23 +16,26 @@ namespace MWC_Localization_Core
         private MagazineTextHandler magazineHandler;
         private PatternMatcher patternMatcher;
         private LocalizationConfig config;
-        private ManualLogSource logger;
+
+        private List<string> ExcludedPath = new List<string>
+        {
+            "HOMENEW/Functions/FunctionsDisable/Stereos/Player/Screen/Settings/Bass/LCD"
+        };
 
         public TextMeshTranslator(
             Dictionary<string, string> translations,
             Dictionary<string, Font> customFonts,
             MagazineTextHandler magazineHandler,
-            LocalizationConfig config,
-            ManualLogSource logger)
+            LocalizationConfig config
+        )
         {
             this.translations = translations;
             this.customFonts = customFonts;
             this.magazineHandler = magazineHandler;
             this.config = config;
-            this.logger = logger;
             
             // Initialize unified pattern matcher
-            this.patternMatcher = new PatternMatcher(translations, logger);
+            this.patternMatcher = new PatternMatcher(translations);
         }
 
         /// <summary>
@@ -49,6 +52,10 @@ namespace MWC_Localization_Core
             if (translatedTextMeshes != null && translatedTextMeshes.Contains(textMesh))
                 return true;
 
+            // Skip excluded paths
+            if (ExcludedPath.Contains(path))
+                return false;
+
             // Try complex text handling first (e.g., magazine text, cashier price)
             if (HandleComplexTextMesh(textMesh, path))
             {
@@ -59,9 +66,7 @@ namespace MWC_Localization_Core
 
             // Use standard translation
             if (ApplyTranslation(textMesh, path))
-            {
                 return true;
-            }
 
             return false;
         }

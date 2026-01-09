@@ -1,21 +1,16 @@
 // Generic handler for translating PlayMakerArrayListProxy data
 // Supports any GameObject with array-based content (HUD, menus, etc.)
 
-using BepInEx.Logging;
-using HutongGames.PlayMaker;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using MSCLoader;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Text;
+using System.Collections;
 
 namespace MWC_Localization_Core
 {
     public class ArrayListProxyHandler
     {
-        private ManualLogSource logger;
-        
         // Reference to main translation dictionaries (from Plugin)
         private Dictionary<string, string> mainTranslations;
         private MagazineTextHandler magazineHandler;
@@ -42,9 +37,12 @@ namespace MWC_Localization_Core
         private Dictionary<string, PlayMakerArrayListProxy> arrayProxyCache 
             = new Dictionary<string, PlayMakerArrayListProxy>();
 
-        public ArrayListProxyHandler(ManualLogSource log, Dictionary<string, string> translations, MagazineTextHandler magazineHandler, TextMeshTranslator translator)
+        public ArrayListProxyHandler(
+            Dictionary<string, string> translations, 
+            MagazineTextHandler magazineHandler, 
+            TextMeshTranslator translator
+        )
         {
-            logger = log;
             this.mainTranslations = translations;
             this.magazineHandler = magazineHandler;
             this.translator = translator;
@@ -83,12 +81,9 @@ namespace MWC_Localization_Core
             arrayPaths.Add("STORE_AREA/TeimoInBar/Pivot/Speak:7"); // Pub Nappo CoffeeSub
             arrayPaths.Add("STORE_AREA/Stuff/LOD/GFX_Pub/PubCashRegister/CashRegisterLogic:1"); // Pub Nappo CoffeeSub
             arrayPaths.Add("CARPARTS/PARTSYSTEM/PhoneNumbers:2"); // Car parts phone call subtitles
-            
-            // Add more paths here as discovered from game dumps
-            // Use BepInEx Dumper to find: GameObject path + component index
-            
-            logger.LogInfo($"Initialized {arrayPaths.Count} array paths to monitor");
-            
+
+            CoreConsole.Print($"Initialized {arrayPaths.Count} array paths to monitor");
+
             // Initialize TextMesh display path mappings
             InitializeTextMeshMappings();
         }
@@ -107,8 +102,8 @@ namespace MWC_Localization_Core
                 "Sheets/YellowPagesMagazine/Page2/Row4",  // Magazine Page 2 Row 4
                 // Add more parent paths as needed
             };
-            
-            logger.LogInfo($"Initialized {parentSearchPaths.Count} parent search paths for font application");
+
+            CoreConsole.Print($"Initialized {parentSearchPaths.Count} parent search paths for font application");
         }
 
         public void ClearTranslations()
@@ -155,7 +150,7 @@ namespace MWC_Localization_Core
             // Parse arrayKey: "GameObject/Path:ComponentIndex"
             if (!arrayKey.Contains(":"))
             {
-                logger.LogWarning($"Invalid array key format (expected 'path:index'): {arrayKey}");
+                CoreConsole.Warning($"Invalid array key format (expected 'path:index'): {arrayKey}");
                 return 0;
             }
 
@@ -165,7 +160,7 @@ namespace MWC_Localization_Core
 
             if (!int.TryParse(parts[1], out componentIndex))
             {
-                logger.LogWarning($"Invalid component index in array key: {arrayKey}");
+                CoreConsole.Warning($"Invalid component index in array key: {arrayKey}");
                 return 0;
             }
 
@@ -181,7 +176,7 @@ namespace MWC_Localization_Core
             PlayMakerArrayListProxy[] proxies = obj.GetComponents<PlayMakerArrayListProxy>();
             if (proxies == null || componentIndex >= proxies.Length)
             {
-                logger.LogWarning($"PlayMakerArrayListProxy[{componentIndex}] not found at {objectPath}");
+                CoreConsole.Warning($"PlayMakerArrayListProxy[{componentIndex}] not found at {objectPath}");
                 return 0;
             }
 
@@ -217,7 +212,7 @@ namespace MWC_Localization_Core
 
             if (translatedCount > 0)
             {
-                logger.LogInfo($"[Array] Translated {translatedCount}/{arrayList.Count} items in {arrayKey}");
+                CoreConsole.Print($"[Array] Translated {translatedCount}/{arrayList.Count} items in {arrayKey}");
             }
 
             return translatedCount;
@@ -370,7 +365,7 @@ namespace MWC_Localization_Core
 
             if (fontsApplied > 0)
             {
-                logger.LogInfo($"[Array Fonts] Applied Korean font to {fontsApplied} TextMesh components ({completedParentPaths.Count}/{parentSearchPaths.Count} paths complete)");
+                CoreConsole.Print($"[Array Fonts] Applied Korean font to {fontsApplied} TextMesh components ({completedParentPaths.Count}/{parentSearchPaths.Count} paths complete)");
             }
 
             return fontsApplied;

@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+using MSCLoader;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -64,7 +64,6 @@ namespace MWC_Localization_Core
         private Dictionary<MonitoringStrategy, List<TextMeshEntry>> strategyGroups;
         private Dictionary<TextMesh, TextMeshEntry> textMeshToEntry;
         private TextMeshTranslator translator;
-        private ManualLogSource logger;
         
         // Throttling timers
         private float fastPollingTimer;
@@ -73,10 +72,9 @@ namespace MWC_Localization_Core
         // Path-based monitoring rules
         private Dictionary<string, MonitoringStrategy> pathRules;
 
-        public UnifiedTextMeshMonitor(TextMeshTranslator translator, ManualLogSource logger)
+        public UnifiedTextMeshMonitor(TextMeshTranslator translator)
         {
             this.translator = translator;
-            this.logger = logger;
             
             strategyGroups = new Dictionary<MonitoringStrategy, List<TextMeshEntry>>();
             textMeshToEntry = new Dictionary<TextMesh, TextMeshEntry>();
@@ -106,12 +104,22 @@ namespace MWC_Localization_Core
             AddPathRule("GUI/HUD/Thrist/HUDLabel/Shadow", MonitoringStrategy.EveryFrame);
             
             // Active HUD - fast polling (10 FPS)
+            AddPathRule("GUI/HUD/Mortal/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("GUI/HUD/Day/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/", MonitoringStrategy.FastPolling);
+            AddPathRule("GUI/HUD/Thirst/HUDValue", MonitoringStrategy.FastPolling);
+            AddPathRule("GUI/HUD/Hunger/HUDValue", MonitoringStrategy.FastPolling);
+            AddPathRule("GUI/HUD/Stress/HUDValue", MonitoringStrategy.FastPolling);
+            AddPathRule("GUI/HUD/Urine/HUDValue", MonitoringStrategy.FastPolling);
+            AddPathRule("GUI/HUD/Fatigue/HUDValue", MonitoringStrategy.FastPolling);
+            AddPathRule("GUI/HUD/Money/HUDValue", MonitoringStrategy.FastPolling);
+            AddPathRule("GUI/HUD/Bodytemp/HUDValue", MonitoringStrategy.FastPolling);
+            AddPathRule("GUI/HUD/Sweat/HUDValue", MonitoringStrategy.FastPolling);
+            AddPathRule("Systems/TV/TVGraphics/CHAT/Day", MonitoringStrategy.FastPolling);
+            AddPathRule("Systems/TV/TVGraphics/CHAT/Moderator", MonitoringStrategy.FastPolling);
             
             // Teletext/FSM - slow polling (1 FPS)
             AddPathRule("Systems/TV/Teletext/", MonitoringStrategy.SlowPolling);
-            AddPathRule("Systems/TV/TVGraphics/CHAT/", MonitoringStrategy.SlowPolling);
+            AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.SlowPolling);
             
             // Magazine - persistent (always check)
             AddPathRule("Sheets/YellowPagesMagazine/", MonitoringStrategy.Persistent);
@@ -162,7 +170,7 @@ namespace MWC_Localization_Core
             
             // Determine strategy if not provided
             MonitoringStrategy finalStrategy = strategy ?? DetermineStrategy(path);
-            
+        
             // Create entry
             var entry = new TextMeshEntry(textMesh, path, finalStrategy);
             

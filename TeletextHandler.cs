@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+using MSCLoader;
 using HutongGames.PlayMaker;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,8 +21,6 @@ namespace MWC_Localization_Core
     /// </summary>
     public class TeletextHandler
     {
-        private ManualLogSource logger;
-
         // Category-based translations: [referenceName][originalText] = translatedText (for key-based lookup)
         private Dictionary<string, Dictionary<string, string>> categoryTranslations = 
             new Dictionary<string, Dictionary<string, string>>();
@@ -35,11 +33,11 @@ namespace MWC_Localization_Core
         private HashSet<string> translatedArrays = new HashSet<string>();
         
         // Track if first ChatMessage has been translated (one-time check)
-        private bool hasTranslatedFirstChatMessage = false;
+        private bool hasTranslatedFirstChatMessage = true;
         
         // Retry counter for first message translation (prevent infinite loops)
-        private int firstMessageRetryCount = 0;
-        private int firstMessageFrameCounter = 0;
+        private int FirstMessageRetryCount = 0;
+        private int FirstMessageFrameCounter = 0;
         
         // Track disabled FSM paths (to avoid re-disabling)
         private HashSet<string> disabledFsmPaths = new HashSet<string>();
@@ -52,9 +50,8 @@ namespace MWC_Localization_Core
             { "Systems/TV/TVGraphics/CHAT/Day", "Chat.Day" }    // Prefix with "Chat.Day."
         };
 
-        public TeletextHandler(ManualLogSource logger)
+        public TeletextHandler()
         {
-            this.logger = logger;
         }
 
         /// <summary>
@@ -66,7 +63,7 @@ namespace MWC_Localization_Core
         {
             if (!System.IO.File.Exists(filePath))
             {
-                logger.LogWarning($"Teletext translation file not found: {filePath}");
+                CoreConsole.Warning($"Teletext translation file not found: {filePath}");
                 return;
             }
 
@@ -199,15 +196,14 @@ namespace MWC_Localization_Core
                 if (categoryTranslations.ContainsKey("ChatMessages.All"))
                 {
                     categoryTranslations["ChatMessages.Messages"] = categoryTranslations["ChatMessages.All"];
-                    logger.LogInfo($"Created alias: ChatMessages.Messages -> ChatMessages.All ({categoryTranslations["ChatMessages.All"].Count} translations)");
+                    //CoreConsole.Print($"Created alias: ChatMessages.Messages -> ChatMessages.All ({categoryTranslations["ChatMessages.All"].Count} translations)");
                 }
 
-                logger.LogInfo($"Loaded {loadedCount} teletext translations across {categoryTranslations.Count} categories");
-                logger.LogInfo($"Note: [fsm] patterns now handled by unified PatternMatcher system");
+                CoreConsole.Print($"[Teletext] Loaded {loadedCount} teletext translations across {categoryTranslations.Count} categories");
             }
             catch (System.Exception ex)
             {
-                logger.LogError($"Error loading teletext translations: {ex.Message}");
+                CoreConsole.Error($"[Teletext] Error loading teletext translations: {ex.Message}");
             }
         }
 
@@ -322,32 +318,32 @@ namespace MWC_Localization_Core
                         // This runs BEFORE the translation check because Messages uses All's translations (via alias)
                         if (categoryName == "ChatMessages.Messages" && currentCount > 0 && !hasTranslatedFirstChatMessage)
                         {
-                            firstMessageFrameCounter++;
+                            FirstMessageFrameCounter++;
                             
                             // Only check every LocalizationConstants.FIRST_MESSAGE_CHECK_INTERVAL frames (not every frame)
-                            if (firstMessageFrameCounter >= LocalizationConstants.FIRST_MESSAGE_CHECK_INTERVAL)
+                            if (FirstMessageFrameCounter >= LocalizationConstants.FIRST_MESSAGE_CHECK_INTERVAL)
                             {
-                                firstMessageFrameCounter = 0; // Reset counter
-                                firstMessageRetryCount++;
+                                FirstMessageFrameCounter = 0; // Reset counter
+                                FirstMessageRetryCount++;
                                 
-                                if (firstMessageRetryCount > LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES)
+                                if (FirstMessageRetryCount > LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES)
                                 {
-                                    logger.LogWarning($"[FirstMessage] Exceeded retry limit ({LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES} attempts over ~3 seconds), giving up");
+                                    CoreConsole.Warning($"[Teletext-FirstChatMessage] Exceeded retry limit ({LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES} attempts over ~3 seconds), giving up");
                                     hasTranslatedFirstChatMessage = true; // Stop retrying
                                 }
                                 else
                                 {
-                                    logger.LogInfo($"[FirstMessage] Attempting first message translation (attempt {firstMessageRetryCount}/{LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES})...");
+                                    CoreConsole.Print($"[Teletext-FirstChatMessage] Attempting first message translation (attempt {FirstMessageRetryCount}/{LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES})...");
                                     // ChatMessages.Messages is aliased to ChatMessages.All during loading
                                     if (TranslateFirstNonEmptyChatMessage(proxies[i], categoryName))
                                     {
                                         totalTranslated++;
                                         hasTranslatedFirstChatMessage = true;
-                                        logger.LogInfo($"[FirstMessage] Success! Flag set - will not check again");
+                                        CoreConsole.Print($"[Teletext-FirstChatMessage] Success! Flag set - will not check again");
                                     }
-                                    else if (firstMessageRetryCount >= LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES)
+                                    else if (FirstMessageRetryCount >= LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES)
                                     {
-                                        logger.LogWarning($"[FirstMessage] Failed after {LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES} attempts - giving up");
+                                        CoreConsole.Warning($"[Teletext-FirstChatMessage] Failed after {LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES} attempts - giving up");
                                         hasTranslatedFirstChatMessage = true; // Prevent infinite retries
                                     }
                                     // If not at limit yet, will retry after next interval
@@ -366,7 +362,7 @@ namespace MWC_Localization_Core
                             int translated = TranslateArrayListProxy(proxies[i], categoryName);
                             if (translated > 0)
                             {
-                                logger.LogInfo($"[Monitor] '{categoryName}' populated with {currentCount} items, replaced with {translated} translations");
+                                CoreConsole.Print($"[Teletext] '{categoryName}' populated with {currentCount} items, replaced with {translated} translations");
                                 totalTranslated += translated;
                                 translatedArrays.Add(arrayKey); // Mark as translated
                             }
@@ -378,7 +374,7 @@ namespace MWC_Localization_Core
             }
             catch (System.Exception ex)
             {
-                logger.LogError($"Error monitoring teletext arrays: {ex.Message}");
+                CoreConsole.Error($"[Teletext] Error monitoring teletext arrays: {ex.Message}");
                 return 0;
             }
         }
@@ -408,7 +404,7 @@ namespace MWC_Localization_Core
                     if (proxies == null || proxies.Length == 0)
                         continue;
 
-                    logger.LogInfo($"Found {pathPrefix}: {proxies.Length} arrays");
+                    CoreConsole.Print($"[Teletext] Found {pathPrefix}: {proxies.Length} arrays");
 
                     // Translate each array based on its referenceName
                     for (int i = 0; i < proxies.Length; i++)
@@ -440,7 +436,7 @@ namespace MWC_Localization_Core
                         
                         if (translated > 0)
                         {
-                            logger.LogInfo($"  [{i}] '{categoryName}': Translated {translated} items");
+                            CoreConsole.Print($"[Teletext]  [{i}] '{categoryName}': Translated {translated} items");
                             translatedArrays.Add(arrayKey);
                         }
                     }
@@ -448,19 +444,19 @@ namespace MWC_Localization_Core
 
                 if (totalTranslated > 0)
                 {
-                    logger.LogInfo($"Successfully translated {totalTranslated} teletext/data items!");
+                    CoreConsole.Print($"[Teletext] Successfully translated {totalTranslated} teletext/data items!");
                 }
                 else
                 {
-                    logger.LogInfo("No pre-populated arrays to translate. Will monitor for lazy-loaded content.");
+                    CoreConsole.Print("[Teletext] No pre-populated arrays to translate. Will monitor for lazy-loaded content.");
                 }
                 
                 return totalTranslated;
             }
             catch (System.Exception ex)
             {
-                logger.LogError($"Error translating teletext data: {ex.Message}");
-                logger.LogError($"Stack trace: {ex.StackTrace}");
+                CoreConsole.Error($"[Teletext] Error translating teletext data: {ex.Message}");
+                CoreConsole.Error($"[Teletext] Stack trace: {ex.StackTrace}");
                 return 0;
             }
         }
@@ -474,23 +470,23 @@ namespace MWC_Localization_Core
         {
             if (proxy == null || proxy._arrayList == null || proxy._arrayList.Count == 0)
             {
-                logger.LogInfo($"[FirstMessage] Array is null or empty");
+                CoreConsole.Print($"[Teletext-FirstChatMessage] Array is null or empty");
                 return false;
             }
 
             try
             {
-                logger.LogInfo($"[FirstMessage] Scanning array with {proxy._arrayList.Count} elements");
+                CoreConsole.Print($"[Teletext-FirstChatMessage] Scanning array with {proxy._arrayList.Count} elements");
                 
                 // Get translation dictionary
                 if (!categoryTranslations.ContainsKey(categoryName))
                 {
-                    logger.LogWarning($"[FirstMessage] No translation dictionary found for: {categoryName}");
+                    CoreConsole.Warning($"[Teletext-FirstChatMessage] No translation dictionary found for: {categoryName}");
                     return false;
                 }
                     
                 var translationDict = categoryTranslations[categoryName];
-                logger.LogInfo($"[FirstMessage] Translation dictionary has {translationDict.Count} entries");
+                CoreConsole.Print($"[Teletext-FirstChatMessage] Translation dictionary has {translationDict.Count} entries");
                 
                 // Scan entire array for first non-empty message
                 for (int idx = 0; idx < proxy._arrayList.Count; idx++)
@@ -508,37 +504,37 @@ namespace MWC_Localization_Core
                         continue;
 
                     // Found first non-empty message
-                    logger.LogInfo($"[FirstMessage] Found non-empty message at index {idx}:");
-                    logger.LogInfo($"[FirstMessage] Original text: '{currentText}'");
-                    logger.LogInfo($"[FirstMessage] Text length: {currentText.Length} chars");
+                    CoreConsole.Print($"[Teletext-FirstChatMessage] Found non-empty message at index {idx}:");
+                    CoreConsole.Print($"[Teletext-FirstChatMessage] Original text: '{currentText}'");
+                    CoreConsole.Print($"[Teletext-FirstChatMessage] Text length: {currentText.Length} chars");
                     
                     // Try to translate it
                     if (translationDict.ContainsKey(currentText))
                     {
                         string translation = translationDict[currentText];
                         proxy._arrayList[idx] = translation;
-                        logger.LogInfo($"[FirstMessage] ✓ Successfully translated at index {idx}");
-                        logger.LogInfo($"[FirstMessage] Translation: '{translation}'");
+                        CoreConsole.Print($"[Teletext-FirstChatMessage] ✓ Successfully translated at index {idx}");
+                        CoreConsole.Print($"[Teletext-FirstChatMessage] Translation: '{translation}'");
                         return true;
                     }
                     else
                     {
                         // First message found but no translation available - likely already translated
-                        logger.LogInfo($"[FirstMessage] Message not in dictionary - assuming already translated:");
-                        logger.LogInfo($"[FirstMessage] '{currentText}'");
-                        logger.LogInfo($"[FirstMessage] Stopping retry loop to prevent infinite attempts");
+                        CoreConsole.Print($"[Teletext-FirstChatMessage] Message not in dictionary - assuming already translated:");
+                        CoreConsole.Print($"[Teletext-FirstChatMessage] '{currentText}'");
+                        CoreConsole.Print($"[Teletext-FirstChatMessage] Stopping retry loop to prevent infinite attempts");
                         return true; // Return true to stop retrying
                     }
                 }
                 
                 // All elements were empty
-                logger.LogInfo($"[FirstMessage] All {proxy._arrayList.Count} elements are empty");
+                CoreConsole.Print($"[Teletext-FirstChatMessage] All {proxy._arrayList.Count} elements are empty");
                 return false;
             }
             catch (System.Exception ex)
             {
-                logger.LogError($"[FirstMessage] Error: {ex.Message}");
-                logger.LogError($"[FirstMessage] Stack: {ex.StackTrace}");
+                CoreConsole.Error($"[Teletext-FirstChatMessage] Error: {ex.Message}");
+                CoreConsole.Error($"[Teletext-FirstChatMessage] Stack: {ex.StackTrace}");
                 return false;
             }
         }
@@ -592,16 +588,16 @@ namespace MWC_Localization_Core
                     
                     // CRITICAL: Replace entire ArrayList (this is what MSC does!)
                     proxy._arrayList = newArrayList;
-                    logger.LogInfo($"[Replace] '{categoryName}': Created new ArrayList with {newArrayList.Count} items ({translatedCount} translated)");
+                    CoreConsole.Print($"[Teletext] [Replace] '{categoryName}': Created new ArrayList with {newArrayList.Count} items ({translatedCount} translated)");
                 }
                 else
                 {
-                    logger.LogInfo($"[Skip] '{categoryName}': Array empty or not yet populated");
+                    CoreConsole.Print($"[Teletext] [Skip] '{categoryName}': Array empty or not yet populated");
                 }
             }
             catch (System.Exception ex)
             {
-                logger.LogError($"Error translating category '{categoryName}': {ex.Message}");
+                CoreConsole.Error($"[Teletext] Error translating category '{categoryName}': {ex.Message}");
             }
 
             return translatedCount;
@@ -662,7 +658,7 @@ namespace MWC_Localization_Core
                     if (extractedNumber < 1 || extractedNumber > 5)
                     {
                         // Invalid round number
-                        //logger.LogInfo($"[FSM Disable] Waiting for valid number (1-5) at {path} (current: '{currentText}', extracted: {extractedNumber})");
+                        //CoreConsole.Print($"[FSM Disable] Waiting for valid number (1-5) at {path} (current: '{currentText}', extracted: {extractedNumber})");
                         continue;
                     }
 
@@ -674,7 +670,7 @@ namespace MWC_Localization_Core
                         {
                             fsm.enabled = false;
                             disabledCount++;
-                            logger.LogInfo($"[FSM Disable] Disabled FSM '{fsm.FsmName}' at {path}");
+                            CoreConsole.Print($"[Teletext] [FSM Disable] Disabled FSM '{fsm.FsmName}' at {path}");
                         }
                     }
 
@@ -684,7 +680,7 @@ namespace MWC_Localization_Core
                         if (translator.TranslateAndApplyFont(textMesh, path, null))
                         {
                             translatedCount++;
-                            logger.LogInfo($"[FSM Disable] Translated: '{textMesh.text}' at {path}");
+                            CoreConsole.Print($"[Teletext] [FSM Disable] Translated: '{textMesh.text}' at {path}");
                         }
                     }
                     
@@ -693,13 +689,13 @@ namespace MWC_Localization_Core
                 }
                 catch (System.Exception ex)
                 {
-                    logger.LogError($"[FSM Disable] Error processing {path}: {ex.Message}");
+                    CoreConsole.Error($"[Teletext] [FSM Disable] Error processing {path}: {ex.Message}");
                 }
             }
 
             if (disabledCount > 0)
             {
-                logger.LogInfo($"[FSM Disable] Successfully disabled {disabledCount} FSMs and translated {translatedCount} Bottomline texts");
+                CoreConsole.Print($"[Teletext] [FSM Disable] Successfully disabled {disabledCount} FSMs and translated {translatedCount} Bottomline texts");
             }
             
             return disabledCount;
@@ -712,8 +708,8 @@ namespace MWC_Localization_Core
         {
             translatedArrays.Clear();
             hasTranslatedFirstChatMessage = false;
-            firstMessageRetryCount = 0;
-            firstMessageFrameCounter = 0;
+            FirstMessageRetryCount = 0;
+            FirstMessageFrameCounter = 0;
             disabledFsmPaths.Clear();
         }
 
@@ -793,18 +789,18 @@ namespace MWC_Localization_Core
                 int threshold = expectedCount / 2;
                 bool isPopulated = expectedCount > 0 && populatedCount >= threshold;
                 
-                logger.LogInfo($"Array population check: {populatedCount}/{expectedCount} arrays populated (threshold: {threshold})");
+                CoreConsole.Print($"Array population check: {populatedCount}/{expectedCount} arrays populated (threshold: {threshold})");
                 foreach (string detail in details)
                 {
-                    //logger.LogInfo(detail);
+                    //CoreConsole.Print(detail);
                 }
-                logger.LogInfo($"Result: {(isPopulated ? "POPULATED - will translate" : "NOT POPULATED - will retry")}");
+                CoreConsole.Print($"Result: {(isPopulated ? "POPULATED - will translate" : "NOT POPULATED - will retry")}");
 
                 return isPopulated;
             }
             catch (System.Exception ex)
             {
-                logger.LogError($"Error checking array population: {ex.Message}");
+                CoreConsole.Error($"Error checking array population: {ex.Message}");
                 return false;
             }
         }

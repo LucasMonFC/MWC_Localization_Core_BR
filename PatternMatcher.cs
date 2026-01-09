@@ -1,4 +1,6 @@
-using BepInEx.Logging;
+// Pattern matching system for Translation Strings
+
+using MSCLoader;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -13,12 +15,10 @@ namespace MWC_Localization_Core
     {
         private List<TranslationPattern> patterns = new List<TranslationPattern>();
         private Dictionary<string, string> translations;
-        private ManualLogSource logger;
 
-        public PatternMatcher(Dictionary<string, string> translations, ManualLogSource logger)
+        public PatternMatcher(Dictionary<string, string> translations)
         {
             this.translations = translations;
-            this.logger = logger;
             
             InitializeBuiltInPatterns();
         }
@@ -109,7 +109,7 @@ namespace MWC_Localization_Core
         {
             if (!File.Exists(filePath))
             {
-                logger.LogInfo("No pattern file found, using built-in patterns only");
+                CoreConsole.Print("No pattern file found, using built-in patterns only");
                 return;
             }
 
@@ -142,11 +142,11 @@ namespace MWC_Localization_Core
                     }
                 }
 
-                logger.LogInfo($"Loaded {loadedCount} patterns from file");
+                CoreConsole.Print($"Loaded {loadedCount} patterns from file");
             }
             catch (System.Exception ex)
             {
-                logger.LogError($"Failed to load patterns: {ex.Message}");
+                CoreConsole.Error($"Failed to load patterns: {ex.Message}");
             }
         }
 
@@ -251,7 +251,7 @@ namespace MWC_Localization_Core
             }
             catch (System.Exception ex)
             {
-                logger.LogWarning($"Failed to parse magazine price/phone line: {text} - {ex.Message}");
+                CoreConsole.Warning($"Failed to parse magazine price/phone line: {text} - {ex.Message}");
             }
 
             return new TranslationPattern.CustomHandlerResult(false, null);
