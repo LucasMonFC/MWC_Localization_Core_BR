@@ -47,10 +47,11 @@ UNEMPLOYMENT OFFICE = 구인구직 센터 사무실
 DEBIT NOTE = 고지서
 POST ORDER NOTIFICATION = 택배 배송 알림
 HISTORIC VEHICLE INSPECTION RECEIPT = 클래식 카 감정 평가서
-RENT A TABLE = 테이블 대여
+RENT A TABLE = 벼룩시장 매대 대여
 TAKE MONEY = 돈 가져가기
 PAY POST ORDER = 택배비 납부
 SALES = 판매 수익
+UNPAID FINES = 미납 벌금
 
 PRICE TOTAL = 총 가격
 BURGER 25 MK = 버거 25 MK
@@ -544,24 +545,24 @@ se = selkeää pi = pilvistä Ls = lumisadetta = se = 맑음\npi = 흐림\nLs = 
 SADETUTKA = 강우 레이더
 Lukka = 닫기
 JÄÄKIEKKO ....................... 240 = 아이스하키 ................................. 240
-Pääsarjan kierroksen 00 tulokset = 메인 시리즈 00라운드 결과
-Pääsarjan kierroksen 1 tulokset. = 메인 시리즈 1라운드 결과
 JÄÄKIEKKO = 아이스하키
 240 TULOKSET = 점수
 242 PISTEPÖRSSI = 포인트 교환
-Sarjatilanne kun pelattu 1 ottelua. = 1 경기 후 시리즈 순위.
 241 SARJATAULUKKO = 241 시리즈 점수 표
 PÄÄSARJA = 메인 시리즈
 302 MEGAVETO	200 URHEILU = 302 메가벳      200 스포츠
 301 LOTTO		200 URHEILU = 301 로또        200 스포츠
-Kierros 2 pelikohteet = 2라운드 게임
-Kierros 1 tulokset = 1라운드 결과
 MAANANTAI = 월요일
 MEGAVETO = 메가벳
+Sarjatilanne kun pelattu {0} ottelua. = {0} 경기 후 시리즈 순위.
+Pääsarjan kierroksen {0} tulokset. = 메인 시리즈 {0}라운드 결과
+Kierros {0} tulokset = {0}라운드 결과
+Kierros {0} pelikohteet = {0}라운드 게임
 tulossa kesällä 1999 = 1999년 여름 출시 예정
 tulossa keväällä 1999 = 1999년 봄 출시 예정
 SOITA JA TILAA HALUTUT TUOTTEET NUMEROSTA 0511-8510. PUHELUN HINTA 15MK/MIN + PPM. POSTIMAKSUT LISÄTÄÄN HINTAAN. NOPEA TOIMITUS! SOITA 0511-8510! = 원하시는 제품이 있다면 0511-8510으로 전화 주문하세요. 통화료는 분당 15 MK입니다. 배송비는 가격에 추가됩니다. 빠른 배송! 0511-8510으로 전화하세요!
 HYVÄÄ UUTTA VUOTTA 1999 TOIVOTTAA TEKSTI-TV:N TOIMITUS! = 1999년 새해 인사드립니다! 새해 복 많이 받으세요!\n- 텍스트TV 편집부 
+Valvojana = 관리자
 
 //// Computer POS
 Copying... 0% = 복사 중... 0%

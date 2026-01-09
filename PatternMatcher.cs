@@ -58,6 +58,26 @@ namespace MWC_Localization_Core
             payPostOrderPattern.PathMatcher = path => path.Contains("GUI/Indicators/Interaction");
             patterns.Add(payPostOrderPattern);
 
+            // Unpaid Fine pattern (regex)
+            var unpaidFinePattern = new TranslationPattern(
+                "UnpaidFine",
+                TranslationMode.RegexExtract,
+                @"UNPAID FINES, \s*([\d.]+)\s*MK",
+                "{UNPAIDFINES} {0} MK"
+            );
+            unpaidFinePattern.PathMatcher = path => path.Contains("GUI/Indicators/Interaction");
+            patterns.Add(unpaidFinePattern);
+
+            // TV Chat moderator pattern (regex)
+            var tvChatModeratorPattern = new TranslationPattern(
+                "TVChatModerator",
+                TranslationMode.RegexExtract,
+                @"Valvojana: \s*(.+)",
+                "{VALVOJANA}: {0}"
+            );
+            tvChatModeratorPattern.PathMatcher = path => path.Contains("Systems/TV/TVGraphics/CHAT/Moderator");
+            patterns.Add(tvChatModeratorPattern);
+
             // Magazine price/phone pattern (custom handler)
             var magazinePricePattern = new TranslationPattern(
                 "MagazinePrice",

@@ -662,7 +662,7 @@ namespace MWC_Localization_Core
                     if (extractedNumber < 1 || extractedNumber > 5)
                     {
                         // Invalid round number
-                        logger.LogInfo($"[FSM Disable] Waiting for valid number (1-5) at {path} (current: '{currentText}', extracted: {extractedNumber})");
+                        //logger.LogInfo($"[FSM Disable] Waiting for valid number (1-5) at {path} (current: '{currentText}', extracted: {extractedNumber})");
                         continue;
                     }
 
@@ -796,7 +796,7 @@ namespace MWC_Localization_Core
                 logger.LogInfo($"Array population check: {populatedCount}/{expectedCount} arrays populated (threshold: {threshold})");
                 foreach (string detail in details)
                 {
-                    logger.LogInfo(detail);
+                    //logger.LogInfo(detail);
                 }
                 logger.LogInfo($"Result: {(isPopulated ? "POPULATED - will translate" : "NOT POPULATED - will retry")}");
 
