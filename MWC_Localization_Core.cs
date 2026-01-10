@@ -269,9 +269,6 @@ namespace MWC_Localization_Core
                 
                 if (teletextHandler.IsTeletextAvailable())
                 {
-                    string info = teletextHandler.GetTeletextInfo();
-                    CoreConsole.Print(info);
-                    
                     // Check if arrays are populated before translating
                     bool arraysPopulated = teletextHandler.AreTeletextArraysPopulated();
                     

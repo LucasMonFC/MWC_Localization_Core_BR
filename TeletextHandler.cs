@@ -1,5 +1,3 @@
-using MSCLoader;
-using HutongGames.PlayMaker;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,13 +29,6 @@ namespace MWC_Localization_Core
         
         // Track which arrays have been translated already
         private HashSet<string> translatedArrays = new HashSet<string>();
-        
-        // Track if first ChatMessage has been translated (one-time check)
-        private bool hasTranslatedFirstChatMessage = true;
-        
-        // Retry counter for first message translation (prevent infinite loops)
-        private int FirstMessageRetryCount = 0;
-        private int FirstMessageFrameCounter = 0;
         
         // Track disabled FSM paths (to avoid re-disabling)
         private HashSet<string> disabledFsmPaths = new HashSet<string>();
@@ -314,46 +305,9 @@ namespace MWC_Localization_Core
                         // Check if array has been populated by the game
                         int currentCount = proxies[i]._arrayList != null ? proxies[i]._arrayList.Count : 0;
                         
-                        // Special handling for ChatMessages.Messages: one-time check for first non-empty message
-                        // This runs BEFORE the translation check because Messages uses All's translations (via alias)
-                        if (categoryName == "ChatMessages.Messages" && currentCount > 0 && !hasTranslatedFirstChatMessage)
-                        {
-                            FirstMessageFrameCounter++;
-                            
-                            // Only check every LocalizationConstants.FIRST_MESSAGE_CHECK_INTERVAL frames (not every frame)
-                            if (FirstMessageFrameCounter >= LocalizationConstants.FIRST_MESSAGE_CHECK_INTERVAL)
-                            {
-                                FirstMessageFrameCounter = 0; // Reset counter
-                                FirstMessageRetryCount++;
-                                
-                                if (FirstMessageRetryCount > LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES)
-                                {
-                                    CoreConsole.Warning($"[Teletext-FirstChatMessage] Exceeded retry limit ({LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES} attempts over ~3 seconds), giving up");
-                                    hasTranslatedFirstChatMessage = true; // Stop retrying
-                                }
-                                else
-                                {
-                                    CoreConsole.Print($"[Teletext-FirstChatMessage] Attempting first message translation (attempt {FirstMessageRetryCount}/{LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES})...");
-                                    // ChatMessages.Messages is aliased to ChatMessages.All during loading
-                                    if (TranslateFirstNonEmptyChatMessage(proxies[i], categoryName))
-                                    {
-                                        totalTranslated++;
-                                        hasTranslatedFirstChatMessage = true;
-                                        CoreConsole.Print($"[Teletext-FirstChatMessage] Success! Flag set - will not check again");
-                                    }
-                                    else if (FirstMessageRetryCount >= LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES)
-                                    {
-                                        CoreConsole.Warning($"[Teletext-FirstChatMessage] Failed after {LocalizationConstants.MAX_FIRST_MESSAGE_RETRIES} attempts - giving up");
-                                        hasTranslatedFirstChatMessage = true; // Prevent infinite retries
-                                    }
-                                    // If not at limit yet, will retry after next interval
-                                }
-                            }
-                        }
-                        
                         // Skip if no translations for this category
-                        if (!indexBasedTranslations.ContainsKey(categoryName) || 
-                            indexBasedTranslations[categoryName].Count == 0) 
+                        if (!categoryTranslations.ContainsKey(categoryName) || 
+                            categoryTranslations[categoryName].Count == 0) 
                             continue;
                         
                         if (currentCount > 0)
@@ -418,8 +372,8 @@ namespace MWC_Localization_Core
                         string categoryName = string.IsNullOrEmpty(prefix) ? refName : $"{prefix}.{refName}";
 
                         // Skip if no translations
-                        if (!indexBasedTranslations.ContainsKey(categoryName) || 
-                            indexBasedTranslations[categoryName].Count == 0)
+                        if (!categoryTranslations.ContainsKey(categoryName) || 
+                            categoryTranslations[categoryName].Count == 0)
                             continue;
 
                         // Only translate if array is already populated
@@ -462,137 +416,46 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Scan entire ChatMessages.Messages array and translate the first non-empty message found
-        /// This only runs once for the very first message that appears
-        /// Uses key-value lookup for targeted translation
-        /// </summary>
-        private bool TranslateFirstNonEmptyChatMessage(PlayMakerArrayListProxy proxy, string categoryName)
-        {
-            if (proxy == null || proxy._arrayList == null || proxy._arrayList.Count == 0)
-            {
-                CoreConsole.Print($"[Teletext-FirstChatMessage] Array is null or empty");
-                return false;
-            }
-
-            try
-            {
-                CoreConsole.Print($"[Teletext-FirstChatMessage] Scanning array with {proxy._arrayList.Count} elements");
-                
-                // Get translation dictionary
-                if (!categoryTranslations.ContainsKey(categoryName))
-                {
-                    CoreConsole.Warning($"[Teletext-FirstChatMessage] No translation dictionary found for: {categoryName}");
-                    return false;
-                }
-                    
-                var translationDict = categoryTranslations[categoryName];
-                CoreConsole.Print($"[Teletext-FirstChatMessage] Translation dictionary has {translationDict.Count} entries");
-                
-                // Scan entire array for first non-empty message
-                for (int idx = 0; idx < proxy._arrayList.Count; idx++)
-                {
-                    object currentValue = proxy._arrayList[idx];
-                    
-                    // Skip if empty or null
-                    if (currentValue == null || string.IsNullOrEmpty(currentValue.ToString()))
-                        continue;
-
-                    string currentText = currentValue.ToString().Trim();
-                    
-                    // Skip if empty after trim
-                    if (string.IsNullOrEmpty(currentText))
-                        continue;
-
-                    // Found first non-empty message
-                    CoreConsole.Print($"[Teletext-FirstChatMessage] Found non-empty message at index {idx}:");
-                    CoreConsole.Print($"[Teletext-FirstChatMessage] Original text: '{currentText}'");
-                    CoreConsole.Print($"[Teletext-FirstChatMessage] Text length: {currentText.Length} chars");
-                    
-                    // Try to translate it
-                    if (translationDict.ContainsKey(currentText))
-                    {
-                        string translation = translationDict[currentText];
-                        proxy._arrayList[idx] = translation;
-                        CoreConsole.Print($"[Teletext-FirstChatMessage] ✓ Successfully translated at index {idx}");
-                        CoreConsole.Print($"[Teletext-FirstChatMessage] Translation: '{translation}'");
-                        return true;
-                    }
-                    else
-                    {
-                        // First message found but no translation available - likely already translated
-                        CoreConsole.Print($"[Teletext-FirstChatMessage] Message not in dictionary - assuming already translated:");
-                        CoreConsole.Print($"[Teletext-FirstChatMessage] '{currentText}'");
-                        CoreConsole.Print($"[Teletext-FirstChatMessage] Stopping retry loop to prevent infinite attempts");
-                        return true; // Return true to stop retrying
-                    }
-                }
-                
-                // All elements were empty
-                CoreConsole.Print($"[Teletext-FirstChatMessage] All {proxy._arrayList.Count} elements are empty");
-                return false;
-            }
-            catch (System.Exception ex)
-            {
-                CoreConsole.Error($"[Teletext-FirstChatMessage] Error: {ex.Message}");
-                CoreConsole.Error($"[Teletext-FirstChatMessage] Stack: {ex.StackTrace}");
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Translate a single PlayMakerArrayListProxy component using index-based translations
-        /// Creates NEW ArrayList and replaces it (MSC approach)
-        /// Does NOT modify preFillStringList - only runtime _arrayList
+        /// Translate a single PlayMakerArrayListProxy component using key-value lookup
+        /// Loops through original array and looks up each element's translation
+        /// Preserves empty/null elements naturally
         /// </summary>
         private int TranslateArrayListProxy(PlayMakerArrayListProxy proxy, string categoryName)
         {
-            if (proxy == null) return 0;
-
-            // Get translations for this category
-            if (!indexBasedTranslations.ContainsKey(categoryName))
-            {
+            if (proxy == null || proxy._arrayList == null) 
                 return 0;
-            }
 
-            List<string> translations = indexBasedTranslations[categoryName];
+            // Get translation dictionary for this category
+            if (!categoryTranslations.ContainsKey(categoryName))
+                return 0;
+
+            Dictionary<string, string> translations = categoryTranslations[categoryName];
             if (translations.Count == 0)
-            {
                 return 0;
-            }
 
             int translatedCount = 0;
-
             try
             {
-                // Translate runtime array by creating NEW ArrayList (MSC approach)
-                if (proxy._arrayList != null && proxy._arrayList.Count > 0)
+                // Translate array in-place by looking up each element
+                ArrayList arrayList = proxy._arrayList;
+                
+                for (int i = 0; i < arrayList.Count; i++)
                 {
-                    int originalCount = proxy._arrayList.Count;
-                    ArrayList newArrayList = new ArrayList();
+                    // Skip null or empty elements
+                    if (arrayList[i] == null)
+                        continue;
                     
-                    // Replace items by index with translations
-                    for (int i = 0; i < originalCount; i++)
+                    string original = arrayList[i].ToString();
+                    if (string.IsNullOrEmpty(original))
+                        continue;
+                    
+                    // Look up translation by normalized key
+                    string normalizedOriginal = original.Trim();
+                    if (translations.TryGetValue(normalizedOriginal, out string translation))
                     {
-                        if (i < translations.Count)
-                        {
-                            // Use translation at this index
-                            newArrayList.Add(translations[i]);
-                            translatedCount++;
-                        }
-                        else
-                        {
-                            // Keep original if no translation
-                            newArrayList.Add(proxy._arrayList[i]);
-                        }
+                        arrayList[i] = translation;
+                        translatedCount++;
                     }
-                    
-                    // CRITICAL: Replace entire ArrayList (this is what MSC does!)
-                    proxy._arrayList = newArrayList;
-                    CoreConsole.Print($"[Teletext] [Replace] '{categoryName}': Created new ArrayList with {newArrayList.Count} items ({translatedCount} translated)");
-                }
-                else
-                {
-                    CoreConsole.Print($"[Teletext] [Skip] '{categoryName}': Array empty or not yet populated");
                 }
             }
             catch (System.Exception ex)
@@ -707,9 +570,6 @@ namespace MWC_Localization_Core
         public void Reset()
         {
             translatedArrays.Clear();
-            hasTranslatedFirstChatMessage = false;
-            FirstMessageRetryCount = 0;
-            FirstMessageFrameCounter = 0;
             disabledFsmPaths.Clear();
         }
 
@@ -802,55 +662,6 @@ namespace MWC_Localization_Core
             {
                 CoreConsole.Error($"Error checking array population: {ex.Message}");
                 return false;
-            }
-        }
-
-        /// <summary>
-        /// Get diagnostic info about all data source structures (for debugging)
-        /// </summary>
-        public string GetTeletextInfo()
-        {
-            try
-            {
-                string info = "Data sources found:\n";
-                int totalSources = 0;
-
-                foreach (string path in pathPrefixes.Keys)
-                {
-                    GameObject dataObject = GameObject.Find(path);
-                    if (dataObject == null) continue;
-
-                    PlayMakerArrayListProxy[] proxies = dataObject.GetComponents<PlayMakerArrayListProxy>();
-                    if (proxies == null || proxies.Length == 0) continue;
-
-                    info += $"\n{path}: {proxies.Length} arrays\n";
-                    totalSources++;
-
-                    for (int i = 0; i < proxies.Length; i++)
-                    {
-                        int count = proxies[i]._arrayList != null ? proxies[i]._arrayList.Count : 0;
-                        int preFillCount = proxies[i].preFillStringList != null ? proxies[i].preFillStringList.Count : 0;
-                        string refName = proxies[i].referenceName ?? "null";
-                        
-                        string prefix = pathPrefixes[path];
-                        string categoryName = string.IsNullOrEmpty(prefix) ? refName : $"{prefix}.{refName}";
-                        bool hasTranslations = categoryTranslations.ContainsKey(categoryName);
-                        
-                        string checkMark = hasTranslations ? "OK" : "NO";
-                        int transCount = hasTranslations ? categoryTranslations[categoryName].Count : 0;
-                        
-                        info += $"  [{i}] '{refName}' ({categoryName}): {count} runtime items, {preFillCount} preFill items [{checkMark} {transCount} translations]\n";
-                    }
-                }
-
-                if (totalSources == 0)
-                    return "No data sources found in this scene";
-
-                return info;
-            }
-            catch (System.Exception ex)
-            {
-                return $"Error getting data source info: {ex.Message}";
             }
         }
     }
