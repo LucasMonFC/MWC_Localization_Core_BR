@@ -98,14 +98,6 @@ namespace MWC_Localization_Core
                         
                         currentCategory = trimmed.Substring(1, trimmed.Length - 2);
                         
-                        // Skip [fsm] section - now handled by PatternMatcher
-                        if (currentCategory == "fsm")
-                        {
-                            currentDict = null;
-                            currentIndexList = null;
-                            continue;
-                        }
-                        
                         if (!categoryTranslations.ContainsKey(currentCategory))
                             categoryTranslations[currentCategory] = new Dictionary<string, string>();
                         
@@ -142,10 +134,6 @@ namespace MWC_Localization_Core
                     int equalsIndex = FindUnescapedEquals(line);
                     if (equalsIndex > 0 && !readingValue)
                     {
-                        // Skip [fsm] section processing - handled by PatternMatcher
-                        if (currentCategory == "fsm")
-                            continue;
-                        
                         // Single-line format: KEY = VALUE
                         string key = line.Substring(0, equalsIndex).Trim();
                         string value = line.Substring(equalsIndex + 1).Trim();
@@ -487,6 +475,7 @@ namespace MWC_Localization_Core
                 "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1",
                 "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt/WeatherTemp", // Other siblings are covered by parent FSM
                 "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste/WeatherTemp", // Other siblings are covered by parent FSM
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Selite"
             };
 
             int disabledCount = 0;
@@ -536,7 +525,7 @@ namespace MWC_Localization_Core
                             }
                         }
                     }
-                    else if (childPath.Contains("188/Texts"))
+                    else if (childPath.Contains("188/Texts/Nyt") || childPath.Contains("188/Texts/Ennuste"))
                     {
                         // Extract number from text using regex
                         var match = System.Text.RegularExpressions.Regex.Match(currentText, @"\b(\d+)\b");
@@ -565,6 +554,27 @@ namespace MWC_Localization_Core
                                 }
                                 CoreConsole.Print($"[Teletext] [FSM Disable] Disabled {parentFsms.Length} FSM(s) on parent '{parentObj.name}'");
                             }
+                        }
+                    }
+                    else if (childPath.Contains("188/Texts/Selite"))
+                    {
+                        // Weather legend: no numeric placeholder, disable parent FSM directly
+                        // Get hardcoded translation built from individual word translations
+                        string translation = GetWeatherLegendTranslation();
+                        if (!string.IsNullOrEmpty(translation))
+                        {
+                            textMesh.text = translation;
+                            translatedCount++;
+                            CoreConsole.Print($"[Teletext] [Hardcoded] Weather legend translated: '{translation}'");
+                            
+                            // Apply font if translator available
+                            if (translator != null)
+                            {
+                                translator.ApplyCustomFont(textMesh, childPath);
+                            }
+                            
+                            disabledFsmPaths.Add(childPath);
+                            continue; // Translation is already done
                         }
                     }
 
@@ -694,6 +704,35 @@ namespace MWC_Localization_Core
                 CoreConsole.Error($"Error checking array population: {ex.Message}");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Hardcoded translation for weather legend at 188/Texts/Selite
+        /// Constructs translation from individual word translations
+        /// Original format: "se = selkeää\npi = pilvistä\nLs = lumisadetta"
+        /// Uses translations from [fsm] category for each component (e.g., "se", "selkeää", "pi", "pilvistä", etc.)
+        /// </summary>
+        private string GetWeatherLegendTranslation()
+        {
+            // Check if [fsm] category exists
+            if (!categoryTranslations.ContainsKey("fsm") || categoryTranslations["fsm"] == null)
+                return null; // No fsm translations available
+
+            Dictionary<string, string> fsmTranslations = categoryTranslations["fsm"];
+
+            // Try to get individual word translations from [fsm] category
+            // Weather codes (left side)
+            string se = fsmTranslations.TryGetValue("se", out string seTrans) ? seTrans : "se";
+            string pi = fsmTranslations.TryGetValue("pi", out string piTrans) ? piTrans : "pi";
+            string ls = fsmTranslations.TryGetValue("Ls", out string lsTrans) ? lsTrans : "Ls";
+            
+            // Weather descriptions (right side)
+            string selkeaa = fsmTranslations.TryGetValue("selkeää", out string selkeaaTrans) ? selkeaaTrans : "selkeää";
+            string pilvista = fsmTranslations.TryGetValue("pilvistä", out string pilvistaTrans) ? pilvistaTrans : "pilvistä";
+            string lumisadetta = fsmTranslations.TryGetValue("lumisadetta", out string lumisadettaTrans) ? lumisadettaTrans : "lumisadetta";
+            
+            // Reconstruct the legend with translated components
+            return $"{se} = {selkeaa}\n{pi} = {pilvista}\n{ls} = {lumisadetta}";
         }
     }
 }
