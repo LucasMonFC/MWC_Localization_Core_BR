@@ -286,8 +286,11 @@ namespace MWC_Localization_Core
                         // Create unique key for this array
                         string arrayKey = $"{pathPrefix}[{i}]:{refName}";
                         
-                        // Skip if already translated
-                        if (translatedArrays.Contains(arrayKey))
+                        // Special handling for dynamic arrays that change content (like chat history)
+                        bool isDynamic = categoryName == "ChatMessages.Messages";
+
+                        // Skip if already translated (unless dynamic)
+                        if (!isDynamic && translatedArrays.Contains(arrayKey))
                             continue;
 
                         // Check if array has been populated by the game
@@ -306,7 +309,9 @@ namespace MWC_Localization_Core
                             {
                                 CoreConsole.Print($"[Teletext] '{categoryName}' populated with {currentCount} items, replaced with {translated} translations");
                                 totalTranslated += translated;
-                                translatedArrays.Add(arrayKey); // Mark as translated
+                                
+                                if (!isDynamic)
+                                    translatedArrays.Add(arrayKey); // Mark as translated
                             }
                         }
                     }
@@ -406,6 +411,7 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Translate a single PlayMakerArrayListProxy component using key-value lookup
         /// Loops through original array and looks up each element's translation
+        /// Falls back to index-based translation if exact key match fails
         /// Preserves empty/null elements naturally
         /// </summary>
         private int TranslateArrayListProxy(PlayMakerArrayListProxy proxy, string categoryName)
@@ -422,10 +428,15 @@ namespace MWC_Localization_Core
                 return 0;
 
             int translatedCount = 0;
+            int fallbackCount = 0;
             try
             {
                 // Translate array in-place by looking up each element
                 ArrayList arrayList = proxy._arrayList;
+                
+                // Check if we have index-based translations as fallback
+                bool hasIndexFallback = indexBasedTranslations.ContainsKey(categoryName) && 
+                                        indexBasedTranslations[categoryName].Count > 0;
                 
                 for (int i = 0; i < arrayList.Count; i++)
                 {
@@ -437,13 +448,29 @@ namespace MWC_Localization_Core
                     if (string.IsNullOrEmpty(original))
                         continue;
                     
-                    // Look up translation by normalized key
+                    // Try exact key match first
                     string normalizedOriginal = original.Trim();
                     if (translations.TryGetValue(normalizedOriginal, out string translation))
                     {
                         arrayList[i] = translation;
                         translatedCount++;
                     }
+                    // Fallback: Use index-based translation if available
+                    else if (hasIndexFallback && i < indexBasedTranslations[categoryName].Count)
+                    {
+                        string indexTranslation = indexBasedTranslations[categoryName][i];
+                        if (!string.IsNullOrEmpty(indexTranslation))
+                        {
+                            arrayList[i] = indexTranslation;
+                            translatedCount++;
+                            fallbackCount++;
+                        }
+                    }
+                }
+                
+                if (fallbackCount > 0)
+                {
+                    CoreConsole.Print($"[Teletext]  '{categoryName}': Used index fallback for {fallbackCount} items");
                 }
             }
             catch (System.Exception ex)
