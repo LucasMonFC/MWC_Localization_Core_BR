@@ -118,7 +118,7 @@ namespace MWC_Localization_Core
             AddPathRule("Systems/TV/TVGraphics/CHAT/Moderator", MonitoringStrategy.FastPolling);
             
             // Teletext/FSM - slow polling (1 FPS)
-            AddPathRule("Systems/TV/Teletext/", MonitoringStrategy.SlowPolling);
+            AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.SlowPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.SlowPolling);
             
             // Magazine - persistent (always check)

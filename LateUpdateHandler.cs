@@ -140,7 +140,7 @@ namespace MWC_Localization_Core
                     }
                     
                     // Monitor and disable FSM-driven Bottomlines (handles late initialization)
-                    int fsmDisabled = teletextHandler.DisableBottomlineFSMs(translator);
+                    int fsmDisabled = teletextHandler.DisableTeletextFSMs(translator);
                     if (fsmDisabled > 0)
                     {
                         CoreConsole.Print($"[{mod.Name}] [Runtime] Disabled {fsmDisabled} Bottomline FSMs");

@@ -470,95 +470,126 @@ namespace MWC_Localization_Core
         /// Disable FSM components on specific teletext paths to prevent text regeneration
         /// Then translate the TextMesh once - solves flickering issue
         /// Can be called multiple times (uses tracking to avoid re-processing)
-        /// Only disables FSM when text has valid data (not default/placeholder values)
+        /// Waits for FSM to populate text before disabling (avoids disabling empty TextMesh)
+        /// Bottomline paths: Waits for placeholder '00' to be replaced with valid value (1-5)
+        /// Weather paths: FSMs on parent objects regenerate child TextMesh components
+        /// Pattern matching (e.g., "Kierros {0} pelikohteet") handled by PatternMatcher
         /// Returns number of NEW FSMs disabled this call
         /// </summary>
-        public int DisableBottomlineFSMs(TextMeshTranslator translator)
+        public int DisableTeletextFSMs(TextMeshTranslator translator)
         {
-            // Paths where FSMs constantly regenerate text (causing flickering)
-            string[] bottomlinePaths = new string[]
+            // Child TextMesh paths to check for valid text (before disabling parent FSMs)
+            string[] childTextPaths = new string[]
             {
                 "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1",
                 "Systems/TV/Teletext/VKTekstiTV/PAGES/241/Texts/Data/Bottomline 1",
                 "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1",
                 "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1",
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt/WeatherTemp", // Other siblings are covered by parent FSM
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste/WeatherTemp", // Other siblings are covered by parent FSM
             };
 
             int disabledCount = 0;
             int translatedCount = 0;
 
-            foreach (string path in bottomlinePaths)
+            foreach (string childPath in childTextPaths)
             {
                 // Skip if already processed
-                if (disabledFsmPaths.Contains(path))
+                if (disabledFsmPaths.Contains(childPath))
                     continue;
                     
                 try
                 {
-                    GameObject obj = GameObject.Find(path);
-                    if (obj == null)
+                    GameObject childObj = GameObject.Find(childPath);
+                    if (childObj == null)
                         continue; // Not found yet - will retry later
 
-                    // Check TextMesh content FIRST - only proceed if it has valid data
-                    TextMesh textMesh = obj.GetComponent<TextMesh>();
+                    // Wait for FSM to populate text before disabling
+                    TextMesh textMesh = childObj.GetComponent<TextMesh>();
                     if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
                         continue; // No text yet - FSM hasn't run
                     
                     string currentText = textMesh.text;
                     
-                    // Extract number from text using regex
-                    // Valid patterns: number should be 1-5
-                    var match = System.Text.RegularExpressions.Regex.Match(currentText, @"\b(\d+)\b");
-                    if (!match.Success)
+                    // Bottomline paths: Wait for placeholder '00' to be replaced with valid value (1-5)
+                    if (childPath.Contains("Bottomline"))
                     {
-                        // No number found in text
-                        continue;
-                    }
-                    
-                    int extractedNumber = int.Parse(match.Groups[1].Value);
-                    
-                    // Validate: number must be 1-5
-                    if (extractedNumber < 1 || extractedNumber > 5)
-                    {
-                        // Invalid round number
-                        //CoreConsole.Print($"[FSM Disable] Waiting for valid number (1-5) at {path} (current: '{currentText}', extracted: {extractedNumber})");
-                        continue;
-                    }
-
-                    // Text looks valid! Disable FSM to prevent regeneration
-                    PlayMakerFSM[] fsms = obj.GetComponents<PlayMakerFSM>();
-                    if (fsms != null && fsms.Length > 0)
-                    {
-                        foreach (var fsm in fsms)
+                        // Extract number from text using regex
+                        var match = System.Text.RegularExpressions.Regex.Match(currentText, @"\b(\d+)\b");
+                        if (!match.Success)
+                            continue; // No number found
+                        
+                        int extractedNumber = int.Parse(match.Groups[1].Value);
+                        
+                        // Validate: number must be 1-5 (not placeholder '00')
+                        if (extractedNumber < 1 || extractedNumber > 5)
+                            continue; // Still showing placeholder
+                        
+                        // Bottomline: FSM on child object itself
+                        PlayMakerFSM[] fsms = childObj.GetComponents<PlayMakerFSM>();
+                        if (fsms != null && fsms.Length > 0)
                         {
-                            fsm.enabled = false;
-                            disabledCount++;
-                            CoreConsole.Print($"[Teletext] [FSM Disable] Disabled FSM '{fsm.FsmName}' at {path}");
+                            foreach (var fsm in fsms)
+                            {
+                                fsm.enabled = false;
+                                disabledCount++;
+                            }
+                        }
+                    }
+                    else if (childPath.Contains("188/Texts"))
+                    {
+                        // Extract number from text using regex
+                        var match = System.Text.RegularExpressions.Regex.Match(currentText, @"\b(\d+)\b");
+                        if (!match.Success)
+                            continue; // No number found
+                        
+                        int extractedNumber = int.Parse(match.Groups[1].Value);
+                        
+                        // Validate: number must not be 33 (placeholder)
+                        if (extractedNumber == 33)
+                            continue; // Still showing placeholder
+
+                        // Weather paths: FSMs on parent object regenerate child TextMesh
+                        // Find parent: "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt" or "Ennuste"
+                        Transform parentTransform = childObj.transform.parent;
+                        if (parentTransform != null)
+                        {
+                            GameObject parentObj = parentTransform.gameObject;
+                            PlayMakerFSM[] parentFsms = parentObj.GetComponents<PlayMakerFSM>();
+                            if (parentFsms != null && parentFsms.Length > 0)
+                            {
+                                foreach (var fsm in parentFsms)
+                                {
+                                    fsm.enabled = false;
+                                    disabledCount++;
+                                }
+                                CoreConsole.Print($"[Teletext] [FSM Disable] Disabled {parentFsms.Length} FSM(s) on parent '{parentObj.name}'");
+                            }
                         }
                     }
 
-                    // Translate the TextMesh once (now that FSM won't fight us)
+                    // Translate using standard pipeline (PatternMatcher handles patterns like "Kierros {0} pelikohteet")
                     if (translator != null)
                     {
-                        if (translator.TranslateAndApplyFont(textMesh, path, null))
+                        if (translator.TranslateAndApplyFont(textMesh, childPath, null))
                         {
                             translatedCount++;
-                            CoreConsole.Print($"[Teletext] [FSM Disable] Translated: '{textMesh.text}' at {path}");
+                            CoreConsole.Print($"[Teletext] [FSM Disable] Translated: '{textMesh.text}' at {childPath.Substring(childPath.LastIndexOf('/') + 1)}");
                         }
                     }
                     
                     // Mark as processed
-                    disabledFsmPaths.Add(path);
+                    disabledFsmPaths.Add(childPath);
                 }
                 catch (System.Exception ex)
                 {
-                    CoreConsole.Error($"[Teletext] [FSM Disable] Error processing {path}: {ex.Message}");
+                    CoreConsole.Error($"[Teletext] [FSM Disable] Error processing {childPath}: {ex.Message}");
                 }
             }
 
             if (disabledCount > 0)
             {
-                CoreConsole.Print($"[Teletext] [FSM Disable] Successfully disabled {disabledCount} FSMs and translated {translatedCount} Bottomline texts");
+                CoreConsole.Print($"[Teletext] [FSM Disable] Successfully disabled {disabledCount} FSMs and translated {translatedCount} texts");
             }
             
             return disabledCount;
