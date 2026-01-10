@@ -169,15 +169,15 @@ namespace MWC_Localization_Core
                 return false;
 
             // Check if this is a pattern (contains {0}, {1}, etc.)
-            // Auto-detect: if BOTH original AND translation have placeholders, use FsmPattern (just substitute)
-            // If ONLY original has placeholders, use FsmPatternWithTranslation (translate the params)
+            // Auto-detect: if translation has placeholders, use FsmPatternWithTranslation (translate the params)
+            // If translation has NO placeholders, use FsmPattern (just substitute - rare case)
             if (original.Contains("{0}") || original.Contains("{1}") || original.Contains("{2}"))
             {
                 bool translationHasPlaceholders = translation.Contains("{0}") || translation.Contains("{1}") || translation.Contains("{2}");
                 
                 pattern = new TranslationPattern(
                     "FSM_" + original.Substring(0, System.Math.Min(20, original.Length)),
-                    translationHasPlaceholders ? TranslationMode.FsmPattern : TranslationMode.FsmPatternWithTranslation,
+                    translationHasPlaceholders ? TranslationMode.FsmPatternWithTranslation : TranslationMode.FsmPattern,
                     original,
                     translation
                 );
