@@ -75,7 +75,7 @@
     <Compile Include="MonitoringStrategy.cs" />
     <Compile Include="MWC_Localization_Core.cs" />
     <Compile Include="PatternMatcher.cs" />
-    <Compile Include="PositionAdjustment.cs" />
+    <Compile Include="TextAdjustment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SceneTranslationManager.cs" />
     <Compile Include="StringHelper.cs" />

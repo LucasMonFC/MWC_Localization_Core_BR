@@ -79,6 +79,7 @@ namespace MWC_Localization_Core
             if (textMesh == null)
                 return;
 
+            // Get custom font based on original font name
             string originalFontName = textMesh.font != null ? textMesh.font.name : "unknown";
             Font customFont = GetCustomFont(originalFontName);
 
@@ -90,7 +91,7 @@ namespace MWC_Localization_Core
                 {
                     renderer.material.mainTexture = customFont.material.mainTexture;
                 }
-                config.ApplyPositionAdjustment(textMesh, path);
+                config.ApplyTextAdjustment(textMesh, path);
             }
         }
 
@@ -126,6 +127,7 @@ namespace MWC_Localization_Core
             if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
                 return false;
 
+            // Normalize current text for lookup
             string currentText = textMesh.text;
             string normalizedKey = StringHelper.FormatUpperKey(currentText);
 
@@ -133,32 +135,15 @@ namespace MWC_Localization_Core
             if (!translations.TryGetValue(normalizedKey, out string translation))
                 return false;
 
-            // Skip if already translated (unless forced)
+            // Skip translation if already translated (unless forced)
             if (!forceUpdate && currentText == translation)
                 return false;
 
-            // Get original font name before changing
-            string originalFontName = textMesh.font != null ? textMesh.font.name : "unknown";
+            // Apply custom font first
+            ApplyCustomFont(textMesh, path);
 
             // Apply translation
             textMesh.text = translation;
-
-            // Apply custom font
-            Font customFont = GetCustomFont(originalFontName);
-            if (customFont != null)
-            {
-                textMesh.font = customFont;
-
-                // Update material texture
-                MeshRenderer renderer = textMesh.GetComponent<MeshRenderer>();
-                if (renderer != null && renderer.material != null && customFont.material != null && customFont.material.mainTexture != null)
-                {
-                    renderer.material.mainTexture = customFont.material.mainTexture;
-                }
-
-                // Adjust position for localized text
-                config.ApplyPositionAdjustment(textMesh, path);
-            }
 
             return true;
         }
@@ -181,10 +166,10 @@ namespace MWC_Localization_Core
             }
 
             // Return first loaded font as fallback
-            else if (customFonts.Count > 0)
-            {
-                return customFonts.Values.First();
-            }
+            //else if (customFonts.Count > 0)
+            //{
+            //    return customFonts.Values.First();
+            //}
 
             return null;
         }
@@ -212,7 +197,7 @@ namespace MWC_Localization_Core
                 }
 
                 // Adjust position for better rendering with Korean font
-                config.ApplyPositionAdjustment(textMesh, path);
+                config.ApplyTextAdjustment(textMesh, path);
                 
                 return true;
             }

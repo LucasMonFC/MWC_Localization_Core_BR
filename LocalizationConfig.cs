@@ -17,7 +17,7 @@ namespace MWC_Localization_Core
         public string LanguageName { get; private set; } = "Unknown";
         public string LanguageCode { get; private set; } = "en-US";
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();
-        public List<PositionAdjustment> PositionAdjustments { get; private set; } = new List<PositionAdjustment>();
+        public List<TextAdjustment> TextAdjustments { get; private set; } = new List<TextAdjustment>();
 
         public LocalizationConfig()
         {
@@ -39,7 +39,7 @@ namespace MWC_Localization_Core
             {
                 string[] lines = File.ReadAllLines(configPath, Encoding.UTF8);
                 bool inFontsSection = false;
-                bool inPositionAdjustmentsSection = false;
+                bool inTextAdjustmentsSection = false;
 
                 foreach (string line in lines)
                 {
@@ -53,12 +53,12 @@ namespace MWC_Localization_Core
                     if (trimmedLine == "[FONTS]")
                     {
                         inFontsSection = true;
-                        inPositionAdjustmentsSection = false;
+                        inTextAdjustmentsSection = false;
                         continue;
                     }
                     else if (trimmedLine == "[POSITION_ADJUSTMENTS]")
                     {
-                        inPositionAdjustmentsSection = true;
+                        inTextAdjustmentsSection = true;
                         inFontsSection = false;
                         continue;
                     }
@@ -68,9 +68,9 @@ namespace MWC_Localization_Core
                     {
                         ParseFontMapping(trimmedLine);
                     }
-                    else if (inPositionAdjustmentsSection)
+                    else if (inTextAdjustmentsSection)
                     {
-                        ParsePositionAdjustment(trimmedLine);
+                        ParseTextAdjustment(trimmedLine);
                     }
                     else
                     {
@@ -80,7 +80,7 @@ namespace MWC_Localization_Core
 
                 CoreConsole.Print($"Configuration loaded: {LanguageName} ({LanguageCode})");
                 CoreConsole.Print($"Font mappings: {FontMappings.Count}");
-                CoreConsole.Print($"Position adjustments: {PositionAdjustments.Count}");
+                CoreConsole.Print($"Position adjustments: {TextAdjustments.Count}");
 
                 return true;
             }
@@ -143,7 +143,7 @@ namespace MWC_Localization_Core
         ///   Contains(Narrow) = 0,0,0,,,1.2                   (position + skip font/spacing + width scale 1.2x)
         ///   Contains(Wide) = 0,0,0,0.1,1.0,1.5               (all adjustments: make wider with 1.5x scale)
         /// </summary>
-        private void ParsePositionAdjustment(string line)
+        private void ParseTextAdjustment(string line)
         {
             int equalsIndex = line.IndexOf('=');
             if (equalsIndex <= 0)
@@ -191,8 +191,8 @@ namespace MWC_Localization_Core
                     widthScale = float.Parse(parts[5].Trim());
                 }
 
-                PositionAdjustment adjustment = new PositionAdjustment(conditionsString, offset, fontSize, lineSpacing, widthScale);
-                PositionAdjustments.Add(adjustment);
+                TextAdjustment adjustment = new TextAdjustment(conditionsString, offset, fontSize, lineSpacing, widthScale);
+                TextAdjustments.Add(adjustment);
             }
             catch (System.Exception ex)
             {
@@ -201,35 +201,17 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Get position offset for the given path based on configured adjustments
-        /// Returns Vector3.zero if no matching adjustment found
-        /// DEPRECATED: Use ApplyPositionAdjustment instead for HashSet-based caching
-        /// </summary>
-        public UnityEngine.Vector3 GetPositionOffset(string path)
-        {
-            foreach (PositionAdjustment adjustment in PositionAdjustments)
-            {
-                if (adjustment.Matches(path))
-                {
-                    return adjustment.Offset;
-                }
-            }
-
-            return UnityEngine.Vector3.zero;
-        }
-
-        /// <summary>
         /// Apply position adjustment to TextMesh based on path matching
         /// Uses HashSet-based caching to prevent duplicate adjustments
         /// </summary>
         /// <returns>True if adjustment was applied, false if no match or already adjusted</returns>
-        public bool ApplyPositionAdjustment(TextMesh textMesh, string path)
+        public bool ApplyTextAdjustment(TextMesh textMesh, string path)
         {
             if (textMesh == null || string.IsNullOrEmpty(path))
                 return false;
 
             // Find matching adjustment and apply it
-            foreach (PositionAdjustment adjustment in PositionAdjustments)
+            foreach (TextAdjustment adjustment in TextAdjustments)
             {
                 if (adjustment.Matches(path))
                 {
@@ -242,11 +224,11 @@ namespace MWC_Localization_Core
 
         /// <summary>
         /// Clear all position adjustment caches
-        /// Useful for F9 reload functionality to reapply adjustments
+        /// Useful for F8 reload functionality to reapply adjustments
         /// </summary>
-        public void ClearPositionAdjustmentCaches()
+        public void ClearTextAdjustmentCaches()
         {
-            foreach (PositionAdjustment adjustment in PositionAdjustments)
+            foreach (TextAdjustment adjustment in TextAdjustments)
             {
                 adjustment.ClearCache();
             }

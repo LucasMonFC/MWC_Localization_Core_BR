@@ -4,10 +4,29 @@ using UnityEngine;
 namespace MWC_Localization_Core
 {
     /// <summary>
+    /// Stores original TextMesh state before adjustment
+    /// </summary>
+    public struct OriginalTextMeshState
+    {
+        public Vector3 LocalPosition;
+        public float CharacterSize;
+        public float LineSpacing;
+        public float WidthScale;
+
+        public OriginalTextMeshState(TextMesh textMesh)
+        {
+            LocalPosition = textMesh.transform.localPosition;
+            CharacterSize = textMesh.characterSize;
+            LineSpacing = textMesh.lineSpacing;
+            WidthScale = textMesh.transform.localScale.x;
+        }
+    }
+
+    /// <summary>
     /// Represents a position adjustment rule with path matching conditions
     /// Supports Contains, EndsWith, StartsWith, and negation (!Contains)
     /// </summary>
-    public class PositionAdjustment
+    public class TextAdjustment
     {
         public List<PathCondition> Conditions { get; private set; } = new List<PathCondition>();
         public Vector3 Offset { get; private set; }
@@ -18,7 +37,10 @@ namespace MWC_Localization_Core
         // Track which TextMesh objects have been adjusted to prevent duplicate adjustments
         private HashSet<TextMesh> adjustedTextMeshes = new HashSet<TextMesh>();
 
-        public PositionAdjustment(string conditionsString, Vector3 offset, float? fontSize = null, float? lineSpacing = null, float? widthScale = null)
+        // Store original state of adjusted TextMesh objects for restoration
+        private Dictionary<TextMesh, OriginalTextMeshState> originalStates = new Dictionary<TextMesh, OriginalTextMeshState>();
+
+        public TextAdjustment(string conditionsString, Vector3 offset, float? fontSize = null, float? lineSpacing = null, float? widthScale = null)
         {
             Offset = offset;
             FontSize = fontSize;
@@ -40,6 +62,10 @@ namespace MWC_Localization_Core
             // Skip if already adjusted
             if (adjustedTextMeshes.Contains(textMesh))
                 return false;
+
+            // Store original state before applying adjustments (only once, on first application)
+            if (!originalStates.ContainsKey(textMesh))
+                originalStates[textMesh] = new OriginalTextMeshState(textMesh);
 
             // Apply the position offset
             Vector3 currentPosition = textMesh.transform.localPosition;
@@ -75,12 +101,45 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Clear the cache of adjusted TextMesh objects
-        /// Useful for F9 reload functionality
+        /// Restore TextMesh to its original state before adjustment
+        /// </summary>
+        /// <returns>True if restored, false if no original state exists</returns>
+        public bool RestoreOriginal(TextMesh textMesh)
+        {
+            if (textMesh == null || !originalStates.ContainsKey(textMesh))
+                return false;
+
+            OriginalTextMeshState originalState = originalStates[textMesh];
+
+            // Restore original values
+            textMesh.transform.localPosition = originalState.LocalPosition;
+            textMesh.characterSize = originalState.CharacterSize;
+            textMesh.lineSpacing = originalState.LineSpacing;
+
+            Vector3 scale = textMesh.transform.localScale;
+            scale.x = originalState.WidthScale;
+            textMesh.transform.localScale = scale;
+
+            // Remove from adjusted set so it can be re-adjusted
+            adjustedTextMeshes.Remove(textMesh);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Clear the cache of adjusted TextMesh objects and restore all to original state
+        /// Useful for F8/F9 reload functionality
         /// </summary>
         public void ClearCache()
         {
-            adjustedTextMeshes.Clear();
+            // Restore all adjusted TextMeshes to their original state before clearing
+            foreach (var textMesh in new List<TextMesh>(originalStates.Keys))
+            {
+                if (textMesh != null)
+                    RestoreOriginal(textMesh);
+            }
+            // adjustedTextMeshes is already cleared by RestoreOriginal() calls
+            originalStates.Clear();
         }
 
         /// <summary>

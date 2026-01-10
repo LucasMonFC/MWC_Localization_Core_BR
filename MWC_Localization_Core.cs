@@ -456,6 +456,11 @@ namespace MWC_Localization_Core
             magazineHandler.ClearTranslations();
             arrayListHandler.ClearTranslations();
 
+            // Reset text adjustment caches and reload config
+            config.ClearTextAdjustmentCaches();
+            string configPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "config.txt");
+            config.LoadConfig(configPath);
+
             // Reload from file
             LoadTranslations();
 
@@ -504,7 +509,20 @@ namespace MWC_Localization_Core
             teletextTranslationTime = 0f;
             teletextRetryCount = 0;
 
-            CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Current scene will be re-translated.");
+            // Reapply fonts and adjustments to all TextMeshes (after restore)
+            TextMesh[] allTextMeshes = Resources.FindObjectsOfTypeAll<TextMesh>();
+            int reappliedCount = 0;
+            foreach (TextMesh tm in allTextMeshes)
+            {
+                if (tm != null && !string.IsNullOrEmpty(tm.text))
+                {
+                    string path = GetGameObjectPath(tm.gameObject);
+                    translator.ApplyCustomFont(tm, path);
+                    reappliedCount++;
+                }
+            }
+
+            CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");
         }
 
         void TranslateScene()
