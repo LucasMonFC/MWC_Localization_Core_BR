@@ -433,6 +433,18 @@ namespace MWC_Localization_Core
             {
                 InsertTranslationLines(translationPath);
             }
+
+            // Load mod translation file for My Winter Car
+            string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
+
+            if (!File.Exists(modTranslationPath))
+            {
+                CoreConsole.Warning($"[{Name}] Translation file not found: {modTranslationPath}");
+            }
+            else 
+            {
+                InsertTranslationLines(modTranslationPath);
+            }
         }
 
         void ReloadTranslations()
