@@ -1,6 +1,6 @@
 # MWC Localization Core
 
-A BepInEx 5.x plugin system for My Winter Car (Unity 5) that enables automatic UI translation and localization without code modifications.
+A MSCLoader plugin system for My Winter Car that enables automatic localization without code modifications.
 
 See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
 
@@ -12,8 +12,10 @@ See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
 2. **Edit `l10n_assets/config.txt`** with your language settings
 3. **Update translation files**:
    - `translate.txt` - Main UI text
-   - `translate_magazine.txt` - Yellow Pages magazine
+   - `translate_msc.txt (optional)` - previous My Summer Car text
+   - `translate_magazine.txt` - Classified Magazine content
    - `translate_teletext.txt` - TV/Teletext content
+   - `translate_mod.txt (optional)` - Mod content
 4. **(Optional)** Create custom fonts in `fonts.unity3d`
 5. **Test in-game with F8 reload!**
 
@@ -44,6 +46,7 @@ BepInEx/plugins/dist/
 │   ├── translate_magazine.txt      # Yellow Pages magazine translations
 │   ├── translate_teletext.txt      # TV/Teletext content translations
 │   ├── translate_msc.txt           # Optional: My Summer Car compatibility
+│   ├── translate_mod.txt           # Optional: Mod content translations
 │   └── fonts.unity3d               # Optional: Custom font asset bundle
 └── MWC_Localization_Core.dll       # Core plugin module
 ```
@@ -65,7 +68,7 @@ LANGUAGE_CODE = ko-KR
 
 ### Font Mappings
 
-Map original game fonts to your custom fonts:
+If you are using custom fonts, you must map original game fonts to them via `config.txt`:
 
 ```ini
 [FONTS]
@@ -80,7 +83,7 @@ Font assets must exist in `fonts.unity3d` with matching names (right side values
 
 ### translate.txt - Main UI Translations
 
-Main translation file with automatic key normalization. This covers most in-game UI text.
+Main translation file that covers My Winter Car lines.
 
 ```
 # Comments use #
@@ -95,9 +98,9 @@ WITHDRAWAL = 출금
 Welcome to My Winter Car = 마이 윈터 카에\n오신 것을 환영합니다
 ```
 
-### translate_magazine.txt - Yellow Pages Magazine
+### translate_magazine.txt - Classified Magazine
 
-Special handling for the Classified Magazine (Yellow Pages) with comma-separated abbreviations.
+This file involves special logic for handling comma-separated random words & Price line in Classified Magazine.
 
 ```
 # Magazine abbreviations (comma-separated)
@@ -117,7 +120,11 @@ PHONE = 전화
 
 ### translate_teletext.txt - TV/Teletext Content
 
-Category-based translations for TV teletext pages (news, weather, recipes, etc.)
+Category-based translations for TV teletext (news, weather, recipes, etc.) & TV chat pages.
+This separate file was introduced to workaround the game constantly trying to overwrite translations from plugin.
+
+**ORDER & [CATEGORY] MATTERS!**
+At least in this file. It's recommended NOT to modify these.
 
 ```
 # Category sections match teletext pages
@@ -152,7 +159,7 @@ Headline here
 - `ajatus` - Quotes
 - `kulttuuri` - Culture
 
-**Important:** Order matters! Translations must appear in the same order as the original game text.
+Please note that few TV lines might not 'look translated' due to the reason mentioned above.
 
 ### translate_msc.txt - My Summer Car Compatibility (Optional)
 
@@ -160,7 +167,7 @@ You can reuse translation files from My Summer Car as a base. Many UI texts are 
 
 Contents from `translate.txt` (MWC-specific) will override `translate_msc.txt` entries.
 
-## Position Adjustments (Optional)
+## Text Adjustments (Optional)
 
 Fine-tune text placement, size, spacing, and width for better appearance without code changes.
 
@@ -259,8 +266,9 @@ Press **F8** in-game to reload all configuration and translation files instantly
 ### Common Issues
 
 **Text not translating?**
+- Enable console messages via MSCLoader Mod settings
 - Check console (F12) for errors
-- Make sure key matches (try UPPERCASE without spaces)
+- Make sure key matches
 - For teletext, check if you're using the right category section
 
 **Wrong font?**
@@ -269,7 +277,7 @@ Press **F8** in-game to reload all configuration and translation files instantly
 - Console will show "Loaded [font] for [original]" messages
 
 **Text position off?**
-- Use F12 console to find GameObject path
+- Use `Developer Toolkit` or something else to find GameObject path
 - Add position adjustment in `config.txt`
 - Test with F8 reload
 
@@ -278,5 +286,3 @@ Press **F8** in-game to reload all configuration and translation files instantly
 ```bash
 dotnet build -c Release
 ```
-
-Output: `bin/Release/net35/MWC_Localization_Core.dll`

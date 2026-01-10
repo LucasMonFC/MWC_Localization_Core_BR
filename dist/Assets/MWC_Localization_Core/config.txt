@@ -1,0 +1,63 @@
+# My Winter Car - Localization Configuration
+# This file configures language-specific settings for the localization plugin
+
+# Language metadata
+LANGUAGE_NAME = Korean
+LANGUAGE_CODE = ko-KR
+
+# Unicode character ranges for localized text detection
+# Format: START-END,START-END (hexadecimal values)
+# Korean ranges: AC00-D7AF (Hangul Syllables), 1100-11FF (Hangul Jamo), 3130-318F (Hangul Compatibility Jamo)
+# 
+# For Latin-based languages (English, Spanish, French, etc.), leave this empty or comment it out
+# to skip character detection entirely
+UNICODE_RANGES = AC00-D7AF,1100-11FF,3130-318F
+
+# Font mappings - map original game fonts to localized font assets
+# Format: OriginalFontName = LocalizedFontAssetName
+# The localized fonts must exist in fonts.unity3d asset bundle
+[FONTS]
+FugazOne-Regular = NanumSquareRoundEB
+Heebo-Black = PaperlogyExtraBold
+AlfaSlabOne-Regular = ROKAFSlabSerifBold
+ArchivoBlack-Regular = PaperlogyExtraBold
+Cour10Bd = D2Coding
+RAGE = KyoboHandwriting2019
+Dosis-SemiBold = TmoneyRoundWindExtraBold
+Dosis-SemiBold LowCase = NanumSquareRoundEB
+VT323-Regular = GalmuriMono11
+DroidSerif-Bold = MaruBuri-Bold
+PlayfairDisplay-Bold = MaruBuri-Bold
+WalterTurncoat-Regular = MaruBuri-Bold
+BLUEHIGD = D2Coding
+
+# Position adjustments - adjust text position for specific UI elements
+# Format: Conditions = X,Y,Z offset + [,FontSize,LineSpacing,WidthScale]
+# Conditions support: Contains(path), EndsWith(path), StartsWith(path), !Contains(path)
+# Multiple conditions separated by &
+# Examples:
+#   Contains(GUI/HUD) & EndsWith(/HUDLabel) = 0,-0.05,0
+#   Contains(Screen) & !Contains(/Row) & EndsWith(/Text) = 0,0.25,0
+# Some elements may be inverted in Y-axis; adjust accordingly
+[POSITION_ADJUSTMENTS]
+## HUD labels
+Contains(GUI/HUD/) & EndsWith(/HUDLabel) = 0,-0.05,0
+## Money ATM screen (excluding row elements)
+Contains(PERAPORTTI/ATMs/MoneyATM/Screen) & !Contains(/Row) & EndsWith(/Text) = 0,0.25,0
+## Fuel ATM screen header
+Contains(PERAPORTTI/ATMs/FuelATM/Screen) & !Contains(/Row) & EndsWith(/Text) = 0,0.45,0
+## Fuel ATM screen rows
+Contains(PERAPORTTI/ATMs/FuelATM/Screen) & Contains(/Row) & EndsWith(/Text) = 0,-0.25,0
+## Teletext TV
+Contains(Systems/TV/Teletext/VKTekstiTV/) = 0,0.25,0
+## TV Chat
+Contains(Systems/TV/TVGraphics/CHAT/Generated/Lines) = 0,0,0,,,0.07
+## Options
+Contains(Systems/OptionsMenu) & Contains(/GUITextlabel) = 0,0,0,0.07
+Contains(Systems/OptionsMenu) & Contains(/GUITextLabel) = 0,0,0,0.07
+Contains(Systems/OptionsMenu) & Contains(/GUITextHeader) = 0,0,0,0.08
+## Settings menu
+Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts) & EndsWith(/Data) = 0,0.5,0
+Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data) & EndsWith(/Bottomline 1) = 0,-0.25,0
+Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts) & EndsWith(/Data 1) = 0,0.5,0
+Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1) & EndsWith(/Bottomline 1) = 0,-0.25,0
