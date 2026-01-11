@@ -210,6 +210,15 @@ namespace MWC_Localization_Core
             if (textMesh == null || string.IsNullOrEmpty(path))
                 return false;
 
+            if (path.Contains("GUI/Indicators/Subtitles"))
+            {
+                // Special handling for subtitles to center-align and lower position
+                textMesh.alignment = TextAlignment.Center;
+                textMesh.anchor = TextAnchor.LowerCenter;
+                if (!path.Contains("/Shadow"))
+                    textMesh.transform.localPosition = new Vector3(textMesh.transform.localPosition.x, -1.0f, textMesh.transform.localPosition.z);
+            }
+
             // Find matching adjustment and apply it
             foreach (TextAdjustment adjustment in TextAdjustments)
             {
