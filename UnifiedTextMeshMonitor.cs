@@ -100,6 +100,8 @@ namespace MWC_Localization_Core
             AddPathRule("GUI/Indicators/Subtitles/Shadow", MonitoringStrategy.EveryFrame);
             AddPathRule("GUI/Indicators/TaxiGUI", MonitoringStrategy.EveryFrame);
             AddPathRule("GUI/Indicators/TaxiGUI/Shadow", MonitoringStrategy.EveryFrame);
+            AddPathRule("GUI/Indicators/Gear", MonitoringStrategy.EveryFrame);
+            AddPathRule("GUI/Indicators/Gear/Shadow", MonitoringStrategy.EveryFrame);
             AddPathRule("GUI/HUD/Thrist/HUDLabel", MonitoringStrategy.EveryFrame);
             AddPathRule("GUI/HUD/Thrist/HUDLabel/Shadow", MonitoringStrategy.EveryFrame);
             
@@ -114,6 +116,7 @@ namespace MWC_Localization_Core
             AddPathRule("GUI/HUD/Money/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("GUI/HUD/Bodytemp/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("GUI/HUD/Sweat/HUDValue", MonitoringStrategy.FastPolling);
+            AddPathRule("GUI/HUD/Jailtime/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Day", MonitoringStrategy.FastPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Moderator", MonitoringStrategy.FastPolling);
             
