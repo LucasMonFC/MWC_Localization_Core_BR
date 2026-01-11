@@ -33,10 +33,6 @@ namespace MWC_Localization_Core
         // Critical UI monitor (MonoBehaviour for LateUpdate access)
         private GameObject lateUpdateHandlerObject;
         private LateUpdateHandler lateUpdateHandler;
-        
-        // Teletext translation tracking
-        private float teletextTranslationTime = 0f;
-        private int teletextRetryCount = 0;
 
         // Font management
         private static AssetBundle fontBundle;  // Static to persist across MSCLoader instance recreation
@@ -44,9 +40,6 @@ namespace MWC_Localization_Core
 
         // Localization configuration
         private LocalizationConfig config;
-        
-        // GameObject reference cache (avoid repeated GameObject.Find calls)
-        private Dictionary<string, TextMesh> textMeshCache = new Dictionary<string, TextMesh>();
 
         // MSCLoader settings
         private SettingsKeybind reloadKey;
@@ -138,9 +131,8 @@ namespace MWC_Localization_Core
         // Game fully loaded - translate everything
         private void Mod_PostLoad()
         {
-            ModConsole.Print($"[{Name}] Game fully loaded - translating...");
-            
             // Translate game scene
+            ModConsole.Print($"[{Name}] Game fully loaded - translating...");
             TranslateScene();
             sceneManager.MarkSceneTranslated("GAME");
             
@@ -156,10 +148,6 @@ namespace MWC_Localization_Core
                 arrayListHandler.ApplyFontsToArrayElements();
             }
             
-            // Schedule teletext translation check
-            teletextTranslationTime = Time.time + LocalizationConstants.TELETEXT_TRANSLATION_DELAY;
-            teletextRetryCount = 0;
-            
             // Create MonoBehaviour for LateUpdate monitoring
             // ALL continuous monitoring logic runs in LateUpdate to ensure correct timing
             lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
@@ -170,8 +158,7 @@ namespace MWC_Localization_Core
                 textMeshMonitor, 
                 teletextHandler, 
                 arrayListHandler, 
-                sceneManager,
-                textMeshCache
+                sceneManager
             );
         }
 
@@ -208,9 +195,6 @@ namespace MWC_Localization_Core
                     lateUpdateHandlerObject = null;
                     lateUpdateHandler = null;
                 }
-
-                // Clear path and TextMesh caches
-                textMeshCache.Clear();
                 
                 CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
             }
@@ -233,7 +217,6 @@ namespace MWC_Localization_Core
                 // Reset teletext handler and retry tracking for new scene
                 teletextHandler.Reset();
                 arrayListHandler.Reset();
-                teletextRetryCount = 0;
                 
                 // Translate static arrays immediately (HUD, menus, etc.)
                 int arrayTranslated = arrayListHandler.TranslateAllArrays();
@@ -243,9 +226,6 @@ namespace MWC_Localization_Core
                     // Apply Korean fonts to TextMesh components using array data
                     arrayListHandler.ApplyFontsToArrayElements();
                 }
-                
-                // Schedule teletext translation after delay
-                teletextTranslationTime = Time.time + LocalizationConstants.TELETEXT_TRANSLATION_DELAY;
             }
         }
 
@@ -413,9 +393,6 @@ namespace MWC_Localization_Core
             
             // Reload additional FSM patterns from teletext file
             translator.LoadFsmPatterns(teletextPath);
-
-            // Clear all caches
-            textMeshCache.Clear();
             
             // Reset and re-initialize LateUpdateHandler to find critical UI again
             if (lateUpdateHandler != null)
@@ -428,8 +405,7 @@ namespace MWC_Localization_Core
                     textMeshMonitor, 
                     teletextHandler, 
                     arrayListHandler, 
-                    sceneManager,
-                    textMeshCache
+                    sceneManager
                 );
             }
 
@@ -440,8 +416,6 @@ namespace MWC_Localization_Core
             // Reset teletext handler
             teletextHandler.Reset();
             arrayListHandler.Reset();
-            teletextTranslationTime = 0f;
-            teletextRetryCount = 0;
 
             // Reapply fonts and adjustments to all TextMeshes (after restore)
             TextMesh[] allTextMeshes = Resources.FindObjectsOfTypeAll<TextMesh>();
@@ -461,6 +435,8 @@ namespace MWC_Localization_Core
 
         void TranslateScene()
         {
+            textMeshMonitor.RegisterAllPathRuleElements();
+
             // Find all TextMesh components in the scene
             TextMesh[] allTextMeshes = Resources.FindObjectsOfTypeAll<TextMesh>();
             int translatedCount = 0;
@@ -474,21 +450,7 @@ namespace MWC_Localization_Core
                 string path = MLCUtils.GetGameObjectPath(tm.gameObject);
 
                 // Translate and apply font
-                bool translated = translator.TranslateAndApplyFont(tm, path, null);
-                
-                // Register with unified monitor
-                // CRITICAL: Register magazine texts even if not translated yet (placeholder handling)
-                if (translated || path.Contains("YellowPagesMagazine") || path.Contains("Systems/TV"))
-                {
-                    if (translated)
-                        translatedCount++;
-
-                    // Cache this TextMesh
-                    textMeshCache[path] = tm;
-
-                    // Register for monitoring
-                    textMeshMonitor.Register(tm, path);
-                }
+                translator.TranslateAndApplyFont(tm, path, null);
             }
 
             CoreConsole.Print($"[{Name}] Scene translation complete: {translatedCount}/{allTextMeshes.Length} TextMesh objects translated");

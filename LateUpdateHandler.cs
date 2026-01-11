@@ -29,18 +29,11 @@ namespace MWC_Localization_Core
             public float NextRetryTime;
             public bool IsRegistered;
         }
-        private List<CriticalUIReference> criticalUIPaths = new List<CriticalUIReference>();
 
         private bool isInitialized = false;
-
-        // Caches to avoid repeated GameObject.Find calls
-        private Dictionary<string, TextMesh> textMeshCache;
-        private Dictionary<string, GameObject> gameObjectCache = new Dictionary<string, GameObject>();
         
         // Throttling timers (MOVED from MWC_Localization_Core.cs)
-        private float lastMonitorUpdateTime = 0f;
         private float lastArrayCheckTime = 0f;
-        private float lastMainMenuScanTime = 0f;
 
         public void Initialize(
             MWC_Localization_Core modInstance, 
@@ -48,8 +41,7 @@ namespace MWC_Localization_Core
             UnifiedTextMeshMonitor textMeshMonitorInstance,
             TeletextHandler teletextHandlerInstance,
             ArrayListProxyHandler arrayListHandlerInstance,
-            SceneTranslationManager sceneManagerInstance,
-            Dictionary<string, TextMesh> textMeshCache)
+            SceneTranslationManager sceneManagerInstance)
         {
             mod = modInstance;
             translator = translatorInstance;
@@ -57,46 +49,8 @@ namespace MWC_Localization_Core
             teletextHandler = teletextHandlerInstance;
             arrayListHandler = arrayListHandlerInstance;
             sceneManager = sceneManagerInstance;
-            this.textMeshCache = textMeshCache;
-
-            // Initialize critical UI paths (EveryFrame monitoring)
-            InitializeCriticalUIPaths();
-            
             isInitialized = true;
             CoreConsole.Print($"[{mod.Name}] LateUpdateHandler initialized");
-        }
-        
-        void InitializeCriticalUIPaths()
-        {
-            // Hardcoded list of critical UI paths that need EveryFrame monitoring
-            // These are interaction prompts, part names, subtitles that change constantly
-            string[] paths = new string[]
-            {
-                "GUI/Indicators/Interaction",
-                "GUI/Indicators/Interaction/Shadow",
-                "GUI/Indicators/Partname",
-                "GUI/Indicators/Partname/Shadow",
-                "GUI/Indicators/Subtitles",
-                "GUI/Indicators/Subtitles/Shadow",
-                "GUI/Indicators/TaxiGUI",
-                "GUI/Indicators/TaxiGUI/Shadow",
-                "GUI/HUD/Thrist/HUDLabel",
-                "GUI/HUD/Thrist/HUDLabel/Shadow",
-            };
-            
-            foreach (string path in paths)
-            {
-                criticalUIPaths.Add(new CriticalUIReference
-                {
-                    Path = path,
-                    TextMesh = null,
-                    RetryCount = 0,
-                    NextRetryTime = 0f,
-                    IsRegistered = false
-                });
-            }
-            
-            CoreConsole.Print($"Initialized {criticalUIPaths.Count} critical UI paths for monitoring");
         }
 
         /// <summary>
@@ -113,19 +67,8 @@ namespace MWC_Localization_Core
             // GAME scene monitoring - EXACT COPY from Mod_Update
             if (currentScene == "GAME" && sceneManager.HasSceneBeenTranslated("GAME"))
             {
-                // Register critical UI elements with retry logic (handles timing issues)
-                RegisterCriticalUIElements();
-                
-                // CRITICAL: Check critical UI every frame (game constantly regenerates these)
-                // This prevents flickering between English and translation
-                UpdateCriticalUIEveryFrame();
-
                 // Throttled monitoring for regular TextMesh elements
-                if (Time.time - lastMonitorUpdateTime >= LocalizationConstants.MONITOR_UPDATE_INTERVAL)
-                {
-                    textMeshMonitor.Update(Time.deltaTime);
-                    lastMonitorUpdateTime = Time.time;
-                }
+                textMeshMonitor.Update(Time.deltaTime);
                 
                 // Throttled array monitoring (teletext, PlayMaker ArrayLists)
                 if (Time.time - lastArrayCheckTime >= LocalizationConstants.ARRAY_MONITOR_INTERVAL)
@@ -163,119 +106,9 @@ namespace MWC_Localization_Core
             // Main menu monitoring - EXACT COPY from Mod_Update
             else if (currentScene == "MainMenu" && sceneManager.HasSceneBeenTranslated("MainMenu"))
             {
-                // Scan for new main menu elements (throttled)
-                if (Time.time - lastMainMenuScanTime >= LocalizationConstants.MAINMENU_SCAN_INTERVAL)
-                {
-                    ScanForNewMainMenuElements();
-                    lastMainMenuScanTime = Time.time;
-                }
-                
-                // Monitor for dynamic changes in main menu (throttled)
-                if (Time.time - lastMonitorUpdateTime >= LocalizationConstants.MONITOR_UPDATE_INTERVAL)
-                {
-                    textMeshMonitor.Update(Time.deltaTime);
-                    lastMonitorUpdateTime = Time.time;
-                }
+                // Monitor for dynamic changes in main menu
+                textMeshMonitor.Update(Time.deltaTime);
             }
-        }
-        
-        /// <summary>
-        /// Update critical UI elements every frame (not throttled)
-        /// Game constantly regenerates interaction prompts, so we need to fight back
-        /// </summary>
-        void UpdateCriticalUIEveryFrame()
-        {
-            foreach (var uiRef in criticalUIPaths)
-            {
-                // Skip if not registered yet
-                if (!uiRef.IsRegistered || uiRef.TextMesh == null)
-                    continue;
-                
-                // Check if TextMesh still exists (might be destroyed)
-                if (uiRef.TextMesh.gameObject == null)
-                {
-                    uiRef.TextMesh = null;
-                    uiRef.IsRegistered = false;
-                    continue;
-                }
-                
-                // Always translate - game regenerates these constantly
-                translator.TranslateAndApplyFont(uiRef.TextMesh, uiRef.Path, null);
-            }
-        }
-        
-        /// <summary>
-        /// Register critical UI elements with cached references and retry logic
-        /// Uses hardcoded allowlist to avoid expensive scene scanning
-        /// </summary>
-        void RegisterCriticalUIElements()
-        {
-            foreach (var uiRef in criticalUIPaths)
-            {
-                // Already registered - skip
-                if (uiRef.IsRegistered && uiRef.TextMesh != null)
-                    continue;
-                
-                // Not yet time for retry - skip
-                if (uiRef.RetryCount > 0 && Time.time < uiRef.NextRetryTime)
-                    continue;
-                
-                // Max retries reached - give up
-                if (uiRef.RetryCount >= LocalizationConstants.GAMEOBJECT_FIND_MAX_RETRIES)
-                    continue;
-                
-                // Try to find GameObject (cached)
-                GameObject obj = FindGameObjectCached(uiRef.Path);
-                if (obj == null)
-                {
-                    // Not found - schedule retry
-                    uiRef.RetryCount++;
-                    uiRef.NextRetryTime = Time.time + LocalizationConstants.GAMEOBJECT_FIND_RETRY_INTERVAL;
-                    continue;
-                }
-                
-                // Get TextMesh component
-                TextMesh textMesh = obj.GetComponent<TextMesh>();
-                if (textMesh == null)
-                {
-                    // No TextMesh - don't retry
-                    uiRef.IsRegistered = true;
-                    continue;
-                }
-                
-                // Cache and register (but DON'T register with UnifiedTextMeshMonitor)
-                // We'll handle these manually every frame to prevent flickering
-                uiRef.TextMesh = textMesh;
-                textMeshCache[uiRef.Path] = textMesh;
-                uiRef.IsRegistered = true;
-                CoreConsole.Print($"[Critical UI] Registered for every-frame checking: {uiRef.Path}");
-            }
-        }
-        
-        /// <summary>
-        /// Find GameObject with caching to avoid repeated GameObject.Find calls
-        /// </summary>
-        GameObject FindGameObjectCached(string path)
-        {
-            // Check cache first
-            if (gameObjectCache.TryGetValue(path, out GameObject cached))
-            {
-                // Verify object still exists
-                if (cached != null)
-                    return cached;
-                
-                // Object was destroyed - remove from cache
-                gameObjectCache.Remove(path);
-            }
-            
-            // Find and cache
-            GameObject obj = GameObject.Find(path);
-            if (obj != null)
-            {
-                gameObjectCache[path] = obj;
-            }
-            
-            return obj;
         }
         
         /// <summary>
@@ -333,12 +166,7 @@ namespace MWC_Localization_Core
                     continue;
 
                 string path = MLCUtils.GetGameObjectPath(tm.gameObject);
-
-                // Translate and cache
-                if (translator.TranslateAndApplyFont(tm, path, null))
-                {
-                    textMeshMonitor.Register(tm, path);
-                }
+                translator.TranslateAndApplyFont(tm, path, null);
             }
         }
 
@@ -347,20 +175,7 @@ namespace MWC_Localization_Core
         /// </summary>
         public void ClearCache()
         {
-            lastMonitorUpdateTime = 0f;
             lastArrayCheckTime = 0f;
-            lastMainMenuScanTime = 0f;
-            gameObjectCache.Clear();
-                
-            // Reset critical UI references for new scene
-            foreach (var uiRef in criticalUIPaths)
-            {
-                uiRef.TextMesh = null;
-                uiRef.RetryCount = 0;
-                uiRef.NextRetryTime = Time.time + LocalizationConstants.GAMEOBJECT_FIND_RETRY_DELAY;
-                uiRef.IsRegistered = false;
-            }
-
             isInitialized = false;
         }
     }

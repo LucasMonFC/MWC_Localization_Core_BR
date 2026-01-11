@@ -61,8 +61,6 @@ namespace MWC_Localization_Core
     /// </summary>
     public class UnifiedTextMeshMonitor
     {
-        private Dictionary<MonitoringStrategy, List<TextMeshEntry>> strategyGroups;
-        private Dictionary<TextMesh, TextMeshEntry> textMeshToEntry;
         private TextMeshTranslator translator;
         
         // Throttling timers
@@ -71,19 +69,21 @@ namespace MWC_Localization_Core
 
         // Path-based monitoring rules
         private Dictionary<string, MonitoringStrategy> pathRules;
+        private Dictionary<string, TextMeshEntry> pathRuleEntries;
+        private Dictionary<MonitoringStrategy, List<string>> strategyGroupPaths;
+        private List<string> monitoredPaths = new List<string>();
 
         public UnifiedTextMeshMonitor(TextMeshTranslator translator)
         {
             this.translator = translator;
-            
-            strategyGroups = new Dictionary<MonitoringStrategy, List<TextMeshEntry>>();
-            textMeshToEntry = new Dictionary<TextMesh, TextMeshEntry>();
             pathRules = new Dictionary<string, MonitoringStrategy>();
-            
+            pathRuleEntries = new Dictionary<string, TextMeshEntry>();
+            strategyGroupPaths = new Dictionary<MonitoringStrategy, List<string>>();
+
             // Initialize strategy groups
             foreach (MonitoringStrategy strategy in System.Enum.GetValues(typeof(MonitoringStrategy)))
             {
-                strategyGroups[strategy] = new List<TextMeshEntry>();
+                strategyGroupPaths[strategy] = new List<string>();
             }
             
             InitializeDefaultPathRules();
@@ -121,8 +121,9 @@ namespace MWC_Localization_Core
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.SlowPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.SlowPolling);
             
-            // Magazine - persistent (always check)
-            AddPathRule("Sheets/YellowPagesMagazine/", MonitoringStrategy.Persistent);
+            // Magazine - late translate once (after creation)
+            AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.LateTranslateOnce);
+            AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.LateTranslateOnce);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -157,48 +158,90 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Register a TextMesh for monitoring
+        /// Register all TextMeshes under defined path rules
         /// </summary>
-        public void Register(TextMesh textMesh, string path, MonitoringStrategy? strategy = null)
+        public void RegisterAllPathRuleElements()
         {
-            if (textMesh == null)
-                return;
-            
+            foreach (string parentPath in pathRules.Keys)
+            {
+                MonitoringStrategy strategy = pathRules[parentPath];
+                if (strategy == MonitoringStrategy.LateTranslateOnce)
+                    monitoredPaths.Add(parentPath);
+
+                Register(parentPath, strategy);
+            }
+        }
+
+        /// <summary>
+        /// Periodically monitor TextMeshes to be available for monitoring
+        /// </summary>
+        public void MonitorLateRegister()
+        {
+            foreach (string parentPath in monitoredPaths)
+            {
+                if (Register(parentPath, MonitoringStrategy.LateTranslateOnce) > 0)
+                {
+                    monitoredPaths.Remove(parentPath);
+                    break; // Avoid modifying collection during iteration
+                }
+            }
+        }
+
+        /// <summary>
+        /// Register a TextMesh for monitoring
+        /// 
+        /// </summary>
+        public int Register(string parentPath, MonitoringStrategy? strategy = null)
+        {
+            int registeredCount = 0;
+
             // Skip if already registered
-            if (textMeshToEntry.ContainsKey(textMesh))
-                return;
+            if (pathRuleEntries.ContainsKey(parentPath))
+                return registeredCount;
             
             // Determine strategy if not provided
-            MonitoringStrategy finalStrategy = strategy ?? DetermineStrategy(path);
+            MonitoringStrategy finalStrategy = strategy ?? pathRules[parentPath];
         
-            // Create entry
-            var entry = new TextMeshEntry(textMesh, path, finalStrategy);
-            
-            // Add to tracking
-            textMeshToEntry[textMesh] = entry;
-            strategyGroups[finalStrategy].Add(entry);
-            
-            // CRITICAL: Translate immediately upon registration
-            // This ensures initial translation happens before monitoring begins
-            bool translated = translator.TranslateAndApplyFont(textMesh, path, null);
-            if (translated)
+            GameObject parent = GameObject.Find(parentPath);
+            if (parent == null)
+                return registeredCount;
+
+            // Get all TextMesh components under this parent and apply fonts to ALL of them
+            TextMesh[] textMeshes = parent.GetComponentsInChildren<TextMesh>(true);
+            foreach (var textMesh in textMeshes)
             {
-                entry.WasTranslated = true;
-                entry.UpdateLastText();
+                if (textMesh == null)
+                    continue; // Skip nulls
+
+                string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
+                TextMeshEntry entry = new TextMeshEntry(textMesh, textMeshPath, finalStrategy);
+
+                pathRuleEntries[textMeshPath] = entry;
+                strategyGroupPaths[finalStrategy].Add(textMeshPath);
+
+                // CRITICAL: Translate immediately upon registration
+                // This ensures initial translation happens before monitoring begins
+                bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath, null);
+                if (translated)
+                {
+                    entry.WasTranslated = true;
+                    entry.UpdateLastText();
+                }
             }
+            return registeredCount;
         }
 
         /// <summary>
         /// Unregister a TextMesh from monitoring
         /// </summary>
-        public void Unregister(TextMesh textMesh)
+        public void Unregister(string path)
         {
-            if (textMesh == null || !textMeshToEntry.ContainsKey(textMesh))
+            if (path == null || !pathRuleEntries.ContainsKey(path))
                 return;
             
-            var entry = textMeshToEntry[textMesh];
-            strategyGroups[entry.Strategy].Remove(entry);
-            textMeshToEntry.Remove(textMesh);
+            var entry = pathRuleEntries[path];
+            strategyGroupPaths[entry.Strategy].Remove(path);
+            pathRuleEntries.Remove(path);
         }
 
         /// <summary>
@@ -223,6 +266,7 @@ namespace MWC_Localization_Core
             if (slowPollingTimer >= LocalizationConstants.SLOW_POLLING_INTERVAL)
             {
                 UpdateGroup(MonitoringStrategy.SlowPolling);
+                MonitorLateRegister(); // Also check for late registrations
                 slowPollingTimer = 0f;
             }
             
@@ -232,33 +276,26 @@ namespace MWC_Localization_Core
 
         private void UpdateGroup(MonitoringStrategy strategy)
         {
-            var entries = strategyGroups[strategy];
+            var paths = strategyGroupPaths[strategy];
             
-            for (int i = entries.Count - 1; i >= 0; i--)
+            foreach (string path in paths)
             {
-                var entry = entries[i];
+                var entry = pathRuleEntries[path];
                 
-                // Remove invalid entries (destroyed objects)
                 if (!entry.IsValid())
-                {
-                    entries.RemoveAt(i);
-                    textMeshToEntry.Remove(entry.TextMesh);
                     continue;
-                }
                 
-                // Persistent strategy: Check if text changed OR not yet translated
+                // Persistent strategy: Check regardless of status
                 // Other strategies: Only check if text changed
                 bool textChanged = entry.HasTextChanged();
-                bool shouldCheck = textChanged || (strategy == MonitoringStrategy.Persistent && !entry.WasTranslated);
-                
-                if (!shouldCheck)
-                    continue;
-                
-                // For Persistent: If text changed, game regenerated it - translate again
-                // For others: If text changed, translate
-                if (textChanged || !entry.WasTranslated)
+                bool shouldCheck = textChanged || !entry.WasTranslated || strategy == MonitoringStrategy.Persistent;
+                if (shouldCheck)
                 {
                     bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path, null);
+                    if(entry.Path.Contains("Sheets/YellowPagesMagazine/Page"))
+                    {
+                        ModConsole.Print("[DEBUG] Translating Yellow Pages Magazine at path: " + entry.Path + " | Translated: " + translated);
+                    }
                     
                     if (translated)
                     {
@@ -268,8 +305,8 @@ namespace MWC_Localization_Core
                         // Remove from monitoring if TranslateOnce
                         if (strategy == MonitoringStrategy.TranslateOnce)
                         {
-                            entries.RemoveAt(i);
-                            textMeshToEntry.Remove(entry.TextMesh);
+                            paths.Remove(path);
+                            pathRuleEntries.Remove(path);
                         }
                     }
                 }
@@ -278,19 +315,14 @@ namespace MWC_Localization_Core
 
         private void UpdateVisibilityChangeGroup()
         {
-            var entries = strategyGroups[MonitoringStrategy.OnVisibilityChange];
+            var paths = strategyGroupPaths[MonitoringStrategy.OnVisibilityChange];
             
-            for (int i = entries.Count - 1; i >= 0; i--)
+            foreach (string path in paths)
             {
-                var entry = entries[i];
+                var entry = pathRuleEntries[path];
                 
-                // Remove invalid entries
                 if (!entry.IsValid())
-                {
-                    entries.RemoveAt(i);
-                    textMeshToEntry.Remove(entry.TextMesh);
                     continue;
-                }
                 
                 bool wasVisible = entry.IsVisible;
                 entry.UpdateVisibility();
@@ -313,54 +345,13 @@ namespace MWC_Localization_Core
         /// </summary>
         public void Clear()
         {
-            foreach (var group in strategyGroups.Values)
+            foreach (var group in strategyGroupPaths.Values)
             {
                 group.Clear();
             }
-            textMeshToEntry.Clear();
+            pathRuleEntries.Clear();
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
-        }
-
-        /// <summary>
-        /// Get diagnostic information
-        /// </summary>
-        public string GetDiagnostics()
-        {
-            var info = new System.Text.StringBuilder();
-            info.AppendLine("Unified TextMesh Monitor Status:");
-            
-            foreach (MonitoringStrategy strategy in System.Enum.GetValues(typeof(MonitoringStrategy)))
-            {
-                int count = strategyGroups[strategy].Count;
-                if (count > 0)
-                {
-                    info.AppendLine($"  {strategy}: {count} entries");
-                }
-            }
-            
-            info.AppendLine($"Total monitored: {textMeshToEntry.Count}");
-            
-            return info.ToString();
-        }
-
-        /// <summary>
-        /// Get all paths configured for EveryFrame monitoring
-        /// Used by dynamic scanning to efficiently find new UI elements
-        /// </summary>
-        public System.Collections.Generic.List<string> GetEveryFramePaths()
-        {
-            var paths = new System.Collections.Generic.List<string>();
-            
-            foreach (var kvp in pathRules)
-            {
-                if (kvp.Value == MonitoringStrategy.EveryFrame)
-                {
-                    paths.Add(kvp.Key);
-                }
-            }
-            
-            return paths;
         }
     }
 }

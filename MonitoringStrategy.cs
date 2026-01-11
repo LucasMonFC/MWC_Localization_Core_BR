@@ -44,7 +44,12 @@ namespace MWC_Localization_Core
         /// Use for: UI panels that are shown/hidden
         /// Example: Menus, popup dialogs
         /// </summary>
-        OnVisibilityChange
+        OnVisibilityChange,
+
+        /// <summary>
+        /// Translate once, but when its textMesh becomes available (delayed)
+        /// Use for: TextMeshes created dynamically after initial scan
+        LateTranslateOnce,
     }
 
     /// <summary>
