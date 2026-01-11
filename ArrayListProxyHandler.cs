@@ -154,40 +154,45 @@ namespace MWC_Localization_Core
                 return 0;
             }
 
-            string[] parts = arrayKey.Split(':');
-            string objectPath = parts[0];
-            int componentIndex;
-
-            if (!int.TryParse(parts[1], out componentIndex))
+            PlayMakerArrayListProxy proxy;
+            if (!arrayProxyCache.ContainsKey(arrayKey))
             {
-                CoreConsole.Warning($"Invalid component index in array key: {arrayKey}");
-                return 0;
-            }
+                string[] parts = arrayKey.Split(':');
+                string objectPath = parts[0];
+                int componentIndex;
 
-            // Find GameObject
-            GameObject obj = GameObject.Find(objectPath);
-            if (obj == null)
+                if (!int.TryParse(parts[1], out componentIndex))
+                {
+                    CoreConsole.Warning($"Invalid component index in array key: {arrayKey}");
+                    return 0;
+                }
+
+                // Find GameObject
+                GameObject obj = GameObject.Find(objectPath);
+                if (obj == null)
+                {
+                    // Not available yet - this is normal for lazy-loaded content
+                    return 0;
+                }
+
+                // Get PlayMakerArrayListProxy component
+                PlayMakerArrayListProxy[] proxies = obj.GetComponents<PlayMakerArrayListProxy>();
+                if (proxies == null || componentIndex >= proxies.Length)
+                {
+                    CoreConsole.Warning($"PlayMakerArrayListProxy[{componentIndex}] not found at {objectPath}");
+                    return 0;
+                }
+                else 
+                {
+                    proxy = proxies[componentIndex];
+                    // Cache the proxy for later monitoring
+                    arrayProxyCache[arrayKey] = proxy;
+                }
+            }
+            else
             {
-                // Not available yet - this is normal for lazy-loaded content
-                return 0;
+                proxy = arrayProxyCache[arrayKey];
             }
-
-            // Get PlayMakerArrayListProxy component
-            PlayMakerArrayListProxy[] proxies = obj.GetComponents<PlayMakerArrayListProxy>();
-            if (proxies == null || componentIndex >= proxies.Length)
-            {
-                CoreConsole.Warning($"PlayMakerArrayListProxy[{componentIndex}] not found at {objectPath}");
-                return 0;
-            }
-
-            PlayMakerArrayListProxy proxy = proxies[componentIndex];
-            if (proxy == null || proxy.arrayList == null)
-            {
-                return 0;
-            }
-
-            // Cache the proxy for later monitoring
-            arrayProxyCache[arrayKey] = proxy;
 
             // Translate array contents using existing translation dictionaries
             int translatedCount = 0;
@@ -230,59 +235,31 @@ namespace MWC_Localization_Core
                 if (!translatedArrays.Contains(arrayKey))
                 {
                     int translated = TranslateArray(arrayKey);
-                    if (translated > 0)
+                    
+                    // Check if array exists and is populated (even if no new translations found)
+                    // This handles cases where arrays are already translated or didn't need translation
+                    bool isPopulated = false;
+                    if (arrayProxyCache.TryGetValue(arrayKey, out PlayMakerArrayListProxy proxy))
                     {
-                        totalTranslated += translated;
-                        translatedArrays.Add(arrayKey);
-                    }
-                }
-                // Also check cached arrays for new content
-                else if (arrayProxyCache.ContainsKey(arrayKey))
-                {
-                    PlayMakerArrayListProxy proxy = arrayProxyCache[arrayKey];
-                    if (proxy != null && proxy.arrayList != null)
-                    {
-                        int translated = TranslateCachedArray(proxy);
-                        if (translated > 0)
+                        if (proxy != null && proxy.arrayList != null && proxy.arrayList.Count > 0)
                         {
-                            totalTranslated += translated;
+                            isPopulated = true;
                         }
                     }
+
+                    // Mark as processed if we translated something OR if the array is fully populated
+                    // This prevents infinite retry loops for already-translated arrays
+                    if (translated > 0 || isPopulated)
+                    {
+                        if (translated > 0) totalTranslated += translated;
+                        translatedArrays.Add(arrayKey);
+                    }
+                    
+                    ModConsole.Print("[Array Monitor] Retry status for " + arrayKey + ": " + (isPopulated ? "Done" : "Waiting"));
                 }
             }
 
             return totalTranslated;
-        }
-
-        // Check a cached array for untranslated items (handles dynamic content)
-        private int TranslateCachedArray(PlayMakerArrayListProxy proxy)
-        {
-            if (proxy == null || proxy.arrayList == null)
-                return 0;
-
-            int translatedCount = 0;
-            ArrayList arrayList = proxy.arrayList;
-
-            for (int i = 0; i < arrayList.Count; i++)
-            {
-                if (arrayList[i] == null)
-                    continue;
-
-                string current = arrayList[i].ToString();
-                if (string.IsNullOrEmpty(current))
-                    continue;
-
-                // Check if this is Finnish (original) text that needs translation
-                string translation = FindTranslation(current);
-                if (translation != null)
-                {
-                    // Found untranslated Finnish text - translate it
-                    arrayList[i] = translation;
-                    translatedCount++;
-                }
-            }
-
-            return translatedCount;
         }
 
         // Find translation from main translations or magazine translations
@@ -389,12 +366,6 @@ namespace MWC_Localization_Core
             }
 
             return pathBuilder.ToString();
-        }
-
-        // Diagnostic info
-        public string GetDiagnostics()
-        {
-            return $"[ArrayListProxy] {translatedArrays.Count}/{arrayPaths.Count} arrays translated, {fontAppliedInstances.Count} fonts applied, {arrayProxyCache.Count} cached";
         }
     }
 }
