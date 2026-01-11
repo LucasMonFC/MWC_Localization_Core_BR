@@ -19,7 +19,8 @@ namespace MWC_Localization_Core
 
         private List<string> ExcludedPath = new List<string>
         {
-            "HOMENEW/Functions/FunctionsDisable/Stereos/Player/Screen/Settings/Bass/LCD"
+            "HOMENEW/Functions/FunctionsDisable/Stereos/Player/Screen/Settings/Bass/LCD",
+            "CARPARTS/VINPlate"
         };
 
         public TextMeshTranslator(
@@ -53,8 +54,11 @@ namespace MWC_Localization_Core
                 return true;
 
             // Skip excluded paths
-            if (ExcludedPath.Contains(path))
-                return false;
+            foreach(string excluded in ExcludedPath)
+            {
+                if (path.StartsWith(excluded))
+                    return false;
+            }
 
             // Try complex text handling first (e.g., magazine text, cashier price)
             if (HandleComplexTextMesh(textMesh, path))
