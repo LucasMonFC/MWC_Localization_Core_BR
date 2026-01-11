@@ -305,7 +305,7 @@ namespace MWC_Localization_Core
                     if (textMesh == null)
                         continue;
 
-                    string path = GetGameObjectPath(textMesh.gameObject);
+                    string path = MLCUtils.GetGameObjectPath(textMesh.gameObject);
 
                     // Apply font using the translator's font mapping logic
                     if (translator.ApplyFontOnly(textMesh, path))
@@ -332,7 +332,7 @@ namespace MWC_Localization_Core
                 if (tm == null || string.IsNullOrEmpty(tm.text))
                     continue;
 
-                string path = GetGameObjectPath(tm.gameObject);
+                string path = MLCUtils.GetGameObjectPath(tm.gameObject);
 
                 // Translate and cache
                 if (translator.TranslateAndApplyFont(tm, path, null))
@@ -340,27 +340,6 @@ namespace MWC_Localization_Core
                     textMeshMonitor.Register(tm, path);
                 }
             }
-        }
-        
-        /// <summary>
-        /// Helper method - Get GameObject path
-        /// </summary>
-        private string GetGameObjectPath(GameObject obj)
-        {
-            if (obj == null)
-                return string.Empty;
-            
-            List<string> pathParts = new List<string>();
-            Transform current = obj.transform;
-            
-            while (current != null)
-            {
-                pathParts.Add(current.name);
-                current = current.parent;
-            }
-            
-            pathParts.Reverse();
-            return string.Join("/", pathParts.ToArray());
         }
 
         /// <summary>

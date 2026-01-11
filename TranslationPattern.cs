@@ -207,7 +207,7 @@ namespace MWC_Localization_Core
                 
                 // Try to translate the parameter value
                 string translatedValue = originalValue;
-                string key = StringHelper.FormatUpperKey(originalValue);
+                string key = MLCUtils.FormatUpperKey(originalValue);
                 
                 if (translations.TryGetValue(key, out string translation))
                 {
@@ -299,7 +299,7 @@ namespace MWC_Localization_Core
             for (int i = 0; i < words.Length; i++)
             {
                 string word = words[i].Trim();
-                string key = StringHelper.FormatUpperKey(word);
+                string key = MLCUtils.FormatUpperKey(word);
                 
                 if (translations.TryGetValue(key, out string translation))
                 {

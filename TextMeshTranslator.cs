@@ -129,7 +129,7 @@ namespace MWC_Localization_Core
 
             // Normalize current text for lookup
             string currentText = textMesh.text;
-            string normalizedKey = StringHelper.FormatUpperKey(currentText);
+            string normalizedKey = MLCUtils.FormatUpperKey(currentText);
 
             // Check if translation exists
             if (!translations.TryGetValue(normalizedKey, out string translation))

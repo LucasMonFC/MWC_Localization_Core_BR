@@ -44,9 +44,6 @@ namespace MWC_Localization_Core
 
         // Localization configuration
         private LocalizationConfig config;
-
-        // GameObject path cache for performance
-        private Dictionary<GameObject, string> pathCache = new Dictionary<GameObject, string>();
         
         // GameObject reference cache (avoid repeated GameObject.Find calls)
         private Dictionary<string, TextMesh> textMeshCache = new Dictionary<string, TextMesh>();
@@ -213,7 +210,6 @@ namespace MWC_Localization_Core
                 }
 
                 // Clear path and TextMesh caches
-                pathCache.Clear();
                 textMeshCache.Clear();
                 
                 CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
@@ -328,7 +324,7 @@ namespace MWC_Localization_Core
                         string key = line.Substring(0, separatorIndex).Trim();
                         string value = line.Substring(separatorIndex + 1).Trim();
 
-                        string normalizedKey = StringHelper.FormatUpperKey(key);
+                        string normalizedKey = MLCUtils.FormatUpperKey(key);
                         string processedValue = value.Replace("\\n", "\n");
 
                         if (!string.IsNullOrEmpty(normalizedKey))
@@ -419,7 +415,6 @@ namespace MWC_Localization_Core
             translator.LoadFsmPatterns(teletextPath);
 
             // Clear all caches
-            pathCache.Clear();
             textMeshCache.Clear();
             
             // Reset and re-initialize LateUpdateHandler to find critical UI again
@@ -455,7 +450,7 @@ namespace MWC_Localization_Core
             {
                 if (tm != null && !string.IsNullOrEmpty(tm.text))
                 {
-                    string path = GetGameObjectPath(tm.gameObject);
+                    string path = MLCUtils.GetGameObjectPath(tm.gameObject);
                     translator.ApplyCustomFont(tm, path);
                     reappliedCount++;
                 }
@@ -476,7 +471,7 @@ namespace MWC_Localization_Core
                     continue;
 
                 // Get GameObject path
-                string path = GetGameObjectPath(tm.gameObject);
+                string path = MLCUtils.GetGameObjectPath(tm.gameObject);
 
                 // Translate and apply font
                 bool translated = translator.TranslateAndApplyFont(tm, path, null);
@@ -497,38 +492,6 @@ namespace MWC_Localization_Core
             }
 
             CoreConsole.Print($"[{Name}] Scene translation complete: {translatedCount}/{allTextMeshes.Length} TextMesh objects translated");
-        }
-
-        string GetGameObjectPath(GameObject obj)
-        {
-            if (obj == null)
-                return string.Empty;
-
-            // Check cache first
-            if (pathCache.TryGetValue(obj, out string cachedPath))
-                return cachedPath;
-
-            // Build path using List + Reverse
-            List<string> pathParts = new List<string>();
-            Transform current = obj.transform;
-
-            while (current != null)
-            {
-                pathParts.Add(current.name);
-                current = current.parent;
-            }
-
-            // Reverse and join
-            pathParts.Reverse();
-            string path = string.Join("/", pathParts.ToArray());
-
-            // Cache the path (limit cache size to prevent memory bloat)
-            if (pathCache.Count < 1000)
-            {
-                pathCache[obj] = path;
-            }
-
-            return path;
         }
     }
 }

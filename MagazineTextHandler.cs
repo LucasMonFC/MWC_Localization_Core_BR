@@ -51,7 +51,7 @@ namespace MWC_Localization_Core
                         string value = line.Substring(equalsIndex + 1).Trim();
 
                         // Normalize key (remove spaces, convert to uppercase)
-                        key = StringHelper.FormatUpperKey(key);
+                        key = MLCUtils.FormatUpperKey(key);
 
                         // Handle escaped newlines in value
                         value = value.Replace("\\n", "\n");
@@ -125,7 +125,7 @@ namespace MWC_Localization_Core
             }
 
             // Try updating rest of the magazine lines in standard way
-            string key = StringHelper.FormatUpperKey(textMesh.text);
+            string key = MLCUtils.FormatUpperKey(textMesh.text);
             if (magazineTranslations.TryGetValue(key, out string translation))
             {
                 CoreConsole.Print($"[Magazine] Standard translation found for '{key}'");
@@ -151,7 +151,7 @@ namespace MWC_Localization_Core
             for (int i = 0; i < words.Length; i++)
             {
                 string word = words[i].Trim();
-                string key = StringHelper.FormatUpperKey(word);
+                string key = MLCUtils.FormatUpperKey(word);
 
                 // Translate each word if a translation exists
                 if (magazineTranslations.TryGetValue(key, out string translation))
@@ -219,7 +219,7 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(original))
                 return null;
 
-            string normalizedKey = StringHelper.FormatUpperKey(original);
+            string normalizedKey = MLCUtils.FormatUpperKey(original);
             if (magazineTranslations.TryGetValue(normalizedKey, out string translation))
             {
                 return translation;

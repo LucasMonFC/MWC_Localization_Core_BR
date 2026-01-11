@@ -266,7 +266,7 @@ namespace MWC_Localization_Core
         private string FindTranslation(string original)
         {
             // Try main translations first (with normalized key)
-            string normalizedKey = StringHelper.FormatUpperKey(original);
+            string normalizedKey = MLCUtils.FormatUpperKey(original);
             if (mainTranslations.TryGetValue(normalizedKey, out string translation))
             {
                 return translation;
@@ -321,7 +321,7 @@ namespace MWC_Localization_Core
                     if (fontAppliedInstances.Contains(instanceId))
                         continue;
 
-                    string textMeshPath = GetGameObjectPath(textMesh.gameObject);
+                    string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
 
                     // Apply font to this TextMesh
                     if (translator.ApplyFontOnly(textMesh, textMeshPath))
@@ -346,26 +346,6 @@ namespace MWC_Localization_Core
             }
 
             return fontsApplied;
-        }
-
-        // Helper to get full GameObject path
-        private string GetGameObjectPath(GameObject obj)
-        {
-            if (obj == null)
-                return "";
-
-            StringBuilder pathBuilder = new StringBuilder();
-            Transform current = obj.transform;
-
-            while (current != null)
-            {
-                if (pathBuilder.Length > 0)
-                    pathBuilder.Insert(0, "/");
-                pathBuilder.Insert(0, current.name);
-                current = current.parent;
-            }
-
-            return pathBuilder.ToString();
         }
     }
 }
