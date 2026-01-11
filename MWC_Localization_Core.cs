@@ -12,7 +12,7 @@ namespace MWC_Localization_Core
         public override string ID => "MWC_Localization_Core";
         public override string Name => "MWC_Localization_Core";
         public override string Author => "potatosalad775";
-        public override string Version => "1.0.1";
+        public override string Version => "1.0.2";
         public override string Description => "Multi-language core localization framework for My Winter Car";
         public override Game SupportedGames => Game.MyWinterCar;
 
@@ -219,14 +219,6 @@ namespace MWC_Localization_Core
                 CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
             }
 
-            // Initial translation pass for Splash Screen (Required for hot reloads)
-            if (currentScene == "SplashScreen" && sceneManager.ShouldTranslateScene("SplashScreen"))
-            {
-                CoreConsole.Print($"[{Name}] Translating Splash Screen...");
-                TranslateScene();
-                sceneManager.MarkSceneTranslated("SplashScreen");
-            }
-
             // Initial translation pass for Main Menu (Required for hot reloads)
             if (currentScene == "MainMenu" && sceneManager.ShouldTranslateScene("MainMenu"))
             {
@@ -258,56 +250,6 @@ namespace MWC_Localization_Core
                 
                 // Schedule teletext translation after delay
                 teletextTranslationTime = Time.time + LocalizationConstants.TELETEXT_TRANSLATION_DELAY;
-            }
-
-            // Teletext translation monitoring (Game scene only)
-            // Scheduling logic - actual monitoring moved to LateUpdate
-            if (currentScene == "GAME" && sceneManager.HasSceneBeenTranslated("GAME") && 
-                teletextTranslationTime > 0 && Time.time >= teletextTranslationTime)
-            {
-                CoreConsole.Print($"[{Name}] Attempting teletext translation (retry {teletextRetryCount + 1}/{LocalizationConstants.TELETEXT_MAX_RETRIES})...");
-                
-                if (teletextHandler.IsTeletextAvailable())
-                {
-                    // Check if arrays are populated before translating
-                    bool arraysPopulated = teletextHandler.AreTeletextArraysPopulated();
-                    
-                    if (arraysPopulated)
-                    {
-                        // Arrays have data, do the translation
-                        int translatedCount = teletextHandler.TranslateTeletextData();
-                        CoreConsole.Print($"[{Name}] Arrays populated! Translated {translatedCount} items.");
-                        
-                        teletextTranslationTime = 0f;  // Done
-                        teletextRetryCount = 0;
-                    }
-                    else if (teletextRetryCount >= LocalizationConstants.TELETEXT_MAX_RETRIES - 1)
-                    {
-                        // Gave up waiting
-                        CoreConsole.Print($"[{Name}] Arrays still empty after {LocalizationConstants.TELETEXT_MAX_RETRIES} retries. They may populate later.");
-                        // Try anyway in case some arrays have data
-                        int translatedCount = teletextHandler.TranslateTeletextData();
-                        if (translatedCount > 0)
-                        {
-                            CoreConsole.Print($"[{Name}] Translated {translatedCount} items from partially populated arrays.");
-                        }
-                        teletextTranslationTime = 0f;
-                        teletextRetryCount = 0;
-                    }
-                    else
-                    {
-                        // Retry - arrays still empty
-                        teletextRetryCount++;
-                        teletextTranslationTime = Time.time + LocalizationConstants.TELETEXT_RETRY_INTERVAL;
-                        CoreConsole.Print($"[{Name}] Arrays not yet populated, will retry in {LocalizationConstants.TELETEXT_RETRY_INTERVAL}s...");
-                    }
-                }
-                else
-                {
-                    CoreConsole.Print($"[{Name}] Teletext not available in this scene.");
-                    teletextTranslationTime = 0f;
-                    teletextRetryCount = 0;
-                }
             }
         }
 

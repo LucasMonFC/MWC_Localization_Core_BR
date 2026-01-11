@@ -40,6 +40,10 @@ namespace MWC_Localization_Core
             { "Systems/TV/ChatMessages", "ChatMessages" },      // Prefix with "ChatMessages."
             { "Systems/TV/TVGraphics/CHAT/Day", "Chat.Day" }    // Prefix with "Chat.Day."
         };
+        
+        // Path Prefix Proxy cache
+        private Dictionary<string, PlayMakerArrayListProxy[]> proxyCache = 
+            new Dictionary<string, PlayMakerArrayListProxy[]>();
 
         public TeletextHandler()
         {
@@ -248,17 +252,7 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Clear all loaded translations
-        /// </summary>
-        public void ClearTranslations()
-        {
-            categoryTranslations.Clear();
-            indexBasedTranslations.Clear();
-        }
-
-        /// <summary>
-        /// Monitor and translate teletext arrays as they populate (call from Update/FixedUpdate)
-        /// This is the MSC approach - wait for arrays to populate, then immediately replace
+        /// Monitor and translate teletext arrays
         /// Returns number of new items translated
         /// </summary>
         public int MonitorAndTranslateArrays()
@@ -269,11 +263,21 @@ namespace MWC_Localization_Core
 
                 foreach (var pathPrefix in pathPrefixes.Keys)
                 {
-                    GameObject dataObject = GameObject.Find(pathPrefix);
-                    if (dataObject == null) continue;
+                    PlayMakerArrayListProxy[] proxies;
+                    if (!proxyCache.ContainsKey(pathPrefix))
+                    {
+                        // First time accessing this path - cache proxies
+                        GameObject dataObject = GameObject.Find(pathPrefix);
+                        if (dataObject == null) continue;
 
-                    PlayMakerArrayListProxy[] proxies = dataObject.GetComponents<PlayMakerArrayListProxy>();
-                    if (proxies == null || proxies.Length == 0) continue;
+                        proxies = dataObject.GetComponents<PlayMakerArrayListProxy>();
+                        proxyCache[pathPrefix] = proxies;
+                    }
+                    else
+                    {
+                        // Use cached proxies
+                        proxies = proxyCache[pathPrefix];
+                    }
 
                     for (int i = 0; i < proxies.Length; i++)
                     {
@@ -282,36 +286,32 @@ namespace MWC_Localization_Core
 
                         string prefix = pathPrefixes[pathPrefix];
                         string categoryName = string.IsNullOrEmpty(prefix) ? refName : $"{prefix}.{refName}";
-                        
+
                         // Create unique key for this array
                         string arrayKey = $"{pathPrefix}[{i}]:{refName}";
-                        
-                        // Special handling for dynamic arrays that change content (like chat history)
-                        bool isDynamic = categoryName == "ChatMessages.Messages";
 
-                        // Skip if already translated (unless dynamic)
-                        if (!isDynamic && translatedArrays.Contains(arrayKey))
-                            continue;
-
-                        // Check if array has been populated by the game
-                        int currentCount = proxies[i]._arrayList != null ? proxies[i]._arrayList.Count : 0;
-                        
-                        // Skip if no translations for this category
-                        if (!categoryTranslations.ContainsKey(categoryName) || 
-                            categoryTranslations[categoryName].Count == 0) 
-                            continue;
-                        
-                        if (currentCount > 0)
+                        // Try translating only if not already done
+                        if (!translatedArrays.Contains(arrayKey))
                         {
-                            // Array just populated! Translate it immediately
                             int translated = TranslateArrayListProxy(proxies[i], categoryName);
-                            if (translated > 0)
+
+                            // Mark as processed
+                            // ... if it doesn't require constant monitoring...
+                            bool isDynamic = categoryName == "ChatMessages.Messages";
+                            // ... or if the array is already populated ...
+                            bool isPopulated = proxies[i] != null && proxies[i]._arrayList != null && proxies[i]._arrayList.Count > 0;
+                            // ... or if there are no translations available (to avoid repeated checks)
+                            bool isTranslationAvailable = categoryTranslations.ContainsKey(categoryName) &&
+                                                          categoryTranslations[categoryName].Count > 0;
+
+                            if (translated > 0 || isPopulated || !isTranslationAvailable)
                             {
-                                CoreConsole.Print($"[Teletext] '{categoryName}' populated with {currentCount} items, replaced with {translated} translations");
-                                totalTranslated += translated;
-                                
-                                if (!isDynamic)
-                                    translatedArrays.Add(arrayKey); // Mark as translated
+                                if (translated > 0)
+                                {
+                                    CoreConsole.Print($"[Teletext] Translated '{categoryName}' with {translated} items");
+                                    totalTranslated += translated;
+                                }
+                                if (!isDynamic) translatedArrays.Add(arrayKey); // Mark as translated
                             }
                         }
                     }
@@ -322,88 +322,6 @@ namespace MWC_Localization_Core
             catch (System.Exception ex)
             {
                 CoreConsole.Error($"[Teletext] Error monitoring teletext arrays: {ex.Message}");
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// Translate teletext data by modifying the underlying ArrayList structures
-        /// Call this once per scene load - translates already-populated arrays only
-        /// Use MonitorAndTranslateArrays() in Update for lazy-loaded arrays
-        /// Returns the number of items translated
-        /// </summary>
-        public int TranslateTeletextData()
-        {
-            try
-            {
-                int totalTranslated = 0;
-
-                // Translate all known data source paths
-                foreach (var pathPrefix in pathPrefixes.Keys)
-                {
-                    GameObject dataObject = GameObject.Find(pathPrefix);
-                    
-                    if (dataObject == null)
-                        continue;
-
-                    PlayMakerArrayListProxy[] proxies = dataObject.GetComponents<PlayMakerArrayListProxy>();
-                    
-                    if (proxies == null || proxies.Length == 0)
-                        continue;
-
-                    CoreConsole.Print($"[Teletext] Found {pathPrefix}: {proxies.Length} arrays");
-
-                    // Translate each array based on its referenceName
-                    for (int i = 0; i < proxies.Length; i++)
-                    {
-                        string refName = proxies[i].referenceName;
-                        if (string.IsNullOrEmpty(refName))
-                            continue;
-
-                        // Build category name (e.g., "day", "ChatMessages.All")
-                        string prefix = pathPrefixes[pathPrefix];
-                        string categoryName = string.IsNullOrEmpty(prefix) ? refName : $"{prefix}.{refName}";
-
-                        // Skip if no translations
-                        if (!categoryTranslations.ContainsKey(categoryName) || 
-                            categoryTranslations[categoryName].Count == 0)
-                            continue;
-
-                        // Only translate if array is already populated
-                        int currentCount = proxies[i]._arrayList != null ? proxies[i]._arrayList.Count : 0;
-                        if (currentCount == 0)
-                            continue;
-
-                        string arrayKey = $"{pathPrefix}[{i}]:{refName}";
-                        if (translatedArrays.Contains(arrayKey))
-                            continue; // Already translated
-
-                        int translated = TranslateArrayListProxy(proxies[i], categoryName);
-                        totalTranslated += translated;
-                        
-                        if (translated > 0)
-                        {
-                            CoreConsole.Print($"[Teletext]  [{i}] '{categoryName}': Translated {translated} items");
-                            translatedArrays.Add(arrayKey);
-                        }
-                    }
-                }
-
-                if (totalTranslated > 0)
-                {
-                    CoreConsole.Print($"[Teletext] Successfully translated {totalTranslated} teletext/data items!");
-                }
-                else
-                {
-                    CoreConsole.Print("[Teletext] No pre-populated arrays to translate. Will monitor for lazy-loaded content.");
-                }
-                
-                return totalTranslated;
-            }
-            catch (System.Exception ex)
-            {
-                CoreConsole.Error($"[Teletext] Error translating teletext data: {ex.Message}");
-                CoreConsole.Error($"[Teletext] Stack trace: {ex.StackTrace}");
                 return 0;
             }
         }
@@ -639,98 +557,7 @@ namespace MWC_Localization_Core
         {
             translatedArrays.Clear();
             disabledFsmPaths.Clear();
-        }
-
-        /// <summary>
-        /// Check if any teletext/data systems exist in current scene
-        /// </summary>
-        public bool IsTeletextAvailable()
-        {
-            foreach (string path in pathPrefixes.Keys)
-            {
-                if (GameObject.Find(path) != null)
-                    return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Check if teletext arrays are populated with data
-        /// Returns true if at least one array that has translations is populated
-        /// </summary>
-        public bool AreTeletextArraysPopulated()
-        {
-            try
-            {
-                int populatedCount = 0;
-                int expectedCount = 0;
-                List<string> details = new List<string>();
-
-                foreach (string path in pathPrefixes.Keys)
-                {
-                    GameObject dataObject = GameObject.Find(path);
-                    if (dataObject == null)
-                    {
-                        details.Add($"  {path}: GameObject not found");
-                        continue;
-                    }
-
-                    PlayMakerArrayListProxy[] proxies = dataObject.GetComponents<PlayMakerArrayListProxy>();
-                    if (proxies == null || proxies.Length == 0)
-                    {
-                        details.Add($"  {path}: No proxies found");
-                        continue;
-                    }
-
-                    for (int i = 0; i < proxies.Length; i++)
-                    {
-                        string refName = proxies[i].referenceName ?? "null";
-                        string prefix = pathPrefixes[path];
-                        string categoryName = string.IsNullOrEmpty(prefix) ? refName : $"{prefix}.{refName}";
-                        
-                        int runtimeCount = proxies[i]._arrayList != null ? proxies[i]._arrayList.Count : 0;
-                        int preFillCount = proxies[i].preFillStringList != null ? proxies[i].preFillStringList.Count : 0;
-                        bool hasTranslations = categoryTranslations.ContainsKey(categoryName);
-                        
-                        // Only check arrays we have translations for
-                        if (hasTranslations)
-                        {
-                            expectedCount++;
-                            // Consider populated if EITHER runtime OR preFill has items
-                            if (runtimeCount > 0 || preFillCount > 0)
-                            {
-                                populatedCount++;
-                                details.Add($"  ✓ {categoryName}: {runtimeCount} runtime, {preFillCount} preFill (POPULATED)");
-                            }
-                            else
-                            {
-                                details.Add($"  ✗ {categoryName}: 0 runtime, 0 preFill (EMPTY)");
-                            }
-                        }
-                        else
-                        {
-                            details.Add($"  - {categoryName}: {runtimeCount} runtime, {preFillCount} preFill (no translations)");
-                        }
-                    }
-                }
-
-                int threshold = expectedCount / 2;
-                bool isPopulated = expectedCount > 0 && populatedCount >= threshold;
-                
-                CoreConsole.Print($"Array population check: {populatedCount}/{expectedCount} arrays populated (threshold: {threshold})");
-                foreach (string detail in details)
-                {
-                    //CoreConsole.Print(detail);
-                }
-                CoreConsole.Print($"Result: {(isPopulated ? "POPULATED - will translate" : "NOT POPULATED - will retry")}");
-
-                return isPopulated;
-            }
-            catch (System.Exception ex)
-            {
-                CoreConsole.Error($"Error checking array population: {ex.Message}");
-                return false;
-            }
+            proxyCache.Clear();
         }
 
         /// <summary>
