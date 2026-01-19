@@ -124,11 +124,12 @@ namespace MWC_Localization_Core
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.SlowPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.SlowPolling);
             
-            // Magazine - late translate once (after creation)
-            AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.LateTranslateOnce);
-            AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.LateTranslateOnce);
-            AddPathRule("Sheets/ServiceBrochure/Confimation", MonitoringStrategy.LateTranslateOnce);
-            AddPathRule("Sheets/ServicePayment", MonitoringStrategy.LateTranslateOnce);
+            // Magazine / Sheets - on visibility change
+            AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("Sheets/ServiceBrochure", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.OnVisibilityChange);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -170,8 +171,11 @@ namespace MWC_Localization_Core
             foreach (string parentPath in pathRules.Keys)
             {
                 MonitoringStrategy strategy = pathRules[parentPath];
-                if (strategy == MonitoringStrategy.LateTranslateOnce)
+                if (strategy == MonitoringStrategy.LateTranslateOnce ||
+                    strategy == MonitoringStrategy.OnVisibilityChange)
+                {
                     monitoredPaths.Add(parentPath);
+                }
 
                 Register(parentPath, strategy);
             }
@@ -185,6 +189,11 @@ namespace MWC_Localization_Core
             foreach (string parentPath in monitoredPaths)
             {
                 if (Register(parentPath, MonitoringStrategy.LateTranslateOnce) > 0)
+                {
+                    monitoredPaths.Remove(parentPath);
+                    break; // Avoid modifying collection during iteration
+                }
+                if (Register(parentPath, MonitoringStrategy.OnVisibilityChange) > 0)
                 {
                     monitoredPaths.Remove(parentPath);
                     break; // Avoid modifying collection during iteration
@@ -263,7 +272,6 @@ namespace MWC_Localization_Core
             if (fastPollingTimer >= LocalizationConstants.FAST_POLLING_INTERVAL)
             {
                 UpdateGroup(MonitoringStrategy.FastPolling);
-                MonitorLateRegister(); // Also check for late registrations
                 fastPollingTimer = 0f;
             }
             
@@ -272,6 +280,7 @@ namespace MWC_Localization_Core
             if (slowPollingTimer >= LocalizationConstants.SLOW_POLLING_INTERVAL)
             {
                 UpdateGroup(MonitoringStrategy.SlowPolling);
+                MonitorLateRegister(); // Also check for late registrations
                 slowPollingTimer = 0f;
             }
             
@@ -326,7 +335,7 @@ namespace MWC_Localization_Core
                 
                 bool wasVisible = entry.IsVisible;
                 entry.UpdateVisibility();
-                
+
                 // Only translate when visibility changes from hidden to visible
                 if (!wasVisible && entry.IsVisible)
                 {
