@@ -28,56 +28,6 @@ namespace MWC_Localization_Core
         /// </summary>
         private void InitializeBuiltInPatterns()
         {
-            // Price Total pattern (regex)
-            var pricePattern = new TranslationPattern(
-                "PriceTotal",
-                TranslationMode.RegexExtract,
-                @"PRICE TOTAL:\s*([\d.]+)\s*MK",
-                "{PRICETOTAL}: {0} MK"
-            );
-            pricePattern.PathMatcher = path => path.Contains("GUI/Indicators/Interaction");
-            patterns.Add(pricePattern);
-
-            // Take Money pattern (regex)
-            var takeMoneyPattern = new TranslationPattern(
-                "TakeMoney",
-                TranslationMode.RegexExtract,
-                @"TAKE MONEY \s*([\d.]+)\s*MK",
-                "{TAKEMONEY} {0} MK"
-            );
-            takeMoneyPattern.PathMatcher = path => path.Contains("GUI/Indicators/Interaction");
-            patterns.Add(takeMoneyPattern);
-
-            // Pay Post Order pattern (regex)
-            var payPostOrderPattern = new TranslationPattern(
-                "PayPostOrder",
-                TranslationMode.RegexExtract,
-                @"PAY POST ORDER \s*([\d.]+)\s*MK",
-                "{PAYPOSTORDER} {0} MK"
-            );
-            payPostOrderPattern.PathMatcher = path => path.Contains("GUI/Indicators/Interaction");
-            patterns.Add(payPostOrderPattern);
-
-            // Unpaid Fine pattern (regex)
-            var unpaidFinePattern = new TranslationPattern(
-                "UnpaidFine",
-                TranslationMode.RegexExtract,
-                @"UNPAID FINES, \s*([\d.]+)\s*MK",
-                "{UNPAIDFINES} {0} MK"
-            );
-            unpaidFinePattern.PathMatcher = path => path.Contains("GUI/Indicators/Interaction");
-            patterns.Add(unpaidFinePattern);
-
-            // TV Chat moderator pattern (regex)
-            var tvChatModeratorPattern = new TranslationPattern(
-                "TVChatModerator",
-                TranslationMode.RegexExtract,
-                @"Valvojana: \s*(.+)",
-                "{VALVOJANA}: {0}"
-            );
-            tvChatModeratorPattern.PathMatcher = path => path.Contains("Systems/TV/TVGraphics/CHAT/Moderator");
-            patterns.Add(tvChatModeratorPattern);
-
             // Magazine price/phone pattern (custom handler)
             var magazinePricePattern = new TranslationPattern(
                 "MagazinePrice",
@@ -158,7 +108,7 @@ namespace MWC_Localization_Core
             if (equalsIndex <= 0)
                 return false;
 
-            string original = line.Substring(0, equalsIndex).Trim();
+            string original = line.Substring(0, equalsIndex).Trim().ToUpperInvariant();
             string translation = line.Substring(equalsIndex + 1).Trim();
 
             // Unescape special characters
@@ -195,7 +145,7 @@ namespace MWC_Localization_Core
         {
             foreach (var pattern in patterns)
             {
-                string result = pattern.TryTranslate(text, path, translations);
+                string result = pattern.TryTranslate(text.ToUpperInvariant(), path, translations);
                 if (result != null)
                 {
                     return result;

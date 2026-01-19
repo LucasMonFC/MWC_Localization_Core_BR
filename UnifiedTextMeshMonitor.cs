@@ -127,6 +127,8 @@ namespace MWC_Localization_Core
             // Magazine - late translate once (after creation)
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.LateTranslateOnce);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.LateTranslateOnce);
+            AddPathRule("Sheets/ServiceBrochure/Confimation", MonitoringStrategy.LateTranslateOnce);
+            AddPathRule("Sheets/ServicePayment", MonitoringStrategy.LateTranslateOnce);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -261,6 +263,7 @@ namespace MWC_Localization_Core
             if (fastPollingTimer >= LocalizationConstants.FAST_POLLING_INTERVAL)
             {
                 UpdateGroup(MonitoringStrategy.FastPolling);
+                MonitorLateRegister(); // Also check for late registrations
                 fastPollingTimer = 0f;
             }
             
@@ -269,7 +272,6 @@ namespace MWC_Localization_Core
             if (slowPollingTimer >= LocalizationConstants.SLOW_POLLING_INTERVAL)
             {
                 UpdateGroup(MonitoringStrategy.SlowPolling);
-                MonitorLateRegister(); // Also check for late registrations
                 slowPollingTimer = 0f;
             }
             
@@ -295,11 +297,6 @@ namespace MWC_Localization_Core
                 if (shouldCheck)
                 {
                     bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path, null);
-                    if(entry.Path.Contains("Sheets/YellowPagesMagazine/Page"))
-                    {
-                        ModConsole.Print("[DEBUG] Translating Yellow Pages Magazine at path: " + entry.Path + " | Translated: " + translated);
-                    }
-                    
                     if (translated)
                     {
                         entry.WasTranslated = true;

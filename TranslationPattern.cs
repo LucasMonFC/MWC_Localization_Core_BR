@@ -79,24 +79,37 @@ namespace MWC_Localization_Core
         private string[] SplitPattern(string pattern)
         {
             List<string> parts = new List<string>();
-            string current = pattern;
+            int lastIndex = 0;
             
-            for (int i = 0; i < 10; i++) // Support up to {9}
+            // Find all placeholders {0}, {1}, {2}, ... in the pattern
+            for (int i = 0; i < 10; i++)
             {
                 string placeholder = "{" + i + "}";
-                if (current.Contains(placeholder))
+                int index = pattern.IndexOf(placeholder, lastIndex);
+                
+                if (index >= 0)
                 {
-                    int idx = current.IndexOf(placeholder);
-                    if (idx >= 0)
-                    {
-                        parts.Add(current.Substring(0, idx));
-                        current = current.Substring(idx + placeholder.Length);
-                    }
+                    // Add text before this placeholder
+                    parts.Add(pattern.Substring(lastIndex, index - lastIndex));
+                    lastIndex = index + placeholder.Length;
+                }
+                else
+                {
+                    // No more placeholders found - break early
+                    break;
                 }
             }
             
-            if (!string.IsNullOrEmpty(current))
-                parts.Add(current);
+            // Add remaining text after last placeholder
+            if (lastIndex < pattern.Length)
+            {
+                parts.Add(pattern.Substring(lastIndex));
+            }
+            else if (lastIndex == pattern.Length && parts.Count > 0)
+            {
+                // Pattern ends with a placeholder - add empty string
+                parts.Add("");
+            }
             
             return parts.ToArray();
         }
@@ -222,7 +235,7 @@ namespace MWC_Localization_Core
 
         private string[] TryExtractFsmValues(string input)
         {
-            if (originalParts.Length == 0)
+            if (originalParts == null || originalParts.Length == 0)
                 return null;
             
             List<string> values = new List<string>();
@@ -232,16 +245,34 @@ namespace MWC_Localization_Core
             {
                 string part = originalParts[i];
                 
+                // Skip empty parts in the middle (consecutive placeholders like {0}{1})
+                if (string.IsNullOrEmpty(part) && i < originalParts.Length - 1)
+                {
+                    // Empty part between placeholders - no static text to match
+                    continue;
+                }
+                
                 if (i == originalParts.Length - 1)
                 {
                     // Last part - must end with this
                     if (!remaining.EndsWith(part))
                         return null;
                     
-                    // Extract everything before this last part
-                    if (part.Length < remaining.Length)
+                    // Extract everything before this last part (only if part is non-empty)
+                    if (part.Length > 0)
                     {
-                        values.Add(remaining.Substring(0, remaining.Length - part.Length));
+                        if (remaining.Length > part.Length)
+                        {
+                            values.Add(remaining.Substring(0, remaining.Length - part.Length));
+                        }
+                    }
+                    else
+                    {
+                        // Pattern ends with placeholder - remaining text IS the last value
+                        if (!string.IsNullOrEmpty(remaining))
+                        {
+                            values.Add(remaining);
+                        }
                     }
                 }
                 else
