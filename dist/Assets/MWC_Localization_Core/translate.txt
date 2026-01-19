@@ -53,6 +53,7 @@ TAKE MONEY {0} = 돈 가져가기: {0}
 PAY POST ORDER {0} = 택배비 납부: {0}
 UNPAID FINES, {0} = 미납부 벌금: {0}
 SALES {0} = 판매 수익: {0}
+SCRAP PAYMENT {0} = 고철 판매 수익: {0}
 
 BURGER 25 MK = 버거 25 MK
 JUMBO CHEESE 37 MK = 점보 치즈 37 MK
@@ -85,6 +86,7 @@ table marker = 테이블 표식
 energy drink = 에너지 드링크
 automatic transmission fluid = 자동 변속기 오일
 classifieds magazine = 생활 정보 잡지
+betting ticket {0} = 복권 티켓 {0}
 
 cable plug = 케이블 플러그
 Lastname = 성
