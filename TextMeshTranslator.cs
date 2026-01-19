@@ -20,7 +20,9 @@ namespace MWC_Localization_Core
         private List<string> ExcludedPath = new List<string>
         {
             "HOMENEW/Functions/FunctionsDisable/Stereos/Player/Screen/Settings/Bass/LCD",
-            "CARPARTS/VINPlate"
+            "CARPARTS/VINPlate",
+            "Sheets/ServiceBrochure/PagePaintRims/Buttons/CustomColors",
+            "Sheets/ServiceBrochure/PagePaintCar/Buttons/CustomColors"
         };
 
         public TextMeshTranslator(
