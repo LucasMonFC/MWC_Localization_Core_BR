@@ -126,9 +126,15 @@
       echo "debug.bat not found in "$(MWCMODSFOLDER)". You probably dont have MSCLoader debugging enabled!"
       )
       )      
+      copy "$(TargetPath)" "D:\SteamLibrary\steamapps\common\My Winter Car\Mods" /y
+      copy "$(TargetDir)$(TargetName).pdb" "D:\SteamLibrary\steamapps\common\My Winter Car\Mods" /y
+      cd "D:\SteamLibrary\steamapps\common\My Winter Car\Mods"
+      call "D:\SteamLibrary\steamapps\common\My Winter Car\Mods\debug.bat"
+      ) ELSE (
+      copy "$(TargetPath)" "D:\SteamLibrary\steamapps\common\My Winter Car\Mods" /y
       )
 
       echo "=== Done! ==="
-    </PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
