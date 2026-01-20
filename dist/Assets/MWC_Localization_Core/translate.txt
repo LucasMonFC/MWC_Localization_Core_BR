@@ -140,6 +140,9 @@ PISTON SET 1750 MK = 피스톤 세트 1750 MK
 STARTER 825 MK = 스타터 825 MK
 THERMOSTAT 59 MK = 온도 센서 59 MK
 WATER PUMP 199 MK = 워터 펌프 199 MK
+TIMING BELT 185 MK = 타이밍 벨트 185 MK
+OIL PUMP 239 MK = 오일 펌프 239 MK
+REV LIMITER 495 MK = RPM 리미터 495 MK
 
 2 BRL CARBURETOR = 2배럴 카뷰레터
 4 BRL RACE CARBURETOR = 4배럴 레이싱 카뷰레터
@@ -258,6 +261,7 @@ Rear Window Grille = 후면 유리 그릴
 Steering Rack {0} = 조향 축 {0}
 Extinguisher Clamp = 소화기 걸이
 car light bulb = 자동차 전구
+Rev Limiter = RPM 리미터
 
 RADIO CHANNEL = 라디오 채널
 BATTERY NEGATIVE = 배터리 음극
@@ -353,6 +357,9 @@ Työttömyystuki = 실업 수당
 PSK Pera Autom. = PSK 주유소
 PSKPerajarviAutom = PSK 주유소
 Vuokra = 임대료
+Palkka = 급여
+TaksiPalkka = 택시 급여
+Jakopalkkio = 전단 배포 급여
 
 //// FUEL ATM
 INSERT BILL = 현금 투입하기
@@ -476,6 +483,7 @@ MA / TI = 월요일 / 화요일
 //// Unemploy Cancel Paper
 TYÖTÖN = 실직 상태
 TÖISSÄ = 재직 중
+TÖISSÄ  8 = 재직 중  8
 Decision on unemployment benefits = 실업 급여 관련 안내
 Päätös työttömyystuesta = 실업 급여 관련 안내
 New decision has been made on your benefits. Your unemployment benefit has been declined. This decision has been based on a statement of workforce official. = 실업 급여에 관한 변동 사항을 알려드립니다.\n\n귀하의 실업 급여 지급이 중단되었습니다.\n\n이 결정은 고용 담당자의 진술에 근거합니다.
@@ -861,6 +869,8 @@ Landfill = 매립지
 Bus Stop, Loppe = 버스 정류장, Loppe
 Bus Stop, Loppentie = 버스 정류장, Loppentie
 Bus Stop, Rykipohja = 버스 정류장, Rykipohja
+FACTORY = 공장
+ARRIVED = 도착
 
 //// Advert
 "FOR SALE! Corris Rivett. Project condition. Only little rust. Comes with 2.0 Block + Head. CHEAP! Phone: 08-609553 / Reijo" = "팝니다! Corris사의 Rivett 차량. 복원 필요. 녹은 거의 없음. 2.0 블록 + 헤드 포함. 싸게 넘깁니다! 전화번호: 08-609553 / Reijo"
