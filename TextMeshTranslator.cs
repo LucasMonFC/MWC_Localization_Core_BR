@@ -22,7 +22,8 @@ namespace MWC_Localization_Core
             "HOMENEW/Functions/FunctionsDisable/Stereos/Player/Screen/Settings/Bass/LCD",
             "CARPARTS/VINPlate",
             "Sheets/ServiceBrochure/PagePaintRims/Buttons/CustomColors",
-            "Sheets/ServiceBrochure/PagePaintCar/Buttons/CustomColors"
+            "Sheets/ServiceBrochure/PagePaintCar/Buttons/CustomColors",
+            "GUI/HUD/FPS"
         };
 
         public TextMeshTranslator(
@@ -61,9 +62,6 @@ namespace MWC_Localization_Core
                 if (path.StartsWith(excluded))
                     return false;
             }
-
-            // Apply custom font first
-            ApplyCustomFont(textMesh, path);
 
             // Try complex text handling first (e.g., magazine text, cashier price)
             if (HandleComplexTextMesh(textMesh, path))
@@ -109,6 +107,9 @@ namespace MWC_Localization_Core
             // Check magazine text FIRST - it requires special handling (comma-separated words, price/phone format)
             if (magazineHandler.IsMagazineText(path))
             {
+                // Apply custom font first
+                ApplyCustomFont(textMesh, path);
+                // Apply Translation
                 return magazineHandler.HandleMagazineText(textMesh);
             }
             
@@ -116,6 +117,9 @@ namespace MWC_Localization_Core
             string patternResult = patternMatcher.TryTranslateWithPattern(textMesh.text, path);
             if (patternResult != null)
             {
+                // Apply custom font first
+                ApplyCustomFont(textMesh, path);
+                // Apply Translation
                 textMesh.text = patternResult;
                 return true;
             }
@@ -144,6 +148,8 @@ namespace MWC_Localization_Core
             if (!forceUpdate && currentText == translation)
                 return false;
 
+            // Apply custom font first
+            ApplyCustomFont(textMesh, path);
             // Apply translation
             textMesh.text = translation;
 

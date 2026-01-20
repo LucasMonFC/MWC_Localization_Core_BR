@@ -91,6 +91,12 @@ namespace MWC_Localization_Core
             // Initialize scene manager
             sceneManager = new SceneTranslationManager();
 
+            // Load fonts
+            LoadCustomFonts();
+
+            // Initialize translator after fonts are loaded
+            translator = new TextMeshTranslator(translations, customFonts, magazineHandler, config);
+
             // Load translations immediately
             LoadTranslations();
 
@@ -102,12 +108,6 @@ namespace MWC_Localization_Core
             string teletextPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_teletext.txt");
             teletextHandler.LoadTeletextTranslations(teletextPath);
             translator.LoadFsmPatterns(teletextPath); // Load additional FSM patterns
-
-            // Load fonts
-            LoadCustomFonts();
-
-            // Initialize translator after fonts are loaded
-            translator = new TextMeshTranslator(translations, customFonts, magazineHandler, config);
             
             // Initialize array handler with translation dictionaries and translator
             arrayListHandler = new ArrayListProxyHandler(translations, magazineHandler, translator);
