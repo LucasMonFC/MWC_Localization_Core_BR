@@ -128,6 +128,7 @@ namespace MWC_Localization_Core
             // Teletext/FSM - slow polling (1 FPS)
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.SlowPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.SlowPolling);
+            //AddPathRule("COMPUTER/SYSTEM/POS", MonitoringStrategy.SlowPolling);
 
             // Magazine / Sheets - on visibility change
             AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
@@ -136,6 +137,7 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("PERAPORTTI/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
+            //AddPathRule("COMPUTER/SYSTEM/TELEBBS/Software", MonitoringStrategy.OnVisibilityChange);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
