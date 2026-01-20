@@ -62,13 +62,12 @@ namespace MWC_Localization_Core
                     return false;
             }
 
+            // Apply custom font first
+            ApplyCustomFont(textMesh, path);
+
             // Try complex text handling first (e.g., magazine text, cashier price)
             if (HandleComplexTextMesh(textMesh, path))
-            {
-                // Complex text was handled, apply font and position
-                ApplyCustomFont(textMesh, path);
                 return true;
-            }
 
             // Use standard translation
             if (ApplyTranslation(textMesh, path))
@@ -144,9 +143,6 @@ namespace MWC_Localization_Core
             // Skip translation if already translated (unless forced)
             if (!forceUpdate && currentText == translation)
                 return false;
-
-            // Apply custom font first
-            ApplyCustomFont(textMesh, path);
 
             // Apply translation
             textMesh.text = translation;
