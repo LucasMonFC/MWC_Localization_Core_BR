@@ -61,3 +61,7 @@ Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts) & EndsWith(/Data) = 0,0
 Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data) & EndsWith(/Bottomline 1) = 0,-0.25,0
 Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts) & EndsWith(/Data 1) = 0,0.5,0
 Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1) & EndsWith(/Bottomline 1) = 0,-0.25,0
+## Fleetari Service Payment Sheet
+Contains(Sheets/ServicePayment) & EndsWith(ServicePayment/Text) = 0,-0.01,0,0.005
+Contains(Sheets/ServicePayment) & EndsWith(ServicePayment/Text/Text) = 0,0.01,0
+Contains(Sheets/ServicePayment/Line) = 0,0.002,0
