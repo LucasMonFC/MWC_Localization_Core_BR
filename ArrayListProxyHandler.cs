@@ -70,20 +70,6 @@ namespace MWC_Localization_Core
             arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/VINLIST_TirePics:1"); // Tire picture descriptions (FI)
             arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/VINLIST_TirePics:2"); // Tire picture descriptions (EN)
 
-            // Subtitles
-            /*
-            arrayPaths.Add("PERAJARVI/Kunnalliskoti/Functions/RoomUncle/Sitting/UncleDrinking/Uncle:1"); // Uncle
-            arrayPaths.Add("PERAPORTTI/Building/LOD/Staff/AlaCarteRunnerPIVOT/Jouni/Audio:3"); // Food Court AngrySub
-            arrayPaths.Add("PERAPORTTI/Building/LOD/Staff/AlaCarteRunnerPIVOT/Jouni/Audio:4"); // Food Court DeliverSub
-            arrayPaths.Add("PERAPORTTI/Building/LOD/Staff/AlaCarteRunnerPIVOT/Jouni/Audio:5"); // Food Court EnjoySub
-            arrayPaths.Add("STORE_AREA/TeimoInBar/Pivot/Speak:1"); // Pub Nappo HelloSub
-            arrayPaths.Add("STORE_AREA/TeimoInBar/Pivot/Speak:3"); // Pub Nappo GoodbyeSub
-            arrayPaths.Add("STORE_AREA/TeimoInBar/Pivot/Speak:5"); // Pub Nappo RandomSub
-            arrayPaths.Add("STORE_AREA/TeimoInBar/Pivot/Speak:7"); // Pub Nappo CoffeeSub
-            arrayPaths.Add("STORE_AREA/Stuff/LOD/GFX_Pub/PubCashRegister/CashRegisterLogic:1"); // Pub Nappo CoffeeSub
-            arrayPaths.Add("CARPARTS/PARTSYSTEM/PhoneNumbers:2"); // Car parts phone call subtitles
-            */
-
             CoreConsole.Print($"Initialized {arrayPaths.Count} array paths to monitor");
 
             // Initialize TextMesh display path mappings
