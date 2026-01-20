@@ -101,6 +101,7 @@ namespace MWC_Localization_Core
             // Load teletext translations from separate file
             string teletextPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_teletext.txt");
             teletextHandler.LoadTeletextTranslations(teletextPath);
+            translator.LoadFsmPatterns(teletextPath); // Load additional FSM patterns
 
             // Load fonts
             LoadCustomFonts();
@@ -111,13 +112,6 @@ namespace MWC_Localization_Core
             // Initialize array handler with translation dictionaries and translator
             arrayListHandler = new ArrayListProxyHandler(translations, magazineHandler, translator);
             arrayListHandler.InitializeArrayPaths();
-            
-            // Load FSM patterns into pattern matcher from main translation file
-            string mainTranslatePath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
-            translator.LoadFsmPatterns(mainTranslatePath);
-            
-            // Load additional FSM patterns from teletext file
-            translator.LoadFsmPatterns(teletextPath);
             
             // Initialize unified text mesh monitor
             textMeshMonitor = new UnifiedTextMeshMonitor(translator);
@@ -335,6 +329,7 @@ namespace MWC_Localization_Core
             else 
             {
                 InsertTranslationLines(mscTranslationPath);
+                translator.LoadFsmPatterns(mscTranslationPath);
             }
 
             // Load main translation file for My Winter Car
@@ -347,6 +342,7 @@ namespace MWC_Localization_Core
             else 
             {
                 InsertTranslationLines(translationPath);
+                translator.LoadFsmPatterns(translationPath);
             }
 
             // Load mod translation file for My Winter Car
@@ -359,6 +355,7 @@ namespace MWC_Localization_Core
             else 
             {
                 InsertTranslationLines(modTranslationPath);
+                translator.LoadFsmPatterns(modTranslationPath);
             }
         }
 
