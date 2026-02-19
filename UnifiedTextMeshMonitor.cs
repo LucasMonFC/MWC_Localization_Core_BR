@@ -75,7 +75,7 @@ namespace MWC_Localization_Core
         private Dictionary<int, TextMeshEntry> instanceEntries;  // instanceID -> entry
         private Dictionary<string, HashSet<int>> pathToInstances;  // path -> instanceIDs
         private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
-        private List<string> monitoredPaths = new List<string>();
+        private HashSet<string> monitoredPaths = new HashSet<string>();
 
         public UnifiedTextMeshMonitor(TextMeshTranslator translator)
         {
@@ -134,6 +134,7 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/ServiceBrochure", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("PERAPORTTI/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
@@ -434,6 +435,7 @@ namespace MWC_Localization_Core
             }
             instanceEntries.Clear();
             pathToInstances.Clear();
+            monitoredPaths.Clear();
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
         }

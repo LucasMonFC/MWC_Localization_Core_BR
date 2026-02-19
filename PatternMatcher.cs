@@ -15,11 +15,22 @@ namespace MWC_Localization_Core
     {
         private List<TranslationPattern> patterns = new List<TranslationPattern>();
         private Dictionary<string, string> translations;
+        private HashSet<string> patternSignatures = new HashSet<string>();
 
         public PatternMatcher(Dictionary<string, string> translations)
         {
             this.translations = translations;
-            
+            ResetPatterns();
+        }
+
+        /// <summary>
+        /// Reset pattern registry to a clean built-in state.
+        /// Call before loading file patterns to make reload idempotent.
+        /// </summary>
+        public void ResetPatterns()
+        {
+            patterns.Clear();
+            patternSignatures.Clear();
             InitializeBuiltInPatterns();
         }
 
@@ -38,7 +49,7 @@ namespace MWC_Localization_Core
             magazinePricePattern.PathMatcher = path => path.Contains("YellowPagesMagazine");
             magazinePricePattern.TextMatcher = text => text.StartsWith("h.") && text.Contains(",- puh.");
             magazinePricePattern.CustomHandler = TranslateMagazinePriceLine;
-            patterns.Add(magazinePricePattern);
+            AddPatternInternal(magazinePricePattern, true);
 
             // Magazine comma-separated words
             var magazineWordsPattern = new TranslationPattern(
@@ -49,7 +60,7 @@ namespace MWC_Localization_Core
             );
             magazineWordsPattern.PathMatcher = path => path.Contains("YellowPagesMagazine");
             magazineWordsPattern.TextMatcher = text => text.Split(',').Length == 3;
-            patterns.Add(magazineWordsPattern);
+            AddPatternInternal(magazineWordsPattern, true);
 
             // Multi-line Computer command text handler
             var pcScreenPattern = new TranslationPattern(
@@ -61,7 +72,7 @@ namespace MWC_Localization_Core
             pcScreenPattern.PathMatcher = path => path.Contains("COMPUTER/SYSTEM/POS/Text");
             pcScreenPattern.TextMatcher = text => text.Contains("\n");
             pcScreenPattern.CustomHandler = TranslateMultilineScreen;
-            patterns.Add(pcScreenPattern);
+            AddPatternInternal(pcScreenPattern, true);
         }
 
         /// <summary>
@@ -99,8 +110,10 @@ namespace MWC_Localization_Core
                     // Parse pattern - auto-detects FsmPattern vs FsmPatternWithTranslation
                     if (TryParseFsmPattern(trimmed, out TranslationPattern pattern))
                     {
-                        patterns.Insert(0, pattern);  // Insert at beginning to override built-in patterns
-                        loadedCount++;
+                        if (AddPatternInternal(pattern, false))
+                        {
+                            loadedCount++;
+                        }
                     }
                 }
 
@@ -172,7 +185,7 @@ namespace MWC_Localization_Core
         /// </summary>
         public void AddPattern(TranslationPattern pattern)
         {
-            patterns.Add(pattern);
+            AddPatternInternal(pattern, false);
         }
 
         /// <summary>
@@ -181,6 +194,36 @@ namespace MWC_Localization_Core
         public void ClearPatterns()
         {
             patterns.Clear();
+            patternSignatures.Clear();
+        }
+
+        private bool AddPatternInternal(TranslationPattern pattern, bool appendToEnd)
+        {
+            if (pattern == null)
+                return false;
+
+            string signature = BuildSignature(pattern);
+            if (!patternSignatures.Add(signature))
+                return false;
+
+            if (appendToEnd)
+            {
+                patterns.Add(pattern);
+            }
+            else
+            {
+                // User file patterns take priority over built-ins.
+                patterns.Insert(0, pattern);
+            }
+
+            return true;
+        }
+
+        private string BuildSignature(TranslationPattern pattern)
+        {
+            string original = pattern.OriginalPattern ?? string.Empty;
+            string translated = pattern.TranslatedTemplate ?? string.Empty;
+            return ((int)pattern.Mode).ToString() + "|" + original + "|" + translated;
         }
 
         /// <summary>

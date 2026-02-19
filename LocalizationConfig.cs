@@ -28,6 +28,12 @@ namespace MWC_Localization_Core
         /// </summary>
         public bool LoadConfig(string configPath)
         {
+            // Make reload idempotent by resetting previously loaded values.
+            FontMappings.Clear();
+            TextAdjustments.Clear();
+            LanguageName = "Unknown";
+            LanguageCode = "en-US";
+
             if (!File.Exists(configPath))
             {
                 CoreConsole.Warning($"Config file not found: {configPath}");

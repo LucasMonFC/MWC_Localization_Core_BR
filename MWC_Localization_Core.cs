@@ -9,10 +9,10 @@ namespace MWC_Localization_Core
     public class MWC_Localization_Core : Mod
     {
         // Mod metadata
-        public override string ID => "MWC_Localization_Core_KR";
+        public override string ID => "MWC_Localization_Core";
         public override string Name => "MWC_Localization_Core";
         public override string Author => "potatosalad775";
-        public override string Version => "1.0.4";
+        public override string Version => "1.0.5";
         public override string Description => "Multi-language core localization framework for My Winter Car";
         public override Game SupportedGames => Game.MyWinterCar;
 
@@ -96,6 +96,7 @@ namespace MWC_Localization_Core
 
             // Initialize translator after fonts are loaded
             translator = new TextMeshTranslator(translations, customFonts, magazineHandler, config);
+            translator.ResetPatterns();
 
             // Load translations immediately
             LoadTranslations();
@@ -182,6 +183,10 @@ namespace MWC_Localization_Core
                 if (lateUpdateHandler != null)
                 {
                     lateUpdateHandler.ClearCache();
+                }
+                if (translator != null)
+                {
+                    translator.ClearRuntimeCaches();
                 }
                 if (lateUpdateHandlerObject != null)
                 {
@@ -367,6 +372,8 @@ namespace MWC_Localization_Core
             translations.Clear();
             magazineHandler.ClearTranslations();
             arrayListHandler.ClearTranslations();
+            translator.ClearRuntimeCaches();
+            translator.ResetPatterns();
 
             // Reset text adjustment caches and reload config
             config.ClearTextAdjustmentCaches();
@@ -447,7 +454,11 @@ namespace MWC_Localization_Core
                 string path = MLCUtils.GetGameObjectPath(tm.gameObject);
 
                 // Translate and apply font
-                translator.TranslateAndApplyFont(tm, path, null);
+                bool translated = translator.TranslateAndApplyFont(tm, path, null);
+                if (translated)
+                {
+                    translatedCount++;
+                }
             }
 
             CoreConsole.Print($"[{Name}] Scene translation complete: {translatedCount}/{allTextMeshes.Length} TextMesh objects translated");
