@@ -13,6 +13,7 @@ LEFT MIRROR QUALITY = 왼쪽 사이드미러 품질
 RIGHT MIRROR QUALITY = 오른쪽 사이드미러 품질
 REAR MIRROR QUALITY = 백미러 품질
 ENABLE AI SONGS = AI 생성 음악 활성화
+MOON SHADOWS = 달빛 그림자
 
 ASSIGN DRIVING CONTROLS = 차량 조작 키 할당
 ASSIGN TRACTOR CONTROLS = 트랙터 조작 키 할당
@@ -788,6 +789,10 @@ PAY 500 MK = 500 MK 지불하기
 "World changes around, but flea market momma does not." = "세상은 변해가지만, 벼룩 시장 할머니는 변하지 않지."
 "Always drive carefully when it is slippery. If nothing else, wool sock with tar finish will do as well." = "길이 미끄러울 때는 항상 조심해서 운전해야 해.\n다른 게 없다면, 타르로 마감된 양말이라도 신으렴."
 "I have drank some windshield cleaning fluid through the french bread. I ate the bread too." = "한 때는 바게트로 앞유리 세정제를 빨아마신 적이 있었지. 물론 빵도 같이 먹었어."
+"Now that they bring the new european money, it means I get six times less from a booze bottle than before!" = "이번에 새로 들여온 유럽 돈 때문에, 술 한 병 팔아서 얻는 돈이 전보다 여섯 배나 줄어들었어."
+"There was funny thing in the news. They sculpted a mammoth from plaster. I would like to have one made from Teimo..." = "뉴스에서 재미있는 이야기를 하더라고. 세상에 석고로 매머드를 조각했대. 나도 테이모 석상을 하나 만들어보고 싶어..."
+"When I was working at north pole once, it was cold, but nobody complained. Moonshine kept me very warm." = "북극에서 일할 때였지, 정말 추웠지만 아무도 불평하지 않았어. 밀주가 나를 아주 따뜻하게 해줬거든."
+"I feel like a bourgeis capitalist when riding a taxi. Now that they are planning such coalition, I would fit right in." = "택시를 탈 때면 마치 부르주아가 된 것만 같았어. 그런데 이번에 노조를 만든다고 하니 왠지 친근해진 기분이랄까."
 
 //// Taxi Job
 DOME LIGHT = 택시등
