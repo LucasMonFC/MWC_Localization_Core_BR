@@ -126,7 +126,7 @@ namespace MWC_Localization_Core
 
             foreach (string rootPath in teletextRootPaths)
             {
-                GameObject root = GameObject.Find(rootPath);
+                GameObject root = MLCUtils.FindGameObjectCached(rootPath);
                 if (root == null)
                     continue;
 
@@ -154,7 +154,7 @@ namespace MWC_Localization_Core
         /// </summary>
         private void ScanForNewMainMenuElements()
         {
-            GameObject mainMenuRoot = GameObject.Find("MainMenu");
+            GameObject mainMenuRoot = MLCUtils.FindGameObjectCached("MainMenu");
             if (mainMenuRoot == null)
                 return;
 

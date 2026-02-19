@@ -27,6 +27,8 @@ namespace MWC_Localization_Core
 
         // Cache for GameObject paths to improve performance
         private static Dictionary<GameObject, string> pathCache = new Dictionary<GameObject, string>();
+        // Cache for expensive GameObject.Find(path) lookups
+        private static Dictionary<string, GameObject> gameObjectFindCache = new Dictionary<string, GameObject>();
 
         public static string GetGameObjectPath(GameObject obj)
         {
@@ -52,12 +54,48 @@ namespace MWC_Localization_Core
             string path = string.Join("/", pathParts.ToArray());
 
             // Cache the path (limit cache size to prevent memory bloat)
-            if (pathCache.Count < 1000)
+            if (pathCache.Count < 10000)
             {
                 pathCache[obj] = path;
             }
 
             return path;
+        }
+
+        /// <summary>
+        /// Cached wrapper around GameObject.Find(path).
+        /// Returns null when not found, and invalidates stale cached references.
+        /// </summary>
+        public static GameObject FindGameObjectCached(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            if (gameObjectFindCache.TryGetValue(path, out GameObject cachedObj))
+            {
+                if (cachedObj != null)
+                    return cachedObj;
+
+                gameObjectFindCache.Remove(path);
+            }
+
+            GameObject found = GameObject.Find(path);
+            if (found != null)
+            {
+                gameObjectFindCache[path] = found;
+            }
+
+            return found;
+        }
+
+        /// <summary>
+        /// Clear all runtime caches.
+        /// Call this on scene changes and reloads.
+        /// </summary>
+        public static void ClearCaches()
+        {
+            pathCache.Clear();
+            gameObjectFindCache.Clear();
         }
     }
 }

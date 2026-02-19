@@ -36,6 +36,7 @@ namespace MWC_Localization_Core
         // Cache for array proxies to avoid repeated lookups
         private Dictionary<string, PlayMakerArrayListProxy> arrayProxyCache 
             = new Dictionary<string, PlayMakerArrayListProxy>();
+        private Dictionary<string, bool> arrayRetryStateCache = new Dictionary<string, bool>();
 
         public ArrayListProxyHandler(
             Dictionary<string, string> translations, 
@@ -100,6 +101,7 @@ namespace MWC_Localization_Core
             arrayProxyCache.Clear();
             fontAppliedInstances.Clear();
             completedParentPaths.Clear();
+            arrayRetryStateCache.Clear();
         }
 
         public void Reset()
@@ -108,6 +110,7 @@ namespace MWC_Localization_Core
             arrayProxyCache.Clear();
             fontAppliedInstances.Clear();
             completedParentPaths.Clear();
+            arrayRetryStateCache.Clear();
         }
 
         // Translate all configured arrays (call once per scene)
@@ -156,7 +159,7 @@ namespace MWC_Localization_Core
                 }
 
                 // Find GameObject
-                GameObject obj = GameObject.Find(objectPath);
+                GameObject obj = MLCUtils.FindGameObjectCached(objectPath);
                 if (obj == null)
                 {
                     // Not available yet - this is normal for lazy-loaded content
@@ -243,7 +246,12 @@ namespace MWC_Localization_Core
                         translatedArrays.Add(arrayKey);
                     }
                     
-                    CoreConsole.Print("[Array Monitor] Retry status for " + arrayKey + ": " + (isPopulated ? "Done" : "Waiting"));
+                    bool currentState = isPopulated;
+                    if (!arrayRetryStateCache.ContainsKey(arrayKey) || arrayRetryStateCache[arrayKey] != currentState)
+                    {
+                        arrayRetryStateCache[arrayKey] = currentState;
+                        CoreConsole.Print("[Array Monitor] Retry status for " + arrayKey + ": " + (isPopulated ? "Done" : "Waiting"));
+                    }
                 }
             }
 
@@ -290,7 +298,7 @@ namespace MWC_Localization_Core
                 if (completedParentPaths.Contains(parentPath))
                     continue;
 
-                GameObject parent = GameObject.Find(parentPath);
+                GameObject parent = MLCUtils.FindGameObjectCached(parentPath);
                 if (parent == null)
                     continue; // Not loaded yet - will try again later
 

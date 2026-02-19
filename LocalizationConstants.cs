@@ -9,6 +9,7 @@ namespace MWC_Localization_Core
         // Monitoring strategies timing
         public const float FAST_POLLING_INTERVAL = 0.1f;            // 10 times per second
         public const float SLOW_POLLING_INTERVAL = 1.0f;            // Once per second
+        public const float VISIBILITY_POLLING_INTERVAL = 0.2f;      // 5 times per second
         public const float ARRAY_MONITOR_INTERVAL = 1.0f;           // Check arrays every 1 second (was every frame)
     }
 }

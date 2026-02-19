@@ -44,6 +44,18 @@ namespace MWC_Localization_Core
         // Path Prefix Proxy cache
         private Dictionary<string, PlayMakerArrayListProxy[]> proxyCache = 
             new Dictionary<string, PlayMakerArrayListProxy[]>();
+        
+        // FSM child text paths to monitor before disabling parent/child FSMs.
+        private static readonly string[] fsmChildTextPaths = new string[]
+        {
+            "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1",
+            "Systems/TV/Teletext/VKTekstiTV/PAGES/241/Texts/Data/Bottomline 1",
+            "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1",
+            "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1",
+            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt/WeatherTemp",
+            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste/WeatherTemp",
+            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Selite"
+        };
 
         public TeletextHandler()
         {
@@ -267,7 +279,7 @@ namespace MWC_Localization_Core
                     if (!proxyCache.ContainsKey(pathPrefix))
                     {
                         // First time accessing this path - cache proxies
-                        GameObject dataObject = GameObject.Find(pathPrefix);
+                        GameObject dataObject = MLCUtils.FindGameObjectCached(pathPrefix);
                         if (dataObject == null) continue;
 
                         proxies = dataObject.GetComponents<PlayMakerArrayListProxy>();
@@ -411,22 +423,13 @@ namespace MWC_Localization_Core
         /// </summary>
         public int DisableTeletextFSMs(TextMeshTranslator translator)
         {
-            // Child TextMesh paths to check for valid text (before disabling parent FSMs)
-            string[] childTextPaths = new string[]
-            {
-                "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1",
-                "Systems/TV/Teletext/VKTekstiTV/PAGES/241/Texts/Data/Bottomline 1",
-                "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1",
-                "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1",
-                "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt/WeatherTemp", // Other siblings are covered by parent FSM
-                "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste/WeatherTemp", // Other siblings are covered by parent FSM
-                "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Selite"
-            };
+            if (disabledFsmPaths.Count >= fsmChildTextPaths.Length)
+                return 0;
 
             int disabledCount = 0;
             int translatedCount = 0;
 
-            foreach (string childPath in childTextPaths)
+            foreach (string childPath in fsmChildTextPaths)
             {
                 // Skip if already processed
                 if (disabledFsmPaths.Contains(childPath))
@@ -434,7 +437,7 @@ namespace MWC_Localization_Core
                     
                 try
                 {
-                    GameObject childObj = GameObject.Find(childPath);
+                    GameObject childObj = MLCUtils.FindGameObjectCached(childPath);
                     if (childObj == null)
                         continue; // Not found yet - will retry later
 

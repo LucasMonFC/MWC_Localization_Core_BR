@@ -179,6 +179,8 @@ namespace MWC_Localization_Core
             // Clear caches when entering a new scene
             if (sceneChanged)
             {
+                MLCUtils.ClearCaches();
+
                 // Clear MonoBehaviour cache and destroy old monitor
                 if (lateUpdateHandler != null)
                 {
@@ -374,6 +376,7 @@ namespace MWC_Localization_Core
             arrayListHandler.ClearTranslations();
             translator.ClearRuntimeCaches();
             translator.ResetPatterns();
+            MLCUtils.ClearCaches();
 
             // Reset text adjustment caches and reload config
             config.ClearTextAdjustmentCaches();

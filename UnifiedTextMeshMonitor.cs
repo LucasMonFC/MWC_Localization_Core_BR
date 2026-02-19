@@ -67,6 +67,7 @@ namespace MWC_Localization_Core
         // Throttling timers
         private float fastPollingTimer;
         private float slowPollingTimer;
+        private float visibilityPollingTimer;
 
         // Path-based monitoring rules (pattern -> strategy mapping)
         private Dictionary<string, MonitoringStrategy> pathRules;
@@ -76,6 +77,7 @@ namespace MWC_Localization_Core
         private Dictionary<string, HashSet<int>> pathToInstances;  // path -> instanceIDs
         private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
         private HashSet<string> monitoredPaths = new HashSet<string>();
+        private List<int> removalBuffer = new List<int>(64);
 
         public UnifiedTextMeshMonitor(TextMeshTranslator translator)
         {
@@ -125,9 +127,10 @@ namespace MWC_Localization_Core
             AddPathRule("Systems/TV/TVGraphics/CHAT/Day", MonitoringStrategy.FastPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Moderator", MonitoringStrategy.FastPolling);
 
-            // Teletext/FSM - slow polling (1 FPS)
-            AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.SlowPolling);
-            AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.SlowPolling);
+            // Teletext/FSM displays are primarily translated at array/FSM source level.
+            // Use one-shot late registration to avoid scanning large TV trees every second.
+            AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.LateTranslateOnce);
+            AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateTranslateOnce);
             //AddPathRule("COMPUTER/SYSTEM/POS", MonitoringStrategy.SlowPolling);
 
             // Magazine / Sheets - on visibility change
@@ -221,7 +224,7 @@ namespace MWC_Localization_Core
             // Determine strategy if not provided
             MonitoringStrategy finalStrategy = strategy ?? pathRules[parentPath];
 
-            GameObject parent = GameObject.Find(parentPath);
+            GameObject parent = MLCUtils.FindGameObjectCached(parentPath);
             if (parent == null)
                 return registeredCount;
 
@@ -336,24 +339,30 @@ namespace MWC_Localization_Core
             if (slowPollingTimer >= LocalizationConstants.SLOW_POLLING_INTERVAL)
             {
                 UpdateGroup(MonitoringStrategy.SlowPolling);
+                UpdateGroup(MonitoringStrategy.LateTranslateOnce);
                 MonitorLateRegister(); // Also check for late registrations
                 slowPollingTimer = 0f;
             }
 
-            // OnVisibilityChange - check when visibility changes
-            UpdateVisibilityChangeGroup();
+            // OnVisibilityChange - check at a throttled interval
+            visibilityPollingTimer += deltaTime;
+            if (visibilityPollingTimer >= LocalizationConstants.VISIBILITY_POLLING_INTERVAL)
+            {
+                UpdateVisibilityChangeGroup();
+                visibilityPollingTimer = 0f;
+            }
         }
 
         private void UpdateGroup(MonitoringStrategy strategy)
         {
             var instanceIDs = strategyGroups[strategy];
-            var toRemove = new List<int>();  // Track instances to remove
+            removalBuffer.Clear();
 
             foreach (int instanceID in instanceIDs)
             {
                 if (!instanceEntries.ContainsKey(instanceID))
                 {
-                    toRemove.Add(instanceID);
+                    removalBuffer.Add(instanceID);
                     continue;
                 }
 
@@ -361,7 +370,14 @@ namespace MWC_Localization_Core
 
                 if (!entry.IsValid())
                 {
-                    toRemove.Add(instanceID);
+                    removalBuffer.Add(instanceID);
+                    continue;
+                }
+
+                // Skip inactive entries for polling strategies.
+                // OnVisibilityChange has its own dedicated pass.
+                if (!entry.GameObject.activeInHierarchy)
+                {
                     continue;
                 }
 
@@ -379,16 +395,16 @@ namespace MWC_Localization_Core
                         entry.UpdateLastText();
 
                         // Mark for removal if TranslateOnce
-                        if (strategy == MonitoringStrategy.TranslateOnce)
+                        if (strategy == MonitoringStrategy.TranslateOnce || strategy == MonitoringStrategy.LateTranslateOnce)
                         {
-                            toRemove.Add(instanceID);
+                            removalBuffer.Add(instanceID);
                         }
                     }
                 }
             }
 
             // Clean up removed instances
-            foreach (int instanceID in toRemove)
+            foreach (int instanceID in removalBuffer)
             {
                 UnregisterInstance(instanceID);
             }
@@ -438,6 +454,7 @@ namespace MWC_Localization_Core
             monitoredPaths.Clear();
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
+            visibilityPollingTimer = 0f;
         }
     }
 }
