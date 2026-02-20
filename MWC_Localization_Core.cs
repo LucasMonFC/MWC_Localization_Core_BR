@@ -34,8 +34,8 @@ namespace MWC_Localization_Core
         private GameObject lateUpdateHandlerObject;
         private LateUpdateHandler lateUpdateHandler;
 
-        // Main Menu FSM hook object (for translating text tied with FSM State)
-        private GameObject mainMenuFsmHookObject;
+        // FSM text hook object (for translating text tied with FSM State)
+        private GameObject fsmTextHookObject;
 
         // Font management
         private static AssetBundle fontBundle;  // Static to persist across MSCLoader instance recreation
@@ -124,7 +124,7 @@ namespace MWC_Localization_Core
             CoreConsole.Print($"[{Name}] Translating Main Menu...");
             TranslateScene();
             sceneManager.MarkSceneTranslated("MainMenu");
-            InitializeMainMenuFsmHook();
+            InitializeFsmTextHook();
         }
 
         // Game fully loaded - translate everything
@@ -134,6 +134,7 @@ namespace MWC_Localization_Core
             ModConsole.Print($"[{Name}] Game fully loaded - translating...");
             TranslateScene();
             sceneManager.MarkSceneTranslated("GAME");
+            InitializeFsmTextHook();
             
             // Reset handlers
             teletextHandler.Reset();
@@ -203,13 +204,20 @@ namespace MWC_Localization_Core
                 CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
             }
 
+            // Keep FSM hook alive for delayed/inactive GAME FSM targets.
+            // Run after scene-change cleanup to avoid create/destroy churn.
+            if (currentScene == "GAME" && fsmTextHookObject == null)
+            {
+                InitializeFsmTextHook();
+            }
+
             // Initial translation pass for Main Menu (Required for hot reloads)
             if (currentScene == "MainMenu" && sceneManager.ShouldTranslateScene("MainMenu"))
             {
                 CoreConsole.Print($"[{Name}] Translating Main Menu...");
                 TranslateScene();
                 sceneManager.MarkSceneTranslated("MainMenu");
-                InitializeMainMenuFsmHook();
+                InitializeFsmTextHook();
             }
 
             // Initial translation pass for Game scene (Required for hot reloads)
@@ -218,6 +226,7 @@ namespace MWC_Localization_Core
                 CoreConsole.Print($"[{Name}] Translating Game scene...");
                 TranslateScene();
                 sceneManager.MarkSceneTranslated("GAME");
+                InitializeFsmTextHook();
                 
                 // Reset teletext handler and retry tracking for new scene
                 teletextHandler.Reset();
@@ -451,25 +460,26 @@ namespace MWC_Localization_Core
                 }
             }
 
-            if (Application.loadedLevelName == "MainMenu")
+            if (Application.loadedLevelName == "MainMenu" || Application.loadedLevelName == "GAME")
             {
-                InitializeMainMenuFsmHook();
+                InitializeFsmTextHook();
             }
 
             CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");
         }
 
-        void InitializeMainMenuFsmHook()
+        void InitializeFsmTextHook()
         {
             if (translations == null || translations.Count == 0)
                 return;
 
-            if (mainMenuFsmHookObject != null)
+            if (fsmTextHookObject != null)
                 return;
 
-            mainMenuFsmHookObject = new GameObject("MWC_MainMenuFsmHook");
-            MainMenuFsmHook hook = mainMenuFsmHookObject.AddComponent<MainMenuFsmHook>();
-            hook.Initialize(translations, mainMenuFsmHookObject);
+            fsmTextHookObject = new GameObject("MWC_FsmTextHook");
+            FsmTextHook hook = fsmTextHookObject.AddComponent<FsmTextHook>();
+            hook.Initialize(translations, fsmTextHookObject);
+            CoreConsole.Print($"[{Name}] FSM hook created for scene '{Application.loadedLevelName}'");
         }
 
         void TranslateScene()

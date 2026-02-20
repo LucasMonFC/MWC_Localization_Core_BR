@@ -131,7 +131,6 @@ namespace MWC_Localization_Core
             // Use one-shot late registration to avoid scanning large TV trees every second.
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.LateTranslateOnce);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateTranslateOnce);
-            //AddPathRule("COMPUTER/SYSTEM/POS", MonitoringStrategy.SlowPolling);
 
             // Magazine / Sheets - on visibility change
             AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
@@ -141,7 +140,6 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("PERAPORTTI/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
-            //AddPathRule("COMPUTER/SYSTEM/TELEBBS/Software", MonitoringStrategy.OnVisibilityChange);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)

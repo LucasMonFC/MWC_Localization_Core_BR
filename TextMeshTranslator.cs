@@ -178,6 +178,45 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
+        /// Translate multiline text line-by-line.
+        /// Useful for dynamic displays that append lines over time.
+        /// </summary>
+        public bool TranslateMultilineByLines(TextMesh textMesh, string path)
+        {
+            if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
+                return false;
+
+            string original = textMesh.text;
+            string[] lines = original.Split('\n');
+            bool changed = false;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                if (string.IsNullOrEmpty(line))
+                    continue;
+
+                string trimmedCr = line.Replace("\r", string.Empty);
+                string normalizedKey = MLCUtils.FormatUpperKey(trimmedCr);
+                if (string.IsNullOrEmpty(normalizedKey))
+                    continue;
+
+                if (translations.TryGetValue(normalizedKey, out string translatedLine) && trimmedCr != translatedLine)
+                {
+                    lines[i] = translatedLine;
+                    changed = true;
+                }
+            }
+
+            if (!changed)
+                return false;
+
+            ApplyCustomFont(textMesh, path);
+            textMesh.text = string.Join("\n", lines);
+            return true;
+        }
+
+        /// <summary>
         /// Get custom font for the given original font name
         /// </summary>
         Font GetCustomFont(string originalFontName)
