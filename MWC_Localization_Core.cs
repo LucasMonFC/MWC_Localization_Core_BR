@@ -34,6 +34,9 @@ namespace MWC_Localization_Core
         private GameObject lateUpdateHandlerObject;
         private LateUpdateHandler lateUpdateHandler;
 
+        // Main Menu FSM hook object (for translating text tied with FSM State)
+        private GameObject mainMenuFsmHookObject;
+
         // Font management
         private static AssetBundle fontBundle;  // Static to persist across MSCLoader instance recreation
         private Dictionary<string, Font> customFonts = new Dictionary<string, Font>();
@@ -121,6 +124,7 @@ namespace MWC_Localization_Core
             CoreConsole.Print($"[{Name}] Translating Main Menu...");
             TranslateScene();
             sceneManager.MarkSceneTranslated("MainMenu");
+            InitializeMainMenuFsmHook();
         }
 
         // Game fully loaded - translate everything
@@ -206,6 +210,7 @@ namespace MWC_Localization_Core
                 CoreConsole.Print($"[{Name}] Translating Main Menu...");
                 TranslateScene();
                 sceneManager.MarkSceneTranslated("MainMenu");
+                InitializeMainMenuFsmHook();
             }
 
             // Initial translation pass for Game scene (Required for hot reloads)
@@ -437,7 +442,25 @@ namespace MWC_Localization_Core
                 }
             }
 
+            if (Application.loadedLevelName == "MainMenu")
+            {
+                InitializeMainMenuFsmHook();
+            }
+
             CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");
+        }
+
+        void InitializeMainMenuFsmHook()
+        {
+            if (translations == null || translations.Count == 0)
+                return;
+
+            if (mainMenuFsmHookObject != null)
+                return;
+
+            mainMenuFsmHookObject = new GameObject("MWC_MainMenuFsmHook");
+            MainMenuFsmHook hook = mainMenuFsmHookObject.AddComponent<MainMenuFsmHook>();
+            hook.Initialize(translations, mainMenuFsmHookObject);
         }
 
         void TranslateScene()
