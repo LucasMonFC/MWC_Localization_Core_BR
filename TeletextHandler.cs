@@ -191,14 +191,13 @@ namespace MWC_Localization_Core
                 if (categoryTranslations.ContainsKey("ChatMessages.All"))
                 {
                     categoryTranslations["ChatMessages.Messages"] = categoryTranslations["ChatMessages.All"];
-                    //CoreConsole.Print($"Created alias: ChatMessages.Messages -> ChatMessages.All ({categoryTranslations["ChatMessages.All"].Count} translations)");
                 }
 
-                CoreConsole.Print($"[Teletext] Loaded {loadedCount} teletext translations across {categoryTranslations.Count} categories");
+                CoreConsole.Print($"[TeletextHandler] Loaded {loadedCount} teletext translations across {categoryTranslations.Count} categories");
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Error($"[Teletext] Error loading teletext translations: {ex.Message}");
+                CoreConsole.Error($"[TeletextHandler] Error loading teletext translations: {ex.Message}");
             }
         }
 
@@ -320,7 +319,7 @@ namespace MWC_Localization_Core
                             {
                                 if (translated > 0)
                                 {
-                                    CoreConsole.Print($"[Teletext] Translated '{categoryName}' with {translated} items");
+                                    CoreConsole.Print($"[TeletextHandler] Translated '{categoryName}' with {translated} items");
                                     totalTranslated += translated;
                                 }
                                 if (!isDynamic) translatedArrays.Add(arrayKey); // Mark as translated
@@ -400,12 +399,12 @@ namespace MWC_Localization_Core
                 
                 if (fallbackCount > 0)
                 {
-                    CoreConsole.Print($"[Teletext]  '{categoryName}': Used index fallback for {fallbackCount} items");
+                    CoreConsole.Print($"[TeletextHandler] '{categoryName}': Used index fallback for {fallbackCount} items");
                 }
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Error($"[Teletext] Error translating category '{categoryName}': {ex.Message}");
+                CoreConsole.Error($"[TeletextHandler] Error translating category '{categoryName}': {ex.Message}");
             }
 
             return translatedCount;
@@ -500,7 +499,7 @@ namespace MWC_Localization_Core
                                     fsm.enabled = false;
                                     disabledCount++;
                                 }
-                                CoreConsole.Print($"[Teletext] [FSM Disable] Disabled {parentFsms.Length} FSM(s) on parent '{parentObj.name}'");
+                                CoreConsole.Print($"[TeletextHandler] Disabled {parentFsms.Length} FSM(s) on parent '{parentObj.name}'");
                             }
                         }
                     }
@@ -513,7 +512,7 @@ namespace MWC_Localization_Core
                         {
                             textMesh.text = translation;
                             translatedCount++;
-                            CoreConsole.Print($"[Teletext] [Hardcoded] Weather legend translated: '{translation}'");
+                            CoreConsole.Print($"[TeletextHandler] Weather legend translated: '{translation}'");
                             
                             // Apply font if translator available
                             if (translator != null)
@@ -532,7 +531,7 @@ namespace MWC_Localization_Core
                         if (translator.TranslateAndApplyFont(textMesh, childPath, null))
                         {
                             translatedCount++;
-                            CoreConsole.Print($"[Teletext] [FSM Disable] Translated: '{textMesh.text}' at {childPath.Substring(childPath.LastIndexOf('/') + 1)}");
+                            CoreConsole.Print($"[TeletextHandler] Translated: '{textMesh.text}' at {childPath.Substring(childPath.LastIndexOf('/') + 1)}");
                         }
                     }
                     
@@ -541,13 +540,13 @@ namespace MWC_Localization_Core
                 }
                 catch (System.Exception ex)
                 {
-                    CoreConsole.Error($"[Teletext] [FSM Disable] Error processing {childPath}: {ex.Message}");
+                    CoreConsole.Error($"[TeletextHandler] Error processing {childPath}: {ex.Message}");
                 }
             }
 
             if (disabledCount > 0)
             {
-                CoreConsole.Print($"[Teletext] [FSM Disable] Successfully disabled {disabledCount} FSMs and translated {translatedCount} texts");
+                CoreConsole.Print($"[TeletextHandler] Successfully disabled {disabledCount} FSMs and translated {translatedCount} texts");
             }
             
             return disabledCount;

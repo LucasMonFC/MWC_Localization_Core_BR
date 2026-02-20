@@ -25,7 +25,7 @@ namespace MWC_Localization_Core
         public static void Print(string message)
         {
             if (getShowDebugLogs == null || getShowDebugLogs())
-                ModConsole.Print(message);
+                ModConsole.Print("[MWC_LC] " + message);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace MWC_Localization_Core
         public static void Warning(string message)
         {
             if (getShowWarningLogs == null || getShowWarningLogs())
-                ModConsole.Warning(message);
+                ModConsole.Warning("[MWC_LC] " + message);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace MWC_Localization_Core
         public static void Error(string message)
         {
             if (getShowWarningLogs == null || getShowWarningLogs())
-                ModConsole.Error(message);
+                ModConsole.Error("[MWC_LC] " + message);
         }
     }
 }

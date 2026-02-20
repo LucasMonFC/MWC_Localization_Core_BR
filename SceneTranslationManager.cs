@@ -52,17 +52,17 @@ namespace MWC_Localization_Core
             {
                 case "SplashScreen":
                     hasTranslatedSplashScreen = true;
-                    CoreConsole.Print("Splash Screen marked as translated");
+                    CoreConsole.Print("[SceneTranslationManager] Splash Screen marked as translated");
                     break;
                     
                 case "MainMenu":
                     hasTranslatedMainMenu = true;
-                    CoreConsole.Print("Main Menu marked as translated");
+                    CoreConsole.Print("[SceneTranslationManager] Main Menu marked as translated");
                     break;
                     
                 case "GAME":
                     hasTranslatedGameScene = true;
-                    CoreConsole.Print("Game scene marked as translated");
+                    CoreConsole.Print("[SceneTranslationManager] Game scene marked as translated");
                     break;
             }
         }
@@ -78,7 +78,6 @@ namespace MWC_Localization_Core
                 previousScene = currentScene;
                 currentScene = newScene;
                 
-                CoreConsole.Print($"Scene changed: {previousScene} -> {currentScene}");
                 HandleSceneChange(previousScene, currentScene);
                 
                 return true;
@@ -96,13 +95,11 @@ namespace MWC_Localization_Core
             {
                 // Reset game scene when returning to menu
                 hasTranslatedGameScene = false;
-                CoreConsole.Print("Scene change: Cleared game scene translation flag");
             }
             else if (to == "GAME")
             {
                 // Reset main menu when entering game
                 hasTranslatedMainMenu = false;
-                CoreConsole.Print("Scene change: Cleared main menu translation flag");
             }
         }
 
@@ -114,7 +111,6 @@ namespace MWC_Localization_Core
             hasTranslatedSplashScreen = false;
             hasTranslatedMainMenu = false;
             hasTranslatedGameScene = false;
-            CoreConsole.Print("All scene translation flags reset");
         }
 
         /// <summary>

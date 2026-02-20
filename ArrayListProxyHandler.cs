@@ -71,8 +71,6 @@ namespace MWC_Localization_Core
             arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/VINLIST_TirePics:1"); // Tire picture descriptions (FI)
             arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/VINLIST_TirePics:2"); // Tire picture descriptions (EN)
 
-            CoreConsole.Print($"Initialized {arrayPaths.Count} array paths to monitor");
-
             // Initialize TextMesh display path mappings
             InitializeTextMeshMappings();
         }
@@ -91,8 +89,6 @@ namespace MWC_Localization_Core
                 "Sheets/YellowPagesMagazine/Page2/Row4",  // Magazine Page 2 Row 4
                 // Add more parent paths as needed
             };
-
-            CoreConsole.Print($"Initialized {parentSearchPaths.Count} parent search paths for font application");
         }
 
         public void ClearTranslations()
@@ -208,7 +204,7 @@ namespace MWC_Localization_Core
 
             if (translatedCount > 0)
             {
-                CoreConsole.Print($"[Array] Translated {translatedCount}/{arrayList.Count} items in {arrayKey}");
+                CoreConsole.Print($"[ArrayListProxyHandler] Translated {translatedCount}/{arrayList.Count} items in {arrayKey}");
             }
 
             return translatedCount;
@@ -250,7 +246,6 @@ namespace MWC_Localization_Core
                     if (!arrayRetryStateCache.ContainsKey(arrayKey) || arrayRetryStateCache[arrayKey] != currentState)
                     {
                         arrayRetryStateCache[arrayKey] = currentState;
-                        CoreConsole.Print("[Array Monitor] Retry status for " + arrayKey + ": " + (isPopulated ? "Done" : "Waiting"));
                     }
                 }
             }
@@ -338,7 +333,7 @@ namespace MWC_Localization_Core
 
             if (fontsApplied > 0)
             {
-                CoreConsole.Print($"[Array Fonts] Applied Korean font to {fontsApplied} TextMesh components ({completedParentPaths.Count}/{parentSearchPaths.Count} paths complete)");
+                CoreConsole.Print($"[ArrayListProxyHandler] Applied Custom font to {fontsApplied} TextMesh components ({completedParentPaths.Count}/{parentSearchPaths.Count} paths complete)");
             }
 
             return fontsApplied;

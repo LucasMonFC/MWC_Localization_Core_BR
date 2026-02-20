@@ -82,7 +82,7 @@ namespace MWC_Localization_Core
         {
             if (!File.Exists(filePath))
             {
-                CoreConsole.Print("No pattern file found, using built-in patterns only");
+                CoreConsole.Print("[PatternMatcher] No pattern file found, using built-in patterns only");
                 return;
             }
 
@@ -117,11 +117,11 @@ namespace MWC_Localization_Core
                     }
                 }
 
-                CoreConsole.Print($"Loaded {loadedCount} patterns from file");
+                CoreConsole.Print($"[PatternMatcher] Loaded {loadedCount} patterns from file");
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Error($"Failed to load patterns: {ex.Message}");
+                CoreConsole.Error($"[PatternMatcher] Failed to load patterns: {ex.Message}");
             }
         }
 

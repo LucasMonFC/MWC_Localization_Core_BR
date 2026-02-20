@@ -152,7 +152,6 @@ namespace MWC_Localization_Core
             lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
             lateUpdateHandler = lateUpdateHandlerObject.AddComponent<LateUpdateHandler>();
             lateUpdateHandler.Initialize(
-                this, 
                 translator, 
                 textMeshMonitor, 
                 teletextHandler, 
@@ -412,7 +411,6 @@ namespace MWC_Localization_Core
                 lateUpdateHandler.ClearCache();
                 // Re-initialize to find critical UI components again
                 lateUpdateHandler.Initialize(
-                    this, 
                     translator, 
                     textMeshMonitor, 
                     teletextHandler, 

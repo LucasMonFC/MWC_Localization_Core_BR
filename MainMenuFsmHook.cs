@@ -31,7 +31,7 @@ namespace MWC_Localization_Core
                 if (TryApplyTranslations())
                 {
                     isApplied = true;
-                    CoreConsole.Print("Main menu FSM text translations applied");
+                    CoreConsole.Print("[MainMenuFsmHook] Main menu FSM text translations applied");
                     Cleanup();
                     yield break;
                 }
@@ -41,7 +41,7 @@ namespace MWC_Localization_Core
 
             if (!isApplied)
             {
-                CoreConsole.Warning("Main menu FSM hook timed out before targets became ready");
+                CoreConsole.Warning("[MainMenuFsmHook] Main menu FSM hook timed out before targets became ready");
                 Cleanup();
             }
         }

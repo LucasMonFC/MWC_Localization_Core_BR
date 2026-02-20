@@ -36,8 +36,8 @@ namespace MWC_Localization_Core
 
             if (!File.Exists(configPath))
             {
-                CoreConsole.Warning($"Config file not found: {configPath}");
-                CoreConsole.Warning("Using default configuration (no font mappings)");
+                CoreConsole.Warning($"[LocalizationConfig] Config file not found: {configPath}");
+                CoreConsole.Warning("[LocalizationConfig] Using default configuration (no font mappings)");
                 return false;
             }
 
@@ -84,15 +84,15 @@ namespace MWC_Localization_Core
                     }
                 }
 
-                CoreConsole.Print($"Configuration loaded: {LanguageName} ({LanguageCode})");
-                CoreConsole.Print($"Font mappings: {FontMappings.Count}");
-                CoreConsole.Print($"Position adjustments: {TextAdjustments.Count}");
+                CoreConsole.Print($"[LocalizationConfig] Configuration loaded: {LanguageName} ({LanguageCode})");
+                CoreConsole.Print($"[LocalizationConfig] Font mappings: {FontMappings.Count}");
+                CoreConsole.Print($"[LocalizationConfig] Position adjustments: {TextAdjustments.Count}");
 
                 return true;
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Error($"Failed to load config: {ex.Message}");
+                CoreConsole.Error($"[LocalizationConfig] Failed to load config: {ex.Message}");
                 return false;
             }
         }
@@ -165,7 +165,7 @@ namespace MWC_Localization_Core
             string[] parts = offsetString.Split(',');
             if (parts.Length < 3)
             {
-                CoreConsole.Warning($"Invalid adjustment format: '{offsetString}'. Expected at least X,Y,Z");
+                CoreConsole.Warning($"[LocalizationConfig] Invalid adjustment format: '{offsetString}'. Expected at least X,Y,Z");
                 return;
             }
 
@@ -202,7 +202,7 @@ namespace MWC_Localization_Core
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Warning($"Failed to parse position adjustment '{line}': {ex.Message}");
+                CoreConsole.Warning($"[LocalizationConfig] Failed to parse position adjustment '{line}': {ex.Message}");
             }
         }
 

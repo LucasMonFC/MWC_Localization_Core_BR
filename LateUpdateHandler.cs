@@ -13,7 +13,6 @@ namespace MWC_Localization_Core
     public class LateUpdateHandler : MonoBehaviour
     {
         // Dependencies
-        private MWC_Localization_Core mod;
         private TextMeshTranslator translator;
         private UnifiedTextMeshMonitor textMeshMonitor;
         private TeletextHandler teletextHandler;
@@ -36,21 +35,18 @@ namespace MWC_Localization_Core
         private float lastArrayCheckTime = 0f;
 
         public void Initialize(
-            MWC_Localization_Core modInstance, 
             TextMeshTranslator translatorInstance,
             UnifiedTextMeshMonitor textMeshMonitorInstance,
             TeletextHandler teletextHandlerInstance,
             ArrayListProxyHandler arrayListHandlerInstance,
             SceneTranslationManager sceneManagerInstance)
         {
-            mod = modInstance;
             translator = translatorInstance;
             textMeshMonitor = textMeshMonitorInstance;
             teletextHandler = teletextHandlerInstance;
             arrayListHandler = arrayListHandlerInstance;
             sceneManager = sceneManagerInstance;
             isInitialized = true;
-            CoreConsole.Print($"[{mod.Name}] LateUpdateHandler initialized");
         }
 
         /// <summary>
@@ -77,7 +73,7 @@ namespace MWC_Localization_Core
                     int translated = teletextHandler.MonitorAndTranslateArrays();
                     if (translated > 0)
                     {
-                        CoreConsole.Print($"[{mod.Name}] [Runtime] Translated {translated} newly-loaded teletext items");
+                        CoreConsole.Print($"[LateUpdateHandler] Translated {translated} newly-loaded teletext items");
                         // Apply Korean font to teletext display immediately after translation
                         ApplyTeletextFonts();
                     }
@@ -86,14 +82,14 @@ namespace MWC_Localization_Core
                     int fsmDisabled = teletextHandler.DisableTeletextFSMs(translator);
                     if (fsmDisabled > 0)
                     {
-                        CoreConsole.Print($"[{mod.Name}] [Runtime] Disabled {fsmDisabled} Bottomline FSMs");
+                        CoreConsole.Print($"[LateUpdateHandler] Disabled {fsmDisabled} Bottomline FSMs");
                     }
                     
                     // Monitor generic arrays for lazy-loaded content
                     int arrayTranslated = arrayListHandler.MonitorAndTranslateArrays();
                     if (arrayTranslated > 0)
                     {
-                        CoreConsole.Print($"[{mod.Name}] [Runtime] Translated {arrayTranslated} newly-loaded array items");
+                        CoreConsole.Print($"[LateUpdateHandler] Translated {arrayTranslated} newly-loaded array items");
                     }
                     
                     // Monitor and apply fonts to late-initialized TextMesh components
