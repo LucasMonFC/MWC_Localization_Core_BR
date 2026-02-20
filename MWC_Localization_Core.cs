@@ -307,7 +307,18 @@ namespace MWC_Localization_Core
                     if (separatorIndex > 0)
                     {
                         string key = line.Substring(0, separatorIndex).Trim();
-                        string value = line.Substring(separatorIndex + 1).Trim();
+                        // Preserve intentional leading spaces in translation values.
+                        // We only trim the end to avoid accidental trailing whitespace.
+                        string value = line.Substring(separatorIndex + 1).TrimEnd();
+
+                        // Common authoring style is: "key = value".
+                        // In that specific case, drop only the single separator space.
+                        if (line.Length > separatorIndex + 1 && line[separatorIndex + 1] == ' ')
+                        {
+                            bool hasSecondSpace = (line.Length > separatorIndex + 2 && line[separatorIndex + 2] == ' ');
+                            if (!hasSecondSpace && value.Length > 0 && value[0] == ' ')
+                                value = value.Substring(1);
+                        }
 
                         string normalizedKey = MLCUtils.FormatUpperKey(key);
                         string processedValue = value.Replace("\\n", "\n");
