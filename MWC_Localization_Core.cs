@@ -439,7 +439,7 @@ namespace MWC_Localization_Core
             arrayListHandler.Reset();
 
             // Reapply fonts and adjustments to all TextMeshes (after restore)
-            TextMesh[] allTextMeshes = Resources.FindObjectsOfTypeAll<TextMesh>();
+            TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();
             int reappliedCount = 0;
             foreach (TextMesh tm in allTextMeshes)
             {
@@ -477,7 +477,7 @@ namespace MWC_Localization_Core
             textMeshMonitor.RegisterAllPathRuleElements();
 
             // Find all TextMesh components in the scene
-            TextMesh[] allTextMeshes = Resources.FindObjectsOfTypeAll<TextMesh>();
+            TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();
             int translatedCount = 0;
 
             foreach (TextMesh tm in allTextMeshes)
