@@ -30,6 +30,8 @@ HI BEAM FLASH = 하이빔 점멸
 BLINKER RETURN = 방향지시등 끄기
 WASHER = 워셔액 분사
 BOOST = 부스트
+CORRIS GRIP HELPER = CORRIS 그립 보조
+STEER ANGLE LIMITER = 조향 각도 제한
 
 BASS = 베이스
 OPEN = 열기
@@ -55,6 +57,9 @@ PAY POST ORDER {0} = 택배비 납부: {0}
 UNPAID FINES, {0} = 미납부 벌금: {0}
 SALES {0} = 판매 수익: {0}
 SCRAP PAYMENT {0} = 고철 판매 수익: {0}
+CONDITION {0}% = 상태 {0}%
+CURRENT BET {0} MK = 현재 베팅 {0} MK
+STAND AT {0} = {0}에서 중단
 
 BURGER 25 MK = 버거 25 MK
 JUMBO CHEESE 37 MK = 점보 치즈 37 MK
@@ -263,6 +268,7 @@ Steering Rack {0} = 조향 축 {0}
 Extinguisher Clamp = 소화기 걸이
 car light bulb = 자동차 전구
 Rev Limiter = RPM 리미터
+coil springs box = 코일 스프링 상자
 
 RADIO CHANNEL = 라디오 채널
 BATTERY NEGATIVE = 배터리 음극
@@ -324,8 +330,12 @@ pakoputken pää = 배기 팁
 pönttö vaimennin = 배기 머플러
 
 //// Death Screen
+Peräjärveläinen mies paleltui kuoliaaksi = 저체온증으로\n남성 1명 사망
 Man found dead from hypothermia = 저체온증으로\n사망한 남성\n뒤늦게 발견
-Peräjärveläinen mies paleltui kuoliaaksi = 저체온증으로\n사망한 남성\n뒤늦게 발견
+Mies tempautui traktorin ulosottoakseliin ja kuoli = 트랙터 동력 장치에 끼어\n남성 1명 사망
+Male got killed by tractor PTO shaft = 트랙터 동력\n장치에 끼어\n사망한 남성\n뒤늦게 발견
+Peräjärveläinen mies sai surmansa klapikoneessa = 통나무 절단기 사고로\n남성 1명 사망
+Dead man found inside of log cutter = 통나무 절단기에서\n사망한 남성\n뒤늦게 발견
 
 //// ATM
 INSERT CREDIT CARD = 신용 카드 삽입하기
@@ -926,6 +936,7 @@ Perävälityksen vaihto / ratio change   {0} = 공연비 수정   {0}
 Turvakehikon poisto / rollcage removal   {0} = 롤케이지 제거   {0}
 Peltityöt / sheet metal work   {0} = 바디 패널 수리   {0}
 Vinyylikaton poisto / vinyl removal   {0} = 비닐 제거   {0}
+Mittatilausjouset / Coil spring order   {0} = 코일 스프링 주문   {0}
 
 //// Computer
 Starting RS-POS... = RS-POS 시작하는 중...
