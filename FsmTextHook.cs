@@ -26,7 +26,8 @@ namespace MWC_Localization_Core
             PosUse,
             PosTyper,
             TeletextBuildStringPattern,
-            TeletextWeatherUpdaterTokens
+            TeletextWeatherUpdaterTokens,
+            UnemployPaperButtonVariables
         }
 
         private sealed class FsmStrategyTarget
@@ -149,6 +150,33 @@ namespace MWC_Localization_Core
                 -1)
         };
 
+        private static readonly FsmStrategyTarget[] GameUnemployPaperTargets = BuildUnemployPaperTargets();
+        private static FsmStrategyTarget[] BuildUnemployPaperTargets()
+        {
+            List<FsmStrategyTarget> targets = new List<FsmStrategyTarget>();
+            string[] groups = new string[] { "2A", "2B", "2C", "2D" };
+
+            for (int g = 0; g < groups.Length; g++)
+            {
+                string group = groups[g];
+                for (int i = 1; i <= 7; i++)
+                {
+                    string path = "Sheets/UnemployPaper/" + group + "/" + i.ToString();
+                    targets.Add(new FsmStrategyTarget(
+                        path,
+                        "Button",
+                        FsmStrategyType.UnemployPaperButtonVariables,
+                        "GAME UnemployPaper",
+                        "UNEMPLOY_READY",
+                        "[FsmTextHook] UnemployPaper Button FSM targets are ready.",
+                        null,
+                        -1));
+                }
+            }
+
+            return targets.ToArray();
+        }
+
         public void Initialize(Dictionary<string, string> translations, GameObject hostObject, string[] patternFiles)
         {
             this.translations = translations;
@@ -207,6 +235,7 @@ namespace MWC_Localization_Core
                 TryApplyGamePosFsmTranslations();
                 TryApplyGameTeletextBottomlineFsmTranslations();
                 TryApplyGameTeletextWeatherUpdaterFsmTranslations();
+                TryApplyGameUnemployPaperFsmTranslations();
             }
 
             return false;
@@ -299,6 +328,21 @@ namespace MWC_Localization_Core
             return anyChanged || hasAnyTarget;
         }
 
+        private bool TryApplyGameUnemployPaperFsmTranslations()
+        {
+            bool anyChanged = false;
+            bool hasAnyTarget = false;
+
+            ApplyStrategyTargets(GameUnemployPaperTargets, ref anyChanged, ref hasAnyTarget);
+
+            if (anyChanged)
+            {
+                appliedTarget = "GAME UnemployPaper";
+            }
+
+            return anyChanged || hasAnyTarget;
+        }
+
         private void ApplyStrategyTargets(FsmStrategyTarget[] targets, ref bool anyChanged, ref bool hasAnyTarget)
         {
             if (targets == null || targets.Length == 0)
@@ -353,6 +397,11 @@ namespace MWC_Localization_Core
                 case FsmStrategyType.TeletextWeatherUpdaterTokens:
                     ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged, ref hasAnyTarget);
                     break;
+
+                case FsmStrategyType.UnemployPaperButtonVariables:
+                    anyChanged |= ApplyUnemployPaperButtonVariableTranslations(fsm);
+                    hasAnyTarget = true;
+                    break;
             }
 
             if (anyChanged && !string.IsNullOrEmpty(target.AppliedLabel))
@@ -387,6 +436,39 @@ namespace MWC_Localization_Core
             anyChanged |= ApplyStateSetStringValueActionIndexesTranslation(fsm, "State 6", 0, 1);
 
             hasAnyTarget |= HasState(fsm, "State 4") || HasState(fsm, "State 6");
+        }
+
+        private bool ApplyUnemployPaperButtonVariableTranslations(PlayMakerFSM fsm)
+        {
+            if (fsm == null)
+                return false;
+
+            bool changed = false;
+
+            changed |= TranslateFsmStringVariableExact(fsm, "jobNo");
+            changed |= TranslateFsmStringVariableExact(fsm, "JobNo");
+            changed |= TranslateFsmStringVariableExact(fsm, "jobYes");
+            changed |= TranslateFsmStringVariableExact(fsm, "JobYes");
+
+            return changed;
+        }
+
+        private bool TranslateFsmStringVariableExact(PlayMakerFSM fsm, string variableName)
+        {
+            if (fsm == null || fsm.FsmVariables == null || string.IsNullOrEmpty(variableName))
+                return false;
+
+            HutongGames.PlayMaker.FsmString target = fsm.FsmVariables.GetFsmString(variableName);
+            if (target == null || string.IsNullOrEmpty(target.Value))
+                return false;
+
+            string original = target.Value;
+            string translated = GetTranslation(original, original);
+            if (translated == original)
+                return false;
+
+            target.Value = translated;
+            return true;
         }
 
         private List<PlayMakerFSM> GetEnnusteDataFsms()

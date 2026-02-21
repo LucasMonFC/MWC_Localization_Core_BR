@@ -23,7 +23,8 @@ namespace MWC_Localization_Core
         {
             "Systems/TV/Teletext/VKTekstiTV/PAGES",
             "Systems/TV/Teletext/VKTekstiTV/HEADER",
-            "COMPUTER/SYSTEM/POS"
+            "COMPUTER/SYSTEM/POS",
+            "Sheets/UnemployPaper"
         };
 
         // Core handlers
