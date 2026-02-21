@@ -9,10 +9,10 @@ namespace MWC_Localization_Core
     public class MWC_Localization_Core : Mod
     {
         // Mod metadata
-        public override string ID => "MWC_Localization_Core";
+        public override string ID => "MWC_Localization_Core_BR";
         public override string Name => "MWC_Localization_Core";
-        public override string Author => "potatosalad775";
-        public override string Version => "1.0.5";
+        public override string Author => "potatosalad775&LucasMonOficial";
+        public override string Version => "1.0.8";
         public override string Description => "Multi-language core localization framework for My Winter Car";
         public override Game SupportedGames => Game.MyWinterCar;
 
