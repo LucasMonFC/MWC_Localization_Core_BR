@@ -84,15 +84,6 @@ namespace MWC_Localization_Core
                     if (translated > 0)
                     {
                         CoreConsole.Print($"[LateUpdateHandler] Translated {translated} newly-loaded teletext items");
-                        // Apply Korean font to teletext display immediately after translation
-                        ApplyTeletextFonts();
-                    }
-                    
-                    // Monitor and disable FSM-driven Bottomlines (handles late initialization)
-                    int fsmDisabled = teletextHandler.DisableTeletextFSMs(translator);
-                    if (fsmDisabled > 0)
-                    {
-                        CoreConsole.Print($"[LateUpdateHandler] Disabled {fsmDisabled} Bottomline FSMs");
                     }
                     
                     // Monitor generic arrays for lazy-loaded content
@@ -114,44 +105,6 @@ namespace MWC_Localization_Core
             {
                 // Monitor for dynamic changes in main menu
                 textMeshMonitor.Update(Time.deltaTime);
-            }
-        }
-        
-        /// <summary>
-        /// Helper method - Apply fonts to teletext display
-        /// </summary>
-        private void ApplyTeletextFonts()
-        {
-            List<string> teletextRootPaths = new List<string>
-            {
-                "Systems/TV/Teletext/VKTekstiTV/PAGES",
-                "Systems/TV/TVGraphics/CHAT/Generated/Lines"
-            };
-
-            int fontChangedCount = 0;
-
-            foreach (string rootPath in teletextRootPaths)
-            {
-                GameObject root = MLCUtils.FindGameObjectCached(rootPath);
-                if (root == null)
-                    continue;
-
-                // Get all TextMesh components in teletext display
-                TextMesh[] textMeshes = root.GetComponentsInChildren<TextMesh>(true);
-
-                foreach (TextMesh textMesh in textMeshes)
-                {
-                    if (textMesh == null)
-                        continue;
-
-                    string path = MLCUtils.GetGameObjectPath(textMesh.gameObject);
-
-                    // Apply font using the translator's font mapping logic
-                    if (translator.ApplyFontOnly(textMesh, path))
-                    {
-                        fontChangedCount++;
-                    }
-                }
             }
         }
         

@@ -19,6 +19,12 @@ namespace MWC_Localization_Core
         // Translation data
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private bool hasLoadedTranslations = false;
+        private static readonly string[] ForcedFontPathPrefixes = new string[]
+        {
+            "Systems/TV/Teletext/VKTekstiTV/PAGES",
+            "Systems/TV/Teletext/VKTekstiTV/HEADER",
+            "COMPUTER/SYSTEM/POS"
+        };
 
         // Core handlers
         private MagazineTextHandler magazineHandler;
@@ -478,8 +484,20 @@ namespace MWC_Localization_Core
 
             fsmTextHookObject = new GameObject("MWC_FsmTextHook");
             FsmTextHook hook = fsmTextHookObject.AddComponent<FsmTextHook>();
-            hook.Initialize(translations, fsmTextHookObject);
+            hook.Initialize(translations, fsmTextHookObject, GetPatternTranslationFiles());
             CoreConsole.Print($"[{Name}] FSM hook created for scene '{Application.loadedLevelName}'");
+        }
+
+        private string[] GetPatternTranslationFiles()
+        {
+            string assetsFolder = ModLoader.GetModAssetsFolder(this);
+            return new string[]
+            {
+                Path.Combine(assetsFolder, "translate_msc.txt"),
+                Path.Combine(assetsFolder, "translate.txt"),
+                Path.Combine(assetsFolder, "translate_mod.txt"),
+                Path.Combine(assetsFolder, "translate_teletext.txt")
+            };
         }
 
         void TranslateScene()
@@ -506,7 +524,50 @@ namespace MWC_Localization_Core
                 }
             }
 
-            CoreConsole.Print($"[{Name}] Scene translation complete: {translatedCount}/{allTextMeshes.Length} TextMesh objects translated");
+            int forcedFontAppliedCount = ApplyForcedFontPass(allTextMeshes);
+
+            CoreConsole.Print($"[{Name}] Scene translation complete: {translatedCount}/{allTextMeshes.Length} TextMesh objects translated, forced font pass: {forcedFontAppliedCount}");
+        }
+
+        private int ApplyForcedFontPass(TextMesh[] allTextMeshes)
+        {
+            if (translator == null || allTextMeshes == null || allTextMeshes.Length == 0)
+                return 0;
+
+            int appliedCount = 0;
+
+            for (int i = 0; i < allTextMeshes.Length; i++)
+            {
+                TextMesh tm = allTextMeshes[i];
+                if (tm == null)
+                    continue;
+
+                string path = MLCUtils.GetGameObjectPath(tm.gameObject);
+                if (!PathStartsWithAny(path, ForcedFontPathPrefixes))
+                    continue;
+
+                if (translator.ApplyFontOnly(tm, path))
+                {
+                    appliedCount++;
+                }
+            }
+
+            return appliedCount;
+        }
+
+        private bool PathStartsWithAny(string path, string[] prefixes)
+        {
+            if (string.IsNullOrEmpty(path) || prefixes == null || prefixes.Length == 0)
+                return false;
+
+            for (int i = 0; i < prefixes.Length; i++)
+            {
+                string prefix = prefixes[i];
+                if (!string.IsNullOrEmpty(prefix) && path.StartsWith(prefix))
+                    return true;
+            }
+
+            return false;
         }
     }
 }
