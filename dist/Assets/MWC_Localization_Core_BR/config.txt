@@ -1,0 +1,28 @@
+LANGUAGE_NAME = Português
+LANGUAGE_CODE = pt-BR
+
+[FONTS]
+FugazOne-Regular = FugazOne-Regular-PL
+Heebo-Black = Heebo-Black-PL
+AlfaSlabOne-Regular = AlfaSlabOne-Regular-PL
+ArchivoBlack-Regular = ArchivoBlack-Regular-PL
+Cour10Bd = Courier10PitchBT-Bold-PL
+RAGE = RageItalic-PL
+Dosis-SemiBold = Dosis-SemiBold-PL
+Dosis-SemiBold LowCase = Dosis-SemiBold-PL
+VT323-Regular = VT323-Regular-PL
+DroidSerif-Bold = DroidSerif-Bold-PL
+PlayfairDisplay-Bold = PlayfairDisplay-Bold-PL
+WalterTurncoat-Regular = WalterTurncoat-Regular-PL
+BLUEHIGD = BlueHighwayD-Regular-PL
+
+[POSITION_ADJUSTMENTS]
+## Options
+Contains(Systems/OptionsMenu) & Contains(/GUITextlabel) = 0,0,0,0.07
+Contains(Systems/OptionsMenu) & Contains(/GUITextLabel) = 0,0,0,0.07
+Contains(Systems/OptionsMenu) & Contains(/GUITextHeader) = 0,0,0,0.08
+## Unemployment report sheet
+Contains(Sheets/UnemployPaper/2) = -0.018,0,0
+Contains(Sheets/UnemployPaper/1) = 0,-0.002,0,0.0033
+Contains(Sheets/UnemployPaper/4/Location) = 0,-0.002,0,0.0033
+Contains(Sheets/UnemployPaper/4/SignatureClear) = 0,0,0,0.0025

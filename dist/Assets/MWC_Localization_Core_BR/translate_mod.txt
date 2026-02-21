@@ -1,0 +1,1318 @@
+//Crawler Boards
+Crawle = PRANCHA
+
+//Kekmet 1102
+Front Axle = EIXO DIANTEIRO
+
+//GaragePitCovers
+PIT COVER = TAMPA DA VALETA
+
+//Expanded Clothes
+ASSEMBLE CLOTHES = COLOCAR A ROUPA
+TAKE JACKET = PEGAR JAQUETA
+TAKE COVERALL = PEGAR MACACÃO
+CLEAN = LIMPO
+OPEN POWDER TRAY = ABRIR
+CLOSE POWDER TRAY = FECHAR
+OPEN DOOR = ABRIR
+CLOSE DOOR = FECHAR
+START WASH = INICIAR LAVAGEM
+washing powder 24 mk = SABÃO EM PÓ 24 MK
+TAKE CLOTHES = PEGUE A ROUPA
+POUR WASHING POWDER (F) = DESPEJE O SABÃO EM PÓ (F)
+TRAY FULL = BANDEJA CHEIA
+CLEAN = LIMPO
+
+//Farm Restoration Project
+"Good morning and welcome to Property Management." = "Bom dia e bem-vindo à Administração de Imóveis."
+"Okay, that should do it. We had trouble selling that place for a while now. Apparently it's haunted. Watch out." = "Certo, isso deve resolver o problema. Estivemos com dificuldades para vender aquele lugar por um tempo. Aparentemente, é assombrado. Cuidado."
+"This will be a tough one.. I don't even know if this is possible. I will call Leif Kentauri. Check the farmhouse out in a few days to see if his company managed to fix it." = "Essa vai ser difícil... Nem sei se é possível. Vou ligar para o Leif Kentauri. Vou dar uma olhada \nna casa de campo daqui a alguns dias para ver se a empresa dele conseguiu consertar."
+"I will get the furniture ordered and delivered to your farmhouse. It's not generic one, but a vintage one!" = "Vou encomendar os móveis e entregá-los na sua casa de campo. Não são móveis comuns, mas sim móveis vintage!"
+"This might take a while as it's gonna require building it from ground up. We will give it it's original shape, with a little modernisation." = "Isso pode demorar um pouco, pois será necessário construí-lo do zero. Vamos manter sua forma original, com algumas modernizações."
+"Alright. I will call Leif Kentauri and let him know about this." = "Certo. Vou ligar para Leif Kentauri e informá-lo sobre isso."
+"It will take a while to get the stove tiles here. It's real ceramic material." = "Vai demorar um pouco para as placas de cerâmica do fogão chegarem aqui. É material cerâmico de verdade."
+SIGN PAPERS & PURCAHSE ABANDONED FARMHOUSE 2500MK = ASSINAR DOCUMENTOS PARA COMPRA DA CASA ABANDONADA 2500 MK
+CALL GHOST BUSTERS TO REMOVE GHOSTS 2500MK = CHAME OS CAÇADORES DE FANTASMAS PARA REMOVER FANTASMAS 2500 MK
+HIRE VINTAGE STOVES SPECIALIST TO TILE UP STOVES 3500MK = CONTRATE UM ESPECIALISTA EM FOGÕES ANTIGOS PARA REVESTIR FOGÕES COM AZULEJOS 3500MK
+HIRE COMPANY TO STABILISE THE FARMHOUSE & REPLACE BROKEN PARTS 19900 MK = CONTRATE UMA EMPRESA PARA ESTABILIZAR A CASA DA FAZENDA E SUBSTITUIR PEÇAS QUEBRADAS 19900 MK
+DO YOU WANT TO GET YOURSELF IN DEBT OR SOMETHING MAN? = VOCÊ QUER SE ENDIVIDAR OU ALGO ASSIM, CARA?
+matress = COLCHÃO
+big matress = COLCHÃO GRANDE
+SEARCH BOX = PROCURAR NA CAIXA
+baking tray = ASSADEIRA
+washing powder = SABÃO EM PÓ
+COW CLOCK = RELÓGIO DE VACA
+TAKE FROM PLATE = TIRE DA ASSADEIRA
+wheat bread = PÃO DE TRIGO
+rye bread = PÃO DE CENTEIO
+COOKED PIZZA = PIZZA ASSADA
+cinammon = BOLINHO DE CANELA
+coffee cup plate = PIRES
+soup plate = PRATO DE SOPA
+deep plate = PRATO FUNDO
+food tray = TRAVESSA
+PAINTING = PINTURA
+RESTORE COWHOUSE TO ORIGINAL CONDITION {0} MK = RESTAURAR 0 CELEIRO ÀS CONDIÇÕES ORIGINAL {0} MK 
+BUY FURNITURE & GET IT DELIVERED {0}MK = COMPRE MÓVEIS E RECEBA EM CASA {0} MK 
+HIRE COMPANY TO REPLACE FARM WINDOWS AND ELECTRICITY {0}MK = CONTRATE UMA EMPRESA PARA SUBSTITUIR JANELAS E ENERGIA ELÉTRICA DA FAZENDA {0} MK 
+PAY ELECTRICITY BILLS {0} MK = PAGAR CONTA DE ENERGIA ELÉTRICA {0} MK
+
+//Mod Shop
+Shopping Bag (psk) = SACOLA DE COMPRAS (PSK)
+Get item from bag ({0} items) = Pegar item ({0} itens)
+{0} in cart = {0} no carrinho
+
+//Automatic Fuses
+AUTOMATIC FUSE {0} = FUSÍVEL AUTOMÁTICO {0}
+Pop fuse = ABRIR FUSÍVEL
+Reset fuse = RESETAR FUSÍVEL
+Slot occupied = SLOT OCUPADO
+Slot: Living room, hallway = SALA DE ESTAR, CORREDOR
+Slot: Sauna heater = AQUECEDOR DA SAUNA
+Slot: Water pump, shower, sauna = BOMBA D'ÁGUA, CHUVEIRO, SAUNA
+Slot: Parent bedroom = QUARTO DOS PAIS
+Slot: Kitchen = COZINHA
+Slot: Garage = GARAGEM
+Slot: Bedroom, bathroom = QUARTO, BANHEIRO
+Slot: Bedroom2, wc = QUARTO 2, BANHEIRO
+Slot: Living room = SALA DE ESTAR
+Slot: Bedroom1, entrance = QUARTO 1, ENTRADA
+
+//Wear Inspector
+Air Cleaner - Not a wear item! = FILTRO DE AR - NÃO É UM ITEM DE DESGASTE!
+Car Radio - Not a wear item! = RÁDIO DO CARRO - NÃO É UM ITEM DE DESGASTE!
+Fender - Not a wear item! = PARALAMA - NÃO É UM ITEM DE DESGASTE!
+Passenger Seat - Not a wear item! = BANCO DO PASSAGEIRO - NÃO É UM ITEM DE DESGASTE!
+Rear Seat Backrest - Not a wear item! = ENCOSTO DO BANCO TRASEIRO - NÃO É UM ITEM DE DESGASTE!
+Pedal Box Automatic - Not a wear item! = CAIXA DE PEDAIS AUTOMÁTICA - NÃO É UM ITEM DE DESGASTE!
+Shifter Automatic - Not a wear item! = ALAVANCA DE CÂMBIO AUTOMÁTICO - NÃO É UM ITEM DE DESGASTE!
+Column Shroud Left - Not a wear item! = CAPA DA COLUNA ESQUERDA - NÃO É UM ITEM DE DESGASTE!
+Column Shroud Right - Not a wear item! = CAPA DA COLUNA DIREITA - NÃO É UM ITEM DE DESGASTE!
+Front Link Right - Not a wear item! = BARRA DIANTEIRA DIREITA - NÃO É UM ITEM DE DESGASTE!
+Front Link Left - Not a wear item! = BARRA DIANTEIRA ESQUERDA - NÃO É UM ITEM DE DESGASTE!
+Steering Shaft - Not a wear item! = EIXO DA DIREÇÃO - NÃO É UM ITEM DE DESGASTE!
+Front Upper Control Arm - Not a wear item! = BANDEJA SUPERIOR DIANTEIRA - NÃO É UM ITEM DE DESGASTE!
+Front Lower Control Arm - Not a wear item! = BANDEJA INFERIOR DIANTEIRA - NÃO É UM ITEM DE DESGASTE!
+Rear Upper Control Arm - Not a wear item! = BANDEJA SUPERIOR TRASEIRA - NÃO É UM ITEM DE DESGASTE!
+Rear Lower Control Arm - Not a wear item! = BANDEJA INFERIOR TRASEIRA - NÃO É UM ITEM DE DESGASTE!
+Air Cleaner - Not a wear item! = FILTRO DE AR - NÃO É UM ITEM DE DESGASTE!
+Car Radio - Not a wear item! = RÁDIO DO CARRO - NÃO É UM ITEM DE DESGASTE!
+Fender - Not a wear item! = PARALAMA - NÃO É UM ITEM DE DESGASTE!
+Passenger Seat - Not a wear item! = BANCO DO PASSAGEIRO - NÃO É UM ITEM DE DESGASTE!
+Rear Seat Backrest - Not a wear item! = ENCOSTO DO BANCO TRASEIRO - NÃO É UM ITEM DE DESGASTE!
+Pedal Box Automatic - Not a wear item! = CAIXA DE PEDAIS AUTOMÁTICA - NÃO É UM ITEM DE DESGASTE!
+Shifter Automatic - Not a wear item! = ALAVANCA DO CÂMBIO AUTOMÁTICO - NÃO É UM ITEM DE DESGASTE!
+Aux Shaft Sprocket - Not a wear item! = ENGRENAGEM DO EIXO AUXILIAR - NÃO É UM ITEM DE DESGASTE!
+Camshaft Sprocket - Not a wear item! = ENGRENAGEM DO COMANDO DE VÁLVULAS - NÃO É UM ITEM DE DESGASTE!
+Flexplate - Not a wear item! = PLACA FLEXÍVEL - NÃO É UM ITEM DE DESGASTE!
+Flywheel - Not a wear item! = VOLANTE DO MOTOR - NÃO É UM ITEM DE DESGASTE!
+Wiper Motor Assembly - Should do for a while = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - DEVE AGUENTAR POR UM TEMPO
+Oilpan - Not a wear item! = CÁRTER DE ÓLEO - NÃO É UM ITEM DE DESGASTE!
+Exhaust Headers - Not a wear item! = COLETOR DE ESCAPE - NÃO É UM ITEM DE DESGASTE!
+Radiator hose bottom - Not a wear item! = MANGUEIRA INFERIOR DO RADIADOR - NÃO É UM ITEM DE DESGASTE!
+Exhaust Pipe Rear - Not a wear item! = TUBO DE ESCAPE TRASEIRO - NÃO É UM ITEM DE DESGASTE!
+Exhaust Muffler - Not a wear item! = SILENCIOSO DO ESCAPE - NÃO É UM ITEM DE DESGASTE!
+Exhaust Pipe Front - Not a wear item! = TUBO DE ESCAPE DIANTEIRO - NÃO É UM ITEM DE DESGASTE!
+Bootlid - Not a wear item! = TAMPA DO PORTA-MALAS - NÃO É UM ITEM DE DESGASTE!
+Door - Not a wear item! = PORTA - NÃO É UM ITEM DE DESGASTE!
+Front Right Brake Assembly - Not a wear item! = CONJUNTO DE FREIO DIANTEIRO DIREITO - NÃO É UM ITEM DE DESGASTE!
+Front Left Brake Assembly - Not a wear item! = CONJUNTO DE FREIO DIANTEIRO ESQUERDO - NÃO É UM ITEM DE DESGASTE!
+Timing Belt Cover - Not a wear item! = CAPA DA CORREIA DENTADA - NÃO É UM ITEM DE DESGASTE!
+Rocker Cover - Not a wear item! = TAMPA DE VÁLVULAS - NÃO É UM ITEM DE DESGASTE!
+Thermostat Housing - Not a wear item! = CARCAÇA DO TERMOSTATO - NÃO É UM ITEM DE DESGASTE!
+Ventilation Box - Not a wear item! = CAIXA DE VENTILAÇÃO - NÃO É UM ITEM DE DESGASTE!
+Fuel tank - Not a wear item! = TANQUE DE COMBUSTÍVEL - NÃO É UM ITEM DE DESGASTE!
+Hood - Not a wear item! = CAPÔ - NÃO É UM ITEM DE DESGASTE!
+Parcel Shelf - Not a wear item! = TAMPA DO PORTA-MALAS - NÃO É UM ITEM DE DESGASTE!
+Rear Seat Bench - Not a wear item! = BANCO TRASEIRO - NÃO É UM ITEM DE DESGASTE!
+Driver Seat - Not a wear item! = BANCO DO MOTORISTA - NÃO É UM ITEM DE DESGASTE!
+Bumper - Not a wear item! = PARA-CHOQUE - NÃO É UM ITEM DE DESGASTE!
+Pedal Box Manual - Not a wear item! = CAIXA DE PEDAIS MANUAL - NÃO É UM ITEM DE DESGASTE!
+Carburettor - Not a wear item! = CARBURADOR - NÃO É ITEM DE DESGASTE!
+Exhaust Manifold - Not a wear item! = COLETOR DE ESCAPE - NÃO É ITEM DE DESGASTE!
+Rear Plate - Not a wear item! = PLACA TRASEIRA - NÃO É ITEM DE DESGASTE!
+Gearbox Crossmember - Not a wear item! = TRAVESSA DO CÂMBIO - NÃO É UM ITEM DE DESGASTE!
+Gear Lever - Not a wear item! = ALAVANCA DE MARCHAS - NÃO É UM ITEM DE DESGASTE!
+Fan - Not a wear item! = VENTOINHA - NÃO É UM ITEM DE DESGASTE!
+Crankshaft Pulley - Not a wear item! = POLIA DO VIRABREQUIM - NÃO É UM ITEM DE DESGASTE!
+Radiator hose top - Not a wear item! = MANGUEIRA SUPERIOR DO RADIADOR - NÃO É UM ITEM DE DESGASTE!
+Heater Hose Outlet - Not a wear item! = SAÍDA DA MANGUEIRA DO AQUECEDOR - NÃO É UM ITEM DE DESGASTE!
+Water Pump Pulley - Not a wear item! = POLIA DA BOMBA D’ÁGUA - NÃO É UM ITEM DE DESGASTE!
+Instrument Panel - Not a wear item! = PAINEL DE INSTRUMENTOS - NÃO É UM ITEM DE DESGASTE!
+Safety Fuel Cell 19L - Not a wear item! = CÉLULA DE COMBUSTÍVEL DE SEGURANÇA 19L - NÃO É UM ITEM DE DESGASTE!
+Steering Wheel - Not a wear item! = VOLANTE - NÃO É UM ITEM DE DESGASTE!
+Rear Upper Control Arm - Not a wear item! = BRAÇO SUPERIOR TRASEIRO - NÃO É UM ITEM DE DESGASTE!
+Rear Lower Control Arm - Not a wear item! = BRAÇO INFERIOR TRASEIRO - NÃO É UM ITEM DE DESGASTE!
+Fresh Air Duct - Not a wear item! = DUTO DE AR FRESCO - NÃO É UM ITEM DE DESGASTE!
+2 Barrel Carb - Not a wear item! = CARBURADOR DE 2 CORPOS - NÃO É UM ITEM DE DESGASTE!
+4 Barrell Racing Carb - Not a wear item! = CARBURADOR DE CORRIDA DE 4 CORPOS - NÃO É UM ITEM DE DESGASTE!
+Brake Lines - Not a wear item! = LINHAS DE FREIO - NÃO É UM ITEM DE DESGASTE!
+Clutch Pressure Plate - Not a wear item! = PLATÔ DA EMBREAGEM - NÃO É UM ITEM DE DESGASTE!
+Rear Light - Not a wear item! = LANTERNA TRASEIRA - NÃO É UM ITEM DE DESGASTE!
+Center Console - Not a wear item! = CONSOLE CENTRAL - NÃO É UM ITEM DE DESGASTE!
+Hand Brake Lever - Not a wear item! = ALAVANCA DO FREIO DE MÃO - NÃO É UM ITEM DE DESGASTE!
+
+Spring {0}" {1}lb - {2}% = MOLA {0}" {1}lb - {2}%
+Spring {0}" {1}lb - Throw in the bin = MOLA {0}" {1}lb - JOGUE NO LIXO
+Spring {0}" {1}lb - Pretty dead = MOLA {0}" {1}lb - QUASE MORTA
+Spring {0}" {1}lb - Should do for a while = MOLA {0}" {1}lb - DEVE AGUENTAR POR UM TEMPO
+Spring {0}" {1}lb - Pretty okay = MOLA {0}" {1}lb - BEM RAZOÁVEL
+Spring {0}" {1}lb - Brand new = MOLA {0}" {1}lb - NOVA EM FOLHA
+Spring {0}" {1}lb - Scrap metal = MOLA {0}" {1}lb - SUCATA
+Spring {0}" {1}lb - Worn out = MOLA {0}" {1}lb - DESGASTADA
+Spring {0}" {1}lb - Good enough = MOLA {0}" {1}lb - BOM O SUFICIENTE
+Spring {0}" {1}lb - Just broken in = MOLA {0}" {1}lb - RECÉM AMACIADA
+Spring {0}" {1}lb - Fresh out of box = MOLA {0}" {1}lb - RECÉM SAÍDA DA CAIXA
+
+Rear Shock Absorber - {0}% = AMORTECEDOR TRASEIRO - {0}%
+Rear Shock Absorber - Throw in the bin = AMORTECEDOR TRASEIRO - JOGUE NO LIXO
+Rear Shock Absorber - Pretty dead = AMORTECEDOR TRASEIRO - QUASE MORTO
+Rear Shock Absorber - Should do for a while = AMORTECEDOR TRASEIRO - DEVE AGUENTAR POR UM TEMPO
+Rear Shock Absorber - Pretty okay = AMORTECEDOR TRASEIRO - BEM RAZOÁVEL
+Rear Shock Absorber - Brand new = AMORTECEDOR TRASEIRO - NOVO EM FOLHA
+Rear Shock Absorber - Scrap metal = AMORTECEDOR TRASEIRO - SUCATA
+Rear Shock Absorber - Worn out = AMORTECEDOR TRASEIRO - DESGASTADO
+Rear Shock Absorber - Good enough = AMORTECEDOR TRASEIRO - BOM O SUFICIENTE
+Rear Shock Absorber - Just broken in = AMORTECEDOR TRASEIRO - RECÉM AMACIADO
+Rear Shock Absorber - Fresh out of box = AMORTECEDOR TRASEIRO - RECÉM SAÍDO DA CAIXA
+
+Front Shock Absorber - {0}% = AMORTECEDOR DIANTEIRO - {0}%
+Front Shock Absorber - Throw in the bin = AMORTECEDOR DIANTEIRO - JOGUE NO LIXO
+Front Shock Absorber - Pretty dead = AMORTECEDOR DIANTEIRO - BEM DANIFICADO
+Front Shock Absorber - Should do for a while = AMORTECEDOR DIANTEIRO - DEVE AGUENTAR POR UM TEMPO
+Front Shock Absorber - Pretty okay = AMORTECEDOR DIANTEIRO - BEM OK
+Front Shock Absorber - Brand new = AMORTECEDOR DIANTEIRO - NOVO EM FOLHA
+Front Shock Absorber - Scrap metal = AMORTECEDOR DIANTEIRO - SUCATA
+Front Shock Absorber - Worn out = AMORTECEDOR DIANTEIRO - DESGASTADO
+Front Shock Absorber - Good enough = AMORTECEDOR DIANTEIRO - BOM O SUFICIENTE
+Front Shock Absorber - Just broken in = AMORTECEDOR DIANTEIRO - RECÉM AMACIADO
+Front Shock Absorber - Fresh out of box = AMORTECEDOR DIANTEIRO - ACABOU DE SAIR DA CAIXA
+
+Timing Belt - {0}% = CORREIA DENTADA - {0}%
+Timing Belt - Throw in the bin = CORREIA DENTADA - JOGUE NO LIXO
+Timing Belt - Pretty dead = CORREIA DENTADA - QUASE MORTA
+Timing Belt - Should do for a while = CORREIA DENTADA - DEVE AGUENTAR POR UM TEMPO
+Timing Belt - Pretty okay = CORREIA DENTADA - BEM RAZOÁVEL
+Timing Belt - Brand new = CORREIA DENTADA - NOVA EM FOLHA
+Timing Belt - Scrap metal = CORREIA DENTADA - SUCATA
+Timing Belt - Worn out = CORREIA DENTADA - DESGASTADA
+Timing Belt - Good enough = CORREIA DENTADA - BOM O SUFICIENTE
+Timing Belt - Just broken in = CORREIA DENTADA - RECÉM AMACIADA
+Timing Belt - Fresh out of box = CORREIA DENTADA - RECÉM SAÍDA DA CAIXA
+
+Steering Rack {0} - {1}% = CAIXA DE DIREÇÃO {0} - {1}%
+Steering Rack {0} - Throw in the bin = CAIXA DE DIREÇÃO {0} - JOGUE NO LIXO
+Steering Rack {0} - Pretty dead = CAIXA DE DIREÇÃO {0} - QUASE MORTA
+Steering Rack {0} - Should do for a while = CAIXA DE DIREÇÃO {0} - DEVE AGUENTAR POR UM TEMPO
+Steering Rack {0} - Pretty okay = CAIXA DE DIREÇÃO {0} - BEM RAZOÁVEL
+Steering Rack {0} - Brand new = CAIXA DE DIREÇÃO {0} - NOVA EM FOLHA
+Steering Rack {0} - Scrap metal = CAIXA DE DIREÇÃO {0} - SUCATA
+Steering Rack {0} - Worn out = CAIXA DE DIREÇÃO {0} - DESGASTADA
+Steering Rack {0} - Good enough = CAIXA DE DIREÇÃO {0} - BOM O SUFICIENTE
+Steering Rack {0} - Just broken in = CAIXA DE DIREÇÃO {0} - RECÉM AMACIADA
+Steering Rack {0} - Fresh out of box = CAIXA DE DIREÇÃO {0} - RECÉM SAÍDA DA CAIXA
+
+Ignition Coil - {0}% = BOBINA DE IGNIÇÃO - {0}%
+Ignition Coil - Throw in the bin = BOBINA DE IGNIÇÃO - JOGAR NO LIXO
+Ignition Coil - Pretty dead = BOBINA DE IGNIÇÃO - BEM DANIFICADO
+Ignition Coil - Should do for a while = BOBINA DE IGNIÇÃO - DEVE AGUENTAR POR UM TEMPO
+Ignition Coil - Pretty okay = BOBINA DE IGNIÇÃO - EM ESTADO BOM
+Ignition Coil - Brand new = BOBINA DE IGNIÇÃO - NOVO
+Ignition Coil - Scrap metal = BOBINA DE IGNIÇÃO - SUCATA
+Ignition Coil - Worn out = BOBINA DE IGNIÇÃO - GASTO
+Ignition Coil - Good enough = BOBINA DE IGNIÇÃO - BOM O SUFICIENTE
+Ignition Coil - Just broken in = BOBINA DE IGNIÇÃO - RECÉM AMACIADO
+Ignition Coil - Fresh out of box = BOBINA DE IGNIÇÃO - RECÉM SAÍDO DA CAIXA
+
+Main Bearing - {0}% = MANCAL PRINCIPAL - {0}%
+Main Bearing - Throw in the bin = MANCAL PRINCIPAL - JOGUE NO LIXO
+Main Bearing - Pretty dead = MANCAL PRINCIPAL - QUASE QUEBRADO
+Main Bearing - Should do for a while = MANCAL PRINCIPAL - DEVE AGUENTAR POR UM TEMPO
+Main Bearing - Pretty okay = MANCAL PRINCIPAL - ATÉ QUE ESTÁ OK
+Main Bearing - Brand new = MANCAL PRINCIPAL - NOVO
+Main Bearing - Scrap metal = MANCAL PRINCIPAL - SUCATA
+Main Bearing - Worn out = MANCAL PRINCIPAL - TOTALMENTE DESGASTADO
+Main Bearing - Good enough = MANCAL PRINCIPAL - BOM O SUFICIENTE
+Main Bearing - Just broken in = MANCAL PRINCIPAL - RECÉM AMACIADO
+Main Bearing - Fresh out of box = MANCAL PRINCIPAL - RECÉM SAÍDO DA CAIXA
+
+Radiator - {0}% = RADIADOR - {0}%
+Radiator - Throw in the bin = RADIADOR - JOGUE NO LIXO
+Radiator - Pretty dead = RADIADOR - BEM DANIFICADO
+Radiator - Should do for a while = RADIADOR - DEVE AGUENTAR POR UM TEMPO
+Radiator - Pretty okay = RADIADOR - BEM OK
+Radiator - Brand new = RADIADOR - NOVO EM FOLHA
+Radiator - Scrap metal = RADIADOR - SUCATA
+Radiator - Worn out = RADIADOR - DESGASTADO
+Radiator - Good enough = RADIADOR - BOM O SUFICIENTE
+Radiator - Just broken in = RADIADOR - RECÉM AMACIADO
+Radiator - Fresh out of box = RADIADOR - ACABOU DE SAIR DA CAIXA
+
+Manual Gearbox {0} spd - {1}% = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - {1}%
+Manual Gearbox {0} spd - Throw in the bin = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - JOGUE NO LIXO
+Manual Gearbox {0} spd - Pretty dead = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - BEM DANIFICADA
+Manual Gearbox {0} spd - Should do for a while = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - DEVE AGUENTAR POR UM TEMPO
+Manual Gearbox {0} spd - Pretty okay = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - BEM OK
+Manual Gearbox {0} spd - Brand new = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - NOVA EM FOLHA
+Manual Gearbox {0} spd - Scrap metal = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - SUCATA
+Manual Gearbox {0} spd - Worn out = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - DESGASTADA
+Manual Gearbox {0} spd - Good enough = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - BOA O SUFICIENTE
+Manual Gearbox {0} spd - Just broken in = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - RECÉM AMACIADA
+Manual Gearbox {0} spd - Fresh out of box = CAIXA DE CÂMBIO MANUAL {0} MARCHAS - ACABOU DE SAIR DA CAIXA
+
+Automatic Gearbox 3 spd - {0}% = CÂMBIO AUTOMÁTICO 3 MARCHAS - {0}%
+Automatic Gearbox 3 spd - Throw in the bin = CÂMBIO AUTOMÁTICO 3 MARCHAS - JOGUE NO LIXO
+Automatic Gearbox 3 spd - Pretty dead = CÂMBIO AUTOMÁTICO 3 MARCHAS - QUASE MORTO
+Automatic Gearbox 3 spd - Should do for a while = CÂMBIO AUTOMÁTICO 3 MARCHAS - DEVE AGUENTAR POR UM TEMPO
+Automatic Gearbox 3 spd - Pretty okay = CÂMBIO AUTOMÁTICO 3 MARCHAS - BEM RAZOÁVEL
+Automatic Gearbox 3 spd - Brand new = CÂMBIO AUTOMÁTICO 3 MARCHAS - NOVO EM FOLHA
+Automatic Gearbox 3 spd - Scrap metal = CÂMBIO AUTOMÁTICO 3 MARCHAS - SUCATA
+Automatic Gearbox 3 spd - Worn out = CÂMBIO AUTOMÁTICO 3 MARCHAS - DESGASTADO
+Automatic Gearbox 3 spd - Good enough = CÂMBIO AUTOMÁTICO 3 MARCHAS - BOM O SUFICIENTE
+Automatic Gearbox 3 spd - Just broken in = CÂMBIO AUTOMÁTICO 3 MARCHAS - RECÉM AMACIADO
+Automatic Gearbox 3 spd - Fresh out of box = CÂMBIO AUTOMÁTICO 3 MARCHAS - RECÉM SAÍDO DA CAIXA
+
+Driveshaft - {0}% = EIXO CARDAN - {0}%
+Driveshaft - Throw in the bin = EIXO CARDAN - JOGUE NO LIXO
+Driveshaft - Pretty dead = EIXO CARDAN - BEM DANIFICADO
+Driveshaft - Should do for a while = EIXO CARDAN - DEVE AGUENTAR POR UM TEMPO
+Driveshaft - Pretty okay = EIXO CARDAN - BEM OK
+Driveshaft - Brand new = EIXO CARDAN - NOVO EM FOLHA
+Driveshaft - Scrap metal = EIXO CARDAN - SUCATA
+Driveshaft - Worn out = EIXO CARDAN - DESGASTADO
+Driveshaft - Good enough = EIXO CARDAN - BOM O SUFICIENTE
+Driveshaft - Just broken in = EIXO CARDAN - RECÉM AMACIADO
+Driveshaft - Fresh out of box = EIXO CARDAN - ACABOU DE SAIR DA CAIXA
+
+Camshaft Standard - {0}% = COMANDO DE VÁLVULAS PADRÃO - {0}%
+Camshaft Standard - Throw in the bin = COMANDO DE VÁLVULAS PADRÃO - JOGUE NO LIXO
+Camshaft Standard - Pretty dead = COMANDO DE VÁLVULAS PADRÃO - BEM DANIFICADO
+Camshaft Standard - Should do for a while = COMANDO DE VÁLVULAS PADRÃO - DEVE AGUENTAR POR UM TEMPO
+Camshaft Standard - Pretty okay = COMANDO DE VÁLVULAS PADRÃO - BEM OK
+Camshaft Standard - Brand new = COMANDO DE VÁLVULAS PADRÃO - NOVO EM FOLHA
+Camshaft Standard - Scrap metal = COMANDO DE VÁLVULAS PADRÃO - SUCATA
+Camshaft Standard - Worn out = COMANDO DE VÁLVULAS PADRÃO - DESGASTADO
+Camshaft Standard - Good enough = COMANDO DE VÁLVULAS PADRÃO - BOM O SUFICIENTE
+Camshaft Standard - Just broken in = COMANDO DE VÁLVULAS PADRÃO - RECÉM AMACIADO
+Camshaft Standard - Fresh out of box = COMANDO DE VÁLVULAS PADRÃO - ACABOU DE SAIR DA CAIXA
+
+Headgasket - {0}% = JUNTA DO CABEÇOTE - {0}%
+Headgasket - Throw in the bin = JUNTA DO CABEÇOTE - JOGUE NO LIXO
+Headgasket - Pretty dead = JUNTA DO CABEÇOTE - BEM DANIFICADO
+Headgasket - Should do for a while = JUNTA DO CABEÇOTE - DEVE AGUENTAR POR UM TEMPO
+Headgasket - Pretty okay = JUNTA DO CABEÇOTE - BEM OK
+Headgasket - Brand new = JUNTA DO CABEÇOTE - NOVO EM FOLHA
+Headgasket - Scrap metal = JUNTA DO CABEÇOTE - SUCATA
+Headgasket - Worn out = JUNTA DO CABEÇOTE - DESGASTADO
+Headgasket - Good enough = JUNTA DO CABEÇOTE - BOM O SUFICIENTE
+Headgasket - Just broken in = JUNTA DO CABEÇOTE - RECÉM AMACIADO
+Headgasket - Fresh out of box = JUNTA DO CABEÇOTE - ACABOU DE SAIR DA CAIXA
+
+Starter - {0}% = MOTOR DE PARTIDA - {0}%
+Starter - Throw in the bin = MOTOR DE PARTIDA - JOGUE NO LIXO
+Starter - Pretty dead = MOTOR DE PARTIDA - BEM DANIFICADO
+Starter - Should do for a while = MOTOR DE PARTIDA - DEVE AGUENTAR POR UM TEMPO
+Starter - Pretty okay = MOTOR DE PARTIDA - BEM OK
+Starter - Brand new = MOTOR DE PARTIDA - NOVO EM FOLHA
+Starter - Scrap metal = MOTOR DE PARTIDA - SUCATA
+Starter - Worn out = MOTOR DE PARTIDA - DESGASTADO
+Starter - Good enough = MOTOR DE PARTIDA - BOM O SUFICIENTE
+Starter - Just broken in = MOTOR DE PARTIDA - RECÉM AMACIADO
+Starter - Fresh out of box = MOTOR DE PARTIDA - ACABOU DE SAIR DA CAIXA
+
+Piston - {0}% = PISTÃO - {0}%
+Piston - Throw in the bin = PISTÃO - JOGUE NO LIXO
+Piston - Pretty dead = PISTÃO - BEM DANIFICADO
+Piston - Should do for a while = PISTÃO - DEVE AGUENTAR POR UM TEMPO
+Piston - Pretty okay = PISTÃO - BEM OK
+Piston - Brand new = PISTÃO - NOVO EM FOLHA
+Piston - Scrap metal = PISTÃO - SUCATA
+Piston - Worn out = PISTÃO - DESGASTADO
+Piston - Good enough = PISTÃO - BOM O SUFICIENTE
+Piston - Just broken in = PISTÃO - RECÉM AMACIADO
+Piston - Fresh out of box = PISTÃO - ACABOU DE SAIR DA CAIXA
+
+Clutch Cable - {0}% = CABO DE EMBREAGEM - {0}%
+Clutch Cable - Throw in the bin = CABO DE EMBREAGEM - JOGUE NO LIXO
+Clutch Cable - Pretty dead = CABO DE EMBREAGEM - BEM DANIFICADO
+Clutch Cable - Should do for a while = CABO DE EMBREAGEM - DEVE AGUENTAR POR UM TEMPO
+Clutch Cable - Pretty okay = CABO DE EMBREAGEM - BEM OK
+Clutch Cable - Brand new = CABO DE EMBREAGEM - NOVO EM FOLHA
+Clutch Cable - Scrap metal = CABO DE EMBREAGEM - SUCATA
+Clutch Cable - Worn out = CABO DE EMBREAGEM - DESGASTADO
+Clutch Cable - Good enough = CABO DE EMBREAGEM - BOM O SUFICIENTE
+Clutch Cable - Just broken in = CABO DE EMBREAGEM - RECÉM AMACIADO
+Clutch Cable - Fresh out of box = CABO DE EMBREAGEM - ACABOU DE SAIR DA CAIXA
+
+Distributor - {0}% = DISTRIBUIDOR - {0}%
+Distributor - Throw in the bin = DISTRIBUIDOR - JOGUE NO LIXO
+Distributor - Pretty dead = DISTRIBUIDOR - BEM DANIFICADO
+Distributor - Should do for a while = DISTRIBUIDOR - DEVE AGUENTAR POR UM TEMPO
+Distributor - Pretty okay = DISTRIBUIDOR - BEM OK
+Distributor - Brand new = DISTRIBUIDOR - NOVO EM FOLHA
+Distributor - Scrap metal = DISTRIBUIDOR - SUCATA
+Distributor - Worn out = DISTRIBUIDOR - DESGASTADO
+Distributor - Good enough = DISTRIBUIDOR - BOM O SUFICIENTE
+Distributor - Just broken in = DISTRIBUIDOR - RECÉM AMACIADO
+Distributor - Fresh out of box = DISTRIBUIDOR - ACABOU DE SAIR DA CAIXA
+
+Alternator - {0}% = ALTERNADOR - {0}%
+Alternator - Throw in the bin = ALTERNADOR - JOGUE NO LIXO
+Alternator - Pretty dead = ALTERNADOR - BEM DANIFICADO
+Alternator - Should do for a while = ALTERNADOR - DEVE AGUENTAR POR UM TEMPO
+Alternator - Pretty okay = ALTERNADOR - BEM OK
+Alternator - Brand new = ALTERNADOR - NOVO EM FOLHA
+Alternator - Scrap metal = ALTERNADOR - SUCATA
+Alternator - Worn out = ALTERNADOR - DESGASTADO
+Alternator - Good enough = ALTERNADOR - BOM O SUFICIENTE
+Alternator - Just broken in = ALTERNADOR - RECÉM AMACIADO
+Alternator - Fresh out of box = ALTERNADOR - ACABOU DE SAIR DA CAIXA
+
+Brake Master Cylinder - {0}% = CILINDRO MESTRE DE FREIO - {0}%
+Brake Master Cylinder - Throw in the bin = CILINDRO MESTRE DE FREIO - JOGUE NO LIXO
+Brake Master Cylinder - Pretty dead = CILINDRO MESTRE DE FREIO - BEM DANIFICADO
+Brake Master Cylinder - Should do for a while = CILINDRO MESTRE DE FREIO - DEVE AGUENTAR POR UM TEMPO
+Brake Master Cylinder - Pretty okay = CILINDRO MESTRE DE FREIO - BEM OK
+Brake Master Cylinder - Brand new = CILINDRO MESTRE DE FREIO - NOVO EM FOLHA
+Brake Master Cylinder - Scrap metal = CILINDRO MESTRE DE FREIO - SUCATA
+Brake Master Cylinder - Worn out = CILINDRO MESTRE DE FREIO - DESGASTADO
+Brake Master Cylinder - Good enough = CILINDRO MESTRE DE FREIO - BOM O SUFICIENTE
+Brake Master Cylinder - Just broken in = CILINDRO MESTRE DE FREIO - RECÉM AMACIADO
+Brake Master Cylinder - Fresh out of box = CILINDRO MESTRE DE FREIO - ACABOU DE SAIR DA CAIXA
+
+Clutch Disc - {0}% = DISCO DE EMBREAGEM - {0}%
+Clutch Disc - Throw in the bin = DISCO DE EMBREAGEM - JOGUE NO LIXO
+Clutch Disc - Pretty dead = DISCO DE EMBREAGEM - BEM DANIFICADO
+Clutch Disc - Should do for a while = DISCO DE EMBREAGEM - DEVE AGUENTAR POR UM TEMPO
+Clutch Disc - Pretty okay = DISCO DE EMBREAGEM - BEM OK
+Clutch Disc - Brand new = DISCO DE EMBREAGEM - NOVO EM FOLHA
+Clutch Disc - Scrap metal = DISCO DE EMBREAGEM - SUCATA
+Clutch Disc - Worn out = DISCO DE EMBREAGEM - DESGASTADO
+Clutch Disc - Good enough = DISCO DE EMBREAGEM - BOM O SUFICIENTE
+Clutch Disc - Just broken in = DISCO DE EMBREAGEM - RECÉM AMACIADO
+Clutch Disc - Fresh out of box = DISCO DE EMBREAGEM - ACABOU DE SAIR DA CAIXA
+
+Fuel Pump - {0}% = BOMBA DE COMBUSTÍVEL - {0}%
+Fuel Pump - Throw in the bin = BOMBA DE COMBUSTÍVEL - JOGUE NO LIXO
+Fuel Pump - Pretty dead = BOMBA DE COMBUSTÍVEL - BEM DANIFICADO
+Fuel Pump - Should do for a while = BOMBA DE COMBUSTÍVEL - DEVE AGUENTAR POR UM TEMPO
+Fuel Pump - Pretty okay = BOMBA DE COMBUSTÍVEL - BEM OK
+Fuel Pump - Brand new = BOMBA DE COMBUSTÍVEL - NOVO EM FOLHA
+Fuel Pump - Scrap metal = BOMBA DE COMBUSTÍVEL - SUCATA
+Fuel Pump - Worn out = BOMBA DE COMBUSTÍVEL - DESGASTADO
+Fuel Pump - Good enough = BOMBA DE COMBUSTÍVEL - BOM O SUFICIENTE
+Fuel Pump - Just broken in = BOMBA DE COMBUSTÍVEL - RECÉM AMACIADO
+Fuel Pump - Fresh out of box = BOMBA DE COMBUSTÍVEL - ACABOU DE SAIR DA CAIXA
+
+Oil Pump - {0}% = BOMBA DE ÓLEO - {0}%
+Oil Pump - Throw in the bin = BOMBA DE ÓLEO - JOGUE NO LIXO
+Oil Pump - Pretty dead = BOMBA DE ÓLEO - BEM DANIFICADO
+Oil Pump - Should do for a while = BOMBA DE ÓLEO - DEVE AGUENTAR POR UM TEMPO
+Oil Pump - Pretty okay = BOMBA DE ÓLEO - BEM OK
+Oil Pump - Brand new = BOMBA DE ÓLEO - NOVO EM FOLHA
+Oil Pump - Scrap metal = BOMBA DE ÓLEO - SUCATA
+Oil Pump - Worn out = BOMBA DE ÓLEO - DESGASTADO
+Oil Pump - Good enough = BOMBA DE ÓLEO - BOM O SUFICIENTE
+Oil Pump - Just broken in = BOMBA DE ÓLEO - RECÉM AMACIADO
+Oil Pump - Fresh out of box = BOMBA DE ÓLEO - ACABOU DE SAIR DA CAIXA
+
+Thermostat - {0}% = TERMOSTATO - {0}%
+Thermostat - Throw in the bin = TERMOSTATO - JOGUE NO LIXO
+Thermostat - Pretty dead = TERMOSTATO - BEM DANIFICADO
+Thermostat - Should do for a while = TERMOSTATO - DEVE AGUENTAR POR UM TEMPO
+Thermostat - Pretty okay = TERMOSTATO - BEM OK
+Thermostat - Brand new = TERMOSTATO - NOVO EM FOLHA
+Thermostat - Scrap metal = TERMOSTATO - SUCATA
+Thermostat - Worn out = TERMOSTATO - DESGASTADO
+Thermostat - Good enough = TERMOSTATO - BOM O SUFICIENTE
+Thermostat - Just broken in = TERMOSTATO - RECÉM AMACIADO
+Thermostat - Fresh out of box = TERMOSTATO - ACABOU DE SAIR DA CAIXA
+
+Rocker - {0}% = BALANCIM - {0}%
+Rocker - Throw in the bin = BALANCIM - JOGUE NO LIXO
+Rocker - Pretty dead = BALANCIM - BEM DANIFICADO
+Rocker - Should do for a while = BALANCIM - DEVE AGUENTAR POR UM TEMPO
+Rocker - Pretty okay = BALANCIM - BEM OK
+Rocker - Brand new = BALANCIM - NOVO EM FOLHA
+Rocker - Scrap metal = BALANCIM - SUCATA
+Rocker - Worn out = BALANCIM - DESGASTADO
+Rocker - Good enough = BALANCIM - BOM O SUFICIENTE
+Rocker - Just broken in = BALANCIM - RECÉM AMACIADO
+Rocker - Fresh out of box = BALANCIM - ACABOU DE SAIR DA CAIXA
+
+Wiper Motor Assembly - {0}% = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - {0}%
+Wiper Motor Assembly - Throw in the bin = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - JOGUE NO LIXO
+Wiper Motor Assembly - Pretty dead = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - QUASE MORTO
+Wiper Motor Assembly - Should do for a while = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - DEVE AGUENTAR POR UM TEMPO
+Wiper Motor Assembly - Pretty okay = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - BEM RAZOÁVEL
+Wiper Motor Assembly - Brand new = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - NOVO EM FOLHA
+Wiper Motor Assembly - Scrap metal = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - SUCATA
+Wiper Motor Assembly - Worn out = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - DESGASTADO
+Wiper Motor Assembly - Good enough = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - BOM O SUFICIENTE
+Wiper Motor Assembly - Just broken in = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - RECÉM AMACIADO
+Wiper Motor Assembly - Fresh out of box = CONJUNTO DO MOTOR DO LIMPADOR DE PARA-BRISA - RECÉM SAÍDO DA CAIXA
+
+Rear Axle {0} - {1}% = EIXO TRASEIRO {0} - {1}%
+Rear Axle {0} - Throw in the bin = EIXO TRASEIRO {0} - JOGUE NO LIXO
+Rear Axle {0} - Pretty dead = EIXO TRASEIRO {0} - QUASE MORTO
+Rear Axle {0} - Should do for a while = EIXO TRASEIRO {0} - DEVE AGUENTAR POR UM TEMPO
+Rear Axle {0} - Pretty okay = EIXO TRASEIRO {0} - BEM RAZOÁVEL
+Rear Axle {0} - Brand new = EIXO TRASEIRO {0} - NOVO EM FOLHA
+Rear Axle {0} - Scrap metal = EIXO TRASEIRO {0} - SUCATA
+Rear Axle {0} - Worn out = EIXO TRASEIRO {0} - DESGASTADO
+Rear Axle {0} - Good enough = EIXO TRASEIRO {0} - BOM O SUFICIENTE
+Rear Axle {0} - Just broken in = EIXO TRASEIRO {0} - RECÉM AMACIADO
+Rear Axle {0} - Fresh out of box = EIXO TRASEIRO {0} - RECÉM SAÍDO DA CAIXA
+
+Crankshaft - {0}% = VIRABREQUIM - {0}%
+Crankshaft - Throw in the bin = VIRABREQUIM - JOGUE NO LIXO
+Crankshaft - Pretty dead = VIRABREQUIM - QUASE MORTO
+Crankshaft - Should do for a while = VIRABREQUIM - DEVE AGUENTAR POR UM TEMPO
+Crankshaft - Pretty okay = VIRABREQUIM - BEM RAZOÁVEL
+Crankshaft - Brand new = VIRABREQUIM - NOVO EM FOLHA
+Crankshaft - Scrap metal = VIRABREQUIM - SUCATA
+Crankshaft - Worn out = VIRABREQUIM - DESGASTADO
+Crankshaft - Good enough = VIRABREQUIM - BOM O SUFICIENTE
+Crankshaft - Just broken in = VIRABREQUIM - RECÉM AMACIADO
+Crankshaft - Fresh out of box = VIRABREQUIM - RECÉM SAÍDO DA CAIXA
+
+Camshaft Rally - {0}% = COMANDO DE VÁLVULAS RALLY - {0}%
+Camshaft Rally - Throw in the bin = COMANDO DE VÁLVULAS RALLY - JOGUE NO LIXO
+Camshaft Rally - Pretty dead = COMANDO DE VÁLVULAS RALLY - QUASE MORTO
+Camshaft Rally - Should do for a while = COMANDO DE VÁLVULAS RALLY - DEVE AGUENTAR POR UM TEMPO
+Camshaft Rally - Pretty okay = COMANDO DE VÁLVULAS RALLY - BEM RAZOÁVEL
+Camshaft Rally - Brand new = COMANDO DE VÁLVULAS RALLY - NOVO EM FOLHA
+Camshaft Rally - Scrap metal = COMANDO DE VÁLVULAS RALLY - SUCATA
+Camshaft Rally - Worn out = COMANDO DE VÁLVULAS RALLY - DESGASTADO
+Camshaft Rally - Good enough = COMANDO DE VÁLVULAS RALLY - BOM O SUFICIENTE
+Camshaft Rally - Just broken in = COMANDO DE VÁLVULAS RALLY - RECÉM AMACIADO
+Camshaft Rally - Fresh out of box = COMANDO DE VÁLVULAS RALLY - RECÉM SAÍDO DA CAIXA
+
+Camshaft Road Sprint - {0}% = COMANDO DE VÁLVULAS ROAD SPRINT - {0}%
+Camshaft Road Sprint - Throw in the bin = COMANDO DE VÁLVULAS ROAD SPRINT - JOGUE NO LIXO
+Camshaft Road Sprint - Pretty dead = COMANDO DE VÁLVULAS ROAD SPRINT - QUASE MORTO
+Camshaft Road Sprint - Should do for a while = COMANDO DE VÁLVULAS ROAD SPRINT - DEVE AGUENTAR POR UM TEMPO
+Camshaft Road Sprint - Pretty okay = COMANDO DE VÁLVULAS ROAD SPRINT - BEM RAZOÁVEL
+Camshaft Road Sprint - Brand new = COMANDO DE VÁLVULAS ROAD SPRINT - NOVO EM FOLHA
+Camshaft Road Sprint - Scrap metal = COMANDO DE VÁLVULAS ROAD SPRINT - SUCATA
+Camshaft Road Sprint - Worn out = COMANDO DE VÁLVULAS ROAD SPRINT - DESGASTADO
+Camshaft Road Sprint - Good enough = COMANDO DE VÁLVULAS ROAD SPRINT - BOM O SUFICIENTE
+Camshaft Road Sprint - Just broken in = COMANDO DE VÁLVULAS ROAD SPRINT - RECÉM AMACIADO
+Camshaft Road Sprint - Fresh out of box = COMANDO DE VÁLVULAS ROAD SPRINT - RECÉM SAÍDO DA CAIXA
+
+Camshaft Race - {0}% = COMANDO DE VÁLVULAS RACE - {0}%
+Camshaft Race - Throw in the bin = COMANDO DE VÁLVULAS RACE - JOGUE NO LIXO
+Camshaft Race - Pretty dead = COMANDO DE VÁLVULAS RACE - QUASE MORTO
+Camshaft Race - Should do for a while = COMANDO DE VÁLVULAS RACE - DEVE AGUENTAR POR UM TEMPO
+Camshaft Race - Pretty okay = COMANDO DE VÁLVULAS RACE - BEM RAZOÁVEL
+Camshaft Race - Brand new = COMANDO DE VÁLVULAS RACE - NOVO EM FOLHA
+Camshaft Race - Scrap metal = COMANDO DE VÁLVULAS RACE - SUCATA
+Camshaft Race - Worn out = COMANDO DE VÁLVULAS RACE - DESGASTADO
+Camshaft Race - Good enough = COMANDO DE VÁLVULAS RACE - BOM O SUFICIENTE
+Camshaft Race - Just broken in = COMANDO DE VÁLVULAS RACE - RECÉM AMACIADO
+Camshaft Race - Fresh out of box = COMANDO DE VÁLVULAS RACE - RECÉM SAÍDO DA CAIXA
+
+Camshaft Fast Road - {0}% = COMANDO DE VÁLVULAS FAST ROAD - {0}%
+Camshaft Fast Road - Throw in the bin = COMANDO DE VÁLVULAS FAST ROAD - JOGUE NO LIXO
+Camshaft Fast Road - Pretty dead = COMANDO DE VÁLVULAS FAST ROAD - QUASE MORTO
+Camshaft Fast Road - Should do for a while = COMANDO DE VÁLVULAS FAST ROAD - DEVE AGUENTAR POR UM TEMPO
+Camshaft Fast Road - Pretty okay = COMANDO DE VÁLVULAS FAST ROAD - BEM RAZOÁVEL
+Camshaft Fast Road - Brand new = COMANDO DE VÁLVULAS FAST ROAD - NOVO EM FOLHA
+Camshaft Fast Road - Scrap metal = COMANDO DE VÁLVULAS FAST ROAD - SUCATA
+Camshaft Fast Road - Worn out = COMANDO DE VÁLVULAS FAST ROAD - DESGASTADO
+Camshaft Fast Road - Good enough = COMANDO DE VÁLVULAS FAST ROAD - BOM O SUFICIENTE
+Camshaft Fast Road - Just broken in = COMANDO DE VÁLVULAS FAST ROAD - RECÉM AMACIADO
+Camshaft Fast Road - Fresh out of box = COMANDO DE VÁLVULAS FAST ROAD - RECÉM SAÍDO DA CAIXA
+
+Water Pump - {0}% = BOMBA D’ÁGUA - {0}%
+Water Pump - Throw in the bin = BOMBA D’ÁGUA - JOGUE NO LIXO
+Water Pump - Pretty dead = BOMBA D’ÁGUA - QUASE MORTA
+Water Pump - Should do for a while = BOMBA D’ÁGUA - DEVE AGUENTAR POR UM TEMPO
+Water Pump - Pretty okay = BOMBA D’ÁGUA - BEM RAZOÁVEL
+Water Pump - Brand new = BOMBA D’ÁGUA - NOVA EM FOLHA
+Water Pump - Scrap metal = BOMBA D’ÁGUA - SUCATA
+Water Pump - Worn out = BOMBA D’ÁGUA - DESGASTADA
+Water Pump - Good enough = BOMBA D’ÁGUA - BOM O SUFICIENTE
+Water Pump - Just broken in = BOMBA D’ÁGUA - RECÉM AMACIADA
+Water Pump - Fresh out of box = BOMBA D’ÁGUA - RECÉM SAÍDA DA CAIXA
+
+Aux Shaft - {0}% = EIXO AUXILIAR - {0}%
+Aux Shaft - Throw in the bin = EIXO AUXILIAR - JOGUE NO LIXO
+Aux Shaft - Pretty dead = EIXO AUXILIAR - QUASE MORTO
+Aux Shaft - Should do for a while = EIXO AUXILIAR - DEVE AGUENTAR POR UM TEMPO
+Aux Shaft - Pretty okay = EIXO AUXILIAR - BEM RAZOÁVEL
+Aux Shaft - Brand new = EIXO AUXILIAR - NOVO EM FOLHA
+Aux Shaft - Scrap metal = EIXO AUXILIAR - SUCATA
+Aux Shaft - Worn out = EIXO AUXILIAR - DESGASTADO
+Aux Shaft - Good enough = EIXO AUXILIAR - BOM O SUFICIENTE
+Aux Shaft - Just broken in = EIXO AUXILIAR - RECÉM AMACIADO
+Aux Shaft - Fresh out of box = EIXO AUXILIAR - RECÉM SAÍDO DA CAIXA
+
+Heater Box - {0}% = CAIXA DO AQUECEDOR - {0}%
+Heater Box - Throw in the bin = CAIXA DO AQUECEDOR - JOGUE NO LIXO
+Heater Box - Pretty dead = CAIXA DO AQUECEDOR - QUASE MORTA
+Heater Box - Should do for a while = CAIXA DO AQUECEDOR - DEVE AGUENTAR POR UM TEMPO
+Heater Box - Pretty okay = CAIXA DO AQUECEDOR - BEM RAZOÁVEL
+Heater Box - Brand new = CAIXA DO AQUECEDOR - NOVA EM FOLHA
+Heater Box - Scrap metal = CAIXA DO AQUECEDOR - SUCATA
+Heater Box - Worn out = CAIXA DO AQUECEDOR - DESGASTADA
+Heater Box - Good enough = CAIXA DO AQUECEDOR - BOM O SUFICIENTE
+Heater Box - Just broken in = CAIXA DO AQUECEDOR - RECÉM AMACIADA
+Heater Box - Fresh out of box = CAIXA DO AQUECEDOR - RECÉM SAÍDA DA CAIXA
+
+Oil filter - {0}% DIRT = FILTRO DE ÓLEO - {0}% SUJO
+Oil filter - Probably change soon = FILTRO DE ÓLEO - PROVAVELMENTE TROCAR EM BREVE
+Oil filter - Due changing = FILTRO DE ÓLEO - TROCA NECESSÁRIA
+Oil filter - Brand new = FILTRO DE ÓLEO - NOVO
+
+//Part Inspector
+Brake Lines (Power Brakes) = LINHAS DE FREIO (FREIOS HIDRÁULICOS)
+Brake Lines (Standard Brakes) = LINHAS DE FREIO (FREIOS PADRÃO)
+
+Engine Block - Intact = BLOCO DO MOTOR - INTACTO
+Oilpan - Intact = CÁRTER DE ÓLEO - INTACTO
+Engine Block - Broken = BLOCO DO MOTOR - QUEBRADO
+Oilpan - Broken = CÁRTER DE ÓLEO - QUEBRADO
+
+Size {0} = TAMANHO {0}
+
+Wrench Too Big = CHAVE GRANDE DEMAIS
+Wrench Too Small = CHAVE PEQUENA DEMAIS
+Wrench Slightly Too Small = CHAVE LIGEIRAMENTE PEQUENA
+Wrench Way Too Big = CHAVE GRANDE DEMAIS
+
+Grille ({0}) = GRADE ({0})
+Bootlid ({0}) = TAMPA DO PORTA-MALAS ({0})
+Bumper ({0}) = PARA-CHOQUE ({0})
+
+Instrument Panel (Clock) = PAINEL DE INSTRUMENTOS (RELÓGIO)
+Instrument Panel (Tachometer) = PAINEL DE INSTRUMENTOS (TACÔMETRO)
+Instrument Panel (Standard) = PAINEL DE INSTRUMENTOS (PADRÃO)
+
+Exhaust Pipe Front (Standard) = TUBO DE ESCAPE DIANTEIRO (PADRÃO)
+Exhaust Pipe Front (GT) = TUBO DE ESCAPE DIANTEIRO (GT)
+
+fuse package - {0} left = PACOTE DE FUSÍVEIS - {0} RESTANTES
+spark plug box - {0} left = CAIXA DE VELAS - {0} RESTANTES
+r20 battery box - {0} left = CAIXA DE PILHAS R20 - {0} RESTANTES
+package - {0} left = PACOTE - {0} RESTANTE
+
+gasoline {0}% = GASOLINA {0}%
+diesel {0}% = DIESEL {0}%
+
+grill charcoal - {0}% full = CARVÃO PARA CHURRASCO - {0}% CHEIO
+grill charcoal - full = CARVÃO PARA CHURRASCO - CHEIO
+grill charcoal - nearly full = CARVÃO PARA CHURRASCO - QUASE CHEIO
+grill charcoal - three-quarters full = CARVÃO PARA CHURRASCO - TRÊS QUARTOS CHEIO
+grill charcoal - over half full = CARVÃO PARA CHURRASCO - MAIS DA METADE CHEIO
+grill charcoal - under half full = CARVÃO PARA CHURRASCO - MENOS DA METADE CHEIO
+grill charcoal - one quarter full = CARVÃO PARA CHURRASCO - UM QUARTO CHEIO
+grill charcoal - nearly empty = CARVÃO PARA CHURRASCO - QUASE VAZIO
+grill charcoal - empty = CARVÃO PARA CHURRASCO - VAZIO
+
+ground coffee - {0}% full = CAFÉ MOÍDO - {0}% CHEIO
+ground coffee - full = CAFÉ MOÍDO - CHEIO
+ground coffee - nearly full = CAFÉ MOÍDO - QUASE CHEIO
+ground coffee - three-quarters full = CAFÉ MOÍDO - TRÊS QUARTOS CHEIO
+ground coffee - over half full = CAFÉ MOÍDO - MAIS DA METADE CHEIO
+ground coffee - under half full = CAFÉ MOÍDO - MENOS DA METADE CHEIO
+ground coffee - one quarter full = CAFÉ MOÍDO - UM QUARTO CHEIO
+ground coffee - nearly empty = CAFÉ MOÍDO - QUASE VAZIO
+
+brake fluid - {0} mL = FLUIDO DE FREIO - {0} mL
+brake fluid - {0} L = FLUIDO DE FREIO - {0} L
+brake fluid - full = FLUIDO DE FREIO - CHEIO
+brake fluid - nearly full = FLUIDO DE FREIO - QUASE CHEIO
+brake fluid - three-quarters full = FLUIDO DE FREIO - TRÊS QUARTOS CHEIO
+brake fluid - over half full = FLUIDO DE FREIO - MAIS DA METADE CHEIO
+brake fluid - under half full = FLUIDO DE FREIO - MENOS DA METADE CHEIO
+brake fluid - one quarter full = FLUIDO DE FREIO - UM QUARTO CHEIO
+brake fluid - nearly empty = FLUIDO DE FREIO - QUASE VAZIO
+
+automatic transmission fluid - {0}mL = FLUIDO DA TRANSMISSÃO AUTOMÁTICA - {0} mL
+automatic transmission fluid - {0}L = FLUIDO DA TRANSMISSÃO AUTOMÁTICA - {0} L
+automatic transmission fluid - full = FLUIDO DA TRANSMISSÃO AUTOMÁTICA - CHEIO
+automatic transmission fluid - nearly full = FLUIDO DA TRANSMISSÃO AUTOMÁTICA - QUASE CHEIO
+automatic transmission fluid - three-quarters full = FLUIDO DA TRANSMISSÃO AUTOMÁTICA - TRÊS QUARTOS CHEIO
+automatic transmission fluid - over half full = FLUIDO DA TRANSMISSÃO AUTOMÁTICA - MAIS DA METADE CHEIO
+automatic transmission fluid - under half full = FLUIDO DA TRANSMISSÃO AUTOMÁTICA - MENOS DA METADE CHEIO
+automatic transmission fluid - one quarter full = FLUIDO DA TRANSMISSÃO AUTOMÁTICA - UM QUARTO CHEIO
+automatic transmission fluid - nearly empty = FLUIDO DA TRANSMISSÃO AUTOMÁTICA - QUASE VAZIO
+
+coolant - {0} mL = LÍQUIDO DE ARREFECIMENTO - {0} mL
+coolant - {0} L = LÍQUIDO DE ARREFECIMENTO - {0} L
+coolant - full = LÍQUIDO DE ARREFECIMENTO - CHEIO
+coolant - nearly full = LÍQUIDO DE ARREFECIMENTO - QUASE CHEIO
+coolant - three-quarters full = LÍQUIDO DE ARREFECIMENTO - TRÊS QUARTOS CHEIO
+coolant - over half full = LÍQUIDO DE ARREFECIMENTO - MAIS DA METADE CHEIO
+coolant - under half full = LÍQUIDO DE ARREFECIMENTO - MENOS DA METADE CHEIO
+coolant - one quarter full = LÍQUIDO DE ARREFECIMENTO - UM QUARTO CHEIO
+coolant - nearly empty = LÍQUIDO DE ARREFECIMENTO - QUASE VAZIO
+
+motor oil - {0} mL = ÓLEO DO MOTOR - {0} mL
+motor oil - {0} L = ÓLEO DO MOTOR - {0} L
+motor oil - full = ÓLEO DO MOTOR - CHEIO
+motor oil - nearly full = ÓLEO DO MOTOR - QUASE CHEIO
+motor oil - three-quarters full = ÓLEO DO MOTOR - TRÊS QUARTOS CHEIO
+motor oil - over half full = ÓLEO DO MOTOR - MAIS DA METADE CHEIO
+motor oil - under half full = ÓLEO DO MOTOR - MENOS DA METADE CHEIO
+motor oil - one quarter full = ÓLEO DO MOTOR - UM QUARTO CHEIO
+motor oil - nearly empty = ÓLEO DO MOTOR - QUASE VAZIO
+
+spray can - {0}% full = LATA DE SPRAY - {0}% CHEIA
+spray can - full = LATA DE SPRAY - CHEIA
+spray can - nearly full = LATA DE SPRAY - QUASE CHEIA
+spray can - three-quarters full = LATA DE SPRAY - TRÊS QUARTOS CHEIA
+spray can - over half full = LATA DE SPRAY - MAIS DA METADE CHEIA
+spray can - under half full = LATA DE SPRAY - MENOS DA METADE CHEIA
+spray can - one quarter full = LATA DE SPRAY - UM QUARTO CHEIA
+spray can - nearly empty = LATA DE SPRAY - QUASE VAZIA
+
+mosquito spray - {0}% full = SPRAY ANTIMOSQUITO - {0}% CHEIO
+mosquito spray - full = SPRAY ANTI-MOSQUITO - CHEIO
+mosquito spray - nearly full = SPRAY ANTI-MOSQUITO - QUASE CHEIO
+mosquito spray - three-quarters full = SPRAY ANTI-MOSQUITO - TRÊS QUARTOS CHEIO
+mosquito spray - over half full = SPRAY ANTI-MOSQUITO - MAIS DA METADE CHEIO
+mosquito spray - under half full = SPRAY ANTI-MOSQUITO - MENOS DA METADE CHEIO
+mosquito spray - one quarter full = SPRAY ANTI-MOSQUITO - UM QUARTO CHEIO
+mosquito spray - nearly empty = SPRAY ANTI-MOSQUITO - QUASE VAZIO
+
+Fire Extinguisher - {0}% full = EXTINTOR DE INCÊNDIO - {0}% CHEIO
+Fire Extinguisher - full = EXTINTOR DE INCÊNDIO - CHEIO
+Fire Extinguisher - nearly full = EXTINTOR DE INCÊNDIO - QUASE CHEIO
+Fire Extinguisher - three-quarters full = EXTINTOR DE INCÊNDIO - TRÊS QUARTOS CHEIO
+Fire Extinguisher - over half full = EXTINTOR DE INCÊNDIO - MAIS DA METADE CHEIO
+Fire Extinguisher - under half full = EXTINTOR DE INCÊNDIO - MENOS DA METADE CHEIO
+Fire Extinguisher - one quarter full = EXTINTOR DE INCÊNDIO - UM QUARTO CHEIO
+Fire Extinguisher - nearly empty = EXTINTOR DE INCÊNDIO - QUASE VAZIO
+
+Oil filter - {0}% dirty = FILTRO DE ÓLEO - {0}% SUJO
+Oil filter - Brand New = FILTRO DE ÓLEO - NOVO
+Oil filter - Clean = FILTRO DE ÓLEO - LIMPO
+Oil filter - Grimy = FILTRO DE ÓLEO - SUJO
+Oil filter - Dirty = FILTRO DE ÓLEO - MUITO SUJO
+Oil filter - Filthy = FILTRO DE ÓLEO - IMUNDO
+
+spark plug - {0}% = VELA DE IGNIÇÃO - {0}%
+spark plug - In intact condition = VELA DE IGNIÇÃO - INTACTO
+spark plug - In broken condition = VELA DE IGNIÇÃO - QUEBRADO
+spark plug - In mint condition = VELA DE IGNIÇÃO - ESTADO IMPECÁVEL
+spark plug - In great condition = VELA DE IGNIÇÃO - EM ÓTIMO ESTADO
+spark plug - In good condition = VELA DE IGNIÇÃO - EM BOM ESTADO
+spark plug - In decent condition = VELA DE IGNIÇÃO - ESTADO DECENTE
+spark plug - In shoddy condition = VELA DE IGNIÇÃO - ESTADO RUIM
+spark plug - In poor condition = VELA DE IGNIÇÃO - EM MAU ESTADO
+spark plug - In bad condition = VELA DE IGNIÇÃO - ESTADO PÉSSIMO
+spark plug - In terrible condition = VELA DE IGNIÇÃO - ESTADO TERRÍVEL
+
+Fan belt - {0}% = CORREIA DO VENTILADOR - {0}%
+Fan belt - In intact condition = CORREIA DO VENTILADOR - INTACTO
+Fan belt - In broken condition = CORREIA DO VENTILADOR - QUEBRADO
+Fan belt - In mint condition = CORREIA DO VENTILADOR - ESTADO IMPECÁVEL
+Fan belt - In great condition = CORREIA DO VENTILADOR - EM ÓTIMO ESTADO
+Fan belt - In good condition = CORREIA DO VENTILADOR - EM BOM ESTADO
+Fan belt - In decent condition = CORREIA DO VENTILADOR - ESTADO DECENTE
+Fan belt - In shoddy condition = CORREIA DO VENTILADOR - ESTADO RUIM
+Fan belt - In poor condition = CORREIA DO VENTILADOR - EM MAU ESTADO
+Fan belt - In bad condition = CORREIA DO VENTILADOR - ESTADO PÉSSIMO
+Fan belt - In terrible condition = CORREIA DO VENTILADOR - ESTADO TERRÍVEL
+
+car light bulb - {0}% = LÂMPADA DO CARRO - {0}%
+car light bulb - In intact condition = LÂMPADA DO FAROL - INTACTO
+car light bulb - In broken condition = LÂMPADA DO FAROL - QUEBRADO
+car light bulb - In mint condition = LÂMPADA DO FAROL - ESTADO IMPECÁVEL
+car light bulb - In great condition = LÂMPADA DO FAROL - EM ÓTIMO ESTADO
+car light bulb - In good condition = LÂMPADA DO FAROL - EM BOM ESTADO
+car light bulb - In decent condition = LÂMPADA DO FAROL - ESTADO DECENTE
+car light bulb - In shoddy condition = LÂMPADA DO FAROL - ESTADO RUIM
+car light bulb - In poor condition = LÂMPADA DO FAROL - EM MAU ESTADO
+car light bulb - In bad condition = LÂMPADA DO FAROL - ESTADO PÉSSIMO
+car light bulb - In terrible condition = LÂMPADA DO FAROL - ESTADO TERRÍVEL
+
+Heater Box - Intact = CAIXA DO AQUECEDOR - INTACTO
+Heater Box - Broken = CAIXA DO AQUECEDOR - QUEBRADO
+Heater Box - In mint condition = CAIXA DO AQUECEDOR - ESTADO IMPECÁVEL
+Heater Box - In great condition = CAIXA DO AQUECEDOR - EM ÓTIMO ESTADO
+Heater Box - In good condition = CAIXA DO AQUECEDOR - EM BOM ESTADO
+Heater Box - In decent condition = CAIXA DO AQUECEDOR - ESTADO DECENTE
+Heater Box - In shoddy condition = CAIXA DO AQUECEDOR - ESTADO RUIM
+Heater Box - In poor condition = CAIXA DO AQUECEDOR - EM MAU ESTADO
+Heater Box - In bad condition = CAIXA DO AQUECEDOR - ESTADO PÉSSIMO
+Heater Box - In terrible condition = CAIXA DO AQUECEDOR - ESTADO TERRÍVEL
+
+Aux Shaft - Intact = EIXO AUXILIAR - INTACTO
+Aux Shaft - Broken = EIXO AUXILIAR - QUEBRADO
+Aux Shaft - In mint condition = EIXO AUXILIAR - ESTADO IMPECÁVEL
+Aux Shaft - In great condition = EIXO AUXILIAR - EM ÓTIMO ESTADO
+Aux Shaft - In good condition = EIXO AUXILIAR - EM BOM ESTADO
+Aux Shaft - In decent condition = EIXO AUXILIAR - ESTADO DECENTE
+Aux Shaft - In shoddy condition = EIXO AUXILIAR - ESTADO RUIM
+Aux Shaft - In poor condition = EIXO AUXILIAR - EM MAU ESTADO
+Aux Shaft - In bad condition = EIXO AUXILIAR - ESTADO PÉSSIMO
+Aux Shaft - In terrible condition = EIXO AUXILIAR - ESTADO TERRÍVEL
+
+Water Pump - Intact = BOMBA D’ÁGUA - INTACTO
+Water Pump - Broken = BOMBA D’ÁGUA - QUEBRADO
+Water Pump - In mint condition = BOMBA D’ÁGUA - ESTADO IMPECÁVEL
+Water Pump - In great condition = BOMBA D’ÁGUA - EM ÓTIMO ESTADO
+Water Pump - In good condition = BOMBA D’ÁGUA - EM BOM ESTADO
+Water Pump - In decent condition = BOMBA D’ÁGUA - ESTADO DECENTE
+Water Pump - In shoddy condition = BOMBA D’ÁGUA - ESTADO RUIM
+Water Pump - In poor condition = BOMBA D’ÁGUA - EM MAU ESTADO
+Water Pump - In bad condition = BOMBA D’ÁGUA - ESTADO PÉSSIMO
+Water Pump - In terrible condition = BOMBA D’ÁGUA - ESTADO TERRÍVEL
+
+Camshaft Fast Road - Intact = COMANDO DE VÁLVULAS FAST ROAD - INTACTO
+Camshaft Fast Road - Broken = COMANDO DE VÁLVULAS FAST ROAD - QUEBRADO
+Camshaft Fast Road - In mint condition = COMANDO DE VÁLVULAS FAST ROAD - ESTADO IMPECÁVEL
+Camshaft Fast Road - In great condition = COMANDO DE VÁLVULAS FAST ROAD - EM ÓTIMO ESTADO
+Camshaft Fast Road - In good condition = COMANDO DE VÁLVULAS FAST ROAD - EM BOM ESTADO
+Camshaft Fast Road - In decent condition = COMANDO DE VÁLVULAS FAST ROAD - ESTADO DECENTE
+Camshaft Fast Road - In shoddy condition = COMANDO DE VÁLVULAS FAST ROAD - ESTADO RUIM
+Camshaft Fast Road - In poor condition = COMANDO DE VÁLVULAS FAST ROAD - EM MAU ESTADO
+Camshaft Fast Road - In bad condition = COMANDO DE VÁLVULAS FAST ROAD - ESTADO PÉSSIMO
+Camshaft Fast Road - In terrible condition = COMANDO DE VÁLVULAS FAST ROAD - ESTADO TERRÍVEL
+
+Camshaft Race - Intact = COMANDO DE VÁLVULAS RACE - INTACTO
+Camshaft Race - Broken = COMANDO DE VÁLVULAS RACE - QUEBRADO
+Camshaft Race - In mint condition = COMANDO DE VÁLVULAS RACE - ESTADO IMPECÁVEL
+Camshaft Race - In great condition = COMANDO DE VÁLVULAS RACE - EM ÓTIMO ESTADO
+Camshaft Race - In good condition = COMANDO DE VÁLVULAS RACE - EM BOM ESTADO
+Camshaft Race - In decent condition = COMANDO DE VÁLVULAS RACE - ESTADO DECENTE
+Camshaft Race - In shoddy condition = COMANDO DE VÁLVULAS RACE - ESTADO RUIM
+Camshaft Race - In poor condition = COMANDO DE VÁLVULAS RACE - EM MAU ESTADO
+Camshaft Race - In bad condition = COMANDO DE VÁLVULAS RACE - ESTADO PÉSSIMO
+Camshaft Race - In terrible condition = COMANDO DE VÁLVULAS RACE - ESTADO TERRÍVEL
+
+Camshaft Road Sprint - Intact = COMANDO DE VÁLVULAS ROAD SPRINT - INTACTO
+Camshaft Road Sprint - Broken = COMANDO DE VÁLVULAS ROAD SPRINT - QUEBRADO
+Camshaft Road Sprint - In mint condition = COMANDO DE VÁLVULAS ROAD SPRINT - ESTADO IMPECÁVEL
+Camshaft Road Sprint - In great condition = COMANDO DE VÁLVULAS ROAD SPRINT - EM ÓTIMO ESTADO
+Camshaft Road Sprint - In good condition = COMANDO DE VÁLVULAS ROAD SPRINT - EM BOM ESTADO
+Camshaft Road Sprint - In decent condition = COMANDO DE VÁLVULAS ROAD SPRINT - ESTADO DECENTE
+Camshaft Road Sprint - In shoddy condition = COMANDO DE VÁLVULAS ROAD SPRINT - ESTADO RUIM
+Camshaft Road Sprint - In poor condition = COMANDO DE VÁLVULAS ROAD SPRINT - EM MAU ESTADO
+Camshaft Road Sprint - In bad condition = COMANDO DE VÁLVULAS ROAD SPRINT - ESTADO PÉSSIMO
+Camshaft Road Sprint - In terrible condition = COMANDO DE VÁLVULAS ROAD SPRINT - ESTADO TERRÍVEL
+
+Camshaft Rally - Intact = COMANDO DE VÁLVULAS RALLY - INTACTO
+Camshaft Rally - Broken = COMANDO DE VÁLVULAS RALLY - QUEBRADO
+Camshaft Rally - In mint condition = COMANDO DE VÁLVULAS RALLY - ESTADO IMPECÁVEL
+Camshaft Rally - In great condition = COMANDO DE VÁLVULAS RALLY - EM ÓTIMO ESTADO
+Camshaft Rally - In good condition = COMANDO DE VÁLVULAS RALLY - EM BOM ESTADO
+Camshaft Rally - In decent condition = COMANDO DE VÁLVULAS RALLY - ESTADO DECENTE
+Camshaft Rally - In shoddy condition = COMANDO DE VÁLVULAS RALLY - ESTADO RUIM
+Camshaft Rally - In poor condition = COMANDO DE VÁLVULAS RALLY - EM MAU ESTADO
+Camshaft Rally - In bad condition = COMANDO DE VÁLVULAS RALLY - ESTADO PÉSSIMO
+Camshaft Rally - In terrible condition = COMANDO DE VÁLVULAS RALLY - ESTADO TERRÍVEL
+
+Crankshaft - Intact = VIRABREQUIM - INTACTO
+Crankshaft - Broken = VIRABREQUIM - QUEBRADO
+Crankshaft - In mint condition = VIRABREQUIM - ESTADO IMPECÁVEL
+Crankshaft - In great condition = VIRABREQUIM - EM ÓTIMO ESTADO
+Crankshaft - In good condition = VIRABREQUIM - EM BOM ESTADO
+Crankshaft - In decent condition = VIRABREQUIM - ESTADO DECENTE
+Crankshaft - In shoddy condition = VIRABREQUIM - ESTADO RUIM
+Crankshaft - In poor condition = VIRABREQUIM - EM MAU ESTADO
+Crankshaft - In bad condition = VIRABREQUIM - ESTADO PÉSSIMO
+Crankshaft - In terrible condition = VIRABREQUIM - ESTADO TERRÍVEL
+
+Rear Axle {0} - Intact = EIXO TRASEIRO {0} - INTACTO
+Rear Axle {0} - Broken = EIXO TRASEIRO {0} - QUEBRADO
+Rear Axle {0} - In mint condition = EIXO TRASEIRO {0} - ESTADO IMPECÁVEL
+Rear Axle {0} - In great condition = EIXO TRASEIRO {0} - EM ÓTIMO ESTADO
+Rear Axle {0} - In good condition = EIXO TRASEIRO {0} - EM BOM ESTADO
+Rear Axle {0} - In decent condition = EIXO TRASEIRO {0} - ESTADO DECENTE
+Rear Axle {0} - In shoddy condition = EIXO TRASEIRO {0} - ESTADO RUIM
+Rear Axle {0} - In poor condition = EIXO TRASEIRO {0} - EM MAU ESTADO
+Rear Axle {0} - In bad condition = EIXO TRASEIRO {0} - ESTADO PÉSSIMO
+Rear Axle {0} - In terrible condition = EIXO TRASEIRO {0} - ESTADO TERRÍVEL
+
+Wiper Motor Assembly - Intact = CONJUNTO DO MOTOR DO LIMPADOR - INTACTO
+Wiper Motor Assembly - Broken = CONJUNTO DO MOTOR DO LIMPADOR - QUEBRADO
+Wiper Motor Assembly - In mint condition = CONJUNTO DO MOTOR DO LIMPADOR - ESTADO IMPECÁVEL
+Wiper Motor Assembly - In great condition = CONJUNTO DO MOTOR DO LIMPADOR - EM ÓTIMO ESTADO
+Wiper Motor Assembly - In good condition = CONJUNTO DO MOTOR DO LIMPADOR - EM BOM ESTADO
+Wiper Motor Assembly - In decent condition = CONJUNTO DO MOTOR DO LIMPADOR - ESTADO DECENTE
+Wiper Motor Assembly - In shoddy condition = CONJUNTO DO MOTOR DO LIMPADOR - ESTADO RUIM
+Wiper Motor Assembly - In poor condition = CONJUNTO DO MOTOR DO LIMPADOR - EM MAU ESTADO
+Wiper Motor Assembly - In bad condition = CONJUNTO DO MOTOR DO LIMPADOR - ESTADO PÉSSIMO
+Wiper Motor Assembly - In terrible condition = CONJUNTO DO MOTOR DO LIMPADOR - ESTADO TERRÍVEL
+
+Rocker - Intact = BALANCIM - INTACTO
+Rocker - Broken = BALANCIM - QUEBRADO
+Rocker - In mint condition = BALANCIM - ESTADO IMPECÁVEL
+Rocker - In great condition = BALANCIM - EM ÓTIMO ESTADO
+Rocker - In good condition = BALANCIM - EM BOM ESTADO
+Rocker - In decent condition = BALANCIM - ESTADO DECENTE
+Rocker - In shoddy condition = BALANCIM - ESTADO RUIM
+Rocker - In poor condition = BALANCIM - EM MAU ESTADO
+Rocker - In bad condition = BALANCIM - ESTADO PÉSSIMO
+Rocker - In terrible condition = BALANCIM - ESTADO TERRÍVEL
+
+Thermostat - Intact = TERMOSTATO - INTACTO
+Thermostat - Broken = TERMOSTATO - QUEBRADO
+Thermostat - In mint condition = TERMOSTATO - ESTADO IMPECÁVEL
+Thermostat - In great condition = TERMOSTATO - EM ÓTIMO ESTADO
+Thermostat - In good condition = TERMOSTATO - EM BOM ESTADO
+Thermostat - In decent condition = TERMOSTATO - ESTADO DECENTE
+Thermostat - In shoddy condition = TERMOSTATO - ESTADO RUIM
+Thermostat - In poor condition = TERMOSTATO - EM MAU ESTADO
+Thermostat - In bad condition = TERMOSTATO - ESTADO PÉSSIMO
+Thermostat - In terrible condition = TERMOSTATO - ESTADO TERRÍVEL
+
+Oil Pump - Intact = BOMBA DE ÓLEO - INTACTO
+Oil Pump - Broken = BOMBA DE ÓLEO - QUEBRADO
+Oil Pump - In mint condition = BOMBA DE ÓLEO - ESTADO IMPECÁVEL
+Oil Pump - In great condition = BOMBA DE ÓLEO - EM ÓTIMO ESTADO
+Oil Pump - In good condition = BOMBA DE ÓLEO - EM BOM ESTADO
+Oil Pump - In decent condition = BOMBA DE ÓLEO - ESTADO DECENTE
+Oil Pump - In shoddy condition = BOMBA DE ÓLEO - ESTADO RUIM
+Oil Pump - In poor condition = BOMBA DE ÓLEO - EM MAU ESTADO
+Oil Pump - In bad condition = BOMBA DE ÓLEO - ESTADO PÉSSIMO
+Oil Pump - In terrible condition = BOMBA DE ÓLEO - ESTADO TERRÍVEL
+
+Fuel Pump - Intact = BOMBA DE COMBUSTÍVEL - INTACTO
+Fuel Pump - Broken = BOMBA DE COMBUSTÍVEL - QUEBRADO
+Fuel Pump - In mint condition = BOMBA DE COMBUSTÍVEL - ESTADO IMPECÁVEL
+Fuel Pump - In great condition = BOMBA DE COMBUSTÍVEL - EM ÓTIMO ESTADO
+Fuel Pump - In good condition = BOMBA DE COMBUSTÍVEL - EM BOM ESTADO
+Fuel Pump - In decent condition = BOMBA DE COMBUSTÍVEL - ESTADO DECENTE
+Fuel Pump - In shoddy condition = BOMBA DE COMBUSTÍVEL - ESTADO RUIM
+Fuel Pump - In poor condition = BOMBA DE COMBUSTÍVEL - EM MAU ESTADO
+Fuel Pump - In bad condition = BOMBA DE COMBUSTÍVEL - ESTADO PÉSSIMO
+Fuel Pump - In terrible condition = BOMBA DE COMBUSTÍVEL - ESTADO TERRÍVEL
+
+Clutch Disc - Intact = DISCO DE EMBREAGEM - INTACTO
+Clutch Disc - Broken = DISCO DE EMBREAGEM - QUEBRADO
+Clutch Disc - In mint condition = DISCO DE EMBREAGEM - ESTADO IMPECÁVEL
+Clutch Disc - In great condition = DISCO DE EMBREAGEM - EM ÓTIMO ESTADO
+Clutch Disc - In good condition = DISCO DE EMBREAGEM - EM BOM ESTADO
+Clutch Disc - In decent condition = DISCO DE EMBREAGEM - ESTADO DECENTE
+Clutch Disc - In shoddy condition = DISCO DE EMBREAGEM - ESTADO RUIM
+Clutch Disc - In poor condition = DISCO DE EMBREAGEM - EM MAU ESTADO
+Clutch Disc - In bad condition = DISCO DE EMBREAGEM - ESTADO PÉSSIMO
+Clutch Disc - In terrible condition = DISCO DE EMBREAGEM - ESTADO TERRÍVEL
+
+Brake Master Cylinder - Intact = CILINDRO MESTRE DE FREIO - INTACTO
+Brake Master Cylinder - Broken = CILINDRO MESTRE DE FREIO - QUEBRADO
+Brake Master Cylinder - In mint condition = CILINDRO MESTRE DE FREIO - ESTADO IMPECÁVEL
+Brake Master Cylinder - In great condition = CILINDRO MESTRE DE FREIO - EM ÓTIMO ESTADO
+Brake Master Cylinder - In good condition = CILINDRO MESTRE DE FREIO - EM BOM ESTADO
+Brake Master Cylinder - In decent condition = CILINDRO MESTRE DE FREIO - ESTADO DECENTE
+Brake Master Cylinder - In shoddy condition = CILINDRO MESTRE DE FREIO - ESTADO RUIM
+Brake Master Cylinder - In poor condition = CILINDRO MESTRE DE FREIO - EM MAU ESTADO
+Brake Master Cylinder - In bad condition = CILINDRO MESTRE DE FREIO - ESTADO PÉSSIMO
+Brake Master Cylinder - In terrible condition = CILINDRO MESTRE DE FREIO - ESTADO TERRÍVEL
+
+Alternator - Intact = ALTERNADOR - INTACTO
+Alternator - Broken = ALTERNADOR - QUEBRADO
+Alternator - In mint condition = ALTERNADOR - ESTADO IMPECÁVEL
+Alternator - In great condition = ALTERNADOR - EM ÓTIMO ESTADO
+Alternator - In good condition = ALTERNADOR - EM BOM ESTADO
+Alternator - In decent condition = ALTERNADOR - ESTADO DECENTE
+Alternator - In shoddy condition = ALTERNADOR - ESTADO RUIM
+Alternator - In poor condition = ALTERNADOR - EM MAU ESTADO
+Alternator - In bad condition = ALTERNADOR - ESTADO PÉSSIMO
+Alternator - In terrible condition = ALTERNADOR - ESTADO TERRÍVEL
+
+Distributor - Intact = DISTRIBUIDOR - INTACTO
+Distributor - Broken = DISTRIBUIDOR - QUEBRADO
+Distributor - In mint condition = DISTRIBUIDOR - ESTADO IMPECÁVEL
+Distributor - In great condition = DISTRIBUIDOR - EM ÓTIMO ESTADO
+Distributor - In good condition = DISTRIBUIDOR - EM BOM ESTADO
+Distributor - In decent condition = DISTRIBUIDOR - ESTADO DECENTE
+Distributor - In shoddy condition = DISTRIBUIDOR - ESTADO RUIM
+Distributor - In poor condition = DISTRIBUIDOR - EM MAU ESTADO
+Distributor - In bad condition = DISTRIBUIDOR - ESTADO PÉSSIMO
+Distributor - In terrible condition = DISTRIBUIDOR - ESTADO TERRÍVEL
+
+Clutch Cable - Intact = CABO DE EMBREAGEM - INTACTO
+Clutch Cable - Broken = CABO DE EMBREAGEM - QUEBRADO
+Clutch Cable - In mint condition = CABO DE EMBREAGEM - ESTADO IMPECÁVEL
+Clutch Cable - In great condition = CABO DE EMBREAGEM - EM ÓTIMO ESTADO
+Clutch Cable - In good condition = CABO DE EMBREAGEM - EM BOM ESTADO
+Clutch Cable - In decent condition = CABO DE EMBREAGEM - ESTADO DECENTE
+Clutch Cable - In shoddy condition = CABO DE EMBREAGEM - ESTADO RUIM
+Clutch Cable - In poor condition = CABO DE EMBREAGEM - EM MAU ESTADO
+Clutch Cable - In bad condition = CABO DE EMBREAGEM - ESTADO PÉSSIMO
+Clutch Cable - In terrible condition = CABO DE EMBREAGEM - ESTADO TERRÍVEL
+
+Piston - Intact = PISTÃO - INTACTO
+Piston - Broken = PISTÃO - QUEBRADO
+Piston - In mint condition = PISTÃO - ESTADO IMPECÁVEL
+Piston - In great condition = PISTÃO - EM ÓTIMO ESTADO
+Piston - In good condition = PISTÃO - EM BOM ESTADO
+Piston - In decent condition = PISTÃO - ESTADO DECENTE
+Piston - In shoddy condition = PISTÃO - ESTADO RUIM
+Piston - In poor condition = PISTÃO - EM MAU ESTADO
+Piston - In bad condition = PISTÃO - ESTADO PÉSSIMO
+Piston - In terrible condition = PISTÃO - ESTADO TERRÍVEL
+
+Starter - Intact = MOTOR DE PARTIDA - INTACTO
+Starter - Broken = MOTOR DE PARTIDA - QUEBRADO
+Starter - In mint condition = MOTOR DE PARTIDA - ESTADO IMPECÁVEL
+Starter - In great condition = MOTOR DE PARTIDA - EM ÓTIMO ESTADO
+Starter - In good condition = MOTOR DE PARTIDA - EM BOM ESTADO
+Starter - In decent condition = MOTOR DE PARTIDA - ESTADO DECENTE
+Starter - In shoddy condition = MOTOR DE PARTIDA - ESTADO RUIM
+Starter - In poor condition = MOTOR DE PARTIDA - EM MAU ESTADO
+Starter - In bad condition = MOTOR DE PARTIDA - ESTADO PÉSSIMO
+Starter - In terrible condition = MOTOR DE PARTIDA - ESTADO TERRÍVEL
+
+Headgasket - Intact = JUNTA DO CABEÇOTE - INTACTO
+Headgasket - Broken = JUNTA DO CABEÇOTE - QUEBRADO
+Headgasket - In mint condition = JUNTA DO CABEÇOTE - ESTADO IMPECÁVEL
+Headgasket - In great condition = JUNTA DO CABEÇOTE - EM ÓTIMO ESTADO
+Headgasket - In good condition = JUNTA DO CABEÇOTE - EM BOM ESTADO
+Headgasket - In decent condition = JUNTA DO CABEÇOTE - ESTADO DECENTE
+Headgasket - In shoddy condition = JUNTA DO CABEÇOTE - ESTADO RUIM
+Headgasket - In poor condition = JUNTA DO CABEÇOTE - EM MAU ESTADO
+Headgasket - In bad condition = JUNTA DO CABEÇOTE - ESTADO PÉSSIMO
+Headgasket - In terrible condition = JUNTA DO CABEÇOTE - ESTADO TERRÍVEL
+
+Camshaft Standard - Intact = COMANDO DE VÁLVULAS PADRÃO - INTACTO
+Camshaft Standard - Broken = COMANDO DE VÁLVULAS PADRÃO - QUEBRADO
+Camshaft Standard - In mint condition = COMANDO DE VÁLVULAS PADRÃO - ESTADO IMPECÁVEL
+Camshaft Standard - In great condition = COMANDO DE VÁLVULAS PADRÃO - EM ÓTIMO ESTADO
+Camshaft Standard - In good condition = COMANDO DE VÁLVULAS PADRÃO - EM BOM ESTADO
+Camshaft Standard - In decent condition = COMANDO DE VÁLVULAS PADRÃO - ESTADO DECENTE
+Camshaft Standard - In shoddy condition = COMANDO DE VÁLVULAS PADRÃO - ESTADO RUIM
+Camshaft Standard - In poor condition = COMANDO DE VÁLVULAS PADRÃO - EM MAU ESTADO
+Camshaft Standard - In bad condition = COMANDO DE VÁLVULAS PADRÃO - ESTADO PÉSSIMO
+Camshaft Standard - In terrible condition = COMANDO DE VÁLVULAS PADRÃO - ESTADO TERRÍVEL
+
+Driveshaft - Intact = EIXO CARDAN - INTACTO
+Driveshaft - Broken = EIXO CARDAN - QUEBRADO
+Driveshaft - In mint condition = EIXO CARDAN - ESTADO IMPECÁVEL
+Driveshaft - In great condition = EIXO CARDAN - EM ÓTIMO ESTADO
+Driveshaft - In good condition = EIXO CARDAN - EM BOM ESTADO
+Driveshaft - In decent condition = EIXO CARDAN - ESTADO DECENTE
+Driveshaft - In shoddy condition = EIXO CARDAN - ESTADO RUIM
+Driveshaft - In poor condition = EIXO CARDAN - EM MAU ESTADO
+Driveshaft - In bad condition = EIXO CARDAN - ESTADO PÉSSIMO
+Driveshaft - In terrible condition = EIXO CARDAN - ESTADO TERRÍVEL
+
+Manual Gearbox {0} spd - Intact = CÂMBIO MANUAL {0} MARCHAS - INTACTO
+Manual Gearbox {0} spd - Broken = CÂMBIO MANUAL {0} MARCHAS - QUEBRADO
+Manual Gearbox {0} spd - In mint condition = CÂMBIO MANUAL {0} MARCHAS - ESTADO IMPECÁVEL
+Manual Gearbox {0} spd - In great condition = CÂMBIO MANUAL {0} MARCHAS - EM ÓTIMO ESTADO
+Manual Gearbox {0} spd - In good condition = CÂMBIO MANUAL {0} MARCHAS - EM BOM ESTADO
+Manual Gearbox {0} spd - In decent condition = CÂMBIO MANUAL {0} MARCHAS - ESTADO DECENTE
+Manual Gearbox {0} spd - In shoddy condition = CÂMBIO MANUAL {0} MARCHAS - ESTADO RUIM
+Manual Gearbox {0} spd - In poor condition = CÂMBIO MANUAL {0} MARCHAS - EM MAU ESTADO
+Manual Gearbox {0} spd - In bad condition = CÂMBIO MANUAL {0} MARCHAS - ESTADO PÉSSIMO
+Manual Gearbox {0} spd - In terrible condition = CÂMBIO MANUAL {0} MARCHAS - ESTADO TERRÍVEL
+
+Automatic Gearbox 3 spd - Intact = CÂMBIO AUTOMÁTICO 3 MARCHAS - INTACTO
+Automatic Gearbox 3 spd - Broken = CÂMBIO AUTOMÁTICO 3 MARCHAS - QUEBRADO
+Automatic Gearbox 3 spd - In mint condition = CÂMBIO AUTOMÁTICO 3 MARCHAS - ESTADO IMPECÁVEL
+Automatic Gearbox 3 spd - In great condition = CÂMBIO AUTOMÁTICO 3 MARCHAS - EM ÓTIMO ESTADO
+Automatic Gearbox 3 spd - In good condition = CÂMBIO AUTOMÁTICO 3 MARCHAS - EM BOM ESTADO
+Automatic Gearbox 3 spd - In decent condition = CÂMBIO AUTOMÁTICO 3 MARCHAS - ESTADO DECENTE
+Automatic Gearbox 3 spd - In shoddy condition = CÂMBIO AUTOMÁTICO 3 MARCHAS - ESTADO RUIM
+Automatic Gearbox 3 spd - In poor condition = CÂMBIO AUTOMÁTICO 3 MARCHAS - EM MAU ESTADO
+Automatic Gearbox 3 spd - In bad condition = CÂMBIO AUTOMÁTICO 3 MARCHAS - ESTADO PÉSSIMO
+Automatic Gearbox 3 spd - In terrible condition = CÂMBIO AUTOMÁTICO 3 MARCHAS - ESTADO TERRÍVEL
+
+Radiator - Intact = RADIADOR - INTACTO
+Radiator - Broken = RADIADOR - QUEBRADO
+Radiator - In mint condition = RADIADOR - ESTADO IMPECÁVEL
+Radiator - In great condition = RADIADOR - EM ÓTIMO ESTADO
+Radiator - In good condition = RADIADOR - EM BOM ESTADO
+Radiator - In decent condition = RADIADOR - ESTADO DECENTE
+Radiator - In shoddy condition = RADIADOR - ESTADO RUIM
+Radiator - In poor condition = RADIADOR - EM MAU ESTADO
+Radiator - In bad condition = RADIADOR - ESTADO PÉSSIMO
+Radiator - In terrible condition = RADIADOR - ESTADO TERRÍVEL
+
+Main Bearing - Intact = BRONZINA PRINCIPAL - INTACTO
+Main Bearing - Broken = BRONZINA PRINCIPAL - QUEBRADO
+Main Bearing - In mint condition = BRONZINA PRINCIPAL - ESTADO IMPECÁVEL
+Main Bearing - In great condition = BRONZINA PRINCIPAL - EM ÓTIMO ESTADO
+Main Bearing - In good condition = BRONZINA PRINCIPAL - EM BOM ESTADO
+Main Bearing - In decent condition = BRONZINA PRINCIPAL - ESTADO DECENTE
+Main Bearing - In shoddy condition = BRONZINA PRINCIPAL - ESTADO RUIM
+Main Bearing - In poor condition = BRONZINA PRINCIPAL - EM MAU ESTADO
+Main Bearing - In bad condition = BRONZINA PRINCIPAL - ESTADO PÉSSIMO
+Main Bearing - In terrible condition = BRONZINA PRINCIPAL - ESTADO TERRÍVEL
+
+Ignition Coil - Intact = BOBINA DE IGNIÇÃO - INTACTO
+Ignition Coil - Broken = BOBINA DE IGNIÇÃO - QUEBRADO
+Ignition Coil - In mint condition = BOBINA DE IGNIÇÃO - ESTADO IMPECÁVEL
+Ignition Coil - In great condition = BOBINA DE IGNIÇÃO - EM ÓTIMO ESTADO
+Ignition Coil - In good condition = BOBINA DE IGNIÇÃO - EM BOM ESTADO
+Ignition Coil - In decent condition = BOBINA DE IGNIÇÃO - ESTADO DECENTE
+Ignition Coil - In shoddy condition = BOBINA DE IGNIÇÃO - ESTADO RUIM
+Ignition Coil - In poor condition = BOBINA DE IGNIÇÃO - EM MAU ESTADO
+Ignition Coil - In bad condition = BOBINA DE IGNIÇÃO - ESTADO PÉSSIMO
+Ignition Coil - In terrible condition = BOBINA DE IGNIÇÃO - ESTADO TERRÍVEL
+
+Steering Rack {0} - Intact = CAIXA DE DIREÇÃO {0} - INTACTO
+Steering Rack {0} - Broken = CAIXA DE DIREÇÃO {0} - QUEBRADO
+Steering Rack {0} - In mint condition = CAIXA DE DIREÇÃO {0} - ESTADO IMPECÁVEL
+Steering Rack {0} - In great condition = CAIXA DE DIREÇÃO {0} - EM ÓTIMO ESTADO
+Steering Rack {0} - In good condition = CAIXA DE DIREÇÃO {0} - EM BOM ESTADO
+Steering Rack {0} - In decent condition = CAIXA DE DIREÇÃO {0} - ESTADO DECENTE
+Steering Rack {0} - In shoddy condition = CAIXA DE DIREÇÃO {0} - ESTADO RUIM
+Steering Rack {0} - In poor condition = CAIXA DE DIREÇÃO {0} - EM MAU ESTADO
+Steering Rack {0} - In bad condition = CAIXA DE DIREÇÃO {0} - ESTADO PÉSSIMO
+Steering Rack {0} - In terrible condition = CAIXA DE DIREÇÃO {0} - ESTADO TERRÍVEL
+
+Timing Belt - Intact = CORREIA DENTADA - INTACTO
+Timing Belt - Broken = CORREIA DENTADA - QUEBRADO
+Timing Belt - In mint condition = CORREIA DENTADA - ESTADO IMPECÁVEL
+Timing Belt - In great condition = CORREIA DENTADA - EM ÓTIMO ESTADO
+Timing Belt - In good condition = CORREIA DENTADA - EM BOM ESTADO
+Timing Belt - In decent condition = CORREIA DENTADA - ESTADO DECENTE
+Timing Belt - In shoddy condition = CORREIA DENTADA - ESTADO RUIM
+Timing Belt - In poor condition = CORREIA DENTADA - EM MAU ESTADO
+Timing Belt - In bad condition = CORREIA DENTADA - ESTADO PÉSSIMO
+Timing Belt - In terrible condition = CORREIA DENTADA - ESTADO TERRÍVEL
+
+Front Shock Absorber - Intact = AMORTECEDOR DIANTEIRO - INTACTO
+Front Shock Absorber - Broken = AMORTECEDOR DIANTEIRO - QUEBRADO
+Front Shock Absorber - In mint condition = AMORTECEDOR DIANTEIRO - ESTADO IMPECÁVEL
+Front Shock Absorber - In great condition = AMORTECEDOR DIANTEIRO - EM ÓTIMO ESTADO
+Front Shock Absorber - In good condition = AMORTECEDOR DIANTEIRO - EM BOM ESTADO
+Front Shock Absorber - In decent condition = AMORTECEDOR DIANTEIRO - ESTADO DECENTE
+Front Shock Absorber - In shoddy condition = AMORTECEDOR DIANTEIRO - ESTADO RUIM
+Front Shock Absorber - In poor condition = AMORTECEDOR DIANTEIRO - EM MAU ESTADO
+Front Shock Absorber - In bad condition = AMORTECEDOR DIANTEIRO - ESTADO PÉSSIMO
+Front Shock Absorber - In terrible condition = AMORTECEDOR DIANTEIRO - ESTADO TERRÍVEL
+
+Rear Shock Absorber - Intact = AMORTECEDOR TRASEIRO - INTACTO
+Rear Shock Absorber - Broken = AMORTECEDOR TRASEIRO - QUEBRADO
+Rear Shock Absorber - In mint condition = AMORTECEDOR TRASEIRO - ESTADO IMPECÁVEL
+Rear Shock Absorber - In great condition = AMORTECEDOR TRASEIRO - EM ÓTIMO ESTADO
+Rear Shock Absorber - In good condition = AMORTECEDOR TRASEIRO - EM BOM ESTADO
+Rear Shock Absorber - In decent condition = AMORTECEDOR TRASEIRO - ESTADO DECENTE
+Rear Shock Absorber - In shoddy condition = AMORTECEDOR TRASEIRO - ESTADO RUIM
+Rear Shock Absorber - In poor condition = AMORTECEDOR TRASEIRO - EM MAU ESTADO
+Rear Shock Absorber - In bad condition = AMORTECEDOR TRASEIRO - ESTADO PÉSSIMO
+Rear Shock Absorber - In terrible condition = AMORTECEDOR TRASEIRO - ESTADO TERRÍVEL
+
+Spring {0}" {1}lb - Intact = MOLA {0}" {1}lb - INTACTO
+Spring {0}" {1}lb - Broken = MOLA {0}" {1}lb - QUEBRADO
+Spring {0}" {1}lb - In mint condition = MOLA {0}" {1}lb - ESTADO IMPECÁVEL
+Spring {0}" {1}lb - In great condition = MOLA {0}" {1}lb - EM ÓTIMO ESTADO
+Spring {0}" {1}lb - In good condition = MOLA {0}" {1}lb - EM BOM ESTADO
+Spring {0}" {1}lb - In decent condition = MOLA {0}" {1}lb - ESTADO DECENTE
+Spring {0}" {1}lb - In shoddy condition = MOLA {0}" {1}lb - ESTADO RUIM
+Spring {0}" {1}lb - In poor condition = MOLA {0}" {1}lb - EM MAU ESTADO
+Spring {0}" {1}lb - In bad condition = MOLA {0}" {1}lb - ESTADO PÉSSIMO
+Spring {0}" {1}lb - In terrible condition = MOLA {0}" {1}lb - ESTADO TERRÍVEL
+
+Brake Master Cylinder (Power Brakes) - {0}% = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - {0}%
+Brake Master Cylinder (Power Brakes) - Intact = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - INTACTO
+Brake Master Cylinder (Power Brakes) - Broken = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - QUEBRADO
+Brake Master Cylinder (Power Brakes) - In mint condition = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - EM ESTADO IMPECÁVEL
+Brake Master Cylinder (Power Brakes) - In great condition = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - EM ÓTIMO ESTADO
+Brake Master Cylinder (Power Brakes) - In good condition = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - EM BOM ESTADO
+Brake Master Cylinder (Power Brakes) - In decent condition = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - EM ESTADO DECENTE
+Brake Master Cylinder (Power Brakes) - In shoddy condition = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - EM ESTADO RUIM
+Brake Master Cylinder (Power Brakes) - In poor condition = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - EM MAU ESTADO
+Brake Master Cylinder (Power Brakes) - In bad condition = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - EM ESTADO PÉSSIMO
+Brake Master Cylinder (Power Brakes) - In terrible condition = CILINDRO MESTRE DE FREIO (FREIOS HIDRÁULICOS) - EM ESTADO TERRÍVEL
+
+Brake Master Cylinder (Standard Brakes) - {0}% = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - {0}%
+Brake Master Cylinder (Standard Brakes) - Intact = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - INTACTO
+Brake Master Cylinder (Standard Brakes) - Broken = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - QUEBRADO
+Brake Master Cylinder (Standard Brakes) - In mint condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM ESTADO IMPECÁVEL
+Brake Master Cylinder (Standard Brakes) - In great condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM ÓTIMO ESTADO
+Brake Master Cylinder (Standard Brakes) - In good condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM BOM ESTADO
+Brake Master Cylinder (Standard Brakes) - In decent condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM ESTADO DECENTE
+Brake Master Cylinder (Standard Brakes) - In shoddy condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM ESTADO RUIM
+Brake Master Cylinder (Standard Brakes) - In poor condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM MAU ESTADO
+Brake Master Cylinder (Standard Brakes) - In bad condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM ESTADO PÉSSIMO
+Brake Master Cylinder (Standard Brakes) - In terrible condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM ESTADO TERRÍVEL
+
+//BetterATM
+English = INGLÊS
+Please wait = Aguarde
+Select language = Selecionar idioma
+Go Back = Voltar
+Exit = Sair
+Select = Selecionar
+Account balance = Saldo da conta
+Take the card, please. = Retire o cartão, por favor.
+Enter PIN code Then press OK = Digite a senha\n\n\n\n\n\n\nAo concluir,\npressione 'ENT'
+Insert Money = Inserir dinheiro
+Deposit in marks = Depósito em marcos
+Deposit = Depósito
+Transactions = Transações
+Withdraw = Sacar
+View details? = Ver saldo?
+No = Não
+Withdraw in marks = Saque em marcos
+Take the money, please. = Retire o dinheiro, por favor.
+Thank you for your visit Goodbye = Obrigado por utilizar o serviço\n\n\nVolte sempre.
+100 mk INSERT BILL = 100 mk\nINSERIR NOTA
+500 mk INSERT BILL = 500 mk\nINSERIR NOTA
+1000 mk INSERT BILL = 1000 mk\nINSERIR NOTA
+
+Odota, ole hyvä = Aguarde, por favor
+Valitse kieli = Selecionar idioma
+Syötä seteli = Inserir nota
+Talletus markoissa = Depósito em marcos
+Kyllä = Sim
+Talletus = Depósito
+Valitse kieli = Selecione o idioma
+Kieli / Language = Idioma
+Nosto markoissa = Saque em marcos
+
+//Finnish Quarry
+EXTRACT STONE = EXTRAIR PEDRA
+Stone = PEDRA
+
+//Enhanced Graphics
+Post FX Effects = EFEITOS DE PÓS-PROCESSAMENTO
+Anti-Aliasing = SUAVIZAÇÃO SERRILHADO
+Ambient Occlusion = OCLUSÃO AMBIENTAL
+Screen-Space-Reflections = REFLEXOS ESPAÇO DE TELA
+Depth-Of-Field = PROFUNDIDADE DE CAMPO
+Motion-Blur = DESFOQUE DE MOVIMENTO
+Eye-Adaptation = ADAPTAÇÃO DOS OLHOS
+FLORESCER = FLORESCIMENTO
+Sun Rays = RAIOS DE SOL
+Color Grading = GRADAÇÃO DE CORES
+Chromatic Aberration = ABERRAÇÃO CROMÁTICA
+Grain = GRANULAÇÃO
+Vignette = VINHETA
+Dithering = DITHERIZAÇÃO
+Lighting = ILUMINAÇÃO
+High Dynamic Range = ALTO ALCANCE DINÂMICO
+Lamp Shadows = SOMBRAS DE LÂMPADAS
+Extra Shadows = SOMBRAS EXTRAS
+Car Light Shadows = SOMBRAS LUZES DO CARRO
+Better Reflections = REFLEXOS MELHORES
+Enhanced Graphics Info = INFORMAÇÕES DE GRÁFICOS
+Motion Blur = DESFOQUE DE MOVIMENTO
+
+//Utility Tow Cart
+TowCar = REBOQUE
+Scroll to move stand = DESLIZE PARA MOVER O SUPORTE
+Connect Tow Cart (USE) = CONECTAR CARRINHO DE REBOQUE (USAR)
+Remove Tow Cart (USE OR MOUSE 1) = REMOVA O CARRINHO DE REBOQUE (USE O MOUSE 1)
+
+//Garagem Country
+GET GARAGE KEY = PEGUE A CHAVE DA GARAGEM
+GARAGE LOCATION. = LOCALIZAÇÃO DA GARAGEM
+
+//CDPlayer Enhanced
+Open Tray = ABRIR
+Close Tray = FECHAR
+Open Case = ABRIR
+Close Case = FECHAR
+Put CD back = COLOQUE CD
+Play this CD = INSERIR CD
+Next/Previous Song = PRÓXIMA/ANTERIOR
+Put case into rack = COLOQUE CD NO RACK
+cd case ({0}) = CD Case ({0})
+Play = REPRODUZIR
+Insert this CD = INSERIR CD
+
+//1987 Machtwagen 300D
+TAKE MACHTWAGEN KEYS = PEGUE AS CHAVES DO MACHTWAGEN
+CRUISE CONTROL TOGGLE/ADJUST = ALTERNAR/AJUSTAR CONTROLE DE CRUZEIRO
+FRONT FOGLIGHTS = FARÓIS DE NEBLINA DIANTEIROS
+AIR RECIRCULATION = RECIRCULAÇÃO DE AR
+HORN TONE = TOM DE BUZINA
+REAR DOME LIGHT = LUZ TRASEIRA DO TETO
+WINDOW FL = JANELA DIANTEIRA ESQUERDA
+WINDOW FR = JANELA DIANTEIRA DIREITA
+WINDOW RL = JANELA TRASEIRA ESQUERDA
+WINDOW RR = JANELA TRASEIRA DIREITA
+
+//Second Machtwagen
+BUY MACHTWAGEN CAR - 25,000 MK = COMPRE O CARRO MACHTWAGEN - 25.000 MK
+
+//Turbocharger
+Open catalog = Abrir catálogo
+Press [F] to Unpack Racing Carb Manifold = Pressione [F] para desempacotar o coletor de admissão Carburador de corrida
+Press [F] to Unpack Turbocharger = Pressione [F] para desempacotar o turbo compressor
+TURBO EXHAUST HEADER = COLETOR DE ESCAPE TURBO
+INTERCOOLER = INTERCOOLER
+RACING CARBURETOR KIT = KIT DE CARBURADOR DE CORRIDA
+TURBOCHARGER KIT = KIT DE TURBO COMPRESSOR
+TURBOCHARGER= TURBO COMPRESSOR
+TURBOCHARGER INTERCOOLER TUBE = TUBO DO INTERCOOLER DO TURBO COMPRESSOR
+TURBOCHARGER EXHAUST OUTLET TUBE = TUBO DE SAÍDA DE ESCAPE DO TURBO COMPRESSOR
+TURBOCHARGER BLOWOFF VALVE = VÁLVULA DE ALÍVIO DO TURBO COMPRESSOR
+RACING CARB MANIFOLD = COLETOR DE ADMISSÃO CARBURADOR DE CORRIDA
+INTERCOOLER RACING CARB MANIFOLD TUBE = TUBO DO COLETOR CARBURADOR DE CORRIDA DO INTERCOOLER
+Boost Gauge = INDICADOR DE PRESSÃO DO TURBO
+[Left mouse] or [F] to switch to Analog [SCROLL UP/Down] to change color = ANALÓGICO / SCROOL MUDAR COR
+[Left mouse] or [F] to switch to Digital [SCROLL UP/Down] to change color = DIGITAL / SCROOL MUDAR COR
+Screw size: {0}mm = TAMANHO {0}
+
+Install Intercooler = Instalar
+Uninstall Intercooler = Desinstalar
+Install Turbo Exhaust Header = Instalar
+Uninstall Turbo Exhaust Header = Desinstalar
+Install Racing Carb Manifold = Instalar
+Uninstall Racing Carb Manifold = Desinstalar
+Install Intercooler Racing Carb Manifold Tube = Instalar
+Uninstall Intercooler Racing Carb Manifold Tube = Desinstalar
+Install Turbocharger = Instalar
+Uninstall Turbocharger = Desinstalar
+Install Turbocharger Intercooler Tube = Instalar
+Uninstall Turbocharger Intercooler Tube = Desinstalar
+Install Turbocharger Blowoff Valve = Instalar
+Uninstall Turbocharger Blowoff Valve = Desinstalar
+Install Boost Gauge = Instalar
+Uninstall Boost Gauge = Desinstalar
+Install Turbocharger Exhaust Outlet Tube = Instalar
+Uninstall Turbocharger Exhaust Outlet Tube = Desinstalar
+
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 0.60 = TURBO 0.60
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 0.65 = TURBO 0.65
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 0.70 = TURBO 0.70
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 0.75 = TURBO 0.75
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 0.80 = TURBO 0.80
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 0.85 = TURBO 0.85
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 0.90 = TURBO 0.90
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 0.95 = TURBO 0.95
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 1.00 = TURBO 1.00
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 1.05 = TURBO 1.05
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 1.10 = TURBO 1.10
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 1.15 = TURBO 1.15
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 1.20 = TURBO 1.20
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 1.25 = TURBO 1.25
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 1.30 = TURBO 1.30
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 1.35 = TURBO 1.35
+[SCROLL UP] to increase boost [SCROLL DOWN] to decrease boost Boost: 1.40 = TURBO 1.40
+
+//Flea Market Fix
+Flea: {0}, scrap: {1} = Pulga: {0}, sucata: {1}
+Steering Column not in the flea list, scrap: {0} = Coluna de direção não consta na lista de pulgas, sucata: {0}
+floor jack not in the flea list, scrap: {0} = Macaco hidráulico não consta na lista de pulgas, sucata: {0}
+Engine Block not in the flea list, scrap: {0} = Bloco do motor não consta na lista de pulgas, sucata: {0}
+Cylinder Head not in the flea list, scrap: {0} = Cabeçote não consta na lista de pulgas, sucata: {0}
+warning triangle not in the flea list, scrap: {0} = Triângulo de aviso não consta na lista de pulgas, sucata: {0}
+Extinguisher Clamp not in the flea list, scrap: {0} = Braçadeira do extintor não consta na lista de pulgas, sucata: {0}
+Clutch Cover Plate not in the flea list, scrap: {0} = Placa de cobertura da embreagem não consta na lista de pulgas, sucata: {0}
+firewood(Clone) not in the flea list, scrap: {0} = Lenha (Clone) não consta na lista de pulgas, sucata: {0}
+classifieds magazine not in the flea list, scrap: {0} = Revista de classificados não consta na lista de pulgas, sucata: {0}
+energy drink not in the flea list, scrap: {0} = Bebida energética não consta na lista de pulgas, sucata: {0}
+garbage barrel not in the flea list, scrap: {0} = Lata de lixo não consta na lista de pulgas, sucata: {0}
+motor hoist not in the flea list, scrap: {0} = Girafa não consta na lista de pulgas, sucata: {0}
+ratchet set(Clone) not in the flea list, scrap: {0} = Conjunto de catraca (Clone) não consta na lista de pulgas, sucata: {0}
+
+//Canned Beer
+Canned Beer 6.5 mk = CERVEJA EM LATA 6.5 MK
+Canned Beer 7.49 mk = CERVEJA EM LATA 7.49 MK
+Canned Beer 14.95 mk = CERVEJA EM LATA 14.95 MK
+Canned Beer Pack 125 mk = PACOTE CERVEJA EM LATA 125 MK
+canned beer pack = PACOTE DE CERVAJA EM LATA
+pack24 = PACOTE DE CERVAJA EM LATA
+canned beer = CERVEJA EM LATA
+Empty Can = LATA VAZIA
+waste = FUNDO DA LATA
+can carrier = Porta-latas
+And that's how we cure the thirst. = "E é assim que a gente mata a sede."
+
+//Second Gifu Flatbed
+BUY GIFU FLATBED (15,000MK) = COMPRE O CAMINHÃO GIFU (15.000 MK)
+Go get more money! = Vá ganhar mais dinheiro!
+You have purchased the Gifu, check Fletari's yard! = Você comprou o Gifu, verifique o quintal do Fleetari!

@@ -1,0 +1,1215 @@
+[fsm]
+PAIKALLISSÄÄ = CLIMA LOCAL
+188 PAIKALLISSÄÄ = 188 CLIMA LOCAL
+stop = PARE
+haku = SCAN
+
+# Weather conditions
+selkeää = ensolarado
+pilvistä = nublado
+lumisadetta = neve
+
+# Weather short codes
+se = en
+pi = nb
+Ls = nv
+
+# Temperature format patterns
+pakkasta = menos
+astetta = graus
+pakkasta {0} astetta = menos {0} graus
+
+[day]
+MAANANTAI = SEGUNDA
+TIISTAI = TERÇA
+KESKIVIIKKO = QUARTA
+TORSTAI = QUINTA
+PERJANTAI = SEXTA
+LAUANTAI = SÁBADO
+SUNNUNTAI = DOMINGO
+
+[ulkomaat]
+VIRON SOTAUHKAUS AIHEETON
+Vuorokauden ajan jännitteitä nostanut
+sotauhkaus on vedetty takaisin.
+Viro uhkasi sekä Suomea että Venäjää
+sodalla, mikäli vaatimuksiin ei suos-
+tuttaisi. Vaatimuksia ei saatukaan
+koskaan kuulla ja kyse olikin Viron
+puolustusministeri Kuimo Allin
+hetkellisestä ylilyönnistä pieleen
+menneiden autokauppojen jälkeen.
+=
+AMEAÇA DE GUERRA DA ESTÔNIA INFUNDADA
+A ameaça de guerra que elevou tensões
+por um período de um dia foi retirada.
+A Estônia ameaçou tanto a Finlândia
+quanto a Rússia com guerra, caso as 
+exigências não fossem aceitas. As 
+exigências nunca chegaram a ser 
+ouvidas, e tratou-se apenas de um 
+excesso momentâneo do ministro da 
+Defesa da Estônia, Kuimo Alli, após 
+negócios de carros que deram errado.
+
+KORJAUS UUTISEEN
+Uutinen, jonka mukaan ulkomailta oli
+löytynyt ankka, ja jonka mukaan
+kukaan ei tiennyt mistä ankka oli
+tullut ja minne ankka oli menossa,
+olikin uutis-ankka.
+Pahoittelemme virhettä. 
+=
+CORREÇÃO DA NOTÍCIA
+A notícia segundo a qual no exterior
+havia sido encontrado um pato, e
+segundo a qual ninguém sabia de onde
+o pato tinha vindo nem para onde
+o pato estava indo,
+era, na verdade, uma notícia falsa.
+Pedimos desculpas pelo erro.
+
+UUSI MANNER LÖYTYNYT?
+Arvostettu kansainvälinen maantieteel-
+linen julkaisu Geology Future julkaisi
+artikkelin jossa todetaan uuden mante-
+reen löytyneen Australian itäpuolelta. 
+Tiedeyhteisö ei pääse yhteisymmärryk-
+seen siitä pitääkö mannerta nimetessä
+käyttää "New" -etuliitettä ja millä
+kielellä. Kriittisen kannan mukaan
+tärkempää on mantereen löytyminen kuin
+sen nimeämisestä noussut kiista. 
+=
+NOVO CONTINENTE DESCOBERTO?
+A respeitada publicação internacional
+de geografia Geology Future publicou 
+artigo no qual se afirma que um novo 
+continente foi encontrado a leste
+da Austrália. A comunidade científica
+não chega a um consenso sobre se, ao 
+nomear o continente, deve-se usar o 
+prefixo "New" e em qual idioma.
+Segundo a posição crítica, mais
+importante que o nome é a descoberta.
+
+ITALIA SYYTTÄÄ UUTTA-SEELANTIA
+Italian parlamentti vaatii Uudelta-
+Seelannilta korvauksia kopioinnista. 
+Taustalla on löydös jossa osoitetaan 
+Uuden-Seelannin valtion kopioineen
+Italian alueen tunnetun saapas-muodon. 
+Uuden-Seelannin valtio vastaa että
+kyseessä ei ole kopio sillä alue on
+peilikuva ja se on halkaistu meri-
+alueella. Kiista on menossa YK:n
+tuomioistuimeen. 
+=
+ITÁLIA ACUSA A NOVA ZELÂNDIA
+O parlamento italiano exige da
+Nova Zelândia compensações por cópia.
+A base da acusação é uma descoberta que
+indica que o Estado da Nova Zelândia
+teria copiado o conhecido formato de
+bota do território italiano.
+O Estado da Nova Zelândia responde
+que não se trata de cópia, pois a área
+é uma imagem espelhada e foi dividida
+por uma área marítima.
+
+ÖLJY-YHTIÖ EI USKO ESIINTYMÄÄN
+Norjan johtava öljy-yhtiö uskoo, että
+Tukholmalaisen kauppakeskuksen parkki-
+paikalta löytynyt öljyesiintymä ei ole
+kaupallisesti hyödynnettävissä. Yhtiö 
+perustelee kantaansa sillä, että
+esiintymä on peräisin paikalla
+seisseestä autosta.
+=
+PETROLÍFERA NÃO ACREDITA NA DESCOBERTA
+A principal empresa petrolífera da
+Noruega acredita que a jazida de
+petróleo encontrada no estacionamento
+de um shopping em Estocolmo não é
+comercialmente explorável.
+A empresa justifica sua posição
+afirmando que a substância se originou
+de um carro que estava estacionado
+no local.
+
+[kotimaa]
+TALVILOMIIN MUUTOS
+Työministerin ehdotuksen mukaan
+talvilomapäivät voisivat jatkossa
+olla käytettävissä vain viikon-
+loppuisin.
+"Eikös viikonloppuisin ole paras
+lomailla muutenkin, kun silloin
+ei olla töissä", kysyy ministeri
+Urpo Pomottaja.
+=
+MUDANÇA NAS FÉRIAS DE INVERNO
+Segundo proposta do ministro do
+trabalho, os dias de férias de
+inverno poderiam no futuro
+ser usados apenas nos fins de
+semana.
+"Não é justamente no fim de semana
+que é melhor descansar, já que
+não se trabalha?", pergunta o
+ministro Urpo Pomottaja.
+
+VAPAA-AJAN KÄSITTEESEEN MUUTOS
+Työministeri ehdottaa, että työaika
+alettaisiin lukea vapaa-ajaksi.
+"Kellään ei olisi enää puutetta
+vapaa-ajasta, kun ihmisen kaikki
+aika luettaisiin vapaa-ajaksi.
+Silloin kaikki voisivat vapaa-
+ajallaan puuhastella kaikenlaista,
+kuten kunkin omaa työtä.
+Asennekysymyshän se vain on",
+perustelee ministeri Pomottaja.
+=
+MUDANÇA NO CONCEITO DE LAZER
+O ministro do trabalho propõe que
+o horário de trabalho passe a
+ser contado como tempo livre.
+"Ninguém teria mais falta de
+tempo livre, se todo o tempo
+de uma pessoa fosse considerado
+lazer. Assim todos poderiam em
+seu tempo livre fazer várias
+coisas, como o próprio trabalho.
+É só uma questão de atitude",
+justifica o ministro Pomottaja.
+
+UHKAPELIYRITYS OIKEUTEEN
+Ahvenanmaalla ja laivoilla toimivan
+uhkapeliyrityksen johtaja U.H. Kapeli
+on haastettu oikeuteen kirjanpito-
+rikoksesta.
+"Teen elämässä tuurilla aivan kaiken.
+Kirjanpitokin on tuurilla tehty.
+Synnyin tuurilla. Puhun tuurilla.
+Kaipa tämäkin oikeuskäsittelykin
+menee tuurilla läpi. Välillä voittaa,
+välillä häviää", puolustaa Kapeli.
+=
+EMPRESA DE JOGOS VAI À JUSTIÇA
+O diretor de uma empresa de jogos
+de azar que atua em Åland e em
+navios foi levado à justiça por
+crime contábil.
+"Faço tudo na vida por sorte.
+A contabilidade também foi feita.
+na sorte. Nasci por sorte. Falo
+por sorte. Acho que este julgamento
+também vai passar na sorte. Às vezes
+se ganha, às vezes se perde",
+defende-se Kapeli.
+
+KOVAT TALVIPAKKASET LAITTOMIKSI
+Kansalaisia vaivanneisiin sääoloihin
+on kenties nyt löytynyt ratkaisu.
+Pakkasen kokemisesta tulee laitonta.
+Pakkasta alettaan mitata kokemusten
+perusteella. Koetusta pakkasesta
+tulee sakkorangaistus, joka nousee
+aina sadalla markalla per koettu
+pakkasaste.
+"Kun asia kielletään, se loppuu",
+toteaa ministeri Eikka Eikaikelle.
+=
+GEADAS FORTES DE INVERNO ILEGAIS
+Talvez tenha sido encontrada uma
+solução para o clima que incomodou
+os cidadãos. Sentir frio intenso
+passará a ser ilegal. O frio será
+medido pelas sensações das pessoas.
+Do frio sentido virá multa, que
+aumenta cem marcos por cada grau
+de frio sentido.
+"Quando algo é proibido, acaba",
+afirma o ministro Eikka Eikaikelle.
+
+[urheilu]
+KUULANTYÖNTÖÖN MUUTOS
+Kansallinen kuulantyöntöliitto KuLi
+on tehnyt aloitteen kuulantyönnön
+muuttamisesta kuulanheitoksi.
+"Kyllähän pallo nyt pidemmälle
+heittämällä lentää", perustelee
+liiton johtaja Olavi Lumppialainen.
+"Tulemme myös vaatimaan keihään-
+heittäjiä työntämään sitä keppiään.
+Oppivatpahan, miltä tuntuu yrittää
+pukata esinettä pitkälle, mulkut."
+=
+MUDANÇA NO ARREMESSO DE PESO
+A liga nacional de arremesso KuLi
+fez uma proposta para mudar o
+arremesso de peso para lançamento.
+"Claro que a bola vai mais longe
+quando é lançada", justifica o
+diretor da liga Olavi Lumppialainen.
+"Também vamos exigir que os lança-
+dores de dardo tenham de empurrá-lo.
+Assim aprendem como é tentar
+empurrar um objeto bem longe, babacas."
+
+AUTOMERKIT URHEILUJOUKKUEIKSI
+Liikuntaviraston vaatimus parantaa
+kansalaisten terveyttä on saanut
+autoliitolta ratkaisuehdotuksen.
+Yleisautoilu olisi urheilulaji,
+johon kaikki autoilijat automaat-
+tisesti ottaisivat osaa. Palkinnot
+jaettaisiin joukkueittain automerk-
+kien välillä. "Me saadaan kaikki
+autoilijat urheilijoiksi tällä",
+sanoo autoliiton Aki Luvanne.
+=
+MARCAS DE CARRO COMO EQUIPES
+A exigência do departamento de
+esportes para melhorar a saúde
+dos cidadãos recebeu uma proposta
+da associação de automóveis.
+Dirigir em geral seria um esporte,
+no qual todos os motoristas auto-
+maticamente participariam. Prêmios
+seriam dados por equipes de marcas
+de carros. "Assim vamos tornar todos
+os motoristas atletas", diz
+Aki Luvanne, da associação.
+
+TEHO-TIMO ON KUOLLUT
+Tehokkuudestaan tunnettu Timppa
+"Timo" Täysveto on menehtynyt
+äkillisesti. Hän oli tunnettu
+siitä, että urheili aina tehok-
+kaimmalla mahdollisella tavalla.
+Timo otti osaa 100 metrin juoksuun
+ja päätti, ettei juokse milliäkään
+yli sadan metrin. "Äkillinen pysäh-
+dys maaliviivalla rikkoi miehestä
+kaiken", sanoo Timon valmentaja.
+=
+TIMO-EFICIÊNCIA ESTÁ MORTO
+Timppa conhecido pela eficiência
+"Timo" Täysveto faleceu
+repentinamente. Ele era conhecido
+por treinar sempre do modo mais
+eficiente possível.
+Timo participou de uma corrida
+de 100 metros e decidiu não correr
+nem um milímetro além disso. "A
+parada brusca na linha de chegada
+quebrou tudo no homem", diz
+o treinador de Timo.
+
+ALIVIESKASSA AJETAAN TAAS SPRINTTIÄ
+Jo perinteeksi muodostunut Peräjärven
+Suvi-Sprint ajetaan taas tulevana vii-
+konloppuna. Kilpailussa ajetaan SM
+-ja amatööriluokissa. Tapahtumaa on
+aiemmin kritisoitu puutteellisista
+turvatoimista, mutta organisaattori
+Leif Fleetari lupaa niiden olevan
+kunnossa: "Kun ajetaan niin ajetaan
+täysillä. Joskus tulee virheitä ja
+sitten mennään vähän hiljempaa."
+=
+SPRINT EM ALIVIESKA NOVAMENTE
+O já tradicional Peräjärvi
+Suvi-Sprint será disputado no próx-
+imo fim de semana. A competição
+tem classes SM e amadora. O evento
+já foi criticado por falhas de
+segurança, mas o organizador
+Leif Fleetari garante que está
+tudo em ordem: "Quando se corre,
+corre-se no máximo. Às vezes há
+erros e então se vai mais devagar."
+
+[talous]
+VEROJENMAKSU VERONALAISEKSI
+Hallitus kaavailee ensi vuodelle
+veronmaksuveroa. "Olemme havainneet
+veroista koituvien tulojen tuovan
+sen verran paljon hyvinvointia,
+että tällaisesta edusta on pakko
+verottaa erikseen", selittää
+ministeri Aina Samanlainen.
+"Harkitsemme veronmaksuveronmaksun
+ottamista takautuvasti käytäntöön
+viimeisen kymmenen vuoden ajalta."
+=
+IMPOSTO SOBRE O PAGAMENTO DE IMPOSTOS
+O governo planeja para o próximo
+ano a criação de um imposto
+sobre pagar impostos.
+"Observamos que as receitas
+geradas pelos impostos produzem
+tanto bem-estar que esse benefício
+precisa ser tributado",
+explica a ministra
+Aina Samanlainen.
+"O imposto pode ser retroativo."
+
+TAKSIUUDISTUS SUUNNITTEILLA
+Taksien ja linja-autojen päittäin
+vaihtamista harkitaan. Jatkossa
+taksit ajaisivat linjamatkoja ja
+linja-autot vapautuisivat
+linjoiltaan.
+"Näin saadaan taksimatkoille
+selkeämmät hinnat ja poliitikot
+pääsevät lounaspaikkoihin paremmin
+isommalla porukalla", perustelee
+liikenneministeri Asta Rengas.
+=
+REFORMA DOS TÁXIS EM PLANEJAMENTO
+Está sendo considerada a troca
+de funções entre táxis e ônibus.
+No futuro, os táxis fariam
+trajetos regulares, enquanto
+os ônibus seriam liberados
+de suas linhas.
+"Dessa forma, as corridas de táxi
+terão preços mais claros e
+os políticos chegarão melhor
+aos almoços", diz Asta Rengas.
+
+[ruoka]
+NOPEA JOULUNODOTUSHERKKULAATIKKO
+1. Pohjalle imelletty perunalaatikko
+2. Kuori nyrkillinen valkosipulin-
+kynsiä ja laita perunalaatikon päälle
+3. Asettele kynsien päälle noin 1 cm 
+paksuudelta kermajuustoa
+4. Lämmitä mikrossa kunnes juusto on
+sulanut
+=
+CAIXA RÁPIDA DE DOCES DE NATAL
+1. Coloque purê de batata doce
+2. Descasque dentes de alho e ponha
+sobre o purê de batata
+3. Acrescente cerca de 1 cm de cream
+cheese por cima do alho
+4. Aqueça no micro-ondas até o queijo
+derreter
+
+TULINEN RUOKAPUURO ISOON NÄLKÄÄN
+1. Sekoita kattilassa vesi, chili,
+soijakastike sekä pasta-ateriapussi
+2. Kuumenna sisältö ja lisää grilli-
+makkaraa sekä omenoita paloina
+3. Lisää kaurahiutaleita hämmentäen
+4. Hauduta miedolla lämmöllä kunnes
+kaurahiutaleet ovat puuroutuneet
+=
+PAPINHO PICANTE PARA FOME GRANDE
+1. Misture em panela água, chili,
+molho de soja e pacote de pasta
+2. Aqueça e adicione linguiça
+grelhada e pedaços de maçã
+3. Acrescente flocos de aveia mexendo
+4. Cozinhe em fogo baixo até a aveia
+engrossar
+
+ITÄMAINEN EIHEKI-KEITTO
+1. Keitä kattilassa vettä sekä hie-
+nonnettuja sipuleita
+2. Lisää makaroni
+3. Keitä kunnes makaroni on valmis
+ja lisää muutama kananmuna
+4. Lisää vielä 100g kermajuustoa ja
+hauduta kunnes juusto on sulanut
+=
+SOPA ORIENTAL EIHEKI
+1. Ferva água e cebolas picadas
+2. Adicione a macarrão
+3. Cozinhe até a massa ficar pronta
+e adicione alguns ovos
+4. Acrescente 100g de cream cheese
+e cozinhe até derreter
+
+RUKIINEN TYÖMIEHEN SOPPA
+1. Keitä kattilassa vesi ja makaroni
+2. Lisää kattilaan 100g tuorejuustoa
+3. Keitä makaronit pehmeiksi ja lisää
+muutama siivu ruisleipää
+4. Hauduta kunnes leivät pehmenevät
+ja lisää toiset 100g tuorejuustoa
+=
+SOPA DE TRABALHADOR COM CENTEIO
+1. Ferva água e macarrão na panela
+2. Adicione 100g de cream cheese
+3. Cozinhe até a massa ficar macia
+e acrescente algumas fatias de pão
+4. Cozinhe até o pão amolecer e
+adicione mais 100g de cream cheese
+
+TIISTAIN MAANANTAIPATA
+1. Ota muutama siivu ruisleipää ja 
+asettele päälle kermajuustosiivuja
+2. Keitä kattilassa vesi ja lisää 
+kaurahiutaleita ja mausteita
+3. Keitä kaurahiutaleet valmiiksi
+ja lisää sekaan ruisleipäsiivut
+4. Hauduta kunnes leipäsiivut ovat
+pehmenneet
+=
+PANELA DE SEGUNDA-FEIRA
+1. Pegue algumas fatias de pão de 
+centeio e coloque fatias de cream
+cheese por cima
+2. Ferva água na panela e adicione
+flocos de aveia e temperos
+3. Cozinhe a aveia até ficar pronta
+e junte as fatias de pão
+4. Cozinhe até o pão amolecer
+
+[ajatus]
+Hopeinen kana,
+kultainen muna.
+-Ulun Yo
+= 
+Galinha prateada,
+ovo dourado.
+-Ulun Yo
+
+Sokea kurkkaa maskin takaa.
+Kuuro höristää hatun alta.
+Kuka törmää peiliin?
+-Afel Paatinen
+= 
+Cego espreita por trás da máscara.
+Surdo escuta debaixo do chapéu.
+Quem bate no espelho?
+-Afel Paatinen
+
+Kukka on kuin pieni lapsi,
+Siemenestä kaunistuu, 
+vanhana kuivistuu. 
+-Lauvo
+= 
+A flor é como uma criança pequena,
+Do grão se torna bela,
+E na velhice seca.
+-Lauvo
+
+Tuntematon osti suuren tavaran.
+Hän ei nähnyt sen takaa.
+-Pertti Kaukolaita
+= 
+Um desconhecido comprou um grande item.
+Ele não viu por trás dele.
+-Pertti Kaukolaita
+
+Kiviset portaat ovat raskaat,
+mutta puisissa kuulet
+matkaavasi. 
+-Gaul Badeul
+=
+Degraus de pedra são pesados,
+mas nos de madeira ouves
+sua viagem.
+-Gaul Badeul
+
+Näkymätön junalippu jättää
+asemalle. Näkymätön on mielesi,
+mutta se ei jätä koskaan.
+-Kati Jafulsson
+=
+O bilhete de trem invisível fica
+na estação. Invisível é sua mente,
+mas ela nunca te abandona.
+-Kati Jafulsson
+
+Those who calculate, 
+shall calculate forever. 
+-Jefton Croft
+= 
+Aqueles que calculam,
+calcularão para sempre.
+-Jefton Croft
+
+Ihmiset ovat kuin vuoria.
+Pieni ei ole koskaan suuri.
+Ehkä ylösalaisin.
+-Santiago de Kazell
+=
+As pessoas são como montanhas.
+O pequeno nunca é grande.
+Talvez de cabeça para baixo.
+-Santiago de Kazelll
+
+Nukkuva koira ei herätä
+nukkuvaa karhua.
+-Kung Yum Ping
+= 
+O cachorro que dorme não acorda
+o urso que também dorme.
+-Kung Yum Ping
+
+Turhaa on julistaa sota
+sodassa.
+-Pavel Kur
+= 
+É inútil declarar guerra
+durante a guerra.
+-Pavel Kur
+
+Liian pienet saappaat. 
+Liian suuret jalat.
+Pienentääkö ihminen?
+-Aate Kauninen
+= 
+Botas pequenas demais.
+Pés grandes demais.
+O homem se encolhe?
+-Aate Kauninen
+
+[kulttuuri]
+SÄVELTÄJÄ PALJASTUI KUUROKSI
+Suosittu säveltäjä Arwo Ilmanen
+on paljastunut kuuroksi.
+Tämä on herättänyt epäilyksiä
+ja kritiikkiä siitä, että Ilmanen ei
+olisikaan tehnyt sävellyksiään itse.
+"Mitä?", kommentoi Ilmanen.
+=
+COMPOSITOR REVELOU-SE SURDO
+O popular compositor Arwo Ilmanen
+foi revelado como sendo surdo.
+Isso tem levantado suspeitas
+e críticas de que Ilmanen não
+teria feito composições sozinho.
+"O quê?", comentou Ilmanen.
+
+TEATTERIESITYKSESSÄ KÄÄNNE
+Teatterinäytelmä Humalan Teatteri
+jouduttiin keskeyttämään yleisön
+huonon käytöksen johdosta.
+Teatteriesitykseen kuului,
+että näyttelijät tulivat juottamaan
+yleisölle viinaa kesken esityksen.
+"Kerrankin näin päin, että yleisö
+on kännissä eikä taiteilija",
+totesi teatterinjohtaja Gaennis.
+=
+REVIRAVOLTA EM PEÇA TEATRAL
+A peça teatral Humalan Teatteri
+teve de ser interrompida pelo
+mau comportamento do público.
+A apresentação incluía
+que os atores vinham servir
+bebida ao público durante a peça.
+"Uma vez ao contrário, o público
+está bêbado e não o artista",
+afirmou o diretor Gaennis.
+
+TARU TERHILEHTO ON ROBOTTI?
+Kotimaisen musiikkiväen keskuudessa
+on esitetty epäilyksiä että laulaja
+Taru Terhilehto on robotti ja hänen
+kappaleensa ovat tietokoneen luomia.
+"Aina ollaan kateellisia kun Suomessa
+joku myy muullakin kuin tangolla ja
+humpalla." Tuottaja Riisto A.I.
+Sikamainen kommentoi. "Minä ainakin
+olen ihminen", jatkaa Sikamainen.
+=
+TARU TERHILEHTO É UM ROBÔ?
+Entre o meio musical nacional
+foram levantadas suspeitas de que
+a cantora Taru Terhilehto é um robô
+e suas músicas são criadas no PC.
+"Sempre ficam com inveja quando na
+Finlândia alguém vende algo que não
+seja tango ou humppa." O produtor
+Riisto A.I. Sikamainen comentou.
+"Eu pelo menos sou humano",
+continua Sikamainen.
+
+# TV Chat Messages
+[Chat.Day.Days]
+maanantai = segunda
+tiistai = terça
+keskiviikko = quarta
+torstai = quinta
+perjantai = sexta
+lauantai = sábado
+sunnuntai = domingo
+
+[ChatMessages.All]
+hei kaikille.Co ehtii paikalle myöhemmin = Oi pessoal. Co vai chegar aqui mais tarde.
+MINSKULLE, yhdelle bestiksistäni Tornioon suurenmoiset terveiset!!! = Para MINSKUL, meu melhor amigo em Tornio, grandes cumprimentos!!!
+RALLIKUSKI on talossa! Morjens! = O piloto de rali está aqui! Olá!
+Rutsonit on SURKEA!!!! kopio jenkkien BATASS ohjelmasta!-PILTTE- = Rutsonit é PÉSSIMO!!!! É uma cópia do programa BATASS dos EUA! -PILTTE-
+KUULIN ET LÄHET POIS...HÖH...OOT PARAS! -TARE- = Ouvi dizer que você vai embora... tsc... você era o melhor! -TARE-
+Onx Jenna siä jos on ni muistakko mut btw olinko eka? -Patre- = Jenna, você está aí? Lembra de mim? A propósito, eu fui o primeiro? -Patre-
+ONNEA MAAILMAN PARHAALLE JARKOLLE TV:TIINU = Parabéns para o melhor JARKO do mundo. De: TIINU
+Nyt chattamaan, terkkui Ippelle ja Jakelle sekä onnee mulle! :) -butter-girl- = Agora para bater papo, mande cumprimentos a Ippe e Jake e me deseje parabéns! :) -butter-girl-
+JIPPII...jaxoin valvoa! (***** töitä) -sits- = Iupi... consegui ficar acordado! (***** trabalho) -sits-
+MÄ OON LÖYTÄNY CHATIN KAUTTA KIVAN KAMUN VESIMIES J:M!! -TYPY- = Eu encontrei um amigo legal de Aquário J:M pelo chat!! -TYPY-
+Jee.... :D = Iupi.... :D
+siistii :D = Legal :D
+Skicka till numret. Börja meddelandet med VASTAA -HORACE- = Envie para o número. Comece a mensagem com VASTAA -HORACE-
+Mulla on tänään synttärit! _dcjukka_x :D = Hoje é meu aniversário! _dcjukka_x :D
+Lovee teille kaikille chatin enkeleille! <anni> = Amo todos vocês, anjos do chat! <anni>
+Tuttuja? TYPY, ootko täällä? -Zappas- = Tem algum conhecido aqui? TYPY, você está por aqui? -Zappas-
+HELLOkaikki..! MikäsYÖNaihe? oiskoPORISketääHER EIL?....T:Tissu80 = Olá pessoal..! Qual é o tema da noite? Tem alguém de Pori aqui?....Enviado por Tissu80
+Epäreilua!Taas peiton alle yksin.. M30+ = Injusto! De novo sozinho debaixo do cobertor.. M30+
+SUOMEN PARHAAT KARPAASIT RAPE JA HEPE LÄHETTÄÄ TERVE = Os melhores caras da Finlândia, Rape e Hepe, mandam um abraço
+KUOLEMA.haava ruusun terälehdellä-punaisia veripisaroita-Wonderlon = Morte. Uma ferida sobre a pétala de uma rosa – gotas vermelhas de sangue – Wonderlon
+paljo viive = Está com muito atraso
+STADIFK näytti epäilijöille, ja antaa manselaisille torstaina TURPAAN. = STADIFK calou a boca dos céticos e, na quinta-feira, dará uma resposta contundente ao pessoal da paróquia.
+JUHLITAANKO? -PEKKA-;) = Vamos comemorar? -PEKKA- ;)
+Harazoo! Keke täällä taas! vaihdoin tänään vanhan kännykkäni uuteen! = Harazoo! Keke está aqui de novo! Hoje troquei meu celular velho por um novo!
+mistä parhaat lihikset löytyy ? = Onde se encontram os melhores pastéis de carne?
+Vera mä rakastan sua! T.Marmelisi = Vera, eu te amo! T. Marmelisi
+Yän aihe: LAURI VALEKEPA ! Tiätsä! = Tema da noite: LAURI VALEKEPA! Sabe!
+AHAA...EIKÖS JOKIN LAKI ESTÄ JUOVUKSISSA OLOA TYÖPAIKOILLA? T:JONI = Ahá… não existe alguma lei que proíba estar bêbado no trabalho? Enviado por: JONI
+VAROKAA VIHASTA KANNAA!?! = Cuidado com a multidão furiosa!?!
+Onko kuhmoisis ketään hereillä? = Tem alguém acordado em Kuhmois?
+MÄ ETSIN ROLLEA HESASTA, TUNTEEKO TAI TIETÄÄKÖ KUKAAN ! KIITTI = Estou procurando o ROLLE em Helsinque, alguém conhece ou sabe quem é? Valeu!
+41K4 1337 4R5E = 41K4 1337 4R5E
+MOI! ONKO KETÄÄN VARKAUDESTA? :) = Oi! Tem alguém de Varkaus? :)
+Onha tääl PORILAISIA,ainaski yks.-MUUMI- = Tem gente de Pori aqui, pelo menos um. -MUUMI-
+PARHAAT PELAA SÖKÖÄ RAHASTA KARSTULASSA! = Os melhores jogam Sökö valendo dinheiro em Karstula!
+LAURALLE ROVANIEMEN SAIRAALAAN TERVEISIÄ = Mandem lembranças para a Laura no hospital de Rovaniemi
+YX YHTEEN, YX HITTI, YX HAILEE = Tudo de uma vez, um sucesso, e sair sem olhar pra trás!
+LIHAPIIRAKAT...HEI HALOO?JUU...EIX OLIS KIVA JUTEL...ÖÖ...EHDOTUKSIA? = Pastéis de carne... alô? sim... não seria legal conversar... é... sugestões?
+Miskuu!! Ihawaa.. eihä viä mennä nukkumaa.. = Que isso!! Ai que legal.. ainda não vamos dormir..
+MUISTA! ÄLÄ OTA? = Lembra! Não pega?
+TIMO TYKKÄÄ HIRVEESTI HANNASTA OCH KUPPIS RULES OK!UPEETA !!! = O Timo gosta MUITO da Hanna e o Kuppis é demais, ok! Show!!!
+NIINIKOSKELLA ON KIVAA JA SAHTIA PIISAA. T:RESSU & SIRU = Em Niinikoski é divertido e tem bebida de sobra. De: Ressu & Siru
+PKX KETÄÄ NAISII.08AREA,KETKÄ ON RYYPPÄÄMÄS?JUOMAA LÖYTYY!! = Tem mulheres no PKX. Pessoal da área 08, quem tá bebendo? Bebida não falta!!
+STADIFK PELAA VARTA PERJANTAINA.-BOA- = O STADIFK joga só na sexta-feira. -BOA-
+Onhan ne lihikset hyvi , mut mul maistuu vaa a-luokan torttu! = Os pastéis de carne são bons, mas eu prefiro mesmo é pastel classe A!
+MULTIA vähän kova sana! = MULTIA é uma palavra meio pesada!
+PIHTIPUTAALAISILLE TERKKUJA TOIVOO PETE JA PASI = Lembranças para o pessoal de Pihtipudas, desejam Pete e Pasi
+TOMPPA LOGO SYDÄN MAISA S-JOEN BAR FANISSA = TOMPPA, logo de coração, Maisa, no bar S-Joki Fani
+STADIFK ON KOHTA MESTARI = O STADIFK vai ser campeão em breve
+Temput ja tepposet ** asuntolan A-rapun yläkerran kommuunille! T:B-rappu = Travessuras ** para a comunidade do andar de cima do prédio A do dormitório! De: B-rappu
+Eli mikä se lihis testi oikein on.. Voitteks te selittää mullekkin.... = Então, o que exatamente é esse teste do pastel? Podem explicar pra mim também?
+MORO TERVEISIÄ SULLE JUHLA-MOKA SANO TERVEISIÄ HIMAGALLE = Oi, manda lembranças pro Juhla-Moka e diz oi pro Himagalle
+Onko naisia kuusankoskelta? = Tem mulheres de Kuusankoski?
+Rauma haisee kissan pisulle tietsä -valekepa- = Rauma fede a xixi de gato, sabia? -valekepa-
+JONNE SE TÄSSÄ HEI!TARJOON PIMUILLE LIMUT ORIVEDEN PEFFASSA = Jonne aqui! Ei! Pago refrigerante pras garotas no Peffassa de Orivesi
+SAAX TÄNÄÄN LÄHETTÄÄ LIHISLAULUJA??? = Dá pra mandar músicas do lihis hoje???
+Marina eiköhän lähetä Töihin maantielle Tv:Junior! = Marina, que tal irmos trabalhar na estrada? TV: Junior!
+MAHOUNEN ON LUUSERI. = Mahounen é um perdedor.
+Koska se lihis testi o? T.RAMI = Quando é o teste do lihis? De: Rami
+J A M O SOITA MULLE!!!T MARI = Jamo, me liga!!! Mari
+HAA PORILAINE!TERKKUI POMARKUST. = Ei, pessoal de Pori! Lembranças de Pomarkku.
+Miks naiset on niin vaikeita ? Rakastan sua sini ?!!!T:VILLE = Por que as mulheres são tão difíceis? Eu te amo, Sini?!!! De: Ville
+Mä rakastan sua, Kirsti!Kyl mä jaksan odottaa hyvää yötä beibe! -O.M.- = Eu te amo, Kirsti! Eu consigo esperar, boa noite, baby! -O.M.-
+In Finland we have this thing called REILU MEININKI! = Na Finlândia existe uma coisa chamada jogo limpo!
+ONKO SALOSTA PATI LOPPU??? AMIS RULES OK. HYVÄ PATI!!! = A festa em Salo acabou??? Amis é demais, ok. Boa festa!!!
+LATE RULAA, PLATINIUMIT JALASSA JA 200KG TANGOSSA. = Late manda muito, com tênis de platina e 200 kg na barra.
+Jeesh.. en jaksais valvoo.. tuli ryypättyä VÄHÄN liikaa.. -Shredder- = Aff.. não aguento mais ficar acordado.. bebi um pouco demais.. -Shredder-
+OOKS NÄHNY LIHISTÄ HYPPÄÄMÄS MÄKEE?` = Alguém já viu um pastel de carne pulando rampa?
+phear! :) = Uau! :)
+Onko ketään naista hereillä Varkaudesta = Tem alguma mulher acordada em Varkaus?
+PIIA..vielä sen verra..hieno nousu todella syvältä..-STADIFKMAN- = Piia… só mais um pouco… uma bela subida desde bem do fundo.. -STADIFKMAN-
+Kohta Päästäisten turkki PÖLLYÄÄ! -Teukka = Logo a Páscoa vai levantar poeira! -Teukka
+MOIDO KAIKILLE LÖYTYISKÖS 21 VARATULLE UKOLLE KESÄMISUU ? = Oi a todos, será que tem uma namorada de verão para um cara de 21 anos que já é comprometido?
+RAKASTAN SUA HEIDI T. VIELÄKIN.ANNA ANTEEX ET JÄTIN SUT.-SAD83- = Heidi T., eu ainda te amo. Me perdoa por ter te deixado. -SAD83-
+EI KSNK VAAN KOUVOLASTA! = Não é KSNK, é de Kouvola!
+LÖYSIN ITELTÄ SATIAISIA TAI JOTAIN SEN TAPASIA,MITÄ TEHDÄ? = Encontrei piolhos ou algo parecido em mim, o que eu faço?
+Erkka sydän suvi tru love is beatiful! = Erkka ama a Suvi, o amor verdadeiro é lindo!
+MORJENS! VOISKO JOKU SANOO MILLÄ NUMEROLLA ÄÄNESTÄÄ -SAMI81- = Oi! Alguém pode dizer em qual número votar? -SAMI81-
+HIMANKA HIMANKA HIMANKA TIEDÄTKÖ MISSÄ ON HIMANKA = Himanka, Himanka, Himanka… você sabe onde fica Himanka?
+pitäkää hauska ilta....PIKKUBLONDI = Tenham uma boa noite.... PIKKUBLONDI
+Kuka kyseli naisia Varkaudesta? Minä olen sellainen. = Quem estava perguntando por mulheres de Varkaus? Sou eu.
+ONKO KAUNIITA NAISIA SEINÄJOELLA VIELÄ HEREILLÄ? = Há mulheres bonitas de Seinäjoki ainda acordadas?
+MARIA.MAKE.TÄSSÄ.JOS.VOISIN.ANTAISIN.RAKAUEN.MAKE = Maria. Aqui é o Make. Se eu pudesse, te daria amor.
+OX MU NIMES JOTAIN VIKAA?!! JUMA...NO EI NY T:SASSU = Tem algo errado com o meu nome?!! Droga… não, agora não. T: Sassu
+LAPPEENRANNASTA KOMEA ATLEETTIMIES ETSII KOMEITA NAISIA..ET PETY. = Homem atlético e bonito de Lappeenranta procura mulheres bonitas… você não vai se decepcionar.
+ARTOO RVP ÄLÄ NUKU VIRTASILLA!! = Artoo RVP, não durma com o aparelho ligado!!
+lllllFINLANDIAlllll -KOLME PÄÄLLÄ- = lllllFINLÂNDIAlllll -três por cima-
+KUKA KAVALSI NUAPPARIN RAHAT? T.VELI VAAN = Quem roubou o dinheiro do Nuappari? T: só o irmão
+LEINO ROK. = Leino é demais.
+ONKO YÖKKÖ-HOITSUJA TAAS TAAJUUDELLA? MEIL MUMMOT NUKKUU. = As enfermeiras do turno da noite estão de novo na frequência? Aqui as vovós estão dormindo.
+KURPA ON TERÄSTÄ!!!!! = Kurpa é feito de aço!!!!!
+Ei kai NOKIALLA NY KUKAAN NUKU?Vai nukkuuko ? = Ninguém em Nokia está dormindo agora, né? Ou estão?
+Anteeks ANSSI! mennään huomenna yhdessä saunaan t:hanna = Desculpa, Anssi! Vamos juntos à sauna amanhã. t: Hanna
+KYLLÄ TÄÄLTÄ VARKAUDESTA ON AINAKIN KAKS! = Aqui de Varkaus tem pelo menos dois!
+USKO TAI ELÄ MUT KURPA OH VINAALISSA.SANNOOPI JAMI! = Acredite ou não, mas o Kurpa está na final. Diz aí, Jami!
+SIVARIT ON IHANIA ARMEIJA HAISEE SIVAREILLA AIVOT! T.ANNE & SARI = O serviço civil é maravilhoso, o exército é horrível, o pessoal do serviço civil tem cérebro! T: Anne & Sari
+HALLELUJA KNÄCKEBRÖ! = Aleluia, knäckebröd!
+FRIIDU...sä oot ihan hölmö. Mut ihan waa. Mennää nukkuu, eiks waa? = Friidu… você é meio boba. Mas tudo bem. Vamos dormir, né?
+Mitähän ikäluokkaa edustat, KOUVOLAN NAINEN? = Qual faixa etária você representa, mulher de Kouvola?
+PORVOO...? = Porvoo...?
+Onko ketään orivesiläisiä/asemalaisia hereillä? t.nv = Tem alguém de Orivesi / da estação acordado? t: nv
+RITVA "VIRKKAA" PARHAIMMAT LIHIKSET!!! -SAKU- = Ritva faz à mão os melhores pastéis de carne!!! -SAKU- = -SAD- Quem é a Heidi que você ama?
+-SAD- KETÄ HEIDIÄ RAKASTAT? = -SAD- Quem é a Heidi que você ama?
+Kaikille vartijoille terveisii!Koittakaa jaksaa töissä! -sec.boy- = Lembranças a todos os seguranças! Força no trabalho! -sec.boy-
+HEMMO ON PSYKOPAATTI ELI LUONNE VIKAINEN. *** = Hemmo é um psicopata, ou seja, tem problemas de caráter. ***
+StadIFK on ihan * samoin kuin pellet ja kuppis! = O StadIFK é ridículo, assim como os palhaços e o Kuppis!
+ANTI TULLA VAAN PUUPÄÄT,ETTE RAUKAT EES TIÄ MIKÄ ON KURPA!!! = Podem vir, seus cabeças-duras, vocês nem sabem o que é Kurpa!!!
+Paina loppuun saakka Vili! = Vai até o fim, Vili!
+No Varkauden keskustasta no entäs ja kuinkapa vanhoja olette t:kt = Se for do centro de Varkaus, e daí? E quantos anos vocês têm? t: kt
+Meitsilt löytyy vihree tonttiin lyöty Victra... = Eu tenho um Vectra verde rebaixado, colado no chão...
+Se on suomen väkivaltaisin kaupunki asukaslukuun nähden....? = Dizem que é a cidade mais violenta da Finlândia em relação à população...?
+TERVE KAIKILLE!SOITTAKAA NUMEROON:*** = Olá a todos! Ligem para o número: ***
+Knäckebröd e fint å gott!! :D = Knäckebröd é bom e gostoso!! :D
+Tääl poistetaan kaikki herjaukset kavereist t:pk = Aqui todas as ofensas aos amigos são removidas. t: pk
+30-KOUVOLA = 30 – Kouvola
+SIVARIT ELÄVÄT SIVARIAIKANA VERONMAKSAJIEN RAHOILLA!! T:ISÄNMAA = Os prestadores de serviço civil vivem do dinheiro dos contribuintes durante o serviço!! T: Pátria
+ONKO ROVANIEMEN NAISET HEREILLÄ T.KALLE 19W = As mulheres de Rovaniemi estão acordadas? T: Kalle, 19 anos
+RITVA ON SALOSTA ... -SAKU- = Ritva é de Salo... -SAKU-
+EERO PUKINMÄESTÄ!OTA YHTEYTTÄ TAMPEREELLE T:"Risteillään" = Eero de Pukinmäki! Entre em contato com Tampere. T: “Em cruzeiro”
+Onko ketään Sannaa hereillä kivenlahdessa? = Tem alguma Sanna acordada em Kivenlahti?
+LOPETTAKAA ÄÄLIÖMÄISEN STADIFK.IN HEHKUTUS! = Parem com essa idolatria idiota ao StadIFK!
+SE O VAA YX HEIDI MASKUSTA. TUSKINPA SE TÄTÄ KATTOO. -SAD- = É só uma Heidi de Masku. Duvido que ela veja isso. -SAD-
+OISKO HANGOSTA NAISTA 31V VAPAALLE MIEHELLE LUOTTAMUKSELLA. = Procura-se mulher de Hanko, 31 anos, para homem solteiro, com discrição.
+AINAKIN RISTIINALAISIA ON HEREILLÄ,PAARMA = Pelo menos o pessoal de Ristiina está acordado, PAARMA
+FLOOD! = Flood / mensagens repetidas!
+Onks täällä psychobilly-väkeä kehissä? J.A.G. rules = Tem gente do psychobilly por aqui? J.A.G. é demais
+Kyl tääl ainaki yks yökkö valvoo. Eka yö menossa 7:stä. = Aqui pelo menos um noturno está acordado. Primeira noite de 7.
+VESKU NYT NUKKUMAAN TAI ME TULLAA SINNE*!! = Vesku, vai dormir agora ou nós vamos aí*!!
+MEKIN OLLAAN KESKUSTASSA! MIKÄ NIMI?! T:JS = Nós também estamos no centro! Qual é o nome?! T: JS
+sormet ja sielu haavoilla,vastausta etsien. meidän nuoruutta pilkaten. = Dedos e alma feridos, procurando respostas, zombando da nossa juventude.
+MAAILMAN PARHAAT löytyy KUOPIOST = Os melhores do mundo estão em Kuopio
+PS JUSSI HANALAHDESSA RAKASTAA * LISSUA 4EVER! = PS: Jussi de Hanalahdessa ama a Lissu para sempre!
+MAARIT MÄ KAIPAAN SUA T.SIVARI-KEHO = Maarit, eu sinto sua falta. T: Sivari-Keho
+Irtoisko KOUVOLAST seuraa? = Rola companhia de Kouvola?
+MINKÄ IKÄNEN ON NEITI KUUSAMOSTA? T:M24 = Qual a idade da moça de Kuusamo? T: homem, 24
+KETÄÄN PERÄJÄRVELTÄ TJOUKO = Alguém de Peräjärvi? T: Jouko
+ALIVIESKAN HURJAT TIIÄÄTTE KYL KETÄ MEINAAN TV:HEKA = Os durões de Alivieska, vocês sabem de quem estou falando. TV: Heka
+HULLUNLEHMÄ TUU PUOLANGALLE, PALJAKKAAN. TÄÄLT RAKKAUATTA. = Vaca louca, vem pra Puolanka, pra Paljakka. Aqui tem amor.
+12.STA YÖ MENOSSA JA 2 JÄLJELLÄ ENNEN VAPAITA. HOITSU 2. = 12ª noite de plantão e faltam 2 antes da folga. Enfermeira 2.
+TUNTEEKO KUKAAN KARAOKE ELVISTÄ; HENRYÄ? = Alguém conhece o Elvis do karaokê, o Henry?
+6 ;S yö meneillään ,jaksetaan vielä.Sitten viikon huili.T.sinisilmä = 6ª noite seguida, ainda aguentando. Depois uma semana de descanso. T: Olhos Azuis
+JANI SULKEE TELKKARIN JA MENEE NUKKUMAAN ÖITÄ KAIKILLE!!! = Jani vai desligar a TV e ir dormir. Boa noite a todos!!!
+TOTTAHAN TÄÄLTÄLTÄ UROKSIA LÖYTYY... = Claro que daqui saem homens...
+ONKO KETÄÄN LPR:STÄ? KENTIES LAURITSALASTA ? = Tem alguém de LPR? Talvez de Lauritsala?
+ICH LIEBE DICH HELENA = Eu te amo, Helena
+Heips taas pitkästä aikaa...Ja terve kaikille vakio chattaajille! = Oi, depois de muito tempo... e olá a todos os chatters de sempre!
+LAIVALLE LÄHTIJÖITÄ TORSTAINA!ILMOTTAKAA JÄTKÄT JOS ON! = Pessoas para ir ao navio na quinta! Avisem, pessoal!
+Eikö yhtään orivesiläisiä oo "virkeenä"... t:vv = Nenhum pessoal de Orivesi está “ativo”? t: vv
+KUKA KAIPAILIA NAISIA SEINÄJOELTA? TÄÄLLÄ OLISI... SUNSET- = Quem sente falta de mulheres de Seinäjoki? Aqui tem... Sunset-
+ON MUITAKIN KIVENLAHDESTA!KETÄ OLET? = Tem mais gente de Kivenlahti! Quem é você?
+..yksin himassa,ja vähän yli 20:ppiä ikää! Maximi fiilis! = ..sozinho em casa, pouco mais de 20 anos! Clima máximo!
+HEI HANKO. KÄYKS K-NUMMI KV = Ei, Hanko. Topa trocar cartas com K-Nummi?
+Lötkö,elä otattele nakkiin!! = Lötkö, não se mete em confusão!!
+Itse olen ollut muukalaislegioonassa ja olen nähnyt,mitä sota on = Eu estive na Legião Estrangeira e vi o que é a guerra
+ONKO TAKATUKKA WILLE CHATIS.EDEN RULES! NOKIA VALVOO. = Wille de cabelo comprido está no chat? EDEN é o melhor! Nokia está acordado.
+TUNNIN PÄÄSTÄ NIPAN-GRILLI! = Daqui a uma hora no Nipan Grill!
+NÄIN SE HOMMA ETENEE!!!!! = É assim que as coisas acontecem!!!!!
+PYMY JYRÄÄ NE ON PARHAITA T.AUKKE UGIST = PYMY domina tudo, eles são os melhores. T: Aukke do UGI
+No tapsa on nimi entäs teidän ja kuinka vanhoja olette t:TS = Tapsa é o nome. E vocês? Quantos anos têm? T: TS
+Kuka sitä karaoke-Henryä kysyy? = Quem está procurando o Henry do karaokê?
+Paras puhelin on FUTUFON 2880 T:Pete = O melhor telefone é o FUTUFON 2880. T: Pete
+Pusuja kaikille ihanille naisille ;o) Hyvät yöt! = Beijos para todas as mulheres lindas ;o) Boa noite!
+lprannasta neitosia? t-baareissa ei ollut menoa...ehkä muualla? = Tem garotas de Lprannasta? Nos bares não tinha agito... talvez em outro lugar?
+LÖYTYYKÖ RAUMALTA IHANAA NAIS PUOLISTA SEURAA. = Dá para encontrar uma namorada legal em Rauma?
+TURCU CITY RULES! = Turku city é demais!
+STADIFK MUITA EI OO. = StadIFK, não há mais ninguém.
+Tämä nti MIKKELISTÄ on 20v. Kuis? Mispäin tääl oleilet? -K- = Esta moça de Mikkeli tem 20 anos. E aí? Onde você está? -K-
+ONKO KEURUULLA INTTIÄ KÄYVIÄ? = Tem alguém indo para o serviço militar em Keuruu?
+Moro!Me ollaan laivassa Tallinnan satamassa..hyvä meno! = Oi! Estamos no navio no porto de Tallinn... está ótimo!
+Miten on Kouvolan laita? Onko uni jo tullut silmään. -m24- = Como vai Kouvola? Já bateu sono? -Homem 24
+ta auto kakkaa... = O carro quebrou...
+asun savitaipaleella t veppe = Moro em Savitaipale. T: Veppe
+MINUSTA RIPSIPIIRAKKA ON PARAS MAHDOLLINEN!T:TIMPPA = Na minha opinião, Ripsipiirakka é o melhor possível! T: Timppa
+MUISTAKAA HAUDUTTAA LIHIKSIT ENSIN AROMOPESÄS. = Lembrem-se de cozinhar o lihis primeiro na panela para realçar o sabor.
+VIROSTA SAA HYVÄÄ ** IHAN **,T:ANKA = Dá para conseguir coisas boas na Estônia ** totalmente **, T: Anka
+MINUSTA KAIKKI NAISET ON IHANIA.T.SMART = Na minha opinião, todas as mulheres são incríveis. T: Smart
+Jees terveisiä ja tsemiä myös täältä yötyön tekijä kolleegoille T:hani = Envio saudações e força aos colegas que trabalham no turno da noite. T: Hani
+ONKOS SAVIKATU YM JÄTKÄT HEREILLÄ T:KEISARI = A galera de Savikatu e arredores está acordada? T: Keisari
+Toivotaan että MIGREENI menee ohi ja huomenna päivä mukava! *HALAUS* = Espero que minha enxaqueca passe e que amanhã seja um bom dia! *Abraço*
+KUPPIS rules kulta on värimme! miten kävi viime vuonna!? = Kuppis é demais! Ouro é nossa cor! Como foi no ano passado!?
+Hei SIVARI, ne vanhukset puolustivat tätä maata... = Ei, Sivari, aqueles idosos defenderam este país...
+INTIN KÄYNEET SENTÄÄN PUOLUSTAVAT MAATA JOS TULEE SOTA = Quem foi ao exército pelo menos defenderá o país se houver guerra
+YO! STADIS TYLSÄÄ. ONX KEED MUIT HEREIL? ONX BILEIT? = Ei! Aqui em Stadis está chato. Tem mais alguém acordado? Tem festa?
+ONKX JÄKES MITÄÄ MENOO? KOHTA ON,MEITSI MUUTTAA JÄKEEN. = Alguma novidade em Jäkälä? Logo vou me mudar para lá.
+Kuppis haisee sillille tv Kiakko = Kuppis cheira a arenque. T: Kiakko
+SIVARIT VOI PAINVA HUITSIN MEVADAAN T VOTE = Os prestadores de serviço civil podem ir embora. T: Vote
+TUUKKA KULTASENI ,TYKKÄÄN SUSTA T: RIITTA = Tuukka meu querido, gosto de você. T: Riitta
+-SAD- KERRO SILLE MITEN PALJON RAKASTAT VIELÄKIN!! -heidi = -SAD- Diga a ele o quanto você ainda o ama!! -Heidi
+we are doomed! we are DOOMED!! wanderin star = Estamos ferrados! Estamos FERRADOS!! Wanderin Star
+juntit (kehäkolmosen ulkopuolella olevat) puhuvat HESASTA. = Os caipiras (fora do anel 3) falam de HESA.
+Kouvola? Pistä nimi ni löydän varmasti oikean jos on ruuhkaa! = Kouvola? Diga o nome, encontrarei a pessoa certa mesmo se houver multidão!
+VILLA PAITA ON KIVA,JOS PATLELOO. = Camisa de lã é legal, se for PATLELOO.
+JUNTTI SEURA SUOMESSA STADIFK TOTTAKAI = Equipe de caipiras na Finlândia, claro, StadIFK
+ISO HALIPUSU KIPSISELLE MIEHELLESAIRAALAAN! = Grande abraço e beijo para o homem com gesso no hospital!
+HEI, LÄHETTÄKÄÄ GOOM-JUTTUJA TMS.!!! -TYLSÄ ELÄMÄ-80- = Ei, enviem coisas sobre GOOM ou similares!!! -Vida entediante-80-
+Futis on kuningaspeli! imho t.youarejustwannabiefans = Futebol é o jogo dos reis! Na minha opinião. T: vocês só são fãs wannabe
+JÄKES!?!? ÄLÄ NAURATA! = Jäkälä!?!? Não ria!
+HE OVAT LÄLLÄRI PULLAMUSSU POIKIA...PEHMOJA T:EKI = Eles são meninos mimados e frágeis... T: Eki
+Mikä on paras puhelin, kaupunki tai lätkäseura? = Qual é o melhor telefone, cidade ou time de hóquei?
+NO MIHIN NE HOITSUT KATOSI. SYÖMÄNKÖ JA KAHVEELLE. = Onde foram as enfermeiras? Vou comer e tomar café.
+Tiiättekö mikä liikkuu ees taas ja haisee hieman virtsalle? = Vocês sabem o que se move para frente e para trás e cheira um pouco a urina?
+kaikille rakastettuille työtille halua.saako kajjaani seuraa. t.sika = Para todas as queridas: amor. Alguém de Kajaani quer companhia? t. Porco
+ONKO TURUN TAUTIA LIIKKEELLÄ? FLY = A “doença de Turku” está se movendo? FLY
+Yo! Onx stadis vielä tyttöjä hereillä? -Iceman- = Ei! Ainda há meninas acordadas em Helsinque? -Iceman-
+ANSSI LOVE ANNA LOVE:lla Anssisi P.S.Pusuja sulle rakkaani! = Anssi ama Anna: seu Anssi. P.S. Beijos para minha amada!
+SINÄ NAINEN,ROHKEA JA OLET LÄH KINNULAA VIESTI.REETU = Você, mulher corajosa, está perto de Kinnula? Envie mensagem. Reetu
+ROVANIEMELLÄ OLI JOSKUS HYVIÄ BÄNDEJÄ = Antigamente havia boas bandas em Rovaniemi
+Niin... Kuka mua kyseli? -Henry = Então… quem me procurou? -Henry
+Koskenniskan ryhmälle terveisiä. Mee veeti nukkuu. T.Kupari = Saudações ao grupo Koskenniska. Veeti, vai dormir. -Kupari
+Sivari on sankari, tosimies on totaali.piste. = Os do serviço civil são heróis, o homem de verdade recusa o serviço militar. Ponto final.
+KURPA KURPA KURPA KURPA KURPA KURPA1999 MESTARI!!! = KURPA KURPA KURPA KURPA KURPA KURPA 1999 CAMPEÃO!!!
+TIMO JA HENKKA HAISEE!!! = TIMO e HENKKA fedem!!!
+EIKÖ KUKAAN MUU VALVO FORSSASSA KUIN MINÄ T.LEENA = Ninguém mais está acordado em Forssa além de mim? -LEENA-
+KETÄÄN HEINOLASTA? = Alguém de Heinola?
+Täl ois vähintään tarpeeks hyvä jätkä,onko vertaistani naista? = Aqui tem um cara bom esperando, há alguma mulher que combine comigo?
+ITE OLIN TYHMÄ JA SAAN NY KÄRSII -SAD- = Fui idiota e agora estou sofrendo. -SAD-
+Painattelin just 190km/h Leviltä Kittilään. T:Jääkeli = Acabei de dirigir a 190 km/h de Levi a Kittilä. -Jääkeli
+UNETON: LETKAJENKKA VANHAINKODISSA. = Sem sono: dança em fila no asilo.
+SIVARIT ON SOKERIA, SIKSI NAISET NUOLEVAT MEITÄ! ;o) = Os do serviço civil são doces, por isso as mulheres nos adoram! ;o)
+MICKE DEAR ! HÄLSNINGAR FRÅN HESA.JAG TYCKER OM DEJ. = MICKE querido! Saudações de Helsinque. Eu gosto de você.
+Kuka tahtoi 50v. SEURAA? = Quem queria companhia com 50 anos?
+Mr X elossa on, joo kortiton olen, hävettää! = Mr X está vivo, sim, não tenho carteira de motorista, vergonha!
+SIVARIT O TYHMII,RUMII,TÄYSII **!!! = Os do serviço civil são idiotas, feios e completamente **!!!
+muuttakaa juntit takaisin KEHÄN 3:sen toisen puolelle!!! = Povo do interior, voltem para o outro lado da estrada periférica!
+Oisko ketään tavattavissa Kouvolasta? Jos vain kiinnostaa. -m24- = Alguém disponível em Kouvola? Se houver interesse, me contate. -24 anos, masculino
+Hyvä sivari&armeija keskustelu osoitteessa *** = Boa discussão sobre serviço civil vs exército em *** 
+JOULUPUKKI MUORIAAN ***. = Papai Noel com uma velhinha ***
+KUIN PITKÄ VIESTI SAA OLLA ?MUN VIESTIÄ EI NÄKYNY! = Qual o tamanho máximo da mensagem? A minha não apareceu!
+Siis kenellä on tuparit Jäkes..? = Então, quem está fazendo festa de inauguração em Järvenpää..?
+HALOO! VALVOOX SIEL KETÄÄN MUITA...NM.YX VETURI = Alô! Tem mais alguém acordado aí? -um locomotiva
+STADISTA SAA HESAN PARHAAT LIHIKSET T.VESKU = Em Helsinque você encontra os melhores pastéis de carne. -VESKU
+soita nainen heti. naiselle *** = Mulher, ligue imediatamente. Número: ***
+Elinsiirrot ja Suomen terveydenhuolto KIITOS! t: uudet keuhkot = Transplantes e saúde na Finlândia, obrigado! -novos pulmões
+Oot taukki! Älä yritä olla manee. kiinostus on jos on = Você é bobo! Não tente parecer legal. Se houver interesse, há.
+ITE OLEN ARMEIJASSA JA HETI LÄHEN SOTII JOS SOTA TULEE. = Estou no exército e vou direto lutar se houver guerra.
+HELENA 36 MISTÄ OOT M34 = Helena 36, de onde você é? -34 anos, masculino
+IKÄRAJA V 20 TÄHÄNKIN TOUHUUN!! Ettei kakarat HYPI silmille! = Limite de idade 20 anos para isso também! Para que os pirralhos não subam em cima!
+MOI HELENA 36 ,MISTÄ PÄIN OOT JKL.LÄINEN MIES KYSYY. = Oi Helena 36, de que região você é? Pergunta homem de JKL
+OLLAAN LAPISSA PAKKASTA ON. TV. KAUSTISEN KOSSIT! = Estamos na Lapônia, está muito frio. -os valentões de Kaustinen
+ONKO NOKIAN HÖYRYPÄÄT HEREIL. = Os loucos de Nokia estão acordados?
+HELSINKI ON AINOO EU PÄÄKAUPUNKI MITÄ VOI SANOO JUNTTILAKSI. = Helsinque é a única capital da UE que pode ser chamada de interior.
+HELENA 36 OTA YHTEYS ARSKAAN OON KOVA RAKASTELIA. T:ARSKA = Helena 36, entre em contato com Arska. Sou bom no amor. T: Arska
+KETÄ LEEMA JA KUI VANHA TERV YX KIINNOSTUNU F LÄHELT = Quem é Leema e quantos anos? Saudações. Uma mulher próxima está interessada.
+Tääl yks hellä herttanen "ukkeli" ois tarjol hellyydellä. = Aqui há um "homem" gentil que pode oferecer carinho.
+MAHOUNEN MAHOUNEN ;) = MAHOUNEN MAHOUNEN ;)
+NANA V? MEE NUKKUMAA! T:JUPPE = Nana V? Vá dormir! T:Juppe
+HELENA36 MISSÄPÄIN OLET?:REETU = Helena36, onde você está? :Reetu
+Torniosta ketään hereillä? Jessica21 = Alguém acordado em Tornio? Jessica21
+HEI JUNTIT KATSOKAA MITALLITAULUKKOA = Ei, caipiras, olhem a tabela de medalhas
+Nyt maistuis Espanjan patta mielummi ku lihikset = Agora eu prefiro prato espanhol cozido do que torta de carne
+Onks viel 50v. FIKSUI naissi? Mull voi antaa- vastauksen. = Ainda há mulheres inteligentes de 50 anos? Pode me dar a resposta
+Nukkumaan ja aamulla ostamaan sormuksia itselle ja rakkaalle Hannalleni. = Vou dormir e de manhã comprar anéis para mim e minha amada Hanna
+Helena36 joku kompuutteri juttelu olis halvempi. Mahdollista? -Mike- = Helena36, conversar pelo computador seria mais barato. Possível? -Mike-
+TUNTEEKO KUKAAN NANNAA VAASASTA?NAM! ONKOHAN VARATTU? = Alguém conhece Nanna de Vaasa? Hum! Será que ela está comprometida?
+OON VALMIS SIIHEN TÄYS PAINOSEEN SUHTEESEEN. SOITA HANNA. = Estou pronto para um relacionamento sério completo. Ligue, Hanna
+satulle terveisiä,ottaisitko yhteyttä jos todella välität = Saudações para Satu, você entraria em contato se realmente se importasse?
+ME KAIKKIHAN OLLAAN VAAN IHMISIÄ. * -ihmiset- = Todos nós somos apenas humanos. * -humanos-
+YX YÖKKÖ LIITTYY RINKIIN JA HALAA KAIKKI MUUT YÖKKÖSET. = Um trabalhador noturno se junta ao círculo e abraça todos os outros noturnos
+KORJAUS! EI KOLME LYHTYÄ VAAN ILTATÄHTI = Correção! Não são três lanternas, mas a estrela da noite
+Peräjärven PSK.n VIRPI on aika kuuma typykkä = Virpi do PSK de Peräjärvi é uma garota bem atraente
+Naiset haluaa naimisiin mut miehet ei. Turha sit valittaa. = As mulheres querem casar, mas os homens não. Então não adianta reclamar
+Soita mulle! -Tappi K = Ligue para mim! -Tappi K
+Jos mies RAKASTAA: Mies siivoaa mies rakastaa ja lopuks kämpän siivoaa. = Se um homem AMA: o homem limpa, ama e, no fim, limpa a casa.
+Anteeks vaan, mutta kukakohan se "HETKEN HUUMA" on. Ja mistä? = Desculpa, mas quem é o "HETKEN HUUMA"? E de onde?
+Anna-Mari joka potkit mua raflas jne.. Ootko paikalla? = Anna-Mari que me chutou no restaurante etc.. Você está aí?
+MINKÄHÄN IKÄSIÄ OULULAISIA TÄÄL ON??? = Quantos anos têm as pessoas de Oulu aqui???
+Vieläkö syöt mielummin JÄKÄLÄÄ kun POROA !! = Você ainda prefere comer musgo do que rena!!
+Vellihousu miehet ammuttiin siihen aikaan tai annettiin venäläisille. = Os homens covardes foram mortos naquela época ou entregues aos russos.
+Helena36, Vantaa. Jos vastaat, kerro itsestäsi. En ole yhden yön tarp. = Helena36, Vantaa. Se responder, fale sobre você. Não estou interessado em um caso de uma noite.
+hei mäki oon ekaa kertaa t.jonne = Oi, eu também estou aqui pela primeira vez. t.Jonne
+hei onko kellään kokemuksia Irlannista??ajattelin lähteä töihin sinne. = Oi, alguém tem experiência na Irlanda?? Estou pensando em ir trabalhar lá.
+NANA haluatko tavata? -Teemu- = NANA, quer se encontrar? -Teemu-
+ON NOKIALAISIA HEREILLÄ SAMA SUUNTA = Pessoas de Nokia acordadas, mesma direção.
+EIKS NÄIN O ET KOUVOLA ON KUUSAAN RATAPIHA! = Não é assim? Kouvola é tipo o quintal da estação de Kuusankoski!
+OLENKO MINÄKIN JOKU LOPONEN KU OON EKA KERTAA TÄÄLLÄ? = Eu também sou algum idiota porque estou aqui pela primeira vez?
+Hmm...tunnen itseni ulkopuoliseksi ;) t: Humanoid = Humm... sinto-me um estranho ;) t: Humanoid
+Taavetti: Terve!menkää nukkuu! = Taavetti: Oi! Vão dormir!
+AI VASTAAN VAI? MIHI? KUHU? AI VASTAAN VAI? MIHI? KUHU? = Você vai responder? Para quem? Para onde? Você vai responder? Para quem? Para onde?
+PELLET ON PARAS PÄÄSARJA JOUKKUE!! IKUISESTI JA AINA! T:TANJA = Pellet é o melhor time da primeira divisão!! Para sempre e sempre! T:Tanja
+Joku SKOPALIK-fani?;D...Täs on SKOPALIKIN suurin fani! = Algum fã de SKOPALIK? ;D ... Aqui está o maior fã do SKOPALIK!
+KAIKILLE YLI 30V NAISILLE HELLÄÄ HIERONTAA HUOMENNA. = Para todas as mulheres acima de 30 anos, massagem suave amanhã.
+TÄNÄÄN TAAS VUODEN VANHEMPI KU EILEN!... = Hoje mais um ano velho do que ontem!...
+Hah-hah! Hesalaiset ne vasta landesakkia on. T:setä samuli = Hah-hah! As pessoas de Helsinki são realmente caipiras. T: Tio Samuli
+JUPPE VOI ITSE MENNÄ NUKKUMAAN,EN OLE NANA -VAKKARI NANA- = Juppe pode ir dormir sozinho, eu não sou Nana - cliente regular Nana -
+SUPPO PYLLYYN JA NUKKUMAAN. HALI PETE ;) = Supositório no traseiro e vá dormir. Abraço Pete ;)
+Mulla on huono omatunto kun kilautin kaverin muijaa. Mitä teen. = Estou com culpa porque me envolvi com a namorada de um amigo. O que faço?
+ROCK'N'ROLL BLUES AND JAZZ, NIM. PELLET RULES FOREVER! = Rock'n'Roll, Blues e Jazz, nome. Pellet reina para sempre!
+Heiluttakaa kaikki valkoista lippua, ei tule ruumiita ! Jukka = Acenem todos a bandeira branca, não haverá mortos! Jukka
+Suvi rakastan sua t.sami = Suvi, eu te amo. t.Sami
+Kyllähän täällä ollaan hereillä.. misäs päin Torniota vaikutat? M22 = Claro que estamos acordados aqui.. você está em que parte de Tornio? M22
+NIIN MIS NIITÄ LEIMAREITA OLI? = Então, onde estavam aqueles carimbos?
+ILTAA KAIKILLE. MÄ OON UUS TÄÄLLÄ. T. EMMI = Boa noite a todos. Sou novo aqui. T.Emmi
+kajjaani kutsuu. hei sä nainen. vieläks leikitään. -make- = Kajaani chama. Oi, garota. Ainda vamos brincar? -Make-
+PANSSARIVAUNU NAHKAHOUSUISSA PITI SENSUROIDA?! Hmm? =) = Um tanque de guerra de calça de couro precisava ser censurado?! Humm? =)
+Löytykö naista KantaHämeestä SUOMEN SUURIN *** ja vapaa *** = Encontrou uma mulher em Kanta-Häme? A maior *** da Finlândia e livre ***
+Rakas on sanoista kaunein.Omistettu Sirpalle Kolariin.Paappa viestiä. = Amor é a palavra mais bonita. Dedicado a Sirpa em Kolari. Mande uma mensagem.
+KUKA LAITTO SATULLE TERKKUJA? MISTÄ PÄIN?! HALUISIN TIETÄÄ!! = Quem enviou cumprimentos para Satu? De onde?! Quero saber!!
+HYVÄÄ YÖTÄ HEIDI. SYDÄMENI ON SINUN. T:PÖLÖ = Boa noite Heidi. Meu coração é seu. T:Pölö
+ISTUTAAN KAIKET PÄIVÄT PC:N EDESSÄ JA MAMMA PASSAA. = Sentamos na frente do PC o dia todo e a mãe cuida de nós.
+JESSICA MÄKIN VALVON!VOITAS VALVOA YHDESSÄ!MISSÄ PÄIN TORNIOTA? = Jessica, eu também estou acordado! Podemos ficar acordados juntos! Onde em Tornio?
+TEIMON KUPPA, TIETÄJÄT TIETÄÄ HNNNHGGGG =D = Teimo está doente, os que sabem entendem HNNNHGGGG =D
+OLETKO KÄYNYT *** ? = Você já foi ao *** ?
+KAUDEN SUURIN YLLÄTTÄJÄ VIE POJAN LAITILAN TORILLE. T:LATE = O maior surpresa da temporada leva o troféu para a praça de Laitila. T:Late
+NAANTALI rules. waZaa.... ja kaikil kauneil naisil halit. = Naantali domina. waZaa.... e abraços para todas as mulheres bonitas.
+ketkä vitu pölöt ryyppää laitila kievaris keskel arkipäivää :-DD = Que diabos de idiotas bebem no bar de Laitila no meio da semana? :-DD
+HENRY!En ole äskeinen etsijäsi,mutta ootko se E jota mä etsin? = Henry! Não sou quem estava te procurando antes, mas você é o E que eu procuro?
+TERKKUJA KAIKILLE TUTUILLE KAJAANIIN TÄÄLTÄ OTANMÄESTÄ!! = Saudações a todos os conhecidos em Kajaani, diretamente de Otanmäki!!
+LINDA ON AINA NÄIN -> (o: !! hih! ...ja sydän mun lyö BUM! BUM! BUUUM! = Linda é sempre assim -> (o: !! hih! ...e meu coração bate BUM! BUM! BUUUM!
+NIIN soittakaa sille PEKKO MAURILLE jos on ongelmia..-daddy cool- = Então liguem para Pekko Mauri se houver problemas..-daddy cool-
+SANTTU, HYVÄÄ YÖTÄ RAKAS,MUL ON NIIN IKÄVÄ T:SUN OMA AINA = Santtu, boa noite meu amor, estou com tanta saudade. T: Sempre seu
+MITÄ LÄHEMPÄNÄ ON 014 AREAA, SITÄ ENEMMÄN KUTITTAA. TONI 19V = Quanto mais perto da área 014, mais coça. Toni 19 anos
+Olen se Helena36 ja odotan kuinka sokkotreffit sovitaan...? = Eu sou a Helena36 e estou esperando como marcar o encontro às cegas...?
+TERVEISII VARTIOINNIN SÖPÖIL VATIJOIL FOORUMIIN.MILKKIS = Saudações aos adoráveis guardas do fórum. Milkkis
+*** Metal-Ladyt,yhteyxiä! ROTTA74 = *** Metal-Ladies, entrem em contato! ROTTA74
+TE OOTTE KAIKKI * IDI__TTEJA!!!!!!!! = Vocês são todos * idiotas!!!!!!!!
+Miksi LAPPEENRANNAN pitää olla näin pieni kaupunki??? = Por que Lappeenranta tem que ser uma cidade tão pequena???
+Mikäs toi LOOOPONEN juttu on? Johanna ulvilast on ihana. t.ensikertalainen = O que é essa história do Loooponen? Johanna de Ulvila é adorável. T: iniciante
+TÄNÄÄ KÄVI TOSI KIVASTI MUST TULI TAAS POIKAMIES T.ARVAA HARMITTAAKO = Hoje foi muito bom, estou solteiro de novo. T: Adivinha se se arrepende
+HYVÄÄ YÖTÄ VILLE!!! Mulle saa muuten tekstata&soittaa... = Boa noite Ville!!! Pode me mandar mensagem ou ligar...
+ONX LAPUALLA KETÄÄN HEREILLÄ? TOIVOO EX LAPUALAINEN. = Tem alguém acordado em Lapua? Pergunta um ex-residente de Lapua.
+PÄIVI YLIKIIMINGIST, MIS OLET? TAVATTIIN BAARIS 1,5 VUOTTA SIT. = Päivi de Yli-Kiiminki, onde você está? Nos encontramos no bar há 1,5 anos.
+samii!jos katselet chattia niin soita tänne keravalle!! = Sami! Se estiver vendo o chat, ligue para Kerava!!
+MANSELAISET KASVATTAA MUUT OSTAA = Os de Manse criam, os outros compram.
+MITÄ EIHÄN NE PELLET OSAA EES LUISTELLA. T:KUPPIS BOY = Esses palhaços nem sabem patinar. T: Kuppis Boy
+Ei Kvl:laa pidä pilkata. Minäkin olen täällä. :) -m24- = Não zombe de Kouvola. Eu também estou aqui. :) -24M
+Mä tunnen naisen jol on simpelin paras peppu ! :) = Eu conheço uma mulher em Simpele com o melhor bumbum! :)
+*** NÄÄS, NÄÄS! = *** Olha, olha!
+No voi morjensmorjens.. SILMÄT LIIKKUU,LISÄÄ KALJAA!!! t:smörre = Oh olá olá.. os olhos se mexem, mais cerveja!!! T: Smörre
+HELENA OIS PORILAISTA AUTOILEVAA HERRASMIES SEURAA T. M34 = Helena, um cavalheiro de Pori com carro está esperando. T: M34
+ketään pyhärannasta? T.HOLY BEACH FOREVER = Alguém de Pyhäranta? T: Holy Beach Forever
+BUSSI MENI MASKUS OJAA OLIKS MUITA TÄÄLTÄ T.OPETTEL AJAMA = O ônibus caiu no riacho em Masku, tinha mais alguém daqui? T: Aprende a dirigir
+TÄYTÄN 30.V.!.KAMOON TYTÖT!PUHUTAA VAIK ET MITÄ TEHÄÄ?? t.pipari = Estou fazendo 30 anos! Vamos garotas! Conversar ou o que fazer?? T: Pipari
+KEURUU KUTSUU HEINÄKUUS:)MITÄ LEIKITTÄS,AIKAA VIELÄ OIS?-LULU- = Keuruu chama em julho :) O que brincar, ainda há tempo? -Lulu-
+HELENA36 OLEN VAPAA POIKAMIES JA YKSIN OMALLA HUVILALLA = Helena36, estou solteiro e sozinho na minha villa.
+PIRISTÄKÄÄ KAHTA BLONDIA KERTOKAA JOTAI HAUSKAA! T:J&N = Animem duas loiras, contem algo engraçado! T: J&N
+MOI HELENA36 MISSÄ ASUT?T:K = Oi Helena36, onde você mora? T: K
+Nettisuhteeni kävi kylässä..:-)M = Meu relacionamento online veio me visitar.. :-) M
+TOMMI JA TERHI ON TÄYDELLINEN PARI... AITOA RAKKAUTTA.. UUH.... = Tommi e Terhi são um casal perfeito... amor verdadeiro.. uuh....
+Onx mistään Keski-Suomesta yleensä A-M:aa paikalla!? = Há geralmente alguém de A-M na região central da Finlândia!?
+RAKATAN SUA NINA. = Eu te amo, Nina.
+Poliiseil on taas Lahes joku hukas, ja me mentii häiriköimää. -CARITA- = Os policiais de Lahti estavam procurando alguém, e fomos atrapalhar. -Carita-
+LIHIS MUNALLA JA MAITO RAHALLA = Comi torta de carne com ovo e iogurte.
+aina kun väittelet idiootin kanssa mistä tiedät että hän ei tee samoin... = Sempre que discute com um idiota, como você sabe que ele não pensa da mesma forma...?
+Siis kuka rakastaa mua? Corrado = Então, quem me ama? Corrado
+MOI JERE! SAVONLINNA ON PARAS PAIKKA SITÄ VOISI VETÄÄ VAIKKA... = Oi Jere! Savonlinna é o melhor lugar, você poderia fazer qualquer coisa lá...
+VOI "ANNELI" JOS TIETÄSIT,ETT SULL ON SALANE IHAILIA! = Oh "Anneli", se você soubesse que tem um admirador secreto!
+Hyvä työpaikkahan se on,jos kännissä saa duunia vääntää.. = É um bom trabalho se você pode trabalhar bêbado..
+ONNEKSI EI SIVAREITA OLLUT -39-44 SUOMESSA! = Felizmente não havia serviço civil na Finlândia entre 1939-44!
+HELENA ON ALASTAROJTA T: HELENA = Helena é de Alastaro. T: Helena
+Levillä 4 miestä ilman naista...Ja koko mökki käytös. = Em Levi, 4 homens sem mulheres... e usam toda a cabana.
+SAMILLE MAISTU PIZZA! = Pizza gostosa para Sami!
+Kaksi poikamiestä pyytaa seuraa aikuisilta leideilta. = Dois solteiros procuram companhia de mulheres adultas.
+SIVARIT JA FASISTIT.LOPETTAKAA SE LÄSSYTYS KAKARAT T.VETERAANI = Serviço civil e fascistas. Parem parar de reclamar, garotada. T: Veterano
+Sepi setä toivottaa hyvää yötä virnuilee hullunkiilto silmissä = Tio Sepi deseja boa noite sorri com um brilho louco nos olhos
+terveiset tajuat jos olet kuka pitääkin, ajattele asiaa = Você entenderá esta saudação se for a pessoa certa, pense nisso.
+HEI SUOMALAISET = Olá finlandeses
+Hello ALLA som pratar svenska! HELLO ON YA2! = Olá a todos que falam sueco! HELLO ON YA2!
+HELENA MITEN SUT LÖYTÄÄ ALASTAROLTA VOITAS NÄHDÄ M34 = Helena, como te encontrar em Alastaro? Podemos nos ver. M34
+Muutin pois Peräjärveltä, paras päätös ikinä. -Sussu- = Mudei de Peräjärvi, a melhor decisão da minha vida. -Sussu-
+Tunteeko kukaan Outia oulusta? Tosi nätti flikka! -Jaska- = Alguém conhece Outi de Oulu? Menina muito bonita! -Jaska-
+Jos * Pekka on katseella niin ota yhteyttä muhun! T: Pilotti pulli = Se * Pekka está de olho, entre em contato comigo! T: Pilotti Pulli
+OON 46.V -RAUMA. LUULIN OLEVANI KUOLLUT. SUSKI- KAIPAAN SUA. = Tenho 46 anos, Rauma. Achei que estivesse morto. Suski, sinto sua falta.
+XXL NAINEN HALUAISI TUTUSTUA XXL MIEHEEN.T.KILTTI = Mulher XXL quer conhecer homem XXL. T: Kiltti
+HEI EIKS VOIS NÄHÄ? MIUA KIINOSTAIS REHELINEN HIMINNEN? = Ei, não podemos nos ver? Estou curioso sobre uma pessoa honesta.
+kenen samin piti soittaa keravalle..? ..japa.. = Qual Sami deveria ligar para Kerava..? ..japa..
+Jessica oletkos vielä hereillä? -Twilight- = Jessica, você ainda está acordada? -Twilight-
+HEI ROO...SIIS RAUMALAINEN!GOOD LUCK! T:AKKSI = Ei Roo... então você é de Rauma! Boa sorte! T: Akk­si
+ARMEIJA JA SIVIILIPALVELUS ON AIVOPESUA! = O exército e o serviço civil são lavagem cerebral!
+Ok, ta det på svenska -Face- Var är du ifrån? = Ok, vamos em sueco -Face- De onde você é?
+MÄ TAIDAN RUVETA KOISAAMAAN JA JÄTÄN TV:N AUKI = Acho que vou dormir, deixo a TV ligada
+helena36 hkl-Tääl on vapaa mies,ei ehkä eroottinen mutta kotona viihtyvä! = Helena36 hkl- Aqui há um homem solteiro, não sexy, mas caseiro
+sami r-mäestä!"vaktare"piti soittaa mut oot kai jo nukkumas? = Sami de Rajamäki! "Vaktare" deveria ligar, mas você já está dormindo?
+M65 JA -FACE- HANKKIKAA ELÄMÄ!GIVE PEACE A CHANCE T:PICKLES = Homem 65 e -Face-, vivam a vida! Dê uma chance à paz. T: Pickles
+OKEE,JOS EXYT MIKKELII BEIBE,KYSY AKKSIA NI TARJOON BISSEN. = Ok, se vier de Mikkeli, baby, peça AKKSI que eu pago uma cerveja.
+KUHMOSSA ON VIELÄKIN LIIKAA SUSIA = Ainda há muitos lobos em Kuhmo.
+Kukkis, 016-area? -Pluton takaa?- = Kukkis, área 016? -Atrás de Plutão?-
+LACROSSE ON PARAS URHEILU LAJI. = Lacrosse é o melhor esporte.
+M38, kerro missä ja milloin tavataan? Helena36 = Homem 38, diga onde e quando nos encontramos? Helena36
+LIHAPIIRAKOITA EI SYÖ KUIN YLIPAINOISET SORRY = Tortas de carne só comem pessoas acima do peso, desculpe.
+VEGATARISTIT ON HUIPPUJA! = Vegetarianos são os melhores!
+Onko ruotsia KIELETTY in this GSM CHAT, way? = O sueco é proibido neste chat GSM?
+MÄ EN KYL OTA VAIMOO JOKA EI OSAA TEHÄ LÄSKISOOSII! T:AKKSI = Eu não me caso com mulher que não sabe fazer molho Läskisoosi! T: Akk­si
+Titityy!se ei joka valakkaa...Vai mitä?TITITYY! = Titityy! Nem todo mundo age assim... certo? Titityy!
+No ruotsi here? Sorry my friends I cant reatc ya! = Ninguém falando sueco aqui? Desculpa amigos, não consigo reagir!
+MISTÄ NIITÄ MANGA PIIRAKOITA SAA T.YXINKERTAINEN = Onde se consegue aquelas tortas de manga? T: Yxinkertainen
+KIRJOTUS SEURAA PORIST??T:Bermudan Kolmio = Alguém de Pori para correspondência? T: Bermudan Kolmio
+KUINKAHAN MONI TÄN PÄIVÄN KAKARA OLIS PÄRJÄNNY TALVISODAS = Quantos garotos de hoje sobreviveriam na Guerra de Inverno?
+ILONA! Mä voin tulla **... Ei saa sensuroida tätä... = Ilona! Eu posso ir **... Não pode censurar isso...
+RIITTA ! RAKASTAN SUA.TUOMO. = Riitta! Eu te amo. Tuomo
+HEIPPA! :D = Oi! :D
+en tarkoita riksua!vaan rajamäkeä!sami!! taidat olla nukumas? = Não estou falando de RIIHIMÄKI! Estou falando de RAJAMÄKI! Sami!! Você está dormindo?
+MuNaVoi - Muhoksen NaisVoimistelijat...ehheh. = MuNaVoi - Ginastas mulheres de MUHOS... hehe.
+TÄÄLLÄ NÄKYY REVONTULI ! MAHTAVAA!! = Aqui se vê a aurora boreal! Incrível!!
+HEI KILTTI HOITSU...ÄLÄ VIELÄ LUOVUTA,KOKEILE MUA T:NAPPISILMÄ = Ei, enfermeira querida... não desista ainda, me dê uma chance. -NAPPISILMÄ-
+KARI RAKASTAA TARJUSKAA YLI KAIKEN! = KARI ama TARJUSKA acima de tudo!
+JANI RAKASTAA MARIKAA.PIHLAVA RULES JA VÄLIKOPPA CORRIS MYÖS. = JANI ama MARIKA. PIHLAVA é demais e VÄLIKOPPA CORRIS também.
+Makke vaasasta jos oot hereillä ja katot tätä niin mä rakastan sua!! = Makke de VAASA, se você está acordado e vendo isso, eu te amo!!
+HEI IPE 34! MISTÄ PÄIN OLET? = Ei, IPE 34! De onde você é?
+M A R I K A HEIPS SINNE KOTISOHVALLE.. T:M23 = MARIKA, olá aí no seu sofá.. -23M-
+OKEI OKEI..MÄ HEITÄN ITTENI LEVYKS JA TYYDYN UNEEN.KROOH.ZZ. = Ok, ok.. vou me jogar na cama e ir dormir. Snooze. ZZ.
+MATTI!OIS PIKKUKAHVET!JOUDATKO? = MATTI! Um cafezinho? Você consegue agora?
+kari ja kuksa ja karppa etsii vapaata aikuista seuraa = Kari, Kuksa e Karppa procuram companhia adulta livre
+Koita ny ellu pärjätä sen darras kans!! T:toni = Ellu, tente aguentar a ressaca!! T:Toni
+Miks sä annoit 2-lapsen isä ymmärtää enemmän kuin ymmärsit antaa?! = Por que você fez o pai de dois filhos entender mais do que podia dar?!
+ONKO MIKKELISSÄ VIELÄ NAISIA HEREILLÄ!? -BENJI- = Ainda há mulheres acordadas em MIKKELI!? -BENJI-
+NYTTEN OLEN TÄYSI RAATO, MIES NIIN KAUKAA MINUT KAATO. = Agora estou totalmente acabado, um homem me derrubou de longe.
+PODEMMEKO UNITAUTIA? VIRUKSEN LAT.NIMI? = Estamos com doença do sono? Qual o nome em latim do vírus?
+Terveiset kukkakaupan väelle Laitilaan! = Saudações ao pessoal da floricultura em Laitila!
+ESA TAUNO MAKSA VELKAS T. TIEDÄT KYLLÄ KUKA = ESA TAUNO, pague sua dívida. Você sabe quem.
+Onko muita jokka tekee itte kaljasa? T: Kurjalan LITKUUN kyllästyny = Há mais alguém que faz a própria cerveja? T: Farto do xixi de Kurjala
+KARVOLA JOS VITTUILES VIEL KERRAN NI MÄ TULEN JA LEMPPASEN = Karvola, se implicar mais uma vez, eu vou lá e te expulso
+Karvakummun yläasteen uskonnon ope oox tääl? T:9a etupulpetti = O professor de religião do ensino médio de Karvakumpu está aqui? T: 9a, primeira carteira
+Rahaa rahaa ja rahaa.Tääkin chätti haluu vaan rahaa.Kusetuksen makua = Dinheiro, dinheiro e dinheiro. Este chat também quer apenas dinheiro. Cheira a golpe.
+AIJA NAPA,LANTSAROOTTE,TENERIIFFA,MALLORKA,ROODOS KAIKKI KÄYTY = Agia Napa, Lanzarote, Tenerife, Mallorca, Rodes, todos visitados  
+JUSSI SE KOVAA NUS..NUS..NUS..NUS..NUKKUI ;) = Jussi dormiu profundamente ;)  
+Laiva viime viikol,hytti 5016 Anna muistatko? Vastaa = Navio na semana passada, cabine 5016, Anna, lembra? Responda  
+VIIS MINSAA VIEL OON TÄÄL SIT NUKKUU = Mais cinco minutos aqui e vou dormir  
+Itken aina kun kuulen Maanme laulun t. Fiinisalo II/96 1.SatTR/TykPR = Choro sempre que ouço o hino nacional  
+onx muita outoja?mä oon vähän outo..enkä ihan vähääkään.. -peikkotyttö = Há outros esquisitos? Eu sou um pouco estranho... na verdade muito estranho -peikkotyttö  
+ROKKENROL ASENNETTA EIKÄ MITÄÄ TEKNO PASKAA = Espírito rock and roll, nada de lixo techno  
+OLKAA JO HILJAA en jaxais kuunnella tätä PASKAA koko yötä joka yö! = Fiquem quietos, não aguento ouvir essa porcaria toda noite  
+Hullu mies Huittisista turha mies Turkkusesta = Homem louco de Huittinen, homem inútil de Turku  
+BOBEDA ON PARAS T:BOBEDA FANI = Popeda é o melhor. T: Fã de Popeda  
+Väinön traktori EI toimi,se on paska kone,rahat takaisin HETI = O trator do Väinö não funciona, é uma máquina lixo, devolvam o dinheiro imediatamente  
+Pahluan ARVAUSKESKUS ei auta, kuumees jo kolmat päivää!! = O centro de “adivinhação” de Pahlua não ajuda, estou com febre há três dias!!  
+VALVOJA OOT IHQ = Administrador, você é fofo  
+VITTU MITÄ VITUN TAAS KAIKKI = Puta merda, que merda é essa agora  
+pukautukaa paremin LÖKÄPÖKSYT = Se vistam melhor, seus calças-sujo-hip-hop  
+Vaan köyhät käy kirppiksellä, itse en käy = Só os pobres vão à feira de usados, eu não vou  
+Jollei pännis, ennolis kännis.NYT = Se não estivesse irritado, nem teria ficado bêbado. Agora sim  
+Valvoja saaxsun tissiä pouristaa? t.fani = Administrador, posso apertar seu peito? T: fã  
+VALVOJA POISTA KAIKKI KURPAN MOLLAUS VIESTIT KIITOS = Administrador, delete todas as mensagens que xingam Kurpa, obrigado  
+KYLLÄ SEISOO.NIMITTÄIN JALOILLANI ;) NIMITTÄIN KOLMANELLA JALALLA ;) = Sim, está em pé. Com meus pés ;) Na verdade com a terceira perna ;)  
+KATTOOX KUKAAN RÖÖRIN KOULULT TÄTÄ? JOS KATTOO NI HSITAKAA PASKA:D = Alguém da escola Röör está vendo isso? Se estiver, coma merda :D  
+AMPIAINE PISTI MUNAM PÄÄHÄN NI RUKOILIN POSITA KIPU JÄTÄ TURVOTUS HAHA = Vespa me picou no membro, então rezei: tira a dor mas deixa o inchaço, haha  
+MIKÄ MENO?MUIT HULLUI? T:NIUVAN "NEROT" = Qual a boa? Outros loucos? T: Niuvan “Gênios”  
+Suomalainen, ruotsalainan ja norjalainen pelas lätkää. Suomi voitti! = Finlandês, sueco e norueguês jogaram hóquei. Finlândia venceu!  
+PERÄ PUKAMAT VAIVAA MISTÄ LÄÄKE = Hemorroida incomoda, qual remédio?  
+Oliko joku lama muka?t. Viimeset 10 vuotta 30 tonnii kuukauspalkka = Teve alguma recessão? Nos últimos 10 anos, salário mensal de 30 mil  
+Köyhä ajaa samal autol aina. Rikas ostaa uuden ku pensa loppuu, meikä = O pobre dirige sempre o mesmo carro. O rico compra novo quando o dinheiro acaba, sou eu  
+Kolme kertaa y suluis :D Kirjottakaa paperil ja kääntäkää paperii :D = Três vezes a letra y :D Escrevam no papel e virem o papel :D  
+CIA LÖYTÄÄ KYLLÄ TEIDÄT...TÄÄLTÄKIN = A CIA vai achar vocês... até aqui  
+Peräjärven päällä kuulemma nähty ufo. Tietääks ketään enempää? = Aparentemente visto um UFO sobre Peräjärvi. Alguém sabe mais?  
+Pierunkuoria ja porkkanoita kuka muistaa :-D = Cascas de pum e cenouras, quem lembra :-D  
+Päättäjilläki pitäis olla vaihtopenkki, jäähyt, ja pelikielto = Políticos também deveriam ter banco reserva, expulsão e suspensão  
+MENKÄÄ TÖIHIN,MITÄ TE TÄNNE KIRJOTATTE PELKKÄÄ PASKAA KIRJOTATTE = Vão trabalhar, por que escrevem só porcaria aqui  
+Mitä yhteist on lehmäl ja laudal?Molempie vierest herää välil haha:-D = Qual a semelhança entre vaca e tábua? Às vezes acorda ao lado dos dois, haha :-D  
+Markku makso kakskymppii et sanon tääl et sil on iso kanki = Markku pagou 20 para eu dizer aqui que ele tem um grande membro  
+Kärpäset on paskaa, miljoona paskaa ei voi olla vääräs = Moscas são lixo, um milhão de lixo não pode estar errado  
+Poliisi on kyttä! = Polícia é polícia ruim!  
+VITUN VEIJO, SÄ OOT VEIJO ETKÄ MIKÄÄN VEYO, TAINNU NOUSTA HATTUUN... = Caralho Veijo, você é Veijo, não algum VeYo, se achou demais...  
+Kärkölänkulman k-päät moro T: Keisari K-Pää (k*sipäätä tarkotan ;) = Oi filhos da puta de Kärkölänkulma. T: Imperador K-Pää (quer dizer filho da puta ;)  
+Latikainen rähmäsilmä tumpelo tuomari pilas TAAS pelin!!! = O árbitro atrapalhado Latikainen estragou o jogo de novo!!!  
+Ennen juopotki soitti musaa paremmin kun nykypäivän tekhno "muusikot" = Antes, os bêbados tocavam melhor que os "músicos" de techno de hoje  
+onko tarvola faneja t tarvola = Há fãs de Tarvola? -Tarvola-  
+Tietääx kukaan onko Taru Terhilehdon oikee nimi Taru vai Terhi? = Alguém sabe se o nome real de Taru Terhilehto é Taru ou Terhi?  
+TIMPPA TIMPPA MAISTUUKO PIM..PIM..PIM.. PIIMÄ ;-) = Timppa Timppa, o leite de cevada está bom? ;-)  
+ESA TAUNO ON VELKAA MULLEKKI, MAKSA V-*-*-*-U VELKAS = ESA TAUNO também me deve dinheiro, paga essa merda  
+junanradat on valehtelua = Trilhos de trem são mentira  
+oispa jo kesä, ei tätä paskansatamista JAKSA! = Queria que já fosse verão, não aguento mais essa porcaria de neve e chuva  
+culliculliculliculliculliculliculliculliculliculliculliculliculliculliculli = [onomatopeia repetitiva]  
+Oon keräiliä kerään junia vaunuineen. Onko muita junakeräiliöitä? = Sou colecionador de trens com vagões. Há outros colecionadores de trens?  
+3=======================================D noin pitkä muna = Pênis de aproximadamente este tamanho  
+en usko että junanraiteet tehdään siitä materiaalista mitä väitetään = Não acredito que os trilhos sejam feitos do material que dizem  
+kuka tietää junanradoista jotain? = Quem sabe algo sobre trilhos de trem?
+muita joita kiinnostaa junanraiteiden painaumat ja kovuus? = Há outros interessados em depressões e dureza dos trilhos?
+tunnistan junanraiteiden tunnustettavuuden helposti ja paineen = Reconheço facilmente a textura e pressão dos trilhos
+junanraiteen yksityiskohdat vaikuttaa junan nopeuteen = Detalhes do trilho afetam a velocidade do trem
+junanradan kulma suhteessa maahan kiinnostaa eri maastoissa = O ângulo dos trilhos em relação ao chão interessa em diferentes terrenos
+kuumalla säällä juna menee eri vauhtia kun aurinko lämmittää raiteen = Em dias quentes, o trem vai mais rápido porque o sol aquece o trilho
+Onko junaskitsoa näkyny :D Junamuna junamuna :D Katotaan suuttuuko :D = Algum esquizofrênico de trem visto :D Trem x trem :D Vamos ver se fica bravo :D
+kuka naarmutti junanraidetta koijalan aseman lähellä? pitkä naarmu = Quem arranhou o trilho perto da estação Koijala? Arranhão longo
+olen tutkinut onko muurahaisista haittaa junanraiteille. ei ole = Pesquisei se formigas prejudicam trilhos de trem. Não prejudicam
+junanradat kuvioituu kartalla merkillisesti olen pannut merkille = Trilhos criam padrões estranhos no mapa, notei
+yritän tutkia viekö kaikki junanraiteet oikesti johonkin = Estou tentando descobrir se todos os trilhos realmente levam a algum lugar
+junanraiteentekijät merkkaa raiteet välillä eri värisävyillä = Fabricantes de trilhos marcam às vezes com diferentes tons
+eikö muita junanratatutkijoita löydy? tutkimusrahat menee chattiin = Não há outros pesquisadores de trilhos? O dinheiro da pesquisa vai todo para o chat
+Junafriikki mee hoitoon :D Idiootti pelle = Fanático por trens, vá ao médico :D Idiota
+yritän valmistaa parempaa junanraidemateriaalia, onko muita? = Estou tentando criar melhor material para trilhos, há mais alguém?
+KATTIA KANSSA JA KISSANPASKAT = Que piada ruim, falando merda de gato
+HAR DU REDAN REDANREDAN :D = Já fez isso várias vezes? :D
+NÄR GÅR NÄSTA BUSS TILL SLUSSEN? = Quando vai o próximo ônibus para Slussen?
+En kutsuisi tällaista sivistykseksi mitä täältä luen = Não chamaria isso de cultura, o que leio aqui
+Kuka muistaa Tele-Urhon? Onks jollai myydä? = Quem lembra do Tele-Urho? Alguém vende?
+Kevät on kaunis ja launis -H.K. = Primavera é bonita e radiante -H.K.-
+Kyllä sen täällä taas näkee että puutteet korvaavat lahjakkuuden! = Aqui se vê de novo que deficiências substituem talento
+Tunteex joku Vesa Loiripuroa? t. Turha-Matti = Alguém conhece Vesa Loiripuro? T: Matti inútil
+Nousin just sängyst mut menin takas sänkyy, mikä meno muil? = Levantei da cama, mas voltei, o que vocês estão fazendo?
+Muna pystös jos valvoja nainen, jos mies ni sitte ei = Pênis ereto se administrador for mulher, se for homem não
+KULLI, HOPELI, PRONSLI = Pênis, prata, bronze
+Oon juoppo mut vierotan itteeni käyttämäl rahat tänne eikä viinaa = Sou bêbado mas me afasto do álcool gastando dinheiro aqui
+Oon kolmen ällän yliopilas, LUKIO LÄPI LUKEMATA haha :D = Sou aluno com três A’s na universidade, passei no ensino médio sem estudar haha :D
+kaljaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa = Cerveeeeejaaaaaaaaaaaaaaaaa
+saax täält pildee, spärdäri löytyy, käyttämätön = Dá pra pegar uma camisinha aqui, nova disponível
+junanraiteen tilavuutta on hankala saada selville mutta yritän, muita? = Difícil medir volume do trilho, mas estou tentando, alguém mais?
+"HUTILAINEN" pilas taas pelin, se ei saatana osu ikinä! = “HUTILAINEN” estragou o jogo de novo, esse filho da puta nunca acerta!
+Mahousen pitäis olla jossai muus joukkuees = Mahounen deveria estar em algum outro time
+Näittekste millasen maalin Mahounen teki!!! = Viram o gol que Mahounen fez!!!
+Näittekö miten hienosti Kurpa pelas? Nii, en mäkään XD = Viram como Kurpa jogou bem? Pois eu não XD
+Kaivoin persettä ja nyt mun sormi haisee paskalta = Cocei o cu e agora meu dedo cheira a merda
+Jäkiksen mm oli viimeks enemmänki ÄMMÄN kisat ku MM kisat = O último mundial de hóquei parecia mais campeonato de mulheres do que mundial
+Eka runq sit nuqq = Primeiro jogo, depois dormir
+MENKÄÄ NUKKUUMAAN IDIOOTIT MITÄ TE TÄMMÖSTÄ KATOTTE! = Vão dormir idiotas, por que estão olhando isso!
+tääl on kyl paskanjauhannan sm-kisat menos, oon yks kilpailijoist :D = Aqui tem campeonato nacional de bobagem, sou um dos competidores :D
+MITÄS PERWOT??? = Que porra, pervertidos???
+parmpi hummallahakunen huominen ku juomallahakusen juiominen :DD = Melhor ficar bêbado amanhã do que beber e se arrepender :DD
+En ehi ny kattoo tätä. Millon tää tulee uusintana? = Não tenho tempo para ver agora. Quando passa de novo?
+NAUHOTAN KAIKKI CHATIT KASETILLE JA TUTKIN? = Gravo todos os chats em fita e estudo?
+TYHMÄ SAA OLLA MUTTEI TYKKIMIES :D = Pode ser idiota, mas não pode ser artilheiro :D
+MUL MENI KOKO VIIME PALKKA TÄN CHÄTTII. PITÄIS VARMAA LOPETTAA. EN = Gastei meu último salário todo nesse chat. Acho que devo parar. Eu
+Sille joka kysyi, ni joo. = Para quem perguntou, sim
+Onks tirppoja? Tääl ois sonni jos tirppoja löytyy! T: Sonni ;) = Tem gatinhas? Aqui tem um touro se houver! T: Touro ;)
+Kankinen on PASKAHOUSU = Kankinen é um medroso
+Pelataaks chättipokerii taas? mun kortit on pa2 he3 ruJ riK riA -Jiri = Vamos jogar poker de chat de novo? minhas cartas são pa2 he3 ruJ riK riA -Jiri
+Pelataaks chättipokerii taas? mun kortit on ri5 pa3 he9 paK heA -Jiri = Vamos jogar poker de chat de novo? minhas cartas são ri5 pa3 he9 paK heA -Jiri
+Pelataaks chättipokerii taas? mun kortit on he5 ru5 ruJ ruK ruA -Jiri = Vamos jogar poker de chat de novo? minhas cartas são he5 ru5 ruJ ruK ruA -Jiri
+Pelataaks chättipokerii taas? mun kortit on he3 he3 paJ paJ ruK -Jiri = Vamos jogar poker de chat de novo? minhas cartas são he3 he3 paJ paJ ruK -Jiri
+Pelataaks chättipokerii taas? mun kortit on pa7 pa8 pa8 paJ heQ -Jiri = Vamos jogar poker de chat de novo? minhas cartas são pa7 pa8 pa8 paJ heQ -Jiri
+Pelataaks chättipokerii taas? mun kortit on ri5 he6 he7 pa8 paA -Jiri = Vamos jogar poker de chat de novo? minhas cartas são ri5 he6 he7 pa8 paA -Jiri
+Pelataaks chättipokerii taas? mun kortit on ri2 ri3 heJ ruQ riA -Jiri = Vamos jogar poker de chat de novo? minhas cartas são ri2 ri3 heJ ruQ riA -Jiri
+Pelataaks chättipokerii taas? mun kortit on he7 pa8 he8 he8 he9 -Jiri = Vamos jogar poker de chat de novo? minhas cartas são he7 pa8 he8 he8 he9 -Jiri
+Pelataaks chättipokerii taas? mun kortit on he3 he6 pa7 heJ riQ -Jiri = Vamos jogar poker de chat de novo? minhas cartas são he3 he6 pa7 heJ riQ -Jiri
+Pelataaks chättipokerii taas? mun kortit on ru2 ri3 ri4 pa8 pa9 -Jiri = Vamos jogar poker de chat de novo? minhas cartas são ru2 ri3 ri4 pa8 pa9 -Jiri
+KAIKKI KANSANEDUSTAJAT ON VITIPÄÄ PERSRIEPUJA = Todos os deputados são idiotas e inúteis.
+Kun on jalkapallo ja käsipallo niin pitäis olla myös pääpallo = Se tem futebol e handebol, também deveria ter bola de cabeça.
+SORPETTI ON PASKA AUTO = Sorpett é um carro ruim.
+MISSÄ ON SELLAISET LAULAJAT KUIN ANTERO ALEN?? EI OLE SELLAISIA ENÄÄN! = Onde estão cantores como Antero Alen?? Não existem mais!
+Musiikki tänä päivänä on tylsää tegno jumputusta vaan! = A música hoje em dia é só batida chata de techno!
+KOMPPANIASSA HERÄTYS!!! :D t. "alikeisari" vänjäranta, muistaaks joku? = Alerta na companhia!!! :D - "subimperador" Vänjäranta, alguém lembra?
+Ylikersantti "KUSIKUMPU" oli kyllä hirvee. Mitäköhän sille kuuluu? = O sargento Kusikumpu era realmente horrível. O que será que ele anda fazendo?
+Onnee vaan spolleille pakkaseen haha :D = Boa sorte pros tiras no frio haha :D
+HAISTAKAA MUNA T. GYRBÄBAPA = Vão cheirar meu pau. -GYRBÄBAPA-
+Marjoriitta tuu takasin jooko = Marjoriitta, volta por favor.
+KIKKELI KIKELI KIKKELI KIKELI = Pau pau pau pau
+Hannu muista hakee kaupasta maitoa kun se on loppu = Hannu, lembra de comprar leite no mercado quando acabar.
+Jugga on hävytön paskantaja t. Jugga :-D = Jugga é um cagão sem vergonha. -Jugga :-D
+Naiset punaiset, ruusut tulipunaiset, sä haiset T: Runoilia = Mulheres são vermelhas, rosas são vermelhas, você fede. -Poeta-
+Joulukinkut saa halvimmalla joulun jälkeen vinkkinä vaan = Dica: presunto de Natal fica mais barato depois do Natal.
+oon ottanna vähän niin sanuttua ilolientä känni tuntuu jo = Tomei um pouco da tal bebida da alegria e já tô ficando bêbado.
+luulin jotta ny ryssät hyökkää mut se oliki vaimo ko pieras :D = Achei que os russos estavam atacando, mas era só minha esposa peidando :D
+SUOMI ON ISÄN MAANI, SEISON KÄSI LIPASSA TÄTÄ KIRJOTTAESSAKIN = Finlândia é minha pátria, estou até com a mão no boné enquanto escrevo isso.
+joku päivä vielä suomi käryää douppinkista hiihdossa = Um dia a Finlândia ainda vai ser pega no doping no esqui.
+ISI TUU JO SANOMAAN HYVÄÄ YÖTÄ ÄLÄ KATO TELKKARIA KOKOA YÖTÄ = Pai, vem logo dar boa noite, não fica vendo TV a noite toda.
+hox hox hox järki sanoo päässä pox pox pox = hox hox hox, a razão diz na cabeça pox pox pox.
+markus mun on suo ikävä :'( tuu mun luokke halitaan = Markus, sinto sua falta :'( vem aqui me abraçar.
+PIERUNKUORIA JA PORKKANOITA PÄÄLLE SINAPPII JA PORSAANVOITA = Casca de peido e cenouras, coloca mostarda e gordura de porco por cima.
+junanraide on mulle taide = Trilho de trem é arte pra mim.
+liikaa nähny pystymettästä tulleita iljetyksiä yök menkää pois = Já vi aberrações demais saindo da floresta, eca, vão embora.
+sain potkut, sanoin pitäkää tunkkine SAATANA, se oli tunkki firma = Fui demitido e mandei eles enfiarem o macaco no rabo, que empresa lixo.
+Tähänkin viestiin meni viisi markkaa rahaa Terveisin Tiedottaja = Essa mensagem também custou cinco marcos. Atenciosamente, o Informante.
+näin kerran muijan jol oli perse pieni ko kärpäselää :D = Uma vez vi uma mulher com a bunda do tamanho das costas de uma mosca :D
+paskantajain yhdistyksestä päivää, onko paska päivä :-D t. Jugga = Associação dos cagões deseja bom dia, o dia tá uma merda? :-D -Jugga-
+KERRAN TULI 1,99 KILON SIIKA, LÄHELLE JÄI KAKS KILOO = Uma vez saiu um peixe branco de 1,99 kg, quase deu 2 kg.
+joulupukin navas on pohjoisnapanöyhtää = No umbigo do Papai Noel tem fiapo do Polo Norte.
+MUITA JOKKA EI OO KÄYNY LUKIOO VAAN ELÄMÄN KOVAN KOULUN!!? = Mais alguém aqui que não fez ensino médio e só a escola dura da vida!!?
+Pidin rasvanippaa suus ja vahingos nielasin, mistä uus? Paskantamal? = Eu tava com um bico de graxa na boca e engoli sem querer, arrumo outro onde? Cagando?
+Kellään teist ei oo ystävii jokka tänne kirjotatte. Mulkaan eioo. = Nenhum de vocês que escreve aqui tem amigos. Eu também não.
+ostin kirkkourut enkä mahu enää kotii ja taloyhtiö urputtaa siit = Comprei um órgão de igreja e agora nem cabe mais em casa, e o condomínio só reclama.
+MUL ON SALA SUHDE REXIN KAA = Tenho um caso secreto com o Rex.
+SÖIN KERRAN KÄRPÄSPAPERII HYI HITTO MUT MAISTU IHA HYVÄLLE = Uma vez comi papel pega-mosca, credo, mas até que era gostoso.
+KÖYHÄT KYYKKYYN!!! *MENEE KYYKKYYN* = Pobres, agachem!!! *agacha*
+olipa kerran sen pituinen SE elikkä MUNA haha :D = Era uma vez um negócio desse tamanho, ou seja, um pau haha :D
+PUHUKAA HILJEMPÄÄ = Falem mais baixo.
+parempi pyy perseessä ku kymmenen perseessä = Melhor um na bunda do que dez na bunda.
+KAIKKI TURHAT CHATVIESTIT ON PERSSEESTÄ CHATVIESTI = Todas as mensagens inúteis do chat são mensagens tiradas do rabo.
+MORO POJA, SORI POJA = E aí rapazes, foi mal rapazes.
+mä oppisi jo soittama boogienationi kitaral mut mite passo mene siin? = Já aprendi a tocar Boogienation na guitarra, mas como faz aquela parte?
+amerikan kiertue on nyt OFI = A turnê na América acabou agora.
