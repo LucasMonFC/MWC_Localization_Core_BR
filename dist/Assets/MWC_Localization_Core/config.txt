@@ -64,10 +64,10 @@ Contains(Sheets/ServicePayment/Line) = 0,0.002,0
 ## Unemployment Sheet
 Contains(Sheets/UnemployPaper/2) = -0.01,0,0
 ## Computer
-Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/BIOS) = 0,0,0,2.4,
-Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/Text) = 0,0,0,2.4,
-Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/Command) = 0,0,0,2.4,
-Contains(COMPUTER/SYSTEM/TELEBBS/Software) & EndsWith(/text 2) = 0,0,0,2.4,
-Contains(COMPUTER/SYSTEM/TELEBBS/Software) & EndsWith(/BaudRate) = 0,0,0,2.4,
-Contains(COMPUTER/SYSTEM/TELEBBS/Software) & EndsWith(/StatusBar) = 0,0,0,2.4,
-Contains(COMPUTER/SYSTEM/TELEBBS/CONLINE) = 0,0,0,2.4,
+Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/BIOS) = 0,0,0,2,
+Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/Text) = 0,0,0,2,
+Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/Command) = 0,0,0,2,
+Contains(COMPUTER/SYSTEM/TELEBBS/Software) & EndsWith(/text 2) = 0,0,0,2,
+Contains(COMPUTER/SYSTEM/TELEBBS/Software) & EndsWith(/BaudRate) = 0,0,0,2,
+Contains(COMPUTER/SYSTEM/TELEBBS/Software) & EndsWith(/StatusBar) = 0,0,0,2,
+Contains(COMPUTER/SYSTEM/TELEBBS/CONLINE) = 0,0,0,2,
