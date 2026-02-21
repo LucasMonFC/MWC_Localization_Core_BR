@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 
@@ -13,15 +14,159 @@ namespace MWC_Localization_Core
     {
         private Dictionary<string, string> translations;
         private GameObject hostObject;
+        private PatternMatcher patternMatcher;
         private bool isApplied;
         private string appliedTarget;
-        private bool loggedUseReady;
-        private bool loggedTyperReady;
+        private HashSet<string> loggedReadyTargets = new HashSet<string>();
+        private List<PlayMakerFSM> cachedEnnusteDataFsms = new List<PlayMakerFSM>();
+        private float lastEnnusteDataFsmScanTime = -10f;
 
-        public void Initialize(Dictionary<string, string> translations, GameObject hostObject)
+        private enum FsmStrategyType
+        {
+            PosUse,
+            PosTyper,
+            TeletextBuildStringPattern,
+            TeletextWeatherUpdaterTokens
+        }
+
+        private sealed class FsmStrategyTarget
+        {
+            public string ObjectPath;
+            public string FsmName;
+            public FsmStrategyType Strategy;
+            public string AppliedLabel;
+            public string ReadyLogKey;
+            public string ReadyLogMessage;
+            public string StateName;
+            public int ActionIndex;
+
+            public FsmStrategyTarget(
+                string objectPath,
+                string fsmName,
+                FsmStrategyType strategy,
+                string appliedLabel,
+                string readyLogKey,
+                string readyLogMessage,
+                string stateName,
+                int actionIndex)
+            {
+                ObjectPath = objectPath;
+                FsmName = fsmName;
+                Strategy = strategy;
+                AppliedLabel = appliedLabel;
+                ReadyLogKey = readyLogKey;
+                ReadyLogMessage = readyLogMessage;
+                StateName = stateName;
+                ActionIndex = actionIndex;
+            }
+        }
+
+        private static readonly string[] PosUseStateNames = new string[] { "State 1", "State 3", "State 4", "State 5" };
+
+        private static readonly FsmStrategyTarget[] GamePosTargets = new FsmStrategyTarget[]
+        {
+            new FsmStrategyTarget(
+                "COMPUTER/SYSTEM/POS/BootSequence",
+                "Use",
+                FsmStrategyType.PosUse,
+                "GAME POS",
+                "POS_USE_READY",
+                "[FsmTextHook] Use FSM is initialized and ready.",
+                null,
+                -1),
+            new FsmStrategyTarget(
+                "COMPUTER/SYSTEM/POS/Command",
+                "Typer",
+                FsmStrategyType.PosTyper,
+                "GAME POS",
+                "POS_TYPER_READY",
+                "[FsmTextHook] Typer FSM is initialized and ready.",
+                null,
+                -1)
+        };
+
+        private static readonly FsmStrategyTarget[] GameTeletextTargets = new FsmStrategyTarget[]
+        {
+            new FsmStrategyTarget(
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1",
+                "Data",
+                FsmStrategyType.TeletextBuildStringPattern,
+                "GAME Teletext Bottomline",
+                "TTX_DATA_READY",
+                "[FsmTextHook] Teletext Data FSM bottomline targets are ready.",
+                "State 1",
+                2),
+            new FsmStrategyTarget(
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/241/Texts/Data/Bottomline 1",
+                "Data",
+                FsmStrategyType.TeletextBuildStringPattern,
+                "GAME Teletext Bottomline",
+                "TTX_DATA_READY",
+                "[FsmTextHook] Teletext Data FSM bottomline targets are ready.",
+                "State 1",
+                2),
+            new FsmStrategyTarget(
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1",
+                "Data",
+                FsmStrategyType.TeletextBuildStringPattern,
+                "GAME Teletext Bottomline",
+                "TTX_DATA_READY",
+                "[FsmTextHook] Teletext Data FSM bottomline targets are ready.",
+                "State 1",
+                2),
+            new FsmStrategyTarget(
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1",
+                "Data",
+                FsmStrategyType.TeletextBuildStringPattern,
+                "GAME Teletext Bottomline",
+                "TTX_DATA_READY",
+                "[FsmTextHook] Teletext Data FSM bottomline targets are ready.",
+                "State 1",
+                3)
+        };
+
+        private static readonly string TeletextEnnusteUpdaterPrefix = "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste/";
+
+        private static readonly FsmStrategyTarget[] GameTeletextWeatherTargets = new FsmStrategyTarget[]
+        {
+            new FsmStrategyTarget(
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Nyt",
+                "Logic",
+                FsmStrategyType.TeletextWeatherUpdaterTokens,
+                "GAME Teletext Weather",
+                "TTX_WX_READY",
+                "[FsmTextHook] Teletext weather updater FSM targets are ready.",
+                null,
+                -1),
+            new FsmStrategyTarget(
+                "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste",
+                "Logic",
+                FsmStrategyType.TeletextWeatherUpdaterTokens,
+                "GAME Teletext Weather",
+                "TTX_WX_READY",
+                "[FsmTextHook] Teletext weather updater FSM targets are ready.",
+                null,
+                -1)
+        };
+
+        public void Initialize(Dictionary<string, string> translations, GameObject hostObject, string[] patternFiles)
         {
             this.translations = translations;
             this.hostObject = hostObject;
+            this.patternMatcher = new PatternMatcher(translations);
+
+            if (patternFiles != null)
+            {
+                for (int i = 0; i < patternFiles.Length; i++)
+                {
+                    string filePath = patternFiles[i];
+                    if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+                    {
+                        patternMatcher.LoadPatternsFromFile(filePath);
+                    }
+                }
+            }
+
             StartCoroutine(ApplyWhenReady());
         }
 
@@ -60,6 +205,8 @@ namespace MWC_Localization_Core
             {
                 // Keep this hook alive in GAME to refresh dynamic POS FSM string buffers.
                 TryApplyGamePosFsmTranslations();
+                TryApplyGameTeletextBottomlineFsmTranslations();
+                TryApplyGameTeletextWeatherUpdaterFsmTranslations();
             }
 
             return false;
@@ -100,48 +247,9 @@ namespace MWC_Localization_Core
 
         private bool TryApplyGamePosFsmTranslations()
         {
-            PlayMakerFSM bootFsm = MLCUtils.FindFsmIncludingInactiveByPathAndName("COMPUTER/SYSTEM/POS/BootSequence", "Use");
             bool anyChanged = false;
             bool hasAnyTarget = false;
-
-            if (IsFsmReady(bootFsm))
-            {
-                if (!loggedUseReady)
-                {
-                    CoreConsole.Print("[FsmTextHook] Use FSM is initialized and ready.");
-                    loggedUseReady = true;
-                }
-
-                anyChanged |= ApplyBuildStringActionStringPartsTranslation(bootFsm, "State 1", 0);
-                anyChanged |= ApplyBuildStringActionStringPartsTranslation(bootFsm, "State 3", 0);
-                anyChanged |= ApplyBuildStringActionStringPartsTranslation(bootFsm, "State 4", 0);
-                anyChanged |= ApplyBuildStringActionStringPartsTranslation(bootFsm, "State 5", 0);
-                anyChanged |= ApplyAllStateSetStringValueTranslation(bootFsm);
-
-                hasAnyTarget =
-                    HasState(bootFsm, "State 1") ||
-                    HasState(bootFsm, "State 3") ||
-                    HasState(bootFsm, "State 4") ||
-                    HasState(bootFsm, "State 5");
-            }
-
-            PlayMakerFSM typerFsm = MLCUtils.FindFsmIncludingInactiveByPathAndName("COMPUTER/SYSTEM/POS/Command", "Typer");
-            if (IsFsmReady(typerFsm))
-            {
-                if (!loggedTyperReady)
-                {
-                    CoreConsole.Print("[FsmTextHook] Typer FSM is initialized and ready.");
-                    loggedTyperReady = true;
-                }
-
-                // Player input / BuildStringFast action[1] = [old, path, command]
-                // Skip command slot (index 2) to avoid fighting live user input.
-                anyChanged |= ApplyBuildStringActionStringPartsTranslation(typerFsm, "Player input", 0, 2);
-                anyChanged |= ApplyBuildStringActionStringPartsTranslation(typerFsm, "Player input", 1, 2);
-                anyChanged |= ApplyAllStateSetStringValueTranslation(typerFsm);
-                anyChanged |= ApplyAllStateSetFsmStringTranslation(typerFsm);
-                hasAnyTarget |= HasState(typerFsm, "Player input");
-            }
+            ApplyStrategyTargets(GamePosTargets, ref anyChanged, ref hasAnyTarget);
 
             if (anyChanged)
             {
@@ -151,9 +259,166 @@ namespace MWC_Localization_Core
             return anyChanged || hasAnyTarget;
         }
 
+        private bool TryApplyGameTeletextBottomlineFsmTranslations()
+        {
+            bool anyChanged = false;
+            bool hasAnyTarget = false;
+            ApplyStrategyTargets(GameTeletextTargets, ref anyChanged, ref hasAnyTarget);
+
+            if (anyChanged)
+            {
+                appliedTarget = "GAME Teletext Bottomline";
+            }
+
+            return anyChanged || hasAnyTarget;
+        }
+
+        private bool TryApplyGameTeletextWeatherUpdaterFsmTranslations()
+        {
+            bool anyChanged = false;
+            bool hasAnyTarget = false;
+
+            ApplyStrategyTargets(GameTeletextWeatherTargets, ref anyChanged, ref hasAnyTarget);
+
+            List<PlayMakerFSM> ennusteDataFsms = GetEnnusteDataFsms();
+            for (int i = 0; i < ennusteDataFsms.Count; i++)
+            {
+                PlayMakerFSM fsm = ennusteDataFsms[i];
+                if (!IsFsmReady(fsm))
+                    continue;
+
+                LogReadyOnce("TTX_WX_READY", "[FsmTextHook] Teletext weather updater FSM targets are ready.");
+                ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged, ref hasAnyTarget);
+            }
+
+            if (anyChanged)
+            {
+                appliedTarget = "GAME Teletext Weather";
+            }
+
+            return anyChanged || hasAnyTarget;
+        }
+
+        private void ApplyStrategyTargets(FsmStrategyTarget[] targets, ref bool anyChanged, ref bool hasAnyTarget)
+        {
+            if (targets == null || targets.Length == 0)
+                return;
+
+            for (int i = 0; i < targets.Length; i++)
+            {
+                FsmStrategyTarget target = targets[i];
+                if (target == null)
+                    continue;
+
+                PlayMakerFSM fsm = MLCUtils.FindFsmIncludingInactiveByPathAndName(target.ObjectPath, target.FsmName);
+                if (!IsFsmReady(fsm))
+                    continue;
+
+                LogReadyOnce(target.ReadyLogKey, target.ReadyLogMessage);
+                ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget);
+            }
+        }
+
+        private void ApplyStrategyForTarget(FsmStrategyTarget target, PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget)
+        {
+            if (target == null || fsm == null)
+                return;
+
+            switch (target.Strategy)
+            {
+                case FsmStrategyType.PosUse:
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 1", 0, false);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 0, false);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 4", 0, false);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 5", 0, false);
+                    anyChanged |= ApplyAllStateSetStringValueTranslation(fsm);
+                    hasAnyTarget |= HasAnyState(fsm, PosUseStateNames);
+                    break;
+
+                case FsmStrategyType.PosTyper:
+                    // Player input / BuildStringFast action[1] = [old, path, command]
+                    // Skip command slot (index 2) to avoid fighting live user input.
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 0, false, 2);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 1, false, 2);
+                    anyChanged |= ApplyAllStateSetStringValueTranslation(fsm);
+                    anyChanged |= ApplyAllStateSetFsmStringTranslation(fsm);
+                    hasAnyTarget |= HasState(fsm, "Player input");
+                    break;
+
+                case FsmStrategyType.TeletextBuildStringPattern:
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, target.StateName, target.ActionIndex, true);
+                    hasAnyTarget |= HasState(fsm, target.StateName);
+                    break;
+
+                case FsmStrategyType.TeletextWeatherUpdaterTokens:
+                    ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged, ref hasAnyTarget);
+                    break;
+            }
+
+            if (anyChanged && !string.IsNullOrEmpty(target.AppliedLabel))
+            {
+                appliedTarget = target.AppliedLabel;
+            }
+        }
+
+        private void LogReadyOnce(string key, string message)
+        {
+            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(message))
+                return;
+
+            if (loggedReadyTargets.Contains(key))
+                return;
+
+            loggedReadyTargets.Add(key);
+            CoreConsole.Print(message);
+        }
+
         private bool IsFsmReady(PlayMakerFSM fsm)
         {
             return fsm != null && fsm.Fsm != null && fsm.Fsm.Initialized && fsm.FsmStates != null;
+        }
+
+        private void ApplyWeatherUpdaterTokenTranslations(PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget)
+        {
+            if (fsm == null)
+                return;
+
+            anyChanged |= ApplyStateSetStringValueActionIndexesTranslation(fsm, "State 4", 0, 1);
+            anyChanged |= ApplyStateSetStringValueActionIndexesTranslation(fsm, "State 6", 0, 1);
+
+            hasAnyTarget |= HasState(fsm, "State 4") || HasState(fsm, "State 6");
+        }
+
+        private List<PlayMakerFSM> GetEnnusteDataFsms()
+        {
+            bool shouldRescan = cachedEnnusteDataFsms.Count == 0 || (Time.realtimeSinceStartup - lastEnnusteDataFsmScanTime) >= 2f;
+            if (!shouldRescan)
+                return cachedEnnusteDataFsms;
+
+            lastEnnusteDataFsmScanTime = Time.realtimeSinceStartup;
+            cachedEnnusteDataFsms.Clear();
+
+            PlayMakerFSM[] allFsms = Resources.FindObjectsOfTypeAll<PlayMakerFSM>();
+            if (allFsms == null)
+                return cachedEnnusteDataFsms;
+
+            for (int i = 0; i < allFsms.Length; i++)
+            {
+                PlayMakerFSM fsm = allFsms[i];
+                if (fsm == null || fsm.gameObject == null)
+                    continue;
+
+                if (fsm.FsmName != "Data")
+                    continue;
+
+                string path = MLCUtils.GetGameObjectPath(fsm.gameObject);
+                if (path.StartsWith(TeletextEnnusteUpdaterPrefix))
+                {
+                    cachedEnnusteDataFsms.Add(fsm);
+                }
+            }
+
+            return cachedEnnusteDataFsms;
         }
 
         private bool HasState(PlayMakerFSM fsm, string stateName)
@@ -164,6 +429,20 @@ namespace MWC_Localization_Core
             for (int i = 0; i < fsm.FsmStates.Length; i++)
             {
                 if (fsm.FsmStates[i] != null && fsm.FsmStates[i].Name == stateName)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool HasAnyState(PlayMakerFSM fsm, string[] stateNames)
+        {
+            if (fsm == null || stateNames == null || stateNames.Length == 0)
+                return false;
+
+            for (int i = 0; i < stateNames.Length; i++)
+            {
+                if (HasState(fsm, stateNames[i]))
                     return true;
             }
 
@@ -232,7 +511,42 @@ namespace MWC_Localization_Core
             }
         }
 
-        private bool ApplyBuildStringActionStringPartsTranslation(PlayMakerFSM fsm, string stateName, int actionIndex, params int[] skipPartIndexes)
+        private bool ApplyStateSetStringValueActionIndexesTranslation(PlayMakerFSM fsm, string stateName, params int[] actionIndexes)
+        {
+            if (fsm == null || fsm.FsmStates == null || string.IsNullOrEmpty(stateName))
+                return false;
+
+            HutongGames.PlayMaker.FsmState targetState = null;
+            for (int i = 0; i < fsm.FsmStates.Length; i++)
+            {
+                if (fsm.FsmStates[i] != null && fsm.FsmStates[i].Name == stateName)
+                {
+                    targetState = fsm.FsmStates[i];
+                    break;
+                }
+            }
+
+            if (targetState == null || targetState.Actions == null || actionIndexes == null || actionIndexes.Length == 0)
+                return false;
+
+            bool changed = false;
+            for (int i = 0; i < actionIndexes.Length; i++)
+            {
+                int actionIndex = actionIndexes[i];
+                if (actionIndex < 0 || actionIndex >= targetState.Actions.Length)
+                    continue;
+
+                HutongGames.PlayMaker.Actions.SetStringValue action = targetState.Actions[actionIndex] as HutongGames.PlayMaker.Actions.SetStringValue;
+                if (action == null || action.stringValue == null || string.IsNullOrEmpty(action.stringValue.Value))
+                    continue;
+
+                changed |= TranslateSetStringValue(action);
+            }
+
+            return changed;
+        }
+
+        private bool ApplyBuildStringActionStringPartsTranslation(PlayMakerFSM fsm, string stateName, int actionIndex, bool allowPatternSplit, params int[] skipPartIndexes)
         {
             if (fsm == null || fsm.FsmStates == null)
                 return false;
@@ -263,6 +577,11 @@ namespace MWC_Localization_Core
                 return false;
 
             bool changed = false;
+            if (allowPatternSplit)
+            {
+                changed = ApplyBuildStringFastPatternTranslation(fsm, stateName, actionIndex, parts);
+            }
+
             for (int i = 0; i < parts.Length; i++)
             {
                 if (ShouldSkipIndex(i, skipPartIndexes))
@@ -272,6 +591,71 @@ namespace MWC_Localization_Core
             }
 
             return changed;
+        }
+
+        private bool ApplyBuildStringFastPatternTranslation(PlayMakerFSM fsm, string stateName, int actionIndex, HutongGames.PlayMaker.FsmString[] parts)
+        {
+            if (patternMatcher == null || fsm == null || parts == null || parts.Length < 3)
+                return false;
+
+            HutongGames.PlayMaker.FsmString part0 = parts[0];
+            HutongGames.PlayMaker.FsmString part1 = parts[1];
+            HutongGames.PlayMaker.FsmString part2 = parts[2];
+
+            if (part0 == null || part1 == null || part2 == null)
+                return false;
+
+            string middleValue = part1.Value ?? string.Empty;
+            if (string.IsNullOrEmpty(middleValue))
+                return false;
+
+            string combinedText = BuildCombinedText(parts);
+            if (string.IsNullOrEmpty(combinedText))
+                return false;
+
+            string path = MLCUtils.GetGameObjectPath(fsm.gameObject) + "|" + fsm.FsmName + "|" + stateName + "|" + actionIndex.ToString();
+            string translatedCombined = patternMatcher.TryTranslateWithPattern(combinedText, path);
+            if (string.IsNullOrEmpty(translatedCombined) || translatedCombined == combinedText)
+                return false;
+
+            int middleIndex = translatedCombined.IndexOf(middleValue, System.StringComparison.Ordinal);
+            if (middleIndex < 0)
+                return false;
+
+            string newPrefix = translatedCombined.Substring(0, middleIndex);
+            string newSuffix = translatedCombined.Substring(middleIndex + middleValue.Length);
+            bool changed = false;
+
+            if (part0.Value != newPrefix)
+            {
+                part0.Value = newPrefix;
+                changed = true;
+            }
+
+            if (part2.Value != newSuffix)
+            {
+                part2.Value = newSuffix;
+                changed = true;
+            }
+
+            return changed;
+        }
+
+        private string BuildCombinedText(HutongGames.PlayMaker.FsmString[] parts)
+        {
+            if (parts == null || parts.Length == 0)
+                return string.Empty;
+
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (parts[i] != null && !string.IsNullOrEmpty(parts[i].Value))
+                {
+                    sb.Append(parts[i].Value);
+                }
+            }
+
+            return sb.ToString();
         }
 
         private bool ApplyAllStateSetStringValueTranslation(PlayMakerFSM fsm)

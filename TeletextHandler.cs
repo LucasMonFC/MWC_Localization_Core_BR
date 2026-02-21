@@ -11,9 +11,9 @@ namespace MWC_Localization_Core
     /// 
     /// Supports category-based translations from translate_teletext.txt:
     /// [day]
-    /// Monday = 월요일
+    /// Monday = Monday (localized)
     /// [kotimaa]
-    /// News headline = 뉴스 헤드라인
+    /// News headline = News headline (localized)
     /// 
     /// NOTE: FSM pattern matching moved to unified PatternMatcher system
     /// </summary>
@@ -30,9 +30,6 @@ namespace MWC_Localization_Core
         // Track which arrays have been translated already
         private HashSet<string> translatedArrays = new HashSet<string>();
         
-        // Track disabled FSM paths (to avoid re-disabling)
-        private HashSet<string> disabledFsmPaths = new HashSet<string>();
-        
         // GameObject path to category mapping
         private Dictionary<string, string> pathPrefixes = new Dictionary<string, string>
         {
@@ -44,18 +41,6 @@ namespace MWC_Localization_Core
         // Path Prefix Proxy cache
         private Dictionary<string, PlayMakerArrayListProxy[]> proxyCache = 
             new Dictionary<string, PlayMakerArrayListProxy[]>();
-        
-        // FSM child text paths to monitor before disabling parent/child FSMs.
-        private static readonly string[] fsmChildTextPaths = new string[]
-        {
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/241/Texts/Data/Bottomline 1",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt/WeatherTemp",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Ennuste/WeatherTemp",
-            "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Selite"
-        };
 
         public TeletextHandler()
         {
@@ -64,7 +49,6 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Load teletext translations from INI-style file with category sections
         /// Supports both key-value pairs and index-based translations (in order)
-        /// Special [fsm] section for FSM hardcoded strings (weather, UI labels, etc.)
         /// </summary>
         public void LoadTeletextTranslations(string filePath)
         {
@@ -366,6 +350,7 @@ namespace MWC_Localization_Core
                 // Check if we have index-based translations as fallback
                 bool hasIndexFallback = indexBasedTranslations.ContainsKey(categoryName) && 
                                         indexBasedTranslations[categoryName].Count > 0;
+                int nonEmptySourceIndex = -1;
                 
                 for (int i = 0; i < arrayList.Count; i++)
                 {
@@ -374,20 +359,23 @@ namespace MWC_Localization_Core
                         continue;
                     
                     string original = arrayList[i].ToString();
-                    if (string.IsNullOrEmpty(original))
+                    string normalizedOriginal = original.Trim();
+                    if (string.IsNullOrEmpty(normalizedOriginal))
                         continue;
+
+                    // Keep fallback alignment based on non-empty source entries only.
+                    nonEmptySourceIndex++;
                     
                     // Try exact key match first
-                    string normalizedOriginal = original.Trim();
                     if (translations.TryGetValue(normalizedOriginal, out string translation))
                     {
                         arrayList[i] = translation;
                         translatedCount++;
                     }
                     // Fallback: Use index-based translation if available
-                    else if (hasIndexFallback && i < indexBasedTranslations[categoryName].Count)
+                    else if (hasIndexFallback && nonEmptySourceIndex < indexBasedTranslations[categoryName].Count)
                     {
-                        string indexTranslation = indexBasedTranslations[categoryName][i];
+                        string indexTranslation = indexBasedTranslations[categoryName][nonEmptySourceIndex];
                         if (!string.IsNullOrEmpty(indexTranslation))
                         {
                             arrayList[i] = indexTranslation;
@@ -411,184 +399,15 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Disable FSM components on specific teletext paths to prevent text regeneration
-        /// Then translate the TextMesh once - solves flickering issue
-        /// Can be called multiple times (uses tracking to avoid re-processing)
-        /// Waits for FSM to populate text before disabling (avoids disabling empty TextMesh)
-        /// Bottomline paths: Waits for placeholder '00' to be replaced with valid value (1-5)
-        /// Weather paths: FSMs on parent objects regenerate child TextMesh components
-        /// Pattern matching (e.g., "Kierros {0} pelikohteet") handled by PatternMatcher
-        /// Returns number of NEW FSMs disabled this call
-        /// </summary>
-        public int DisableTeletextFSMs(TextMeshTranslator translator)
-        {
-            if (disabledFsmPaths.Count >= fsmChildTextPaths.Length)
-                return 0;
-
-            int disabledCount = 0;
-            int translatedCount = 0;
-
-            foreach (string childPath in fsmChildTextPaths)
-            {
-                // Skip if already processed
-                if (disabledFsmPaths.Contains(childPath))
-                    continue;
-                    
-                try
-                {
-                    GameObject childObj = MLCUtils.FindGameObjectCached(childPath);
-                    if (childObj == null)
-                        continue; // Not found yet - will retry later
-
-                    // Wait for FSM to populate text before disabling
-                    TextMesh textMesh = childObj.GetComponent<TextMesh>();
-                    if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
-                        continue; // No text yet - FSM hasn't run
-                    
-                    string currentText = textMesh.text;
-                    
-                    // Bottomline paths: Wait for placeholder '00' to be replaced with valid value (1-5)
-                    if (childPath.Contains("Bottomline"))
-                    {
-                        // Extract number from text using regex
-                        var match = System.Text.RegularExpressions.Regex.Match(currentText, @"\b(\d+)\b");
-                        if (!match.Success)
-                            continue; // No number found
-                        
-                        int extractedNumber = int.Parse(match.Groups[1].Value);
-                        
-                        // Validate: number must be 1-5 (not placeholder '00')
-                        if (extractedNumber < 1 || extractedNumber > 5)
-                            continue; // Still showing placeholder
-                        
-                        // Bottomline: FSM on child object itself
-                        PlayMakerFSM[] fsms = childObj.GetComponents<PlayMakerFSM>();
-                        if (fsms != null && fsms.Length > 0)
-                        {
-                            foreach (var fsm in fsms)
-                            {
-                                fsm.enabled = false;
-                                disabledCount++;
-                            }
-                        }
-                    }
-                    else if (childPath.Contains("188/Texts/Nyt") || childPath.Contains("188/Texts/Ennuste"))
-                    {
-                        // Extract number from text using regex
-                        var match = System.Text.RegularExpressions.Regex.Match(currentText, @"\b(\d+)\b");
-                        if (!match.Success)
-                            continue; // No number found
-                        
-                        int extractedNumber = int.Parse(match.Groups[1].Value);
-                        
-                        // Validate: number must not be 33 (placeholder)
-                        if (extractedNumber == 33)
-                            continue; // Still showing placeholder
-
-                        // Weather paths: FSMs on parent object regenerate child TextMesh
-                        // Find parent: "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Nyt" or "Ennuste"
-                        Transform parentTransform = childObj.transform.parent;
-                        if (parentTransform != null)
-                        {
-                            GameObject parentObj = parentTransform.gameObject;
-                            PlayMakerFSM[] parentFsms = parentObj.GetComponents<PlayMakerFSM>();
-                            if (parentFsms != null && parentFsms.Length > 0)
-                            {
-                                foreach (var fsm in parentFsms)
-                                {
-                                    fsm.enabled = false;
-                                    disabledCount++;
-                                }
-                                CoreConsole.Print($"[TeletextHandler] Disabled {parentFsms.Length} FSM(s) on parent '{parentObj.name}'");
-                            }
-                        }
-                    }
-                    else if (childPath.Contains("188/Texts/Selite"))
-                    {
-                        // Weather legend: no numeric placeholder, disable parent FSM directly
-                        // Get hardcoded translation built from individual word translations
-                        string translation = GetWeatherLegendTranslation();
-                        if (!string.IsNullOrEmpty(translation))
-                        {
-                            textMesh.text = translation;
-                            translatedCount++;
-                            CoreConsole.Print($"[TeletextHandler] Weather legend translated: '{translation}'");
-                            
-                            // Apply font if translator available
-                            if (translator != null)
-                            {
-                                translator.ApplyCustomFont(textMesh, childPath);
-                            }
-                            
-                            disabledFsmPaths.Add(childPath);
-                            continue; // Translation is already done
-                        }
-                    }
-
-                    // Translate using standard pipeline (PatternMatcher handles patterns like "Kierros {0} pelikohteet")
-                    if (translator != null)
-                    {
-                        if (translator.TranslateAndApplyFont(textMesh, childPath, null))
-                        {
-                            translatedCount++;
-                            CoreConsole.Print($"[TeletextHandler] Translated: '{textMesh.text}' at {childPath.Substring(childPath.LastIndexOf('/') + 1)}");
-                        }
-                    }
-                    
-                    // Mark as processed
-                    disabledFsmPaths.Add(childPath);
-                }
-                catch (System.Exception ex)
-                {
-                    CoreConsole.Error($"[TeletextHandler] Error processing {childPath}: {ex.Message}");
-                }
-            }
-
-            if (disabledCount > 0)
-            {
-                CoreConsole.Print($"[TeletextHandler] Successfully disabled {disabledCount} FSMs and translated {translatedCount} texts");
-            }
-            
-            return disabledCount;
-        }
-
-        /// <summary>
         /// Reset translation state (useful for testing or scene changes)
         /// </summary>
         public void Reset()
         {
             translatedArrays.Clear();
-            disabledFsmPaths.Clear();
             proxyCache.Clear();
-        }
-
-        /// <summary>
-        /// Hardcoded translation for weather legend at 188/Texts/Selite
-        /// Constructs translation from individual word translations
-        /// Original format: "se = selkeää\npi = pilvistä\nLs = lumisadetta"
-        /// Uses translations from [fsm] category for each component (e.g., "se", "selkeää", "pi", "pilvistä", etc.)
-        /// </summary>
-        private string GetWeatherLegendTranslation()
-        {
-            // Check if [fsm] category exists
-            if (!categoryTranslations.ContainsKey("fsm") || categoryTranslations["fsm"] == null)
-                return null; // No fsm translations available
-
-            Dictionary<string, string> fsmTranslations = categoryTranslations["fsm"];
-
-            // Try to get individual word translations from [fsm] category
-            // Weather codes (left side)
-            string se = fsmTranslations.TryGetValue("se", out string seTrans) ? seTrans : "se";
-            string pi = fsmTranslations.TryGetValue("pi", out string piTrans) ? piTrans : "pi";
-            string ls = fsmTranslations.TryGetValue("Ls", out string lsTrans) ? lsTrans : "Ls";
-            
-            // Weather descriptions (right side)
-            string selkeaa = fsmTranslations.TryGetValue("selkeää", out string selkeaaTrans) ? selkeaaTrans : "selkeää";
-            string pilvista = fsmTranslations.TryGetValue("pilvistä", out string pilvistaTrans) ? pilvistaTrans : "pilvistä";
-            string lumisadetta = fsmTranslations.TryGetValue("lumisadetta", out string lumisadettaTrans) ? lumisadettaTrans : "lumisadetta";
-            
-            // Reconstruct the legend with translated components
-            return $"{se} = {selkeaa}\n{pi} = {pilvista}\n{ls} = {lumisadetta}";
         }
     }
 }
+
+
+
