@@ -139,6 +139,7 @@ namespace MWC_Localization_Core
                 anyChanged |= ApplyBuildStringActionStringPartsTranslation(typerFsm, "Player input", 0, 2);
                 anyChanged |= ApplyBuildStringActionStringPartsTranslation(typerFsm, "Player input", 1, 2);
                 anyChanged |= ApplyAllStateSetStringValueTranslation(typerFsm);
+                anyChanged |= ApplyAllStateSetFsmStringTranslation(typerFsm);
                 hasAnyTarget |= HasState(typerFsm, "Player input");
             }
 
@@ -299,6 +300,32 @@ namespace MWC_Localization_Core
             return changed;
         }
 
+        private bool ApplyAllStateSetFsmStringTranslation(PlayMakerFSM fsm)
+        {
+            if (fsm == null || fsm.FsmStates == null)
+                return false;
+
+            bool changed = false;
+
+            for (int i = 0; i < fsm.FsmStates.Length; i++)
+            {
+                HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
+                if (state == null || state.Actions == null)
+                    continue;
+
+                for (int j = 0; j < state.Actions.Length; j++)
+                {
+                    object action = state.Actions[j];
+                    if (action == null || action.GetType().Name != "SetFsmString")
+                        continue;
+
+                    changed |= TranslateActionFsmStringField(action, "setValue");
+                }
+            }
+
+            return changed;
+        }
+
         private bool TranslateSetStringValue(HutongGames.PlayMaker.Actions.SetStringValue action)
         {
             if (action == null || action.stringValue == null || string.IsNullOrEmpty(action.stringValue.Value))
@@ -318,6 +345,40 @@ namespace MWC_Localization_Core
                 if (lineTranslated != original)
                 {
                     action.stringValue.Value = lineTranslated;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool TranslateActionFsmStringField(object action, string fieldName)
+        {
+            if (action == null || string.IsNullOrEmpty(fieldName))
+                return false;
+
+            FieldInfo field = action.GetType().GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (field == null)
+                return false;
+
+            HutongGames.PlayMaker.FsmString fsmString = field.GetValue(action) as HutongGames.PlayMaker.FsmString;
+            if (fsmString == null || string.IsNullOrEmpty(fsmString.Value))
+                return false;
+
+            string original = fsmString.Value;
+            string translated = GetTranslation(original, original);
+            if (translated != original)
+            {
+                fsmString.Value = translated;
+                return true;
+            }
+
+            if (original.IndexOf('\n') >= 0)
+            {
+                string lineTranslated = TranslateTextByLines(original);
+                if (lineTranslated != original)
+                {
+                    fsmString.Value = lineTranslated;
                     return true;
                 }
             }
