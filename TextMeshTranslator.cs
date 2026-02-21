@@ -107,16 +107,41 @@ namespace MWC_Localization_Core
                 MeshRenderer renderer = textMesh.GetComponent<MeshRenderer>();
                 if (renderer != null && customFont.material != null)
                 {
-                    // Do not mutate shared material textures in-place.
-                    // Rebinding the renderer material avoids corrupting other font atlases.
-                    if (renderer.sharedMaterial != customFont.material)
+                    if (IsRuntimeSensitiveTvPath(path))
                     {
-                        renderer.sharedMaterial = customFont.material;
+                        // Legacy-safe path: keep runtime material/shader, only swap atlas texture.
+                        Material runtimeMaterial = renderer.material;
+                        Texture targetMainTexture = customFont.material.mainTexture;
+                        if (runtimeMaterial != null && targetMainTexture != null && runtimeMaterial.mainTexture != targetMainTexture)
+                        {
+                            runtimeMaterial.mainTexture = targetMainTexture;
+                        }
+                    }
+                    else
+                    {
+                        // Do not mutate shared material textures in-place.
+                        // Rebinding the renderer material avoids corrupting other font atlases.
+                        if (renderer.sharedMaterial != customFont.material)
+                        {
+                            renderer.sharedMaterial = customFont.material;
+                        }
                     }
                 }
 
                 config.ApplyTextAdjustment(textMesh, path);
             }
+        }
+
+        /// <summary>
+        /// Some TV paths rely on runtime material/shader properties for tint/visibility effects.
+        /// </summary>
+        private bool IsRuntimeSensitiveTvPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            return path.Contains("Systems/TV/TVGraphics/") ||
+                   path.Contains("Systems/TV/Teletext/VKTekstiTV/");
         }
 
         /// <summary>
