@@ -1,288 +1,289 @@
 # MWC Localization Core
 
-A MSCLoader plugin system for My Winter Car that enables automatic localization without code modifications.
+Sistema plugin para MSCLoader do My Winter Car que permite tradução automática sem modificar o código.
 
-See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
+Veja em [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
 
-## Quick Start
+## Início Rápido
 
-### For Language Pack Creators
+### Para criadores de pacotes de idioma
 
-1. **Copy template files** from `dist/`
-2. **Edit `l10n_assets/config.txt`** with your language settings
-3. **Update translation files**:
-   - `translate.txt` - Main UI text
-   - `translate_msc.txt (optional)` - previous My Summer Car text
-   - `translate_magazine.txt` - Classified Magazine content
-   - `translate_teletext.txt` - TV/Teletext content
-   - `translate_mod.txt (optional)` - Mod content
-4. **(Optional)** Create custom fonts in `fonts.unity3d`
-5. **Test in-game with F8 reload!**
+1. **Copie os arquivos de modelo** de `dist/`
+2. **Edite dist\Assets\MWC_Localization_Core_BR/config.txt`** com as configurações do seu idioma
+3. **Atualize os arquivos de tradução**:
+   - `translate.txt` - Texto principal da interface
+   - `translate_msc.txt (opcional)` - textos do My Summer Car (compatibilidade)
+   - `translate_magazine.txt` - Conteúdo da revista Classificados
+   - `translate_teletext.txt` - Conteúdo da TV/Teletexto
+   - `translate_mod.txt (opcional)` - Conteúdo de mods
+4. **(Opcional)** Crie fontes customizadas em `fonts.unity3d`
+5. **Teste no jogo com recarga (F8)!**
 
-### For Developers
-
-```
-dotnet build -c Release
-```
-
-## Features
-
-**Automatic Translation** - Scans TextMesh components and replaces text  
-**Teletext/TV Translation** - TV news, weather, recipes get translated  
-**Magazine Translations** - Special handling for Yellow Pages magazine  
-**Configurable Fonts** - Map game fonts to localized custom fonts  
-**Position Adjustments** - Fine-tune text placement per language  
-**Live Reload** - Press F8 to test changes without restarting  
-**Non-Latin Support** - Korean, Japanese, Chinese, Cyrillic, etc.  
-**My Summer Car Compatibility** - Use previous MSC translation as basis
-
-## File Structure
+### Para desenvolvedores
 
 ```
-BepInEx/plugins/dist/
-├── l10n_assets/
-│   ├── config.txt                  # Language configuration
-│   ├── translate.txt               # Main UI translations
-│   ├── translate_magazine.txt      # Yellow Pages magazine translations
-│   ├── translate_teletext.txt      # TV/Teletext content translations
-│   ├── translate_msc.txt           # Optional: My Summer Car compatibility
-│   ├── translate_mod.txt           # Optional: Mod content translations
-│   └── fonts.unity3d               # Optional: Custom font asset bundle
-└── MWC_Localization_Core.dll       # Core plugin module
+Para copilar abra o MWC_Localization_Core.csproj no Visual Studio mude para Release apos isso clique em Compilação e Recompilar Solução
+Para mudar o ID edite o MWC_Localization_Core.cs 'public override string ID => "MWC_Localization_Core_BR";' mude o BR para o seu idioma assim a pasta dos arquivos também vai mudar de 'MWC_Localization_Core_BR' para qual você colocar no ID
 ```
 
-## Configuration (config.txt)
+## Funcionalidades
 
-### Basic Settings
+**Tradução automática** - Escaneia componentes TextMesh e substitui o texto  
+**Tradução de teletexto/TV** - Notícias, tempo e receitas traduzidas  
+**Tradução de revista** - Tratamento especial para a revista Classificados  
+**Fontes configuráveis** - Mapeie fontes do jogo para fontes localizadas  
+**Ajustes de posição** - Ajuste fino do posicionamento do texto por idioma  
+**Recarga ao vivo** - Pressione F8 para testar alterações sem reiniciar  
+**Suporte a alfabetos não latinos** - coreano, japonês, chinês, cirílico etc.  
+**Compatibilidade com My Summer Car** - Use tradução do MSC como base
+
+## Estrutura de arquivos
+
+```
+My Winter Car\Mods
+├── My Winter Car\Mods\Assets\MWC_Localization_Core_BR
+│   ├── config.txt                  # Configuração do idioma
+│   ├── translate.txt               # Traduções principais da interface
+│   ├── translate_magazine.txt      # Traduções da revista Classificados
+│   ├── translate_teletext.txt      # Traduções de TV/Teletexto
+│   ├── translate_msc.txt           # Opcional: compatibilidade My Summer Car
+│   ├── translate_mod.txt           # Opcional: traduções de mods
+│   └── fonts.unity3d               # Opcional: bundle de fontes customizadas
+└── MWC_Localization_Core.dll       # Módulo principal do plugin
+```
+
+## Configuração (config.txt)
+
+### Configurações básicas
 
 ```ini
-# Your language information
-LANGUAGE_NAME = Korean
+# Informações do seu idioma
+LANGUAGE_NAME = Coreano
 LANGUAGE_CODE = ko-KR
 ```
 
-| Setting | Purpose | Example |
-|---------|---------|---------|
-| `LANGUAGE_NAME` | Display name | `Korean`, `Español`, `日本語` |
-| `LANGUAGE_CODE` | ISO language code | `ko-KR`, `es-ES`, `ja-JP` |
+| Configuração | Propósito | Exemplo |
+|-------------|-----------|---------|
+| `LANGUAGE_NAME` | Nome exibido | `Coreano`, `Español`, `日本語` |
+| `LANGUAGE_CODE` | Código ISO do idioma | `ko-KR`, `es-ES`, `ja-JP` |
 
-### Font Mappings
+### Mapeamento de fontes
 
-If you are using custom fonts, you must map original game fonts to them via `config.txt`:
+Se estiver usando fontes personalizadas, mapeie as fontes originais do jogo para elas no `config.txt`:
 
 ```ini
 [FONTS]
-OriginalGameFont = YourCustomFont
-FugazOne-Regular = MyFont-Bold
-Heebo-Black = MyFont-Regular
+OriginalGameFont = SuaFontePersonalizada
+FugazOne-Regular = MinhaFonte-Bold
+Heebo-Black = MinhaFonte-Regular
 ```
 
-Font assets must exist in `fonts.unity3d` with matching names (right side values).
+Os assets de fontes devem existir em `fonts.unity3d` com os nomes correspondentes (valores à direita).
 
-## Translation Files
+## Arquivos de tradução
 
-### translate.txt - Main UI Translations
+### translate.txt - Traduções da interface principal
 
-Main translation file that covers My Winter Car lines.
-
-```
-# Comments use #
-# Keys are auto-normalized: UPPERCASE, no spaces
-
-BEER = 맥주
-BUCKET = 양동이
-MONDAY = 월요일
-WITHDRAWAL = 출금
-
-# Multiline support (Use \n)
-Welcome to My Winter Car = 마이 윈터 카에\n오신 것을 환영합니다
-```
-
-### translate_magazine.txt - Classified Magazine
-
-This file involves special logic for handling comma-separated random words & Price line in Classified Magazine.
+Arquivo principal de tradução que cobre as linhas do My Winter Car.
 
 ```
-# Magazine abbreviations (comma-separated)
-headlgh.l = 좌.전조등
-headgskt. = 헤.가스켓
-supp.arm = 서스.암
+# Comentários usam #
+# As chaves são normalizadas automaticamente: MAIÚSCULAS, sem espaços
 
-# Phone label for price lines
-# Used in lines like "h.149,- puh.123456" -> "149 MK, ${PHONE} - (08)123456"
-PHONE = 전화
+BEER = Cerveja
+BUCKET = Balde
+MONDAY = Segunda-feira
+WITHDRAWAL = Retirada
+
+# Suporte a múltiplas linhas (Use \n)
+Welcome to My Winter Car = Bem-vindo ao My Winter Car\nSeja bem-vindo
 ```
 
-**Magazine-specific formatting:**
-- Abbreviated words use periods and commas
-- Price lines get special phone number treatment
-- Different from regular UI text
+### translate_magazine.txt - Revista Classificados
 
-### translate_teletext.txt - TV/Teletext Content
-
-Category-based translations for TV teletext (news, weather, recipes, etc.) & TV chat pages.
-This separate file was introduced to workaround the game constantly trying to overwrite translations from plugin.
-
-**ORDER & [CATEGORY] MATTERS!**
-At least in this file. It's recommended NOT to modify these.
+Este arquivo contém lógica especial para lidar com palavras aleatórias separadas por vírgula e a linha de preço na revista Classificados.
 
 ```
-# Category sections match teletext pages
+# Abreviações da revista (separadas por vírgula)
+headlgh.l = esq.farol
+headgskt. = cab.gaxeta
+supp.arm = susp.braco
+
+# Rótulo de telefone para linhas de preço
+# Usado em linhas como "h.149,- puh.123456" -> "149 MK, ${PHONE} - (08)123456"
+PHONE = Telefone
+```
+
+**Formatação específica da revista:**
+- Palavras abreviadas usam pontos e vírgulas
+- Linhas de preço recebem tratamento especial para números de telefone
+- Diferente do texto normal da interface
+
+### translate_teletext.txt - Conteúdo TV/Teletexto
+
+Traduções por categoria para o teletexto da TV (notícias, tempo, receitas etc.) e páginas de chat da TV.
+Este arquivo separado foi introduzido para evitar que o jogo sobrescreva constantemente as traduções do plugin.
+
+**A ORDEM & [CATEGORIA] IMPORTAM!**
+Pelo menos neste arquivo. Recomenda-se NÃO modificar a ordem/categories.
+
+```
+# As seções de categoria correspondem às páginas do teletexto
 [day]
-MONDAY = 월요일
-TUESDAY = 화요일
+MONDAY = Segunda-feira
+TUESDAY = Terça-feira
 
 [kotimaa]
-# Domestic news headlines (in order they appear)
-MAKELIN CEO FIRED = 마켈린 CEO 해고
-TAXI REFORM PLANNED = 택시 개혁안
+# Manchetes de notícias domésticas (na ordem em que aparecem)
+MAKELIN CEO FIRED = MAKELIN CEO DEMITIDO
+TAXI REFORM PLANNED = REFORMA DO TÁXI PLANEJADA
 
 [urheilu]
-# Sports news
-FOOTBALL RESULTS = 축구 결과
+# Notícias esportivas
+FOOTBALL RESULTS = RESULTADOS DE FUTEBOL
 
-# Multi-line format:
+# Formato multilinha:
 Long news
 Headline here
 =
-긴 뉴스
-헤드라인
+Notícia longa
+Manchete
 ```
 
-**Categories:**
-- `day` - Day names
-- `kotimaa` - Domestic news
-- `ulkomaat` - Foreign news  
-- `talous` - Economy news
-- `urheilu` - Sports news
-- `ruoka` - Recipes
-- `ajatus` - Quotes
-- `kulttuuri` - Culture
+**Categorias:**
+- `day` - Nomes dos dias
+- `kotimaa` - Notícias domésticas
+- `ulkomaat` - Notícias estrangeiras  
+- `talous` - Notícias econômicas
+- `urheilu` - Notícias esportivas
+- `ruoka` - Receitas
+- `ajatus` - Citações
+- `kulttuuri` - Cultura
 
-Please note that few TV lines might not 'look translated' due to the reason mentioned above.
+Observe que algumas linhas da TV podem não 'parecer traduzidas' devido ao motivo mencionado acima.
 
-### translate_msc.txt - My Summer Car Compatibility (Optional)
+### translate_msc.txt - Compatibilidade com My Summer Car (Opcional)
 
-You can reuse translation files from My Summer Car as a base. Many UI texts are shared between games.
+Você pode reutilizar arquivos de tradução do My Summer Car como base. Muitos textos da interface são compartilhados entre os jogos.
 
-Contents from `translate.txt` (MWC-specific) will override `translate_msc.txt` entries.
+O conteúdo de `translate.txt` (específico do MWC) irá sobrescrever as entradas de `translate_msc.txt`.
 
-## Text Adjustments (Optional)
+## Ajustes de texto (Opcional)
 
-Fine-tune text placement, size, spacing, and width for better appearance without code changes.
+Ajuste fino do posicionamento, tamanho, espaçamento e largura do texto para melhor aparência sem alterar o código.
 
-### Configuration
+### Configuração
 
 ```ini
 [POSITION_ADJUSTMENTS]
-Conditions = X,Y,Z[,FontSize,LineSpacing,WidthScale]
+Conditions = X,Y,Z[,Tamanho da fonte,Espaçamento entre linhas,Escala de largura]
 ```
 
-### Condition Syntax
+### Sintaxe de condições
 
-| Condition | Matches When |
-|-----------|--------------|
-| `Contains(path)` | Path contains text |
-| `EndsWith(path)` | Path ends with text |
-| `StartsWith(path)` | Path starts with text |
-| `Equals(path)` | Path exactly matches |
-| `!Contains(path)` | Path does NOT contain (negation) |
+| Condição | Quando corresponde |
+|---------|-------------------|
+| `Contains(path)` | O caminho contém o texto |
+| `EndsWith(path)` | O caminho termina com o texto |
+| `StartsWith(path)` | O caminho começa com o texto |
+| `Equals(path)` | O caminho corresponde exatamente |
+| `!Contains(path)` | O caminho NÃO contém (negação) |
 
-**Tip:** Use the BepInEx console (F12) to see GameObject paths when text appears. This helps you write conditions.
+**Dica:** Use o console BepInEx (F12) para ver os caminhos dos GameObjects quando o texto aparece. Isso ajuda a escrever as condições. (Não esta funcionando no MSCLoader)
 
-### Examples
+### Exemplos
 
 ```ini
-# Position adjustment only: Shift HUD labels down (Y = -0.05)
+# Apenas ajuste de posição: mover labels do HUD para baixo (Y = -0.05)
 Contains(GUI/HUD/) & EndsWith(/HUDLabel) = 0,-0.05,0
 
-# Make text wider: Scale width to 1.2x (last parameter)
+# Tornar o texto mais largo: escala de largura 1.2x (último parâmetro)
 Contains(Systems/Narrow/Text) = 0,0,0,,,1.2
 
-# Full adjustment: position + size + line spacing + width
+# Ajuste completo: posição + tamanho + espaçamento de linha + largura
 Contains(GUI/Menu/Title) = 0,0.1,0,0.12,1.0,1.3
 
-# Skip parameters with commas: position + width scale (skip font size and line spacing)
+# Pular parâmetros com vírgulas: posição + escala de largura (pular tamanho da fonte e espaçamento)
 Contains(PERAPORTTI/ATMs/) & EndsWith(/Text) = 0,0.25,0,,,0.9
 
-# Combine multiple conditions with negation
+# Combinar múltiplas condições com negação
 Contains(PERAPORTTI/ATMs/) & !Contains(/Row) & EndsWith(/Text) = 0,0.25,0
 ```
 
-### Parameter Format
+### Formato dos parâmetros
 
 ```
 X,Y,Z[,FontSize,LineSpacing,WidthScale]
 ```
 
-| Parameter | Type | Purpose | Example Values |
-|-----------|------|---------|----------------|
-| **X** | Required | Horizontal offset (+ right, - left) | `0`, `0.5`, `-0.3` |
-| **Y** | Required | Vertical offset (+ up, - down) | `0`, `0.25`, `-0.05` |
-| **Z** | Required | Depth offset (rarely needed) | `0` |
-| **FontSize** | Optional | Character size (TextMesh.characterSize) | `0.1`, `0.15`, `0.2` |
-| **LineSpacing** | Optional | Line spacing multiplier | `1.0`, `1.2`, `0.8` |
-| **WidthScale** | Optional | Character width scale (transform.localScale.x) | `1.0`, `1.2` (wider), `0.8` (narrower) |
+| Parâmetro | Tipo | Propósito | Exemplos |
+|-----------|------|----------|---------|
+| **X** | Obrigatório | Deslocamento horizontal (+ para direita, - para esquerda) | `0`, `0.5`, `-0.3` |
+| **Y** | Obrigatório | Deslocamento vertical (+ para cima, - para baixo) | `0`, `0.25`, `-0.05` |
+| **Z** | Obrigatório | Deslocamento em profundidade (raramente necessário) | `0` |
+| **FontSize** | Opcional | Tamanho do caractere (TextMesh.characterSize) | `0.1`, `0.15`, `0.2` |
+| **LineSpacing** | Opcional | Multiplicador de espaçamento entre linhas | `1.0`, `1.2`, `0.8` |
+| **WidthScale** | Opcional | Escala de largura dos caracteres (transform.localScale.x) | `1.0`, `1.2` (mais largo), `0.8` (mais estreito) |
 
-**Tips:**
-- Leave optional parameters empty to skip: `0,0,0,,1.2` (skip FontSize, set LineSpacing)
-- Use `WidthScale > 1.0` to make text wider (good for narrow fonts)
-- Use `WidthScale < 1.0` to make text narrower (good for condensed layouts)
-- Combine with FontSize to control both height and width independently
+**Dicas:**
+- Deixe parâmetros opcionais vazios para pular: `0,0,0,,1.2` (pular FontSize, definir LineSpacing)
+- Use `WidthScale > 1.0` para deixar o texto mais largo (bom para fontes estreitas)
+- Use `WidthScale < 1.0` para deixar o texto mais estreito (bom para layouts condensados)
+- Combine com FontSize para controlar altura e largura independentemente
 
-## Creating Custom Fonts (Optional)
+## Criando fontes customizadas (Opcional)
 
-For languages requiring special font support (better readability, special characters, etc.):
+Para idiomas que precisam de suporte especial de fontes (melhor legibilidade, caracteres especiais etc.):
 
-1. **Prepare fonts** - TrueType (.ttf) or OpenType (.otf)
-2. **Create Unity assets** - Use Unity 5.0.0f4 (same version as My Winter Car)
-3. **Build AssetBundle** - Name it `fonts.unity3d`
-4. **Match names** - Font asset names must match `config.txt` [FONTS] section values
-5. **Place in l10n_assets** - Put `fonts.unity3d` alongside other translation files
+1. **Prepare as fontes** - TrueType (.ttf) ou OpenType (.otf)
+2. **Crie assets no Unity** - Use Unity 5.0.0f4 (mesma versão do My Winter Car)
+3. **Construir AssetBundle** - Nomeie como `fonts.unity3d`
+4. **Caso os nomes** - Os nomes dos assets de fonte devem corresponder aos valores na seção [FONTS] do `config.txt`
+5. **Coloque em l10n_assets** - Coloque `fonts.unity3d` junto com os outros arquivos de tradução
 
-**Unity Setup Notes:**
-- Unity 5.0.0f4 has broken licensing - install 5.6.7f1 first to activate, then run 5.0.0f4
-- AssetBundle build target must match game (typically Windows Standalone)
+**Observações sobre o Unity:**
+- O Unity 5.0.0f4 tem problemas de licenciamento - instale 5.6.7f1 primeiro para ativar, depois execute 5.0.0f4
+- O target do AssetBundle deve corresponder ao jogo (geralmente Windows Standalone)
 
-## Testing & Development
+## Testes e desenvolvimento
 
-### Live Reload (F8 Key)
+### Recarga ao vivo (tecla F8)
 
-Press **F8** in-game to reload all configuration and translation files instantly:
-- Edit `config.txt`, translation files, etc.
-- No game restart needed
-- Perfect for iterative translation work
+Pressione **F8** no jogo para recarregar instantaneamente todos os arquivos de configuração e tradução:
+- Edite `config.txt`, arquivos de tradução, etc.
+- Não é necessário reiniciar o jogo
+- Perfeito para trabalho iterativo de tradução
 
-### Debug Workflow
+### Fluxo de depuração
 
-1. Enable BepInEx console: Edit `BepInEx/config/BepInEx.cfg`
-   - Set `Enabled = true` under `[Logging.Console]`
-2. Launch game and press **F12** to open console
-3. Check for configuration errors and translation status
-4. Watch for GameObject paths when text appears (helps with position adjustments)
-5. Edit files and press **F8** to test changes
-6. Repeat until perfect
+1. Ative o console BepInEx: Edite `BepInEx/config/BepInEx.cfg`
+   - Defina `Enabled = true` em `[Logging.Console]`
+2. Inicie o jogo e pressione **F12** para abrir o console
+3. Verifique erros de configuração e o status das traduções
+4. Observe os caminhos dos GameObjects quando o texto aparece (ajuda nos ajustes de posição)
+5. Edite os arquivos e pressione **F8** para testar as alterações
+6. Repita até ficar perfeito
 
-### Common Issues
+### Problemas comuns
 
-**Text not translating?**
-- Enable console messages via MSCLoader Mod settings
-- Check console (F12) for errors
-- Make sure key matches
-- For teletext, check if you're using the right category section
+**Texto não está sendo traduzido?**
+- Ative mensagens no console via configurações do MSCLoader Mod
+- Verifique o console (F12) para erros
+- Certifique-se de que a chave corresponde
+- Para teletexto, verifique se você está usando a seção de categoria correta
 
-**Wrong font?**
-- Verify font names in `config.txt` [FONTS] section
-- Check if `fonts.unity3d` exists and loads successfully
-- Console will show "Loaded [font] for [original]" messages
+**Fonte errada?**
+- Verifique os nomes das fontes na seção [FONTS] do `config.txt`
+- Verifique se `fonts.unity3d` existe e carrega corretamente
+- O console exibirá mensagens "Loaded [font] for [original]"
 
-**Text position off?**
-- Use `Developer Toolkit` or something else to find GameObject path
-- Add position adjustment in `config.txt`
-- Test with F8 reload
+**Posição do texto deslocada?**
+- Use o `Developer Toolkit` ou outra ferramenta para encontrar o caminho do GameObject
+- Adicione ajuste de posição no `config.txt`
+- Teste com recarga (F8)
 
-### Building the Plugin
+### Compilando o plugin
 
 ```bash
-dotnet build -c Release
+Para copilar abra o MWC_Localization_Core.csproj no Visual Studio mude para Release apos isso clique em Compilação e Recompilar Solução
 ```
