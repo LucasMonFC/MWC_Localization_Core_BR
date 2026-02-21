@@ -61,6 +61,8 @@ Contains(Systems/OptionsMenu) & Contains(/GUITextHeader) = 0,0,0,0.08
 Contains(Sheets/ServicePayment) & EndsWith(ServicePayment/Text) = 0,-0.01,0,0.005
 Contains(Sheets/ServicePayment) & EndsWith(ServicePayment/Text/Text) = 0,0.01,0
 Contains(Sheets/ServicePayment/Line) = 0,0.002,0
+## Unemployment Sheet
+Contains(Sheets/UnemployPaper/2) = -0.01,0,0
 ## Computer
 Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/BIOS) = 0,0,0,2.4,
 Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/Text) = 0,0,0,2.4,
