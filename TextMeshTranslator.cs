@@ -223,7 +223,7 @@ namespace MWC_Localization_Core
                 // Apply Translation
                 return magazineHandler.HandleMagazineText(textMesh);
             }
-
+            
             // Try pattern matching for other complex texts (FSM, Price patterns)
             string patternResult = patternMatcher.TryTranslateWithPattern(textMesh.text, path);
             if (patternResult != null)
@@ -323,6 +323,12 @@ namespace MWC_Localization_Core
                 return customFonts.Values.FirstOrDefault(f => f.name == originalFontName);
             }
 
+            // Return first loaded font as fallback
+            //else if (customFonts.Count > 0)
+            //{
+            //    return customFonts.Values.First();
+            //}
+
             return null;
         }
 
@@ -333,13 +339,13 @@ namespace MWC_Localization_Core
         {
             if (textMesh == null)
                 return false;
-
+            
             string beforeFontName = textMesh.font != null ? textMesh.font.name : string.Empty;
             ApplyCustomFont(textMesh, path);
             string afterFontName = textMesh.font != null ? textMesh.font.name : string.Empty;
             return beforeFontName != afterFontName;
         }
-
+        
         /// <summary>
         /// Load FSM patterns from teletext translation file
         /// </summary>
