@@ -58,7 +58,7 @@ namespace MWC_Localization_Core
                 return true;
 
             // Skip excluded paths
-            foreach (string excluded in ExcludedPath)
+            foreach(string excluded in ExcludedPath)
             {
                 if (path.StartsWith(excluded))
                     return false;
