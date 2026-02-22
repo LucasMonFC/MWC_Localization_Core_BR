@@ -457,4 +457,4 @@ namespace MWC_Localization_Core
             visibilityPollingTimer = 0f;
         }
     }
-
+}
