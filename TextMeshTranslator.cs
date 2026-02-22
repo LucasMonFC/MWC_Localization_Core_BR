@@ -38,7 +38,7 @@ namespace MWC_Localization_Core
             this.customFonts = customFonts;
             this.magazineHandler = magazineHandler;
             this.config = config;
-            
+
             // Initialize unified pattern matcher
             this.patternMatcher = new PatternMatcher(translations);
         }
@@ -58,11 +58,15 @@ namespace MWC_Localization_Core
                 return true;
 
             // Skip excluded paths
-            foreach(string excluded in ExcludedPath)
+            foreach (string excluded in ExcludedPath)
             {
                 if (path.StartsWith(excluded))
                     return false;
             }
+
+            // Hardcoded weather legend (188/Texts/Selite) - build from individual word translations
+            if (TryApplyWeatherLegendTranslation(textMesh, path))
+                return true;
 
             // Try complex text handling first (e.g., magazine text, cashier price)
             if (HandleComplexTextMesh(textMesh, path))
@@ -73,6 +77,67 @@ namespace MWC_Localization_Core
                 return true;
 
             return false;
+        }
+
+        /// <summary>
+        /// Hardcoded translation for weather legend at 188/Texts/Selite.
+        /// Constructs translation from individual word translations using the main translations dictionary.
+        /// Original format: "se = selkeää\npi = pilvistä\nLs = lumisadetta"
+        /// </summary>
+        private bool TryApplyWeatherLegendTranslation(TextMesh textMesh, string path)
+        {
+            if (textMesh == null)
+                return false;
+
+            // Path guard: only for the specific legend object
+            if (string.IsNullOrEmpty(path) || !path.Contains("188/Texts/Selite"))
+                return false;
+
+            string legend = GetWeatherLegendTranslation();
+            if (string.IsNullOrEmpty(legend))
+                return false;
+
+            // Avoid re-applying if already correct
+            if (textMesh.text == legend)
+                return true;
+
+            ApplyCustomFont(textMesh, path);
+            textMesh.text = legend;
+            return true;
+        }
+
+        /// <summary>
+        /// Builds the weather legend string from individual translations.
+        /// Falls back to original Finnish tokens if a specific entry is missing.
+        /// </summary>
+        private string GetWeatherLegendTranslation()
+        {
+            // Left side codes
+            string se = TryGetTranslatedToken("se", "se");
+            string pi = TryGetTranslatedToken("pi", "pi");
+            string ls = TryGetTranslatedToken("Ls", "Ls"); // Keep case as in original legend
+
+            // Right side descriptions
+            string selkeaa = TryGetTranslatedToken("selkeää", "selkeää");
+            string pilvista = TryGetTranslatedToken("pilvistä", "pilvistä");
+            string lumisadetta = TryGetTranslatedToken("lumisadetta", "lumisadetta");
+
+            return $"{se} = {selkeaa}\n{pi} = {pilvista}\n{ls} = {lumisadetta}";
+        }
+
+        /// <summary>
+        /// Tries to translate a raw token using the same dictionary as normal UI translations.
+        /// </summary>
+        private string TryGetTranslatedToken(string raw, string fallback)
+        {
+            if (string.IsNullOrEmpty(raw))
+                return fallback;
+
+            string key = MLCUtils.FormatUpperKey(raw);
+            if (!string.IsNullOrEmpty(key) && translations != null && translations.TryGetValue(key, out string translated) && !string.IsNullOrEmpty(translated))
+                return translated;
+
+            return fallback;
         }
 
         /// <summary>
@@ -158,7 +223,7 @@ namespace MWC_Localization_Core
                 // Apply Translation
                 return magazineHandler.HandleMagazineText(textMesh);
             }
-            
+
             // Try pattern matching for other complex texts (FSM, Price patterns)
             string patternResult = patternMatcher.TryTranslateWithPattern(textMesh.text, path);
             if (patternResult != null)
@@ -258,12 +323,6 @@ namespace MWC_Localization_Core
                 return customFonts.Values.FirstOrDefault(f => f.name == originalFontName);
             }
 
-            // Return first loaded font as fallback
-            //else if (customFonts.Count > 0)
-            //{
-            //    return customFonts.Values.First();
-            //}
-
             return null;
         }
 
@@ -274,13 +333,13 @@ namespace MWC_Localization_Core
         {
             if (textMesh == null)
                 return false;
-            
+
             string beforeFontName = textMesh.font != null ? textMesh.font.name : string.Empty;
             ApplyCustomFont(textMesh, path);
             string afterFontName = textMesh.font != null ? textMesh.font.name : string.Empty;
             return beforeFontName != afterFontName;
         }
-        
+
         /// <summary>
         /// Load FSM patterns from teletext translation file
         /// </summary>

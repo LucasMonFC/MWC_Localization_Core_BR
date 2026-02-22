@@ -71,7 +71,7 @@ namespace MWC_Localization_Core
 
         // Path-based monitoring rules (pattern -> strategy mapping)
         private Dictionary<string, MonitoringStrategy> pathRules;
-        
+
         // Instance-based storage (supports multiple TextMeshes per path)
         private Dictionary<int, TextMeshEntry> instanceEntries;  // instanceID -> entry
         private Dictionary<string, HashSet<int>> pathToInstances;  // path -> instanceIDs
@@ -126,7 +126,7 @@ namespace MWC_Localization_Core
             AddPathRule("GUI/HUD/Jailtime/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Day", MonitoringStrategy.FastPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Moderator", MonitoringStrategy.FastPolling);
-            AddPathRule("Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status", MonitoringStrategy.FastPolling); 
+            AddPathRule("Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status", MonitoringStrategy.FastPolling);
 
             // Teletext/FSM displays are primarily translated at array/FSM source level.
             // Use one-shot late registration to avoid scanning large TV trees every second.
@@ -236,13 +236,13 @@ namespace MWC_Localization_Core
                     continue;
 
                 int instanceID = textMesh.GetInstanceID();
-                
+
                 // Skip if this specific instance is already registered
                 if (instanceEntries.ContainsKey(instanceID))
                     continue;
 
                 string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
-                
+
                 // Translate first to reduce visible unlocalized text
                 bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath, null);
 
@@ -255,12 +255,12 @@ namespace MWC_Localization_Core
 
                 // Register instance
                 instanceEntries[instanceID] = entry;
-                
+
                 // Index by path
                 if (!pathToInstances.ContainsKey(textMeshPath))
                     pathToInstances[textMeshPath] = new HashSet<int>();
                 pathToInstances[textMeshPath].Add(instanceID);
-                
+
                 // Group by strategy
                 strategyGroups[finalStrategy].Add(instanceID);
 
@@ -288,7 +288,7 @@ namespace MWC_Localization_Core
                 strategyGroups[entry.Strategy].Remove(instanceID);
                 instanceEntries.Remove(instanceID);
             }
-            
+
             pathToInstances.Remove(path);
         }
 
@@ -301,10 +301,10 @@ namespace MWC_Localization_Core
                 return;
 
             var entry = instanceEntries[instanceID];
-            
+
             // Remove from strategy group
             strategyGroups[entry.Strategy].Remove(instanceID);
-            
+
             // Remove from path index
             if (pathToInstances.ContainsKey(entry.Path))
             {
@@ -312,7 +312,7 @@ namespace MWC_Localization_Core
                 if (pathToInstances[entry.Path].Count == 0)
                     pathToInstances.Remove(entry.Path);
             }
-            
+
             // Remove instance
             instanceEntries.Remove(instanceID);
         }
@@ -385,7 +385,7 @@ namespace MWC_Localization_Core
                 // Other strategies: Only check if text changed
                 bool textChanged = entry.HasTextChanged();
                 bool shouldCheck = textChanged || !entry.WasTranslated || strategy == MonitoringStrategy.Persistent;
-                
+
                 if (shouldCheck)
                 {
                     bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path, null);
@@ -455,6 +455,43 @@ namespace MWC_Localization_Core
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
             visibilityPollingTimer = 0f;
+        }
+    }
+
+    /// <summary>
+    /// Hardcoded translation helper for weather legend at 188/Texts/Selite
+    /// Constructs translation from individual word translations
+    /// Original format: "se = selkeää\npi = pilvistä\nLs = lumisadetta"
+    /// Uses translations from [fsm] category for each component (e.g., "se", "selkeää", "pi", "pilvistä", etc.)
+    /// 
+    /// IMPORTANT: This file doesn't own categoryTranslations, so the builder receives it as a parameter.
+    /// Call this from TextMeshTranslator (or wherever you have access to categoryTranslations).
+    /// </summary>
+    internal static class WeatherLegendTranslationBuilder
+    {
+        internal static string Build(Dictionary<string, Dictionary<string, string>> categoryTranslations)
+        {
+            // Check if [fsm] category exists
+            if (categoryTranslations == null ||
+                !categoryTranslations.ContainsKey("fsm") ||
+                categoryTranslations["fsm"] == null)
+                return null; // No fsm translations available
+
+            Dictionary<string, string> fsmTranslations = categoryTranslations["fsm"];
+
+            // Try to get individual word translations from [fsm] category
+            // Weather codes (left side)
+            string se = fsmTranslations.TryGetValue("se", out string seTrans) ? seTrans : "se";
+            string pi = fsmTranslations.TryGetValue("pi", out string piTrans) ? piTrans : "pi";
+            string ls = fsmTranslations.TryGetValue("Ls", out string lsTrans) ? lsTrans : "Ls";
+
+            // Weather descriptions (right side)
+            string selkeaa = fsmTranslations.TryGetValue("selkeää", out string selkeaaTrans) ? selkeaaTrans : "selkeää";
+            string pilvista = fsmTranslations.TryGetValue("pilvistä", out string pilvistaTrans) ? pilvistaTrans : "pilvistä";
+            string lumisadetta = fsmTranslations.TryGetValue("lumisadetta", out string lumisadettaTrans) ? lumisadettaTrans : "lumisadetta";
+
+            // Reconstruct the legend with translated components
+            return $"{se} = {selkeaa}\n{pi} = {pilvista}\n{ls} = {lumisadetta}";
         }
     }
 }
