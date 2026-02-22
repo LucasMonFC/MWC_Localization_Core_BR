@@ -319,13 +319,13 @@ namespace MWC_Localization_Core
                     if (string.IsNullOrEmpty(line) || line.TrimStart().StartsWith("#"))
                         continue;
 
-                    int separatorIndex = line.IndexOf('=');
+                    int separatorIndex = FindKeyValueSeparatorIndex(line);
                     if (separatorIndex > 0)
                     {
-                        string key = line.Substring(0, separatorIndex).Trim();
+                        string key = line.Substring(0, separatorIndex).Trim().Replace("\\=", "=");
                         // Preserve intentional leading spaces in translation values.
                         // We only trim the end to avoid accidental trailing whitespace.
-                        string value = line.Substring(separatorIndex + 1).TrimEnd();
+                        string value = line.Substring(separatorIndex + 1).TrimEnd().Replace("\\=", "=");
 
                         // Common authoring style is: "key = value".
                         // In that specific case, drop only the single separator space.
@@ -353,6 +353,27 @@ namespace MWC_Localization_Core
             {
                 CoreConsole.Error($"[{Name}] Failed to load translations: {ex.Message}");
             }
+        }
+
+        private static int FindKeyValueSeparatorIndex(string line)
+        {
+            for (int i = 0; i < line.Length; i++)
+            {
+                if (line[i] != '=')
+                    continue;
+
+                int backslashCount = 0;
+                for (int j = i - 1; j >= 0 && line[j] == '\\'; j--)
+                {
+                    backslashCount++;
+                }
+
+                bool isEscaped = (backslashCount % 2) == 1;
+                if (!isEscaped)
+                    return i;
+            }
+
+            return -1;
         }
 
         void LoadTranslations()
