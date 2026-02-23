@@ -596,7 +596,7 @@ La: = Sáb:
 Su: = Dom:
 TÄNÄÄN: = HOJE:
 ENNUSTE VKO: = PREV. SEMANAL:
-se \= selkeää pi \= pilvistä Ls \= lumisadetta = en \= ensolarado\nnb \= nublado\nnv \= neve
+se \= selkeää pi \= pilvistä Ls \= lumisadetta = en \= ENSOLARADO\nnb \= NUBLADO\nnv \= NEVE
 
 //Computer POS
 CONNECTION ESTABLISHED: WAITING = CONEXÃO ESTABELECIDA: AGUARDANDO
@@ -611,7 +611,6 @@ CONNECTION ESTABLISHED: WAITING = CONEXÃO ESTABELECIDA: PENDENTE
 COULD NOT CONNECT = A CONEXÃO NÃO É POSSÍVEL
 INCORRECT BAUD SETTING = PARÂMETROS DE BAUD INVÁLIDOS
 BAUD SETTING CHANGED = CONFIGURAÇÕES DE BAUD ALTERADAS
-Copying... {0}% = Copiando... {0}%
 Data error reading drive A = Erro ao ler o drive A
 Incorrect command. = Comando incorreto.
 The system cannot find the path specified. = O sistema não conseguiu encontrar o caminho especificado.
@@ -632,9 +631,31 @@ Sending... = Enviando...
 Sending failed! = Mensagem não enviada!
 Copying...  = Copiando... 
 Formatting... = Formatação...
-Volume in drive C is C = O volume na unidade C
+Volume in drive C is C = Volume na unidade C
+Volume in drive A is A = Volume na unidade A
 CCC   CC    CCC     C     C   CCC  CCCC     CCC   CCC    CCC  ////////////////   C     C  C  C  C     C     C  C  C  C        C  C  C  C  C     // /C - Chat  //  C     C  C  C  C  C  C     C  C  C  CCCC     CCC   CCC   CCCC  // /F - Files // C     C  C  C  C     C     C  C  C  C        C  C  C  C     C  // /R - Ranks // CCC   CC   C  C     CCCC  C  C  C  CCCC     CCC   CCC   CCC   //////////////// =     CCC   CC    CCC     C     C   CCC  CCCC     CCC   CCC    CCC  ////////////////\n   C     C  C  C  C     C     C  C  C  C        C  C  C  C  C     // /C - Chat   /\n  C     C  C  C  C  C  C     C  C  C  CCCC     CCC   CCC   CCCC  // /F - Arqui  /\n C     C  C  C  C     C     C  C  C  C        C  C  C  C     C  // /R - Classi /\n CCC   CC   C  C     CCCC  C  C  C  CCCC     CCC   CCC   CCC   ////////////////
 TELEBBS v2.73h RoyalSoft 1992 = TELEBBS v2.73h RoyalSoft 1992
+Copying... 0% = Copiando... 0%
+Copying... 5% = Copiando... 5%
+Copying... 10% = Copiando... 10%
+Copying... 15% = Copiando... 15%
+Copying... 20% = Copiando... 20%
+Copying... 25% = Copiando... 25%
+Copying... 30% = Copiando... 30%
+Copying... 35% = Copiando... 35%
+Copying... 40% = Copiando... 40%
+Copying... 45% = Copiando... 45%
+Copying... 50% = Copiando... 50%
+Copying... 55% = Copiando... 55%
+Copying... 60% = Copiando... 60%
+Copying... 65% = Copiando... 65%
+Copying... 70% = Copiando... 70%
+Copying... 75% = Copiando... 75%
+Copying... 80% = Copiando... 80%
+Copying... 85% = Copiando... 85%
+Copying... 90% = Copiando... 90%
+Copying... 95% = Copiando... 95%
+Copying... 100% = Copiando... 100%
 
 //Phone Call
 "I tried to call everybody. Please can you pick me up from the Pub and drive me home?" = "Tentei ligar para todo mundo. Você pode me buscar no bar e me levar para casa?"
