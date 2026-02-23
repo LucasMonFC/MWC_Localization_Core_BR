@@ -375,18 +375,16 @@ namespace MWC_Localization_Core
                     anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 0, false);
                     anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 4", 0, false);
                     anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 5", 0, false);
-                    anyChanged |= ApplyAllStateSetStringValueTranslation(fsm);
+                    anyChanged |= ApplyAllStateSetStringValueTranslation(fsm, "Player input");
                     hasAnyTarget |= HasAnyState(fsm, PosUseStateNames);
                     break;
 
                 case FsmStrategyType.PosTyper:
-                    // Player input / BuildStringFast action[1] = [old, path, command]
-                    // Skip command slot (index 2) to avoid fighting live user input.
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 0, false, 2);
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 1, false, 2);
-                    anyChanged |= ApplyAllStateSetStringValueTranslation(fsm);
-                    anyChanged |= ApplyAllStateSetFsmStringTranslation(fsm);
-                    hasAnyTarget |= HasState(fsm, "Player input");
+                    // IMPORTANT: Do not translate live user-typed commands in POS terminal input.
+                    // We still translate static UI/status strings that the FSM sets (e.g., TELEBBS connection status).
+                    anyChanged |= ApplyAllStateSetStringValueTranslation_PosTyperSafe(fsm);
+                    anyChanged |= ApplyAllStateSetFsmStringTranslation_PosTyperSafe(fsm);
+                    hasAnyTarget |= (fsm != null && fsm.FsmStates != null && fsm.FsmStates.Length > 0);
                     break;
 
                 case FsmStrategyType.TeletextBuildStringPattern:
@@ -741,56 +739,182 @@ namespace MWC_Localization_Core
         }
 
         private bool ApplyAllStateSetStringValueTranslation(PlayMakerFSM fsm)
+{
+    return ApplyAllStateSetStringValueTranslation(fsm, null);
+}
+
+
+private static bool ShouldSkipPosTyperState(string stateName)
+{
+    if (string.IsNullOrEmpty(stateName))
+        return false;
+
+    string n = stateName.ToLowerInvariant();
+    // POS command input states vary across versions; skip anything that looks like live typing/input.
+    return n.Contains("player input") || n.Contains("input") || n.Contains("type") || n.Contains("typing") || n.Contains("command");
+}
+
+private static bool LooksLikeUserTypedCommand(string value)
+{
+    if (string.IsNullOrEmpty(value))
+        return false;
+
+    string v = value.Trim();
+
+    // Very short, single-token strings are most likely commands like "exit".
+    if (v.Length < 1 || v.Length > 24)
+        return false;
+
+    // Commands are typically a single token (no spaces). We still allow status strings with spaces.
+    if (v.IndexOf(' ') >= 0 || v.IndexOf('\t') >= 0 || v.IndexOf('\n') >= 0 || v.IndexOf('\r') >= 0)
+        return false;
+
+    // Avoid skipping obvious UI/status strings.
+    if (v.Contains(":") || v.Contains("...") || v.Contains("."))
+        return false;
+
+    // Only letters/digits and a few common command characters.
+    for (int i = 0; i < v.Length; i++)
+    {
+        char c = v[i];
+        bool ok = (c >= 'a' && c <= 'z') ||
+                  (c >= 'A' && c <= 'Z') ||
+                  (c >= '0' && c <= '9') ||
+                  c == '-' || c == '_' || c == '/' || c == '#';
+        if (!ok)
+            return false;
+    }
+
+    return true;
+}
+
+private bool ApplyAllStateSetStringValueTranslation_PosTyperSafe(PlayMakerFSM fsm)
+{
+    if (fsm == null || fsm.FsmStates == null)
+        return false;
+
+    bool changed = false;
+
+    for (int i = 0; i < fsm.FsmStates.Length; i++)
+    {
+        HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
+        if (state == null || state.Actions == null)
+            continue;
+
+        if (ShouldSkipPosTyperState(state.Name))
+            continue;
+
+        for (int j = 0; j < state.Actions.Length; j++)
         {
-            if (fsm == null || fsm.FsmStates == null)
-                return false;
+            HutongGames.PlayMaker.Actions.SetStringValue action = state.Actions[j] as HutongGames.PlayMaker.Actions.SetStringValue;
+            if (action == null || action.stringValue == null || string.IsNullOrEmpty(action.stringValue.Value))
+                continue;
 
-            bool changed = false;
+            // As an extra safety net, skip anything that looks like a live typed command token.
+            if (LooksLikeUserTypedCommand(action.stringValue.Value))
+                continue;
 
-            for (int i = 0; i < fsm.FsmStates.Length; i++)
-            {
-                HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
-                if (state == null || state.Actions == null)
-                    continue;
-
-                for (int j = 0; j < state.Actions.Length; j++)
-                {
-                    HutongGames.PlayMaker.Actions.SetStringValue action = state.Actions[j] as HutongGames.PlayMaker.Actions.SetStringValue;
-                    if (action == null || action.stringValue == null || string.IsNullOrEmpty(action.stringValue.Value))
-                        continue;
-
-                    changed |= TranslateSetStringValue(action);
-                }
-            }
-
-            return changed;
+            changed |= TranslateSetStringValue(action);
         }
+    }
+
+    return changed;
+}
+
+private bool ApplyAllStateSetFsmStringTranslation_PosTyperSafe(PlayMakerFSM fsm)
+{
+    if (fsm == null || fsm.FsmStates == null)
+        return false;
+
+    bool changed = false;
+
+    for (int i = 0; i < fsm.FsmStates.Length; i++)
+    {
+        HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
+        if (state == null || state.Actions == null)
+            continue;
+
+        if (ShouldSkipPosTyperState(state.Name))
+            continue;
+
+        for (int j = 0; j < state.Actions.Length; j++)
+        {
+            HutongGames.PlayMaker.Actions.SetFsmString action = state.Actions[j] as HutongGames.PlayMaker.Actions.SetFsmString;
+            if (action == null || action.setValue == null || string.IsNullOrEmpty(action.setValue.Value))
+                continue;
+
+            if (LooksLikeUserTypedCommand(action.setValue.Value))
+                continue;
+
+            changed |= TranslateSetFsmString(action);
+        }
+    }
+
+    return changed;
+}
+
+private bool ApplyAllStateSetStringValueTranslation(PlayMakerFSM fsm, string skipStateName)
+{
+    if (fsm == null || fsm.FsmStates == null)
+        return false;
+
+    bool changed = false;
+
+    for (int i = 0; i < fsm.FsmStates.Length; i++)
+    {
+        HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
+        if (state == null || state.Actions == null)
+            continue;
+
+        if (!string.IsNullOrEmpty(skipStateName) && state.Name == skipStateName)
+            continue;
+
+        for (int j = 0; j < state.Actions.Length; j++)
+        {
+            HutongGames.PlayMaker.Actions.SetStringValue action = state.Actions[j] as HutongGames.PlayMaker.Actions.SetStringValue;
+            if (action == null || action.stringValue == null || string.IsNullOrEmpty(action.stringValue.Value))
+                continue;
+
+            changed |= TranslateSetStringValue(action);
+        }
+    }
+
+    return changed;
+}
 
         private bool ApplyAllStateSetFsmStringTranslation(PlayMakerFSM fsm)
+{
+    return ApplyAllStateSetFsmStringTranslation(fsm, null);
+}
+
+private bool ApplyAllStateSetFsmStringTranslation(PlayMakerFSM fsm, string skipStateName)
+{
+    if (fsm == null || fsm.FsmStates == null)
+        return false;
+
+    bool changed = false;
+
+    for (int i = 0; i < fsm.FsmStates.Length; i++)
+    {
+        HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
+        if (state == null || state.Actions == null)
+            continue;
+
+        if (!string.IsNullOrEmpty(skipStateName) && state.Name == skipStateName)
+            continue;
+
+        for (int j = 0; j < state.Actions.Length; j++)
         {
-            if (fsm == null || fsm.FsmStates == null)
-                return false;
+            object action = state.Actions[j];
+            if (action == null || action.GetType().Name != "SetFsmString")
+                continue;
 
-            bool changed = false;
-
-            for (int i = 0; i < fsm.FsmStates.Length; i++)
-            {
-                HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
-                if (state == null || state.Actions == null)
-                    continue;
-
-                for (int j = 0; j < state.Actions.Length; j++)
-                {
-                    object action = state.Actions[j];
-                    if (action == null || action.GetType().Name != "SetFsmString")
-                        continue;
-
-                    changed |= TranslateActionFsmStringField(action, "setValue");
-                }
-            }
-
-            return changed;
+            changed |= TranslateActionFsmStringField(action, "setValue");
         }
+    }
+
+    return changed;
+}
 
         private bool TranslateSetStringValue(HutongGames.PlayMaker.Actions.SetStringValue action)
         {
@@ -811,6 +935,37 @@ namespace MWC_Localization_Core
                 if (lineTranslated != original)
                 {
                     action.stringValue.Value = lineTranslated;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        private bool TranslateSetFsmString(HutongGames.PlayMaker.Actions.SetFsmString action)
+        {
+            if (action == null || action.setValue == null || string.IsNullOrEmpty(action.setValue.Value))
+                return false;
+
+            string original = action.setValue.Value;
+            // Don’t translate user-typed commands (extra safety; caller also checks)
+            if (LooksLikeUserTypedCommand(original))
+                return false;
+
+            string translated = GetTranslation(original, original);
+            if (translated != original)
+            {
+                action.setValue.Value = translated;
+                return true;
+            }
+
+            if (original.IndexOf('\n') >= 0)
+            {
+                string lineTranslated = TranslateTextByLines(original);
+                if (lineTranslated != original)
+                {
+                    action.setValue.Value = lineTranslated;
                     return true;
                 }
             }

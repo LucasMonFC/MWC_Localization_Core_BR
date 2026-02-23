@@ -24,7 +24,8 @@ namespace MWC_Localization_Core
             "CARPARTS/VINPlate",
             "Sheets/ServiceBrochure/PagePaintRims/Buttons/CustomColors",
             "Sheets/ServiceBrochure/PagePaintCar/Buttons/CustomColors",
-            "GUI/HUD/FPS"
+            "GUI/HUD/FPS",
+            "COMPUTER/SYSTEM/POS/Command"
         };
 
         public TextMeshTranslator(
