@@ -596,6 +596,7 @@ La: = Sáb:
 Su: = Dom:
 TÄNÄÄN: = HOJE:
 ENNUSTE VKO: = PREV. SEMANAL:
+se \= selkeää pi \= pilvistä Ls \= lumisadetta = en \= ensolarado\nnb \= nublado\nnv \= neve
 
 //Computer POS
 CONNECTION ESTABLISHED: WAITING = CONEXÃO ESTABELECIDA: AGUARDANDO
@@ -610,7 +611,7 @@ CONNECTION ESTABLISHED: WAITING = CONEXÃO ESTABELECIDA: PENDENTE
 COULD NOT CONNECT = A CONEXÃO NÃO É POSSÍVEL
 INCORRECT BAUD SETTING = PARÂMETROS DE BAUD INVÁLIDOS
 BAUD SETTING CHANGED = CONFIGURAÇÕES DE BAUD ALTERADAS
-Copying... 0% = Copiando... 0%
+Copying... {0}% = Copiando... {0}%
 Data error reading drive A = Erro ao ler o drive A
 Incorrect command. = Comando incorreto.
 The system cannot find the path specified. = O sistema não conseguiu encontrar o caminho especificado.
