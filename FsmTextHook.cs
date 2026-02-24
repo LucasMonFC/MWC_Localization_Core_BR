@@ -20,15 +20,18 @@ namespace MWC_Localization_Core
         private HashSet<string> loggedReadyTargets = new HashSet<string>();
         private List<PlayMakerFSM> cachedEnnusteDataFsms = new List<PlayMakerFSM>();
         private float lastEnnusteDataFsmScanTime = -10f;
-        
-        // Minimal POS update throttle to keep copy/progress text translated without heavy scanning
+        // POS/TextMesh batching and caches to avoid per-frame hitches
         private float lastPosUpdateTime = -10f;
-        private readonly float posUpdateInterval = 0.12f;
-        // Cache TextMesh instances to avoid calling Resources.FindObjectsOfTypeAll every update
+        private float posUpdateInterval = 0.25f; // seconds
         private List<TextMesh> cachedTextMeshes = new List<TextMesh>();
         private float lastTextMeshCacheTime = -10f;
-        private readonly float textMeshCacheInterval = 5f; // seconds
-        // Scanning processes all cached TextMesh entries now (no per-tick quota).
+        private float textMeshCacheInterval = 5f; // seconds
+        private int textMeshBatchSize = 64; // items processed per invocation
+        private int textMeshBatchIndex = 0;
+
+        private class TranslationCacheEntry { public string Translated; public float Time; }
+        private Dictionary<string, TranslationCacheEntry> translationCache = new Dictionary<string, TranslationCacheEntry>();
+        private float translationCacheTtl = 2f; // seconds
         private static readonly string[] PercentTokens = new string[] { "copying...", "formatting...", "sending..." };
 
         private enum FsmStrategyType
@@ -40,56 +43,28 @@ namespace MWC_Localization_Core
             UnemployPaperButtonVariables
         }
 
-		// Process a small batch each tick to avoid hitches on large scenes.
-        private void UpdateAllCopyingTextMeshes()
+        private bool TryTranslateValue_PosBufferAware(string original, out string translated)
         {
-            try
+            translated = original;
+            if (string.IsNullOrEmpty(original)) return false;
+            if (LooksLikeUserTypedCommand(original)) return false;
+
+            if (original.IndexOf('\n') >= 0 && PosContainsPrompt(original))
             {
-                float now = Time.realtimeSinceStartup;
-                if (cachedTextMeshes == null) cachedTextMeshes = new List<TextMesh>();
-
-                // Refresh cached TextMesh list occasionally (expensive call)
-                if (cachedTextMeshes.Count == 0 || (now - lastTextMeshCacheTime) >= textMeshCacheInterval)
-                {
-                    cachedTextMeshes.Clear();
-                    TextMesh[] all = Resources.FindObjectsOfTypeAll<TextMesh>();
-                    if (all != null)
-                    {
-                        foreach (TextMesh tm in all) if (tm != null) cachedTextMeshes.Add(tm);
-                    }
-                    lastTextMeshCacheTime = now;
-                }
-
-                int count = cachedTextMeshes.Count;
-                if (count == 0) return;
-
-                for (int i = 0; i < count; i++)
-                {
-                    TextMesh tm = cachedTextMeshes[i];
-                    if (tm == null) continue;
-
-                    string cur = tm.text ?? string.Empty;
-                    if (cur.Length == 0) continue;
-
-                    bool isNoOsPos = false;
-                    try { string path = MLCUtils.GetGameObjectPath(tm.gameObject); isNoOsPos = !string.IsNullOrEmpty(path) && path.StartsWith("COMPUTER/SYSTEM/POS/NoOS"); } catch { }
-                    if (!isNoOsPos && !ContainsPercentToken(cur)) continue;
-
-                    string translated = (cur.IndexOf('\n') >= 0) ? TranslatePosTerminalBuffer(cur) : (GetTranslation(cur, cur) == cur ? TranslateTextByLines(cur) : GetTranslation(cur, cur));
-                    if (!string.IsNullOrEmpty(translated) && translated != cur)
-                    {
-                        try { tm.text = translated.Replace("\\n", "\n"); } catch { }
-                    }
-                }
+                string translatedBuf = TranslatePosTerminalBuffer(original);
+                if (translatedBuf != original) { translated = translatedBuf; return true; }
+                return false;
             }
-            catch { }
-        }
 
-        private static bool ContainsPercentToken(string s)
-        {
-            if (string.IsNullOrEmpty(s)) return false;
-            string lower = s.ToLowerInvariant();
-            for (int i = 0; i < PercentTokens.Length; i++) if (lower.IndexOf(PercentTokens[i]) >= 0) return true;
+            string t = GetTranslation(original, original);
+            if (t != original) { translated = t; return true; }
+
+            if (original.IndexOf('\n') >= 0)
+            {
+                string lineTranslated = TranslateTextByLines(original);
+                if (lineTranslated != original) { translated = lineTranslated; return true; }
+            }
+
             return false;
         }
 
@@ -281,73 +256,6 @@ namespace MWC_Localization_Core
             }
         }
 
-        // lines translated. This is intentionally small-scope to avoid scanning all FSMs.
-        private void Update()
-        {
-            try
-            {
-                if (Application.loadedLevelName != "GAME")
-                    return;
-
-                float now = Time.realtimeSinceStartup;
-                if ((now - lastPosUpdateTime) < posUpdateInterval)
-                    return;
-
-                lastPosUpdateTime = now;
-
-                // Update any POS buildstring actions and short TextMesh pass
-                for (int t = 0; t < GamePosTargets.Length; t++)
-                {
-                    var target = GamePosTargets[t];
-                    if (target == null)
-                        continue;
-
-                    PlayMakerFSM fsm = MLCUtils.FindFsmIncludingInactiveByPathAndName(target.ObjectPath, target.FsmName);
-                    if (!IsFsmReady(fsm))
-                        continue;
-
-					// Special-case: apply safe BuildStringFast translations for known Command Dir list states
-					try
-					{
-						if (!string.IsNullOrEmpty(target.ObjectPath) &&
-							target.ObjectPath.Equals("COMPUTER/SYSTEM/POS/Command", System.StringComparison.OrdinalIgnoreCase))
-						{
-							bool changed = false;
-							foreach (var st in new[] { "Dir list A", "Dir list C" })
-								foreach (var id in new[] { 2, 5 })
-									changed |= ApplyBuildStringActionStringPartsTranslation(fsm, st, id, true);
-
-							if (changed) appliedTarget = "GAME POS Command Dir list";
-						}
-					}
-					catch { }
-
-					// For POS use states, translate BuildString parts (pattern split enabled)
-					if (target.Strategy == FsmStrategyType.PosUse)
-                    {
-                        ApplyBuildStringActionStringPartsTranslation(fsm, "State 1", 0, true);
-                        ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 0, true);
-                        ApplyBuildStringActionStringPartsTranslation(fsm, "State 4", 0, true);
-                        ApplyBuildStringActionStringPartsTranslation(fsm, "State 5", 0, true);
-                    }
-
-                    // For POS typer, translate BuildString in player input states but skip command slot
-                    if (target.Strategy == FsmStrategyType.PosTyper)
-                    {
-                        ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 0, false, 2);
-                        ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 1, false, 2);
-                    }
-                }
-
-                // Small TextMesh sweep to catch any direct TextMesh copies
-                UpdateAllCopyingTextMeshes();
-            }
-            catch
-            {
-                // ignore
-            }
-        }
-
         private bool TryApplyTranslations(string currentScene)
         {
             if (translations == null)
@@ -366,6 +274,8 @@ namespace MWC_Localization_Core
                 TryApplyGameTeletextBottomlineFsmTranslations();
                 TryApplyGameTeletextWeatherUpdaterFsmTranslations();
                 TryApplyGameUnemployPaperFsmTranslations();
+                // Also do a small batched sweep for copying/percent TextMeshes
+                UpdateAllCopyingTextMeshes();
             }
 
             return false;
@@ -488,7 +398,6 @@ namespace MWC_Localization_Core
                 if (!IsFsmReady(fsm))
                     continue;
 
-
                 LogReadyOnce(target.ReadyLogKey, target.ReadyLogMessage);
                 ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget);
             }
@@ -499,14 +408,35 @@ namespace MWC_Localization_Core
             if (target == null || fsm == null)
                 return;
 
+            // Special-case: apply safe BuildStringFast translations for known Command Dir list states
+            try
+            {
+                if (!string.IsNullOrEmpty(target.ObjectPath) &&
+                    target.ObjectPath.Equals("COMPUTER/SYSTEM/POS/Command", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    bool cmdChanged = false;
+
+                    cmdChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list A", 2, true);
+                    cmdChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list A", 5, true);
+                    cmdChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list C", 2, true);
+                    cmdChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list C", 5, true);
+
+                    if (cmdChanged)
+                    {
+                        appliedTarget = "GAME POS Command Dir list";
+                        anyChanged = true;
+                    }
+                }
+            }
+            catch { }
+
             switch (target.Strategy)
             {
                 case FsmStrategyType.PosUse:
-                    // Allow pattern split so combined BuildStringFast parts like "Copying... {0}%" are matched
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 1", 0, true);
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 0, true);
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 4", 0, true);
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 5", 0, true);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 1", 0, false);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 0, false);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 4", 0, false);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 5", 0, false);
                     anyChanged |= ApplyAllStateSetStringValueTranslation(fsm);
                     hasAnyTarget |= HasAnyState(fsm, PosUseStateNames);
                     break;
@@ -516,8 +446,8 @@ namespace MWC_Localization_Core
                     // Skip command slot (index 2) to avoid fighting live user input.
                     anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 0, false, 2);
                     anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 1, false, 2);
-                    anyChanged |= ApplyAllStateSetStringValueTranslation_PosTyperSafe(fsm);
-                    anyChanged |= ApplyAllStateSetFsmStringTranslation_PosTyperSafe(fsm);
+                    anyChanged |= ApplyAllStateSetStringValueTranslation(fsm);
+                    anyChanged |= ApplyAllStateSetFsmStringTranslation(fsm);
                     hasAnyTarget |= HasState(fsm, "Player input");
                     break;
 
@@ -796,10 +726,21 @@ namespace MWC_Localization_Core
                 changed = ApplyBuildStringFastPatternTranslation(fsm, stateName, actionIndex, parts);
             }
 
+            // If this is a player-input-like state, avoid translating parts that look like user-typed commands.
+            bool skipUserCommands = ShouldSkipPosTyperState(stateName);
+
             for (int i = 0; i < parts.Length; i++)
             {
                 if (ShouldSkipIndex(i, skipPartIndexes))
                     continue;
+
+                HutongGames.PlayMaker.FsmString part = parts[i];
+                if (skipUserCommands && part != null && !string.IsNullOrEmpty(part.Value))
+                {
+                    // Don't translate short, single-token commands typed by the player.
+                    if (LooksLikeUserTypedCommand(part.Value) && part.Value.IndexOf('\n') < 0)
+                        continue;
+                }
 
                 changed |= TranslateStringPart(parts[i]);
             }
@@ -828,13 +769,7 @@ namespace MWC_Localization_Core
                 return false;
 
             string path = MLCUtils.GetGameObjectPath(fsm.gameObject) + "|" + fsm.FsmName + "|" + stateName + "|" + actionIndex.ToString();
-            string translatedCombined = null;
-            try
-            {
-                translatedCombined = patternMatcher.TryTranslateWithPattern(combinedText, path);
-            }
-            catch { translatedCombined = null; }
-
+            string translatedCombined = patternMatcher.TryTranslateWithPattern(combinedText, path);
             if (string.IsNullOrEmpty(translatedCombined) || translatedCombined == combinedText)
                 return false;
 
@@ -878,7 +813,130 @@ namespace MWC_Localization_Core
             return sb.ToString();
         }
 
-        // POS / typer safety helpers (condensed)
+        // Check for POS prompt markers in buffers
+        private bool PosContainsPrompt(string s, bool asLine = false)
+        {
+            if (string.IsNullOrEmpty(s)) return false;
+            if (asLine)
+            {
+                string l = s.TrimStart(' ', '\t');
+                return l.StartsWith("C:\\>") || l.StartsWith("TELEBBS:\\>");
+            }
+
+            return s.Contains("C:\\>") || s.Contains("TELEBBS:\\>");
+        }
+
+        private string TranslatePosTerminalBuffer(string buffer)
+        {
+            if (string.IsNullOrEmpty(buffer)) return buffer;
+            string[] lines = buffer.Split('\n');
+            bool any = false;
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                if (string.IsNullOrEmpty(line)) continue;
+                if (PosContainsPrompt(line, true)) continue;
+                bool hasCR = line.Length > 0 && line[line.Length - 1] == '\r';
+                string core = hasCR ? line.Substring(0, line.Length - 1) : line;
+                if (string.IsNullOrEmpty(core)) continue;
+                string translated = GetTranslation(core, core);
+                if (translated == core) translated = TranslateTextByLines(core);
+                if (translated != core) { lines[i] = hasCR ? (translated + "\r") : translated; any = true; }
+            }
+            if (!any) return buffer;
+            return string.Join("\n", lines);
+        }
+
+        private static bool ContainsPercentToken(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return false;
+            string lower = s.ToLowerInvariant();
+            for (int i = 0; i < PercentTokens.Length; i++) if (lower.IndexOf(PercentTokens[i]) >= 0) return true;
+            return false;
+        }
+
+        // Batched scanning of TextMesh objects to translate copying/formatting/sending lines.
+        private void UpdateAllCopyingTextMeshes()
+        {
+            float now = Time.realtimeSinceStartup;
+
+            // Throttle overall frequency
+            if ((now - lastPosUpdateTime) < posUpdateInterval)
+                return;
+            lastPosUpdateTime = now;
+
+            // Refresh cache of all TextMeshes occasionally
+            if (cachedTextMeshes == null) cachedTextMeshes = new List<TextMesh>();
+            if (cachedTextMeshes.Count == 0 || (now - lastTextMeshCacheTime) >= textMeshCacheInterval)
+            {
+                cachedTextMeshes.Clear();
+                TextMesh[] all = Resources.FindObjectsOfTypeAll<TextMesh>();
+                if (all != null)
+                {
+                    for (int i = 0; i < all.Length; i++) if (all[i] != null) cachedTextMeshes.Add(all[i]);
+                }
+                lastTextMeshCacheTime = now;
+                textMeshBatchIndex = 0;
+            }
+
+            int total = cachedTextMeshes.Count;
+            if (total == 0) return;
+
+            int toProcess = textMeshBatchSize;
+            int processed = 0;
+
+            while (processed < toProcess && total > 0)
+            {
+                TextMesh tm = cachedTextMeshes[textMeshBatchIndex % total];
+                textMeshBatchIndex = (textMeshBatchIndex + 1) % total;
+                processed++;
+
+                if (tm == null) continue;
+                string cur = tm.text ?? string.Empty;
+                if (cur.Length == 0) continue;
+
+                bool isNoOsPos = false;
+                try { string path = MLCUtils.GetGameObjectPath(tm.gameObject); isNoOsPos = !string.IsNullOrEmpty(path) && path.StartsWith("COMPUTER/SYSTEM/POS/NoOS"); } catch { }
+                if (!isNoOsPos && !ContainsPercentToken(cur)) continue;
+
+                // Check cache
+                TranslationCacheEntry cacheEntry;
+                if (translationCache.TryGetValue(cur, out cacheEntry))
+                {
+                    if ((now - cacheEntry.Time) < translationCacheTtl)
+                    {
+                        if (!string.IsNullOrEmpty(cacheEntry.Translated) && cacheEntry.Translated != cur)
+                        {
+                            try { tm.text = cacheEntry.Translated.Replace("\\n", "\n"); } catch { }
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        translationCache.Remove(cur);
+                    }
+                }
+
+                string translated = GetTranslation(cur, cur);
+                if (translated == cur && cur.IndexOf('\n') >= 0)
+                {
+                    translated = TranslateTextByLines(cur);
+                }
+
+                if (!string.IsNullOrEmpty(translated) && translated != cur)
+                {
+                    try { tm.text = translated.Replace("\\n", "\n"); } catch { }
+                    translationCache[cur] = new TranslationCacheEntry() { Translated = translated, Time = now };
+                }
+                else
+                {
+                    // store negative result to avoid reprocessing for TTL
+                    translationCache[cur] = new TranslationCacheEntry() { Translated = cur, Time = now };
+                }
+            }
+        }
+
+        // POS / typer safety helpers
         private static bool ShouldSkipPosTyperState(string stateName)
         {
             if (string.IsNullOrEmpty(stateName)) return false;
@@ -923,112 +981,15 @@ namespace MWC_Localization_Core
             return changed;
         }
 
-        private bool ApplyAllStateSetStringValueTranslation_PosTyperSafe(PlayMakerFSM fsm)
-        {
-            return IterateStatesActions(fsm, (action, skipState) =>
-            {
-                var a = action as HutongGames.PlayMaker.Actions.SetStringValue;
-                if (a == null || a.stringValue == null || string.IsNullOrEmpty(a.stringValue.Value)) return false;
-                if (skipState && LooksLikeUserTypedCommand(a.stringValue.Value) && a.stringValue.Value.IndexOf('\n') < 0) return false;
-                return TranslateSetStringValue_PosBufferAware(a);
-            });
-        }
-
-        private bool ApplyAllStateSetFsmStringTranslation_PosTyperSafe(PlayMakerFSM fsm)
-        {
-            return IterateStatesActions(fsm, (action, skipState) =>
-            {
-                var a = action as HutongGames.PlayMaker.Actions.SetFsmString;
-                if (a == null || a.setValue == null || string.IsNullOrEmpty(a.setValue.Value)) return false;
-                if (skipState && LooksLikeUserTypedCommand(a.setValue.Value) && a.setValue.Value.IndexOf('\n') < 0) return false;
-                return TranslateSetFsmString_PosBufferAware(a);
-            });
-        }
-
-        private bool TryTranslateValue_PosBufferAware(string original, out string translated)
-        {
-            translated = original;
-            if (string.IsNullOrEmpty(original)) return false;
-            if (LooksLikeUserTypedCommand(original)) return false;
-
-            if (original.IndexOf('\n') >= 0 && PosContainsPrompt(original))
-            {
-                string translatedBuf = TranslatePosTerminalBuffer(original);
-                if (translatedBuf != original) { translated = translatedBuf; return true; }
-                return false;
-            }
-
-            string t = GetTranslation(original, original);
-            if (t != original) { translated = t; return true; }
-
-            if (original.IndexOf('\n') >= 0)
-            {
-                string lineTranslated = TranslateTextByLines(original);
-                if (lineTranslated != original) { translated = lineTranslated; return true; }
-            }
-
-            return false;
-        }
-
-        private bool TranslateSetStringValue_PosBufferAware(HutongGames.PlayMaker.Actions.SetStringValue action)
-        {
-            if (action == null || action.stringValue == null || string.IsNullOrEmpty(action.stringValue.Value)) return false;
-            string original = action.stringValue.Value;
-            string result;
-            if (TryTranslateValue_PosBufferAware(original, out result)) { action.stringValue.Value = result; return true; }
-            return false;
-        }
-
-        private bool TranslateSetFsmString_PosBufferAware(HutongGames.PlayMaker.Actions.SetFsmString action)
-        {
-            if (action == null || action.setValue == null || string.IsNullOrEmpty(action.setValue.Value)) return false;
-            string original = action.setValue.Value;
-            string result;
-            if (TryTranslateValue_PosBufferAware(original, out result)) { action.setValue.Value = result; return true; }
-            return false;
-        }
-
-        // Combined POS prompt/buffer check. Use asLine=true to check a single line (trimmed start).
-        private bool PosContainsPrompt(string s, bool asLine = false)
-        {
-            if (string.IsNullOrEmpty(s)) return false;
-            if (asLine)
-            {
-                string l = s.TrimStart(' ', '\t');
-                return l.StartsWith("C:\\>") || l.StartsWith("TELEBBS:\\>");
-            }
-
-            return s.Contains("C:\\>") || s.Contains("TELEBBS:\\>");
-        }
-
-        private string TranslatePosTerminalBuffer(string buffer)
-        {
-            if (string.IsNullOrEmpty(buffer)) return buffer;
-            string[] lines = buffer.Split('\n');
-            bool any = false;
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string line = lines[i];
-                if (string.IsNullOrEmpty(line)) continue;
-                if (PosContainsPrompt(line, true)) continue;
-                bool hasCR = line.Length > 0 && line[line.Length - 1] == '\r';
-                string core = hasCR ? line.Substring(0, line.Length - 1) : line;
-                if (string.IsNullOrEmpty(core)) continue;
-                string translated = GetTranslation(core, core);
-                if (translated == core) translated = TranslateTextByLines(core);
-                if (translated != core) { lines[i] = hasCR ? (translated + "\r") : translated; any = true; }
-            }
-            if (!any) return buffer;
-            return string.Join("\n", lines);
-        }
-
         private bool ApplyAllStateSetStringValueTranslation(PlayMakerFSM fsm)
         {
-            // Reuse IterateStatesActions to iterate states/actions and translate SetStringValue actions.
+            // Use IterateStatesActions to find SetStringValue actions and translate their values.
             return IterateStatesActions(fsm, (action, skipState) =>
             {
                 var a = action as HutongGames.PlayMaker.Actions.SetStringValue;
                 if (a == null || a.stringValue == null || string.IsNullOrEmpty(a.stringValue.Value)) return false;
+                // If this is a player-input-like state, don't translate values that look like typed commands.
+                if (skipState && LooksLikeUserTypedCommand(a.stringValue.Value) && a.stringValue.Value.IndexOf('\n') < 0) return false;
                 return TranslateSetStringValue(a);
             });
         }
@@ -1039,16 +1000,28 @@ namespace MWC_Localization_Core
             return IterateStatesActions(fsm, (action, skipState) =>
             {
                 if (action == null || action.GetType().Name != "SetFsmString") return false;
+                // If this is a player-input-like state, don't translate values that look like typed commands.
+                FieldInfo field = action.GetType().GetField("setValue", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (field == null) return false;
+                HutongGames.PlayMaker.FsmString fsmString = field.GetValue(action) as HutongGames.PlayMaker.FsmString;
+                if (fsmString == null || string.IsNullOrEmpty(fsmString.Value)) return false;
+                if (skipState && LooksLikeUserTypedCommand(fsmString.Value) && fsmString.Value.IndexOf('\n') < 0) return false;
                 return TranslateActionFsmStringField(action, "setValue");
             });
         }
 
         private bool TranslateSetStringValue(HutongGames.PlayMaker.Actions.SetStringValue action)
         {
-            if (action == null || action.stringValue == null || string.IsNullOrEmpty(action.stringValue.Value)) return false;
+            if (action == null || action.stringValue == null || string.IsNullOrEmpty(action.stringValue.Value))
+                return false;
             string original = action.stringValue.Value;
             string result;
-            if (TryTranslateSimple(original, out result)) { action.stringValue.Value = result; return true; }
+            if (TryTranslateValue_PosBufferAware(original, out result))
+            {
+                action.stringValue.Value = result;
+                return true;
+            }
+
             return false;
         }
 
@@ -1064,33 +1037,30 @@ namespace MWC_Localization_Core
             HutongGames.PlayMaker.FsmString fsmString = field.GetValue(action) as HutongGames.PlayMaker.FsmString;
             if (fsmString == null || string.IsNullOrEmpty(fsmString.Value))
                 return false;
+
             string original = fsmString.Value;
             string result;
-            if (TryTranslateSimple(original, out result)) { fsmString.Value = result; return true; }
+            if (TryTranslateValue_PosBufferAware(original, out result))
+            {
+                fsmString.Value = result;
+                return true;
+            }
+
             return false;
         }
 
         private bool TranslateStringPart(HutongGames.PlayMaker.FsmString part)
         {
-            if (part == null || string.IsNullOrEmpty(part.Value)) return false;
+            if (part == null || string.IsNullOrEmpty(part.Value))
+                return false;
             string original = part.Value;
             string result;
-            if (TryTranslateSimple(original, out result)) { part.Value = result; return true; }
-            return false;
-        }
-
-        // Simple translation helper: direct dictionary/pattern lookup, then per-line fallback.
-        private bool TryTranslateSimple(string original, out string translated)
-        {
-            translated = original;
-            if (string.IsNullOrEmpty(original)) return false;
-            string t = GetTranslation(original, original);
-            if (t != original) { translated = t; return true; }
-            if (original.IndexOf('\n') >= 0)
+            if (TryTranslateValue_PosBufferAware(original, out result))
             {
-                string lineTranslated = TranslateTextByLines(original);
-                if (lineTranslated != original) { translated = lineTranslated; return true; }
+                part.Value = result;
+                return true;
             }
+
             return false;
         }
 
@@ -1147,9 +1117,7 @@ namespace MWC_Localization_Core
             string value;
             if (translations.TryGetValue(normalizedKey, out value))
                 return value;
-
             // Fallback: try pattern-based translations (supports placeholders like {0})
-            // Use the original key text when matching patterns; PatternMatcher uppercases internally.
             if (patternMatcher != null)
             {
                 try
@@ -1158,10 +1126,7 @@ namespace MWC_Localization_Core
                     if (!string.IsNullOrEmpty(patternResult))
                         return patternResult;
                 }
-                catch
-                {
-                    // Ignore pattern matching errors and fall back to the basic fallback.
-                }
+                catch { }
             }
 
             return fallback;
