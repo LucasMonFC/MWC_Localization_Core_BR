@@ -28,8 +28,7 @@ namespace MWC_Localization_Core
         private List<TextMesh> cachedTextMeshes = new List<TextMesh>();
         private float lastTextMeshCacheTime = -10f;
         private readonly float textMeshCacheInterval = 5f; // seconds
-        private int scanIndex = 0;
-        private const int MaxTextMeshesPerTick = 1280;
+        // Scanning processes all cached TextMesh entries now (no per-tick quota).
         private static readonly string[] PercentTokens = new string[] { "copying...", "formatting...", "sending..." };
 
         private enum FsmStrategyType
@@ -59,24 +58,19 @@ namespace MWC_Localization_Core
                         foreach (TextMesh tm in all) if (tm != null) cachedTextMeshes.Add(tm);
                     }
                     lastTextMeshCacheTime = now;
-                    scanIndex = 0;
                 }
 
                 int count = cachedTextMeshes.Count;
                 if (count == 0) return;
 
-                int processed = 0;
-                while (processed < MaxTextMeshesPerTick && count > 0)
+                for (int i = 0; i < count; i++)
                 {
-                    if (scanIndex >= count) scanIndex = 0;
-                    TextMesh tm = cachedTextMeshes[scanIndex++];
-                    processed++;
+                    TextMesh tm = cachedTextMeshes[i];
                     if (tm == null) continue;
 
                     string cur = tm.text ?? string.Empty;
                     if (cur.Length == 0) continue;
 
-                    // Always process NoOS POS labels (path-based)
                     bool isNoOsPos = false;
                     try { string path = MLCUtils.GetGameObjectPath(tm.gameObject); isNoOsPos = !string.IsNullOrEmpty(path) && path.StartsWith("COMPUTER/SYSTEM/POS/NoOS"); } catch { }
                     if (!isNoOsPos && !ContainsPercentToken(cur)) continue;
@@ -312,8 +306,24 @@ namespace MWC_Localization_Core
                     if (!IsFsmReady(fsm))
                         continue;
 
-                    // For POS use states, translate BuildString parts (pattern split enabled)
-                    if (target.Strategy == FsmStrategyType.PosUse)
+					// Special-case: apply safe BuildStringFast translations for known Command Dir list states
+					try
+					{
+						if (!string.IsNullOrEmpty(target.ObjectPath) &&
+							target.ObjectPath.Equals("COMPUTER/SYSTEM/POS/Command", System.StringComparison.OrdinalIgnoreCase))
+						{
+							bool changed = false;
+							foreach (var st in new[] { "Dir list A", "Dir list C" })
+								foreach (var id in new[] { 2, 5 })
+									changed |= ApplyBuildStringActionStringPartsTranslation(fsm, st, id, true);
+
+							if (changed) appliedTarget = "GAME POS Command Dir list";
+						}
+					}
+					catch { }
+
+					// For POS use states, translate BuildString parts (pattern split enabled)
+					if (target.Strategy == FsmStrategyType.PosUse)
                     {
                         ApplyBuildStringActionStringPartsTranslation(fsm, "State 1", 0, true);
                         ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 0, true);

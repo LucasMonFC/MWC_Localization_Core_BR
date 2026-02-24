@@ -143,7 +143,8 @@ namespace MWC_Localization_Core
             AddPathRule("PERAPORTTI/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
 			AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.OnVisibilityChange);
-        }
+			AddPathRule("COMPUTER/SYSTEM/POS/Command", MonitoringStrategy.OnVisibilityChange);
+		}
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
         {
