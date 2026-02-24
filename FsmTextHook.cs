@@ -20,6 +20,16 @@ namespace MWC_Localization_Core
         private HashSet<string> loggedReadyTargets = new HashSet<string>();
         private List<PlayMakerFSM> cachedEnnusteDataFsms = new List<PlayMakerFSM>();
         private float lastEnnusteDataFsmScanTime = -10f;
+        
+        // Minimal POS update throttle to keep copy/progress text translated without heavy scanning
+        private float lastPosUpdateTime = -10f;
+        private readonly float posUpdateInterval = 0.12f;
+        // Cache TextMesh instances to avoid calling Resources.FindObjectsOfTypeAll every update
+        private List<TextMesh> cachedTextMeshes = new List<TextMesh>();
+        private float lastTextMeshCacheTime = -10f;
+        private readonly float textMeshCacheInterval = 5f; // seconds
+        private int scanIndex = 0;
+        private const int MaxTextMeshesPerTick = 980;
 
         private enum FsmStrategyType
         {
@@ -29,6 +39,101 @@ namespace MWC_Localization_Core
             TeletextWeatherUpdaterTokens,
             UnemployPaperButtonVariables
         }
+
+		// Process a small batch each tick to avoid hitches on large scenes.
+		private void UpdateAllCopyingTextMeshes()
+		{
+		    try
+		    {
+		        float now = Time.realtimeSinceStartup;
+		
+		        if (cachedTextMeshes == null)
+		            cachedTextMeshes = new List<TextMesh>();
+		
+		        // Refresh cached TextMesh list occasionally (expensive call)
+		        if (cachedTextMeshes.Count == 0 || (now - lastTextMeshCacheTime) >= textMeshCacheInterval)
+		        {
+		            cachedTextMeshes.Clear();
+		            TextMesh[] all = Resources.FindObjectsOfTypeAll<TextMesh>();
+		            if (all != null)
+		            {
+		                for (int i = 0; i < all.Length; i++)
+		                {
+		                    TextMesh tm = all[i];
+		                    if (tm != null)
+		                        cachedTextMeshes.Add(tm);
+		                }
+		            }
+		            lastTextMeshCacheTime = now;
+		            scanIndex = 0;
+		        }
+		
+		        int count = cachedTextMeshes.Count;
+		        if (count == 0)
+		            return;
+		
+		        int processed = 0;
+		        while (processed < MaxTextMeshesPerTick && count > 0)
+		        {
+		            if (scanIndex >= count) scanIndex = 0;
+		
+		            TextMesh tm = cachedTextMeshes[scanIndex++];
+		            processed++;
+		
+                    if (tm == null) continue;
+
+                    string cur = tm.text ?? string.Empty;
+                    if (cur.Length == 0) continue;
+
+                    // Always process NoOS POS labels (path-based) because they are
+                    // translated but don't contain usual progress markers.
+                    bool isNoOsPos = false;
+                    try
+                    {
+                        string path = MLCUtils.GetGameObjectPath(tm.gameObject);
+                        if (!string.IsNullOrEmpty(path) && path.StartsWith("COMPUTER/SYSTEM/POS/NoOS"))
+                            isNoOsPos = true;
+                    }
+                    catch { }
+
+                    if (!isNoOsPos && !ContainsPercentToken(cur)) continue;
+		
+		            string translated;
+		            if (cur.IndexOf('\n') >= 0)
+		            {
+		                translated = TranslatePosTerminalBuffer(cur);
+		            }
+		            else
+		            {
+		                string t = GetTranslation(cur, cur);
+		                translated = (t == cur) ? TranslateTextByLines(cur) : t;
+		            }
+		
+		            if (!string.IsNullOrEmpty(translated) && translated != cur)
+		            {
+		                try { tm.text = translated.Replace("\\n", "\n"); } catch { }
+		            }
+		        }
+		    }
+		    catch
+		    {
+		        // ignore
+		    }
+		}
+
+		private static bool ContainsPercentToken(string s)
+		{
+		    // Detect common copying/transfer progress markers (case-insensitive)
+		    if (string.IsNullOrEmpty(s))
+		        return false;
+
+		    string lower = s.ToLowerInvariant();
+		    if (lower.IndexOf("copying...") >= 0) return true;
+		    if (lower.IndexOf("formatting...") >= 0) return true;
+		    if (lower.IndexOf("sending...") >= 0) return true;
+
+		    return false;
+		}
 
         private sealed class FsmStrategyTarget
         {
@@ -218,6 +323,57 @@ namespace MWC_Localization_Core
             }
         }
 
+        // lines translated. This is intentionally small-scope to avoid scanning all FSMs.
+        private void Update()
+        {
+            try
+            {
+                if (Application.loadedLevelName != "GAME")
+                    return;
+
+                float now = Time.realtimeSinceStartup;
+                if ((now - lastPosUpdateTime) < posUpdateInterval)
+                    return;
+
+                lastPosUpdateTime = now;
+
+                // Update any POS buildstring actions and short TextMesh pass
+                for (int t = 0; t < GamePosTargets.Length; t++)
+                {
+                    var target = GamePosTargets[t];
+                    if (target == null)
+                        continue;
+
+                    PlayMakerFSM fsm = MLCUtils.FindFsmIncludingInactiveByPathAndName(target.ObjectPath, target.FsmName);
+                    if (!IsFsmReady(fsm))
+                        continue;
+
+                    // For POS use states, translate BuildString parts (pattern split enabled)
+                    if (target.Strategy == FsmStrategyType.PosUse)
+                    {
+                        ApplyBuildStringActionStringPartsTranslation(fsm, "State 1", 0, true);
+                        ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 0, true);
+                        ApplyBuildStringActionStringPartsTranslation(fsm, "State 4", 0, true);
+                        ApplyBuildStringActionStringPartsTranslation(fsm, "State 5", 0, true);
+                    }
+
+                    // For POS typer, translate BuildString in player input states but skip command slot
+                    if (target.Strategy == FsmStrategyType.PosTyper)
+                    {
+                        ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 0, false, 2);
+                        ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 1, false, 2);
+                    }
+                }
+
+                // Small TextMesh sweep to catch any direct TextMesh copies
+                UpdateAllCopyingTextMeshes();
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+
         private bool TryApplyTranslations(string currentScene)
         {
             if (translations == null)
@@ -358,6 +514,7 @@ namespace MWC_Localization_Core
                 if (!IsFsmReady(fsm))
                     continue;
 
+
                 LogReadyOnce(target.ReadyLogKey, target.ReadyLogMessage);
                 ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget);
             }
@@ -371,10 +528,11 @@ namespace MWC_Localization_Core
             switch (target.Strategy)
             {
                 case FsmStrategyType.PosUse:
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 1", 0, false);
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 0, false);
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 4", 0, false);
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 5", 0, false);
+                    // Allow pattern split so combined BuildStringFast parts like "Copying... {0}%" are matched
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 1", 0, true);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 0, true);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 4", 0, true);
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 5", 0, true);
                     anyChanged |= ApplyAllStateSetStringValueTranslation(fsm);
                     hasAnyTarget |= HasAnyState(fsm, PosUseStateNames);
                     break;
@@ -696,7 +854,13 @@ namespace MWC_Localization_Core
                 return false;
 
             string path = MLCUtils.GetGameObjectPath(fsm.gameObject) + "|" + fsm.FsmName + "|" + stateName + "|" + actionIndex.ToString();
-            string translatedCombined = patternMatcher.TryTranslateWithPattern(combinedText, path);
+            string translatedCombined = null;
+            try
+            {
+                translatedCombined = patternMatcher.TryTranslateWithPattern(combinedText, path);
+            }
+            catch { translatedCombined = null; }
+
             if (string.IsNullOrEmpty(translatedCombined) || translatedCombined == combinedText)
                 return false;
 
@@ -1182,6 +1346,22 @@ namespace MWC_Localization_Core
             string value;
             if (translations.TryGetValue(normalizedKey, out value))
                 return value;
+
+            // Fallback: try pattern-based translations (supports placeholders like {0})
+            // Use the original key text when matching patterns; PatternMatcher uppercases internally.
+            if (patternMatcher != null)
+            {
+                try
+                {
+                    string patternResult = patternMatcher.TryTranslateWithPattern(key, string.Empty);
+                    if (!string.IsNullOrEmpty(patternResult))
+                        return patternResult;
+                }
+                catch
+                {
+                    // Ignore pattern matching errors and fall back to the basic fallback.
+                }
+            }
 
             return fallback;
         }

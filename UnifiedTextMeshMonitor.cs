@@ -142,6 +142,7 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("PERAPORTTI/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
+			AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.OnVisibilityChange);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
