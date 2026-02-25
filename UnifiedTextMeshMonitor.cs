@@ -126,23 +126,23 @@ namespace MWC_Localization_Core
             AddPathRule("GUI/HUD/Jailtime/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Day", MonitoringStrategy.FastPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Moderator", MonitoringStrategy.FastPolling);
-            AddPathRule("Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status", MonitoringStrategy.FastPolling); 
+            AddPathRule("Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status", MonitoringStrategy.FastPolling);
+			AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.FastPolling);
 
-            // Teletext/FSM displays are primarily translated at array/FSM source level.
-            // Use one-shot late registration to avoid scanning large TV trees every second.
-            AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.LateTranslateOnce);
+			// Teletext/FSM displays are primarily translated at array/FSM source level.
+			// Use one-shot late registration to avoid scanning large TV trees every second.
+			AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.LateTranslateOnce);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateTranslateOnce);
 
-            // Magazine / Sheets - on visibility change
-            AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/ServiceBrochure", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("PERAPORTTI/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
-			AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.OnVisibilityChange);
+			// Magazine / Sheets - on visibility change
+			AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
+			AddPathRule("Sheets/ServiceBrochure", MonitoringStrategy.OnVisibilityChange);
+			AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
+			AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
+			AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.OnVisibilityChange);
+			AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.OnVisibilityChange);
+			AddPathRule("PERAPORTTI/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
+			AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
 		}
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -186,6 +186,12 @@ namespace MWC_Localization_Core
                 MonitoringStrategy strategy = pathRules[parentPath];
                 if (strategy == MonitoringStrategy.LateTranslateOnce ||
                     strategy == MonitoringStrategy.OnVisibilityChange)
+                {
+                    monitoredPaths.Add(parentPath);
+                }
+
+                // FastPolling paths with dynamic TextMesh creation need continuous re-registration
+                if (strategy == MonitoringStrategy.FastPolling && parentPath == "COMPUTER/SYSTEM/POS/NoOS")
                 {
                     monitoredPaths.Add(parentPath);
                 }

@@ -408,27 +408,11 @@ namespace MWC_Localization_Core
             if (target == null || fsm == null)
                 return;
 
-            // Special-case: apply safe BuildStringFast translations for known Command Dir list states
-            try
+            // Apply translations for POS Command operation progress states (copying/formatting/sending)
+            if (TryApplyPosCommandProgressStateTranslations(fsm, ref anyChanged))
             {
-                if (!string.IsNullOrEmpty(target.ObjectPath) &&
-                    target.ObjectPath.Equals("COMPUTER/SYSTEM/POS/Command", System.StringComparison.OrdinalIgnoreCase))
-                {
-                    bool cmdChanged = false;
-
-                    cmdChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list A", 2, true);
-                    cmdChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list A", 5, true);
-                    cmdChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list C", 2, true);
-                    cmdChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list C", 5, true);
-
-                    if (cmdChanged)
-                    {
-                        appliedTarget = "GAME POS Command Dir list";
-                        anyChanged = true;
-                    }
-                }
+                appliedTarget = "GAME POS Command Progress";
             }
-            catch { }
 
             switch (target.Strategy)
             {
@@ -482,6 +466,33 @@ namespace MWC_Localization_Core
 
             loggedReadyTargets.Add(key);
             CoreConsole.Print(message);
+        }
+
+        private bool TryApplyPosCommandProgressStateTranslations(PlayMakerFSM fsm, ref bool anyChanged)
+        {
+            if (fsm == null || fsm.gameObject == null)
+                return false;
+
+            string objectPath = MLCUtils.GetGameObjectPath(fsm.gameObject);
+            if (string.IsNullOrEmpty(objectPath) || !objectPath.Equals("COMPUTER/SYSTEM/POS/Command", System.StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            bool changed = false;
+
+            // Translate progress indicators in directory listing states (Dir list A & C)
+            // These states show file operation progress: copying..., formatting..., sending...
+            changed |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list A", 2, true);
+            changed |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list A", 5, true);
+            changed |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list C", 2, true);
+            changed |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list C", 5, true);
+
+            if (changed)
+            {
+                anyChanged = true;
+                LogReadyOnce("POS_PROGRESS_READY", "[FsmTextHook] POS Command progress state translations are ready.");
+            }
+
+            return changed;
         }
 
         private bool IsFsmReady(PlayMakerFSM fsm)
@@ -895,9 +906,8 @@ namespace MWC_Localization_Core
                 string cur = tm.text ?? string.Empty;
                 if (cur.Length == 0) continue;
 
-                bool isNoOsPos = false;
-                try { string path = MLCUtils.GetGameObjectPath(tm.gameObject); isNoOsPos = !string.IsNullOrEmpty(path) && path.StartsWith("COMPUTER/SYSTEM/POS/NoOS"); } catch { }
-                if (!isNoOsPos && !ContainsPercentToken(cur)) continue;
+                // Only process copying/formatting/sending progress indicators
+                if (!ContainsPercentToken(cur)) continue;
 
                 // Check cache
                 TranslationCacheEntry cacheEntry;
