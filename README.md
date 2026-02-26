@@ -22,8 +22,7 @@ Veja em [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
 ### Para desenvolvedores
 
 ```
-Delete: <TargetFrameworkProfile>v3.5</TargetFrameworkProfile> no MWC_Localization_Core.csproj apos rode esse comando no PowerShell
-'& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MWC_Localization_Core.csproj" /p:Configuration=Release'
+& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MWC_Localization_Core.sln" /p:Configuration=Release
 ```
 
 ## Funcionalidades
@@ -285,6 +284,5 @@ Pressione **F8** no jogo para recarregar instantaneamente todos os arquivos de c
 ### Compilando o plugin
 
 ```bash
-Delete: <TargetFrameworkProfile>v3.5</TargetFrameworkProfile> no MWC_Localization_Core.csproj apos rode esse comando no PowerShell
-'& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MWC_Localization_Core.csproj" /p:Configuration=Release'
+& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MWC_Localization_Core.sln" /p:Configuration=Release
 ```
