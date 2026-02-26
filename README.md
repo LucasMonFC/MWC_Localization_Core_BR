@@ -22,8 +22,8 @@ Veja em [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
 ### Para desenvolvedores
 
 ```
-Para copilar abra o MWC_Localization_Core.csproj no Visual Studio mude para Release apos isso clique em Compilação e Recompilar Solução
-Para mudar o ID edite o MWC_Localization_Core.cs 'public override string ID => "MWC_Localization_Core_BR";' mude o BR para o seu idioma assim a pasta dos arquivos também vai mudar de 'MWC_Localization_Core_BR' para qual você colocar no ID
+Delete: <TargetFrameworkProfile>v3.5</TargetFrameworkProfile> no MWC_Localization_Core.csproj apos rode esse comando no PowerShell
+'& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MWC_Localization_Core.csproj" /p:Configuration=Release'
 ```
 
 ## Funcionalidades
@@ -285,5 +285,6 @@ Pressione **F8** no jogo para recarregar instantaneamente todos os arquivos de c
 ### Compilando o plugin
 
 ```bash
-Para copilar abra o MWC_Localization_Core.csproj no Visual Studio mude para Release apos isso clique em Compilação e Recompilar Solução
+Delete: <TargetFrameworkProfile>v3.5</TargetFrameworkProfile> no MWC_Localization_Core.csproj apos rode esse comando no PowerShell
+'& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MWC_Localization_Core.csproj" /p:Configuration=Release'
 ```
