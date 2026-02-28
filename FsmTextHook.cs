@@ -90,6 +90,9 @@ namespace MWC_Localization_Core
         }
 
         private static readonly string[] PosUseStateNames = new string[] { "State 1", "State 3", "State 4", "State 5" };
+        private static readonly string[] PosProgressStates = new string[] { "Dir list A", "Dir list C" };
+        private static readonly int[] PosProgressActions = new int[] { 2, 5 };
+        private static readonly string[] SkipTokens = new string[] { "player input", "input", "type", "typing", "command" };
 
         private static readonly FsmStrategyTarget[] GamePosTargets = new FsmStrategyTarget[]
         {
@@ -464,9 +467,9 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(objectPath) || !objectPath.Equals("COMPUTER/SYSTEM/POS/Command", System.StringComparison.OrdinalIgnoreCase)) return false;
 
             bool changed = false;
-            foreach (var state in new[] { "Dir list A", "Dir list C" })
-                foreach (var action in new[] { 2, 5 })
-                    changed |= ApplyBuildStringActionStringPartsTranslation(fsm, state, action, true);
+            for (int s = 0; s < PosProgressStates.Length; s++)
+                for (int a = 0; a < PosProgressActions.Length; a++)
+                    changed |= ApplyBuildStringActionStringPartsTranslation(fsm, PosProgressStates[s], PosProgressActions[a], true);
 
             if (changed)
             {
@@ -839,8 +842,14 @@ namespace MWC_Localization_Core
             return string.Join("\n", lines);
         }
 
-        private static bool ContainsPercentToken(string s) =>
-            !string.IsNullOrEmpty(s) && System.Array.Exists(PercentTokens, x => s.ToLowerInvariant().Contains(x));
+        private static bool ContainsPercentToken(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return false;
+            string lower = s.ToLowerInvariant();
+            for (int i = 0; i < PercentTokens.Length; i++)
+                if (lower.IndexOf(PercentTokens[i]) >= 0) return true;
+            return false;
+        }
 
         // Scan and translate copying/formatting/sending progress indicators.
         private void UpdateAllCopyingTextMeshes()
@@ -857,8 +866,9 @@ namespace MWC_Localization_Core
                             recentCopyingMeshes.Add(tm);
             }
 
-            foreach (var tm in recentCopyingMeshes)
+            for (int i = 0; i < recentCopyingMeshes.Count; i++)
             {
+                var tm = recentCopyingMeshes[i];
                 if (tm == null || string.IsNullOrEmpty(tm.text)) continue;
                 string translated = GetTranslation(tm.text, tm.text);
                 if (translated == tm.text && tm.text.IndexOf('\n') >= 0)
@@ -873,8 +883,8 @@ namespace MWC_Localization_Core
         {
             if (string.IsNullOrEmpty(stateName)) return false;
             string n = stateName.ToLowerInvariant();
-            string[] tokens = new string[] { "player input", "input", "type", "typing", "command" };
-            for (int i = 0; i < tokens.Length; i++) if (n.Contains(tokens[i])) return true;
+            for (int i = 0; i < SkipTokens.Length; i++)
+                if (n.Contains(SkipTokens[i])) return true;
             return false;
         }
 
