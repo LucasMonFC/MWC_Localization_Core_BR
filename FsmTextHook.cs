@@ -20,18 +20,10 @@ namespace MWC_Localization_Core
         private HashSet<string> loggedReadyTargets = new HashSet<string>();
         private List<PlayMakerFSM> cachedEnnusteDataFsms = new List<PlayMakerFSM>();
         private float lastEnnusteDataFsmScanTime = -10f;
-        // POS/TextMesh batching and caches to avoid per-frame hitches
-        private float lastPosUpdateTime = -10f;
-        private float posUpdateInterval = 0.25f; // seconds
-        private List<TextMesh> cachedTextMeshes = new List<TextMesh>();
-        private float lastTextMeshCacheTime = -10f;
-        private float textMeshCacheInterval = 5f; // seconds
-        private int textMeshBatchSize = 64; // items processed per invocation
-        private int textMeshBatchIndex = 0;
-
-        private class TranslationCacheEntry { public string Translated; public float Time; }
-        private Dictionary<string, TranslationCacheEntry> translationCache = new Dictionary<string, TranslationCacheEntry>();
-        private float translationCacheTtl = 2f; // seconds
+        // Copying/formatting/sending progress indicator monitoring
+        private List<TextMesh> recentCopyingMeshes = new List<TextMesh>();
+        private float lastCopyingScanTime = -10f;
+        private const float COPYING_SCAN_INTERVAL = 5f;
         private static readonly string[] PercentTokens = new string[] { "copying...", "formatting...", "sending..." };
 
         private enum FsmStrategyType
@@ -866,82 +858,43 @@ namespace MWC_Localization_Core
             return false;
         }
 
-        // Batched scanning of TextMesh objects to translate copying/formatting/sending lines.
+        // Scan and translate copying/formatting/sending progress indicators.
         private void UpdateAllCopyingTextMeshes()
         {
             float now = Time.realtimeSinceStartup;
 
-            // Throttle overall frequency
-            if ((now - lastPosUpdateTime) < posUpdateInterval)
-                return;
-            lastPosUpdateTime = now;
-
-            // Refresh cache of all TextMeshes occasionally
-            if (cachedTextMeshes == null) cachedTextMeshes = new List<TextMesh>();
-            if (cachedTextMeshes.Count == 0 || (now - lastTextMeshCacheTime) >= textMeshCacheInterval)
+            // Refresh cache of TextMeshes occasionally
+            if (now - lastCopyingScanTime >= COPYING_SCAN_INTERVAL)
             {
-                cachedTextMeshes.Clear();
+                lastCopyingScanTime = now;
+                recentCopyingMeshes.Clear();
+
                 TextMesh[] all = Resources.FindObjectsOfTypeAll<TextMesh>();
                 if (all != null)
                 {
-                    for (int i = 0; i < all.Length; i++) if (all[i] != null) cachedTextMeshes.Add(all[i]);
+                    for (int i = 0; i < all.Length; i++)
+                    {
+                        if (all[i] != null && ContainsPercentToken(all[i].text ?? ""))
+                            recentCopyingMeshes.Add(all[i]);
+                    }
                 }
-                lastTextMeshCacheTime = now;
-                textMeshBatchIndex = 0;
             }
 
-            int total = cachedTextMeshes.Count;
-            if (total == 0) return;
-
-            int toProcess = textMeshBatchSize;
-            int processed = 0;
-
-            while (processed < toProcess && total > 0)
+            // Translate found copying/formatting/sending texts
+            foreach (var tm in recentCopyingMeshes)
             {
-                TextMesh tm = cachedTextMeshes[textMeshBatchIndex % total];
-                textMeshBatchIndex = (textMeshBatchIndex + 1) % total;
-                processed++;
+                if (tm == null || string.IsNullOrEmpty(tm.text))
+                    continue;
 
-                if (tm == null) continue;
-                string cur = tm.text ?? string.Empty;
-                if (cur.Length == 0) continue;
-
-                // Only process copying/formatting/sending progress indicators
-                if (!ContainsPercentToken(cur)) continue;
-
-                // Check cache
-                TranslationCacheEntry cacheEntry;
-                if (translationCache.TryGetValue(cur, out cacheEntry))
+                string translated = GetTranslation(tm.text, tm.text);
+                if (translated == tm.text && tm.text.IndexOf('\n') >= 0)
                 {
-                    if ((now - cacheEntry.Time) < translationCacheTtl)
-                    {
-                        if (!string.IsNullOrEmpty(cacheEntry.Translated) && cacheEntry.Translated != cur)
-                        {
-                            try { tm.text = cacheEntry.Translated.Replace("\\n", "\n"); } catch { }
-                        }
-                        continue;
-                    }
-                    else
-                    {
-                        translationCache.Remove(cur);
-                    }
+                    translated = TranslateTextByLines(tm.text);
                 }
 
-                string translated = GetTranslation(cur, cur);
-                if (translated == cur && cur.IndexOf('\n') >= 0)
-                {
-                    translated = TranslateTextByLines(cur);
-                }
-
-                if (!string.IsNullOrEmpty(translated) && translated != cur)
+                if (translated != tm.text)
                 {
                     try { tm.text = translated.Replace("\\n", "\n"); } catch { }
-                    translationCache[cur] = new TranslationCacheEntry() { Translated = translated, Time = now };
-                }
-                else
-                {
-                    // store negative result to avoid reprocessing for TTL
-                    translationCache[cur] = new TranslationCacheEntry() { Translated = cur, Time = now };
                 }
             }
         }
