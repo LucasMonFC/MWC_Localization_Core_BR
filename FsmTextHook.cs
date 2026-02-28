@@ -38,25 +38,22 @@ namespace MWC_Localization_Core
         private bool TryTranslateValue_PosBufferAware(string original, out string translated)
         {
             translated = original;
-            if (string.IsNullOrEmpty(original)) return false;
-            if (LooksLikeUserTypedCommand(original)) return false;
+            if (string.IsNullOrEmpty(original) || LooksLikeUserTypedCommand(original)) return false;
 
             if (original.IndexOf('\n') >= 0 && PosContainsPrompt(original))
             {
-                string translatedBuf = TranslatePosTerminalBuffer(original);
-                if (translatedBuf != original) { translated = translatedBuf; return true; }
-                return false;
+                translated = TranslatePosTerminalBuffer(original);
+                return translated != original;
             }
 
-            string t = GetTranslation(original, original);
-            if (t != original) { translated = t; return true; }
+            translated = GetTranslation(original, original);
+            if (translated != original) return true;
 
             if (original.IndexOf('\n') >= 0)
             {
-                string lineTranslated = TranslateTextByLines(original);
-                if (lineTranslated != original) { translated = lineTranslated; return true; }
+                translated = TranslateTextByLines(original);
+                return translated != original;
             }
-
             return false;
         }
 
@@ -462,28 +459,20 @@ namespace MWC_Localization_Core
 
         private bool TryApplyPosCommandProgressStateTranslations(PlayMakerFSM fsm, ref bool anyChanged)
         {
-            if (fsm == null || fsm.gameObject == null)
-                return false;
-
+            if (fsm == null || fsm.gameObject == null) return false;
             string objectPath = MLCUtils.GetGameObjectPath(fsm.gameObject);
-            if (string.IsNullOrEmpty(objectPath) || !objectPath.Equals("COMPUTER/SYSTEM/POS/Command", System.StringComparison.OrdinalIgnoreCase))
-                return false;
+            if (string.IsNullOrEmpty(objectPath) || !objectPath.Equals("COMPUTER/SYSTEM/POS/Command", System.StringComparison.OrdinalIgnoreCase)) return false;
 
             bool changed = false;
-
-            // Translate progress indicators in directory listing states (Dir list A & C)
-            // These states show file operation progress: copying..., formatting..., sending...
-            changed |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list A", 2, true);
-            changed |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list A", 5, true);
-            changed |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list C", 2, true);
-            changed |= ApplyBuildStringActionStringPartsTranslation(fsm, "Dir list C", 5, true);
+            foreach (var state in new[] { "Dir list A", "Dir list C" })
+                foreach (var action in new[] { 2, 5 })
+                    changed |= ApplyBuildStringActionStringPartsTranslation(fsm, state, action, true);
 
             if (changed)
             {
                 anyChanged = true;
                 LogReadyOnce("POS_PROGRESS_READY", "[FsmTextHook] POS Command progress state translations are ready.");
             }
-
             return changed;
         }
 
@@ -850,52 +839,32 @@ namespace MWC_Localization_Core
             return string.Join("\n", lines);
         }
 
-        private static bool ContainsPercentToken(string s)
-        {
-            if (string.IsNullOrEmpty(s)) return false;
-            string lower = s.ToLowerInvariant();
-            for (int i = 0; i < PercentTokens.Length; i++) if (lower.IndexOf(PercentTokens[i]) >= 0) return true;
-            return false;
-        }
+        private static bool ContainsPercentToken(string s) =>
+            !string.IsNullOrEmpty(s) && System.Array.Exists(PercentTokens, x => s.ToLowerInvariant().Contains(x));
 
         // Scan and translate copying/formatting/sending progress indicators.
         private void UpdateAllCopyingTextMeshes()
         {
             float now = Time.realtimeSinceStartup;
-
-            // Refresh cache of TextMeshes occasionally
             if (now - lastCopyingScanTime >= COPYING_SCAN_INTERVAL)
             {
                 lastCopyingScanTime = now;
                 recentCopyingMeshes.Clear();
-
-                TextMesh[] all = Resources.FindObjectsOfTypeAll<TextMesh>();
+                var all = Resources.FindObjectsOfTypeAll<TextMesh>();
                 if (all != null)
-                {
-                    for (int i = 0; i < all.Length; i++)
-                    {
-                        if (all[i] != null && ContainsPercentToken(all[i].text ?? ""))
-                            recentCopyingMeshes.Add(all[i]);
-                    }
-                }
+                    foreach (var tm in all)
+                        if (tm != null && ContainsPercentToken(tm.text ?? ""))
+                            recentCopyingMeshes.Add(tm);
             }
 
-            // Translate found copying/formatting/sending texts
             foreach (var tm in recentCopyingMeshes)
             {
-                if (tm == null || string.IsNullOrEmpty(tm.text))
-                    continue;
-
+                if (tm == null || string.IsNullOrEmpty(tm.text)) continue;
                 string translated = GetTranslation(tm.text, tm.text);
                 if (translated == tm.text && tm.text.IndexOf('\n') >= 0)
-                {
                     translated = TranslateTextByLines(tm.text);
-                }
-
                 if (translated != tm.text)
-                {
                     try { tm.text = translated.Replace("\\n", "\n"); } catch { }
-                }
             }
         }
 
@@ -913,15 +882,10 @@ namespace MWC_Localization_Core
         {
             if (string.IsNullOrEmpty(value)) return false;
             string v = value.Trim();
-            if (v.Length < 1 || v.Length > 24) return false;
-            if (v.IndexOfAny(new char[] { ' ', '\t', '\n', '\r' }) >= 0) return false;
-            if (v.Contains(":") || v.Contains("...") || v.Contains(".")) return false;
+            if (v.Length < 1 || v.Length > 24 || v.IndexOfAny(new char[] { ' ', '\t', '\n', '\r', ':', '.' }) >= 0) return false;
+            if (v.Contains("...")) return false;
             for (int i = 0; i < v.Length; i++)
-            {
-                char c = v[i];
-                if (!(char.IsLetterOrDigit(c) || c == '-' || c == '_' || c == '/' || c == '#'))
-                    return false;
-            }
+                if (!(char.IsLetterOrDigit(v[i]) || v[i] == '-' || v[i] == '_' || v[i] == '/' || v[i] == '#')) return false;
             return true;
         }
 
