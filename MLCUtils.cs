@@ -188,5 +188,31 @@ namespace MWC_Localization_Core
             inactiveTextMeshPathCache.Clear();
             inactiveFsmPathNameCache.Clear();
         }
+
+        /// <summary>
+        /// Check if text contains progress tokens (copying..., formatting..., sending...)
+        /// </summary>
+        public static bool ContainsProgressToken(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return false;
+            string lower = text.ToLowerInvariant();
+            return lower.Contains("copying...") || lower.Contains("formatting...") || lower.Contains("sending...");
+        }
+
+        /// <summary>
+        /// Validate if text looks like a user-typed command (prevent translating player input)
+        /// </summary>
+        public static bool LooksLikeUserCommand(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return false;
+            string v = value.Trim();
+            if (v.Length < 1 || v.Length > 24 || v.IndexOfAny(new char[] { ' ', '\t', '\n', '\r', ':', '.' }) >= 0) return false;
+            if (v.Contains("...")) return false;
+            for (int i = 0; i < v.Length; i++)
+                if (!(char.IsLetterOrDigit(v[i]) || v[i] == '-' || v[i] == '_' || v[i] == '/' || v[i] == '#')) return false;
+            return true;
+        }
+
+
     }
 }
