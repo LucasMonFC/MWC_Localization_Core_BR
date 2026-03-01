@@ -17,6 +17,10 @@ WalterTurncoat-Regular = WalterTurncoat-Regular-PL
 BLUEHIGD = BlueHighwayD-Regular-PL
 
 [POSITION_ADJUSTMENTS]
+## Fuel ATM screen (excluding row elements)
+Contains(PERAPORTTI/ActiveFunctions/ATMs/FuelATM/Screen) & !Contains(/CashScreen) & !Contains(/Row) & EndsWith(/Text) = 0,0.35,0
+## Fuel ATM screen rows
+Contains(PERAPORTTI/ActiveFunctions/ATMs/FuelATM/Screen) & Contains(/Row) & EndsWith(/Text) = 0,0.10,0
 ## Options
 Contains(Systems/OptionsMenu) & Contains(/GUITextlabel) = 0,0,0,0.07
 Contains(Systems/OptionsMenu) & Contains(/GUITextLabel) = 0,0,0,0.07
