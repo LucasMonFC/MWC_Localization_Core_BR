@@ -818,6 +818,7 @@ OPEN BOX = ABRIR CAIXA
 "And place charger and manual inside the plastic tray." = "E coloca o carregador e o manual dentro da bandeja plástica."
 "You put the tray inside the product box and it is done." = "Você coloca a bandeja dentro da caixa do produto e está pronto."
 "Then just place the product box inside the packaging box and thats it!" = "Depois é só colocar a caixa do produto dentro da caixa de embalagem e pronto!"
+"Good luck everybody! You are important part of the IT chain!" = "Boa sorte a todos! Vocês são parte importante da cadeia de TI!"
 
 //HouseWood CarPos
 Car for sale. = CARRO À VENDA
