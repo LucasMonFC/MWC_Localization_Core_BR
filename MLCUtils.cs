@@ -190,16 +190,6 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Check if text contains progress tokens (copying..., formatting..., sending...)
-        /// </summary>
-        public static bool ContainsProgressToken(string text)
-        {
-            if (string.IsNullOrEmpty(text)) return false;
-            string lower = text.ToLowerInvariant();
-            return lower.Contains("copying...") || lower.Contains("formatting...") || lower.Contains("sending...");
-        }
-
-        /// <summary>
         /// Validate if text looks like a user-typed command (prevent translating player input)
         /// </summary>
         public static bool LooksLikeUserCommand(string value)
