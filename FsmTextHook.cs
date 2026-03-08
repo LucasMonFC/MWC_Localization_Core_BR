@@ -63,6 +63,7 @@ namespace MWC_Localization_Core
         }
 
         private static readonly string[] PosUseStateNames = new string[] { "State 1", "State 3", "State 4", "State 5" };
+        private static readonly string[] PosTyperCommandStateNames = new string[] { "Player input", "Player input 2", "Type", "Type 2", "Drive mem", "Disk mem", "Change baud" };
 
         private static readonly FsmStrategyTarget[] GamePosTargets = new FsmStrategyTarget[]
         {
@@ -382,11 +383,17 @@ namespace MWC_Localization_Core
                 case FsmStrategyType.PosTyper:
                     // Player input / BuildStringFast action[1] = [old, path, command]
                     // Skip command slot (index 2) to avoid fighting live user input.
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 0, false, 2);
-                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Player input", 1, false, 2);
-                    anyChanged |= ApplyAllStateSetStringValueTranslation(fsm);
-                    anyChanged |= ApplyAllStateSetFsmStringTranslation(fsm);
-                    hasAnyTarget |= HasState(fsm, "Player input");
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Remove mem", 3, false, 1); // Formatting message
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Remove mem 2", 3, false, 1); // Formatting message
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Copyying", 4, false, 1); // Copying message
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "Spezzer", 1, false, 1); // Virus Message
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 3", 1, false, 1); // Virus Message
+                    anyChanged |= ApplyStringAddNewLineActionStringPartTranslation(fsm, "Dir list A", 3, 1);
+                    anyChanged |= ApplyStringAddNewLineActionStringPartTranslation(fsm, "Dir list C", 3, 1);
+                    // Do not translate setter actions in states that can carry live command text.
+                    anyChanged |= ApplyAllStateSetStringValueTranslation(fsm, PosTyperCommandStateNames);
+                    anyChanged |= ApplyAllStateSetFsmStringTranslation(fsm, PosTyperCommandStateNames);
+                    hasAnyTarget |= HasAnyState(fsm, PosTyperCommandStateNames);
                     break;
 
                 case FsmStrategyType.TeletextBuildStringPattern:
@@ -647,7 +654,13 @@ namespace MWC_Localization_Core
                 return false;
 
             object action = targetState.Actions[actionIndex];
-            if (action == null || action.GetType().Name != "BuildStringFast")
+            if (action == null)
+                return false;
+
+            string actionTypeName = action.GetType().Name;
+            bool isBuildStringFast = actionTypeName == "BuildStringFast";
+            bool isBuildString = actionTypeName == "BuildString";
+            if (!isBuildStringFast && !isBuildString)
                 return false;
 
             FieldInfo stringPartsField = action.GetType().GetField("stringParts", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -659,7 +672,7 @@ namespace MWC_Localization_Core
                 return false;
 
             bool changed = false;
-            if (allowPatternSplit)
+            if (allowPatternSplit && isBuildStringFast)
             {
                 changed = ApplyBuildStringFastPatternTranslation(fsm, stateName, actionIndex, parts);
             }
@@ -723,6 +736,39 @@ namespace MWC_Localization_Core
             return changed;
         }
 
+        private bool ApplyStringAddNewLineActionStringPartTranslation(PlayMakerFSM fsm, string stateName, int actionIndex, int stringPartIndex)
+        {
+            if (fsm == null || fsm.FsmStates == null)
+                return false;
+
+            HutongGames.PlayMaker.FsmState targetState = null;
+            for (int i = 0; i < fsm.FsmStates.Length; i++)
+            {
+                if (fsm.FsmStates[i] != null && fsm.FsmStates[i].Name == stateName)
+                {
+                    targetState = fsm.FsmStates[i];
+                    break;
+                }
+            }
+
+            if (targetState == null || targetState.Actions == null || actionIndex < 0 || actionIndex >= targetState.Actions.Length)
+                return false;
+
+            object action = targetState.Actions[actionIndex];
+            if (action == null || action.GetType().Name != "StringAddNewLine")
+                return false;
+
+            FieldInfo stringPartsField = action.GetType().GetField("stringParts", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (stringPartsField == null)
+                return false;
+
+            HutongGames.PlayMaker.FsmString[] parts = stringPartsField.GetValue(action) as HutongGames.PlayMaker.FsmString[];
+            if (parts == null || stringPartIndex < 0 || stringPartIndex >= parts.Length)
+                return false;
+
+            return TranslateStringPart(parts[stringPartIndex]);
+        }
+
         private string BuildCombinedText(HutongGames.PlayMaker.FsmString[] parts)
         {
             if (parts == null || parts.Length == 0)
@@ -740,7 +786,7 @@ namespace MWC_Localization_Core
             return sb.ToString();
         }
 
-        private bool ApplyAllStateSetStringValueTranslation(PlayMakerFSM fsm)
+        private bool ApplyAllStateSetStringValueTranslation(PlayMakerFSM fsm, params string[] skipStateNames)
         {
             if (fsm == null || fsm.FsmStates == null)
                 return false;
@@ -751,6 +797,9 @@ namespace MWC_Localization_Core
             {
                 HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
                 if (state == null || state.Actions == null)
+                    continue;
+
+                if (ShouldSkipState(state.Name, skipStateNames))
                     continue;
 
                 for (int j = 0; j < state.Actions.Length; j++)
@@ -766,7 +815,7 @@ namespace MWC_Localization_Core
             return changed;
         }
 
-        private bool ApplyAllStateSetFsmStringTranslation(PlayMakerFSM fsm)
+        private bool ApplyAllStateSetFsmStringTranslation(PlayMakerFSM fsm, params string[] skipStateNames)
         {
             if (fsm == null || fsm.FsmStates == null)
                 return false;
@@ -777,6 +826,9 @@ namespace MWC_Localization_Core
             {
                 HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
                 if (state == null || state.Actions == null)
+                    continue;
+
+                if (ShouldSkipState(state.Name, skipStateNames))
                     continue;
 
                 for (int j = 0; j < state.Actions.Length; j++)
@@ -892,6 +944,20 @@ namespace MWC_Localization_Core
             return false;
         }
 
+        private bool ShouldSkipState(string stateName, string[] skipStateNames)
+        {
+            if (string.IsNullOrEmpty(stateName) || skipStateNames == null || skipStateNames.Length == 0)
+                return false;
+
+            for (int i = 0; i < skipStateNames.Length; i++)
+            {
+                if (skipStateNames[i] == stateName)
+                    return true;
+            }
+
+            return false;
+        }
+
         private string TranslateTextByLines(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -920,7 +986,6 @@ namespace MWC_Localization_Core
 
             return string.Join("\n", lines);
         }
-
 
         private string GetTranslation(string key, string fallback)
         {
