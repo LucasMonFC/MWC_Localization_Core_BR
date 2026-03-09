@@ -58,9 +58,6 @@ namespace MWC_Localization_Core
             // HUD Elements
             arrayPaths.Add("GUI/HUD/Day/HUDValue:0");  // Day names: MONDAY, TUESDAY, etc.
             
-            // Bank System
-            arrayPaths.Add("Systems/BankAccount:0");  // Transaction types: Nosto, Asumistuki, etc.
-            
             // Magazine System
             arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/KeywordsFI:0"); // LinesSelected (FI)
             arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/KeywordsFI:1"); // LinesRandom1 (FI)
@@ -82,7 +79,6 @@ namespace MWC_Localization_Core
             parentSearchPaths = new List<string>
             {
                 "GUI/HUD/Day",                            // HUD Day Display
-                "PERAPORTTI/ATMs/MoneyATM/Screen",        // Bank Account Display
                 "Sheets/YellowPagesMagazine/Page1/Row1",  // Magazine Page 1 Row 1
                 "Sheets/YellowPagesMagazine/Page1/Row2",  // Magazine Page 1 Row 2
                 "Sheets/YellowPagesMagazine/Page2/Row3",  // Magazine Page 2 Row 3

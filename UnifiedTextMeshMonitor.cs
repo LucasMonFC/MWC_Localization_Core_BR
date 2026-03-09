@@ -138,12 +138,12 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/ServiceBrochure", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("PERAPORTTI/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
 
             // Magazine / Sheets - persistent monitoring due to dynamic content changes and rebuilds
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.Persistent);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
+            AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -326,7 +326,7 @@ namespace MWC_Localization_Core
         /// </summary>
         public void Update(float deltaTime)
         {
-            // Always update EveryFrame and Persistent
+            // Always update EveryFrame
             UpdateGroup(MonitoringStrategy.EveryFrame);
 
             // Throttled fast polling (0.1s)
