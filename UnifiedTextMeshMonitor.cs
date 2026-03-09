@@ -144,6 +144,7 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.Persistent);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
             AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
+            AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.Persistent);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -334,6 +335,7 @@ namespace MWC_Localization_Core
             if (fastPollingTimer >= LocalizationConstants.FAST_POLLING_INTERVAL)
             {
                 UpdateGroup(MonitoringStrategy.FastPolling);
+                UpdateGroup(MonitoringStrategy.Persistent);
                 fastPollingTimer = 0f;
             }
 
@@ -343,7 +345,6 @@ namespace MWC_Localization_Core
             {
                 UpdateGroup(MonitoringStrategy.SlowPolling);
                 UpdateGroup(MonitoringStrategy.LateTranslateOnce);
-                UpdateGroup(MonitoringStrategy.Persistent);
                 MonitorLateRegister(); // Also check for late registrations
                 slowPollingTimer = 0f;
             }
