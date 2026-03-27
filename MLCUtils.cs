@@ -16,13 +16,21 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(original))
                 return original;
 
-            // Trim whitespace
-            original = original.Trim();
-            // Remove spaces, newlines, carriage returns
-            original = original.Replace(" ", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty);
-            // Convert to uppercase
-            original = original.ToUpper();
-            return original;
+            // Single-pass: skip whitespace chars and uppercase in one allocation
+            char[] buffer = new char[original.Length];
+            int len = 0;
+            for (int i = 0; i < original.Length; i++)
+            {
+                char c = original[i];
+                if (c == ' ' || c == '\n' || c == '\r' || c == '\t')
+                    continue;
+                buffer[len++] = char.ToUpperInvariant(c);
+            }
+
+            if (len == 0)
+                return string.Empty;
+
+            return new string(buffer, 0, len);
         }
 
         // Cache for GameObject paths to improve performance

@@ -21,6 +21,25 @@ namespace MWC_Localization_Core
         private List<PlayMakerFSM> cachedEnnusteDataFsms = new List<PlayMakerFSM>();
         private float lastEnnusteDataFsmScanTime = -10f;
 
+        // Reflection cache: (Type, fieldName) -> FieldInfo to avoid repeated GetField calls
+        private static readonly Dictionary<System.Type, Dictionary<string, FieldInfo>> reflectionCache
+            = new Dictionary<System.Type, Dictionary<string, FieldInfo>>();
+
+        private static FieldInfo GetCachedField(System.Type type, string fieldName)
+        {
+            if (!reflectionCache.TryGetValue(type, out Dictionary<string, FieldInfo> fields))
+            {
+                fields = new Dictionary<string, FieldInfo>();
+                reflectionCache[type] = fields;
+            }
+            if (!fields.TryGetValue(fieldName, out FieldInfo fi))
+            {
+                fi = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                fields[fieldName] = fi;
+            }
+            return fi;
+        }
+
         private enum FsmStrategyType
         {
             PosUse,
@@ -663,7 +682,7 @@ namespace MWC_Localization_Core
             if (!isBuildStringFast && !isBuildString)
                 return false;
 
-            FieldInfo stringPartsField = action.GetType().GetField("stringParts", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo stringPartsField = GetCachedField(action.GetType(), "stringParts");
             if (stringPartsField == null)
                 return false;
 
@@ -758,7 +777,7 @@ namespace MWC_Localization_Core
             if (action == null || action.GetType().Name != "StringAddNewLine")
                 return false;
 
-            FieldInfo stringPartsField = action.GetType().GetField("stringParts", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo stringPartsField = GetCachedField(action.GetType(), "stringParts");
             if (stringPartsField == null)
                 return false;
 
@@ -875,7 +894,7 @@ namespace MWC_Localization_Core
             if (action == null || string.IsNullOrEmpty(fieldName))
                 return false;
 
-            FieldInfo field = action.GetType().GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo field = GetCachedField(action.GetType(), fieldName);
             if (field == null)
                 return false;
 
