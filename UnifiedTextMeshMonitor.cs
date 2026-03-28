@@ -42,6 +42,20 @@ namespace MWC_Localization_Core
             return LastText != TextMesh.text;
         }
 
+        public bool CheckAndMarkDirty(HashSet<int> dirtySet)
+        {
+            if (TextMesh == null)
+                return false;
+
+            if (LastText != TextMesh.text)
+            {
+                int instanceID = TextMesh.GetInstanceID();
+                dirtySet.Add(instanceID);
+                return true;
+            }
+            return false;
+        }
+
         public void UpdateLastText()
         {
             if (TextMesh != null)
@@ -78,6 +92,9 @@ namespace MWC_Localization_Core
         private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
         private HashSet<string> monitoredPaths = new HashSet<string>();
         private List<int> removalBuffer = new List<int>(64);
+        
+        // Dirty tracking - only process TextMeshes that changed text
+        private HashSet<int> dirtySet = new HashSet<int>();
 
         public UnifiedTextMeshMonitor(TextMeshTranslator translator)
         {
@@ -139,11 +156,11 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
 
             // Magazine / Sheets - persistent monitoring due to dynamic content changes and rebuilds
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.Persistent);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
-            AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
             AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.Persistent);
         }
 
@@ -383,15 +400,20 @@ namespace MWC_Localization_Core
                     continue;
                 }
 
-                bool textChanged = entry.HasTextChanged();
+                // Dirty tracking: Check if text changed and mark as dirty
+                entry.CheckAndMarkDirty(dirtySet);
                 
-                if (textChanged || !entry.WasTranslated)
+                bool textChanged = dirtySet.Contains(instanceID);
+                bool shouldTranslate = textChanged || !entry.WasTranslated;
+                
+                if (shouldTranslate)
                 {
                     bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path, null);
                     if (translated)
                     {
                         entry.WasTranslated = true;
                         entry.UpdateLastText();
+                        dirtySet.Remove(instanceID);  // Clear from dirty tracking after processing
 
                         // Mark for removal if TranslateOnce
                         if (strategy == MonitoringStrategy.TranslateOnce || strategy == MonitoringStrategy.LateTranslateOnce)
@@ -439,6 +461,14 @@ namespace MWC_Localization_Core
             }
         }
 
+        public void MarkAsDirty(int instanceID)
+        {
+            if (instanceEntries.ContainsKey(instanceID))
+            {
+                dirtySet.Add(instanceID);
+            }
+        }
+
         /// <summary>
         /// Clear all monitored entries
         /// </summary>
@@ -452,6 +482,7 @@ namespace MWC_Localization_Core
             pathToInstances.Clear();
             pathRules.Clear();
             monitoredPaths.Clear();
+            dirtySet.Clear();
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
             visibilityPollingTimer = 0f;
