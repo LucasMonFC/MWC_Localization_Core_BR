@@ -9,10 +9,10 @@ namespace MWC_Localization_Core
     public class MWC_Localization_Core : Mod
     {
         // Mod metadata
-        public override string ID => "MWC_Localization_Core";
+        public override string ID => "MWC_Localization_Core_BR";
         public override string Name => "MWC_Localization_Core";
-        public override string Author => "potatosalad775";
-        public override string Version => "1.0.7";
+        public override string Author => "potatosalad775&LucasMonOficial";
+        public override string Version => "1.2.2";
         public override string Description => "Multi-language core localization framework for My Winter Car";
         public override Game SupportedGames => Game.MyWinterCar;
 
@@ -341,9 +341,9 @@ namespace MWC_Localization_Core
                     if (separatorIndex > 0)
                     {
                         string key = line.Substring(0, separatorIndex).Trim().Replace("\\=", "=");
-                        // Preserve intentional leading spaces in translation values.
-                        // We only trim the end to avoid accidental trailing whitespace.
-                        string value = line.Substring(separatorIndex + 1).TrimEnd().Replace("\\=", "=");
+                        // Preserve intentional leading AND trailing spaces in translation values.
+                        // Spaces are needed for proper formatting in concatenated strings
+                        string value = line.Substring(separatorIndex + 1).Replace("\\=", "=");
 
                         // Common authoring style is: "key = value".
                         // In that specific case, drop only the single separator space.
