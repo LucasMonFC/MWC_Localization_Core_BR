@@ -42,19 +42,7 @@ namespace MWC_Localization_Core
             return LastText != TextMesh.text;
         }
 
-        public bool CheckAndMarkDirty(HashSet<int> dirtySet)
-        {
-            if (TextMesh == null)
-                return false;
 
-            if (LastText != TextMesh.text)
-            {
-                int instanceID = TextMesh.GetInstanceID();
-                dirtySet.Add(instanceID);
-                return true;
-            }
-            return false;
-        }
 
         public void UpdateLastText()
         {
@@ -93,8 +81,7 @@ namespace MWC_Localization_Core
         private HashSet<string> monitoredPaths = new HashSet<string>();
         private List<int> removalBuffer = new List<int>(64);
         
-        // Dirty tracking - only process TextMeshes that changed text
-        private HashSet<int> dirtySet = new HashSet<int>();
+
 
         public UnifiedTextMeshMonitor(TextMeshTranslator translator)
         {
@@ -400,10 +387,8 @@ namespace MWC_Localization_Core
                     continue;
                 }
 
-                // Dirty tracking: Check if text changed and mark as dirty
-                entry.CheckAndMarkDirty(dirtySet);
-                
-                bool textChanged = dirtySet.Contains(instanceID);
+                // Check if text changed
+                bool textChanged = entry.HasTextChanged();
                 bool shouldTranslate = textChanged || !entry.WasTranslated;
                 
                 if (shouldTranslate)
@@ -413,7 +398,6 @@ namespace MWC_Localization_Core
                     {
                         entry.WasTranslated = true;
                         entry.UpdateLastText();
-                        dirtySet.Remove(instanceID);  // Clear from dirty tracking after processing
 
                         // Mark for removal if TranslateOnce
                         if (strategy == MonitoringStrategy.TranslateOnce || strategy == MonitoringStrategy.LateTranslateOnce)
@@ -461,13 +445,7 @@ namespace MWC_Localization_Core
             }
         }
 
-        public void MarkAsDirty(int instanceID)
-        {
-            if (instanceEntries.ContainsKey(instanceID))
-            {
-                dirtySet.Add(instanceID);
-            }
-        }
+
 
         /// <summary>
         /// Clear all monitored entries
@@ -482,7 +460,6 @@ namespace MWC_Localization_Core
             pathToInstances.Clear();
             pathRules.Clear();
             monitoredPaths.Clear();
-            dirtySet.Clear();
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
             visibilityPollingTimer = 0f;
