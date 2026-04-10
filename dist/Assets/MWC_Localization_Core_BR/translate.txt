@@ -885,6 +885,7 @@ ACCEPT PAYMENT = ACEITAR PAGAMENTO
 FUNCTION = FUNÇÃO
 RECEIPT = RECIBO
 MODE SELECT = SELEÇÃO DE MODO
+TAXI SALARY = SALÁRIO DE TAXISTA
 "Good afternoon!" = "Boa tarde!"
 "Lets go through the Taximeter functionalities." = "Vamos passar pelas funcionalidades do taxímetro."
 "Now when it is off, you are not on duty and won't receive calls." = "Quando ele está desligado, você não está em serviço e não receberá chamadas."
