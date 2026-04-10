@@ -1,6 +1,5 @@
 using MSCLoader;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace MWC_Localization_Core
@@ -17,6 +16,7 @@ namespace MWC_Localization_Core
         private PatternMatcher patternMatcher;
         private LocalizationConfig config;
         private Dictionary<int, string> appliedFontCache = new Dictionary<int, string>();
+        private Dictionary<string, Font> fontNameToFont;  // Reverse lookup: font.name -> Font
 
         private List<string> ExcludedPath = new List<string>
         {
@@ -38,9 +38,23 @@ namespace MWC_Localization_Core
             this.customFonts = customFonts;
             this.magazineHandler = magazineHandler;
             this.config = config;
-            
+
             // Initialize unified pattern matcher
             this.patternMatcher = new PatternMatcher(translations);
+
+            // Build reverse font lookup for O(1) access by font.name
+            RebuildFontNameLookup();
+        }
+
+        private void RebuildFontNameLookup()
+        {
+            fontNameToFont = new Dictionary<string, Font>();
+            if (customFonts == null) return;
+            foreach (var kvp in customFonts)
+            {
+                if (kvp.Value != null && !fontNameToFont.ContainsKey(kvp.Value.name))
+                    fontNameToFont[kvp.Value.name] = kvp.Value;
+            }
         }
 
         /// <summary>
@@ -246,23 +260,13 @@ namespace MWC_Localization_Core
         /// </summary>
         Font GetCustomFont(string originalFontName)
         {
-            // First try direct match
-            if (customFonts.ContainsKey(originalFontName))
-            {
-                return customFonts[originalFontName];
-            }
+            // First try direct match by mapping key
+            if (customFonts.TryGetValue(originalFontName, out Font font))
+                return font;
 
-            // Use original if it exists in the dictionary as value
-            else if (customFonts.Values.Any(f => f.name == originalFontName))
-            {
-                return customFonts.Values.FirstOrDefault(f => f.name == originalFontName);
-            }
-
-            // Return first loaded font as fallback
-            //else if (customFonts.Count > 0)
-            //{
-            //    return customFonts.Values.First();
-            //}
+            // Reverse lookup: font already has a custom font name (e.g. after reload)
+            if (fontNameToFont != null && fontNameToFont.TryGetValue(originalFontName, out Font reverseFont))
+                return reverseFont;
 
             return null;
         }

@@ -138,7 +138,7 @@ namespace MWC_Localization_Core
             }
 
             PlayMakerArrayListProxy proxy;
-            if (!arrayProxyCache.ContainsKey(arrayKey))
+            if (!arrayProxyCache.TryGetValue(arrayKey, out proxy))
             {
                 string[] parts = arrayKey.Split(':');
                 string objectPath = parts[0];
@@ -165,16 +165,10 @@ namespace MWC_Localization_Core
                     CoreConsole.Warning($"PlayMakerArrayListProxy[{componentIndex}] not found at {objectPath}");
                     return 0;
                 }
-                else 
-                {
-                    proxy = proxies[componentIndex];
-                    // Cache the proxy for later monitoring
-                    arrayProxyCache[arrayKey] = proxy;
-                }
-            }
-            else
-            {
-                proxy = arrayProxyCache[arrayKey];
+
+                proxy = proxies[componentIndex];
+                // Cache the proxy for later monitoring
+                arrayProxyCache[arrayKey] = proxy;
             }
 
             // Translate array contents using existing translation dictionaries
@@ -239,7 +233,8 @@ namespace MWC_Localization_Core
                     }
                     
                     bool currentState = isPopulated;
-                    if (!arrayRetryStateCache.ContainsKey(arrayKey) || arrayRetryStateCache[arrayKey] != currentState)
+                    bool cachedState;
+                    if (!arrayRetryStateCache.TryGetValue(arrayKey, out cachedState) || cachedState != currentState)
                     {
                         arrayRetryStateCache[arrayKey] = currentState;
                     }

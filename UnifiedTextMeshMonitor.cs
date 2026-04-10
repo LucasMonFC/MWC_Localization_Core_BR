@@ -1,6 +1,5 @@
 using MSCLoader;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace MWC_Localization_Core
@@ -42,8 +41,6 @@ namespace MWC_Localization_Core
             return LastText != TextMesh.text;
         }
 
-
-
         public void UpdateLastText()
         {
             if (TextMesh != null)
@@ -80,8 +77,7 @@ namespace MWC_Localization_Core
         private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
         private HashSet<string> monitoredPaths = new HashSet<string>();
         private List<int> removalBuffer = new List<int>(64);
-        
-
+        private List<string> stringRemovalBuffer = new List<string>(16);
 
         public UnifiedTextMeshMonitor(TextMeshTranslator translator)
         {
@@ -143,11 +139,11 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.OnVisibilityChange);
 
             // Magazine / Sheets - persistent monitoring due to dynamic content changes and rebuilds
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.Persistent);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
+            AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
             AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.Persistent);
         }
 
@@ -206,10 +202,12 @@ namespace MWC_Localization_Core
         /// </summary>
         public void MonitorLateRegister()
         {
-            // Use ToList() to avoid modifying collection during iteration
-            foreach (string parentPath in monitoredPaths.ToList())
+            stringRemovalBuffer.Clear();
+            foreach (string parentPath in monitoredPaths)
             {
-                MonitoringStrategy strategy = pathRules.ContainsKey(parentPath) ? pathRules[parentPath] : MonitoringStrategy.LateTranslateOnce;
+                MonitoringStrategy strategy;
+                if (!pathRules.TryGetValue(parentPath, out strategy))
+                    strategy = MonitoringStrategy.LateTranslateOnce;
 
                 int registered = Register(parentPath, strategy);
 
@@ -217,8 +215,12 @@ namespace MWC_Localization_Core
                 // Persistent paths stay in the scan because their child TextMeshes can be rebuilt.
                 if (registered > 0 && strategy != MonitoringStrategy.Persistent)
                 {
-                    monitoredPaths.Remove(parentPath);
+                    stringRemovalBuffer.Add(parentPath);
                 }
+            }
+            for (int i = 0; i < stringRemovalBuffer.Count; i++)
+            {
+                monitoredPaths.Remove(stringRemovalBuffer[i]);
             }
         }
 
@@ -266,9 +268,13 @@ namespace MWC_Localization_Core
                 instanceEntries[instanceID] = entry;
                 
                 // Index by path
-                if (!pathToInstances.ContainsKey(textMeshPath))
-                    pathToInstances[textMeshPath] = new HashSet<int>();
-                pathToInstances[textMeshPath].Add(instanceID);
+                HashSet<int> pathSet;
+                if (!pathToInstances.TryGetValue(textMeshPath, out pathSet))
+                {
+                    pathSet = new HashSet<int>();
+                    pathToInstances[textMeshPath] = pathSet;
+                }
+                pathSet.Add(instanceID);
                 
                 // Group by strategy
                 strategyGroups[finalStrategy].Add(instanceID);
@@ -284,16 +290,15 @@ namespace MWC_Localization_Core
         /// </summary>
         public void Unregister(string path)
         {
-            if (path == null || !pathToInstances.ContainsKey(path))
+            HashSet<int> instanceIDs;
+            if (path == null || !pathToInstances.TryGetValue(path, out instanceIDs))
                 return;
 
-            var instanceIDs = pathToInstances[path];
             foreach (int instanceID in instanceIDs)
             {
-                if (!instanceEntries.ContainsKey(instanceID))
+                TextMeshEntry entry;
+                if (!instanceEntries.TryGetValue(instanceID, out entry))
                     continue;
-
-                var entry = instanceEntries[instanceID];
                 strategyGroups[entry.Strategy].Remove(instanceID);
                 instanceEntries.Remove(instanceID);
             }
@@ -306,19 +311,19 @@ namespace MWC_Localization_Core
         /// </summary>
         public void UnregisterInstance(int instanceID)
         {
-            if (!instanceEntries.ContainsKey(instanceID))
+            TextMeshEntry entry;
+            if (!instanceEntries.TryGetValue(instanceID, out entry))
                 return;
 
-            var entry = instanceEntries[instanceID];
-            
             // Remove from strategy group
             strategyGroups[entry.Strategy].Remove(instanceID);
-            
+
             // Remove from path index
-            if (pathToInstances.ContainsKey(entry.Path))
+            HashSet<int> pathSet;
+            if (pathToInstances.TryGetValue(entry.Path, out pathSet))
             {
-                pathToInstances[entry.Path].Remove(instanceID);
-                if (pathToInstances[entry.Path].Count == 0)
+                pathSet.Remove(instanceID);
+                if (pathSet.Count == 0)
                     pathToInstances.Remove(entry.Path);
             }
             
@@ -369,29 +374,27 @@ namespace MWC_Localization_Core
 
             foreach (int instanceID in instanceIDs)
             {
-                if (!instanceEntries.ContainsKey(instanceID))
+                TextMeshEntry entry;
+                if (!instanceEntries.TryGetValue(instanceID, out entry))
                     continue;
 
-                var entry = instanceEntries[instanceID];
+                // Check validity first to avoid NullReferenceException on destroyed objects
+                if (!entry.IsValid())
+                {
+                    // Persistent strategy: Keep checking even if entry is not valid
+                    if (strategy != MonitoringStrategy.Persistent)
+                        removalBuffer.Add(instanceID);
+                    continue;
+                }
 
                 // Skip inactive entries for polling strategies.
                 // OnVisibilityChange has its own dedicated pass.
                 if (!entry.GameObject.activeInHierarchy)
                     continue;
 
-                // Persistent strategy: Keep checking even if entry is not valid
-                // Other strategies: Remove if entry becomes invalid (e.g. destroyed)
-                if (!entry.IsValid() && strategy != MonitoringStrategy.Persistent)
-                {
-                    removalBuffer.Add(instanceID);
-                    continue;
-                }
-
-                // Check if text changed
                 bool textChanged = entry.HasTextChanged();
-                bool shouldTranslate = textChanged || !entry.WasTranslated;
                 
-                if (shouldTranslate)
+                if (textChanged || !entry.WasTranslated)
                 {
                     bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path, null);
                     if (translated)
@@ -421,10 +424,9 @@ namespace MWC_Localization_Core
 
             foreach (int instanceID in instanceIDs)
             {
-                if (!instanceEntries.ContainsKey(instanceID))
+                TextMeshEntry entry;
+                if (!instanceEntries.TryGetValue(instanceID, out entry))
                     continue;
-
-                var entry = instanceEntries[instanceID];
 
                 if (!entry.IsValid())
                     continue;
@@ -444,8 +446,6 @@ namespace MWC_Localization_Core
                 }
             }
         }
-
-
 
         /// <summary>
         /// Clear all monitored entries

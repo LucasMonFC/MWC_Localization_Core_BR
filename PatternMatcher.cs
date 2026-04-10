@@ -168,15 +168,34 @@ namespace MWC_Localization_Core
         /// </summary>
         public string TryTranslateWithPattern(string text, string path)
         {
+            if (patterns.Count == 0)
+                return null;
+
+            // Defer ToUpperInvariant until we know at least one pattern needs it
+            string upperText = null;
             foreach (var pattern in patterns)
             {
-                string result = pattern.TryTranslate(text.ToUpperInvariant(), path, translations);
+                // CustomHandler patterns work on original text; FSM/Regex need uppercase
+                bool needsUpper = pattern.Mode != TranslationMode.CustomHandler && pattern.Mode != TranslationMode.CommaSeparated;
+                string inputText;
+                if (needsUpper)
+                {
+                    if (upperText == null)
+                        upperText = text.ToUpperInvariant();
+                    inputText = upperText;
+                }
+                else
+                {
+                    inputText = text;
+                }
+
+                string result = pattern.TryTranslate(inputText, path, translations);
                 if (result != null)
                 {
                     return result;
                 }
             }
-            
+
             return null;
         }
 
