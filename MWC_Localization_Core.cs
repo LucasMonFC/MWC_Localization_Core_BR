@@ -12,7 +12,7 @@ namespace MWC_Localization_Core
         public override string ID => "MWC_Localization_Core";
         public override string Name => "MWC_Localization_Core";
         public override string Author => "potatosalad775";
-        public override string Version => "1.0.7";
+        public override string Version => "1.0.8";
         public override string Description => "Multi-language core localization framework for My Winter Car";
         public override Game SupportedGames => Game.MyWinterCar;
 
@@ -344,7 +344,7 @@ namespace MWC_Localization_Core
                         // Preserve intentional leading AND trailing spaces in translation values.
                         // Spaces are needed for proper formatting in concatenated strings
                         string value = line.Substring(separatorIndex + 1).Replace("\\=", "=");
-                        
+
                         // Common authoring style is: "key = value".
                         // In that specific case, drop only the single separator space.
                         if (line.Length > separatorIndex + 1 && line[separatorIndex + 1] == ' ')
