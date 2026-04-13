@@ -172,9 +172,10 @@ namespace MWC_Localization_Core
                 }
 
                 // Create alias: ChatMessages.Messages uses ChatMessages.All translations
-                if (categoryTranslations.ContainsKey("ChatMessages.All"))
+                Dictionary<string, string> chatAllDict;
+                if (categoryTranslations.TryGetValue("ChatMessages.All", out chatAllDict))
                 {
-                    categoryTranslations["ChatMessages.Messages"] = categoryTranslations["ChatMessages.All"];
+                    categoryTranslations["ChatMessages.Messages"] = chatAllDict;
                 }
 
                 CoreConsole.Print($"[TeletextHandler] Loaded {loadedCount} teletext translations across {categoryTranslations.Count} categories");
