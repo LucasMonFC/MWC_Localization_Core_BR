@@ -341,10 +341,10 @@ namespace MWC_Localization_Core
                     if (separatorIndex > 0)
                     {
                         string key = line.Substring(0, separatorIndex).Trim().Replace("\\=", "=");
-                        // Preserve intentional leading spaces in translation values.
-                        // We only trim the end to avoid accidental trailing whitespace.
-                        string value = line.Substring(separatorIndex + 1).TrimEnd().Replace("\\=", "=");
-
+                        // Preserve intentional leading AND trailing spaces in translation values.
+                        // Spaces are needed for proper formatting in concatenated strings
+                        string value = line.Substring(separatorIndex + 1).Replace("\\=", "=");
+                        
                         // Common authoring style is: "key = value".
                         // In that specific case, drop only the single separator space.
                         if (line.Length > separatorIndex + 1 && line[separatorIndex + 1] == ' ')
