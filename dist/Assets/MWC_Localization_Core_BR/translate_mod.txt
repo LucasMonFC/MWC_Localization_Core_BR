@@ -1743,3 +1743,7 @@ Bumper Rear (Pre-Facelift) {0}MK = PARA-CHOQUE TRASEIRO (PRÉ-FACELIFT) {0} MK
 Bumper Rear (Facelift) {0}MK = PARA-CHOQUE TRASEIRO (FACELIFT) {0} MK
 Spring {0}" {1}mk = MOLA {0}" {1} MK
 Hood {0}mk = CAPO {0} MK
+
+//uncle is back home
+"You maybe wonder what happened to the hayosiko? Well, I got sick, and some peace of shit people distroyed my van and littered it." = "Talvez você esteja se perguntando o que aconteceu com a van? Bem, eu fiquei doente, e uns filhos da puta destruíram minha van e a sujaram toda."
+"I've been thinking that there should be alcohol in the clouds. If it rains, you could drink it. Or fill up bottles and sell it." = "Tenho pensado que deveria haver álcool nas nuvens. Se chover, você poderia bebê-lo. Ou encher garrafas e vendê-lo."
