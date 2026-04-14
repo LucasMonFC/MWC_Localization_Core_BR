@@ -60,6 +60,17 @@ SCRAP PAYMENT {0} = 고철 판매 수익: {0}
 CONDITION {0}% = 상태 {0}%
 CURRENT BET {0} MK = 현재 베팅 {0} MK
 STAND AT {0} = {0}에서 중단
+FUR DICES {0} MK = 주사위 장식 {0} MK
+KEYBOARD AND MOUSE {0} MK = 키보드 마우스 세트 {0} MK
+PC MONITOR {0} MK = PC 모니터 {0} MK
+PC SPEAKERS {0} MK = PC 스피커 {0} MK
+PC CASE {0} MK = PC 케이스 {0} MK
+Computer Case = 컴퓨터 케이스
+DISKETTE {0} MK = 디스켓 {0} MK
+STEERING WHEEL {0} MK = 스티어링 휠 {0} MK
+CAMERA {0} MK = 카메라 {0} MK
+ALARM CLOCK {0} MK = 알람 시계 {0} MK
+FABRIC ROLL {0} MK = 원단 롤 {0} MK
 
 BURGER 25 MK = 버거 25 MK
 JUMBO CHEESE 37 MK = 점보 치즈 37 MK
@@ -111,8 +122,12 @@ sandbag = 모래주머니
 receipt = 영수증
 manual = 설명서
 package = 패키지
-DISPOSED BATTERY = 다 쓴 배터리
 post package = 택배 상자
+DISPOSED BATTERY = 다 쓴 배터리
+Steering Wheel Cover = 스티어링 휠 커버
+car fabric roll = 자동차 원단 롤
+FAN CONTROL = 팬 제어
+dead moose = 죽은 사슴
 
 SCRAPE WINDOW = 창문 긁어내기
 BLOWER = 풍량 조절
@@ -328,6 +343,16 @@ pelti sarjat keraaminen = 세라믹 배기 매니폴드
 pelti sarjat pitkä = 롱 튜브 배기 매니폴드
 pakoputken pää = 배기 팁
 pönttö vaimennin = 배기 머플러
+leopardi ratinsuoja = 레오파드 스티어링 휠 커버
+seepra ratinsuoja = 지브라 스티어링 휠 커버
+tiikeri ratinsuoja = 타이거 스티어링 휠 커버
+suomi ratinsuoja = 핀란드 스티어링 휠 커버
+pinkki ratinsuoja = 핑크 스티어링 휠 커버
+leopardi kangas = 레오파드 원단
+seepra kangas = 지브라 원단
+tiikeri kangas = 타이거 원단
+suomi kangas = 핀란드 원단
+pinkki kangas = 핑크 원단
 
 //// Death Screen
 Peräjärveläinen mies paleltui kuoliaaksi = 저체온증으로\n남성 1명 사망
@@ -672,6 +697,16 @@ COULD NOT CONNECT = 연결할 수 없습니다
 "You are not the first person to behave badly. I might not be friendly next time. You should learn to behave." = "이 곳에서 헛짓거리한 사람들이 한 둘이 아닙니다. 당신이 처음이 아니죠.\n다음 번에는 고분고분하게 받아주지 않을겁니다. 똑바로 행동하는 방법을 배우는 것이 좋을겁니다."
 "If you want service, you should behave. I work long hours, why would I have to watch clowns like you?" = "좋은 서비스를 받고 싶어하지만 말고, 당신의 행동도 좀 돌아보세요.\n이 곳에서 철야 근무를 하는 제가 당신의 광대짓을 왜 쳐다보고만 있어야 합니까?"
 
+//// PSK Client
+"There you are! I am writing dictionary, and you would fit the redneck" section perfectly." = "여기 있네요! 제가 사전을 쓰고 있는데, 당신은 '촌놈' 항목에 완벽하게 들어맞을 것 같아요."
+"My son once asked what is remainder" in mathematics. Seeing you would have been a great answer." = "제 아들이 한 번 수학에서 '나머지'가 뭐냐고 물어본 적이 있어요. 그 때 당신을 보여줬으면 정말 좋은 답이 됐을 텐데요."
+"You bum, you know what. I know what is your problem, you are stuck at this hellhole forever." = "이 멍청아. 네 인생이 왜 이 모양 이 꼬라지인지는 나도 알겠다, 이 똥통만도 못한 촌동네에 평생 갇혀있는 탓이지." 
+"Walking example about usefulness of birth control." = "피임이 왜 중요한지를 명확하게 보여주는, 살아있는 예시 그 자체로구만."
+"Damn man... Tell me one thing, have you ever seen an apartment building?" = "허 참... 하나만 물어보지, 당신 아파트 건물이라는 걸 본 적은 있어요?"
+"Just move away and stop smelling like shit." = "그냥 좀 저리 멀리 비키세요. 좆같은 냄새 풍기지 마시고."
+"You want money? Here is two tips, cut your hair and go get a job. Damn bum." = "돈이 필요하시다고? 그럼 두 가지 팁을 주지, 가서 머리부터 깎고 일자리를 알아봐, 이 멍청아."
+"Hello, clown!" = "안녕, 띨띨아!"
+
 //// Pub
 "And that's how we cure the thirst." = "그게 바로 우리가 갈증을 해소하는 방법이지."
 "Okay, wait a second." = "좋아. 잠깐만 기다려봐."
@@ -789,6 +824,8 @@ FOLD A BOX = 상자 접기
 "And place charger and manual inside the plastic tray." = "플라스틱 트레이 안에 충전기와 설명서를 넣으시고요."
 "You put the tray inside the product box and it is done." = "패키지 안에 트레이를 넣고 포장하면 되겠습니다."
 "Then just place the product box inside the packaging box and thats it!" = "그렇게 완성된 제품 패키지를 큰 택배 상자에 넣으면 끝이죠!"
+"Good luck everybody! You are important part of the IT chain!" = "모두들 행운을 빌어요! 여러분은 IT 산업에 있어서 중요한 역할을 하고 계세요!"
+"No signal? Now what is this... Fuck this." = "신호 없음이라고? 이건 또 뭔... 젠장."
 
 //// HouseWood CarPos
 Car for sale. = 자동차 구매하기
