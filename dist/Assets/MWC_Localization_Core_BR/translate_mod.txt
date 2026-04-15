@@ -1162,7 +1162,6 @@ Valitse kieli = Selecionar idioma
 Syötä seteli = Inserir nota
 Talletus markoissa = Depósito em marcos
 Kyllä = Sim
-Talletus = Depósito
 Valitse kieli = Selecione o idioma
 Kieli / Language = Idioma
 Nosto markoissa = Saque em marcos

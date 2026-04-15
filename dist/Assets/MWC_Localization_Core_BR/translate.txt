@@ -96,6 +96,10 @@ SAUSAGE + COFFEE 20 MK = SALSICHA + CAFÉ 20 MK
 COFFEE 10 MK = CAFÉ 10 MK
 SAUSAGE 15 MK = SALSICHA 15 MK
 SAUSAGES 10,95 MK = SALSICHAS 10.95 MK
+MOTOR OIL 5W-40 109 MK = ÓLEO DE MOTOR 5W-40 109 MK
+MOTOR OIL 10W-60 89 MK = ÓLEO DE MOTOR 10W-60 89 MK
+MOTOR OIL 0W-30 125 MK = ÓLEO DE MOTOR 0W-30 125 MK
+Ice Scraper 39.95 MK = RASPADOR DE GELO 39,95 MK
 
 energy drink = BEBIDA ENERGÉTICA
 automatic transmission fluid = FLUIDO DE TRANSMISSÃO AUTOMÁTICA
@@ -124,6 +128,7 @@ FAN CONTROL = CONTROLE DO VENTILADOR
 dead moose = ALCE MORTO
 Steering Wheel Cover = CAPA DE VOLANTE
 car fabric roll = ROLO DE TECIDO
+ice scraper = RASPADOR DE GELO
 
 SCRAPE WINDOW = RASPAR VIDRO
 BLOWER = CONTROLE DE VENTILAÇÃO
@@ -359,8 +364,8 @@ Peräjärveläinen mies sai surmansa klapikoneessa = Homem morreu em uma\nmáqui
 Dead man found inside of log cutter = Morto foi\nencontrado\ndentro de\nmáquina de\ncortar lenha
 
 //ATM
-INSERT CREDIT CARD = INSERIR O CARTÃO
-TAKE CREDIT CARD = RETIRAR O CARTÃO
+INSERT BANK CARD = INSERIR CARTÃO BANCÁRIO
+TAKE BANK CARD = RETIRAR CARTÃO BANCÁRIO
 TAKE MONEY = PEGUE O DINHEIRO
 Tervetuloa! Syötä kortti, ole hyvä = Bem-vindo!\n\n\nPor favor, insira o cartão
 Näppäile tunnusluku Lopuksi paina OK = Digite a senha\n\n\n\n\n\n\nAo concluir,\npressione no 'ENT'
@@ -393,10 +398,12 @@ Asumistuki = Auxílio-moradia
 Työttömyystuki = Auxílio-desemprego
 TaksiPalkka = Salário do táxi
 Palkka = Salário
+Talletus = Depósito
+Syötä seteleitä, ole hyvä = Por favor insira as notas
 
 //FUEL ATM
 INSERT BILL = INSERIR DINHEIRO
-PICK CREDIT CARD = RETIRAR CARTÃO
+PICK BANK CARD = RETIRAR CARTÃO BANCÁRIO
 PICK BILL = RETIRAR DINHEIRO
 ALOITA TANKKAUS 2 MIN KULUESSA = INICIE O ABASTECIMENTO\n\nEM ATÉ 2 MINUTOS\nO ABASTECIMENTO SERÁ CONCLUÍDO
 TERVETULOA SYÖTÄ KORTTI TAI SETELI = BEM-VINDO\nINSIRA O CARTÃO OU O DINHEIRO
