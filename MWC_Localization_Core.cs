@@ -218,6 +218,7 @@ namespace MWC_Localization_Core
                     lateUpdateHandlerObject = null;
                     lateUpdateHandler = null;
                 }
+                
                 CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
             }
 
@@ -510,11 +511,6 @@ namespace MWC_Localization_Core
 
             if (Application.loadedLevelName == "MainMenu" || Application.loadedLevelName == "GAME")
             {
-                if (fsmTextHookObject != null)
-                {
-                    Object.Destroy(fsmTextHookObject);
-                    fsmTextHookObject = null;
-                }
                 InitializeFsmTextHook();
             }
 

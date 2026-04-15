@@ -129,7 +129,7 @@ namespace MWC_Localization_Core
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status", MonitoringStrategy.FastPolling);
 
             // Teletext/FSM displays are primarily translated at array/FSM source level.
-            // Use one-shot late registration to avoid rescanning large TV trees continuously.
+            // Use one-shot late registration to avoid scanning large TV trees every second.
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.LateTranslateOnce);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateTranslateOnce);
 
@@ -150,6 +150,32 @@ namespace MWC_Localization_Core
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
         {
             pathRules[pathPattern] = strategy;
+        }
+
+        /// <summary>
+        /// Determine monitoring strategy for a given path
+        /// Matches most specific (longest) rule first to avoid ambiguity
+        /// </summary>
+        public MonitoringStrategy DetermineStrategy(string path)
+        {
+            string longestMatch = null;
+            MonitoringStrategy matchedStrategy = MonitoringStrategy.TranslateOnce;
+
+            // Find the longest (most specific) matching rule
+            foreach (var rule in pathRules)
+            {
+                if (path.Contains(rule.Key))
+                {
+                    // Use longest match (most specific)
+                    if (longestMatch == null || rule.Key.Length > longestMatch.Length)
+                    {
+                        longestMatch = rule.Key;
+                        matchedStrategy = rule.Value;
+                    }
+                }
+            }
+
+            return matchedStrategy;
         }
 
         /// <summary>
@@ -256,6 +282,28 @@ namespace MWC_Localization_Core
                 registeredCount++;
             }
             return registeredCount;
+        }
+
+        /// <summary>
+        /// Unregister a TextMesh from monitoring by path
+        /// Removes all TextMesh instances at the given path
+        /// </summary>
+        public void Unregister(string path)
+        {
+            HashSet<int> instanceIDs;
+            if (path == null || !pathToInstances.TryGetValue(path, out instanceIDs))
+                return;
+
+            foreach (int instanceID in instanceIDs)
+            {
+                TextMeshEntry entry;
+                if (!instanceEntries.TryGetValue(instanceID, out entry))
+                    continue;
+                strategyGroups[entry.Strategy].Remove(instanceID);
+                instanceEntries.Remove(instanceID);
+            }
+            
+            pathToInstances.Remove(path);
         }
 
         /// <summary>

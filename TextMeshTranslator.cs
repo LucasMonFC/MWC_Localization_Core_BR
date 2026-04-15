@@ -16,10 +16,9 @@ namespace MWC_Localization_Core
         private PatternMatcher patternMatcher;
         private LocalizationConfig config;
         private Dictionary<int, string> appliedFontCache = new Dictionary<int, string>();
-        private Dictionary<int, Texture> appliedRuntimeTextureCache = new Dictionary<int, Texture>();
         private Dictionary<string, Font> fontNameToFont;  // Reverse lookup: font.name -> Font
 
-        private static readonly string[] ExcludedPath = new string[]
+        private List<string> ExcludedPath = new List<string>
         {
             "HOMENEW/Functions/FunctionsDisable/Stereos/Player/Screen/Settings/Bass/LCD",
             "CARPARTS/VINPlate",
@@ -124,21 +123,12 @@ namespace MWC_Localization_Core
                 {
                     if (IsRuntimeSensitiveTvPath(path))
                     {
+                        // Legacy-safe path: keep runtime material/shader, only swap atlas texture.
+                        Material runtimeMaterial = renderer.material;
                         Texture targetMainTexture = customFont.material.mainTexture;
-                        int rendererInstanceID = renderer.GetInstanceID();
-                        bool needsTextureApply = !appliedRuntimeTextureCache.TryGetValue(rendererInstanceID, out Texture cachedTexture)
-                            || cachedTexture != targetMainTexture;
-
-                        if (needsTextureApply && targetMainTexture != null)
+                        if (runtimeMaterial != null && targetMainTexture != null && runtimeMaterial.mainTexture != targetMainTexture)
                         {
-                            // Keep the runtime material/shader setup intact and swap only the atlas texture.
-                            Material runtimeMaterial = renderer.material;
-                            if (runtimeMaterial != null && runtimeMaterial.mainTexture != targetMainTexture)
-                            {
-                                runtimeMaterial.mainTexture = targetMainTexture;
-                            }
-
-                            appliedRuntimeTextureCache[rendererInstanceID] = targetMainTexture;
+                            runtimeMaterial.mainTexture = targetMainTexture;
                         }
                     }
                     else
@@ -317,7 +307,6 @@ namespace MWC_Localization_Core
         public void ClearRuntimeCaches()
         {
             appliedFontCache.Clear();
-            appliedRuntimeTextureCache.Clear();
         }
     }
 }

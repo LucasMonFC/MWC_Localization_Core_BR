@@ -36,6 +36,7 @@ namespace MWC_Localization_Core
         // Cache for array proxies to avoid repeated lookups
         private Dictionary<string, PlayMakerArrayListProxy> arrayProxyCache 
             = new Dictionary<string, PlayMakerArrayListProxy>();
+        private Dictionary<string, bool> arrayRetryStateCache = new Dictionary<string, bool>();
 
         public ArrayListProxyHandler(
             Dictionary<string, string> translations, 
@@ -73,8 +74,8 @@ namespace MWC_Localization_Core
 
         private void InitializeTextMeshMappings()
         {
-            // Parent paths to search under - apply fonts to all TextMeshes under these paths
-            // Paths are specific enough that all children should get the localized font mapping
+            // Parent paths to search under - apply fonts to ALL TextMeshes under these paths
+            // Paths are specific enough that all children should get Korean fonts
             parentSearchPaths = new List<string>
             {
                 "GUI/HUD/Day",                            // HUD Day Display
@@ -92,6 +93,7 @@ namespace MWC_Localization_Core
             arrayProxyCache.Clear();
             fontAppliedInstances.Clear();
             completedParentPaths.Clear();
+            arrayRetryStateCache.Clear();
         }
 
         public void Reset()
@@ -100,6 +102,7 @@ namespace MWC_Localization_Core
             arrayProxyCache.Clear();
             fontAppliedInstances.Clear();
             completedParentPaths.Clear();
+            arrayRetryStateCache.Clear();
         }
 
         // Translate all configured arrays (call once per scene)
@@ -228,6 +231,13 @@ namespace MWC_Localization_Core
                         if (translated > 0) totalTranslated += translated;
                         translatedArrays.Add(arrayKey);
                     }
+                    
+                    bool currentState = isPopulated;
+                    bool cachedState;
+                    if (!arrayRetryStateCache.TryGetValue(arrayKey, out cachedState) || cachedState != currentState)
+                    {
+                        arrayRetryStateCache[arrayKey] = currentState;
+                    }
                 }
             }
 
@@ -254,7 +264,7 @@ namespace MWC_Localization_Core
             return null;
         }
 
-        // Apply localized fonts to TextMesh components displaying array data
+        // Apply Korean fonts to TextMesh components displaying array data
         // Call this once during scene initialization, then periodically until all paths are complete
         public int ApplyFontsToArrayElements()
         {
