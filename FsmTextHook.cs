@@ -15,11 +15,16 @@ namespace MWC_Localization_Core
         private Dictionary<string, string> translations;
         private GameObject hostObject;
         private PatternMatcher patternMatcher;
-        private bool isApplied;
         private string appliedTarget;
         private HashSet<string> loggedReadyTargets = new HashSet<string>();
+        private HashSet<string> completedStrategyTargets = new HashSet<string>();
+        private HashSet<int> completedEnnusteFsmInstances = new HashSet<int>();
         private List<PlayMakerFSM> cachedEnnusteDataFsms = new List<PlayMakerFSM>();
         private float lastEnnusteDataFsmScanTime = -10f;
+
+        private static readonly WaitForSeconds BootstrapPollDelay = new WaitForSeconds(0.5f);
+        private static readonly WaitForSeconds MaintenancePollDelay = new WaitForSeconds(3.0f);
+        private const float EnnusteDataRescanInterval = 10f;
 
         // Reflection cache: (Type, fieldName) -> FieldInfo to avoid repeated GetField calls
         private static readonly Dictionary<System.Type, Dictionary<string, FieldInfo>> reflectionCache
@@ -220,45 +225,52 @@ namespace MWC_Localization_Core
 
         private IEnumerator ApplyWhenReady()
         {
-            while (!isApplied)
+            while (hostObject != null)
             {
                 string currentScene = Application.loadedLevelName;
 
-                if (TryApplyTranslations(currentScene))
+                if (currentScene == "MainMenu")
                 {
-                    isApplied = true;
-                    string targetLabel = string.IsNullOrEmpty(appliedTarget) ? "Unknown" : appliedTarget;
-                    CoreConsole.Print("[FsmTextHook] FSM text translations applied (" + targetLabel + ")");
-                    Cleanup();
-                    yield break;
+                    if (TryApplyMainMenuTranslations())
+                    {
+                        appliedTarget = "MainMenu";
+                        string targetLabel = string.IsNullOrEmpty(appliedTarget) ? "Unknown" : appliedTarget;
+                        CoreConsole.Print("[FsmTextHook] FSM text translations applied (" + targetLabel + ")");
+                        Cleanup();
+                        yield break;
+                    }
+
+                    yield return BootstrapPollDelay;
+                    continue;
                 }
 
-                // Poll at a small interval so delayed/hidden FSMs can be picked up after user interaction.
-                yield return new WaitForSeconds(0.25f);
+                if (currentScene == "GAME")
+                {
+                    TryApplyGameTranslations();
+                    yield return MaintenancePollDelay;
+                    continue;
+                }
+
+                yield return BootstrapPollDelay;
             }
         }
 
-        private bool TryApplyTranslations(string currentScene)
+        private void TryApplyGameTranslations()
         {
             if (translations == null)
-                return false;
+                return;
 
-            if (currentScene == "MainMenu" && TryApplyMainMenuTranslations())
+            bool anyChanged = false;
+            anyChanged |= TryApplyGamePosFsmTranslations();
+            anyChanged |= TryApplyGameTeletextBottomlineFsmTranslations();
+            anyChanged |= TryApplyGameTeletextWeatherUpdaterFsmTranslations();
+            anyChanged |= TryApplyGameUnemployPaperFsmTranslations();
+
+            if (anyChanged)
             {
-                appliedTarget = "MainMenu";
-                return true;
+                string targetLabel = string.IsNullOrEmpty(appliedTarget) ? "GAME" : appliedTarget;
+                CoreConsole.Print("[FsmTextHook] FSM text translations applied (" + targetLabel + ")");
             }
-
-            if (currentScene == "GAME")
-            {
-                // Keep this hook alive in GAME to refresh dynamic POS FSM string buffers.
-                TryApplyGamePosFsmTranslations();
-                TryApplyGameTeletextBottomlineFsmTranslations();
-                TryApplyGameTeletextWeatherUpdaterFsmTranslations();
-                TryApplyGameUnemployPaperFsmTranslations();
-            }
-
-            return false;
         }
 
         private bool TryApplyMainMenuTranslations()
@@ -336,8 +348,13 @@ namespace MWC_Localization_Core
                 if (!IsFsmReady(fsm))
                     continue;
 
+                int instanceID = fsm.GetInstanceID();
+                if (completedEnnusteFsmInstances.Contains(instanceID))
+                    continue;
+
                 LogReadyOnce("TTX_WX_READY", "[FsmTextHook] Teletext weather updater FSM targets are ready.");
                 ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged, ref hasAnyTarget);
+                completedEnnusteFsmInstances.Add(instanceID);
             }
 
             if (anyChanged)
@@ -374,13 +391,23 @@ namespace MWC_Localization_Core
                 if (target == null)
                     continue;
 
+                string targetKey = BuildTargetKey(target);
+                if (completedStrategyTargets.Contains(targetKey))
+                    continue;
+
                 PlayMakerFSM fsm = MLCUtils.FindFsmIncludingInactiveByPathAndName(target.ObjectPath, target.FsmName);
                 if (!IsFsmReady(fsm))
                     continue;
 
                 LogReadyOnce(target.ReadyLogKey, target.ReadyLogMessage);
                 ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget);
+                completedStrategyTargets.Add(targetKey);
             }
+        }
+
+        private static string BuildTargetKey(FsmStrategyTarget target)
+        {
+            return target.ObjectPath + "|" + target.FsmName + "|" + target.Strategy.ToString() + "|" + target.StateName + "|" + target.ActionIndex.ToString();
         }
 
         private void ApplyStrategyForTarget(FsmStrategyTarget target, PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget)
@@ -499,7 +526,7 @@ namespace MWC_Localization_Core
 
         private List<PlayMakerFSM> GetEnnusteDataFsms()
         {
-            bool shouldRescan = cachedEnnusteDataFsms.Count == 0 || (Time.realtimeSinceStartup - lastEnnusteDataFsmScanTime) >= 2f;
+            bool shouldRescan = cachedEnnusteDataFsms.Count == 0 || (Time.realtimeSinceStartup - lastEnnusteDataFsmScanTime) >= EnnusteDataRescanInterval;
             if (!shouldRescan)
                 return cachedEnnusteDataFsms;
 
