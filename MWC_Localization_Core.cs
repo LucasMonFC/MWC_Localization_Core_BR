@@ -169,8 +169,7 @@ namespace MWC_Localization_Core
             // ALL continuous monitoring logic runs in LateUpdate to ensure correct timing
             lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
             lateUpdateHandler = lateUpdateHandlerObject.AddComponent<LateUpdateHandler>();
-            lateUpdateHandler.Initialize(
-                translator, 
+            lateUpdateHandler.Initialize( 
                 textMeshMonitor, 
                 teletextHandler, 
                 arrayListHandler, 
@@ -218,7 +217,6 @@ namespace MWC_Localization_Core
                     lateUpdateHandlerObject = null;
                     lateUpdateHandler = null;
                 }
-                
                 CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
             }
 
@@ -478,7 +476,6 @@ namespace MWC_Localization_Core
                 lateUpdateHandler.ClearCache();
                 // Re-initialize to find critical UI components again
                 lateUpdateHandler.Initialize(
-                    translator, 
                     textMeshMonitor, 
                     teletextHandler, 
                     arrayListHandler, 
@@ -511,6 +508,11 @@ namespace MWC_Localization_Core
 
             if (Application.loadedLevelName == "MainMenu" || Application.loadedLevelName == "GAME")
             {
+                if (fsmTextHookObject != null)
+                {
+                    Object.Destroy(fsmTextHookObject);
+                    fsmTextHookObject = null;
+                }
                 InitializeFsmTextHook();
             }
 

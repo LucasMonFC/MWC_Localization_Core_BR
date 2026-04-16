@@ -4,13 +4,11 @@ namespace MWC_Localization_Core
 {
     /// <summary>
     /// Manages scene transitions and translation flags
-    /// Consolidates hasTranslatedSplashScreen, hasTranslatedMainMenu, hasTranslatedGameScene logic
+    /// Tracks whether supported scenes have already received their initial translation pass
     /// </summary>
     public class SceneTranslationManager
     {
-        
         // Scene translation states
-        private bool hasTranslatedSplashScreen = false;
         private bool hasTranslatedMainMenu = false;
         private bool hasTranslatedGameScene = false;
         
@@ -29,9 +27,6 @@ namespace MWC_Localization_Core
         {
             switch (sceneName)
             {
-                case "SplashScreen":
-                    return !hasTranslatedSplashScreen;
-                    
                 case "MainMenu":
                     return !hasTranslatedMainMenu;
                     
@@ -50,11 +45,6 @@ namespace MWC_Localization_Core
         {
             switch (sceneName)
             {
-                case "SplashScreen":
-                    hasTranslatedSplashScreen = true;
-                    CoreConsole.Print("[SceneTranslationManager] Splash Screen marked as translated");
-                    break;
-                    
                 case "MainMenu":
                     hasTranslatedMainMenu = true;
                     CoreConsole.Print("[SceneTranslationManager] Main Menu marked as translated");
@@ -108,41 +98,8 @@ namespace MWC_Localization_Core
         /// </summary>
         public void ResetAll()
         {
-            hasTranslatedSplashScreen = false;
             hasTranslatedMainMenu = false;
             hasTranslatedGameScene = false;
-        }
-
-        /// <summary>
-        /// Get current scene name
-        /// </summary>
-        public string GetCurrentScene()
-        {
-            return currentScene;
-        }
-
-        /// <summary>
-        /// Get previous scene name
-        /// </summary>
-        public string GetPreviousScene()
-        {
-            return previousScene;
-        }
-
-        /// <summary>
-        /// Check if currently in main menu
-        /// </summary>
-        public bool IsInMainMenu()
-        {
-            return currentScene == "MainMenu";
-        }
-
-        /// <summary>
-        /// Check if currently in game
-        /// </summary>
-        public bool IsInGame()
-        {
-            return currentScene == "GAME";
         }
 
         /// <summary>
@@ -152,9 +109,6 @@ namespace MWC_Localization_Core
         {
             switch (sceneName)
             {
-                case "SplashScreen":
-                    return hasTranslatedSplashScreen;
-                    
                 case "MainMenu":
                     return hasTranslatedMainMenu;
                     

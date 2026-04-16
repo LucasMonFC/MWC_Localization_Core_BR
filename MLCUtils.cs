@@ -38,7 +38,6 @@ namespace MWC_Localization_Core
         // Cache for expensive GameObject.Find(path) lookups
         private static Dictionary<string, GameObject> gameObjectFindCache = new Dictionary<string, GameObject>();
         // Cache for inactive lookup helpers (resolved via Resources.FindObjectsOfTypeAll)
-        private static Dictionary<string, TextMesh> inactiveTextMeshPathCache = new Dictionary<string, TextMesh>();
         private static Dictionary<string, PlayMakerFSM> inactiveFsmPathNameCache = new Dictionary<string, PlayMakerFSM>();
 
         public static string GetGameObjectPath(GameObject obj)
@@ -100,44 +99,6 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Find TextMesh by full object path, including inactive objects.
-        /// Uses a cache and falls back to Resources.FindObjectsOfTypeAll when needed.
-        /// </summary>
-        public static TextMesh FindTextMeshIncludingInactiveByPath(string fullPath)
-        {
-            if (string.IsNullOrEmpty(fullPath))
-                return null;
-
-            if (inactiveTextMeshPathCache.TryGetValue(fullPath, out TextMesh cachedTextMesh))
-            {
-                if (cachedTextMesh != null && cachedTextMesh.gameObject != null)
-                    return cachedTextMesh;
-
-                inactiveTextMeshPathCache.Remove(fullPath);
-            }
-
-            TextMesh[] allTextMeshes = Resources.FindObjectsOfTypeAll<TextMesh>();
-            if (allTextMeshes == null)
-                return null;
-
-            for (int i = 0; i < allTextMeshes.Length; i++)
-            {
-                TextMesh textMesh = allTextMeshes[i];
-                if (textMesh == null || textMesh.gameObject == null)
-                    continue;
-
-                string path = GetGameObjectPath(textMesh.gameObject);
-                if (path == fullPath)
-                {
-                    inactiveTextMeshPathCache[fullPath] = textMesh;
-                    return textMesh;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Find PlayMakerFSM by object path + FSM name, including inactive objects.
         /// Uses a cache and falls back to Resources.FindObjectsOfTypeAll when needed.
         /// </summary>
@@ -193,7 +154,6 @@ namespace MWC_Localization_Core
         {
             pathCache.Clear();
             gameObjectFindCache.Clear();
-            inactiveTextMeshPathCache.Clear();
             inactiveFsmPathNameCache.Clear();
         }
     }

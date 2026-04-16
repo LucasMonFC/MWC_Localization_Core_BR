@@ -7,9 +7,9 @@ namespace MWC_Localization_Core
     public static class LocalizationConstants
     {
         // Monitoring strategies timing
-        public const float FAST_POLLING_INTERVAL = 0.1f;            // 10 times per second
+        public const float FAST_POLLING_INTERVAL = 0.15f;           // ~6.6 times per second
         public const float SLOW_POLLING_INTERVAL = 1.0f;            // Once per second
-        public const float VISIBILITY_POLLING_INTERVAL = 0.2f;      // 5 times per second
-        public const float ARRAY_MONITOR_INTERVAL = 1.0f;           // Check arrays every 1 second (was every frame)
+        public const float VISIBILITY_POLLING_INTERVAL = 0.35f;     // ~3 times per second
+        public const float ARRAY_MONITOR_INTERVAL = 2.0f;           // Check arrays every 2 seconds
     }
 }
