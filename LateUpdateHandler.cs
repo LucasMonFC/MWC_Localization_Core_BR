@@ -34,7 +34,6 @@ namespace MWC_Localization_Core
         private float lastArrayCheckTime = 0f;
 
         public void Initialize(
-            TextMeshTranslator translatorInstance,
             UnifiedTextMeshMonitor textMeshMonitorInstance,
             TeletextHandler teletextHandlerInstance,
             ArrayListProxyHandler arrayListHandlerInstance,

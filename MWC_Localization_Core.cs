@@ -170,7 +170,6 @@ namespace MWC_Localization_Core
             lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
             lateUpdateHandler = lateUpdateHandlerObject.AddComponent<LateUpdateHandler>();
             lateUpdateHandler.Initialize(
-                translator, 
                 textMeshMonitor, 
                 teletextHandler, 
                 arrayListHandler, 
