@@ -7,13 +7,11 @@ namespace MWC_Localization_Core
     /// <summary>
     /// MonoBehaviour component for ALL continuous translation monitoring
     /// Must run in LateUpdate() to translate AFTER game's Update() regenerates text
-    /// DIRECT COPY from Plugin.cs LateUpdate - all monitoring logic moved here
-    /// Same pattern as legacy LanguageFramework's MainObject for My Summer Car
+    /// Centralizes continuous translation work outside the main mod entry point
     /// </summary>
     public class LateUpdateHandler : MonoBehaviour
     {
         // Dependencies
-        private TextMeshTranslator translator;
         private UnifiedTextMeshMonitor textMeshMonitor;
         private TeletextHandler teletextHandler;
         private ArrayListProxyHandler arrayListHandler;
@@ -32,7 +30,7 @@ namespace MWC_Localization_Core
 
         private bool isInitialized = false;
         
-        // Throttling timers (MOVED from MWC_Localization_Core.cs)
+        // Throttling timer for array and proxy monitoring
         private float lastArrayCheckTime = 0f;
 
         public void Initialize(
@@ -43,7 +41,6 @@ namespace MWC_Localization_Core
             HashTableProxyHandler hashTableHandlerInstance,
             SceneTranslationManager sceneManagerInstance)
         {
-            translator = translatorInstance;
             textMeshMonitor = textMeshMonitorInstance;
             teletextHandler = teletextHandlerInstance;
             arrayListHandler = arrayListHandlerInstance;
@@ -63,7 +60,7 @@ namespace MWC_Localization_Core
 
             string currentScene = Application.loadedLevelName;
 
-            // GAME scene monitoring - EXACT COPY from Mod_Update
+            // GAME scene monitoring
             if (currentScene == "GAME" && sceneManager.HasSceneBeenTranslated("GAME"))
             {
                 // Throttled monitoring for regular TextMesh elements
@@ -99,7 +96,7 @@ namespace MWC_Localization_Core
                 }
             }
 
-            // Main menu monitoring - EXACT COPY from Mod_Update
+            // Main menu monitoring
             else if (currentScene == "MainMenu" && sceneManager.HasSceneBeenTranslated("MainMenu"))
             {
                 // Monitor for dynamic changes in main menu
