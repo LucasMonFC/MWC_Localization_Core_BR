@@ -62,12 +62,17 @@ HIRE COMPANY TO REPLACE FARM WINDOWS AND ELECTRICITY {0}MK = CONTRATE UMA EMPRES
 PAY ELECTRICITY BILLS {0} MK = PAGAR CONTA DE ENERGIA ELÉTRICA {0} MK
 
 //Mod Shop
-Shopping Bag (psk) = SACOLA DE COMPRAS (PSK)
-Get item from bag ({0} items) = Pegar item ({0} itens)
-{0} in cart = {0} no carrinho
+SHOPPING BAG (MODS SHOP) = SACOLA DE COMPRAS (MODS SHOP)
+Get item from bag ({0} items) = PEGAR ITEM ({0} ITENS)
+{0} in cart = {0} NO CARRINHO
 
 //Automatic Fuses
-AUTOMATIC FUSE {0} = FUSÍVEL AUTOMÁTICO {0}
+AUTOMATIC FUSE (10A) - 20 MK{0} IN CART = FUSÍVEL AUTOMÁTICO (10A) - 20 MK{0} NO CARRINHO
+AUTOMATIC FUSE (16A) - 40 MK{0} IN CART = FUSÍVEL AUTOMÁTICO (16A) - 40 MK{0} NO CARRINHO
+AUTOMATIC FUSE (20A) - 50 MK{0} IN CART = FUSÍVEL AUTOMÁTICO (20A) - 50 MK{0} NO CARRINHO
+Automatic Fuse 10A = FUSÍVEL AUTOMÁTICO 10A
+Automatic Fuse 16A = FUSÍVEL AUTOMÁTICO 16A
+Automatic Fuse 20A = FUSÍVEL AUTOMÁTICO 20A
 Pop fuse = ABRIR FUSÍVEL
 Reset fuse = RESETAR FUSÍVEL
 Slot occupied = SLOT OCUPADO
@@ -1639,8 +1644,10 @@ Blackcurrant Juice = SUCO DE GROSELHA PRETA
 Buy Fresh Milk (11 mk) = Compre Leite Fresco (11 mk)
 Fresh Milk = LEITE FRESCO
 Buy Lingonberry Juice (8 mk) = Compre Suco De Airela (8 mk)
+Buy Cinnamon Roll (8 mk) = Compre Rolinho De Canela (8 mk)
 Lingonberry Juice = SUCO DE AIRELA
 Pay {0} mk ({1} items) = Pague {0} mk ({1} itens)
+Take Cinnamon Roll ({0} left) = Pegue o Rolinho De Canela ({0} restantes)
 Take Sausage Roll ({0} left) = Pegue o Rolo de Salsicha ({0} restantes)
 Take Fresh Milk ({0} left) = Pegue Leite Fresco ({0} restante)
 Take Sausage Roll ({0} left) = Pegue O Enrolado De Salsicha ({0} Restantes)
@@ -1746,3 +1753,20 @@ Hood {0}mk = CAPO {0} MK
 //uncle is back home
 "You maybe wonder what happened to the hayosiko? Well, I got sick, and some peace of shit people distroyed my van and littered it." = "Talvez você esteja se perguntando o que aconteceu com a van? Bem, eu fiquei doente, e uns filhos da puta destruíram minha van e a sujaram toda."
 "I've been thinking that there should be alcohol in the clouds. If it rains, you could drink it. Or fill up bottles and sell it." = "Tenho pensado que deveria haver álcool nas nuvens. Se chover, você poderia bebê-lo. Ou encher garrafas e vendê-lo."
+
+//Buyable Items
+COFFEE PAN - 199 MK{0} IN CART = CAFETEIRA - 199 MK{0} NO CARRINHO
+COFFEE CUP - 79 MK{0} IN CART = XÍCARA DE CAFÉ - 79 MK{0} NO CARRINHO
+RATCHET SET - 1199 MK{0} IN CART = JOGO DE CHAVES CATRACA - 1199 MK{0} NO CARRINHO
+SPANNER SET - 799 MK{0} IN CART = JOGO DE CHAVES - 799 MK{0} NO CARRINHO
+SLEDGEHAMMER - 599 MK{0} IN CART = MARRETA - 599 MK{0} NO CARRINHO
+AXE - 950 MK{0} IN CART = MACHADO - 950 MK{0} NO CARRINHO
+ALARM CLOCK - 299 MK{0} IN CART = DESPERTADOR - 299 MK{0} NO CARRINHO
+CAMERA - 1499 MK{0} IN CART = CÂMERA - 1499 MK{0} NO CARRINHO
+LANTERN - 399 MK{0} IN CART = LAMPARINA - 399 MK{0} NO CARRINHO
+JERRYCAN (GASOLINE) - 249 MK{0} IN CART = GALÃO DE GASOLINA - 249 MK{0} NO CARRINHO
+JERRYCAN (DIESEL) - 249 MK{0} IN CART = GALÃO DE DIESEL - 249 MK{0} NO CARRINHO
+SANDBAGS (50KG) - 149 MK{0} IN CART = SACOS DE AREIA (50KG) - 149 MK{0} NO CARRINHO
+GRILL - 699 MK{0} IN CART = CHURRASQUEIRA - 699 MK{0} NO CARRINHO
+BOOMBOX - 1999 MK{0} IN CART = RÁDIO PORTÁTIL - 1999 MK{0} NO CARRINHO
+SOFA - 1499 MK{0} IN CART = SOFÁ - 1499 MK{0} NO CARRINHO
