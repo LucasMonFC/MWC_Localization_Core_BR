@@ -1910,6 +1910,7 @@ shoulders = OMBROS
 "Good lady-mister, I haven't drank at all, and I won't. When I am sober. = "Boa senhora, não bebi nada e não beberei. Quando estiver sóbrio.
 "Hello! Are you a fly or a bird?" = "Olá! Você é uma mosca ou um pássaro?"
 "Andy of the large house and the Shore of lake!" = "Andy da casa grande e da margem do lago!"
+"Good lady-mister, I haven't drank at all, and I won't. When I am sober.!" = "Boa senhora, eu não bebi nada, e não vou. Quando eu estiver sóbrio!"
 
 //Jouko (drunk guy)
 "You little bastard! You have taken my money!" = "Maldito bastardo, você pegou meu dinheiro!"

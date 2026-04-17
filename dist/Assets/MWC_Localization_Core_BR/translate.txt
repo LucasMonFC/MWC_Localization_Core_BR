@@ -1054,3 +1054,16 @@ Mittatilausjouset / Coil spring order   {0} = Pedido de molas helicoidais       
 "Just move away and stop smelling like shit." = "Apenas saia daqui e pare de feder a merda."
 "You want money? Here is two tips, cut your hair and go get a job. Damn bum." = "Quer dinheiro? Aqui vão duas dicas: corte o cabelo e vá arrumar um emprego. Maldito vagabundo."
 "Hello, clown!" = "Olá, palhaço!"
+
+//Worker Jani
+"No way who's here! What are you doing here? Just take the door out." = "Não acredito que você esteja aqui! O que você está fazendo aqui? De o fora daqui."
+"Am I in a candid camera? Which of these clowns invited you here?" = "Será que estou sendo filmado sem autorização? Qual desses palhaços te convidou para vir aqui?"
+"This smell... I know this guy. The spirit of sewage." = "Esse cheiro... Eu conheço esse cara. O espírito do esgoto."
+"Look at yourself. You look like a lost tourist. But hey, this is not a place for sightseeings." = "Olhe para você. Você parece um turista perdido. Mas ei, este não é um lugar para passeios turísticos."
+
+//Mulkkunen2
+"Well hello. Car parts, huh? Sure I still have them. Let's do the deal, I'll post the parts." = "Olá. Peças de carro, hein? Claro que ainda tenho. Vamos fechar o negócio, vou enviar as peças."
+"Hello, hello? Yep yep! Stuff? Yeah that is my ad. I'll get the parts on your way. Thank you!" = "Alô, alô? Sim, sim! Coisas? Sim, esse é meu anúncio. Vou enviar as peças para você. Obrigado!"
+"Hello? Sure I had an ad in the magazine. I'll post the parts on your way. If you don't want them, then I throw the shit in the lake. Good bye." = "Alô? Claro que tinha um anúncio na revista. Vou enviar as peças para você. Se não quiser, jogo essa merda no lago. Adeus."
+"Well hi and hello. Sure that is my ad, good stuff, don't worry. I'll will take extra care on the packaging and send it to you. Thanks!" = "Oi, olá. Sim, esse é meu anúncio, coisa boa, não se preocupe. Vou embalar com cuidado e enviar para você. Obrigado!"
+"...? That's my ad all right. I had all sorts of junk in the garage, but good stuff nevertheless. I send it to your way, thank you!" = "...? Esse é meu anúncio mesmo. Eu tinha todo tipo de tralha na garagem, mas ainda assim coisa boa. Vou enviar para você, obrigado!"
