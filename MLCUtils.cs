@@ -8,50 +8,29 @@ namespace MWC_Localization_Core
     /// </summary>
     public static class MLCUtils
     {
-        // Cache for FormatUpperKey - reduces string allocations by ~70%
-        private static Dictionary<string, string> formatKeyCache = new Dictionary<string, string>(256);
-        private static System.Text.StringBuilder formatKeyBuilder = new System.Text.StringBuilder(128);
-
         /// <summary>
         /// Format string for use as translation key (uppercase, no spaces/newlines)
-        /// Optimized with caching to reduce allocations.
         /// </summary>
         public static string FormatUpperKey(string original)
         {
             if (string.IsNullOrEmpty(original))
                 return original;
 
-            // Check cache first (80% hit rate expected)
-            if (formatKeyCache.TryGetValue(original, out string cached))
-                return cached;
-
-            // Format using StringBuilder to avoid intermediate allocations
-            formatKeyBuilder.Length = 0;  // Reset StringBuilder (compatible with .NET 3.5)
+            // Single-pass: skip whitespace chars and uppercase in one allocation
+            char[] buffer = new char[original.Length];
+            int len = 0;
             for (int i = 0; i < original.Length; i++)
             {
                 char c = original[i];
                 if (c == ' ' || c == '\n' || c == '\r' || c == '\t')
                     continue;
-                formatKeyBuilder.Append(char.ToUpperInvariant(c));
+                buffer[len++] = char.ToUpperInvariant(c);
             }
 
-            string result = formatKeyBuilder.Length > 0 ? formatKeyBuilder.ToString() : string.Empty;
+            if (len == 0)
+                return string.Empty;
 
-            // Cache result (with limit to prevent memory bloat)
-            if (formatKeyCache.Count < 256)
-            {
-                formatKeyCache[original] = result;
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Clear format key cache (chamada em scene changes)
-        /// </summary>
-        public static void ClearFormatKeyCache()
-        {
-            formatKeyCache.Clear();
+            return new string(buffer, 0, len);
         }
 
         // Cache for GameObject paths to improve performance

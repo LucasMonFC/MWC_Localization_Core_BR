@@ -118,8 +118,7 @@ namespace MWC_Localization_Core
         {
             try
             {
-                // RegexOptions.Compiled: JIT compile para melhor performance em matching
-                regexPattern = new Regex(OriginalPattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                regexPattern = new Regex(OriginalPattern, RegexOptions.IgnoreCase);
             }
             catch (Exception ex)
             {
