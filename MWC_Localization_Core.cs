@@ -130,6 +130,11 @@ namespace MWC_Localization_Core
             // Initialize unified text mesh monitor
             textMeshMonitor = new UnifiedTextMeshMonitor(translator);
 
+            // Set hasLoadedTranslations flag AFTER all sources are loaded
+            hasLoadedTranslations = translations.Count > 0 || magazineHandler.HasTranslations() || teletextHandler.HasTranslations();
+            if (hasLoadedTranslations)
+                ModConsole.Print($"[{Name}] Translations loaded: {translations.Count} entries");
+
             // Translate main menu
             CoreConsole.Print($"[{Name}] Translating Main Menu...");
             TranslateScene();
@@ -201,7 +206,6 @@ namespace MWC_Localization_Core
             if (sceneChanged)
             {
                 MLCUtils.ClearCaches();
-                MLCUtils.ClearFormatKeyCache();
 
                 // Clear MonoBehaviour cache and destroy old monitor
                 if (lateUpdateHandler != null)
@@ -342,10 +346,6 @@ namespace MWC_Localization_Core
             string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
             LoadTranslationFile(modTranslationPath);
             translator.LoadFsmPatterns(modTranslationPath);
-
-            hasLoadedTranslations = translations.Count > 0 || magazineHandler.HasTranslations() || teletextHandler.HasTranslations();
-            if (hasLoadedTranslations)
-                CoreConsole.Print($"[{Name}] Loaded {translations.Count} total translations");
         }
         /// <summary>
         /// Load a translation file and merge results into the main translations dictionary
@@ -378,7 +378,6 @@ namespace MWC_Localization_Core
             translator.ClearRuntimeCaches();
             translator.ResetPatterns();
             MLCUtils.ClearCaches();
-            MLCUtils.ClearFormatKeyCache();
 
             // Reset text adjustment caches and reload config
             config.ClearTextAdjustmentCaches();
