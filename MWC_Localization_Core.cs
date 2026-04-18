@@ -333,6 +333,7 @@ namespace MWC_Localization_Core
             // Load translation files using unified parser
             string mscTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_msc.txt");
             LoadTranslationFile(mscTranslationPath);
+            translator.LoadFsmPatterns(mscTranslationPath);
 
             string translationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
             LoadTranslationFile(translationPath);
