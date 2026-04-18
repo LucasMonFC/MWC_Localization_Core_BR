@@ -201,6 +201,7 @@ namespace MWC_Localization_Core
             if (sceneChanged)
             {
                 MLCUtils.ClearCaches();
+                MLCUtils.ClearFormatKeyCache();
 
                 // Clear MonoBehaviour cache and destroy old monitor
                 if (lateUpdateHandler != null)
@@ -324,114 +325,56 @@ namespace MWC_Localization_Core
             }
         }
 
-        void InsertTranslationLines(string translationPath)
-        {
-            try
-            {
-                string[] lines = File.ReadAllLines(translationPath, Encoding.UTF8);
-
-                foreach (string line in lines)
-                {
-                    if (string.IsNullOrEmpty(line) || line.TrimStart().StartsWith("#"))
-                        continue;
-
-                    int separatorIndex = FindKeyValueSeparatorIndex(line);
-                    if (separatorIndex > 0)
-                    {
-                        string key = line.Substring(0, separatorIndex).Trim().Replace("\\=", "=");
-                        // Preserve intentional leading AND trailing spaces in translation values.
-                        // Spaces are needed for proper formatting in concatenated strings
-                        string value = line.Substring(separatorIndex + 1).Replace("\\=", "=");
-
-                        // Common authoring style is: "key = value".
-                        // In that specific case, drop only the single separator space.
-                        if (line.Length > separatorIndex + 1 && line[separatorIndex + 1] == ' ')
-                        {
-                            bool hasSecondSpace = (line.Length > separatorIndex + 2 && line[separatorIndex + 2] == ' ');
-                            if (!hasSecondSpace && value.Length > 0 && value[0] == ' ')
-                                value = value.Substring(1);
-                        }
-
-                        string normalizedKey = MLCUtils.FormatUpperKey(key);
-                        string processedValue = value.Replace("\\n", "\n");
-
-                        if (!string.IsNullOrEmpty(normalizedKey))
-                        {
-                            translations[normalizedKey] = processedValue;
-                        }
-                    }
-                }
-
-                hasLoadedTranslations = true;
-                CoreConsole.Print($"[{Name}] Loaded {translations.Count} translations from {Path.GetFileName(translationPath)}");
-            }
-            catch (System.Exception ex)
-            {
-                CoreConsole.Error($"[{Name}] Failed to load translations: {ex.Message}");
-            }
-        }
-
-        private static int FindKeyValueSeparatorIndex(string line)
-        {
-            for (int i = 0; i < line.Length; i++)
-            {
-                if (line[i] != '=')
-                    continue;
-
-                int backslashCount = 0;
-                for (int j = i - 1; j >= 0 && line[j] == '\\'; j--)
-                {
-                    backslashCount++;
-                }
-
-                bool isEscaped = (backslashCount % 2) == 1;
-                if (!isEscaped)
-                    return i;
-            }
-
-            return -1;
-        }
+        // Parsing consolidated into TranslationFileParser.ParseKeyValueFile()
+        // Eliminates duplicate parsing logic - single source of truth for KEY=VALUE files
 
         void LoadTranslations()
         {
             // Load translation file used in My Summer Car first
             string mscTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_msc.txt");
-            
-            if (!File.Exists(mscTranslationPath))
+            if (File.Exists(mscTranslationPath))
+            {
+                var mscTranslations = TranslationFileParser.ParseKeyValueFile(mscTranslationPath);
+                foreach (var kvp in mscTranslations)
+                    translations[kvp.Key] = kvp.Value;
+                translator.LoadFsmPatterns(mscTranslationPath);
+            }
+            else
             {
                 CoreConsole.Warning($"[{Name}] Translation file not found: {mscTranslationPath}");
-            }
-            else 
-            {
-                InsertTranslationLines(mscTranslationPath);
-                translator.LoadFsmPatterns(mscTranslationPath);
             }
 
             // Load main translation file for My Winter Car
             string translationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
-
-            if (!File.Exists(translationPath))
+            if (File.Exists(translationPath))
+            {
+                var mainTranslations = TranslationFileParser.ParseKeyValueFile(translationPath);
+                foreach (var kvp in mainTranslations)
+                    translations[kvp.Key] = kvp.Value;
+                translator.LoadFsmPatterns(translationPath);
+            }
+            else
             {
                 CoreConsole.Warning($"[{Name}] Translation file not found: {translationPath}");
-            }
-            else 
-            {
-                InsertTranslationLines(translationPath);
-                translator.LoadFsmPatterns(translationPath);
             }
 
             // Load mod translation file for My Winter Car
             string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
-
-            if (!File.Exists(modTranslationPath))
+            if (File.Exists(modTranslationPath))
+            {
+                var modTranslations = TranslationFileParser.ParseKeyValueFile(modTranslationPath);
+                foreach (var kvp in modTranslations)
+                    translations[kvp.Key] = kvp.Value;
+                translator.LoadFsmPatterns(modTranslationPath);
+            }
+            else
             {
                 CoreConsole.Warning($"[{Name}] Translation file not found: {modTranslationPath}");
             }
-            else 
-            {
-                InsertTranslationLines(modTranslationPath);
-                translator.LoadFsmPatterns(modTranslationPath);
-            }
+
+            hasLoadedTranslations = translations.Count > 0;
+            if (hasLoadedTranslations)
+                CoreConsole.Print($"[{Name}] Loaded {translations.Count} total translations");
         }
 
         void ReloadTranslations()
@@ -446,14 +389,40 @@ namespace MWC_Localization_Core
             translator.ClearRuntimeCaches();
             translator.ResetPatterns();
             MLCUtils.ClearCaches();
+            MLCUtils.ClearFormatKeyCache();
 
             // Reset text adjustment caches and reload config
             config.ClearTextAdjustmentCaches();
             string configPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "config.txt");
             config.LoadConfig(configPath);
 
-            // Reload from file
-            LoadTranslations();
+            // Reload all translation files using unified parser
+            string mscTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_msc.txt");
+            if (File.Exists(mscTranslationPath))
+            {
+                var mscTranslations = TranslationFileParser.ParseKeyValueFile(mscTranslationPath);
+                foreach (var kvp in mscTranslations)
+                    translations[kvp.Key] = kvp.Value;
+                translator.LoadFsmPatterns(mscTranslationPath);
+            }
+
+            string translationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
+            if (File.Exists(translationPath))
+            {
+                var mainTranslations = TranslationFileParser.ParseKeyValueFile(translationPath);
+                foreach (var kvp in mainTranslations)
+                    translations[kvp.Key] = kvp.Value;
+                translator.LoadFsmPatterns(translationPath);
+            }
+
+            string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
+            if (File.Exists(modTranslationPath))
+            {
+                var modTranslations = TranslationFileParser.ParseKeyValueFile(modTranslationPath);
+                foreach (var kvp in modTranslations)
+                    translations[kvp.Key] = kvp.Value;
+                translator.LoadFsmPatterns(modTranslationPath);
+            }
 
             // Reload magazine translations
             string magazinePath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_magazine.txt");
