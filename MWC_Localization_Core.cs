@@ -201,7 +201,7 @@ namespace MWC_Localization_Core
             if (sceneChanged)
             {
                 MLCUtils.ClearCaches();
-                MLCUtils.ClearFormatKeyCache();  // Optimization: clear FormatUpperKey cache
+                MLCUtils.ClearFormatKeyCache();
 
                 // Clear MonoBehaviour cache and destroy old monitor
                 if (lateUpdateHandler != null)
@@ -330,53 +330,37 @@ namespace MWC_Localization_Core
 
         void LoadTranslations()
         {
-            // Load translation file used in My Summer Car first
+            // Load translation files using unified parser
             string mscTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_msc.txt");
-            if (File.Exists(mscTranslationPath))
-            {
-                var mscTranslations = TranslationFileParser.ParseKeyValueFile(mscTranslationPath);
-                foreach (var kvp in mscTranslations)
-                    translations[kvp.Key] = kvp.Value;
-                translator.LoadFsmPatterns(mscTranslationPath);
-            }
-            else
-            {
-                CoreConsole.Warning($"[{Name}] Translation file not found: {mscTranslationPath}");
-            }
+            LoadTranslationFile(mscTranslationPath);
 
-            // Load main translation file for My Winter Car
             string translationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
-            if (File.Exists(translationPath))
-            {
-                var mainTranslations = TranslationFileParser.ParseKeyValueFile(translationPath);
-                foreach (var kvp in mainTranslations)
-                    translations[kvp.Key] = kvp.Value;
-                translator.LoadFsmPatterns(translationPath);
-            }
-            else
-            {
-                CoreConsole.Warning($"[{Name}] Translation file not found: {translationPath}");
-            }
+            LoadTranslationFile(translationPath);
 
-            // Load mod translation file for My Winter Car
             string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
-            if (File.Exists(modTranslationPath))
-            {
-                var modTranslations = TranslationFileParser.ParseKeyValueFile(modTranslationPath);
-                foreach (var kvp in modTranslations)
-                    translations[kvp.Key] = kvp.Value;
-                translator.LoadFsmPatterns(modTranslationPath);
-            }
-            else
-            {
-                CoreConsole.Warning($"[{Name}] Translation file not found: {modTranslationPath}");
-            }
+            LoadTranslationFile(modTranslationPath);
 
             hasLoadedTranslations = translations.Count > 0;
             if (hasLoadedTranslations)
                 CoreConsole.Print($"[{Name}] Loaded {translations.Count} total translations");
         }
+        /// <summary>
+        /// Load a translation file and merge results into the main translations dictionary
+        /// Helper to avoid code duplication when loading multiple translation files
+        /// </summary>
+        private void LoadTranslationFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                CoreConsole.Warning($"[{Name}] Translation file not found: {filePath}");
+                return;
+            }
 
+            var fileTranslations = TranslationFileParser.ParseKeyValueFile(filePath);
+            foreach (var kvp in fileTranslations)
+                translations[kvp.Key] = kvp.Value;
+            translator.LoadFsmPatterns(filePath);
+        }
         void ReloadTranslations()
         {
             CoreConsole.Print($"[{Name}] [F8] Reloading translations...");
@@ -389,40 +373,22 @@ namespace MWC_Localization_Core
             translator.ClearRuntimeCaches();
             translator.ResetPatterns();
             MLCUtils.ClearCaches();
-            MLCUtils.ClearFormatKeyCache();  // Optimization: clear FormatUpperKey cache
+            MLCUtils.ClearFormatKeyCache();
 
             // Reset text adjustment caches and reload config
             config.ClearTextAdjustmentCaches();
             string configPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "config.txt");
             config.LoadConfig(configPath);
 
-            // Reload all translation files using unified parser
+            // Reload all translation files using unified helper
             string mscTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_msc.txt");
-            if (File.Exists(mscTranslationPath))
-            {
-                var mscTranslations = TranslationFileParser.ParseKeyValueFile(mscTranslationPath);
-                foreach (var kvp in mscTranslations)
-                    translations[kvp.Key] = kvp.Value;
-                translator.LoadFsmPatterns(mscTranslationPath);
-            }
+            LoadTranslationFile(mscTranslationPath);
 
             string translationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
-            if (File.Exists(translationPath))
-            {
-                var mainTranslations = TranslationFileParser.ParseKeyValueFile(translationPath);
-                foreach (var kvp in mainTranslations)
-                    translations[kvp.Key] = kvp.Value;
-                translator.LoadFsmPatterns(translationPath);
-            }
+            LoadTranslationFile(translationPath);
 
             string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
-            if (File.Exists(modTranslationPath))
-            {
-                var modTranslations = TranslationFileParser.ParseKeyValueFile(modTranslationPath);
-                foreach (var kvp in modTranslations)
-                    translations[kvp.Key] = kvp.Value;
-                translator.LoadFsmPatterns(modTranslationPath);
-            }
+            LoadTranslationFile(modTranslationPath);
 
             // Reload magazine translations
             string magazinePath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_magazine.txt");
@@ -431,10 +397,6 @@ namespace MWC_Localization_Core
             // Reload teletext translations
             string teletextPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_teletext.txt");
             teletextHandler.LoadTeletextTranslations(teletextPath);
-            
-            // Reload FSM patterns from main file first
-            string mainTranslatePath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
-            translator.LoadFsmPatterns(mainTranslatePath);
             
             // Reload additional FSM patterns from teletext file
             translator.LoadFsmPatterns(teletextPath);
