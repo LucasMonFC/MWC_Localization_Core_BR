@@ -347,6 +347,8 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Load a translation file and merge results into the main translations dictionary
         /// Helper to avoid code duplication when loading multiple translation files
+        /// Note: FSM patterns are loaded separately via translator.LoadFsmPatterns() in ReloadTranslations()
+        /// and explicitly for teletext in PostLoad() - not here.
         /// </summary>
         private void LoadTranslationFile(string filePath)
         {
@@ -359,7 +361,6 @@ namespace MWC_Localization_Core
             var fileTranslations = TranslationFileParser.ParseKeyValueFile(filePath);
             foreach (var kvp in fileTranslations)
                 translations[kvp.Key] = kvp.Value;
-            translator.LoadFsmPatterns(filePath);
         }
         void ReloadTranslations()
         {
@@ -367,6 +368,7 @@ namespace MWC_Localization_Core
 
             // Clear existing translations
             translations.Clear();
+            hasLoadedTranslations = false;  // Reset flag before reloading
             magazineHandler.ClearTranslations();
             arrayListHandler.ClearTranslations();
             hashTableHandler.ClearTranslations();
@@ -400,6 +402,11 @@ namespace MWC_Localization_Core
             
             // Reload additional FSM patterns from teletext file
             translator.LoadFsmPatterns(teletextPath);
+            
+            // Update hasLoadedTranslations flag to reflect actual post-reload state
+            hasLoadedTranslations = translations.Count > 0;
+            if (hasLoadedTranslations)
+                CoreConsole.Print($"[{Name}] Reloaded translations: {translations.Count} main translations");
             
             // Reset and re-initialize LateUpdateHandler to find critical UI again
             if (lateUpdateHandler != null)

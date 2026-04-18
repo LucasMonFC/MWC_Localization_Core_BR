@@ -201,7 +201,7 @@ namespace MWC_Localization_Core
                     }
 
                     // Check if line contains unescaped "=" (single-line format)
-                    int equalsIndex = FindUnescapedEquals(line);
+                    int equalsIndex = FindKeyValueSeparatorIndex(line);
                     if (equalsIndex > 0 && !readingValue)
                     {
                         // Single-line format: KEY = VALUE
@@ -241,13 +241,6 @@ namespace MWC_Localization_Core
                     SaveEntry(currentDict, currentIndexList, keyLines, valueLines, ref loadedCount);
                 }
 
-                // Create alias: ChatMessages.Messages uses ChatMessages.All translations
-                Dictionary<string, string> chatAllDict;
-                if (categoryTranslations.TryGetValue("ChatMessages.All", out chatAllDict))
-                {
-                    categoryTranslations["ChatMessages.Messages"] = chatAllDict;
-                }
-
                 CoreConsole.Print($"[TranslationFileParser] Loaded {loadedCount} category-based translations from {categoryTranslations.Count} categories");
             }
             catch (Exception ex)
@@ -256,30 +249,7 @@ namespace MWC_Localization_Core
             }
         }
 
-        /// <summary>
-        /// Find the index of the first unescaped '=' character
-        /// Returns -1 if no unescaped '=' is found
-        /// </summary>
-        private static int FindUnescapedEquals(string line)
-        {
-            for (int i = 0; i < line.Length; i++)
-            {
-                if (line[i] != '=')
-                    continue;
 
-                int backslashCount = 0;
-                for (int j = i - 1; j >= 0 && line[j] == '\\'; j--)
-                {
-                    backslashCount++;
-                }
-
-                bool isEscaped = (backslashCount % 2) == 1;
-                if (!isEscaped)
-                    return i;
-            }
-
-            return -1;
-        }
 
         /// <summary>
         /// Unescape special characters: \= -> =, \n -> newline

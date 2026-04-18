@@ -133,12 +133,13 @@ namespace MWC_Localization_Core
             if (equalsIndex <= 0)
                 return false;
 
-            string original = line.Substring(0, equalsIndex).Trim().ToUpperInvariant();
+            string original = line.Substring(0, equalsIndex).Trim();
             string translation = line.Substring(equalsIndex + 1).Trim();
 
-            // Unescape special characters using unified parser
+            // Unescape special characters first, then uppercase original only
             original = TranslationFileParser.UnescapeValue(original);
             translation = TranslationFileParser.UnescapeValue(translation);
+            original = original.ToUpperInvariant();
 
             if (string.IsNullOrEmpty(original) || string.IsNullOrEmpty(translation))
                 return false;

@@ -47,11 +47,13 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Clear format key cache (chamada em scene changes)
+        /// Clear all runtime caches (including format key cache).
+        /// Consolidated API - use this instead of individual cache clearing.
+        /// Call this on scene changes and reloads.
         /// </summary>
         public static void ClearFormatKeyCache()
         {
-            formatKeyCache.Clear();
+            ClearCaches();  // Delegate to main cache clearing function
         }
 
         // Cache for GameObject paths to improve performance
@@ -168,11 +170,12 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Clear all runtime caches.
+        /// Clear all runtime caches (authoritative cache invalidation).
         /// Call this on scene changes and reloads.
         /// </summary>
         public static void ClearCaches()
         {
+            formatKeyCache.Clear();
             pathCache.Clear();
             gameObjectFindCache.Clear();
             inactiveFsmPathNameCache.Clear();

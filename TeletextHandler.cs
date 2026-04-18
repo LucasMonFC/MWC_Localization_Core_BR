@@ -56,6 +56,9 @@ namespace MWC_Localization_Core
             if (!System.IO.File.Exists(filePath))
             {
                 CoreConsole.Warning($"Teletext translation file not found: {filePath}");
+                // Clear stale data when file is missing
+                categoryTranslations = new Dictionary<string, Dictionary<string, string>>();
+                indexBasedTranslations = new Dictionary<string, List<string>>();
                 return;
             }
 
@@ -65,6 +68,7 @@ namespace MWC_Localization_Core
                 TranslationFileParser.ParseCategoryBasedFile(filePath, out categoryTranslations, out indexBasedTranslations);
 
                 // Create alias: ChatMessages.Messages uses ChatMessages.All translations
+                // (Teletext-specific aliasing - localized to TeletextHandler)
                 Dictionary<string, string> chatAllDict;
                 if (categoryTranslations.TryGetValue("ChatMessages.All", out chatAllDict))
                 {
