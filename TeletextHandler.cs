@@ -247,8 +247,31 @@ namespace MWC_Localization_Core
             translatedArrays.Clear();
             proxyCache.Clear();
         }
+
+        /// <summary>
+        /// Check if any teletext translations are loaded
+        /// </summary>
+        public bool HasTranslations()
+        {
+            if (categoryTranslations.Count == 0 && indexBasedTranslations.Count == 0)
+                return false;
+
+            // Check if any category has actual translations
+            foreach (var category in categoryTranslations.Values)
+            {
+                if (category.Count > 0)
+                    return true;
+            }
+
+            foreach (var indexList in indexBasedTranslations.Values)
+            {
+                if (indexList.Count > 0)
+                    return true;
+            }
+
+            return false;
+        }
     }
 }
-
 
 

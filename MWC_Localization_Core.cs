@@ -341,7 +341,7 @@ namespace MWC_Localization_Core
             string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
             LoadTranslationFile(modTranslationPath);
 
-            hasLoadedTranslations = translations.Count > 0;
+            hasLoadedTranslations = translations.Count > 0 || magazineHandler.HasTranslations() || teletextHandler.HasTranslations();
             if (hasLoadedTranslations)
                 CoreConsole.Print($"[{Name}] Loaded {translations.Count} total translations");
         }
@@ -405,7 +405,7 @@ namespace MWC_Localization_Core
             translator.LoadFsmPatterns(teletextPath);
             
             // Update hasLoadedTranslations flag to reflect actual post-reload state
-            hasLoadedTranslations = translations.Count > 0;
+            hasLoadedTranslations = translations.Count > 0 || magazineHandler.HasTranslations() || teletextHandler.HasTranslations();
             if (hasLoadedTranslations)
                 CoreConsole.Print($"[{Name}] Reloaded translations: {translations.Count} main translations");
             

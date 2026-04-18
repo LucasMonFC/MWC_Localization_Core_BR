@@ -206,7 +206,14 @@ namespace MWC_Localization_Core
                     {
                         // Single-line format: KEY = VALUE
                         string key = line.Substring(0, equalsIndex).Trim();
-                        string value = line.Substring(equalsIndex + 1).Trim();
+
+                        // Only remove a single optional space immediately after '='
+                        int valueStart = equalsIndex + 1;
+                        if (valueStart < line.Length && line[valueStart] == ' ')
+                        {
+                            valueStart++; // Skip single space after '='
+                        }
+                        string value = valueStart < line.Length ? line.Substring(valueStart) : "";
 
                         // Unescape special characters
                         key = UnescapeString(key);
@@ -274,9 +281,9 @@ namespace MWC_Localization_Core
             string key = string.Join("\n", keyLines.ToArray());
             string value = valueLines.Count > 0 ? string.Join("\n", valueLines.ToArray()) : "";
 
-            // Trim trailing/leading empty lines but preserve internal structure
-            key = key.Trim();
-            value = value.Trim();
+            // Only strip wholly empty leading/trailing lines (preserving lines that contain spaces)
+            key = TrimEmptyBoundaryLines(key);
+            value = TrimEmptyBoundaryLines(value);
 
             // Unescape special characters in both key and value
             key = UnescapeString(key);
@@ -288,6 +295,47 @@ namespace MWC_Localization_Core
                 indexList.Add(value); // Add to index list in order
                 count++;
             }
+        }
+
+        /// <summary>
+        /// Trim only wholly empty leading and trailing lines, preserving lines that contain spaces.
+        /// This preserves padding required for fixed-width layouts.
+        /// </summary>
+        private static string TrimEmptyBoundaryLines(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            string[] lines = input.Split('\n');
+            int start = 0;
+            int end = lines.Length - 1;
+
+            // Find first non-empty line
+            while (start <= end && lines[start].Length == 0)
+            {
+                start++;
+            }
+
+            // Find last non-empty line
+            while (end >= start && lines[end].Length == 0)
+            {
+                end--;
+            }
+
+            // If all lines are empty
+            if (start > end)
+                return "";
+
+            // Reconstruct string with only the trimmed range
+            StringBuilder result = new StringBuilder();
+            for (int i = start; i <= end; i++)
+            {
+                if (i > start)
+                    result.Append('\n');
+                result.Append(lines[i]);
+            }
+
+            return result.ToString();
         }
     }
 }

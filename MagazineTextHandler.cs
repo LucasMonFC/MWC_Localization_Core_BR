@@ -108,6 +108,14 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
+        /// Check if any magazine translations are loaded
+        /// </summary>
+        public bool HasTranslations()
+        {
+            return magazineTranslations.Count > 0;
+        }
+
+        /// <summary>
         /// Get translation for a magazine text (case-insensitive lookup)
         /// Returns null if no translation found
         /// </summary>
