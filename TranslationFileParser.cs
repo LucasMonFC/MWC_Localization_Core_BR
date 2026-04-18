@@ -264,17 +264,20 @@ namespace MWC_Localization_Core
         {
             for (int i = 0; i < line.Length; i++)
             {
-                if (line[i] == '=')
+                if (line[i] != '=')
+                    continue;
+
+                int backslashCount = 0;
+                for (int j = i - 1; j >= 0 && line[j] == '\\'; j--)
                 {
-                    // Check if it's escaped (preceded by backslash)
-                    if (i > 0 && line[i - 1] == '\\')
-                    {
-                        // This equals is escaped, skip it
-                        continue;
-                    }
-                    return i;
+                    backslashCount++;
                 }
+
+                bool isEscaped = (backslashCount % 2) == 1;
+                if (!isEscaped)
+                    return i;
             }
+
             return -1;
         }
 
