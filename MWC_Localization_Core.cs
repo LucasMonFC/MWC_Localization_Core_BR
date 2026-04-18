@@ -341,6 +341,7 @@ namespace MWC_Localization_Core
 
             string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
             LoadTranslationFile(modTranslationPath);
+            translator.LoadFsmPatterns(modTranslationPath);
 
             hasLoadedTranslations = translations.Count > 0 || magazineHandler.HasTranslations() || teletextHandler.HasTranslations();
             if (hasLoadedTranslations)
@@ -387,12 +388,15 @@ namespace MWC_Localization_Core
             // Reload all translation files using unified helper
             string mscTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_msc.txt");
             LoadTranslationFile(mscTranslationPath);
+            translator.LoadFsmPatterns(mscTranslationPath);
 
             string translationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
             LoadTranslationFile(translationPath);
+            translator.LoadFsmPatterns(translationPath);
 
             string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
             LoadTranslationFile(modTranslationPath);
+            translator.LoadFsmPatterns(modTranslationPath);
 
             // Reload magazine translations
             string magazinePath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_magazine.txt");
