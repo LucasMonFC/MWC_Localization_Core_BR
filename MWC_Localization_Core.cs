@@ -336,6 +336,7 @@ namespace MWC_Localization_Core
 
             string translationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
             LoadTranslationFile(translationPath);
+            translator.LoadFsmPatterns(translationPath);
 
             string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
             LoadTranslationFile(modTranslationPath);
@@ -347,8 +348,8 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Load a translation file and merge results into the main translations dictionary
         /// Helper to avoid code duplication when loading multiple translation files
-        /// Note: FSM patterns are loaded separately via translator.LoadFsmPatterns() in ReloadTranslations()
-        /// and explicitly for teletext in PostLoad() - not here.
+        /// Note: FSM patterns for translate.txt are loaded separately in LoadTranslations()
+        /// Additional patterns for teletext loaded in PostLoad() and ReloadTranslations()
         /// </summary>
         private void LoadTranslationFile(string filePath)
         {
