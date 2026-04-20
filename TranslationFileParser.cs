@@ -208,15 +208,13 @@ namespace MWC_Localization_Core
                     if (equalsIndex > 0 && !readingValue)
                     {
                         // Single-line format: KEY = VALUE
+                        // Teletext format historically trims both sides - individual category
+                        // entries don't carry leading/trailing whitespace the way translate.txt
+                        // concatenation fragments do, and the lookup side (TranslateArrayListProxy)
+                        // trims the game-provided original before dict lookup, so preserving
+                        // trailing whitespace here would cause keys to silently miss.
                         string key = line.Substring(0, equalsIndex).Trim();
-
-                        // Only remove a single optional space immediately after '='
-                        int valueStart = equalsIndex + 1;
-                        if (valueStart < line.Length && line[valueStart] == ' ')
-                        {
-                            valueStart++; // Skip single space after '='
-                        }
-                        string value = valueStart < line.Length ? line.Substring(valueStart) : "";
+                        string value = line.Substring(equalsIndex + 1).Trim();
 
                         // Unescape special characters
                         key = UnescapeString(key);
@@ -284,9 +282,13 @@ namespace MWC_Localization_Core
             string key = string.Join("\n", keyLines.ToArray());
             string value = valueLines.Count > 0 ? string.Join("\n", valueLines.ToArray()) : "";
 
-            // Only strip wholly empty leading/trailing lines (preserving lines that contain spaces)
-            key = TrimEmptyBoundaryLines(key);
-            value = TrimEmptyBoundaryLines(value);
+            // Match the pre-refactor teletext parser: strip boundary whitespace (including
+            // trailing spaces on the last content line and the leading newline introduced by
+            // "=" on its own line). The lookup side (TranslateArrayListProxy) trims the
+            // game-provided original before dict lookup, so keys must be trimmed here to
+            // match; values get trimmed for consistency.
+            key = key.Trim();
+            value = value.Trim();
 
             // Unescape special characters in both key and value
             key = UnescapeString(key);
@@ -300,47 +302,5 @@ namespace MWC_Localization_Core
             }
         }
 
-        /// <summary>
-        /// Trim only wholly empty leading and trailing lines, preserving lines that contain spaces.
-        /// This preserves padding required for fixed-width layouts.
-        /// </summary>
-        private static string TrimEmptyBoundaryLines(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return input;
-
-            string[] lines = input.Split('\n');
-            int start = 0;
-            int end = lines.Length - 1;
-
-            // Find first non-empty line
-            while (start <= end && lines[start].Length == 0)
-            {
-                start++;
-            }
-
-            // Find last non-empty line
-            while (end >= start && lines[end].Length == 0)
-            {
-                end--;
-            }
-
-            // If all lines are empty
-            if (start > end)
-                return "";
-
-            // Reconstruct string with only the trimmed range
-            StringBuilder result = new StringBuilder();
-            for (int i = start; i <= end; i++)
-            {
-                if (i > start)
-                    result.Append('\n');
-                result.Append(lines[i]);
-            }
-
-            string trimmedResult = result.ToString();
-            result.Length = 0;  // NET 3.5 compatible: reset StringBuilder for reuse
-            return trimmedResult;
-        }
     }
 }
