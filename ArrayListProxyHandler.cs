@@ -304,9 +304,10 @@ namespace MWC_Localization_Core
                     }
                 }
 
-                // Mark this parent path as complete if we found the parent and processed all its TextMeshes
-                // (If anyNewFonts is false, it means all TextMeshes were already processed)
-                if (!anyNewFonts)
+                // Only mark this parent path as complete if we actually found TextMeshes under it
+                // and none of them produced a new font application. If textMeshes.Length == 0 the
+                // parent exists but children haven't been lazy-loaded yet - retry on the next tick.
+                if (textMeshes.Length > 0 && !anyNewFonts)
                 {
                     completedParentPaths.Add(parentPath);
                 }

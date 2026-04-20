@@ -217,6 +217,15 @@ namespace MWC_Localization_Core
                     lateUpdateHandlerObject = null;
                     lateUpdateHandler = null;
                 }
+
+                // Tear down the FSM hook when leaving MainMenu/GAME so its coroutine
+                // doesn't keep polling in scenes that have no FSM targets.
+                if (currentScene != "MainMenu" && currentScene != "GAME" && fsmTextHookObject != null)
+                {
+                    Object.Destroy(fsmTextHookObject);
+                    fsmTextHookObject = null;
+                }
+
                 CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
             }
 
@@ -294,6 +303,9 @@ namespace MWC_Localization_Core
 
                 foreach (var pair in config.FontMappings)
                 {
+                    if (string.IsNullOrEmpty(pair.Key) || string.IsNullOrEmpty(pair.Value))
+                        continue;
+
                     Font font = fontBundle.LoadAsset(pair.Value, typeof(Font)) as Font;
                     if (font != null)
                     {
@@ -469,11 +481,15 @@ namespace MWC_Localization_Core
             // Reset managers
             sceneManager.ResetAll();
             textMeshMonitor.Clear();
-            
+
             // Reset teletext handler
             teletextHandler.Reset();
             arrayListHandler.Reset();
             hashTableHandler.Reset();
+
+            // Reload custom font mappings from config so edits to FontMappings take effect.
+            customFonts.Clear();
+            LoadCustomFonts();
 
             // Reapply fonts and adjustments to all TextMeshes (after restore)
             TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();
@@ -498,7 +514,11 @@ namespace MWC_Localization_Core
                 InitializeFsmTextHook();
             }
 
-            CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");
+            int totalTranslationsReloaded = translations.Count
+                + magazineHandler.GetTranslationCount()
+                + teletextHandler.GetTranslationCount();
+
+            CoreConsole.Print($"[{Name}] [F8] Reloaded {totalTranslationsReloaded} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");
         }
 
         void InitializeFsmTextHook()

@@ -29,6 +29,9 @@ namespace MWC_Localization_Core
         
         // Track which arrays have been translated already
         private HashSet<string> translatedArrays = new HashSet<string>();
+
+        // Total translations loaded on the most recent LoadTeletextTranslations call.
+        private int lastLoadedTranslationCount = 0;
         
         // GameObject path to category mapping
         private Dictionary<string, string> pathPrefixes = new Dictionary<string, string>
@@ -60,11 +63,32 @@ namespace MWC_Localization_Core
             categoryTranslations = loadedCategoryTranslations;
             indexBasedTranslations = loadedIndexBasedTranslations;
 
-            // Create alias: ChatMessages.Messages uses ChatMessages.All translations
+            // Create alias: ChatMessages.Messages uses ChatMessages.All translations.
+            // Mirror the alias on the index-based map too so the ordered fallback in
+            // TranslateArrayListProxy works for ChatMessages.Messages - otherwise entries
+            // that don't exact-match by key fall through with no translation at all.
             if (categoryTranslations.TryGetValue("ChatMessages.All", out Dictionary<string, string> chatAllDict))
             {
                 categoryTranslations["ChatMessages.Messages"] = chatAllDict;
             }
+            if (indexBasedTranslations.TryGetValue("ChatMessages.All", out List<string> chatAllList))
+            {
+                indexBasedTranslations["ChatMessages.Messages"] = chatAllList;
+            }
+
+            lastLoadedTranslationCount = 0;
+            foreach (var category in categoryTranslations.Values)
+            {
+                lastLoadedTranslationCount += category.Count;
+            }
+        }
+
+        /// <summary>
+        /// Get total count of loaded teletext translations (sum across categories).
+        /// </summary>
+        public int GetTranslationCount()
+        {
+            return lastLoadedTranslationCount;
         }
 
         /// <summary>
