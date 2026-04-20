@@ -14,6 +14,7 @@ namespace MWC_Localization_Core
     {
         private Dictionary<string, string> translations;
         private GameObject hostObject;
+        private Coroutine applyWhenReadyCoroutine;
         private PatternMatcher patternMatcher;
         private string appliedTarget;
         private HashSet<string> loggedReadyTargets = new HashSet<string>();
@@ -50,8 +51,10 @@ namespace MWC_Localization_Core
             PosUse,
             PosTyper,
             TeletextBuildStringPattern,
+            TeletextBuildStringSimple,
             TeletextWeatherUpdaterTokens,
-            UnemployPaperButtonVariables
+            UnemployPaperButtonVariables,
+            ConlineChatStatus
         }
 
         private sealed class FsmStrategyTarget
@@ -148,7 +151,18 @@ namespace MWC_Localization_Core
                 "TTX_DATA_READY",
                 "[FsmTextHook] Teletext Data FSM bottomline targets are ready.",
                 "State 1",
-                3)
+                3),
+            // Chat-TV clock label (e.g. "KLO" prefix) uses a BuildString action; only part[0]
+            // should be translated - the other parts hold dynamic time/date values.
+            new FsmStrategyTarget(
+                "Systems/TV/TVGraphics/CHAT/Day/Time",
+                "Clock",
+                FsmStrategyType.TeletextBuildStringSimple,
+                "GAME Teletext Clock",
+                "TTX_CLOCK_READY",
+                "[FsmTextHook] Teletext Clock FSM target is ready.",
+                "State 3",
+                2)
         };
 
         private static readonly string TeletextEnnusteUpdaterPrefix = "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste/";
@@ -202,6 +216,23 @@ namespace MWC_Localization_Core
             return targets.ToArray();
         }
 
+        // CONLINE chat-status target: FSM nested setProperty on Download/Fail states that
+        // pushes status strings (e.g. "ONLINE", "CALL FAILED") into an FsmString on the
+        // chat-TV UI. The nested reflection doesn't always resolve on the first ready check,
+        // so this strategy is intentionally retried until it actually makes a change.
+        private static readonly FsmStrategyTarget[] GameConlineTargets = new FsmStrategyTarget[]
+        {
+            new FsmStrategyTarget(
+                "COMPUTER/SYSTEM/TELEBBS/CONLINE/CHAT",
+                "Type",
+                FsmStrategyType.ConlineChatStatus,
+                "GAME Conline Chat",
+                "CONLINE_CHAT_READY",
+                "[FsmTextHook] Conline Chat FSM target is ready.",
+                null,
+                -1)
+        };
+
         public void Initialize(Dictionary<string, string> translations, GameObject hostObject, string[] patternFiles)
         {
             this.translations = translations;
@@ -220,7 +251,7 @@ namespace MWC_Localization_Core
                 }
             }
 
-            StartCoroutine(ApplyWhenReady());
+            applyWhenReadyCoroutine = StartCoroutine(ApplyWhenReady());
         }
 
         private IEnumerator ApplyWhenReady()
@@ -265,6 +296,7 @@ namespace MWC_Localization_Core
             anyChanged |= TryApplyGameTeletextBottomlineFsmTranslations();
             anyChanged |= TryApplyGameTeletextWeatherUpdaterFsmTranslations();
             anyChanged |= TryApplyGameUnemployPaperFsmTranslations();
+            anyChanged |= TryApplyGameConlineChatFsmTranslations();
 
             if (anyChanged)
             {
@@ -380,6 +412,21 @@ namespace MWC_Localization_Core
             return anyChanged || hasAnyTarget;
         }
 
+        private bool TryApplyGameConlineChatFsmTranslations()
+        {
+            bool anyChanged = false;
+            bool hasAnyTarget = false;
+
+            ApplyStrategyTargets(GameConlineTargets, ref anyChanged, ref hasAnyTarget);
+
+            if (anyChanged)
+            {
+                appliedTarget = "GAME Conline Chat";
+            }
+
+            return anyChanged || hasAnyTarget;
+        }
+
         private void ApplyStrategyTargets(FsmStrategyTarget[] targets, ref bool anyChanged, ref bool hasAnyTarget)
         {
             if (targets == null || targets.Length == 0)
@@ -400,8 +447,18 @@ namespace MWC_Localization_Core
                     continue;
 
                 LogReadyOnce(target.ReadyLogKey, target.ReadyLogMessage);
-                ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget);
-                completedStrategyTargets.Add(targetKey);
+
+                bool strategyChanged;
+                ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget, out strategyChanged);
+
+                // ConlineChatStatus reaches through nested FsmString properties and may not
+                // succeed on the first ready check even when the FSM reports Initialized.
+                // Keep retrying that strategy until it actually translates something; every
+                // other strategy is fine to mark complete immediately.
+                if (strategyChanged || target.Strategy != FsmStrategyType.ConlineChatStatus)
+                {
+                    completedStrategyTargets.Add(targetKey);
+                }
             }
         }
 
@@ -410,10 +467,13 @@ namespace MWC_Localization_Core
             return target.ObjectPath + "|" + target.FsmName + "|" + target.Strategy.ToString() + "|" + target.StateName + "|" + target.ActionIndex.ToString();
         }
 
-        private void ApplyStrategyForTarget(FsmStrategyTarget target, PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget)
+        private void ApplyStrategyForTarget(FsmStrategyTarget target, PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget, out bool strategyChanged)
         {
+            strategyChanged = false;
             if (target == null || fsm == null)
                 return;
+
+            bool beforeChanged = anyChanged;
 
             switch (target.Strategy)
             {
@@ -447,6 +507,13 @@ namespace MWC_Localization_Core
                     hasAnyTarget |= HasState(fsm, target.StateName);
                     break;
 
+                case FsmStrategyType.TeletextBuildStringSimple:
+                    // Translate only part[0] (e.g. "KLO " -> localized prefix) and leave the
+                    // dynamic time/date parts 1 and 2 untouched.
+                    anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, target.StateName, target.ActionIndex, false, 1, 2);
+                    hasAnyTarget |= HasState(fsm, target.StateName);
+                    break;
+
                 case FsmStrategyType.TeletextWeatherUpdaterTokens:
                     ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged, ref hasAnyTarget);
                     break;
@@ -455,12 +522,19 @@ namespace MWC_Localization_Core
                     anyChanged |= ApplyUnemployPaperButtonVariableTranslations(fsm);
                     hasAnyTarget = true;
                     break;
+
+                case FsmStrategyType.ConlineChatStatus:
+                    anyChanged |= ApplyConlineChatStatusTranslations(fsm);
+                    hasAnyTarget = true;
+                    break;
             }
 
             if (anyChanged && !string.IsNullOrEmpty(target.AppliedLabel))
             {
                 appliedTarget = target.AppliedLabel;
             }
+
+            strategyChanged = (anyChanged != beforeChanged);
         }
 
         private void LogReadyOnce(string key, string message)
@@ -504,6 +578,66 @@ namespace MWC_Localization_Core
             changed |= TranslateFsmStringVariableExact(fsm, "JobYes");
 
             return changed;
+        }
+
+        // Translate status strings written into a nested FsmString via setProperty actions
+        // inside the CHAT/Type FSM (Download + Fail states).
+        private bool ApplyConlineChatStatusTranslations(PlayMakerFSM fsm)
+        {
+            if (fsm == null || fsm.FsmStates == null)
+                return false;
+
+            bool changed = false;
+            changed |= ApplyConlineNestedTranslation(fsm, "Download", 1);
+            changed |= ApplyConlineNestedTranslation(fsm, "Fail", 0);
+            return changed;
+        }
+
+        private bool ApplyConlineNestedTranslation(PlayMakerFSM fsm, string stateName, int actionIndex)
+        {
+            if (fsm == null || fsm.FsmStates == null)
+                return false;
+
+            HutongGames.PlayMaker.FsmState state = null;
+            for (int i = 0; i < fsm.FsmStates.Length; i++)
+            {
+                if (fsm.FsmStates[i] != null && fsm.FsmStates[i].Name == stateName)
+                {
+                    state = fsm.FsmStates[i];
+                    break;
+                }
+            }
+
+            if (state == null || state.Actions == null || actionIndex < 0 || actionIndex >= state.Actions.Length)
+                return false;
+
+            object action = state.Actions[actionIndex];
+            if (action == null)
+                return false;
+
+            FieldInfo targetPropertyField = GetCachedField(action.GetType(), "targetProperty");
+            if (targetPropertyField == null)
+                return false;
+
+            object targetProperty = targetPropertyField.GetValue(action);
+            if (targetProperty == null)
+                return false;
+
+            FieldInfo stringParamField = GetCachedField(targetProperty.GetType(), "StringParameter");
+            if (stringParamField == null)
+                return false;
+
+            HutongGames.PlayMaker.FsmString fsmString = stringParamField.GetValue(targetProperty) as HutongGames.PlayMaker.FsmString;
+            if (fsmString == null || string.IsNullOrEmpty(fsmString.Value))
+                return false;
+
+            string original = fsmString.Value;
+            string translated = GetTranslation(original, original);
+            if (translated == original)
+                return false;
+
+            fsmString.Value = translated;
+            return true;
         }
 
         private bool TranslateFsmStringVariableExact(PlayMakerFSM fsm, string variableName)
@@ -718,17 +852,26 @@ namespace MWC_Localization_Core
                 return false;
 
             bool changed = false;
+            bool patternResolved = false;
             if (allowPatternSplit && isBuildStringFast)
             {
-                changed = ApplyBuildStringFastPatternTranslation(fsm, stateName, actionIndex, parts);
+                patternResolved = ApplyBuildStringFastPatternTranslation(fsm, stateName, actionIndex, parts);
+                changed = patternResolved;
             }
 
-            for (int i = 0; i < parts.Length; i++)
+            // If the pattern path rewrote parts[0]/parts[2] around parts[1], DON'T then
+            // run per-part translation - it would double-translate the already rewritten
+            // prefix/suffix and corrupt the result. Only fall back to per-part when no
+            // pattern matched.
+            if (!patternResolved)
             {
-                if (ShouldSkipIndex(i, skipPartIndexes))
-                    continue;
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    if (ShouldSkipIndex(i, skipPartIndexes))
+                        continue;
 
-                changed |= TranslateStringPart(parts[i]);
+                    changed |= TranslateStringPart(parts[i]);
+                }
             }
 
             return changed;
@@ -765,6 +908,16 @@ namespace MWC_Localization_Core
 
             string newPrefix = translatedCombined.Substring(0, middleIndex);
             string newSuffix = translatedCombined.Substring(middleIndex + middleValue.Length);
+
+            // If parts[0]/parts[2] already match the translated prefix/suffix, the pattern
+            // has already been applied on a previous tick. Return true so the caller still
+            // treats this as "pattern-resolved" (skipping per-part translation) without
+            // needlessly writing back identical values.
+            string currentPart0 = part0.Value ?? string.Empty;
+            string currentPart2 = part2.Value ?? string.Empty;
+            if (currentPart0 == newPrefix && currentPart2 == newSuffix)
+                return true;
+
             bool changed = false;
 
             if (part0.Value != newPrefix)
@@ -1050,6 +1203,24 @@ namespace MWC_Localization_Core
         {
             if (hostObject != null)
                 Object.Destroy(hostObject);
+        }
+
+        private void OnDestroy()
+        {
+            // Stop the still-running ApplyWhenReady coroutine so it doesn't keep polling
+            // (and holding references to translations/hostObject) after this hook is torn
+            // down - e.g. on scene change or F8 reload.
+            if (applyWhenReadyCoroutine != null)
+            {
+                StopCoroutine(applyWhenReadyCoroutine);
+                applyWhenReadyCoroutine = null;
+            }
+
+            if (hostObject != null)
+            {
+                Object.Destroy(hostObject);
+                hostObject = null;
+            }
         }
     }
 }

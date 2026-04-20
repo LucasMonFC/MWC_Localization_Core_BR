@@ -29,6 +29,9 @@ namespace MWC_Localization_Core
         
         // Track which arrays have been translated already
         private HashSet<string> translatedArrays = new HashSet<string>();
+
+        // Total translations loaded on the most recent LoadTeletextTranslations call.
+        private int lastLoadedTranslationCount = 0;
         
         // GameObject path to category mapping
         private Dictionary<string, string> pathPrefixes = new Dictionary<string, string>
@@ -65,6 +68,20 @@ namespace MWC_Localization_Core
             {
                 categoryTranslations["ChatMessages.Messages"] = chatAllDict;
             }
+
+            lastLoadedTranslationCount = 0;
+            foreach (var category in categoryTranslations.Values)
+            {
+                lastLoadedTranslationCount += category.Count;
+            }
+        }
+
+        /// <summary>
+        /// Get total count of loaded teletext translations (sum across categories).
+        /// </summary>
+        public int GetTranslationCount()
+        {
+            return lastLoadedTranslationCount;
         }
 
         /// <summary>
