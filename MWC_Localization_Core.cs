@@ -335,29 +335,31 @@ namespace MWC_Localization_Core
                     if (string.IsNullOrEmpty(line) || line.TrimStart().StartsWith("#"))
                         continue;
 
-                    int separatorIndex = FindKeyValueSeparatorIndex(line);
+                    int separatorIndex = TranslationFileParser.FindKeyValueSeparator(line);
                     if (separatorIndex > 0)
                     {
-                        string key = line.Substring(0, separatorIndex).Trim().Replace("\\=", "=");
-                        // Preserve intentional leading AND trailing spaces in translation values.
-                        // Spaces are needed for proper formatting in concatenated strings
-                        string value = line.Substring(separatorIndex + 1).Replace("\\=", "=");
+                        string rawKey = line.Substring(0, separatorIndex).Trim();
+                        string rawValue = line.Substring(separatorIndex + 1);
+
+                        // Unescape \= -> = in key; apply full unescape (\= and \n) to value
+                        string unescapedKey = rawKey.Replace("\\=", "=");
+                        string unescapedValue = TranslationFileParser.UnescapeValue(rawValue);
 
                         // Common authoring style is: "key = value".
-                        // In that specific case, drop only the single separator space.
+                        // In that specific case, drop only the single separator space so
+                        // intentional leading/trailing spacing is preserved.
                         if (line.Length > separatorIndex + 1 && line[separatorIndex + 1] == ' ')
                         {
                             bool hasSecondSpace = (line.Length > separatorIndex + 2 && line[separatorIndex + 2] == ' ');
-                            if (!hasSecondSpace && value.Length > 0 && value[0] == ' ')
-                                value = value.Substring(1);
+                            if (!hasSecondSpace && unescapedValue.Length > 0 && unescapedValue[0] == ' ')
+                                unescapedValue = unescapedValue.Substring(1);
                         }
 
-                        string normalizedKey = MLCUtils.FormatUpperKey(key);
-                        string processedValue = value.Replace("\\n", "\n");
+                        string normalizedKey = MLCUtils.FormatUpperKey(unescapedKey);
 
                         if (!string.IsNullOrEmpty(normalizedKey))
                         {
-                            translations[normalizedKey] = processedValue;
+                            translations[normalizedKey] = unescapedValue;
                         }
                     }
                 }
@@ -369,27 +371,6 @@ namespace MWC_Localization_Core
             {
                 CoreConsole.Error($"[{Name}] Failed to load translations: {ex.Message}");
             }
-        }
-
-        private static int FindKeyValueSeparatorIndex(string line)
-        {
-            for (int i = 0; i < line.Length; i++)
-            {
-                if (line[i] != '=')
-                    continue;
-
-                int backslashCount = 0;
-                for (int j = i - 1; j >= 0 && line[j] == '\\'; j--)
-                {
-                    backslashCount++;
-                }
-
-                bool isEscaped = (backslashCount % 2) == 1;
-                if (!isEscaped)
-                    return i;
-            }
-
-            return -1;
         }
 
         void LoadTranslations()
