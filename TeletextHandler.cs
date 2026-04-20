@@ -63,10 +63,17 @@ namespace MWC_Localization_Core
             categoryTranslations = loadedCategoryTranslations;
             indexBasedTranslations = loadedIndexBasedTranslations;
 
-            // Create alias: ChatMessages.Messages uses ChatMessages.All translations
+            // Create alias: ChatMessages.Messages uses ChatMessages.All translations.
+            // Mirror the alias on the index-based map too so the ordered fallback in
+            // TranslateArrayListProxy works for ChatMessages.Messages - otherwise entries
+            // that don't exact-match by key fall through with no translation at all.
             if (categoryTranslations.TryGetValue("ChatMessages.All", out Dictionary<string, string> chatAllDict))
             {
                 categoryTranslations["ChatMessages.Messages"] = chatAllDict;
+            }
+            if (indexBasedTranslations.TryGetValue("ChatMessages.All", out List<string> chatAllList))
+            {
+                indexBasedTranslations["ChatMessages.Messages"] = chatAllList;
             }
 
             lastLoadedTranslationCount = 0;
