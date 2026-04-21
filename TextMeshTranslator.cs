@@ -146,18 +146,6 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Some TV paths rely on runtime material/shader properties for tint/visibility effects.
-        /// </summary>
-        private bool IsRuntimeSensitiveTvPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return false;
-
-            return path.Contains("Systems/TV/TVGraphics/") ||
-                   path.Contains("Systems/TV/Teletext/VKTekstiTV/");
-        }
-
-        /// <summary>
         /// Handle complex text patterns (magazine text, cashier price line)
         /// Now uses unified pattern matcher for all pattern-based translations
         /// </summary>
