@@ -46,6 +46,14 @@ namespace MWC_Localization_Core
         /// Use for dynamically created TextMeshes that appear after the initial scan.
         /// </summary>
         LateTranslateOnce,
+
+        /// <summary>
+        /// Apply the localized font once when the TextMesh becomes available, then stop monitoring.
+        /// Use for TextMeshes whose text is already translated upstream at the data source
+        /// (e.g. TeletextHandler / ArrayListProxyHandler / FsmTextHook mutate the backing data),
+        /// so no translation is needed - only the font swap.
+        /// </summary>
+        LateApplyFontOnce,
     }
 
     /// <summary>

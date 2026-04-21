@@ -131,7 +131,11 @@ namespace MWC_Localization_Core
             // Teletext/FSM displays are primarily translated at array/FSM source level.
             // Use one-shot late registration to avoid rescanning large TV trees continuously.
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.LateTranslateOnce);
-            AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateTranslateOnce);
+            // CHAT/Generated/Lines is already translated upstream by TeletextHandler via the
+            // Systems/TV/ChatMessages array, so the TextMesh text never matches a dictionary
+            // key on this end. Apply the font once and stop monitoring - no translation pass
+            // would ever succeed here.
+            AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateApplyFontOnce);
 
             // Magazine / Sheets - on visibility change
             AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
@@ -161,6 +165,7 @@ namespace MWC_Localization_Core
             {
                 MonitoringStrategy strategy = pathRules[parentPath];
                 if (strategy == MonitoringStrategy.LateTranslateOnce ||
+                    strategy == MonitoringStrategy.LateApplyFontOnce ||
                     strategy == MonitoringStrategy.OnVisibilityChange ||
                     strategy == MonitoringStrategy.Persistent)
                 {
@@ -215,19 +220,38 @@ namespace MWC_Localization_Core
 
             // Get all TextMesh components under this parent
             TextMesh[] textMeshes = parent.GetComponentsInChildren<TextMesh>(true);
+
+            // Font-only fast path: these TextMeshes are translated upstream at the data
+            // source, so we only need to swap the font once and then forget about them.
+            // No per-instance tracking or follow-up monitoring is needed - the translator's
+            // appliedFontCache already prevents redundant re-application.
+            if (finalStrategy == MonitoringStrategy.LateApplyFontOnce)
+            {
+                foreach (var textMesh in textMeshes)
+                {
+                    if (textMesh == null)
+                        continue;
+
+                    string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
+                    translator.ApplyFontOnly(textMesh, textMeshPath);
+                    registeredCount++;
+                }
+                return registeredCount;
+            }
+
             foreach (var textMesh in textMeshes)
             {
                 if (textMesh == null)
                     continue;
 
                 int instanceID = textMesh.GetInstanceID();
-                
+
                 // Skip if this specific instance is already registered
                 if (instanceEntries.ContainsKey(instanceID))
                     continue;
 
                 string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
-                
+
                 // Translate first to reduce visible unlocalized text
                 bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath, null);
 
