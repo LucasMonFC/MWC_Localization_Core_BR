@@ -122,33 +122,22 @@ namespace MWC_Localization_Core
                 MeshRenderer renderer = textMesh.GetComponent<MeshRenderer>();
                 if (renderer != null && customFont.material != null)
                 {
-                    if (IsRuntimeSensitiveTvPath(path))
-                    {
-                        Texture targetMainTexture = customFont.material.mainTexture;
-                        int rendererInstanceID = renderer.GetInstanceID();
-                        bool needsTextureApply = !appliedRuntimeTextureCache.TryGetValue(rendererInstanceID, out Texture cachedTexture)
-                            || cachedTexture != targetMainTexture;
+                    Texture targetMainTexture = customFont.material.mainTexture;
+                    int rendererInstanceID = renderer.GetInstanceID();
+                    bool needsTextureApply = !appliedRuntimeTextureCache.TryGetValue(rendererInstanceID, out Texture cachedTexture)
+                        || cachedTexture != targetMainTexture;
 
-                        if (needsTextureApply && targetMainTexture != null)
-                        {
-                            // Keep the runtime material/shader setup intact and swap only the atlas texture.
-                            Material runtimeMaterial = renderer.material;
-                            if (runtimeMaterial != null && runtimeMaterial.mainTexture != targetMainTexture)
-                            {
-                                runtimeMaterial.mainTexture = targetMainTexture;
-                            }
-
-                            appliedRuntimeTextureCache[rendererInstanceID] = targetMainTexture;
-                        }
-                    }
-                    else
+                    if (needsTextureApply && targetMainTexture != null)
                     {
-                        // Do not mutate shared material textures in-place.
-                        // Rebinding the renderer material avoids corrupting other font atlases.
-                        if (renderer.sharedMaterial != customFont.material)
+                        // Always preserve original material properties (colors, tints, etc.) by swapping only the atlas texture.
+                        // This works for both TV and non-TV paths and preserves custom colors like yellow text.
+                        Material runtimeMaterial = renderer.material;
+                        if (runtimeMaterial != null && runtimeMaterial.mainTexture != targetMainTexture)
                         {
-                            renderer.sharedMaterial = customFont.material;
+                            runtimeMaterial.mainTexture = targetMainTexture;
                         }
+
+                        appliedRuntimeTextureCache[rendererInstanceID] = targetMainTexture;
                     }
                 }
 
