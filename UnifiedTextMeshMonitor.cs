@@ -131,11 +131,11 @@ namespace MWC_Localization_Core
             // Teletext/FSM displays are primarily translated at array/FSM source level.
             // Use one-shot late registration to avoid rescanning large TV trees continuously.
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.LateTranslateOnce);
-            // CHAT/Generated/Lines is already translated upstream by TeletextHandler via the
-            // Systems/TV/ChatMessages array, so the TextMesh text never matches a dictionary
-            // key on this end. Apply the font once and stop monitoring - no translation pass
-            // would ever succeed here.
+            // CHAT/Generated/Lines is already translated upstream by TeletextHandler, 
+            // so the TextMesh text never matches a dictionary key on this end. 
+            // Apply the font once and stop monitoring - no translation pass would ever succeed here.
             AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateApplyFontOnce);
+            AddPathRule("Systems/TV/TVGraphics/CHAT/Day/Time", MonitoringStrategy.LateApplyFontOnce);
 
             // Magazine / Sheets - on visibility change
             AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
