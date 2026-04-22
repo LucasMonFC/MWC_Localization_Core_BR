@@ -156,6 +156,22 @@ namespace MWC_Localization_Core
             pathRules[pathPattern] = strategy;
         }
 
+        // A parent scan (e.g. FastPolling on "CHAT/Day") must not absorb TextMeshes that have
+        // their own more-specific rule (e.g. LateApplyFontOnce on "CHAT/Day/Time"), or the
+        // one-shot rule gets silently demoted into continuous polling.
+        private bool HasMoreSpecificRule(string textMeshPath, string parentPath)
+        {
+            int parentLen = parentPath.Length;
+            foreach (var rule in pathRules.Keys)
+            {
+                if (rule.Length <= parentLen)
+                    continue;
+                if (rule == textMeshPath || textMeshPath.StartsWith(rule + "/"))
+                    return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Register all TextMeshes under defined path rules
         /// </summary>
@@ -233,6 +249,8 @@ namespace MWC_Localization_Core
                         continue;
 
                     string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
+                    if (HasMoreSpecificRule(textMeshPath, parentPath))
+                        continue;
                     translator.ApplyFontOnly(textMesh, textMeshPath);
                     registeredCount++;
                 }
@@ -251,6 +269,11 @@ namespace MWC_Localization_Core
                     continue;
 
                 string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
+
+                // A more-specific path rule (e.g. child Late/OnVisibility rule) must handle this
+                // TextMesh instead of it being captured by this parent scan.
+                if (HasMoreSpecificRule(textMeshPath, parentPath))
+                    continue;
 
                 // Translate first to reduce visible unlocalized text
                 bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath, null);
