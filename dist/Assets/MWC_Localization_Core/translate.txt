@@ -498,10 +498,12 @@ PRACTICE RESULTS = 연습 결과
 Amateur = 아마추어
 
 //// Rally Results
-Time penalty: 0 sec. = 시간 패널티: 0초.
-Jump start violation: 0x = 이른 출발 위반: 0x
-Parc Ferme violation: 0x = 주정차 영역 이탈: 0x
 Junior Cup - Luokitus 1/10 = 주니어 컵 - 클래스 1/10
+Time penalty: {0} sec. = 시간 패널티: {0}초
+Parc Ferme violation: {0}x = 주정차 영역 이탈: {0}x
+Jump start violation: {0}x = 이른 출발 위반: {0}x
+Junior - Class {0} = 주니어 - 클래스 {0}
+Amateur - Class {0} = 아마추어 - 클래스 {0}
 
 //// Job Contract
 5.1 klo 18:00 = 1월 5일 18:00

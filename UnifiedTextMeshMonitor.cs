@@ -142,6 +142,8 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/ServiceBrochure", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("Sheets/RallyResults", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("Sheets/RallyRegistration/Functions/Class", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
 
             // Magazine / Sheets - persistent monitoring due to dynamic content changes and rebuilds
