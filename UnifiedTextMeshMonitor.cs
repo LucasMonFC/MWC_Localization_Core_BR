@@ -131,7 +131,11 @@ namespace MWC_Localization_Core
             // Teletext/FSM displays are primarily translated at array/FSM source level.
             // Use one-shot late registration to avoid rescanning large TV trees continuously.
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.LateTranslateOnce);
-            AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateTranslateOnce);
+            // CHAT/Generated/Lines is already translated upstream by TeletextHandler, 
+            // so the TextMesh text never matches a dictionary key on this end. 
+            // Apply the font once and stop monitoring - no translation pass would ever succeed here.
+            AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateApplyFontOnce);
+            AddPathRule("Systems/TV/TVGraphics/CHAT/Day/Time", MonitoringStrategy.LateApplyFontOnce);
 
             // Magazine / Sheets - on visibility change
             AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
@@ -152,6 +156,22 @@ namespace MWC_Localization_Core
             pathRules[pathPattern] = strategy;
         }
 
+        // A parent scan (e.g. FastPolling on "CHAT/Day") must not absorb TextMeshes that have
+        // their own more-specific rule (e.g. LateApplyFontOnce on "CHAT/Day/Time"), or the
+        // one-shot rule gets silently demoted into continuous polling.
+        private bool HasMoreSpecificRule(string textMeshPath, string parentPath)
+        {
+            int parentLen = parentPath.Length;
+            foreach (var rule in pathRules.Keys)
+            {
+                if (rule.Length <= parentLen)
+                    continue;
+                if (rule == textMeshPath || textMeshPath.StartsWith(rule + "/"))
+                    return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Register all TextMeshes under defined path rules
         /// </summary>
@@ -160,14 +180,18 @@ namespace MWC_Localization_Core
             foreach (string parentPath in pathRules.Keys)
             {
                 MonitoringStrategy strategy = pathRules[parentPath];
-                if (strategy == MonitoringStrategy.LateTranslateOnce ||
-                    strategy == MonitoringStrategy.OnVisibilityChange ||
-                    strategy == MonitoringStrategy.Persistent)
+                int registered = Register(parentPath, strategy);
+
+                // Only queue for late retry if the initial Register couldn't find the parent yet
+                // (registered == 0). Persistent still stays queued so rebuilt children get picked up.
+                bool needsLateQueue = strategy == MonitoringStrategy.LateTranslateOnce ||
+                                      strategy == MonitoringStrategy.LateApplyFontOnce ||
+                                      strategy == MonitoringStrategy.OnVisibilityChange ||
+                                      strategy == MonitoringStrategy.Persistent;
+                if (needsLateQueue && (registered == 0 || strategy == MonitoringStrategy.Persistent))
                 {
                     monitoredPaths.Add(parentPath);
                 }
-
-                Register(parentPath, strategy);
             }
         }
 
@@ -215,19 +239,45 @@ namespace MWC_Localization_Core
 
             // Get all TextMesh components under this parent
             TextMesh[] textMeshes = parent.GetComponentsInChildren<TextMesh>(true);
+
+            // Font-only fast path: these TextMeshes are translated upstream at the data
+            // source, so we only need to swap the font once and then forget about them.
+            // No per-instance tracking or follow-up monitoring is needed - the translator's
+            // appliedFontCache already prevents redundant re-application.
+            if (finalStrategy == MonitoringStrategy.LateApplyFontOnce)
+            {
+                foreach (var textMesh in textMeshes)
+                {
+                    if (textMesh == null)
+                        continue;
+
+                    string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
+                    if (HasMoreSpecificRule(textMeshPath, parentPath))
+                        continue;
+                    translator.ApplyFontOnly(textMesh, textMeshPath);
+                    registeredCount++;
+                }
+                return registeredCount;
+            }
+
             foreach (var textMesh in textMeshes)
             {
                 if (textMesh == null)
                     continue;
 
                 int instanceID = textMesh.GetInstanceID();
-                
+
                 // Skip if this specific instance is already registered
                 if (instanceEntries.ContainsKey(instanceID))
                     continue;
 
                 string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
-                
+
+                // A more-specific path rule (e.g. child Late/OnVisibility rule) must handle this
+                // TextMesh instead of it being captured by this parent scan.
+                if (HasMoreSpecificRule(textMeshPath, parentPath))
+                    continue;
+
                 // Translate first to reduce visible unlocalized text
                 bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath, null);
 
