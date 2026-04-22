@@ -86,6 +86,11 @@ PIZZA 59 MK = 피자 59 MK
 ENERGY DRINK 12.95 MK = 에너지 드링크 12.95 MK
 Automatic Transmission Fluid 79 MK = 자동 변속기 오일 79 MK
 CLASSIFIEDS MAGAZINE 15 MK = 생활 정보 잡지 15 MK
+MOTOR OIL 10W-60 89 MK = 엔진 오일 10W-60 89 MK
+MOTOR OIL 5W-40 109 MK = 엔진 오일 5W-40 109 MK
+MOTOR OIL 0W-30 125 MK = 엔진 오일 0W-30 125 MK
+BEER 110 MK = 맥주 110 MK
+Ice Scraper 39.95 MK = 성에 제거기 39.95 MK
 HISTORIC VEHICLE INSPECTION, 749 MK = 클래식 카 감정 평가, 749 MK
 CAR INSPECTION, 349 MK = 차량 검사, 349 MK
 SAUSAGE + COFFEE 20 MK = 소세지 + 커피 20 MK
@@ -128,6 +133,7 @@ Steering Wheel Cover = 스티어링 휠 커버
 car fabric roll = 자동차 원단 롤
 FAN CONTROL = 팬 제어
 dead moose = 죽은 사슴
+ice scraper = 성에 제거기
 
 SCRAPE WINDOW = 창문 긁어내기
 BLOWER = 풍량 조절
@@ -363,8 +369,8 @@ Peräjärveläinen mies sai surmansa klapikoneessa = 통나무 절단기 사고�
 Dead man found inside of log cutter = 통나무 절단기에서\n사망한 남성\n뒤늦게 발견
 
 //// ATM
-INSERT CREDIT CARD = 신용 카드 삽입하기
-TAKE CREDIT CARD = 신용 카드 가져가기
+INSERT BANK CARD = 은행 카드 삽입하기
+TAKE BANK CARD = 은행 카드 가져가기
 TAKE MONEY = 현금 가져가기
 Tervetuloa! Syötä kortti, ole hyvä = 환영합니다!\n\n\n카드를 넣어주십시오
 Näppäile tunnusluku Lopuksi paina OK = 비밀번호를 입력하십시오\n\n\n\n\n\n\n입력이 완료되면\nOK를 눌러주십시오
@@ -375,6 +381,8 @@ Valitse = 선택
 Tapahtumat = 거래 기록
 Otto = 인출
 Haluatko tiedot? = 잔액을 확인하시겠습니까?
+Talletu = 입금
+Syötä seteleitä, ole hyvä = 현금을 넣어주십시오
 Näytölle = 네
 Ei kiitos = 아니오
 Tilillä ei katetta Ota kortti, ole hyvä = 계좌의 잔액이 부족합니다\n\n\n카드를 가져가십시오
@@ -399,7 +407,7 @@ Jakopalkkio = 전단 배포 급여
 
 //// FUEL ATM
 INSERT BILL = 현금 투입하기
-PICK CREDIT CARD = 카드 가져가기
+PICK BANK CARD = 카드 가져가기
 PICK BILL = 현금 가져가기
 ALOITA TANKKAUS 2 MIN KULUESSA = 주유 시작\n\n2분 내에\n주유가 완료됩니다
 TERVETULOA SYÖTÄ KORTTI TAI SETELI = 환영합니다\n카드 또는 현금을 넣어주십시오
@@ -853,6 +861,12 @@ PAY 500 MK = 500 MK 지불하기
 "There was funny thing in the news. They sculpted a mammoth from plaster. I would like to have one made from Teimo..." = "뉴스에서 재미있는 이야기를 하더라고. 세상에 석고로 매머드를 조각했대. 나도 테이모 석상을 하나 만들어보고 싶어..."
 "When I was working at north pole once, it was cold, but nobody complained. Moonshine kept me very warm." = "북극에서 일할 때였지, 정말 추웠지만 아무도 불평하지 않았어. 밀주가 나를 아주 따뜻하게 해줬거든."
 "I feel like a bourgeis capitalist when riding a taxi. Now that they are planning such coalition, I would fit right in." = "택시를 탈 때면 마치 부르주아가 된 것만 같았어. 그런데 이번에 노조를 만든다고 하니 왠지 친근해진 기분이랄까."
+
+//// Worker Jani
+"No way who's here! What are you doing here? Just take the door out." = "이게 누구야! 여기서 뭐하고 있는거야? 빨리 문 바깥으로 나가버려."
+"Am I in a candid camera? Which of these clowns invited you here?" = "지금 나 사진 찍힌거야? 어느 멍청이가 널 여기 데려온거야?"
+"This smell... I know this guy. The spirit of sewage." = "이 냄새... 나 이 사람 알아. 똥통이라면 죽고 못 사는 인간이지."
+"Look at yourself. You look like a lost tourist. But hey, this is not a place for sightseeings." = "네 자신을 봐. 무슨 길 잃은 관광객 마냥 얼빠진 모습을 하고 있어. 여긴 볼 것도 없단 말야."
 
 //// Taxi Job
 DOME LIGHT = 택시등
