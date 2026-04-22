@@ -180,15 +180,18 @@ namespace MWC_Localization_Core
             foreach (string parentPath in pathRules.Keys)
             {
                 MonitoringStrategy strategy = pathRules[parentPath];
-                if (strategy == MonitoringStrategy.LateTranslateOnce ||
-                    strategy == MonitoringStrategy.LateApplyFontOnce ||
-                    strategy == MonitoringStrategy.OnVisibilityChange ||
-                    strategy == MonitoringStrategy.Persistent)
+                int registered = Register(parentPath, strategy);
+
+                // Only queue for late retry if the initial Register couldn't find the parent yet
+                // (registered == 0). Persistent still stays queued so rebuilt children get picked up.
+                bool needsLateQueue = strategy == MonitoringStrategy.LateTranslateOnce ||
+                                      strategy == MonitoringStrategy.LateApplyFontOnce ||
+                                      strategy == MonitoringStrategy.OnVisibilityChange ||
+                                      strategy == MonitoringStrategy.Persistent;
+                if (needsLateQueue && (registered == 0 || strategy == MonitoringStrategy.Persistent))
                 {
                     monitoredPaths.Add(parentPath);
                 }
-
-                Register(parentPath, strategy);
             }
         }
 
