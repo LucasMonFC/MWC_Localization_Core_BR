@@ -1,10 +1,8 @@
 // Generic handler for translating PlayMakerArrayListProxy data
 // Supports any GameObject with array-based content (HUD, menus, etc.)
 
-using MSCLoader;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Text;
 using System.Collections;
 
 namespace MWC_Localization_Core

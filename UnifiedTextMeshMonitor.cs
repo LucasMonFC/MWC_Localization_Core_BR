@@ -1,4 +1,3 @@
-using MSCLoader;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -73,7 +72,6 @@ namespace MWC_Localization_Core
         
         // Instance-based storage (supports multiple TextMeshes per path)
         private Dictionary<int, TextMeshEntry> instanceEntries;  // instanceID -> entry
-        private Dictionary<string, HashSet<int>> pathToInstances;  // path -> instanceIDs
         private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
         private HashSet<string> monitoredPaths = new HashSet<string>();
         private List<int> removalBuffer = new List<int>(64);
@@ -84,7 +82,6 @@ namespace MWC_Localization_Core
             this.translator = translator;
             pathRules = new Dictionary<string, MonitoringStrategy>();
             instanceEntries = new Dictionary<int, TextMeshEntry>();
-            pathToInstances = new Dictionary<string, HashSet<int>>();
             strategyGroups = new Dictionary<MonitoringStrategy, HashSet<int>>();
 
             // Initialize strategy groups
@@ -142,8 +139,6 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/ServiceBrochure", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/RallyResults", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/RallyRegistration/Functions/Class", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
 
             // Magazine / Sheets - persistent monitoring due to dynamic content changes and rebuilds
@@ -151,6 +146,8 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
             AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
             AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.Persistent);
+            AddPathRule("Sheets/RallyResults", MonitoringStrategy.Persistent);
+            AddPathRule("Sheets/RallyRegistration/Functions/Class", MonitoringStrategy.Persistent);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -293,15 +290,6 @@ namespace MWC_Localization_Core
                 // Register instance
                 instanceEntries[instanceID] = entry;
                 
-                // Index by path
-                HashSet<int> pathSet;
-                if (!pathToInstances.TryGetValue(textMeshPath, out pathSet))
-                {
-                    pathSet = new HashSet<int>();
-                    pathToInstances[textMeshPath] = pathSet;
-                }
-                pathSet.Add(instanceID);
-                
                 // Group by strategy
                 strategyGroups[finalStrategy].Add(instanceID);
 
@@ -322,15 +310,6 @@ namespace MWC_Localization_Core
             // Remove from strategy group
             strategyGroups[entry.Strategy].Remove(instanceID);
 
-            // Remove from path index
-            HashSet<int> pathSet;
-            if (pathToInstances.TryGetValue(entry.Path, out pathSet))
-            {
-                pathSet.Remove(instanceID);
-                if (pathSet.Count == 0)
-                    pathToInstances.Remove(entry.Path);
-            }
-            
             // Remove instance
             instanceEntries.Remove(instanceID);
         }
@@ -356,7 +335,6 @@ namespace MWC_Localization_Core
             slowPollingTimer += deltaTime;
             if (slowPollingTimer >= LocalizationConstants.SLOW_POLLING_INTERVAL)
             {
-                UpdateGroup(MonitoringStrategy.SlowPolling);
                 UpdateGroup(MonitoringStrategy.LateTranslateOnce);
                 MonitorLateRegister(); // Also check for late registrations
                 slowPollingTimer = 0f;
@@ -406,8 +384,8 @@ namespace MWC_Localization_Core
                         entry.WasTranslated = true;
                         entry.UpdateLastText();
 
-                        // Mark for removal if TranslateOnce
-                        if (strategy == MonitoringStrategy.TranslateOnce || strategy == MonitoringStrategy.LateTranslateOnce)
+                        // Late one-shot entries can stop monitoring after the first successful translation.
+                        if (strategy == MonitoringStrategy.LateTranslateOnce)
                         {
                             removalBuffer.Add(instanceID);
                         }
@@ -461,7 +439,6 @@ namespace MWC_Localization_Core
                 group.Clear();
             }
             instanceEntries.Clear();
-            pathToInstances.Clear();
             pathRules.Clear();
             monitoredPaths.Clear();
             fastPollingTimer = 0f;

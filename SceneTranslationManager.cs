@@ -1,5 +1,3 @@
-using MSCLoader;
-
 namespace MWC_Localization_Core
 {
     /// <summary>

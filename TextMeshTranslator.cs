@@ -1,4 +1,3 @@
-using MSCLoader;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +16,7 @@ namespace MWC_Localization_Core
         private LocalizationConfig config;
         private Dictionary<int, string> appliedFontCache = new Dictionary<int, string>();
         private Dictionary<int, Texture> appliedRuntimeTextureCache = new Dictionary<int, Texture>();
+        private Dictionary<int, Material> runtimeMaterialCache = new Dictionary<int, Material>();
         private Dictionary<string, Font> fontNameToFont;  // Reverse lookup: font.name -> Font
 
         private static readonly string[] ExcludedPath = new string[]
@@ -129,9 +129,14 @@ namespace MWC_Localization_Core
 
                     if (needsTextureApply && targetMainTexture != null)
                     {
-                        // Always preserve original material properties (colors, tints, etc.) by swapping only the atlas texture.
-                        // This works for both TV and non-TV paths and preserves custom colors like yellow text.
-                        Material runtimeMaterial = renderer.material;
+                        Material runtimeMaterial;
+                        if (!runtimeMaterialCache.TryGetValue(rendererInstanceID, out runtimeMaterial) || runtimeMaterial == null)
+                        {
+                            // Preserve per-renderer material properties while avoiding repeated renderer.material instantiation.
+                            runtimeMaterial = renderer.material;
+                            runtimeMaterialCache[rendererInstanceID] = runtimeMaterial;
+                        }
+
                         if (runtimeMaterial != null && runtimeMaterial.mainTexture != targetMainTexture)
                         {
                             runtimeMaterial.mainTexture = targetMainTexture;
@@ -204,45 +209,6 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Translate multiline text line-by-line.
-        /// Useful for dynamic displays that append lines over time.
-        /// </summary>
-        public bool TranslateMultilineByLines(TextMesh textMesh, string path)
-        {
-            if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
-                return false;
-
-            string original = textMesh.text;
-            string[] lines = original.Split('\n');
-            bool changed = false;
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string line = lines[i];
-                if (string.IsNullOrEmpty(line))
-                    continue;
-
-                string trimmedCr = line.Replace("\r", string.Empty);
-                string normalizedKey = MLCUtils.FormatUpperKey(trimmedCr);
-                if (string.IsNullOrEmpty(normalizedKey))
-                    continue;
-
-                if (translations.TryGetValue(normalizedKey, out string translatedLine) && trimmedCr != translatedLine)
-                {
-                    lines[i] = translatedLine;
-                    changed = true;
-                }
-            }
-
-            if (!changed)
-                return false;
-
-            ApplyCustomFont(textMesh, path);
-            textMesh.text = string.Join("\n", lines);
-            return true;
-        }
-
-        /// <summary>
         /// Get custom font for the given original font name
         /// </summary>
         Font GetCustomFont(string originalFontName)
@@ -295,6 +261,7 @@ namespace MWC_Localization_Core
         {
             appliedFontCache.Clear();
             appliedRuntimeTextureCache.Clear();
+            runtimeMaterialCache.Clear();
         }
     }
 }

@@ -6,12 +6,6 @@ namespace MWC_Localization_Core
     public enum MonitoringStrategy
     {
         /// <summary>
-        /// Translate once during the initial scene scan, then stop monitoring.
-        /// Use for static UI elements that never change.
-        /// </summary>
-        TranslateOnce,
-
-        /// <summary>
         /// Monitor every frame without throttling.
         /// Use for interaction prompts, subtitles, and other critical real-time UI.
         /// </summary>
@@ -22,12 +16,6 @@ namespace MWC_Localization_Core
         /// Use for active HUD elements that update frequently.
         /// </summary>
         FastPolling,
-
-        /// <summary>
-        /// Monitor at a slow polling interval for less critical content.
-        /// Use for teletext, FSM-generated content, and weather displays.
-        /// </summary>
-        SlowPolling,
 
         /// <summary>
         /// Keep checking even after translation for content that is frequently rebuilt.
@@ -70,16 +58,6 @@ namespace MWC_Localization_Core
         /// Pattern matching with {0}, {1}, and similar placeholders.
         /// </summary>
         FsmPattern,
-
-        /// <summary>
-        /// Regular expression extraction and replacement.
-        /// </summary>
-        RegexExtract,
-
-        /// <summary>
-        /// Split by comma and translate each item independently.
-        /// </summary>
-        CommaSeparated,
 
         /// <summary>
         /// Use a custom handler for more complex translation logic.

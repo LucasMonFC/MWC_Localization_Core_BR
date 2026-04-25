@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using UnityEngine;
 
 namespace MWC_Localization_Core
 {
     /// <summary>
     /// Represents a translation pattern with extraction and formatting logic
-    /// Supports placeholders, regex, comma-separated values, and custom handlers
+    /// Supports placeholders and custom handlers
     /// </summary>
     public class TranslationPattern
     {
@@ -23,9 +21,6 @@ namespace MWC_Localization_Core
         // For FsmPattern mode
         private string[] originalParts;
         private string[] translationParts;
-        
-        // For RegexExtract mode
-        private Regex regexPattern;
         
         // For CustomHandler mode
         public Func<string, string, Dictionary<string, string>, CustomHandlerResult> CustomHandler { get; set; }
@@ -60,10 +55,6 @@ namespace MWC_Localization_Core
                 case TranslationMode.FsmPattern:
                 case TranslationMode.FsmPatternWithTranslation:
                     InitializeFsmPattern();
-                    break;
-                    
-                case TranslationMode.RegexExtract:
-                    InitializeRegexPattern();
                     break;
             }
         }
@@ -114,18 +105,6 @@ namespace MWC_Localization_Core
             return parts.ToArray();
         }
 
-        private void InitializeRegexPattern()
-        {
-            try
-            {
-                regexPattern = new Regex(OriginalPattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Failed to compile regex pattern '{OriginalPattern}': {ex.Message}");
-            }
-        }
-
         /// <summary>
         /// Check if this pattern matches the given text and path
         /// </summary>
@@ -145,13 +124,6 @@ namespace MWC_Localization_Core
                 case TranslationMode.FsmPattern:
                 case TranslationMode.FsmPatternWithTranslation:
                     return TryExtractFsmValues(text) != null;
-                    
-                case TranslationMode.RegexExtract:
-                    return regexPattern != null && regexPattern.IsMatch(text);
-                    
-                case TranslationMode.CommaSeparated:
-                    return text.Contains(",");
-                    
                 default:
                     return false;
             }
@@ -173,13 +145,6 @@ namespace MWC_Localization_Core
                     
                 case TranslationMode.FsmPatternWithTranslation:
                     return TranslateWithFsmPatternAndTranslateParams(text, translations);
-                    
-                case TranslationMode.RegexExtract:
-                    return TranslateWithRegex(text, translations);
-                    
-                case TranslationMode.CommaSeparated:
-                    return TranslateCommaSeparated(text, translations);
-                    
                 case TranslationMode.CustomHandler:
                     if (CustomHandler != null)
                     {
@@ -294,55 +259,6 @@ namespace MWC_Localization_Core
             }
             
             return values.ToArray();
-        }
-
-        private string TranslateWithRegex(string text, Dictionary<string, string> translations)
-        {
-            Match match = regexPattern.Match(text);
-            if (!match.Success)
-                return null;
-            
-            string result = TranslatedTemplate;
-            
-            // Replace {0}, {1}, {2} with captured groups
-            for (int i = 1; i < match.Groups.Count; i++)
-            {
-                result = result.Replace("{" + (i - 1) + "}", match.Groups[i].Value);
-            }
-            
-            // Replace {KEYNAME} with translations (e.g., {PRICETOTAL})
-            foreach (Match keyMatch in Regex.Matches(result, @"\{([A-Z]+)\}"))
-            {
-                string key = keyMatch.Groups[1].Value;
-                if (translations.TryGetValue(key, out string translation))
-                {
-                    result = result.Replace("{" + key + "}", translation);
-                }
-            }
-            
-            return result;
-        }
-
-        private string TranslateCommaSeparated(string text, Dictionary<string, string> translations)
-        {
-            string[] words = text.Split(',');
-            
-            for (int i = 0; i < words.Length; i++)
-            {
-                string word = words[i].Trim();
-                string key = MLCUtils.FormatUpperKey(word);
-                
-                if (translations.TryGetValue(key, out string translation))
-                {
-                    words[i] = translation;
-                }
-                else
-                {
-                    words[i] = word;
-                }
-            }
-            
-            return string.Join(", ", words);
         }
     }
 }

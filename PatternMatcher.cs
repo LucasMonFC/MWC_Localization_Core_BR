@@ -1,6 +1,5 @@
 // Pattern matching system for Translation Strings
 
-using MSCLoader;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -39,29 +38,6 @@ namespace MWC_Localization_Core
         /// </summary>
         private void InitializeBuiltInPatterns()
         {
-            // Magazine price/phone pattern (custom handler)
-            var magazinePricePattern = new TranslationPattern(
-                "MagazinePrice",
-                TranslationMode.CustomHandler,
-                "h.{price},- puh.{phone}",
-                "{price} MK, {PHONE} - {phone}"
-            );
-            magazinePricePattern.PathMatcher = path => path.Contains("YellowPagesMagazine");
-            magazinePricePattern.TextMatcher = text => text.StartsWith("h.") && text.Contains(",- puh.");
-            magazinePricePattern.CustomHandler = TranslateMagazinePriceLine;
-            AddPatternInternal(magazinePricePattern, true);
-
-            // Magazine comma-separated words
-            var magazineWordsPattern = new TranslationPattern(
-                "MagazineWords",
-                TranslationMode.CommaSeparated,
-                "",
-                ""
-            );
-            magazineWordsPattern.PathMatcher = path => path.Contains("YellowPagesMagazine");
-            magazineWordsPattern.TextMatcher = text => text.Split(',').Length == 3;
-            AddPatternInternal(magazineWordsPattern, true);
-
             // Multi-line Computer command text handler
             var pcScreenPattern = new TranslationPattern(
                 "PCMultiLine",
@@ -89,7 +65,6 @@ namespace MWC_Localization_Core
             try
             {
                 string[] lines = File.ReadAllLines(filePath, Encoding.UTF8);
-                string currentSection = null;
                 int loadedCount = 0;
 
                 foreach (string line in lines)
@@ -103,7 +78,6 @@ namespace MWC_Localization_Core
                     // Check for section header
                     if (trimmed.StartsWith("[") && trimmed.EndsWith("]"))
                     {
-                        currentSection = trimmed.Substring(1, trimmed.Length - 2);
                         continue;
                     }
 
@@ -176,8 +150,8 @@ namespace MWC_Localization_Core
             string upperText = null;
             foreach (var pattern in patterns)
             {
-                // CustomHandler patterns work on original text; FSM/Regex need uppercase
-                bool needsUpper = pattern.Mode != TranslationMode.CustomHandler && pattern.Mode != TranslationMode.CommaSeparated;
+                // CustomHandler patterns work on original text; FSM patterns need uppercase
+                bool needsUpper = pattern.Mode != TranslationMode.CustomHandler;
                 string inputText;
                 if (needsUpper)
                 {
@@ -198,23 +172,6 @@ namespace MWC_Localization_Core
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Add a pattern programmatically
-        /// </summary>
-        public void AddPattern(TranslationPattern pattern)
-        {
-            AddPatternInternal(pattern, false);
-        }
-
-        /// <summary>
-        /// Clear all patterns
-        /// </summary>
-        public void ClearPatterns()
-        {
-            patterns.Clear();
-            patternSignatures.Clear();
         }
 
         private bool AddPatternInternal(TranslationPattern pattern, bool appendToEnd)
@@ -244,42 +201,6 @@ namespace MWC_Localization_Core
             string original = pattern.OriginalPattern ?? string.Empty;
             string translated = pattern.TranslatedTemplate ?? string.Empty;
             return ((int)pattern.Mode).ToString() + "|" + original + "|" + translated;
-        }
-
-        /// <summary>
-        /// Custom handler for magazine price/phone lines
-        /// Format: "h.149,- puh.123456" -> "149 MK, PHONE - 123456"
-        /// </summary>
-        private TranslationPattern.CustomHandlerResult TranslateMagazinePriceLine(string text, string path, Dictionary<string, string> translations)
-        {
-            try
-            {
-                // Remove "h." prefix and split by ",- puh."
-                if (!text.StartsWith("h."))
-                    return new TranslationPattern.CustomHandlerResult(false, null);
-
-                string withoutPrefix = text.Substring(2);
-                string[] parts = withoutPrefix.Split(new string[] { ",- puh." }, System.StringSplitOptions.None);
-
-                if (parts.Length == 2)
-                {
-                    string pricePart = parts[0].Trim();
-                    string phonePart = parts[1].Trim();
-
-                    // Get phone label from translations
-                    string phoneLabel = translations.TryGetValue("PHONE", out string translation)
-                        ? translation
-                        : "PHONE";
-
-                    return new TranslationPattern.CustomHandlerResult(true, $"{pricePart} MK, {phoneLabel} - {phonePart}");
-                }
-            }
-            catch (System.Exception ex)
-            {
-                CoreConsole.Warning($"Failed to parse magazine price/phone line: {text} - {ex.Message}");
-            }
-
-            return new TranslationPattern.CustomHandlerResult(false, null);
         }
 
         /// <summary>
