@@ -134,15 +134,21 @@ namespace MWC_Localization_Core
                         {
                             // Preserve per-renderer material properties while avoiding repeated renderer.material instantiation.
                             runtimeMaterial = renderer.material;
-                            runtimeMaterialCache[rendererInstanceID] = runtimeMaterial;
+                            if (runtimeMaterial != null)
+                            {
+                                runtimeMaterialCache[rendererInstanceID] = runtimeMaterial;
+                            }
                         }
 
-                        if (runtimeMaterial != null && runtimeMaterial.mainTexture != targetMainTexture)
+                        if (runtimeMaterial != null)
                         {
-                            runtimeMaterial.mainTexture = targetMainTexture;
-                        }
+                            if (runtimeMaterial.mainTexture != targetMainTexture)
+                            {
+                                runtimeMaterial.mainTexture = targetMainTexture;
+                            }
 
-                        appliedRuntimeTextureCache[rendererInstanceID] = targetMainTexture;
+                            appliedRuntimeTextureCache[rendererInstanceID] = targetMainTexture;
+                        }
                     }
                 }
 

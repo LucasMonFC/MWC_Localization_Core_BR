@@ -207,12 +207,13 @@ namespace MWC_Localization_Core
                     string normalizedOriginal = original.Trim();
                     if (string.IsNullOrEmpty(normalizedOriginal))
                         continue;
+                    string translationKey = MLCUtils.FormatUpperKey(normalizedOriginal);
 
                     // Keep fallback alignment based on non-empty source entries only.
                     nonEmptySourceIndex++;
                     
                     // Try exact key match first
-                    if (translations.TryGetValue(normalizedOriginal, out string translation))
+                    if (translations.TryGetValue(translationKey, out string translation))
                     {
                         if (original != translation)
                         {
