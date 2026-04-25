@@ -50,11 +50,6 @@ namespace MWC_Localization_Core
     public enum TranslationMode
     {
         /// <summary>
-        /// Simple dictionary lookup for exact text keys.
-        /// </summary>
-        SimpleLookup,
-
-        /// <summary>
         /// Pattern matching with {0}, {1}, and similar placeholders.
         /// </summary>
         FsmPattern,

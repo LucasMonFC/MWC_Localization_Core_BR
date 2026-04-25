@@ -278,7 +278,7 @@ namespace MWC_Localization_Core
                     continue;
 
                 // Translate first to reduce visible unlocalized text
-                bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath, null);
+                bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath);
 
                 TextMeshEntry entry = new TextMeshEntry(textMesh, textMeshPath, finalStrategy);
                 if (translated)
@@ -363,9 +363,7 @@ namespace MWC_Localization_Core
                 // Check validity first to avoid NullReferenceException on destroyed objects
                 if (!entry.IsValid())
                 {
-                    // Persistent strategy: Keep checking even if entry is not valid
-                    if (strategy != MonitoringStrategy.Persistent)
-                        removalBuffer.Add(instanceID);
+                    removalBuffer.Add(instanceID);
                     continue;
                 }
 
@@ -378,7 +376,7 @@ namespace MWC_Localization_Core
                 
                 if (textChanged || !entry.WasTranslated)
                 {
-                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path, null);
+                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);
                     if (translated)
                     {
                         entry.WasTranslated = true;
@@ -403,6 +401,7 @@ namespace MWC_Localization_Core
         private void UpdateVisibilityChangeGroup()
         {
             var instanceIDs = strategyGroups[MonitoringStrategy.OnVisibilityChange];
+            removalBuffer.Clear();
 
             foreach (int instanceID in instanceIDs)
             {
@@ -411,7 +410,10 @@ namespace MWC_Localization_Core
                     continue;
 
                 if (!entry.IsValid())
+                {
+                    removalBuffer.Add(instanceID);
                     continue;
+                }
 
                 bool wasVisible = entry.IsVisible;
                 entry.UpdateVisibility();
@@ -419,13 +421,18 @@ namespace MWC_Localization_Core
                 // Only translate when visibility changes from hidden to visible
                 if (!wasVisible && entry.IsVisible)
                 {
-                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path, null);
+                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);
                     if (translated)
                     {
                         entry.WasTranslated = true;
                         entry.UpdateLastText();
                     }
                 }
+            }
+
+            foreach (int instanceID in removalBuffer)
+            {
+                UnregisterInstance(instanceID);
             }
         }
 

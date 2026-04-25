@@ -9,7 +9,6 @@ namespace MWC_Localization_Core
     /// </summary>
     public class TranslationPattern
     {
-        public string Name { get; private set; }
         public TranslationMode Mode { get; private set; }
         public string OriginalPattern { get; private set; }
         public string TranslatedTemplate { get; private set; }
@@ -20,8 +19,6 @@ namespace MWC_Localization_Core
         
         // For FsmPattern mode
         private string[] originalParts;
-        private string[] translationParts;
-        
         // For CustomHandler mode
         public Func<string, string, Dictionary<string, string>, CustomHandlerResult> CustomHandler { get; set; }
         
@@ -40,7 +37,6 @@ namespace MWC_Localization_Core
 
         public TranslationPattern(string name, TranslationMode mode, string originalPattern, string translatedTemplate)
         {
-            Name = name;
             Mode = mode;
             OriginalPattern = originalPattern;
             TranslatedTemplate = translatedTemplate;
@@ -64,7 +60,6 @@ namespace MWC_Localization_Core
             // Split patterns by placeholders to get static parts
             // Example: "pakkasta {0} astetta" -> ["pakkasta ", " astetta"]
             originalParts = SplitPattern(OriginalPattern);
-            translationParts = SplitPattern(TranslatedTemplate);
         }
 
         private string[] SplitPattern(string pattern)
@@ -124,6 +119,10 @@ namespace MWC_Localization_Core
                 case TranslationMode.FsmPattern:
                 case TranslationMode.FsmPatternWithTranslation:
                     return TryExtractFsmValues(text) != null;
+
+                case TranslationMode.CustomHandler:
+                    return CustomHandler != null;
+
                 default:
                     return false;
             }

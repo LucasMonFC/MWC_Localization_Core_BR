@@ -12,8 +12,6 @@ namespace MWC_Localization_Core
         
         // Current scene tracking
         private string currentScene = "";
-        private string previousScene = "";
-
         public SceneTranslationManager()
         {
         }
@@ -66,7 +64,7 @@ namespace MWC_Localization_Core
 
             if (currentScene != newScene)
             {
-                previousScene = currentScene;
+                string previousScene = currentScene;
                 currentScene = newScene;
                 
                 HandleSceneChange(previousScene, currentScene);

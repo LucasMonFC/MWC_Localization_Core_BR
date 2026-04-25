@@ -61,16 +61,11 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Translate TextMesh and apply custom font + position adjustments
         /// </summary>
-        /// <param name="translatedTextMeshes">HashSet tracking which TextMesh objects have been translated</param>
         /// <returns>True if text was translated or already localized</returns>
-        public bool TranslateAndApplyFont(TextMesh textMesh, string path, HashSet<TextMesh> translatedTextMeshes)
+        public bool TranslateAndApplyFont(TextMesh textMesh, string path)
         {
             if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
                 return false;
-
-            // Skip if already translated (language-agnostic check)
-            if (translatedTextMeshes != null && translatedTextMeshes.Contains(textMesh))
-                return true;
 
             // Skip excluded paths
             foreach(string excluded in ExcludedPath)
@@ -79,12 +74,17 @@ namespace MWC_Localization_Core
                     return false;
             }
 
-            // Try complex text handling first (e.g., magazine text, cashier price)
-            if (HandleComplexTextMesh(textMesh, path))
+            if (magazineHandler.IsMagazineText(path))
+            {
+                ApplyCustomFont(textMesh, path);
+                return magazineHandler.HandleMagazineText(textMesh);
+            }
+
+            // Use standard translation before pattern matching; dictionary lookup is cheaper.
+            if (ApplyTranslation(textMesh, path))
                 return true;
 
-            // Use standard translation
-            if (ApplyTranslation(textMesh, path))
+            if (ApplyPatternTranslation(textMesh, path))
                 return true;
 
             return false;
@@ -151,32 +151,19 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Handle complex text patterns (magazine text, cashier price line)
-        /// Now uses unified pattern matcher for all pattern-based translations
+        /// Handle pattern-based text translations.
         /// </summary>
-        bool HandleComplexTextMesh(TextMesh textMesh, string path)
+        bool ApplyPatternTranslation(TextMesh textMesh, string path)
         {
-            // Check magazine text FIRST - it requires special handling (comma-separated words, price/phone format)
-            if (magazineHandler.IsMagazineText(path))
-            {
-                // Apply custom font first
-                ApplyCustomFont(textMesh, path);
-                // Apply Translation
-                return magazineHandler.HandleMagazineText(textMesh);
-            }
-            
-            // Try pattern matching for other complex texts (FSM, Price patterns)
             string patternResult = patternMatcher.TryTranslateWithPattern(textMesh.text, path);
             if (patternResult != null)
             {
-                // Apply custom font first
                 ApplyCustomFont(textMesh, path);
-                // Apply Translation
                 textMesh.text = patternResult;
                 return true;
             }
 
-            return false; // Not handled, use standard translation
+            return false;
         }
 
         /// <summary>

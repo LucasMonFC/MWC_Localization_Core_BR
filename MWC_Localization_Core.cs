@@ -549,7 +549,7 @@ namespace MWC_Localization_Core
                 // Translate and apply font
                 if (!string.IsNullOrEmpty(tm.text))
                 {
-                    bool translated = translator.TranslateAndApplyFont(tm, path, null);
+                    bool translated = translator.TranslateAndApplyFont(tm, path);
                     if (translated)
                     {
                         translatedCount++;
