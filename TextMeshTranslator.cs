@@ -77,7 +77,8 @@ namespace MWC_Localization_Core
             if (magazineHandler.IsMagazineText(path))
             {
                 ApplyCustomFont(textMesh, path);
-                return magazineHandler.HandleMagazineText(textMesh);
+                magazineHandler.HandleMagazineText(textMesh);
+                return true;
             }
 
             // Use standard translation before pattern matching; dictionary lookup is cheaper.
