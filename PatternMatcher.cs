@@ -225,7 +225,7 @@ namespace MWC_Localization_Core
                     }
 
                     // Try to translate this line
-                    string key = trimmed.ToUpperInvariant();
+                    string key = MLCUtils.FormatUpperKey(trimmed);
                     if (translations.TryGetValue(key, out string translation))
                     {
                         translatedLines.Add(translation);
