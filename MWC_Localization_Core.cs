@@ -248,8 +248,8 @@ namespace MWC_Localization_Core
             if (arrayTranslated > 0)
             {
                 CoreConsole.Print($"[{Name}] {logPrefix}translated {arrayTranslated} array items");
-                arrayListHandler.ApplyFontsToArrayElements();
             }
+            arrayListHandler.ApplyFontsToArrayElements();
 
             int hashTableTranslated = hashTableHandler.TranslateAllHashTables();
             if (hashTableTranslated > 0)
