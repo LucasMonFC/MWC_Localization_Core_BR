@@ -307,8 +307,8 @@ namespace MWC_Localization_Core
 
         private bool TryApplyMainMenuTranslations()
         {
-            GameObject folkObj = GameObject.Find("Radio/Folk");
-            GameObject cdObj = GameObject.Find("Radio/CD");
+            GameObject folkObj = MLCUtils.FindGameObjectCached("Radio/Folk");
+            GameObject cdObj = MLCUtils.FindGameObjectCached("Radio/CD");
 
             if (folkObj == null || cdObj == null)
                 return false;
