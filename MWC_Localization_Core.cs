@@ -2,7 +2,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace MWC_Localization_Core
 {
@@ -321,51 +320,18 @@ namespace MWC_Localization_Core
 
         void InsertTranslationLines(string translationPath)
         {
-            try
+            Dictionary<string, string> loadedTranslations = TranslationFileParser.ParseKeyValueFile(
+                translationPath,
+                normalizeKeys: true,
+                overwriteExisting: true);
+
+            foreach (var pair in loadedTranslations)
             {
-                string[] lines = File.ReadAllLines(translationPath, Encoding.UTF8);
-
-                foreach (string line in lines)
-                {
-                    if (string.IsNullOrEmpty(line) || line.TrimStart().StartsWith("#"))
-                        continue;
-
-                    int separatorIndex = TranslationFileParser.FindKeyValueSeparator(line);
-                    if (separatorIndex > 0)
-                    {
-                        string rawKey = line.Substring(0, separatorIndex).Trim();
-                        string rawValue = line.Substring(separatorIndex + 1);
-
-                        // Unescape \= -> = in key; apply full unescape (\= and \n) to value
-                        string unescapedKey = rawKey.Replace("\\=", "=");
-                        string unescapedValue = TranslationFileParser.UnescapeValue(rawValue);
-
-                        // Common authoring style is: "key = value".
-                        // In that specific case, drop only the single separator space so
-                        // intentional leading/trailing spacing is preserved.
-                        if (line.Length > separatorIndex + 1 && line[separatorIndex + 1] == ' ')
-                        {
-                            bool hasSecondSpace = (line.Length > separatorIndex + 2 && line[separatorIndex + 2] == ' ');
-                            if (!hasSecondSpace && unescapedValue.Length > 0 && unescapedValue[0] == ' ')
-                                unescapedValue = unescapedValue.Substring(1);
-                        }
-
-                        string normalizedKey = MLCUtils.FormatUpperKey(unescapedKey);
-
-                        if (!string.IsNullOrEmpty(normalizedKey))
-                        {
-                            translations[normalizedKey] = unescapedValue;
-                        }
-                    }
-                }
-
-                hasLoadedTranslations = true;
-                CoreConsole.Print($"[{Name}] Loaded {translations.Count} translations from {Path.GetFileName(translationPath)}");
+                translations[pair.Key] = pair.Value;
             }
-            catch (System.Exception ex)
-            {
-                CoreConsole.Error($"[{Name}] Failed to load translations: {ex.Message}");
-            }
+
+            hasLoadedTranslations = true;
+            CoreConsole.Print($"[{Name}] Loaded {loadedTranslations.Count} translations from {Path.GetFileName(translationPath)} ({translations.Count} total)");
         }
 
         void LoadTranslations()

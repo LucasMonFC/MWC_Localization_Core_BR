@@ -18,14 +18,12 @@ namespace MWC_Localization_Core
         private PatternMatcher patternMatcher;
         private string appliedTarget;
         private HashSet<string> loggedReadyTargets = new HashSet<string>();
-        private HashSet<string> completedStrategyTargets = new HashSet<string>();
-        private HashSet<int> completedEnnusteFsmInstances = new HashSet<int>();
         private List<PlayMakerFSM> cachedEnnusteDataFsms = new List<PlayMakerFSM>();
         private float lastEnnusteDataFsmScanTime = -10f;
 
         private static readonly WaitForSeconds BootstrapPollDelay = new WaitForSeconds(0.5f);
-        private static readonly WaitForSeconds MaintenancePollDelay = new WaitForSeconds(3.0f);
-        private const float EnnusteDataRescanInterval = 10f;
+        private static readonly WaitForSeconds MaintenancePollDelay = new WaitForSeconds(1.0f);
+        private const float EnnusteDataRescanInterval = 2f;
 
         // Reflection cache: (Type, fieldName) -> FieldInfo to avoid repeated GetField calls
         private static readonly Dictionary<System.Type, Dictionary<string, FieldInfo>> reflectionCache
@@ -380,13 +378,8 @@ namespace MWC_Localization_Core
                 if (!IsFsmReady(fsm))
                     continue;
 
-                int instanceID = fsm.GetInstanceID();
-                if (completedEnnusteFsmInstances.Contains(instanceID))
-                    continue;
-
                 LogReadyOnce("TTX_WX_READY", "[FsmTextHook] Teletext weather updater FSM targets are ready.");
                 ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged, ref hasAnyTarget);
-                completedEnnusteFsmInstances.Add(instanceID);
             }
 
             if (anyChanged)
@@ -438,42 +431,20 @@ namespace MWC_Localization_Core
                 if (target == null)
                     continue;
 
-                string targetKey = BuildTargetKey(target);
-                if (completedStrategyTargets.Contains(targetKey))
-                    continue;
-
                 PlayMakerFSM fsm = MLCUtils.FindFsmIncludingInactiveByPathAndName(target.ObjectPath, target.FsmName);
                 if (!IsFsmReady(fsm))
                     continue;
 
                 LogReadyOnce(target.ReadyLogKey, target.ReadyLogMessage);
 
-                bool strategyChanged;
-                ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget, out strategyChanged);
-
-                // ConlineChatStatus reaches through nested FsmString properties and may not
-                // succeed on the first ready check even when the FSM reports Initialized.
-                // Keep retrying that strategy until it actually translates something; every
-                // other strategy is fine to mark complete immediately.
-                if (strategyChanged || target.Strategy != FsmStrategyType.ConlineChatStatus)
-                {
-                    completedStrategyTargets.Add(targetKey);
-                }
+                ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget);
             }
         }
 
-        private static string BuildTargetKey(FsmStrategyTarget target)
+        private void ApplyStrategyForTarget(FsmStrategyTarget target, PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget)
         {
-            return target.ObjectPath + "|" + target.FsmName + "|" + target.Strategy.ToString() + "|" + target.StateName + "|" + target.ActionIndex.ToString();
-        }
-
-        private void ApplyStrategyForTarget(FsmStrategyTarget target, PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget, out bool strategyChanged)
-        {
-            strategyChanged = false;
             if (target == null || fsm == null)
                 return;
-
-            bool beforeChanged = anyChanged;
 
             switch (target.Strategy)
             {
@@ -533,8 +504,6 @@ namespace MWC_Localization_Core
             {
                 appliedTarget = target.AppliedLabel;
             }
-
-            strategyChanged = (anyChanged != beforeChanged);
         }
 
         private void LogReadyOnce(string key, string message)
@@ -667,25 +636,10 @@ namespace MWC_Localization_Core
             lastEnnusteDataFsmScanTime = Time.realtimeSinceStartup;
             cachedEnnusteDataFsms.Clear();
 
-            PlayMakerFSM[] allFsms = Resources.FindObjectsOfTypeAll<PlayMakerFSM>();
-            if (allFsms == null)
-                return cachedEnnusteDataFsms;
-
-            for (int i = 0; i < allFsms.Length; i++)
-            {
-                PlayMakerFSM fsm = allFsms[i];
-                if (fsm == null || fsm.gameObject == null)
-                    continue;
-
-                if (fsm.FsmName != "Data")
-                    continue;
-
-                string path = MLCUtils.GetGameObjectPath(fsm.gameObject);
-                if (path.StartsWith(TeletextEnnusteUpdaterPrefix))
-                {
-                    cachedEnnusteDataFsms.Add(fsm);
-                }
-            }
+            MLCUtils.FindFsmsIncludingInactiveByPathPrefixAndName(
+                TeletextEnnusteUpdaterPrefix,
+                "Data",
+                cachedEnnusteDataFsms);
 
             return cachedEnnusteDataFsms;
         }

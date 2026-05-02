@@ -13,6 +13,7 @@ namespace MWC_Localization_Core
         public string Path;
         public MonitoringStrategy Strategy;
         public string LastText;
+        public bool HasProcessedText;
         public bool WasTranslated;
         public bool IsVisible;
 
@@ -23,6 +24,7 @@ namespace MWC_Localization_Core
             Path = path;
             Strategy = strategy;
             LastText = textMesh != null ? textMesh.text : "";
+            HasProcessedText = false;
             WasTranslated = false;
             IsVisible = GameObject != null && GameObject.activeInHierarchy;
         }
@@ -281,10 +283,11 @@ namespace MWC_Localization_Core
                 bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath);
 
                 TextMeshEntry entry = new TextMeshEntry(textMesh, textMeshPath, finalStrategy);
+                entry.HasProcessedText = true;
+                entry.UpdateLastText();
                 if (translated)
                 {
                     entry.WasTranslated = true;
-                    entry.UpdateLastText();
                 }
 
                 if (finalStrategy == MonitoringStrategy.LateTranslateOnce && entry.WasTranslated)
@@ -385,14 +388,19 @@ namespace MWC_Localization_Core
                     continue;
 
                 bool textChanged = entry.HasTextChanged();
+                if (textChanged)
+                {
+                    entry.HasProcessedText = false;
+                }
                 
-                if (textChanged || !entry.WasTranslated)
+                if (textChanged || !entry.HasProcessedText)
                 {
                     bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);
+                    entry.HasProcessedText = true;
+                    entry.UpdateLastText();
                     if (translated)
                     {
                         entry.WasTranslated = true;
-                        entry.UpdateLastText();
 
                         // Late one-shot entries can stop monitoring after the first successful translation.
                         if (strategy == MonitoringStrategy.LateTranslateOnce)
@@ -434,10 +442,11 @@ namespace MWC_Localization_Core
                 if (!wasVisible && entry.IsVisible)
                 {
                     bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);
+                    entry.HasProcessedText = true;
+                    entry.UpdateLastText();
                     if (translated)
                     {
                         entry.WasTranslated = true;
-                        entry.UpdateLastText();
                     }
                 }
             }

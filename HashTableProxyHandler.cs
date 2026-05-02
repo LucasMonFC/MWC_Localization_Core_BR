@@ -33,8 +33,7 @@ namespace MWC_Localization_Core
 
         public void ClearTranslations()
         {
-            translatedPaths.Clear();
-            proxyCache.Clear();
+            Reset();
         }
 
         public void Reset()

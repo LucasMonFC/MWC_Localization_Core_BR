@@ -64,10 +64,9 @@ namespace MWC_Localization_Core
 
             if (currentScene != newScene)
             {
-                string previousScene = currentScene;
                 currentScene = newScene;
                 
-                HandleSceneChange(previousScene, currentScene);
+                HandleSceneChange(currentScene);
                 
                 return true;
             }
@@ -78,7 +77,7 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Handle scene-specific cleanup/reset logic
         /// </summary>
-        private void HandleSceneChange(string from, string to)
+        private void HandleSceneChange(string to)
         {
             if (to == "MainMenu")
             {

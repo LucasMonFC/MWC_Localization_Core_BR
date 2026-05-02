@@ -86,10 +86,7 @@ namespace MWC_Localization_Core
 
         public void ClearTranslations()
         {
-            translatedArrays.Clear();
-            arrayProxyCache.Clear();
-            fontAppliedInstances.Clear();
-            completedParentPaths.Clear();
+            Reset();
         }
 
         public void Reset()
