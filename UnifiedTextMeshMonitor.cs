@@ -142,14 +142,14 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("Sheets/RallyResults", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("Sheets/RallyRegistration/Functions/Class", MonitoringStrategy.OnVisibilityChange);
 
             // Magazine / Sheets - persistent monitoring due to dynamic content changes and rebuilds
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.Persistent);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
             AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
             AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.Persistent);
-            AddPathRule("Sheets/RallyResults", MonitoringStrategy.Persistent);
-            AddPathRule("Sheets/RallyRegistration/Functions/Class", MonitoringStrategy.Persistent);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -184,12 +184,15 @@ namespace MWC_Localization_Core
                 int registered = Register(parentPath, strategy);
 
                 // Only queue for late retry if the initial Register couldn't find the parent yet
-                // (registered == 0). Persistent still stays queued so rebuilt children get picked up.
+                // (registered == 0). Persistent and OnVisibilityChange stay queued so rebuilt
+                // children get picked up.
                 bool needsLateQueue = strategy == MonitoringStrategy.LateTranslateOnce ||
                                       strategy == MonitoringStrategy.LateApplyFontOnce ||
                                       strategy == MonitoringStrategy.OnVisibilityChange ||
                                       strategy == MonitoringStrategy.Persistent;
-                if (needsLateQueue && (registered == 0 || strategy == MonitoringStrategy.Persistent))
+                if (needsLateQueue && (registered == 0 ||
+                                       strategy == MonitoringStrategy.Persistent ||
+                                       strategy == MonitoringStrategy.OnVisibilityChange))
                 {
                     monitoredPaths.Add(parentPath);
                 }
@@ -211,8 +214,11 @@ namespace MWC_Localization_Core
                 int registered = Register(parentPath, strategy);
 
                 // Remove from monitoring list if successfully registered.
-                // Persistent paths stay in the scan because their child TextMeshes can be rebuilt.
-                if (registered > 0 && strategy != MonitoringStrategy.Persistent)
+                // Persistent and OnVisibilityChange paths stay in the scan because their
+                // child TextMeshes can be rebuilt.
+                if (registered > 0 &&
+                    strategy != MonitoringStrategy.Persistent &&
+                    strategy != MonitoringStrategy.OnVisibilityChange)
                 {
                     stringRemovalBuffer.Add(parentPath);
                 }
