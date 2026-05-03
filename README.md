@@ -9,7 +9,7 @@ See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
 ### For Language Pack Creators
 
 1. **Copy template files** from `dist/`
-2. **Edit `l10n_assets/config.txt`** with your language settings
+2. **Edit `Assets/MWC_Localization_Core/config.txt`** with your language settings
 3. **Update translation files**:
    - `translate.txt` - Main UI text
    - `translate_msc.txt (optional)` - previous My Summer Car text
@@ -21,34 +21,40 @@ See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
 
 ### For Developers
 
+```powershell
+& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MWC_Localization_Core.sln" /p:Configuration=Release
 ```
-dotnet build -c Release
-```
+
+Adjust the MSBuild path if Visual Studio is installed somewhere else.
 
 ## Features
 
-**Automatic Translation** - Scans TextMesh components and replaces text  
-**Teletext/TV Translation** - TV news, weather, recipes get translated  
-**Magazine Translations** - Special handling for Yellow Pages magazine  
-**Configurable Fonts** - Map game fonts to localized custom fonts  
-**Position Adjustments** - Fine-tune text placement per language  
-**Live Reload** - Press F8 to test changes without restarting  
-**Non-Latin Support** - Korean, Japanese, Chinese, Cyrillic, etc.  
-**My Summer Car Compatibility** - Use previous MSC translation as basis
+- **Automatic Translation** - Scans TextMesh components and replaces text
+- **Teletext/TV Translation** - TV news, weather, recipes get translated
+- **Magazine Translations** - Special handling for Yellow Pages magazine
+- **Configurable Fonts** - Map game fonts to localized custom fonts
+- **Position Adjustments** - Fine-tune text placement per language
+- **Live Reload** - Press F8 to test changes without restarting
+- **Non-Latin Support** - Korean, Japanese, Chinese, Cyrillic, etc.
+- **My Summer Car Compatibility** - Use previous MSC translation as basis
 
 ## File Structure
 
+Copy the contents of `dist/` into the My Winter Car `Mods` folder:
+
 ```
-BepInEx/plugins/dist/
-├── l10n_assets/
-│   ├── config.txt                  # Language configuration
-│   ├── translate.txt               # Main UI translations
-│   ├── translate_magazine.txt      # Yellow Pages magazine translations
-│   ├── translate_teletext.txt      # TV/Teletext content translations
-│   ├── translate_msc.txt           # Optional: My Summer Car compatibility
-│   ├── translate_mod.txt           # Optional: Mod content translations
-│   └── fonts.unity3d               # Optional: Custom font asset bundle
-└── MWC_Localization_Core.dll       # Core plugin module
+My Winter Car/
+`-- Mods/
+    |-- MWC_Localization_Core.dll       # Core plugin module
+    `-- Assets/
+        `-- MWC_Localization_Core/
+            |-- config.txt              # Language configuration
+            |-- translate.txt           # Main UI translations
+            |-- translate_magazine.txt  # Yellow Pages magazine translations
+            |-- translate_teletext.txt  # TV/Teletext content translations
+            |-- translate_msc.txt       # Optional: My Summer Car compatibility
+            |-- translate_mod.txt       # Optional: Mod content translations
+            `-- fonts.unity3d           # Optional: Custom font asset bundle
 ```
 
 ## Configuration (config.txt)
@@ -98,6 +104,12 @@ WITHDRAWAL = 출금
 Welcome to My Winter Car = 마이 윈터 카에\n오신 것을 환영합니다
 ```
 
+**Format notes:**
+- The first unescaped `=` separates the key from the value.
+- Use `\=` if the original text contains a literal equals sign.
+- Use `\n` for line breaks.
+- Translation files are read as UTF-8.
+
 ### translate_magazine.txt - Classified Magazine
 
 This file involves special logic for handling comma-separated random words & Price line in Classified Magazine.
@@ -109,7 +121,7 @@ headgskt. = 헤.가스켓
 supp.arm = 서스.암
 
 # Phone label for price lines
-# Used in lines like "h.149,- puh.123456" -> "149 MK, ${PHONE} - (08)123456"
+# Used in lines like "h.149,- puh.123456" -> "149 MK, ${PHONE} - 123456"
 PHONE = 전화
 ```
 
@@ -124,7 +136,7 @@ Category-based translations for TV teletext (news, weather, recipes, etc.) & TV 
 This separate file was introduced to workaround the game constantly trying to overwrite translations from plugin.
 
 **ORDER & [CATEGORY] MATTERS!**
-At least in this file. It's recommended NOT to modify these.
+At least in this file. It's recommended NOT to modify these unless you are updating the matching game dump/order.
 
 ```
 # Category sections match teletext pages
@@ -152,7 +164,7 @@ Headline here
 **Categories:**
 - `day` - Day names
 - `kotimaa` - Domestic news
-- `ulkomaat` - Foreign news  
+- `ulkomaat` - Foreign news
 - `talous` - Economy news
 - `urheilu` - Sports news
 - `ruoka` - Recipes
@@ -166,6 +178,12 @@ Please note that few TV lines might not 'look translated' due to the reason ment
 You can reuse translation files from My Summer Car as a base. Many UI texts are shared between games.
 
 Contents from `translate.txt` (MWC-specific) will override `translate_msc.txt` entries.
+
+### translate_mod.txt - Mod Translations (Optional)
+
+Use this file for strings added by other mods or for mod-specific overrides.
+
+Contents from `translate_mod.txt` are loaded after `translate.txt`, so they can override previous entries.
 
 ## Text Adjustments (Optional)
 
@@ -238,7 +256,7 @@ For languages requiring special font support (better readability, special charac
 2. **Create Unity assets** - Use Unity 5.0.0f4 (same version as My Winter Car)
 3. **Build AssetBundle** - Name it `fonts.unity3d`
 4. **Match names** - Font asset names must match `config.txt` [FONTS] section values
-5. **Place in l10n_assets** - Put `fonts.unity3d` alongside other translation files
+5. **Place in Assets/MWC_Localization_Core** - Put `fonts.unity3d` alongside other translation files
 
 **Unity Setup Notes:**
 - Unity 5.0.0f4 has broken licensing - install 5.6.7f1 first to activate, then run 5.0.0f4
@@ -283,6 +301,8 @@ Press **F8** in-game to reload all configuration and translation files instantly
 
 ### Building the Plugin
 
-```bash
-dotnet build -c Release
+```powershell
+& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MWC_Localization_Core.sln" /p:Configuration=Release
 ```
+
+If the game is installed outside the default Steam path, update the `HintPath` entries in `MWC_Localization_Core.csproj`.
