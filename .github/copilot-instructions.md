@@ -1,178 +1,236 @@
-# My Winter Car Localization Framework - Migration Guide
+# My Winter Car Localization Framework - Copilot Instructions
 
 ## Project Overview
-**Game:** My Winter Car (Unity 5, PlayMaker FSM)  
-**Framework:** MSCLoader 1.4  
-**Architecture:** Multi-language localization (generic framework for community language packs)  
-**Status:** v1.0.0 - MSCLoader Migration (fixing critical bugs)
+
+- **Game:** My Winter Car (Unity 5-era runtime, PlayMaker FSM)
+- **Framework:** MSCLoader
+- **Architecture:** Multi-language localization core for community language packs
+- **Current version:** 1.3.3
+- **Target framework:** .NET Framework 3.5
+- **Supported game:** `Game.MyWinterCar`
+
+This project is no longer in the old v1.0 migration state. The current code uses MSCLoader lifecycle callbacks plus a dedicated `LateUpdateHandler` MonoBehaviour for continuous monitoring after the game's own Update logic has regenerated text.
 
 ## MSCLoader Lifecycle
 
-**Execution Order:**
-```
-Main Menu Load → ModSettings() → OnMenuLoad() → [User plays]
-New Game/Continue → PreLoad() → OnLoad() → PostLoad() → [Game Loop: Update(), FixedUpdate()]
-Save/Quit → OnSave() → [Back to Main Menu]
-```
+`MWC_Localization_Core.ModSetup()` must only register callbacks:
 
-**Critical Setup Functions:**
-- `ModSetup()` - Register callbacks ONLY (no logic!)
-- `OnMenuLoad` - Main menu initialization (once per menu load)
-- `PostLoad` - Game scene fully loaded (all mods ready)
-- `Update` - Every frame (register via `SetupFunction(Setup.Update, Mod_Update)`)
-- **⚠️ LateUpdate/FixedUpdate** - MonoBehaviour methods DO NOT auto-run in Mod class!
-
-**Lifecycle Members**
-OnNewGame - Called once when new game (not continue old save) is started
-OnMenuLoad - Setup function that is executed once in MainMenu
-PreLoad - Phase 1 of mod loading (executed once after GAME scene is loaded)
-OnLoad - Phase 2 of mod loading (executed once GAME scene is fully loaded)
-PostLoad - Phase 3 of mod loading (executed once after all mods finished with Phase 2)
-OnSave - Executed once after game is being saved.
-OnGUI - Works same way as unity OnGUI
-Update - Works same way as unity Update
-FixedUpdate - Works same way as unity FixedUpdate
-OnModEnabled - Called once when mod has been enabled in settings
-OnModDisabled - Called once when mod has been disabled in settings
-ModSettingsLoaded - Called after saved settings have been loaded from file.
-ModSettings - All settings and Keybinds should be created here.
-
-### Scene Loading Strategy
-
-**MSCLoader - Event-Driven:**
 ```csharp
-public override void ModSetup() {
+public override void ModSetup()
+{
+    SetupFunction(Setup.ModSettings, Mod_Settings);
     SetupFunction(Setup.OnMenuLoad, Mod_OnMenuLoad);
     SetupFunction(Setup.PostLoad, Mod_PostLoad);
     SetupFunction(Setup.Update, Mod_Update);
 }
-
-void Mod_OnMenuLoad() {
-    // Called once when main menu loads
-    TranslateMainMenu();
-}
-
-void Mod_PostLoad() {
-    // Called after game fully loaded
-    TranslateGameScene();
-}
-
-void Mod_Update() {
-    // Every frame - monitoring only
-    if (reloadKey.GetKeybindDown()) ReloadTranslations();
-    MonitorDynamicUI();
-}
 ```
 
-## Core Architecture Overview
+Current responsibilities:
 
-**Key Components:**
-- `MWC_Localization_Core` - Main MSCLoader mod (entry point)
-- `LocalizationConfig` - Loads config.txt (language metadata, fonts, position adjustments)
-- `TextMeshTranslator` - Core translation logic + font application
-- `TeletextHandler` - Teletext array translation (runtime ArrayList replacement)
-- `ArrayListProxyHandler` - PlayMaker ArrayList translation
-- `MagazineTextHandler` - Complex text handling (comma-separated, price lines)
-- `SceneTranslationManager` - Scene state tracking
-- `UnifiedTextMeshMonitor` - Dynamic UI monitoring
+- `Mod_Settings` - registers F8 reload key and debug/warning log settings.
+- `Mod_OnMenuLoad` - loads config, fonts, translations, handlers, main-menu text, and FSM hook.
+- `Mod_PostLoad` - translates GAME scene, initializes PlayMaker data sources, and creates `MWC_LateUpdateHandler`.
+- `Mod_Update` - handles F8 reload, scene changes, cache cleanup, and scene-level initial translation scheduling.
+- `LateUpdateHandler.LateUpdate` - performs continuous monitoring after the game has updated/rebuilt dynamic text.
 
-**Translation Workflow:**
-1. Load `config.txt` → Language metadata, Unicode ranges, font mappings, position adjustments
-2. Load `translate.txt` → Main translation dictionary (KEY = Translation)
-3. Load `translate_magazine.txt` / `translate_teletext.txt` → Specialized translations
-4. Scan TextMesh components → Match GameObject paths
-5. Apply translations + custom fonts + position adjustments
-6. Monitor dynamic UI for changes
+Important rule: do not put heavy scan/translation loops directly in `Mod_Update` if they must run after game text is regenerated. Put that work behind `LateUpdateHandler` or one of the monitor/handler classes.
 
-**Configuration Files:**
-- `config.txt` - Language settings (Korean example)
-- `translate.txt` - Main translations
-- `translate_msc.txt` - My Summer Car compatibility
-- `translate_magazine.txt` - Magazine translations
-- `translate_teletext.txt` - Teletext translations (category-based, index-ordered)
-- `fonts.unity3d` - Custom font bundle (optional)
+## Core Architecture
 
-## Teletext System (Critical for MSCLoader)
+Key components:
 
-**Challenge:** Teletext stored in PlayMaker ArrayLists, not TextMesh → Can't use standard translation
+- `MWC_Localization_Core` - MSCLoader entry point and lifecycle orchestration.
+- `LocalizationConfig` - loads `config.txt`, language metadata, font mappings, and position adjustments.
+- `TranslationFileParser` - parses simple `KEY = VALUE` files and category-based teletext files.
+- `TextMeshTranslator` - translates `TextMesh`, applies custom fonts, and applies text adjustments.
+- `PatternMatcher` / `TranslationPattern` - handles dynamic strings with placeholders such as `{0}`.
+- `FsmTextHook` - translates PlayMaker FSM-owned strings that would otherwise be regenerated by the game.
+- `TeletextHandler` - translates TV/Teletext/chat ArrayList data sources.
+- `MagazineTextHandler` - handles Yellow Pages / Classified Magazine text and price/phone formatting.
+- `ArrayListProxyHandler` - translates selected generic PlayMaker ArrayList data.
+- `HashTableProxyHandler` - translates selected magazine keyword HashTable data.
+- `UnifiedTextMeshMonitor` - monitors dynamic TextMeshes using path-based strategies.
+- `LateUpdateHandler` - runs continuous monitor work in Unity `LateUpdate`.
+- `MLCUtils` - normalizes keys, builds/caches GameObject paths, and finds objects/FSMs including inactive ones.
 
-**Solution:** Direct data source manipulation - replace ArrayList contents at runtime
+## Translation Loading
 
-**Lazy-Loading Issue:**
-- Most arrays empty until navigated to (`kotimaa`, `ulkomaat`, `talous`, etc.)
-- Pre-filling doesn't work (game overwrites `preFillStringList`)
-- Must replace `_arrayList` AFTER game populates it
+Main dictionary loading order:
 
-**Translation Strategy:**
-```csharp
-// Monitor in Mod_Update() (not LateUpdate - it doesn't run!)
-if (proxy._arrayList.Count > 0) {  // Array populated
-    ArrayList newArrayList = new ArrayList();
-    for (int i = 0; i < proxy._arrayList.Count; i++) {
-        newArrayList.Add(translations[i]);  // Index-based replacement
-    }
-    proxy._arrayList = newArrayList;  // Replace entire ArrayList
-}
-```
+1. `translate_msc.txt`
+2. `translate.txt`
+3. `translate_mod.txt`
 
-**translate_teletext.txt Format:**
+Later files overwrite earlier entries when the same normalized key exists.
+
+Specialized files:
+
+- `translate_magazine.txt` - magazine/classified text and the `PHONE` label.
+- `translate_teletext.txt` - category-based TV/Teletext/chat text and FSM patterns.
+- `config.txt` - language metadata, `[FONTS]`, and `[POSITION_ADJUSTMENTS]`.
+- `fonts.unity3d` - optional custom font AssetBundle.
+
+All text/config files are read as UTF-8.
+
+## Key/Value Translation Format
+
+Simple translation files use:
+
 ```ini
-[day]
-MAANANTAI = 월요일
-TIISTAI = 화요일
-
-[kotimaa]
-Original news headline = Translated headline
-Second headline = 번역된 헤드라인
+ORIGINAL TEXT = Translated text
+PRICE TOTAL: {0} = TOTAL PRICE: {0}
+MULTILINE = First line\nSecond line
 ```
-Order MUST match game's dump order (index-based)
 
-**Font Application (Separate Step):**
-After translating data, apply fonts to display TextMesh components:
-```csharp
-GameObject root = GameObject.Find("Systems/TV/Teletext/VKTekstiTV/PAGES");
-TextMesh[] displays = root.GetComponentsInChildren<TextMesh>();
-foreach (var tm in displays) translator.ApplyFontOnly(tm, path);
-```
+Parser details:
+
+- Lines whose first non-space character is `#` are comments.
+- The first unescaped `=` separates key and value.
+- Use `\=` for literal equals signs.
+- Use `\n` for line breaks.
+- Keys are normalized by `MLCUtils.FormatUpperKey`: uppercase and remove spaces, tabs, carriage returns, and newlines.
+- Translation values intentionally preserve some spacing because concatenated game strings sometimes rely on it.
+
+## Teletext System
+
+Teletext, TV chat, and some TV strings are stored in PlayMaker data rather than plain TextMesh fields. The current implementation translates data sources directly, then applies fonts to the display TextMeshes.
+
+Current behavior:
+
+- `TeletextHandler` parses `[category]` sections from `translate_teletext.txt`.
+- It first tries exact key lookup.
+- It can fall back to index-based replacement for ordered category entries.
+- `ChatMessages.Messages` aliases `ChatMessages.All`.
+- `LateUpdateHandler` checks teletext arrays on `LocalizationConstants.ARRAY_MONITOR_INTERVAL` (2 seconds).
+- `FsmTextHook` handles FSM-owned TV strings such as weather, bottom lines, chat clock/status, and related generated strings.
+
+Common categories:
+
+- `fsm`
+- `day`
+- `kotimaa`
+- `ulkomaat`
+- `talous`
+- `urheilu`
+- `ruoka`
+- `ajatus`
+- `kulttuuri`
+- `Chat.Day.Days`
+- `ChatMessages.All`
+
+Keep teletext category order stable unless updating from a matching game dump and testing in-game.
 
 ## Configuration System
 
-**config.txt Structure:**
+`config.txt` structure:
+
 ```ini
 LANGUAGE_NAME = Korean
 LANGUAGE_CODE = ko-KR
 
 [FONTS]
-FugazOne-Regular = NanumSquareRoundEB
-Heebo-Black = PaperlogyExtraBold
+FugazOne-Regular = CustomFontName
+Heebo-Black = CustomFontNameRegular
 
 [POSITION_ADJUSTMENTS]
 Contains(GUI/HUD/) & EndsWith(/HUDLabel) = 0,-0.05,0
+Contains(Systems/OptionsMenu) & Contains(/GUITextHeader) = 0,0,0,0.08
 ```
 
-**Position Adjustment Conditions:**
-- `Contains(text)` - Path contains substring
-- `EndsWith(text)` - Path ends with substring
-- `StartsWith(text)` - Path starts with substring
-- `Equals(text)` - Exact match
-- `!Contains(text)` - Negation
-- Combine with `&` for AND logic
+Position adjustment format:
 
-**Key Normalization:**
-```csharp
-// StringHelper.FormatUpperKey() - uppercase, no spaces/newlines
-"BEER 149 MK" → "BEER149MK"
+```text
+Conditions = X,Y,Z[,FontSize,LineSpacing,WidthScale]
 ```
 
-## Version History
-- **v0.2.0** - Korean-specific initial implementation
-- **v0.3.0** - Generic multi-language framework
-- **v0.3.1** - Teletext/array translation system
-- **v1.0.0** - MSCLoader migration (ongoing - fixing critical bugs)
+Supported conditions:
 
----
+- `Contains(text)`
+- `EndsWith(text)`
+- `StartsWith(text)`
+- `Equals(text)`
+- `!Contains(text)`
+- Combine conditions with `&`.
 
-**Last Updated:** January 10, 2026  
-**Status:** MSCLoader Migration In Progress - Critical bugs being fixed  
-**Current Issues:** LateUpdate not running, duplicate scene translation, game scene under-translated  
-**Next Steps:** Refactor to MSCLoader lifecycle properly, consolidate monitoring in Mod_Update
+`WidthScale` maps to `transform.localScale.x`.
+
+## Dynamic Monitoring
+
+`UnifiedTextMeshMonitor` uses path rules and strategies:
+
+- `EveryFrame` - critical interaction/subtitle/HUD text.
+- `FastPolling` - active HUD and TV/chat status values.
+- `LateTranslateOnce` - late-loaded text that can stop monitoring after a successful translation.
+- `LateApplyFontOnce` - text translated upstream where only font application is needed.
+- `OnVisibilityChange` - sheets/menus that should translate when shown.
+- `Persistent` - rebuilt/dynamic screens that need repeated checks.
+
+Continuous monitoring must remain cache-aware. Clear caches on scene changes and F8 reloads through the existing manager/helper methods.
+
+## F8 Reload
+
+F8 reload should:
+
+- Clear translation dictionaries and handler caches.
+- Reload `config.txt`.
+- Reload `translate_msc.txt`, `translate.txt`, and `translate_mod.txt`.
+- Reload magazine and teletext files.
+- Reset and reload pattern matching.
+- Clear `MLCUtils` and runtime translator caches.
+- Reinitialize relevant monitor state.
+- Reload custom font mappings and reapply fonts/adjustments.
+- Recreate the FSM hook for MainMenu/GAME when needed.
+
+Do not add reload behavior that leaves stale font, path, FSM, or TextMesh caches alive.
+
+## Build Notes
+
+The project is a classic C# library targeting .NET Framework 3.5.
+
+Expected build command:
+
+```powershell
+& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MWC_Localization_Core.sln" /p:Configuration=Release
+```
+
+If the game is installed outside the default Steam path, update `HintPath` entries in `MWC_Localization_Core.csproj`.
+
+The project references game/MSCLoader assemblies under:
+
+```text
+C:\Program Files (x86)\Steam\steamapps\common\My Winter Car\mywintercar_Data\Managed\
+```
+
+## Distribution Layout
+
+The packaged mod lives in `dist/`:
+
+```text
+dist/
+|-- MWC_Localization_Core.dll
+`-- Assets/
+    `-- MWC_Localization_Core/
+        |-- config.txt
+        |-- translate.txt
+        |-- translate_magazine.txt
+        |-- translate_teletext.txt
+        |-- translate_msc.txt
+        |-- translate_mod.txt
+        `-- fonts.unity3d
+```
+
+Do not document or generate `l10n_assets`; the current MSCLoader asset folder is `Assets/MWC_Localization_Core`.
+
+## Contribution Notes
+
+- Keep generated or edited text files in UTF-8.
+- Avoid large unrelated refactors; this code relies on Unity 5 / .NET 3.5 compatibility.
+- Be careful with modern C# APIs that are unavailable at runtime even though the project has `LangVersion` set to 13.
+- Preserve PlayMaker reflection logic unless you can test in-game.
+- Preserve placeholder patterns such as `{0}`, `{1}`, and `{2}`.
+- If adding AI-generated code, follow the disclosure comment in `Properties/AssemblyInfo.cs`.
+
+## Current Status
+
+- **Status:** Active localization core, version 1.3.3.
+- **Old migration issues resolved:** LateUpdate monitoring now runs through `LateUpdateHandler`; scene translation is coordinated through `SceneTranslationManager`; dynamic GAME text is monitored by dedicated handlers.
