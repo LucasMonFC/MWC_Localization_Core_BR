@@ -1,9 +1,6 @@
 // 'Classified Magazine' Text Handler
 
-using MSCLoader;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using UnityEngine;
 
 namespace MWC_Localization_Core

@@ -1,4 +1,3 @@
-using MSCLoader;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +13,7 @@ namespace MWC_Localization_Core
         public string Path;
         public MonitoringStrategy Strategy;
         public string LastText;
+        public bool HasProcessedText;
         public bool WasTranslated;
         public bool IsVisible;
 
@@ -24,6 +24,7 @@ namespace MWC_Localization_Core
             Path = path;
             Strategy = strategy;
             LastText = textMesh != null ? textMesh.text : "";
+            HasProcessedText = false;
             WasTranslated = false;
             IsVisible = GameObject != null && GameObject.activeInHierarchy;
         }
@@ -73,7 +74,6 @@ namespace MWC_Localization_Core
         
         // Instance-based storage (supports multiple TextMeshes per path)
         private Dictionary<int, TextMeshEntry> instanceEntries;  // instanceID -> entry
-        private Dictionary<string, HashSet<int>> pathToInstances;  // path -> instanceIDs
         private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
         private HashSet<string> monitoredPaths = new HashSet<string>();
         private List<int> removalBuffer = new List<int>(64);
@@ -84,7 +84,6 @@ namespace MWC_Localization_Core
             this.translator = translator;
             pathRules = new Dictionary<string, MonitoringStrategy>();
             instanceEntries = new Dictionary<int, TextMeshEntry>();
-            pathToInstances = new Dictionary<string, HashSet<int>>();
             strategyGroups = new Dictionary<MonitoringStrategy, HashSet<int>>();
 
             // Initialize strategy groups
@@ -142,9 +141,9 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/ServiceBrochure", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
+            AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/RallyResults", MonitoringStrategy.OnVisibilityChange);
             AddPathRule("Sheets/RallyRegistration/Functions/Class", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
 
             // Magazine / Sheets - persistent monitoring due to dynamic content changes and rebuilds
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.Persistent);
@@ -185,12 +184,15 @@ namespace MWC_Localization_Core
                 int registered = Register(parentPath, strategy);
 
                 // Only queue for late retry if the initial Register couldn't find the parent yet
-                // (registered == 0). Persistent still stays queued so rebuilt children get picked up.
+                // (registered == 0). Persistent and OnVisibilityChange stay queued so rebuilt
+                // children get picked up.
                 bool needsLateQueue = strategy == MonitoringStrategy.LateTranslateOnce ||
                                       strategy == MonitoringStrategy.LateApplyFontOnce ||
                                       strategy == MonitoringStrategy.OnVisibilityChange ||
                                       strategy == MonitoringStrategy.Persistent;
-                if (needsLateQueue && (registered == 0 || strategy == MonitoringStrategy.Persistent))
+                if (needsLateQueue && (registered == 0 ||
+                                       strategy == MonitoringStrategy.Persistent ||
+                                       strategy == MonitoringStrategy.OnVisibilityChange))
                 {
                     monitoredPaths.Add(parentPath);
                 }
@@ -212,8 +214,11 @@ namespace MWC_Localization_Core
                 int registered = Register(parentPath, strategy);
 
                 // Remove from monitoring list if successfully registered.
-                // Persistent paths stay in the scan because their child TextMeshes can be rebuilt.
-                if (registered > 0 && strategy != MonitoringStrategy.Persistent)
+                // Persistent and OnVisibilityChange paths stay in the scan because their
+                // child TextMeshes can be rebuilt.
+                if (registered > 0 &&
+                    strategy != MonitoringStrategy.Persistent &&
+                    strategy != MonitoringStrategy.OnVisibilityChange)
                 {
                     stringRemovalBuffer.Add(parentPath);
                 }
@@ -281,26 +286,24 @@ namespace MWC_Localization_Core
                     continue;
 
                 // Translate first to reduce visible unlocalized text
-                bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath, null);
+                bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath);
 
                 TextMeshEntry entry = new TextMeshEntry(textMesh, textMeshPath, finalStrategy);
+                entry.HasProcessedText = true;
+                entry.UpdateLastText();
                 if (translated)
                 {
                     entry.WasTranslated = true;
-                    entry.UpdateLastText();
+                }
+
+                if (finalStrategy == MonitoringStrategy.LateTranslateOnce && entry.WasTranslated)
+                {
+                    registeredCount++;
+                    continue;
                 }
 
                 // Register instance
                 instanceEntries[instanceID] = entry;
-                
-                // Index by path
-                HashSet<int> pathSet;
-                if (!pathToInstances.TryGetValue(textMeshPath, out pathSet))
-                {
-                    pathSet = new HashSet<int>();
-                    pathToInstances[textMeshPath] = pathSet;
-                }
-                pathSet.Add(instanceID);
                 
                 // Group by strategy
                 strategyGroups[finalStrategy].Add(instanceID);
@@ -322,15 +325,6 @@ namespace MWC_Localization_Core
             // Remove from strategy group
             strategyGroups[entry.Strategy].Remove(instanceID);
 
-            // Remove from path index
-            HashSet<int> pathSet;
-            if (pathToInstances.TryGetValue(entry.Path, out pathSet))
-            {
-                pathSet.Remove(instanceID);
-                if (pathSet.Count == 0)
-                    pathToInstances.Remove(entry.Path);
-            }
-            
             // Remove instance
             instanceEntries.Remove(instanceID);
         }
@@ -356,7 +350,6 @@ namespace MWC_Localization_Core
             slowPollingTimer += deltaTime;
             if (slowPollingTimer >= LocalizationConstants.SLOW_POLLING_INTERVAL)
             {
-                UpdateGroup(MonitoringStrategy.SlowPolling);
                 UpdateGroup(MonitoringStrategy.LateTranslateOnce);
                 MonitorLateRegister(); // Also check for late registrations
                 slowPollingTimer = 0f;
@@ -385,9 +378,13 @@ namespace MWC_Localization_Core
                 // Check validity first to avoid NullReferenceException on destroyed objects
                 if (!entry.IsValid())
                 {
-                    // Persistent strategy: Keep checking even if entry is not valid
-                    if (strategy != MonitoringStrategy.Persistent)
-                        removalBuffer.Add(instanceID);
+                    removalBuffer.Add(instanceID);
+                    continue;
+                }
+
+                if (strategy == MonitoringStrategy.LateTranslateOnce && entry.WasTranslated)
+                {
+                    removalBuffer.Add(instanceID);
                     continue;
                 }
 
@@ -397,17 +394,22 @@ namespace MWC_Localization_Core
                     continue;
 
                 bool textChanged = entry.HasTextChanged();
-                
-                if (textChanged || !entry.WasTranslated)
+                if (textChanged)
                 {
-                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path, null);
+                    entry.HasProcessedText = false;
+                }
+                
+                if (textChanged || !entry.HasProcessedText)
+                {
+                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);
+                    entry.HasProcessedText = true;
+                    entry.UpdateLastText();
                     if (translated)
                     {
                         entry.WasTranslated = true;
-                        entry.UpdateLastText();
 
-                        // Mark for removal if TranslateOnce
-                        if (strategy == MonitoringStrategy.TranslateOnce || strategy == MonitoringStrategy.LateTranslateOnce)
+                        // Late one-shot entries can stop monitoring after the first successful translation.
+                        if (strategy == MonitoringStrategy.LateTranslateOnce)
                         {
                             removalBuffer.Add(instanceID);
                         }
@@ -425,6 +427,7 @@ namespace MWC_Localization_Core
         private void UpdateVisibilityChangeGroup()
         {
             var instanceIDs = strategyGroups[MonitoringStrategy.OnVisibilityChange];
+            removalBuffer.Clear();
 
             foreach (int instanceID in instanceIDs)
             {
@@ -433,7 +436,10 @@ namespace MWC_Localization_Core
                     continue;
 
                 if (!entry.IsValid())
+                {
+                    removalBuffer.Add(instanceID);
                     continue;
+                }
 
                 bool wasVisible = entry.IsVisible;
                 entry.UpdateVisibility();
@@ -441,13 +447,19 @@ namespace MWC_Localization_Core
                 // Only translate when visibility changes from hidden to visible
                 if (!wasVisible && entry.IsVisible)
                 {
-                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path, null);
+                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);
+                    entry.HasProcessedText = true;
+                    entry.UpdateLastText();
                     if (translated)
                     {
                         entry.WasTranslated = true;
-                        entry.UpdateLastText();
                     }
                 }
+            }
+
+            foreach (int instanceID in removalBuffer)
+            {
+                UnregisterInstance(instanceID);
             }
         }
 
@@ -461,7 +473,6 @@ namespace MWC_Localization_Core
                 group.Clear();
             }
             instanceEntries.Clear();
-            pathToInstances.Clear();
             pathRules.Clear();
             monitoredPaths.Clear();
             fastPollingTimer = 0f;

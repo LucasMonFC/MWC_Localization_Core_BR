@@ -15,7 +15,7 @@ namespace MWC_Localization_Core
         /// Parse KEY=VALUE translation file (simple format)
         /// Supports escaped equals (\=) and preserves intentional spacing
         /// </summary>
-        public static Dictionary<string, string> ParseKeyValueFile(string filePath, bool normalizeKeys = true)
+        public static Dictionary<string, string> ParseKeyValueFile(string filePath, bool normalizeKeys = true, bool overwriteExisting = false)
         {
             var result = new Dictionary<string, string>();
 
@@ -59,7 +59,7 @@ namespace MWC_Localization_Core
 
                     string processedValue = value.Replace("\\n", "\n");
 
-                    if (!result.ContainsKey(key))
+                    if (overwriteExisting || !result.ContainsKey(key))
                         result[key] = processedValue;
                 }
             }

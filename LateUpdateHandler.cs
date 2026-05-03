@@ -1,6 +1,4 @@
-using MSCLoader;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace MWC_Localization_Core
 {
