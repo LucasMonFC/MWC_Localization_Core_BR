@@ -2,7 +2,7 @@
 
 A MSCLoader plugin system for My Winter Car that enables automatic localization without code modifications.
 
-See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
+See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/213)
 
 ## Quick Start
 
