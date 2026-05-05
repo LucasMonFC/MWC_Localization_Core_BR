@@ -82,9 +82,11 @@ namespace MWC_Localization_Core
                         return false;
                 }
 
-                // The game moved this TextMesh after our last adjustment. Treat the
-                // current transform as the new base, then apply the configured offset.
-                originalStates[textMesh] = new OriginalTextMeshState(textMesh);
+                // The game moved this TextMesh after our last adjustment. Keep the
+                // original sizing values, but use the current transform as the new base.
+                OriginalTextMeshState updatedState = originalStates[textMesh];
+                updatedState.LocalPosition = textMesh.transform.localPosition;
+                originalStates[textMesh] = updatedState;
             }
 
             // Apply the position offset
