@@ -43,6 +43,8 @@ namespace MWC_Localization_Core
         // Last values written by this rule. If the game rewrites a transform later,
         // the next monitor tick can apply the offset again without accumulating it.
         private Dictionary<TextMesh, Vector3> lastAppliedLocalPositions = new Dictionary<TextMesh, Vector3>();
+        // PositionToleranceSqr is a squared Vector3.sqrMagnitude threshold, not a raw
+        // distance; 1e-7 means about 3.16e-4 units of linear drift.
         private const float PositionToleranceSqr = 0.0000001f;
 
         public TextAdjustment(string conditionsString, Vector3 offset, float? fontSize = null, float? lineSpacing = null, float? widthScale = null)

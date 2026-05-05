@@ -76,6 +76,7 @@ namespace MWC_Localization_Core
         private Dictionary<int, TextMeshEntry> instanceEntries;  // instanceID -> entry
         private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
         private HashSet<string> monitoredPaths = new HashSet<string>();
+        private HashSet<string> persistentLayoutPaths = new HashSet<string>();
         private List<int> removalBuffer = new List<int>(64);
         private List<string> stringRemovalBuffer = new List<string>(16);
 
@@ -189,17 +190,15 @@ namespace MWC_Localization_Core
                 // Only queue for late retry if the initial Register couldn't find the parent yet
                 // (registered == 0). Persistent and OnVisibilityChange stay queued so rebuilt
                 // children get picked up.
+                bool keepQueued = strategy == MonitoringStrategy.OnVisibilityChange ||
+                                  strategy == MonitoringStrategy.Persistent ||
+                                  strategy == MonitoringStrategy.PersistentLayout;
                 bool needsLateQueue = strategy == MonitoringStrategy.LateTranslateOnce ||
                                       strategy == MonitoringStrategy.LateApplyFontOnce ||
-                                      strategy == MonitoringStrategy.OnVisibilityChange ||
-                                      strategy == MonitoringStrategy.Persistent ||
-                                      strategy == MonitoringStrategy.PersistentLayout;
-                if (needsLateQueue && (registered == 0 ||
-                                       strategy == MonitoringStrategy.Persistent ||
-                                       strategy == MonitoringStrategy.PersistentLayout ||
-                                       strategy == MonitoringStrategy.OnVisibilityChange))
+                                      keepQueued;
+                if (needsLateQueue && (registered == 0 || keepQueued))
                 {
-                    monitoredPaths.Add(parentPath);
+                    AddMonitoredPath(parentPath, strategy);
                 }
             }
         }
@@ -210,7 +209,11 @@ namespace MWC_Localization_Core
         public void MonitorLateRegister(MonitoringStrategy? strategyFilter = null)
         {
             stringRemovalBuffer.Clear();
-            foreach (string parentPath in monitoredPaths)
+            HashSet<string> pathsToScan = strategyFilter.HasValue && strategyFilter.Value == MonitoringStrategy.PersistentLayout
+                ? persistentLayoutPaths
+                : monitoredPaths;
+
+            foreach (string parentPath in pathsToScan)
             {
                 MonitoringStrategy strategy;
                 if (!pathRules.TryGetValue(parentPath, out strategy))
@@ -234,8 +237,23 @@ namespace MWC_Localization_Core
             }
             for (int i = 0; i < stringRemovalBuffer.Count; i++)
             {
-                monitoredPaths.Remove(stringRemovalBuffer[i]);
+                RemoveMonitoredPath(stringRemovalBuffer[i]);
             }
+        }
+
+        private void AddMonitoredPath(string parentPath, MonitoringStrategy strategy)
+        {
+            monitoredPaths.Add(parentPath);
+            if (strategy == MonitoringStrategy.PersistentLayout)
+            {
+                persistentLayoutPaths.Add(parentPath);
+            }
+        }
+
+        private void RemoveMonitoredPath(string parentPath)
+        {
+            monitoredPaths.Remove(parentPath);
+            persistentLayoutPaths.Remove(parentPath);
         }
 
         /// <summary>
@@ -494,6 +512,7 @@ namespace MWC_Localization_Core
             instanceEntries.Clear();
             pathRules.Clear();
             monitoredPaths.Clear();
+            persistentLayoutPaths.Clear();
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
             visibilityPollingTimer = 0f;
