@@ -569,6 +569,18 @@ Heater Box - Good enough = CAIXA DO AQUECEDOR - BOM O SUFICIENTE
 Heater Box - Just broken in = CAIXA DO AQUECEDOR - RECÉM AMACIADA
 Heater Box - Fresh out of box = CAIXA DO AQUECEDOR - RECÉM SAÍDA DA CAIXA
 
+Carburettor - {0}% = CARBURADOR - {0}%
+Carburettor - Throw in the bin = CARBURADOR - JOGUE NO LIXO
+Carburettor - Pretty dead = CARBURADOR - QUASE MORTA
+Carburettor - Should do for a while = CARBURADOR - DEVE AGUENTAR POR UM TEMPO
+Carburettor - Pretty okay = CARBURADOR - BEM RAZOÁVEL
+Carburettor - Brand new = CARBURADOR - NOVA EM FOLHA
+Carburettor - Scrap metal = CARBURADOR - SUCATA
+Carburettor - Worn out = CARBURADOR - DESGASTADA
+Carburettor - Good enough = CARBURADOR - BOM O SUFICIENTE
+Carburettor - Just broken in = CARBURADOR - RECÉM AMACIADA
+Carburettor - Fresh out of box = CARBURADOR - RECÉM SAÍDA DA CAIXA
+
 Oil filter - {0}% DIRT = FILTRO DE ÓLEO - {0}% SUJO
 Oil filter - Probably change soon = FILTRO DE ÓLEO - PROVAVELMENTE TROCAR EM BREVE
 Oil filter - Due changing = FILTRO DE ÓLEO - TROCA NECESSÁRIA
@@ -1149,6 +1161,18 @@ Brake Master Cylinder (Standard Brakes) - In poor condition = CILINDRO MESTRE DE
 Brake Master Cylinder (Standard Brakes) - In bad condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM ESTADO PÉSSIMO
 Brake Master Cylinder (Standard Brakes) - In terrible condition = CILINDRO MESTRE DE FREIO (FREIO PADRÃO) - EM ESTADO TERRÍVEL
 
+Carburettor - {0}% = CARBURADOR - {0}%
+Carburettor - Intact = CARBURADOR - INTACTO
+Carburettor - Broken = CARBURADOR - QUEBRADO
+Carburettor - In mint condition = CARBURADOR - EM ESTADO IMPECÁVEL
+Carburettor - In great condition = CARBURADOR - EM ÓTIMO ESTADO
+Carburettor - In good condition = CARBURADOR - EM BOM ESTADO
+Carburettor - In decent condition = CARBURADOR - EM ESTADO DECENTE
+Carburettor - In shoddy condition = CARBURADOR - EM ESTADO RUIM
+Carburettor - In poor condition = CARBURADOR - EM MAU ESTADO
+Carburettor - In bad condition = CARBURADOR - EM ESTADO PÉSSIMO
+Carburettor - In terrible condition = CARBURADOR - EM ESTADO TERRÍVEL
+
 //BetterATM
 English = INGLÊS
 Please wait = Aguarde
@@ -1323,7 +1347,10 @@ Uninstall Turbocharger Exhaust Outlet Tube = Desinstalar
 
 //Flea Market Fix
 Flea: {0}, scrap: {1} = Pulga: {0}, sucata: {1}
+advert pile not in the flea list, scrap: {0} = Pilha de anúncios não está na lista da feira, sucata: {0}
+advert(Clone) not in the flea list, scrap: {0} = Anúncio não está na lista da feira, sucata: {0}
 Steering Column not in the flea list, scrap: {0} = Coluna de direção não consta na lista de pulgas, sucata: {0}
+Rocker not in the flea list, scrap: {0} = Balacim não consta na lista de pulgas, sucata: {0}
 floor jack not in the flea list, scrap: {0} = Macaco hidráulico não consta na lista de pulgas, sucata: {0}
 Engine Block not in the flea list, scrap: {0} = Bloco do motor não consta na lista de pulgas, sucata: {0}
 Cylinder Head not in the flea list, scrap: {0} = Cabeçote não consta na lista de pulgas, sucata: {0}
