@@ -76,6 +76,9 @@ ALARM CLOCK {0} MK = DESPERTADOR {0} MK
 FABRIC ROLL {0} MK = ROLO DE TECIDO {0} MK
 FIREWORKS BAG {0} MK = FOGOS DE ARTIFÍCIO {0} MK
 PRICE MONEY {0} MK = PRÊMIO EM DINHEIRO {0} MK
+SCALE {0} MK = BALANÇA {0} MK
+scale = BALANÇA
+RADAR BUSTER {0} MK = DETECTOR DE RADAR {0} MK
 
 BURGER 25 MK = HAMBÚRGUER 25 MK
 JUMBO CHEESE 37 MK = QUEIJO JUMBO 37 MK
@@ -376,6 +379,8 @@ Mies tempautui traktorin ulosottoakseliin ja kuoli = Homem foi puxado pelo\neixo
 Male got killed by tractor PTO shaft = Homem foi\nmorto pelo\neixo de força\ndo trator
 Peräjärveläinen mies sai surmansa klapikoneessa = Homem morreu em uma\nmáquina de rachar lenha
 Dead man found inside of log cutter = Morto foi\nencontrado\ndentro de\nmáquina de\ncortar lenha
+Häkämyrkytys tappoi miehen Peräjärvellä = Envenenamento por CO\nmata homem em Peräjärvi
+Man found dead from carbon poisoning = Monóxido\nde carbono\nmata\nhomem em\nperäjärvi
 
 //ATM
 INSERT BANK CARD = INSERIR CARTÃO BANCÁRIO
@@ -659,6 +664,12 @@ TÄNÄÄN: = HOJE:
 ENNUSTE VKO: = PREV. SEMANAL:
 se \= selkeää pi \= pilvistä Ls \= lumisadetta = en \= ENSOLARADO\nnb \= NUBLADO\nnv \= NEVE
 KLO  = hora 
+172 PRIME-KORKO 175 PÖRSSI = 172 TAXA PRIME   175 BOLSA DE VALORES
+160 TALOUS 175 PÖRSSI = 160 ECONOMIA     175 BOLSA DE VALORES
+160 TALOUS 172 PRIME-KORKO = 160 ECONOMIA           172 TAXA PRIME
+PRIME-KORKO = TAXA DE JUROS (PRIME)
+PRIME-KORON ARVOKEHITYS 10 PV = Variação da taxa prime 10 dias
+ARVO% = Valor%
 
 //Computer POS
 CONNECTION ESTABLISHED: WAITING = CONEXÃO ESTABELECIDA: AGUARDANDO
