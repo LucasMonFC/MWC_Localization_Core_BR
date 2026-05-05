@@ -31,7 +31,7 @@ Contains(Sheets/UnemployPaper/1) = 0,-0.002,0
 ##Death Paper
 Contains(Systems/Death/GameOverScreen/Paper) = 0,0,0,,0.77
 ##Magazine Products
-Contains(Sheets/Magazine/Products) = 0,0,0,0.0024
+Contains(Sheets/Magazine/Products) = 0,-0.002,0,0.0024
 ##Rally Registration
 Contains(Sheets/RallyRegistration/Functions/Class) = 0,-0.01,0,0.0024
 ##TV Status

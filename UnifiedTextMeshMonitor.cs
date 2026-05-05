@@ -150,6 +150,9 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
             AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
             AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.Persistent);
+
+            // Magazine Products / Sheets - persistent layout monitoring due to dynamic content changes and rebuilds
+            AddPathRule("Sheets/Magazine/Products", MonitoringStrategy.PersistentLayout);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -189,9 +192,11 @@ namespace MWC_Localization_Core
                 bool needsLateQueue = strategy == MonitoringStrategy.LateTranslateOnce ||
                                       strategy == MonitoringStrategy.LateApplyFontOnce ||
                                       strategy == MonitoringStrategy.OnVisibilityChange ||
-                                      strategy == MonitoringStrategy.Persistent;
+                                      strategy == MonitoringStrategy.Persistent ||
+                                      strategy == MonitoringStrategy.PersistentLayout;
                 if (needsLateQueue && (registered == 0 ||
                                        strategy == MonitoringStrategy.Persistent ||
+                                       strategy == MonitoringStrategy.PersistentLayout ||
                                        strategy == MonitoringStrategy.OnVisibilityChange))
                 {
                     monitoredPaths.Add(parentPath);
@@ -202,7 +207,7 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Periodically monitor TextMeshes to be available for monitoring
         /// </summary>
-        public void MonitorLateRegister()
+        public void MonitorLateRegister(MonitoringStrategy? strategyFilter = null)
         {
             stringRemovalBuffer.Clear();
             foreach (string parentPath in monitoredPaths)
@@ -211,6 +216,9 @@ namespace MWC_Localization_Core
                 if (!pathRules.TryGetValue(parentPath, out strategy))
                     strategy = MonitoringStrategy.LateTranslateOnce;
 
+                if (strategyFilter.HasValue && strategy != strategyFilter.Value)
+                    continue;
+
                 int registered = Register(parentPath, strategy);
 
                 // Remove from monitoring list if successfully registered.
@@ -218,6 +226,7 @@ namespace MWC_Localization_Core
                 // child TextMeshes can be rebuilt.
                 if (registered > 0 &&
                     strategy != MonitoringStrategy.Persistent &&
+                    strategy != MonitoringStrategy.PersistentLayout &&
                     strategy != MonitoringStrategy.OnVisibilityChange)
                 {
                     stringRemovalBuffer.Add(parentPath);
@@ -337,6 +346,11 @@ namespace MWC_Localization_Core
             // Always update EveryFrame
             UpdateGroup(MonitoringStrategy.EveryFrame);
 
+            // Layout-sensitive magazine text can be rebuilt while the sheet is opened,
+            // so keep it registered and adjusted in the same LateUpdate pass.
+            MonitorLateRegister(MonitoringStrategy.PersistentLayout);
+            UpdateGroup(MonitoringStrategy.PersistentLayout);
+
             // Throttled fast polling (0.1s)
             fastPollingTimer += deltaTime;
             if (fastPollingTimer >= LocalizationConstants.FAST_POLLING_INTERVAL)
@@ -399,6 +413,11 @@ namespace MWC_Localization_Core
                     entry.HasProcessedText = false;
                 }
                 
+                if (strategy == MonitoringStrategy.PersistentLayout)
+                {
+                    translator.ApplyFontOnly(entry.TextMesh, entry.Path);
+                }
+
                 if (textChanged || !entry.HasProcessedText)
                 {
                     bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);

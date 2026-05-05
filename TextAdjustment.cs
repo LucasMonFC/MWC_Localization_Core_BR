@@ -40,6 +40,11 @@ namespace MWC_Localization_Core
         // Store original state of adjusted TextMesh objects for restoration
         private Dictionary<TextMesh, OriginalTextMeshState> originalStates = new Dictionary<TextMesh, OriginalTextMeshState>();
 
+        // Last values written by this rule. If the game rewrites a transform later,
+        // the next monitor tick can apply the offset again without accumulating it.
+        private Dictionary<TextMesh, Vector3> lastAppliedLocalPositions = new Dictionary<TextMesh, Vector3>();
+        private const float PositionToleranceSqr = 0.0000001f;
+
         public TextAdjustment(string conditionsString, Vector3 offset, float? fontSize = null, float? lineSpacing = null, float? widthScale = null)
         {
             Offset = offset;
@@ -59,17 +64,31 @@ namespace MWC_Localization_Core
             if (textMesh == null)
                 return false;
 
-            // Skip if already adjusted
-            if (adjustedTextMeshes.Contains(textMesh))
-                return false;
+            bool alreadyAdjusted = adjustedTextMeshes.Contains(textMesh);
 
             // Store original state before applying adjustments (only once, on first application)
             if (!originalStates.ContainsKey(textMesh))
                 originalStates[textMesh] = new OriginalTextMeshState(textMesh);
 
+            if (alreadyAdjusted)
+            {
+                Vector3 lastAppliedPosition;
+                if (lastAppliedLocalPositions.TryGetValue(textMesh, out lastAppliedPosition))
+                {
+                    Vector3 positionDelta = textMesh.transform.localPosition - lastAppliedPosition;
+                    if (positionDelta.sqrMagnitude <= PositionToleranceSqr)
+                        return false;
+                }
+
+                // The game moved this TextMesh after our last adjustment. Treat the
+                // current transform as the new base, then apply the configured offset.
+                originalStates[textMesh] = new OriginalTextMeshState(textMesh);
+            }
+
             // Apply the position offset
-            Vector3 currentPosition = textMesh.transform.localPosition;
-            textMesh.transform.localPosition = currentPosition + Offset;
+            OriginalTextMeshState originalState = originalStates[textMesh];
+            Vector3 targetPosition = originalState.LocalPosition + Offset;
+            textMesh.transform.localPosition = targetPosition;
 
             // Apply font size if specified
             if (FontSize.HasValue)
@@ -96,6 +115,7 @@ namespace MWC_Localization_Core
 
             // Mark as adjusted
             adjustedTextMeshes.Add(textMesh);
+            lastAppliedLocalPositions[textMesh] = targetPosition;
 
             return true;
         }
@@ -122,6 +142,7 @@ namespace MWC_Localization_Core
 
             // Remove from adjusted set so it can be re-adjusted
             adjustedTextMeshes.Remove(textMesh);
+            lastAppliedLocalPositions.Remove(textMesh);
 
             return true;
         }
@@ -140,6 +161,7 @@ namespace MWC_Localization_Core
             }
             // adjustedTextMeshes is already cleared by RestoreOriginal() calls
             originalStates.Clear();
+            lastAppliedLocalPositions.Clear();
         }
 
         /// <summary>
