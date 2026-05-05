@@ -34,3 +34,5 @@ Contains(Systems/Death/GameOverScreen/Paper) = 0,0,0,,0.77
 Contains(Sheets/Magazine/Products) = 0,0,0,0.0024
 ##Rally Registration
 Contains(Sheets/RallyRegistration/Functions/Class) = 0,-0.01,0,0.0024
+##TV Status
+Contains(Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status) = 0.5,0,0
