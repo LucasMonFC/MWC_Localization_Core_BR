@@ -762,7 +762,7 @@ atk harri package = PACOTE ATK HARRI
 CAR INSPECTION, 325 MK = INSPEÇÃO DO CARRO, 325 МК
 
 //teletext
-OY VALTIONKANAVA AB = CANAL ESTADUAL FINLANDÊS
+OY VALTIONKANAVA AB = CANAL ESTATAL S.A.
 UUTISET ......................... 101 = NOTÍCIA ......................... 101
 URHEILU ......................... 200 = ESPORTE ......................... 200
 SÄÄ ............................. 180 = CLIMA ........................... 180
