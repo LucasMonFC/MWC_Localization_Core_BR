@@ -76,6 +76,7 @@ namespace MWC_Localization_Core
         private Dictionary<int, TextMeshEntry> instanceEntries;  // instanceID -> entry
         private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
         private HashSet<string> monitoredPaths = new HashSet<string>();
+        private HashSet<string> persistentLayoutPaths = new HashSet<string>();
         private List<int> removalBuffer = new List<int>(64);
         private List<string> stringRemovalBuffer = new List<string>(16);
 
@@ -150,6 +151,9 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
             AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
             AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.Persistent);
+
+            // Magazine Products / Sheets - persistent layout monitoring due to dynamic content changes and rebuilds
+            AddPathRule("Sheets/Magazine/Products", MonitoringStrategy.PersistentLayout);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
@@ -186,15 +190,15 @@ namespace MWC_Localization_Core
                 // Only queue for late retry if the initial Register couldn't find the parent yet
                 // (registered == 0). Persistent and OnVisibilityChange stay queued so rebuilt
                 // children get picked up.
+                bool keepQueued = strategy == MonitoringStrategy.OnVisibilityChange ||
+                                  strategy == MonitoringStrategy.Persistent ||
+                                  strategy == MonitoringStrategy.PersistentLayout;
                 bool needsLateQueue = strategy == MonitoringStrategy.LateTranslateOnce ||
                                       strategy == MonitoringStrategy.LateApplyFontOnce ||
-                                      strategy == MonitoringStrategy.OnVisibilityChange ||
-                                      strategy == MonitoringStrategy.Persistent;
-                if (needsLateQueue && (registered == 0 ||
-                                       strategy == MonitoringStrategy.Persistent ||
-                                       strategy == MonitoringStrategy.OnVisibilityChange))
+                                      keepQueued;
+                if (needsLateQueue && (registered == 0 || keepQueued))
                 {
-                    monitoredPaths.Add(parentPath);
+                    AddMonitoredPath(parentPath, strategy);
                 }
             }
         }
@@ -202,14 +206,21 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Periodically monitor TextMeshes to be available for monitoring
         /// </summary>
-        public void MonitorLateRegister()
+        public void MonitorLateRegister(MonitoringStrategy? strategyFilter = null)
         {
             stringRemovalBuffer.Clear();
-            foreach (string parentPath in monitoredPaths)
+            HashSet<string> pathsToScan = strategyFilter.HasValue && strategyFilter.Value == MonitoringStrategy.PersistentLayout
+                ? persistentLayoutPaths
+                : monitoredPaths;
+
+            foreach (string parentPath in pathsToScan)
             {
                 MonitoringStrategy strategy;
                 if (!pathRules.TryGetValue(parentPath, out strategy))
                     strategy = MonitoringStrategy.LateTranslateOnce;
+
+                if (strategyFilter.HasValue && strategy != strategyFilter.Value)
+                    continue;
 
                 int registered = Register(parentPath, strategy);
 
@@ -218,6 +229,7 @@ namespace MWC_Localization_Core
                 // child TextMeshes can be rebuilt.
                 if (registered > 0 &&
                     strategy != MonitoringStrategy.Persistent &&
+                    strategy != MonitoringStrategy.PersistentLayout &&
                     strategy != MonitoringStrategy.OnVisibilityChange)
                 {
                     stringRemovalBuffer.Add(parentPath);
@@ -225,8 +237,23 @@ namespace MWC_Localization_Core
             }
             for (int i = 0; i < stringRemovalBuffer.Count; i++)
             {
-                monitoredPaths.Remove(stringRemovalBuffer[i]);
+                RemoveMonitoredPath(stringRemovalBuffer[i]);
             }
+        }
+
+        private void AddMonitoredPath(string parentPath, MonitoringStrategy strategy)
+        {
+            monitoredPaths.Add(parentPath);
+            if (strategy == MonitoringStrategy.PersistentLayout)
+            {
+                persistentLayoutPaths.Add(parentPath);
+            }
+        }
+
+        private void RemoveMonitoredPath(string parentPath)
+        {
+            monitoredPaths.Remove(parentPath);
+            persistentLayoutPaths.Remove(parentPath);
         }
 
         /// <summary>
@@ -337,6 +364,11 @@ namespace MWC_Localization_Core
             // Always update EveryFrame
             UpdateGroup(MonitoringStrategy.EveryFrame);
 
+            // Layout-sensitive magazine text can be rebuilt while the sheet is opened,
+            // so keep it registered and adjusted in the same LateUpdate pass.
+            MonitorLateRegister(MonitoringStrategy.PersistentLayout);
+            UpdateGroup(MonitoringStrategy.PersistentLayout);
+
             // Throttled fast polling (0.1s)
             fastPollingTimer += deltaTime;
             if (fastPollingTimer >= LocalizationConstants.FAST_POLLING_INTERVAL)
@@ -399,6 +431,11 @@ namespace MWC_Localization_Core
                     entry.HasProcessedText = false;
                 }
                 
+                if (strategy == MonitoringStrategy.PersistentLayout)
+                {
+                    translator.ApplyFontOnly(entry.TextMesh, entry.Path);
+                }
+
                 if (textChanged || !entry.HasProcessedText)
                 {
                     bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);
@@ -475,6 +512,7 @@ namespace MWC_Localization_Core
             instanceEntries.Clear();
             pathRules.Clear();
             monitoredPaths.Clear();
+            persistentLayoutPaths.Clear();
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
             visibilityPollingTimer = 0f;

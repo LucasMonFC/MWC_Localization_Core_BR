@@ -1,8 +1,6 @@
 [fsm]
 PAIKALLISSÄÄ = CLIMA LOCAL
 188 PAIKALLISSÄÄ = 188 CLIMA LOCAL
-stop = PARE
-haku = SCAN
 
 # Weather conditions
 selkeää = ensolarado
