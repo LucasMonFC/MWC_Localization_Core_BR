@@ -207,21 +207,25 @@ namespace MWC_Localization_Core
                     string normalizedOriginal = original.Trim();
                     if (string.IsNullOrEmpty(normalizedOriginal))
                         continue;
+                    string translationKey = TranslationFileParser.UnescapeString(normalizedOriginal);
 
                     // Keep fallback alignment based on non-empty source entries only.
                     nonEmptySourceIndex++;
                     
                     // Try exact key match first
-                    if (translations.TryGetValue(normalizedOriginal, out string translation))
+                    if (translations.TryGetValue(translationKey, out string translation))
                     {
-                        arrayList[i] = translation;
-                        translatedCount++;
+                        if (original != translation)
+                        {
+                            arrayList[i] = translation;
+                            translatedCount++;
+                        }
                     }
                     // Fallback: Use index-based translation if available
                     else if (hasIndexFallback && nonEmptySourceIndex < indexBasedTranslations[categoryName].Count)
                     {
                         string indexTranslation = indexBasedTranslations[categoryName][nonEmptySourceIndex];
-                        if (!string.IsNullOrEmpty(indexTranslation))
+                        if (!string.IsNullOrEmpty(indexTranslation) && original != indexTranslation)
                         {
                             arrayList[i] = indexTranslation;
                             translatedCount++;

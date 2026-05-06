@@ -2,7 +2,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace MWC_Localization_Core
 {
@@ -145,25 +144,7 @@ namespace MWC_Localization_Core
             TranslateScene();
             sceneManager.MarkSceneTranslated("GAME");
             InitializeFsmTextHook();
-            
-            // Reset handlers
-            teletextHandler.Reset();
-            arrayListHandler.Reset();
-            hashTableHandler.Reset();
-
-            // Translate static arrays immediately
-            int arrayTranslated = arrayListHandler.TranslateAllArrays();
-            if (arrayTranslated > 0)
-            {
-                CoreConsole.Print($"[{Name}] Translated {arrayTranslated} array items");
-                arrayListHandler.ApplyFontsToArrayElements();
-            }
-
-            int hashTableTranslated = hashTableHandler.TranslateAllHashTables();
-            if (hashTableTranslated > 0)
-            {
-                CoreConsole.Print($"[{Name}] Translated {hashTableTranslated} hash table items");
-            }
+            InitializeGameDataSources("");
             
             // Create MonoBehaviour for LateUpdate monitoring
             // ALL continuous monitoring logic runs in LateUpdate to ensure correct timing
@@ -252,26 +233,27 @@ namespace MWC_Localization_Core
                 TranslateScene();
                 sceneManager.MarkSceneTranslated("GAME");
                 InitializeFsmTextHook();
-                
-                // Reset teletext handler and retry tracking for new scene
-                teletextHandler.Reset();
-                arrayListHandler.Reset();
-                hashTableHandler.Reset();
-                
-                // Translate static arrays immediately (HUD, menus, etc.)
-                int arrayTranslated = arrayListHandler.TranslateAllArrays();
-                if (arrayTranslated > 0)
-                {
-                    CoreConsole.Print($"[{Name}] [Arrays] Initial translation: {arrayTranslated} items");
-                    // Apply Korean fonts to TextMesh components using array data
-                    arrayListHandler.ApplyFontsToArrayElements();
-                }
+                InitializeGameDataSources("Initial ");
+            }
+        }
 
-                int hashTableTranslated = hashTableHandler.TranslateAllHashTables();
-                if (hashTableTranslated > 0)
-                {
-                    CoreConsole.Print($"[{Name}] [HashTables] Initial translation: {hashTableTranslated} items");
-                }
+        private void InitializeGameDataSources(string logPrefix)
+        {
+            teletextHandler.Reset();
+            arrayListHandler.Reset();
+            hashTableHandler.Reset();
+
+            int arrayTranslated = arrayListHandler.TranslateAllArrays();
+            if (arrayTranslated > 0)
+            {
+                CoreConsole.Print($"[{Name}] {logPrefix}translated {arrayTranslated} array items");
+            }
+            arrayListHandler.ApplyFontsToArrayElements();
+
+            int hashTableTranslated = hashTableHandler.TranslateAllHashTables();
+            if (hashTableTranslated > 0)
+            {
+                CoreConsole.Print($"[{Name}] {logPrefix}translated {hashTableTranslated} hash table items");
             }
         }
 
@@ -338,51 +320,18 @@ namespace MWC_Localization_Core
 
         void InsertTranslationLines(string translationPath)
         {
-            try
+            Dictionary<string, string> loadedTranslations = TranslationFileParser.ParseKeyValueFile(
+                translationPath,
+                normalizeKeys: true,
+                overwriteExisting: true);
+
+            foreach (var pair in loadedTranslations)
             {
-                string[] lines = File.ReadAllLines(translationPath, Encoding.UTF8);
-
-                foreach (string line in lines)
-                {
-                    if (string.IsNullOrEmpty(line) || line.TrimStart().StartsWith("#"))
-                        continue;
-
-                    int separatorIndex = TranslationFileParser.FindKeyValueSeparator(line);
-                    if (separatorIndex > 0)
-                    {
-                        string rawKey = line.Substring(0, separatorIndex).Trim();
-                        string rawValue = line.Substring(separatorIndex + 1);
-
-                        // Unescape \= -> = in key; apply full unescape (\= and \n) to value
-                        string unescapedKey = rawKey.Replace("\\=", "=");
-                        string unescapedValue = TranslationFileParser.UnescapeValue(rawValue);
-
-                        // Common authoring style is: "key = value".
-                        // In that specific case, drop only the single separator space so
-                        // intentional leading/trailing spacing is preserved.
-                        if (line.Length > separatorIndex + 1 && line[separatorIndex + 1] == ' ')
-                        {
-                            bool hasSecondSpace = (line.Length > separatorIndex + 2 && line[separatorIndex + 2] == ' ');
-                            if (!hasSecondSpace && unescapedValue.Length > 0 && unescapedValue[0] == ' ')
-                                unescapedValue = unescapedValue.Substring(1);
-                        }
-
-                        string normalizedKey = MLCUtils.FormatUpperKey(unescapedKey);
-
-                        if (!string.IsNullOrEmpty(normalizedKey))
-                        {
-                            translations[normalizedKey] = unescapedValue;
-                        }
-                    }
-                }
-
-                hasLoadedTranslations = true;
-                CoreConsole.Print($"[{Name}] Loaded {translations.Count} translations from {Path.GetFileName(translationPath)}");
+                translations[pair.Key] = pair.Value;
             }
-            catch (System.Exception ex)
-            {
-                CoreConsole.Error($"[{Name}] Failed to load translations: {ex.Message}");
-            }
+
+            hasLoadedTranslations = true;
+            CoreConsole.Print($"[{Name}] Loaded {loadedTranslations.Count} translations from {Path.GetFileName(translationPath)} ({translations.Count} total)");
         }
 
         void LoadTranslations()
@@ -553,52 +502,33 @@ namespace MWC_Localization_Core
             // Find all TextMesh components in the scene
             TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();
             int translatedCount = 0;
+            int forcedFontAppliedCount = 0;
 
             foreach (TextMesh tm in allTextMeshes)
             {
-                if (tm == null || string.IsNullOrEmpty(tm.text))
+                if (tm == null)
                     continue;
 
                 // Get GameObject path
                 string path = MLCUtils.GetGameObjectPath(tm.gameObject);
 
                 // Translate and apply font
-                bool translated = translator.TranslateAndApplyFont(tm, path, null);
-                if (translated)
+                if (!string.IsNullOrEmpty(tm.text))
                 {
-                    translatedCount++;
+                    bool translated = translator.TranslateAndApplyFont(tm, path);
+                    if (translated)
+                    {
+                        translatedCount++;
+                    }
+                }
+
+                if (PathStartsWithAny(path, ForcedFontPathPrefixes) && translator.ApplyFontOnly(tm, path))
+                {
+                    forcedFontAppliedCount++;
                 }
             }
-
-            int forcedFontAppliedCount = ApplyForcedFontPass(allTextMeshes);
 
             CoreConsole.Print($"[{Name}] Scene translation complete: {translatedCount}/{allTextMeshes.Length} TextMesh objects translated, forced font pass: {forcedFontAppliedCount}");
-        }
-
-        private int ApplyForcedFontPass(TextMesh[] allTextMeshes)
-        {
-            if (translator == null || allTextMeshes == null || allTextMeshes.Length == 0)
-                return 0;
-
-            int appliedCount = 0;
-
-            for (int i = 0; i < allTextMeshes.Length; i++)
-            {
-                TextMesh tm = allTextMeshes[i];
-                if (tm == null)
-                    continue;
-
-                string path = MLCUtils.GetGameObjectPath(tm.gameObject);
-                if (!PathStartsWithAny(path, ForcedFontPathPrefixes))
-                    continue;
-
-                if (translator.ApplyFontOnly(tm, path))
-                {
-                    appliedCount++;
-                }
-            }
-
-            return appliedCount;
         }
 
         private bool PathStartsWithAny(string path, string[] prefixes)

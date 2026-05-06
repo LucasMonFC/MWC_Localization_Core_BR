@@ -1,6 +1,5 @@
 // Configuration file loader
 
-using MSCLoader;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;

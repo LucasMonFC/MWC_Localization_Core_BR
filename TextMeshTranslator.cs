@@ -1,4 +1,3 @@
-using MSCLoader;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +16,7 @@ namespace MWC_Localization_Core
         private LocalizationConfig config;
         private Dictionary<int, string> appliedFontCache = new Dictionary<int, string>();
         private Dictionary<int, Texture> appliedRuntimeTextureCache = new Dictionary<int, Texture>();
+        private Dictionary<int, Material> runtimeMaterialCache = new Dictionary<int, Material>();
         private Dictionary<string, Font> fontNameToFont;  // Reverse lookup: font.name -> Font
 
         private static readonly string[] ExcludedPath = new string[]
@@ -61,16 +61,11 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Translate TextMesh and apply custom font + position adjustments
         /// </summary>
-        /// <param name="translatedTextMeshes">HashSet tracking which TextMesh objects have been translated</param>
         /// <returns>True if text was translated or already localized</returns>
-        public bool TranslateAndApplyFont(TextMesh textMesh, string path, HashSet<TextMesh> translatedTextMeshes)
+        public bool TranslateAndApplyFont(TextMesh textMesh, string path)
         {
             if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
                 return false;
-
-            // Skip if already translated (language-agnostic check)
-            if (translatedTextMeshes != null && translatedTextMeshes.Contains(textMesh))
-                return true;
 
             // Skip excluded paths
             foreach(string excluded in ExcludedPath)
@@ -79,12 +74,18 @@ namespace MWC_Localization_Core
                     return false;
             }
 
-            // Try complex text handling first (e.g., magazine text, cashier price)
-            if (HandleComplexTextMesh(textMesh, path))
+            if (magazineHandler.IsMagazineText(path))
+            {
+                ApplyCustomFont(textMesh, path);
+                magazineHandler.HandleMagazineText(textMesh);
+                return true;
+            }
+
+            // Use standard translation before pattern matching; dictionary lookup is cheaper.
+            if (ApplyTranslation(textMesh, path))
                 return true;
 
-            // Use standard translation
-            if (ApplyTranslation(textMesh, path))
+            if (ApplyPatternTranslation(textMesh, path))
                 return true;
 
             return false;
@@ -129,15 +130,26 @@ namespace MWC_Localization_Core
 
                     if (needsTextureApply && targetMainTexture != null)
                     {
-                        // Always preserve original material properties (colors, tints, etc.) by swapping only the atlas texture.
-                        // This works for both TV and non-TV paths and preserves custom colors like yellow text.
-                        Material runtimeMaterial = renderer.material;
-                        if (runtimeMaterial != null && runtimeMaterial.mainTexture != targetMainTexture)
+                        Material runtimeMaterial;
+                        if (!runtimeMaterialCache.TryGetValue(rendererInstanceID, out runtimeMaterial) || runtimeMaterial == null)
                         {
-                            runtimeMaterial.mainTexture = targetMainTexture;
+                            // Preserve per-renderer material properties while avoiding repeated renderer.material instantiation.
+                            runtimeMaterial = renderer.material;
+                            if (runtimeMaterial != null)
+                            {
+                                runtimeMaterialCache[rendererInstanceID] = runtimeMaterial;
+                            }
                         }
 
-                        appliedRuntimeTextureCache[rendererInstanceID] = targetMainTexture;
+                        if (runtimeMaterial != null)
+                        {
+                            if (runtimeMaterial.mainTexture != targetMainTexture)
+                            {
+                                runtimeMaterial.mainTexture = targetMainTexture;
+                            }
+
+                            appliedRuntimeTextureCache[rendererInstanceID] = targetMainTexture;
+                        }
                     }
                 }
 
@@ -146,32 +158,19 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Handle complex text patterns (magazine text, cashier price line)
-        /// Now uses unified pattern matcher for all pattern-based translations
+        /// Handle pattern-based text translations.
         /// </summary>
-        bool HandleComplexTextMesh(TextMesh textMesh, string path)
+        bool ApplyPatternTranslation(TextMesh textMesh, string path)
         {
-            // Check magazine text FIRST - it requires special handling (comma-separated words, price/phone format)
-            if (magazineHandler.IsMagazineText(path))
-            {
-                // Apply custom font first
-                ApplyCustomFont(textMesh, path);
-                // Apply Translation
-                return magazineHandler.HandleMagazineText(textMesh);
-            }
-            
-            // Try pattern matching for other complex texts (FSM, Price patterns)
             string patternResult = patternMatcher.TryTranslateWithPattern(textMesh.text, path);
             if (patternResult != null)
             {
-                // Apply custom font first
                 ApplyCustomFont(textMesh, path);
-                // Apply Translation
                 textMesh.text = patternResult;
                 return true;
             }
 
-            return false; // Not handled, use standard translation
+            return false;
         }
 
         /// <summary>
@@ -200,45 +199,6 @@ namespace MWC_Localization_Core
             // Apply translation
             textMesh.text = translation;
 
-            return true;
-        }
-
-        /// <summary>
-        /// Translate multiline text line-by-line.
-        /// Useful for dynamic displays that append lines over time.
-        /// </summary>
-        public bool TranslateMultilineByLines(TextMesh textMesh, string path)
-        {
-            if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
-                return false;
-
-            string original = textMesh.text;
-            string[] lines = original.Split('\n');
-            bool changed = false;
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string line = lines[i];
-                if (string.IsNullOrEmpty(line))
-                    continue;
-
-                string trimmedCr = line.Replace("\r", string.Empty);
-                string normalizedKey = MLCUtils.FormatUpperKey(trimmedCr);
-                if (string.IsNullOrEmpty(normalizedKey))
-                    continue;
-
-                if (translations.TryGetValue(normalizedKey, out string translatedLine) && trimmedCr != translatedLine)
-                {
-                    lines[i] = translatedLine;
-                    changed = true;
-                }
-            }
-
-            if (!changed)
-                return false;
-
-            ApplyCustomFont(textMesh, path);
-            textMesh.text = string.Join("\n", lines);
             return true;
         }
 
@@ -295,6 +255,7 @@ namespace MWC_Localization_Core
         {
             appliedFontCache.Clear();
             appliedRuntimeTextureCache.Clear();
+            runtimeMaterialCache.Clear();
         }
     }
 }
