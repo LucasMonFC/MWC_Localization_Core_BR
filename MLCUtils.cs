@@ -163,7 +163,7 @@ namespace MWC_Localization_Core
             EnsureFsmIndexBuilt();
             AddMatchingFsmsByPrefix(pathPrefix, fsmName, results);
 
-            if (results.Count == 0 && IsFsmIndexStale())
+            if (IsFsmIndexStale())
             {
                 RebuildFsmIndex(Time.realtimeSinceStartup);
                 AddMatchingFsmsByPrefix(pathPrefix, fsmName, results);
