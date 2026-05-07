@@ -190,9 +190,14 @@ namespace MWC_Localization_Core
             if (!translations.TryGetValue(normalizedKey, out string translation))
                 return false;
 
-            // Skip translation if already translated (unless forced)
+            // Already-localized text still needs its font + adjustments applied so
+            // one-shot monitors can stop cleanly and so drift-tracked meshes get
+            // entered into lastAppliedLocalPositions on first contact.
             if (!forceUpdate && currentText == translation)
-                return false;
+            {
+                ApplyCustomFont(textMesh, path);
+                return true;
+            }
 
             // Apply custom font first
             ApplyCustomFont(textMesh, path);
@@ -232,6 +237,15 @@ namespace MWC_Localization_Core
             return beforeFontName != afterFontName;
         }
         
+        /// <summary>
+        /// Re-pin drift-tracked TextMeshes (e.g. magazine sheets the game rebuilds).
+        /// Called every LateUpdate by the monitor.
+        /// </summary>
+        public void RefreshDriftTrackedAdjustments()
+        {
+            config.RefreshDriftTrackedAdjustments();
+        }
+
         /// <summary>
         /// Load FSM patterns from teletext translation file
         /// </summary>

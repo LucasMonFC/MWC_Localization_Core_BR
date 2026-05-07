@@ -229,11 +229,23 @@ namespace MWC_Localization_Core
             {
                 if (adjustment.Matches(path))
                 {
-                    return adjustment.ApplyAdjustment(textMesh);
+                    return adjustment.ApplyAdjustment(textMesh, path);
                 }
             }
 
             return false; // No matching adjustment found
+        }
+
+        /// <summary>
+        /// Re-pin drift-tracked TextMeshes whose transform was rewritten by the game
+        /// since the last frame. Called every LateUpdate by the monitor.
+        /// </summary>
+        public void RefreshDriftTrackedAdjustments()
+        {
+            foreach (TextAdjustment adjustment in TextAdjustments)
+            {
+                adjustment.Refresh();
+            }
         }
 
         /// <summary>

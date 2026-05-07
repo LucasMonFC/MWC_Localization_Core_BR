@@ -230,6 +230,10 @@ X,Y,Z[,FontSize,LineSpacing,WidthScale]
 - Use `WidthScale < 1.0` to make text narrower (good for condensed layouts)
 - Combine with FontSize to control both height and width independently
 
+### Drift-tracked paths
+
+A few sheets (e.g. `Sheets/Magazine/Products`) are rebuilt by the game while the screen is open, which would normally let the rebuilt transform overwrite the position offset. These paths are listed in a small in-code whitelist (`TextAdjustment.DriftTrackedPathPatterns`) and re-pinned every frame. Adding a path to the whitelist is a code change, not a config change — open an issue if you find another sheet that flickers.
+
 ## Creating Custom Fonts (Optional)
 
 For languages requiring special font support (better readability, special characters, etc.):

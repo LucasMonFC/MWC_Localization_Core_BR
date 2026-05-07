@@ -24,6 +24,16 @@ namespace MWC_Localization_Core
         Persistent,
 
         /// <summary>
+        /// Like Persistent, but the parent itself rebuilds child GameObjects while the
+        /// screen is open (e.g. magazine sheets). The parent's subtree is re-scanned 
+        /// every LateUpdate so new child TextMeshes are translated and adjusted 
+        /// on the same frame they appear. Pair with TextAdjustment.DriftTrackedPathPatterns
+        /// when the rebuilt transforms also need their position offset re-pinned.
+        /// Every entry pays a per-frame GetComponentsInChildren walk - use sparingly.
+        /// </summary>
+        PersistentRebuilding,
+
+        /// <summary>
         /// Translate only when a GameObject becomes active in the hierarchy.
         /// Use for menus, dialogs, and other show/hide UI panels.
         /// </summary>
