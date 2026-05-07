@@ -20,10 +20,13 @@ namespace MWC_Localization_Core
         private HashSet<string> loggedReadyTargets = new HashSet<string>();
         private List<PlayMakerFSM> cachedEnnusteDataFsms = new List<PlayMakerFSM>();
         private float lastEnnusteDataFsmScanTime = -10f;
+        private int unchangedMaintenanceTicks = 0;
 
         private static readonly WaitForSeconds BootstrapPollDelay = new WaitForSeconds(0.5f);
         private static readonly WaitForSeconds MaintenancePollDelay = new WaitForSeconds(1.0f);
+        private static readonly WaitForSeconds SettledMaintenancePollDelay = new WaitForSeconds(3.0f);
         private const float EnnusteDataRescanInterval = 2f;
+        private const int SettledMaintenanceThreshold = 3;
 
         // Reflection cache: (Type, fieldName) -> FieldInfo to avoid repeated GetField calls
         private static readonly Dictionary<System.Type, Dictionary<string, FieldInfo>> reflectionCache
@@ -275,8 +278,19 @@ namespace MWC_Localization_Core
 
                 if (currentScene == "GAME")
                 {
-                    TryApplyGameTranslations();
-                    yield return MaintenancePollDelay;
+                    bool changed = TryApplyGameTranslations();
+                    if (changed)
+                    {
+                        unchangedMaintenanceTicks = 0;
+                    }
+                    else
+                    {
+                        unchangedMaintenanceTicks++;
+                    }
+
+                    yield return unchangedMaintenanceTicks >= SettledMaintenanceThreshold
+                        ? SettledMaintenancePollDelay
+                        : MaintenancePollDelay;
                     continue;
                 }
 
@@ -284,10 +298,10 @@ namespace MWC_Localization_Core
             }
         }
 
-        private void TryApplyGameTranslations()
+        private bool TryApplyGameTranslations()
         {
             if (translations == null)
-                return;
+                return false;
 
             bool anyChanged = false;
             anyChanged |= TryApplyGamePosFsmTranslations();
@@ -301,6 +315,8 @@ namespace MWC_Localization_Core
                 string targetLabel = string.IsNullOrEmpty(appliedTarget) ? "GAME" : appliedTarget;
                 CoreConsole.Print("[FsmTextHook] FSM text translations applied (" + targetLabel + ")");
             }
+
+            return anyChanged;
         }
 
         private bool TryApplyMainMenuTranslations()
@@ -347,7 +363,7 @@ namespace MWC_Localization_Core
                 appliedTarget = "GAME POS";
             }
 
-            return anyChanged || hasAnyTarget;
+            return anyChanged;
         }
 
         private bool TryApplyGameTeletextBottomlineFsmTranslations()
@@ -361,7 +377,7 @@ namespace MWC_Localization_Core
                 appliedTarget = "GAME Teletext Bottomline";
             }
 
-            return anyChanged || hasAnyTarget;
+            return anyChanged;
         }
 
         private bool TryApplyGameTeletextWeatherUpdaterFsmTranslations()
@@ -387,7 +403,7 @@ namespace MWC_Localization_Core
                 appliedTarget = "GAME Teletext Weather";
             }
 
-            return anyChanged || hasAnyTarget;
+            return anyChanged;
         }
 
         private bool TryApplyGameUnemployPaperFsmTranslations()
@@ -402,7 +418,7 @@ namespace MWC_Localization_Core
                 appliedTarget = "GAME UnemployPaper";
             }
 
-            return anyChanged || hasAnyTarget;
+            return anyChanged;
         }
 
         private bool TryApplyGameConlineChatFsmTranslations()
@@ -417,7 +433,7 @@ namespace MWC_Localization_Core
                 appliedTarget = "GAME Conline Chat";
             }
 
-            return anyChanged || hasAnyTarget;
+            return anyChanged;
         }
 
         private void ApplyStrategyTargets(FsmStrategyTarget[] targets, ref bool anyChanged, ref bool hasAnyTarget)

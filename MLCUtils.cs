@@ -112,17 +112,39 @@ namespace MWC_Localization_Core
 
             string cacheKey = objectPath + "|" + fsmName;
 
-            EnsureFsmIndexFresh();
-
             PlayMakerFSM cachedFsm;
-            if (inactiveFsmPathNameCache.TryGetValue(cacheKey, out cachedFsm)
-                && cachedFsm != null
-                && cachedFsm.gameObject != null)
+            if (TryGetCachedFsm(cacheKey, out cachedFsm))
             {
                 return cachedFsm;
             }
 
+            // Full inactive FSM scans are expensive. Build the index once, then only
+            // refresh on cache misses after a cooldown so optional/missing targets do
+            // not create a steady frametime spike.
+            if (!fsmIndexBuilt || IsFsmIndexStale())
+            {
+                RebuildFsmIndex(Time.realtimeSinceStartup);
+                if (TryGetCachedFsm(cacheKey, out cachedFsm))
+                {
+                    return cachedFsm;
+                }
+            }
+
             return null;
+        }
+
+        private static bool TryGetCachedFsm(string cacheKey, out PlayMakerFSM cachedFsm)
+        {
+            if (inactiveFsmPathNameCache.TryGetValue(cacheKey, out cachedFsm))
+            {
+                if (cachedFsm != null && cachedFsm.gameObject != null)
+                    return true;
+
+                inactiveFsmPathNameCache.Remove(cacheKey);
+            }
+
+            cachedFsm = null;
+            return false;
         }
 
         /// <summary>
@@ -138,8 +160,29 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(pathPrefix) || string.IsNullOrEmpty(fsmName))
                 return;
 
-            EnsureFsmIndexFresh();
+            EnsureFsmIndexBuilt();
+            AddMatchingFsmsByPrefix(pathPrefix, fsmName, results);
 
+            if (results.Count == 0 && IsFsmIndexStale())
+            {
+                RebuildFsmIndex(Time.realtimeSinceStartup);
+                AddMatchingFsmsByPrefix(pathPrefix, fsmName, results);
+            }
+        }
+
+        private static bool IsFsmIndexStale()
+        {
+            return Time.realtimeSinceStartup - lastFsmIndexBuildTime >= FSM_INDEX_REFRESH_INTERVAL;
+        }
+
+        private static void EnsureFsmIndexBuilt()
+        {
+            if (!fsmIndexBuilt)
+                RebuildFsmIndex(Time.realtimeSinceStartup);
+        }
+
+        private static void AddMatchingFsmsByPrefix(string pathPrefix, string fsmName, List<PlayMakerFSM> results)
+        {
             foreach (PlayMakerFSM fsm in inactiveFsmPathNameCache.Values)
             {
                 if (fsm == null || fsm.gameObject == null)
@@ -154,15 +197,6 @@ namespace MWC_Localization_Core
                     results.Add(fsm);
                 }
             }
-        }
-
-        private static void EnsureFsmIndexFresh()
-        {
-            float now = Time.realtimeSinceStartup;
-            if (fsmIndexBuilt && now - lastFsmIndexBuildTime < FSM_INDEX_REFRESH_INTERVAL)
-                return;
-
-            RebuildFsmIndex(now);
         }
 
         private static void RebuildFsmIndex(float timestamp)

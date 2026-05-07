@@ -68,6 +68,7 @@ namespace MWC_Localization_Core
         private float fastPollingTimer;
         private float slowPollingTimer;
         private float visibilityPollingTimer;
+        private float rebuildingScanTimer = LocalizationConstants.REBUILDING_SCAN_INTERVAL;
 
         // Path-based monitoring rules (pattern -> strategy mapping)
         private Dictionary<string, MonitoringStrategy> pathRules;
@@ -341,10 +342,10 @@ namespace MWC_Localization_Core
 
         /// <summary>
         /// Re-run Register() for PersistentRebuilding parents so newly-spawned child
-        /// TextMeshes are picked up the same frame they appear. Register() already
+        /// TextMeshes are picked up shortly after they appear. Register() already
         /// deduplicates by instanceID; the dominant cost is one
-        /// GetComponentsInChildren&lt;TextMesh&gt;(true) per parent, so rebuildingPaths
-        /// must stay tiny.
+        /// GetComponentsInChildren&lt;TextMesh&gt;(true) per parent, so this scan is
+        /// throttled instead of running every frame.
         /// </summary>
         private void ScanRebuildingPaths()
         {
@@ -359,11 +360,16 @@ namespace MWC_Localization_Core
         /// </summary>
         public void Update(float deltaTime)
         {
-            // Per-frame work for content the game rebuilds in place.
-            // ScanRebuildingPaths catches new child TextMeshes; the translator's
-            // drift-tracked refresh re-pins meshes whose transforms the game rewrites
-            // every frame. Both lists are deliberately tiny.
-            ScanRebuildingPaths();
+            // Periodic work for content the game rebuilds in place.
+            // GetComponentsInChildren allocates and walks a subtree, so keep it off
+            // the per-frame path. Drift refresh stays per-frame because it only touches
+            // meshes already opted into the tiny drift-tracked set.
+            rebuildingScanTimer += deltaTime;
+            if (rebuildingScanTimer >= LocalizationConstants.REBUILDING_SCAN_INTERVAL)
+            {
+                ScanRebuildingPaths();
+                rebuildingScanTimer = 0f;
+            }
             translator.RefreshDriftTrackedAdjustments();
 
             // Always update EveryFrame
@@ -512,6 +518,7 @@ namespace MWC_Localization_Core
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
             visibilityPollingTimer = 0f;
+            rebuildingScanTimer = LocalizationConstants.REBUILDING_SCAN_INTERVAL;
             InitializeDefaultPathRules();
         }
     }
