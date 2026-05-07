@@ -76,6 +76,11 @@ namespace MWC_Localization_Core
         private Dictionary<int, TextMeshEntry> instanceEntries;  // instanceID -> entry
         private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
         private HashSet<string> monitoredPaths = new HashSet<string>();
+        // Subset of pathRules whose strategy is PersistentRebuilding. Re-scanned every
+        // frame so newly-spawned child TextMeshes are picked up the same frame they
+        // appear. Kept small on purpose - every entry pays a per-frame
+        // GetComponentsInChildren walk.
+        private HashSet<string> rebuildingPaths = new HashSet<string>();
         private List<int> removalBuffer = new List<int>(64);
         private List<string> stringRemovalBuffer = new List<string>(16);
 
@@ -150,11 +155,16 @@ namespace MWC_Localization_Core
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
             AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
             AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.Persistent);
+
+            // Magazine product list - parent rebuilds children while sheet is open.
+            AddPathRule("Sheets/Magazine/Products", MonitoringStrategy.PersistentRebuilding);
         }
 
         public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
         {
             pathRules[pathPattern] = strategy;
+            if (strategy == MonitoringStrategy.PersistentRebuilding)
+                rebuildingPaths.Add(pathPattern);
         }
 
         // A parent scan (e.g. FastPolling on "CHAT/Day") must not absorb TextMeshes that have
@@ -330,10 +340,32 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
+        /// Re-run Register() for PersistentRebuilding parents so newly-spawned child
+        /// TextMeshes are picked up the same frame they appear. Register() already
+        /// deduplicates by instanceID; the dominant cost is one
+        /// GetComponentsInChildren&lt;TextMesh&gt;(true) per parent, so rebuildingPaths
+        /// must stay tiny.
+        /// </summary>
+        private void ScanRebuildingPaths()
+        {
+            foreach (string parentPath in rebuildingPaths)
+            {
+                Register(parentPath, MonitoringStrategy.PersistentRebuilding);
+            }
+        }
+
+        /// <summary>
         /// Main update loop - called every frame
         /// </summary>
         public void Update(float deltaTime)
         {
+            // Per-frame work for content the game rebuilds in place.
+            // ScanRebuildingPaths catches new child TextMeshes; the translator's
+            // drift-tracked refresh re-pins meshes whose transforms the game rewrites
+            // every frame. Both lists are deliberately tiny.
+            ScanRebuildingPaths();
+            translator.RefreshDriftTrackedAdjustments();
+
             // Always update EveryFrame
             UpdateGroup(MonitoringStrategy.EveryFrame);
 
@@ -343,6 +375,7 @@ namespace MWC_Localization_Core
             {
                 UpdateGroup(MonitoringStrategy.FastPolling);
                 UpdateGroup(MonitoringStrategy.Persistent);
+                UpdateGroup(MonitoringStrategy.PersistentRebuilding);
                 fastPollingTimer = 0f;
             }
 
@@ -475,6 +508,7 @@ namespace MWC_Localization_Core
             instanceEntries.Clear();
             pathRules.Clear();
             monitoredPaths.Clear();
+            rebuildingPaths.Clear();
             fastPollingTimer = 0f;
             slowPollingTimer = 0f;
             visibilityPollingTimer = 0f;
