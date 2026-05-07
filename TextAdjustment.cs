@@ -67,6 +67,10 @@ namespace MWC_Localization_Core
         // Presence in this dict is the marker that a mesh participates in Refresh().
         private Dictionary<TextMesh, Vector3> lastAppliedLocalPositions = new Dictionary<TextMesh, Vector3>();
 
+        // Pre-allocated buffers for Refresh() — avoids per-frame heap allocation.
+        private readonly List<TextMesh> refreshSnapshot = new List<TextMesh>();
+        private readonly List<TextMesh> staleBuffer = new List<TextMesh>();
+
         public TextAdjustment(string conditionsString, Vector3 offset, float? fontSize = null, float? lineSpacing = null, float? widthScale = null)
         {
             Offset = offset;
@@ -141,14 +145,17 @@ namespace MWC_Localization_Core
             if (lastAppliedLocalPositions.Count == 0)
                 return;
 
-            List<TextMesh> stale = null;
-            // Snapshot keys - we mutate the dict on hits.
-            foreach (TextMesh tm in new List<TextMesh>(lastAppliedLocalPositions.Keys))
+            // Snapshot keys into the pre-allocated buffer so we can mutate the dict
+            // during the pass without allocating a new List each frame.
+            refreshSnapshot.Clear();
+            refreshSnapshot.AddRange(lastAppliedLocalPositions.Keys);
+            staleBuffer.Clear();
+
+            foreach (TextMesh tm in refreshSnapshot)
             {
                 if (tm == null)
                 {
-                    if (stale == null) stale = new List<TextMesh>();
-                    stale.Add(tm);
+                    staleBuffer.Add(tm);
                     continue;
                 }
 
@@ -171,14 +178,14 @@ namespace MWC_Localization_Core
                 lastAppliedLocalPositions[tm] = newPos;
             }
 
-            if (stale != null)
+            // Release snapshot refs promptly so Unity can manage TextMesh lifetime.
+            refreshSnapshot.Clear();
+
+            for (int i = 0; i < staleBuffer.Count; i++)
             {
-                for (int i = 0; i < stale.Count; i++)
-                {
-                    lastAppliedLocalPositions.Remove(stale[i]);
-                    originalStates.Remove(stale[i]);
-                    adjustedTextMeshes.Remove(stale[i]);
-                }
+                lastAppliedLocalPositions.Remove(staleBuffer[i]);
+                originalStates.Remove(staleBuffer[i]);
+                adjustedTextMeshes.Remove(staleBuffer[i]);
             }
         }
 
