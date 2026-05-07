@@ -90,7 +90,6 @@ namespace MWC_Localization_Core
             }
         }
 
-        private static readonly string[] PosUseStateNames = new string[] { "State 1", "State 3", "State 4", "State 5" };
         private static readonly string[] PosTyperCommandStateNames = new string[] { "Player input", "Player input 2", "Type", "Type 2", "Drive mem", "Disk mem", "Change baud" };
 
         private static readonly FsmStrategyTarget[] GamePosTargets = new FsmStrategyTarget[]
@@ -355,8 +354,7 @@ namespace MWC_Localization_Core
         private bool TryApplyGamePosFsmTranslations()
         {
             bool anyChanged = false;
-            bool hasAnyTarget = false;
-            ApplyStrategyTargets(GamePosTargets, ref anyChanged, ref hasAnyTarget);
+            ApplyStrategyTargets(GamePosTargets, ref anyChanged);
 
             if (anyChanged)
             {
@@ -369,8 +367,7 @@ namespace MWC_Localization_Core
         private bool TryApplyGameTeletextBottomlineFsmTranslations()
         {
             bool anyChanged = false;
-            bool hasAnyTarget = false;
-            ApplyStrategyTargets(GameTeletextTargets, ref anyChanged, ref hasAnyTarget);
+            ApplyStrategyTargets(GameTeletextTargets, ref anyChanged);
 
             if (anyChanged)
             {
@@ -383,9 +380,8 @@ namespace MWC_Localization_Core
         private bool TryApplyGameTeletextWeatherUpdaterFsmTranslations()
         {
             bool anyChanged = false;
-            bool hasAnyTarget = false;
 
-            ApplyStrategyTargets(GameTeletextWeatherTargets, ref anyChanged, ref hasAnyTarget);
+            ApplyStrategyTargets(GameTeletextWeatherTargets, ref anyChanged);
 
             List<PlayMakerFSM> ennusteDataFsms = GetEnnusteDataFsms();
             for (int i = 0; i < ennusteDataFsms.Count; i++)
@@ -395,7 +391,7 @@ namespace MWC_Localization_Core
                     continue;
 
                 LogReadyOnce("TTX_WX_READY", "[FsmTextHook] Teletext weather updater FSM targets are ready.");
-                ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged, ref hasAnyTarget);
+                ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged);
             }
 
             if (anyChanged)
@@ -409,9 +405,8 @@ namespace MWC_Localization_Core
         private bool TryApplyGameUnemployPaperFsmTranslations()
         {
             bool anyChanged = false;
-            bool hasAnyTarget = false;
 
-            ApplyStrategyTargets(GameUnemployPaperTargets, ref anyChanged, ref hasAnyTarget);
+            ApplyStrategyTargets(GameUnemployPaperTargets, ref anyChanged);
 
             if (anyChanged)
             {
@@ -424,9 +419,8 @@ namespace MWC_Localization_Core
         private bool TryApplyGameConlineChatFsmTranslations()
         {
             bool anyChanged = false;
-            bool hasAnyTarget = false;
 
-            ApplyStrategyTargets(GameConlineTargets, ref anyChanged, ref hasAnyTarget);
+            ApplyStrategyTargets(GameConlineTargets, ref anyChanged);
 
             if (anyChanged)
             {
@@ -436,7 +430,7 @@ namespace MWC_Localization_Core
             return anyChanged;
         }
 
-        private void ApplyStrategyTargets(FsmStrategyTarget[] targets, ref bool anyChanged, ref bool hasAnyTarget)
+        private void ApplyStrategyTargets(FsmStrategyTarget[] targets, ref bool anyChanged)
         {
             if (targets == null || targets.Length == 0)
                 return;
@@ -453,11 +447,11 @@ namespace MWC_Localization_Core
 
                 LogReadyOnce(target.ReadyLogKey, target.ReadyLogMessage);
 
-                ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget);
+                ApplyStrategyForTarget(target, fsm, ref anyChanged);
             }
         }
 
-        private void ApplyStrategyForTarget(FsmStrategyTarget target, PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget)
+        private void ApplyStrategyForTarget(FsmStrategyTarget target, PlayMakerFSM fsm, ref bool anyChanged)
         {
             if (target == null || fsm == null)
                 return;
@@ -470,7 +464,6 @@ namespace MWC_Localization_Core
                     anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 4", 0, false);
                     anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, "State 5", 0, false);
                     anyChanged |= ApplyAllStateSetStringValueTranslation(fsm);
-                    hasAnyTarget |= HasAnyState(fsm, PosUseStateNames);
                     break;
 
                 case FsmStrategyType.PosTyper:
@@ -486,33 +479,28 @@ namespace MWC_Localization_Core
                     // Do not translate setter actions in states that can carry live command text.
                     anyChanged |= ApplyAllStateSetStringValueTranslation(fsm, PosTyperCommandStateNames);
                     anyChanged |= ApplyAllStateSetFsmStringTranslation(fsm, PosTyperCommandStateNames);
-                    hasAnyTarget |= HasAnyState(fsm, PosTyperCommandStateNames);
                     break;
 
                 case FsmStrategyType.TeletextBuildStringPattern:
                     anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, target.StateName, target.ActionIndex, true);
-                    hasAnyTarget |= HasState(fsm, target.StateName);
                     break;
 
                 case FsmStrategyType.TeletextBuildStringSimple:
                     // Translate only part[0] (e.g. "KLO " -> localized prefix) and leave the
                     // dynamic time/date parts 1 and 2 untouched.
                     anyChanged |= ApplyBuildStringActionStringPartsTranslation(fsm, target.StateName, target.ActionIndex, false, 1, 2);
-                    hasAnyTarget |= HasState(fsm, target.StateName);
                     break;
 
                 case FsmStrategyType.TeletextWeatherUpdaterTokens:
-                    ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged, ref hasAnyTarget);
+                    ApplyWeatherUpdaterTokenTranslations(fsm, ref anyChanged);
                     break;
 
                 case FsmStrategyType.UnemployPaperButtonVariables:
                     anyChanged |= ApplyUnemployPaperButtonVariableTranslations(fsm);
-                    hasAnyTarget = true;
                     break;
 
                 case FsmStrategyType.ConlineChatStatus:
                     anyChanged |= ApplyConlineChatStatusTranslations(fsm);
-                    hasAnyTarget = true;
                     break;
             }
 
@@ -539,15 +527,13 @@ namespace MWC_Localization_Core
             return fsm != null && fsm.Fsm != null && fsm.Fsm.Initialized && fsm.FsmStates != null;
         }
 
-        private void ApplyWeatherUpdaterTokenTranslations(PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget)
+        private void ApplyWeatherUpdaterTokenTranslations(PlayMakerFSM fsm, ref bool anyChanged)
         {
             if (fsm == null)
                 return;
 
             anyChanged |= ApplyStateSetStringValueActionIndexesTranslation(fsm, "State 4", 0, 1);
             anyChanged |= ApplyStateSetStringValueActionIndexesTranslation(fsm, "State 6", 0, 1);
-
-            hasAnyTarget |= HasState(fsm, "State 4") || HasState(fsm, "State 6");
         }
 
         private bool ApplyUnemployPaperButtonVariableTranslations(PlayMakerFSM fsm)
@@ -658,34 +644,6 @@ namespace MWC_Localization_Core
                 cachedEnnusteDataFsms);
 
             return cachedEnnusteDataFsms;
-        }
-
-        private bool HasState(PlayMakerFSM fsm, string stateName)
-        {
-            if (fsm == null || fsm.FsmStates == null)
-                return false;
-
-            for (int i = 0; i < fsm.FsmStates.Length; i++)
-            {
-                if (fsm.FsmStates[i] != null && fsm.FsmStates[i].Name == stateName)
-                    return true;
-            }
-
-            return false;
-        }
-
-        private bool HasAnyState(PlayMakerFSM fsm, string[] stateNames)
-        {
-            if (fsm == null || stateNames == null || stateNames.Length == 0)
-                return false;
-
-            for (int i = 0; i < stateNames.Length; i++)
-            {
-                if (HasState(fsm, stateNames[i]))
-                    return true;
-            }
-
-            return false;
         }
 
         private PlayMakerFSM FindFsmWithState(GameObject obj, string stateName)
@@ -825,8 +783,9 @@ namespace MWC_Localization_Core
             bool patternResolved = false;
             if (allowPatternSplit && isBuildStringFast)
             {
-                patternResolved = ApplyBuildStringFastPatternTranslation(fsm, stateName, actionIndex, parts);
-                changed = patternResolved;
+                bool patternWrote;
+                patternResolved = ApplyBuildStringFastPatternTranslation(fsm, stateName, actionIndex, parts, out patternWrote);
+                changed |= patternWrote;
             }
 
             // If the pattern path rewrote parts[0]/parts[2] around parts[1], DON'T then
@@ -847,8 +806,10 @@ namespace MWC_Localization_Core
             return changed;
         }
 
-        private bool ApplyBuildStringFastPatternTranslation(PlayMakerFSM fsm, string stateName, int actionIndex, HutongGames.PlayMaker.FsmString[] parts)
+        private bool ApplyBuildStringFastPatternTranslation(PlayMakerFSM fsm, string stateName, int actionIndex, HutongGames.PlayMaker.FsmString[] parts, out bool wrote)
         {
+            wrote = false;
+
             if (patternMatcher == null || fsm == null || parts == null || parts.Length < 3)
                 return false;
 
@@ -882,27 +843,25 @@ namespace MWC_Localization_Core
             // If parts[0]/parts[2] already match the translated prefix/suffix, the pattern
             // has already been applied on a previous tick. Return true so the caller still
             // treats this as "pattern-resolved" (skipping per-part translation) without
-            // needlessly writing back identical values.
+            // reporting a write that would reset maintenance backoff.
             string currentPart0 = part0.Value ?? string.Empty;
             string currentPart2 = part2.Value ?? string.Empty;
             if (currentPart0 == newPrefix && currentPart2 == newSuffix)
                 return true;
 
-            bool changed = false;
-
             if (part0.Value != newPrefix)
             {
                 part0.Value = newPrefix;
-                changed = true;
+                wrote = true;
             }
 
             if (part2.Value != newSuffix)
             {
                 part2.Value = newSuffix;
-                changed = true;
+                wrote = true;
             }
 
-            return changed;
+            return true;
         }
 
         private bool ApplyStringAddNewLineActionStringPartTranslation(PlayMakerFSM fsm, string stateName, int actionIndex, int stringPartIndex)
