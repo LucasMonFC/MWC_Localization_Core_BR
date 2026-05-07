@@ -131,6 +131,9 @@ namespace MWC_Localization_Core
             AddPathRule("Systems/TV/TVGraphics/CHAT/Day", MonitoringStrategy.FastPolling);
             AddPathRule("Systems/TV/TVGraphics/CHAT/Moderator", MonitoringStrategy.FastPolling);
             AddPathRule("Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status", MonitoringStrategy.FastPolling);
+            AddPathRule("Systems/TV/TVGraphics/GFXTanaanSat1/Text", MonitoringStrategy.FastPolling);
+            AddPathRule("Systems/TV/TVGraphics/GFXTanaanSun1/Text", MonitoringStrategy.FastPolling);
+            AddPathRule("Systems/TV/TVGraphics/GFXTanaanWeek/Text", MonitoringStrategy.FastPolling);
 
             // Teletext/FSM displays are primarily translated at array/FSM source level.
             // Use one-shot late registration to avoid rescanning large TV trees continuously.
