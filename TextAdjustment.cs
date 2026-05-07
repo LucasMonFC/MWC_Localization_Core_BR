@@ -30,8 +30,9 @@ namespace MWC_Localization_Core
     {
         // Paths whose transforms the game rewrites repeatedly (e.g. magazine sheets that
         // get rebuilt while open). TextMeshes whose path matches any entry get drift-
-        // tracked and re-pinned every LateUpdate. Keep this list small - every entry
-        // pays a per-frame cost proportional to the number of TextMeshes it has touched.
+        // tracked and re-pinned from UnifiedTextMeshMonitor.Update(). Keep this list
+        // small - every entry pays a per-frame cost proportional to the number of
+        // TextMeshes it has touched.
         private static readonly string[] DriftTrackedPathPatterns =
         {
             "Sheets/Magazine/Products",
@@ -138,7 +139,8 @@ namespace MWC_Localization_Core
 
         /// <summary>
         /// Re-pin drift-tracked TextMeshes whose local position the game has rewritten
-        /// since the last frame. Caller invokes every LateUpdate. No-op when nothing is tracked.
+        /// since the last frame. Called from UnifiedTextMeshMonitor.Update().
+        /// No-op when nothing is tracked.
         /// </summary>
         public void Refresh()
         {

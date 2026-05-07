@@ -239,7 +239,7 @@ namespace MWC_Localization_Core
         
         /// <summary>
         /// Re-pin drift-tracked TextMeshes (e.g. magazine sheets the game rebuilds).
-        /// Called every LateUpdate by the monitor.
+        /// Invoked each frame from UnifiedTextMeshMonitor.Update().
         /// </summary>
         public void RefreshDriftTrackedAdjustments()
         {
