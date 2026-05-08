@@ -256,11 +256,11 @@ namespace MWC_Localization_Core
 
             int textStart = FindTextStartAfterNumericPrefix(lineNoCr);
             if (textStart <= 0 || textStart >= lineNoCr.Length)
-                return line;
+                return lineNoCr;
 
             string suffix = lineNoCr.Substring(textStart);
             if (!translations.TryGetValue(MLCUtils.FormatUpperKey(suffix), out translated))
-                return line;
+                return lineNoCr;
 
             return lineNoCr.Substring(0, textStart) + translated;
         }
