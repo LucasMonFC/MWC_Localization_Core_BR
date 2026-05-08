@@ -18,12 +18,19 @@ namespace MWC_Localization_Core
         private PatternMatcher patternMatcher;
         private string appliedTarget;
         private HashSet<string> loggedReadyTargets = new HashSet<string>();
+        private Dictionary<string, PlayMakerFSM> cachedStrategyFsms = new Dictionary<string, PlayMakerFSM>();
+        private Dictionary<string, float> nextStrategyLookupTimes = new Dictionary<string, float>();
         private List<PlayMakerFSM> cachedEnnusteDataFsms = new List<PlayMakerFSM>();
         private float lastEnnusteDataFsmScanTime = -10f;
+        private float lastGeneralFsmMaintenanceTime = -10f;
 
         private static readonly WaitForSeconds BootstrapPollDelay = new WaitForSeconds(0.5f);
-        private static readonly WaitForSeconds MaintenancePollDelay = new WaitForSeconds(1.0f);
-        private const float EnnusteDataRescanInterval = 2f;
+        private static readonly WaitForSeconds MaintenancePollDelay = new WaitForSeconds(0.25f);
+        private const float GeneralFsmMaintenanceInterval = 1f;
+        private const float MissingStrategyTargetRetryInterval = 2f;
+        private const float MissingWeatherTargetRetryInterval = 0.5f;
+        private const float EnnusteDataInitialRescanInterval = 2f;
+        private const float EnnusteDataRescanInterval = 10f;
 
         // Reflection cache: (Type, fieldName) -> FieldInfo to avoid repeated GetField calls
         private static readonly Dictionary<System.Type, Dictionary<string, FieldInfo>> reflectionCache
@@ -290,11 +297,17 @@ namespace MWC_Localization_Core
                 return;
 
             bool anyChanged = false;
-            anyChanged |= TryApplyGamePosFsmTranslations();
-            anyChanged |= TryApplyGameTeletextBottomlineFsmTranslations();
             anyChanged |= TryApplyGameTeletextWeatherUpdaterFsmTranslations();
-            anyChanged |= TryApplyGameUnemployPaperFsmTranslations();
-            anyChanged |= TryApplyGameConlineChatFsmTranslations();
+
+            float now = Time.realtimeSinceStartup;
+            if (now - lastGeneralFsmMaintenanceTime >= GeneralFsmMaintenanceInterval)
+            {
+                lastGeneralFsmMaintenanceTime = now;
+                anyChanged |= TryApplyGamePosFsmTranslations();
+                anyChanged |= TryApplyGameTeletextBottomlineFsmTranslations();
+                anyChanged |= TryApplyGameUnemployPaperFsmTranslations();
+                anyChanged |= TryApplyGameConlineChatFsmTranslations();
+            }
 
             if (anyChanged)
             {
@@ -369,7 +382,7 @@ namespace MWC_Localization_Core
             bool anyChanged = false;
             bool hasAnyTarget = false;
 
-            ApplyStrategyTargets(GameTeletextWeatherTargets, ref anyChanged, ref hasAnyTarget);
+            ApplyStrategyTargets(GameTeletextWeatherTargets, ref anyChanged, ref hasAnyTarget, MissingWeatherTargetRetryInterval);
 
             List<PlayMakerFSM> ennusteDataFsms = GetEnnusteDataFsms();
             for (int i = 0; i < ennusteDataFsms.Count; i++)
@@ -422,6 +435,11 @@ namespace MWC_Localization_Core
 
         private void ApplyStrategyTargets(FsmStrategyTarget[] targets, ref bool anyChanged, ref bool hasAnyTarget)
         {
+            ApplyStrategyTargets(targets, ref anyChanged, ref hasAnyTarget, MissingStrategyTargetRetryInterval);
+        }
+
+        private void ApplyStrategyTargets(FsmStrategyTarget[] targets, ref bool anyChanged, ref bool hasAnyTarget, float missingRetryInterval)
+        {
             if (targets == null || targets.Length == 0)
                 return;
 
@@ -431,7 +449,7 @@ namespace MWC_Localization_Core
                 if (target == null)
                     continue;
 
-                PlayMakerFSM fsm = MLCUtils.FindFsmIncludingInactiveByPathAndName(target.ObjectPath, target.FsmName);
+                PlayMakerFSM fsm = ResolveStrategyTargetFsm(target, missingRetryInterval);
                 if (!IsFsmReady(fsm))
                     continue;
 
@@ -439,6 +457,43 @@ namespace MWC_Localization_Core
 
                 ApplyStrategyForTarget(target, fsm, ref anyChanged, ref hasAnyTarget);
             }
+        }
+
+        private PlayMakerFSM ResolveStrategyTargetFsm(FsmStrategyTarget target, float missingRetryInterval)
+        {
+            if (target == null)
+                return null;
+
+            string targetKey = BuildStrategyTargetKey(target);
+            PlayMakerFSM cachedFsm;
+            if (cachedStrategyFsms.TryGetValue(targetKey, out cachedFsm))
+            {
+                if (cachedFsm != null && cachedFsm.gameObject != null)
+                    return cachedFsm;
+
+                cachedStrategyFsms.Remove(targetKey);
+            }
+
+            float now = Time.realtimeSinceStartup;
+            float nextLookupTime;
+            if (nextStrategyLookupTimes.TryGetValue(targetKey, out nextLookupTime) && now < nextLookupTime)
+                return null;
+
+            PlayMakerFSM fsm = MLCUtils.FindFsmIncludingInactiveByPathAndName(target.ObjectPath, target.FsmName);
+            if (fsm != null && fsm.gameObject != null)
+            {
+                cachedStrategyFsms[targetKey] = fsm;
+                nextStrategyLookupTimes.Remove(targetKey);
+                return fsm;
+            }
+
+            nextStrategyLookupTimes[targetKey] = now + missingRetryInterval;
+            return null;
+        }
+
+        private static string BuildStrategyTargetKey(FsmStrategyTarget target)
+        {
+            return target.ObjectPath + "|" + target.FsmName + "|" + target.Strategy.ToString() + "|" + target.StateName + "|" + target.ActionIndex.ToString();
         }
 
         private void ApplyStrategyForTarget(FsmStrategyTarget target, PlayMakerFSM fsm, ref bool anyChanged, ref bool hasAnyTarget)
@@ -629,7 +684,8 @@ namespace MWC_Localization_Core
 
         private List<PlayMakerFSM> GetEnnusteDataFsms()
         {
-            bool shouldRescan = cachedEnnusteDataFsms.Count == 0 || (Time.realtimeSinceStartup - lastEnnusteDataFsmScanTime) >= EnnusteDataRescanInterval;
+            float rescanInterval = cachedEnnusteDataFsms.Count == 0 ? EnnusteDataInitialRescanInterval : EnnusteDataRescanInterval;
+            bool shouldRescan = (Time.realtimeSinceStartup - lastEnnusteDataFsmScanTime) >= rescanInterval;
             if (!shouldRescan)
                 return cachedEnnusteDataFsms;
 

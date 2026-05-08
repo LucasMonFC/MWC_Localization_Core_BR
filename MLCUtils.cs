@@ -37,11 +37,8 @@ namespace MWC_Localization_Core
         private static Dictionary<GameObject, string> pathCache = new Dictionary<GameObject, string>();
         // Cache for expensive GameObject.Find(path) lookups
         private static Dictionary<string, GameObject> gameObjectFindCache = new Dictionary<string, GameObject>();
-        // Scene-local FSM index for inactive lookup helpers (resolved via Resources.FindObjectsOfTypeAll)
+        // Cache for inactive lookup helpers (resolved via Resources.FindObjectsOfTypeAll)
         private static Dictionary<string, PlayMakerFSM> inactiveFsmPathNameCache = new Dictionary<string, PlayMakerFSM>();
-        private static bool fsmIndexBuilt = false;
-        private static float lastFsmIndexBuildTime = -1000f;
-        private const float FSM_INDEX_REFRESH_INTERVAL = 1f;
 
         public static string GetGameObjectPath(GameObject obj)
         {
@@ -112,14 +109,30 @@ namespace MWC_Localization_Core
 
             string cacheKey = objectPath + "|" + fsmName;
 
-            EnsureFsmIndexFresh();
-
             PlayMakerFSM cachedFsm;
             if (inactiveFsmPathNameCache.TryGetValue(cacheKey, out cachedFsm)
                 && cachedFsm != null
                 && cachedFsm.gameObject != null)
             {
                 return cachedFsm;
+            }
+
+            PlayMakerFSM[] allFsms = Resources.FindObjectsOfTypeAll<PlayMakerFSM>();
+            if (allFsms == null)
+                return null;
+
+            for (int i = 0; i < allFsms.Length; i++)
+            {
+                PlayMakerFSM fsm = allFsms[i];
+                if (fsm == null || fsm.gameObject == null)
+                    continue;
+
+                string path = GetGameObjectPath(fsm.gameObject);
+                if (path == objectPath && fsm.FsmName == fsmName)
+                {
+                    inactiveFsmPathNameCache[cacheKey] = fsm;
+                    return fsm;
+                }
             }
 
             return null;
@@ -138,10 +151,13 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(pathPrefix) || string.IsNullOrEmpty(fsmName))
                 return;
 
-            EnsureFsmIndexFresh();
+            PlayMakerFSM[] allFsms = Resources.FindObjectsOfTypeAll<PlayMakerFSM>();
+            if (allFsms == null)
+                return;
 
-            foreach (PlayMakerFSM fsm in inactiveFsmPathNameCache.Values)
+            for (int i = 0; i < allFsms.Length; i++)
             {
+                PlayMakerFSM fsm = allFsms[i];
                 if (fsm == null || fsm.gameObject == null)
                     continue;
 
@@ -152,40 +168,6 @@ namespace MWC_Localization_Core
                 if (path.StartsWith(pathPrefix))
                 {
                     results.Add(fsm);
-                }
-            }
-        }
-
-        private static void EnsureFsmIndexFresh()
-        {
-            float now = Time.realtimeSinceStartup;
-            if (fsmIndexBuilt && now - lastFsmIndexBuildTime < FSM_INDEX_REFRESH_INTERVAL)
-                return;
-
-            RebuildFsmIndex(now);
-        }
-
-        private static void RebuildFsmIndex(float timestamp)
-        {
-            inactiveFsmPathNameCache.Clear();
-            lastFsmIndexBuildTime = timestamp;
-            fsmIndexBuilt = true;
-
-            PlayMakerFSM[] allFsms = Resources.FindObjectsOfTypeAll<PlayMakerFSM>();
-            if (allFsms == null)
-                return;
-
-            for (int i = 0; i < allFsms.Length; i++)
-            {
-                PlayMakerFSM fsm = allFsms[i];
-                if (fsm == null || fsm.gameObject == null || string.IsNullOrEmpty(fsm.FsmName))
-                    continue;
-
-                string path = GetGameObjectPath(fsm.gameObject);
-                string key = path + "|" + fsm.FsmName;
-                if (!inactiveFsmPathNameCache.ContainsKey(key))
-                {
-                    inactiveFsmPathNameCache[key] = fsm;
                 }
             }
         }
@@ -207,8 +189,6 @@ namespace MWC_Localization_Core
             pathCache.Clear();
             gameObjectFindCache.Clear();
             inactiveFsmPathNameCache.Clear();
-            fsmIndexBuilt = false;
-            lastFsmIndexBuildTime = -1000f;
         }
     }
 }
