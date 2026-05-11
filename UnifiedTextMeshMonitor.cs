@@ -57,8 +57,8 @@ namespace MWC_Localization_Core
     }
 
     /// <summary>
-    /// Unified monitoring system for all TextMesh translation
-    /// Replaces UpdatePriorityTextMeshes, UpdateDynamicTextMeshes, and FSM monitoring
+    /// Unified path-based monitoring system for TextMesh translation.
+    /// Consolidates priority and dynamic TextMesh polling into one scheduler.
     /// </summary>
     public class UnifiedTextMeshMonitor
     {
@@ -116,7 +116,7 @@ namespace MWC_Localization_Core
             AddPathRule("GUI/HUD/Thrist/HUDLabel", MonitoringStrategy.EveryFrame);
             AddPathRule("GUI/HUD/Thrist/HUDLabel/Shadow", MonitoringStrategy.EveryFrame);
 
-            // Active HUD - fast polling (10 FPS)
+            // Active HUD - fast polling (~6.6 FPS by default)
             AddPathRule("GUI/HUD/Mortal/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("GUI/HUD/Day/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("GUI/HUD/Thirst/HUDValue", MonitoringStrategy.FastPolling);
@@ -345,7 +345,7 @@ namespace MWC_Localization_Core
             // Always update EveryFrame
             UpdateGroup(MonitoringStrategy.EveryFrame);
 
-            // Throttled fast polling (0.1s)
+            // Throttled fast polling (LocalizationConstants.FAST_POLLING_INTERVAL)
             fastPollingTimer += deltaTime;
             if (fastPollingTimer >= LocalizationConstants.FAST_POLLING_INTERVAL)
             {

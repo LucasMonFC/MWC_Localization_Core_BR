@@ -15,7 +15,7 @@ namespace MWC_Localization_Core
     /// [kotimaa]
     /// News headline = News headline (localized)
     /// 
-    /// NOTE: FSM pattern matching moved to unified PatternMatcher system
+    /// NOTE: FSM pattern matching lives in the separate PatternMatcher system.
     /// </summary>
     public class TeletextHandler
     {

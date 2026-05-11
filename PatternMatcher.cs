@@ -7,8 +7,8 @@ using System.Text;
 namespace MWC_Localization_Core
 {
     /// <summary>
-    /// Unified pattern matching system for all translation types
-    /// Replaces separate FSM, Magazine, and Price pattern logic
+    /// Pattern matcher used by TextMeshTranslator for placeholder-based
+    /// translation entries loaded from translation files.
     /// </summary>
     public class PatternMatcher
     {
@@ -23,7 +23,7 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Reset pattern registry to a clean built-in state.
+        /// Reset the loaded pattern registry.
         /// Call before loading file patterns to make reload idempotent.
         /// </summary>
         public void ResetPatterns()
@@ -39,7 +39,7 @@ namespace MWC_Localization_Core
         {
             if (!File.Exists(filePath))
             {
-                CoreConsole.Print("[PatternMatcher] No pattern file found, using built-in patterns only");
+                CoreConsole.Print("[PatternMatcher] No pattern file found, no file patterns loaded");
                 return;
             }
 
@@ -99,9 +99,9 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(original) || string.IsNullOrEmpty(translation))
                 return false;
 
-            // Check if this is a pattern (contains {0}, {1}, etc.)
-            // Auto-detect: if translation has placeholders, use FsmPatternWithTranslation (translate the params)
-            // If translation has NO placeholders, use FsmPattern (just substitute - rare case)
+            // Check if this is a pattern (contains {0}, {1}, etc.).
+            // If the translation has placeholders, translate extracted params before substitution.
+            // If it has no placeholders, return the static template after the source pattern matches.
             if (original.Contains("{0}") || original.Contains("{1}") || original.Contains("{2}"))
             {
                 bool translationHasPlaceholders = translation.Contains("{0}") || translation.Contains("{1}") || translation.Contains("{2}");
@@ -170,7 +170,7 @@ namespace MWC_Localization_Core
             }
             else
             {
-                // User file patterns take priority over built-ins.
+                // Prepend file-loaded patterns so later files win when patterns overlap.
                 patterns.Insert(0, pattern);
             }
 

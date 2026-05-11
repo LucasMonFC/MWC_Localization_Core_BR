@@ -4,8 +4,7 @@ using UnityEngine;
 namespace MWC_Localization_Core
 {
     /// <summary>
-    /// Handles TextMesh translation, font application, and position adjustments
-    /// Centralizes all translation logic for better maintainability
+    /// Handles TextMesh translation, mapped font application, and position adjustments.
     /// </summary>
     public class TextMeshTranslator
     {
@@ -59,9 +58,9 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Translate TextMesh and apply custom font + position adjustments
+        /// Translate a TextMesh, or otherwise handle it, and apply mapped font adjustments.
         /// </summary>
-        /// <returns>True if text was translated or already localized</returns>
+        /// <returns>True if the text was translated, already localized, or handled by a specialized path.</returns>
         public bool TranslateAndApplyFont(TextMesh textMesh, string path)
         {
             if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
@@ -92,7 +91,7 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Apply custom font and position adjustment to TextMesh
+        /// Apply a mapped custom font and its matching position adjustment to a TextMesh.
         /// </summary>
         public void ApplyCustomFont(TextMesh textMesh, string path)
         {
@@ -176,7 +175,7 @@ namespace MWC_Localization_Core
         /// <summary>
         /// Apply standard translation to TextMesh
         /// </summary>
-        /// <param name="forceUpdate">Force update even if text hasn't changed</param>
+        /// <param name="forceUpdate">Apply the translation even when the current text already equals the localized value.</param>
         public bool ApplyTranslation(TextMesh textMesh, string path, bool forceUpdate = false)
         {
             if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
@@ -322,7 +321,7 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Reset pattern registry to built-ins for clean reload.
+        /// Reset the loaded pattern registry for a clean reload.
         /// </summary>
         public void ResetPatterns()
         {

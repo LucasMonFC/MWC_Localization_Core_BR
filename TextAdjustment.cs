@@ -67,7 +67,7 @@ namespace MWC_Localization_Core
         // Presence in this dict is the marker that a mesh participates in Refresh().
         private Dictionary<TextMesh, Vector3> lastAppliedLocalPositions = new Dictionary<TextMesh, Vector3>();
 
-        // Pre-allocated buffers for Refresh() — avoids per-frame heap allocation.
+        // Pre-allocated buffers for Refresh(); avoids per-frame heap allocation.
         private readonly List<TextMesh> refreshSnapshot = new List<TextMesh>();
         private readonly List<TextMesh> staleBuffer = new List<TextMesh>();
 
@@ -218,7 +218,7 @@ namespace MWC_Localization_Core
 
         /// <summary>
         /// Clear the cache of adjusted TextMesh objects and restore all to original state
-        /// Useful for F8/F9 reload functionality
+        /// Useful for F8 reload functionality.
         /// </summary>
         public void ClearCache()
         {

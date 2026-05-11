@@ -1,5 +1,5 @@
-// Generic handler for translating PlayMakerArrayListProxy data
-// Supports any GameObject with array-based content (HUD, menus, etc.)
+// Handler for translating configured PlayMakerArrayListProxy data sources.
+// Used for HUD, magazine, and other known array-backed content.
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -24,11 +24,11 @@ namespace MWC_Localization_Core
         // Track which TextMesh instances already have fonts applied (by instance ID)
         private HashSet<int> fontAppliedInstances = new HashSet<int>();
         
-        // Track which parent paths have been fully processed (all TextMeshes found)
+        // Track parent paths whose current TextMeshes no longer need a new font application.
         private HashSet<string> completedParentPaths = new HashSet<string>();
         
         // Parent paths to search for TextMesh components (for performance)
-        // Apply fonts to ALL TextMeshes under these paths
+        // Apply fonts to all TextMeshes under these paths.
         private List<string> parentSearchPaths;
         
         // Cache for array proxies to avoid repeated lookups
@@ -97,7 +97,7 @@ namespace MWC_Localization_Core
             completedParentPaths.Clear();
         }
 
-        // Translate all configured arrays (call once per scene)
+        // Translate configured arrays during scene initialization.
         public int TranslateAllArrays()
         {
             int totalTranslated = 0;
@@ -192,7 +192,7 @@ namespace MWC_Localization_Core
             return translatedCount;
         }
 
-        // Monitor arrays for runtime changes (like teletext lazy-loading)
+        // Monitor configured arrays that may appear or populate after scene initialization.
         // Returns number of newly translated items
         public int MonitorAndTranslateArrays()
         {
@@ -239,7 +239,7 @@ namespace MWC_Localization_Core
                 return translation;
             }
 
-            // Try magazine translations (exact match)
+            // Try magazine translations using the magazine handler's normalized lookup.
             translation = magazineHandler.GetTranslation(original);
             if (translation != null)
             {
@@ -262,7 +262,7 @@ namespace MWC_Localization_Core
 
             int fontsApplied = 0;
 
-            // Search only under known parent paths (MUCH faster than FindObjectsOfType)
+            // Search only under known parent paths to avoid a scene-wide lookup.
             foreach (string parentPath in parentSearchPaths)
             {
                 // Skip already completed parent paths (huge performance boost)

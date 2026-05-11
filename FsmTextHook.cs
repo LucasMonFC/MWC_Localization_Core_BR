@@ -7,7 +7,7 @@ using UnityEngine;
 namespace MWC_Localization_Core
 {
     /// <summary>
-    /// Applies hardcoded PlayMaker FSM source translations through translate.txt.
+    /// Applies hardcoded PlayMaker FSM source translations through loaded translation data.
     /// The registration table itself lives in <c>FsmTextHook.BuiltInTargets.cs</c>.
     /// </summary>
     public partial class FsmTextHook

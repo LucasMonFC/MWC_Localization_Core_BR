@@ -45,7 +45,7 @@ namespace MWC_Localization_Core
         private SceneTranslationManager sceneManager;
         private UnifiedTextMeshMonitor textMeshMonitor;
         
-        // Critical UI monitor (MonoBehaviour for LateUpdate access)
+        // LateUpdate monitoring host
         private GameObject lateUpdateHandlerObject;
         private LateUpdateHandler lateUpdateHandler;
 
@@ -169,8 +169,8 @@ namespace MWC_Localization_Core
             );
         }
 
-        // Every frame - scheduling and scene management ONLY
-        // All monitoring logic moved to LateUpdateHandler.LateUpdate()
+        // Every frame - hotkeys, scheduling, and scene management.
+        // Continuous monitoring runs in LateUpdateHandler.LateUpdate().
         private void Mod_Update()
         {
             if (!hasLoadedTranslations)
@@ -502,7 +502,7 @@ namespace MWC_Localization_Core
         {
             textMeshMonitor.RegisterAllPathRuleElements();
 
-            // Find all TextMesh components in the scene
+            // Find all TextMesh components in the scene, including inactive objects.
             TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();
             int translatedCount = 0;
             int forcedFontAppliedCount = 0;
