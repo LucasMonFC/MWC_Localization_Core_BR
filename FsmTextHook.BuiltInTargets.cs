@@ -81,13 +81,13 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun2/Text", "Text", "", -1, "sunnuntai");
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Moderator", "Text", "State 11", 1, "Valvojana:");
 
-            // Sheets: Rally results / registration / penalties (runtime-dynamic where game rebuilds rows)
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Junior", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Amateur", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "- Class", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Junior", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Amateur", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "- Class", runtimeDynamic: true);
+            // Sheets: Rally results / registration / penalties
+            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Junior");
+            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Amateur");
+            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "- Class");
+            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Junior");
+            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Amateur");
+            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "- Class");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "Time penalty:");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "sec.");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "Parc Ferme violation:");

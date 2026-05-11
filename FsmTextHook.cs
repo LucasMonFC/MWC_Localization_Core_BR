@@ -12,13 +12,11 @@ namespace MWC_Localization_Core
     /// </summary>
     public partial class FsmTextHook
     {
-        private const float RuntimeDynamicPollInterval = 0.2f;
-        private const int RuntimeDynamicTargetBatchSize = 8;
+        private const float SourcePollInterval = 0.2f;
         private const float WeatherEnnusteDataRescanInterval = 10f;
         private const string WeatherEnnusteUpdaterPrefix = "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste/";
 
         private readonly List<FsmTarget> targets = new List<FsmTarget>();
-        private readonly List<FsmTarget> runtimeDynamicTargets = new List<FsmTarget>();
         private readonly List<PlayMakerFSM> weatherEnnusteDataFsmCache = new List<PlayMakerFSM>();
         private readonly Dictionary<string, string> directTranslations = new Dictionary<string, string>();
         private readonly Dictionary<string, string> translationCache = new Dictionary<string, string>();
@@ -33,13 +31,14 @@ namespace MWC_Localization_Core
         private static readonly Dictionary<System.Type, FieldInfo[]> fieldCache = new Dictionary<System.Type, FieldInfo[]>();
         private static readonly Dictionary<System.Type, FieldInfo> stringPartsFieldCache = new Dictionary<System.Type, FieldInfo>();
 
-        private float lastRuntimeDynamicPollTime = -10f;
-        private int runtimeDynamicTargetIndex;
+        private float lastSourcePollTime = -10f;
         private int pendingTargetIndex;
         private float lastWeatherEnnusteDataFsmScanTime = -1000f;
         private FsmTarget servicePaymentLineTarget;
         private FsmTarget atmTransactionDescriptionTarget;
         private FsmTarget tvChatDayTarget;
+        private FsmTarget rallyPlayerResultsTarget;
+        private FsmTarget rallyRegistrationClassTarget;
         private bool unemployPaperResolved;
 
         private static readonly string[] UnemployPaperGroups = new string[] { "2A", "2B", "2C", "2D" };
@@ -65,7 +64,6 @@ namespace MWC_Localization_Core
             public readonly string StateName;
             public readonly int ActionIndex;
             public readonly bool WholeFsm;
-            public bool RuntimeDynamic;
             public readonly List<FsmRule> Rules = new List<FsmRule>();
 
             public FsmTarget(string objectPath, string fsmName, string stateName, int actionIndex)
@@ -94,8 +92,7 @@ namespace MWC_Localization_Core
 
         public void ResetRuntimeState()
         {
-            lastRuntimeDynamicPollTime = -10f;
-            runtimeDynamicTargetIndex = 0;
+            lastSourcePollTime = -10f;
             pendingTargetIndex = 0;
             unemployPaperResolved = false;
             ClearRuntimeCaches();
@@ -121,13 +118,17 @@ namespace MWC_Localization_Core
             // sources that the game rebuilds after opening a screen.
             if (!force)
             {
-                if (!isGame || !ShouldPoll(ref lastRuntimeDynamicPollTime, RuntimeDynamicPollInterval))
+                if (!isGame)
                     return false;
 
-                bool runtimeChanged = TryApplyFleetariServicePaymentBreakdownSource();
+                bool immediateChanged = TryApplyRallyClassSources();
+                if (!ShouldPoll(ref lastSourcePollTime, SourcePollInterval))
+                    return immediateChanged;
+
+                bool runtimeChanged = immediateChanged;
+                runtimeChanged |= TryApplyFleetariServicePaymentBreakdownSource();
                 runtimeChanged |= TryApplyAtmTransactionDescriptionSource();
                 runtimeChanged |= TryApplyTvChatDaySource();
-                runtimeChanged |= ApplyRuntimeDynamicTargets(currentScene, RuntimeDynamicTargetBatchSize);
                 runtimeChanged |= TryApplyGameTeletextWeatherUpdaterDirectTranslations();
                 if (!unemployPaperResolved)
                 {
@@ -146,6 +147,7 @@ namespace MWC_Localization_Core
                 changed |= TryApplyFleetariServicePaymentBreakdownSource();
                 changed |= TryApplyAtmTransactionDescriptionSource();
                 changed |= TryApplyTvChatDaySource();
+                changed |= TryApplyRallyClassSources();
                 changed |= TryApplyGameTeletextWeatherUpdaterDirectTranslations();
 
                 bool resolved;
@@ -164,11 +166,12 @@ namespace MWC_Localization_Core
         private void BuildTargets()
         {
             targets.Clear();
-            runtimeDynamicTargets.Clear();
             translationCache.Clear();
             servicePaymentLineTarget = null;
             atmTransactionDescriptionTarget = null;
             tvChatDayTarget = null;
+            rallyPlayerResultsTarget = null;
+            rallyRegistrationClassTarget = null;
 
             Dictionary<string, FsmTarget> byKey = new Dictionary<string, FsmTarget>();
             AddBuiltInTargets(byKey);
@@ -177,9 +180,6 @@ namespace MWC_Localization_Core
             for (int i = 0; i < targets.Count; i++)
             {
                 SortRules(targets[i].Rules);
-                if (targets[i].RuntimeDynamic)
-                    runtimeDynamicTargets.Add(targets[i]);
-
                 if (IsServicePaymentLineTarget(targets[i]))
                     servicePaymentLineTarget = targets[i];
 
@@ -188,10 +188,16 @@ namespace MWC_Localization_Core
 
                 if (IsTvChatDayTarget(targets[i]))
                     tvChatDayTarget = targets[i];
+
+                if (IsRallyPlayerResultsTarget(targets[i]))
+                    rallyPlayerResultsTarget = targets[i];
+
+                if (IsRallyRegistrationClassTarget(targets[i]))
+                    rallyRegistrationClassTarget = targets[i];
             }
         }
 
-        private void AddTargetRule(Dictionary<string, FsmTarget> byKey, string objectPath, string fsmName, string stateName, int actionIndex, string source, bool runtimeDynamic = false)
+        private void AddTargetRule(Dictionary<string, FsmTarget> byKey, string objectPath, string fsmName, string stateName, int actionIndex, string source)
         {
             if (byKey == null || string.IsNullOrEmpty(objectPath) || string.IsNullOrEmpty(source))
                 return;
@@ -207,9 +213,6 @@ namespace MWC_Localization_Core
                 target = new FsmTarget(objectPath, fsmName, stateName, actionIndex);
                 byKey[key] = target;
             }
-
-            if (runtimeDynamic)
-                target.RuntimeDynamic = true;
 
             target.Rules.Add(new FsmRule(source, translation));
         }
@@ -258,34 +261,6 @@ namespace MWC_Localization_Core
                     continue;
 
                 processedCount++;
-                bool resolved;
-                changed |= TryApplyTarget(target, out resolved);
-                if (resolved)
-                    MarkTargetResolved(target);
-            }
-
-            return changed;
-        }
-
-        private bool ApplyRuntimeDynamicTargets(string currentScene, int maxTargets)
-        {
-            if (runtimeDynamicTargets.Count == 0 || maxTargets <= 0)
-                return false;
-
-            bool changed = false;
-            int checkedCount = 0;
-            while (checkedCount < runtimeDynamicTargets.Count && checkedCount < maxTargets)
-            {
-                if (runtimeDynamicTargetIndex >= runtimeDynamicTargets.Count)
-                    runtimeDynamicTargetIndex = 0;
-
-                FsmTarget target = runtimeDynamicTargets[runtimeDynamicTargetIndex];
-                runtimeDynamicTargetIndex++;
-                checkedCount++;
-
-                if (target == null || !IsTargetForScene(target, currentScene))
-                    continue;
-
                 bool resolved;
                 changed |= TryApplyTarget(target, out resolved);
                 if (resolved)
@@ -855,6 +830,32 @@ namespace MWC_Localization_Core
             return changed;
         }
 
+        private bool TryApplyRallyClassSources()
+        {
+            bool changed = false;
+            changed |= TryApplyRallyClassSource(rallyPlayerResultsTarget, "State 1", 5);
+            changed |= TryApplyRallyClassSource(rallyRegistrationClassTarget, "State 1", 3);
+            return changed;
+        }
+
+        private bool TryApplyRallyClassSource(FsmTarget target, string stateName, int actionIndex)
+        {
+            if (target == null)
+                return false;
+
+            PlayMakerFSM fsm = GetFsmForTarget(target);
+            if (!IsFsmReady(fsm))
+                return false;
+
+            bool changed = false;
+            HutongGames.PlayMaker.FsmState state = FindState(fsm, stateName);
+            if (state != null && state.Actions != null && actionIndex >= 0 && actionIndex < state.Actions.Length)
+                changed |= TranslateAction(state.Actions[actionIndex], target);
+
+            changed |= TranslateTextMeshesForTarget(target);
+            return changed;
+        }
+
         private bool TryTranslateTvScheduleTarget(FsmTarget target, out bool handled, out bool resolved)
         {
             handled = false;
@@ -943,6 +944,19 @@ namespace MWC_Localization_Core
                 for (int i = 0; i < parts.Length; i++)
                 {
                     changed |= TranslateFsmString(parts[i], target);
+                }
+            }
+
+            string[] stringParts = GetStringArrayParts(action);
+            if (stringParts != null)
+            {
+                for (int i = 0; i < stringParts.Length; i++)
+                {
+                    if (!TranslateString(stringParts[i], target, out string translated))
+                        continue;
+
+                    stringParts[i] = translated;
+                    changed = true;
                 }
             }
 
@@ -1336,6 +1350,22 @@ namespace MWC_Localization_Core
                 && target.ActionIndex == 0;
         }
 
+        private static bool IsRallyPlayerResultsTarget(FsmTarget target)
+        {
+            return target != null
+                && TextMatchesExact(target.ObjectPath, "Sheets/RallyResults/PlayerResults")
+                && TextMatchesExact(target.FsmName, "Data")
+                && target.WholeFsm;
+        }
+
+        private static bool IsRallyRegistrationClassTarget(FsmTarget target)
+        {
+            return target != null
+                && TextMatchesExact(target.ObjectPath, "Sheets/RallyRegistration/Functions/Class")
+                && TextMatchesExact(target.FsmName, "Data")
+                && target.WholeFsm;
+        }
+
         private static bool IsTargetForScene(FsmTarget target, string currentScene)
         {
             if (target == null)
@@ -1369,16 +1399,6 @@ namespace MWC_Localization_Core
             translated = value;
             if (string.IsNullOrEmpty(value) || target == null || target.Rules.Count == 0)
                 return false;
-
-            // Dynamic targets observe ArrayLists whose contents rotate (ATM transactions, Fleetari
-            // breakdown, TV schedule rebuilds): each input string is typically seen once, so caching
-            // them just leaks memory over a long session. Static targets keep their cache.
-            if (target.RuntimeDynamic)
-            {
-                string dynResult = ApplyRules(value, target.Rules);
-                translated = dynResult;
-                return dynResult != value;
-            }
 
             string cacheKey = target.Key + "\n" + value;
             if (translationCache.TryGetValue(cacheKey, out translated))
@@ -1783,6 +1803,22 @@ namespace MWC_Localization_Core
             return field != null ? field.GetValue(action) as HutongGames.PlayMaker.FsmString[] : null;
         }
 
+        private static string[] GetStringArrayParts(object action)
+        {
+            if (action == null)
+                return null;
+
+            System.Type type = action.GetType();
+            FieldInfo field;
+            if (!stringPartsFieldCache.TryGetValue(type, out field))
+            {
+                field = GetField(type, "stringParts");
+                stringPartsFieldCache[type] = field;
+            }
+
+            return field != null ? field.GetValue(action) as string[] : null;
+        }
+
         private static FieldInfo GetField(System.Type type, string name)
         {
             if (type == null || string.IsNullOrEmpty(name))
@@ -1902,7 +1938,7 @@ namespace MWC_Localization_Core
 
         private static bool IsTranslatableDirectStringField(string fieldName)
         {
-            return fieldName == "stringValue" || fieldName == "text";
+            return fieldName == "stringValue" || fieldName == "text" || fieldName == "m_stringGenerated";
         }
 
         private static string GetFsmName(PlayMakerFSM fsm)
