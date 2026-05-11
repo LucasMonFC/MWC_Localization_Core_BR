@@ -39,6 +39,7 @@ namespace MWC_Localization_Core
         private float lastWeatherEnnusteDataFsmScanTime = -1000f;
         private FsmTarget servicePaymentLineTarget;
         private FsmTarget atmTransactionDescriptionTarget;
+        private FsmTarget tvChatDayTarget;
         private bool unemployPaperResolved;
 
         private static readonly string[] UnemployPaperGroups = new string[] { "2A", "2B", "2C", "2D" };
@@ -125,6 +126,7 @@ namespace MWC_Localization_Core
 
                 bool runtimeChanged = TryApplyFleetariServicePaymentBreakdownSource();
                 runtimeChanged |= TryApplyAtmTransactionDescriptionSource();
+                runtimeChanged |= TryApplyTvChatDaySource();
                 runtimeChanged |= ApplyRuntimeDynamicTargets(currentScene, RuntimeDynamicTargetBatchSize);
                 runtimeChanged |= TryApplyGameTeletextWeatherUpdaterDirectTranslations();
                 if (!unemployPaperResolved)
@@ -143,6 +145,7 @@ namespace MWC_Localization_Core
             {
                 changed |= TryApplyFleetariServicePaymentBreakdownSource();
                 changed |= TryApplyAtmTransactionDescriptionSource();
+                changed |= TryApplyTvChatDaySource();
                 changed |= TryApplyGameTeletextWeatherUpdaterDirectTranslations();
 
                 bool resolved;
@@ -165,6 +168,7 @@ namespace MWC_Localization_Core
             translationCache.Clear();
             servicePaymentLineTarget = null;
             atmTransactionDescriptionTarget = null;
+            tvChatDayTarget = null;
 
             Dictionary<string, FsmTarget> byKey = new Dictionary<string, FsmTarget>();
             AddBuiltInTargets(byKey);
@@ -181,6 +185,9 @@ namespace MWC_Localization_Core
 
                 if (IsAtmTransactionDescriptionTarget(targets[i]))
                     atmTransactionDescriptionTarget = targets[i];
+
+                if (IsTvChatDayTarget(targets[i]))
+                    tvChatDayTarget = targets[i];
             }
         }
 
@@ -813,6 +820,41 @@ namespace MWC_Localization_Core
             return changed;
         }
 
+        private bool TryApplyTvChatDaySource()
+        {
+            FsmTarget target = tvChatDayTarget;
+            if (target == null)
+                return false;
+
+            GameObject day = FindGameObjectByPath("Systems/TV/TVGraphics/CHAT/Day");
+            if (day == null)
+                return false;
+
+            bool changed = false;
+            PlayMakerArrayListProxy[] proxies = day.GetComponents<PlayMakerArrayListProxy>();
+            for (int i = 0; i < proxies.Length; i++)
+            {
+                PlayMakerArrayListProxy proxy = proxies[i];
+                if (proxy == null || !TextMatchesExact(proxy.referenceName, "Days"))
+                    continue;
+
+                changed |= TranslateArrayListProxy(proxy, target);
+            }
+
+            PlayMakerFSM fsm = FindMatchingFsmOnObject(day, "Text", null);
+            if (IsFsmReady(fsm))
+                changed |= TranslateWholeFsm(fsm, target);
+
+            TextMesh textMesh = day.GetComponent<TextMesh>();
+            if (textMesh != null && TranslateString(textMesh.text, target, out string translatedText))
+            {
+                textMesh.text = translatedText;
+                changed = true;
+            }
+
+            return changed;
+        }
+
         private bool TryTranslateTvScheduleTarget(FsmTarget target, out bool handled, out bool resolved)
         {
             handled = false;
@@ -1283,6 +1325,15 @@ namespace MWC_Localization_Core
                 && TextMatchesExact(target.ObjectPath, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite")
                 && TextMatchesExact(target.FsmName, "GetData")
                 && target.WholeFsm;
+        }
+
+        private static bool IsTvChatDayTarget(FsmTarget target)
+        {
+            return target != null
+                && TextMatchesExact(target.ObjectPath, "Systems/TV/TVGraphics/CHAT/Day")
+                && TextMatchesExact(target.FsmName, "Text")
+                && TextMatchesExact(target.StateName, "State 11")
+                && target.ActionIndex == 0;
         }
 
         private static bool IsTargetForScene(FsmTarget target, string currentScene)

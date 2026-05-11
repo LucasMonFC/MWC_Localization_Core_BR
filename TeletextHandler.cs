@@ -38,7 +38,6 @@ namespace MWC_Localization_Core
         {
             { "Systems/TV/Teletext/VKTekstiTV/Database", "" },  // Use referenceName directly
             { "Systems/TV/ChatMessages", "ChatMessages" },      // Prefix with "ChatMessages."
-            { "Systems/TV/TVGraphics/CHAT/Day", "Chat.Day" }    // Prefix with "Chat.Day."
         };
         
         // Path Prefix Proxy cache
