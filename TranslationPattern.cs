@@ -67,7 +67,7 @@ namespace MWC_Localization_Core
             List<string> parts = new List<string>();
             int lastIndex = 0;
             
-            // Find all placeholders {0}, {1}, {2}, ... in the pattern
+            // Find sequential placeholders {0}, {1}, {2}, ... in the pattern.
             for (int i = 0; i < 10; i++)
             {
                 string placeholder = "{" + i + "}";

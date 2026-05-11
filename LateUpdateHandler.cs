@@ -111,7 +111,7 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Clear cache when scene changes
+        /// Reset handler scheduling state when scene changes.
         /// </summary>
         public void ClearCache()
         {

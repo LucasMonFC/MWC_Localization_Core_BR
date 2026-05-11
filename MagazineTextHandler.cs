@@ -6,8 +6,8 @@ using UnityEngine;
 namespace MWC_Localization_Core
 {
     /// <summary>
-    /// Handles Yellow Pages magazine text translation
-    /// Manages comma-separated word lists and price/phone line formatting
+    /// Handles Yellow Pages magazine text translation.
+    /// Performs direct line lookup and price/phone line formatting.
     /// </summary>
     public class MagazineTextHandler
     {

@@ -9,7 +9,7 @@ namespace MWC_Localization_Core
 {
     /// <summary>
     /// Loads and manages localization configuration from config.txt
-    /// Supports language metadata, font mappings, and Unicode range detection
+    /// Supports language metadata, font mappings, and text adjustment rules.
     /// </summary>
     public class LocalizationConfig
     {
