@@ -128,33 +128,10 @@ namespace MWC_Localization_Core
             AddPathRule("GUI/HUD/Bodytemp/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("GUI/HUD/Sweat/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("GUI/HUD/Jailtime/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("Systems/TV/TVGraphics/CHAT/Day", MonitoringStrategy.FastPolling);
-            AddPathRule("Systems/TV/TVGraphics/CHAT/Moderator", MonitoringStrategy.FastPolling);
-            AddPathRule("Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status", MonitoringStrategy.FastPolling);
-
-            // Teletext/FSM displays are primarily translated at array/FSM source level.
-            // Use one-shot late registration to avoid rescanning large TV trees continuously.
-            AddPathRule("Systems/TV/Teletext/VKTekstiTV/PAGES", MonitoringStrategy.LateTranslateOnce);
-            // CHAT/Generated/Lines is already translated upstream by TeletextHandler, 
-            // so the TextMesh text never matches a dictionary key on this end. 
-            // Apply the font once and stop monitoring - no translation pass would ever succeed here.
-            AddPathRule("Systems/TV/TVGraphics/CHAT/Generated", MonitoringStrategy.LateApplyFontOnce);
-            AddPathRule("Systems/TV/TVGraphics/CHAT/Day/Time", MonitoringStrategy.LateApplyFontOnce);
-
-            // Magazine / Sheets - on visibility change
-            AddPathRule("Sheets/UnemployPaper", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/ServiceBrochure", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/ServicePayment", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/TrafficTicket", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("COMPUTER/SYSTEM/TELEBBS/CONLINE/CommandLine", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/RallyResults", MonitoringStrategy.OnVisibilityChange);
-            AddPathRule("Sheets/RallyRegistration/Functions/Class", MonitoringStrategy.OnVisibilityChange);
-
+            
             // Magazine / Sheets - persistent monitoring due to dynamic content changes and rebuilds
             AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.Persistent);
             AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
-            AddPathRule("PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat", MonitoringStrategy.Persistent);
-            AddPathRule("COMPUTER/SYSTEM/POS/NoOS", MonitoringStrategy.Persistent);
 
             // Magazine product list - parent rebuilds children while sheet is open.
             AddPathRule("Sheets/Magazine/Products", MonitoringStrategy.PersistentRebuilding);
@@ -167,9 +144,8 @@ namespace MWC_Localization_Core
                 rebuildingPaths.Add(pathPattern);
         }
 
-        // A parent scan (e.g. FastPolling on "CHAT/Day") must not absorb TextMeshes that have
-        // their own more-specific rule (e.g. LateApplyFontOnce on "CHAT/Day/Time"), or the
-        // one-shot rule gets silently demoted into continuous polling.
+        // A parent scan must not absorb TextMeshes that have their own more-specific rule,
+        // or the more-specific strategy gets silently demoted into the parent strategy.
         private bool HasMoreSpecificRule(string textMeshPath, string parentPath)
         {
             int parentLen = parentPath.Length;

@@ -23,7 +23,15 @@ namespace MWC_Localization_Core
             "Systems/TV/Teletext/VKTekstiTV/PAGES",
             "Systems/TV/Teletext/VKTekstiTV/HEADER",
             "COMPUTER/SYSTEM/POS",
-            "Sheets/UnemployPaper"
+            "Sheets/UnemployPaper",
+            "Systems/TV/TVGraphics/CHAT",
+            "Sheets/ServicePayment",
+            "Sheets/RallyRegistration/Functions/Class",
+            "Systems/TV/TVGraphics/GFXTanaanWeek/Text",
+            "Systems/TV/TVGraphics/GFXTanaanSat1/Text",
+            "Systems/TV/TVGraphics/GFXTanaanSat2/Text",
+            "Systems/TV/TVGraphics/GFXTanaanSun1/Text",
+            "Systems/TV/TVGraphics/GFXTanaanSun2/Text"
         };
 
         // Core handlers
@@ -41,8 +49,8 @@ namespace MWC_Localization_Core
         private GameObject lateUpdateHandlerObject;
         private LateUpdateHandler lateUpdateHandler;
 
-        // FSM text hook object (for translating text tied with FSM State)
-        private GameObject fsmTextHookObject;
+        // FSM/action source translations
+        private FsmTextHook fsmTextHook;
 
         // Font management
         private static AssetBundle fontBundle;  // Static to persist across MSCLoader instance recreation
@@ -128,12 +136,13 @@ namespace MWC_Localization_Core
             
             // Initialize unified text mesh monitor
             textMeshMonitor = new UnifiedTextMeshMonitor(translator);
+            InitializeFsmTextHook();
 
             // Translate main menu
             CoreConsole.Print($"[{Name}] Translating Main Menu...");
             TranslateScene();
             sceneManager.MarkSceneTranslated("MainMenu");
-            InitializeFsmTextHook();
+            RunFsmTextHook(true);
         }
 
         // Game fully loaded - translate everything
@@ -143,7 +152,7 @@ namespace MWC_Localization_Core
             ModConsole.Print($"[{Name}] Game fully loaded - translating...");
             TranslateScene();
             sceneManager.MarkSceneTranslated("GAME");
-            InitializeFsmTextHook();
+            RunFsmTextHook(true);
             InitializeGameDataSources("");
             
             // Create MonoBehaviour for LateUpdate monitoring
@@ -155,6 +164,7 @@ namespace MWC_Localization_Core
                 teletextHandler, 
                 arrayListHandler, 
                 hashTableHandler,
+                fsmTextHook,
                 sceneManager
             );
         }
@@ -199,22 +209,17 @@ namespace MWC_Localization_Core
                     lateUpdateHandler = null;
                 }
 
-                // Tear down the FSM hook when leaving MainMenu/GAME so its coroutine
-                // doesn't keep polling in scenes that have no FSM targets.
-                if (currentScene != "MainMenu" && currentScene != "GAME" && fsmTextHookObject != null)
+                if (fsmTextHook != null)
                 {
-                    Object.Destroy(fsmTextHookObject);
-                    fsmTextHookObject = null;
+                    fsmTextHook.ResetRuntimeState();
                 }
 
                 CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
             }
 
-            // Keep FSM hook alive for delayed/inactive GAME FSM targets.
-            // Run after scene-change cleanup to avoid create/destroy churn.
-            if (currentScene == "GAME" && fsmTextHookObject == null)
+            if (currentScene == "MainMenu" && sceneManager.HasSceneBeenTranslated("MainMenu"))
             {
-                InitializeFsmTextHook();
+                RunFsmTextHook(false);
             }
 
             // Initial translation pass for Main Menu (Required for hot reloads)
@@ -223,7 +228,7 @@ namespace MWC_Localization_Core
                 CoreConsole.Print($"[{Name}] Translating Main Menu...");
                 TranslateScene();
                 sceneManager.MarkSceneTranslated("MainMenu");
-                InitializeFsmTextHook();
+                RunFsmTextHook(true);
             }
 
             // Initial translation pass for Game scene (Required for hot reloads)
@@ -232,7 +237,7 @@ namespace MWC_Localization_Core
                 CoreConsole.Print($"[{Name}] Translating Game scene...");
                 TranslateScene();
                 sceneManager.MarkSceneTranslated("GAME");
-                InitializeFsmTextHook();
+                RunFsmTextHook(true);
                 InitializeGameDataSources("Initial ");
             }
         }
@@ -411,6 +416,7 @@ namespace MWC_Localization_Core
             
             // Reload additional FSM patterns from teletext file
             translator.LoadFsmPatterns(teletextPath);
+            InitializeFsmTextHook();
             
             // Reset and re-initialize LateUpdateHandler to find critical UI again
             if (lateUpdateHandler != null)
@@ -422,6 +428,7 @@ namespace MWC_Localization_Core
                     teletextHandler,
                     arrayListHandler,
                     hashTableHandler,
+                    fsmTextHook,
                     sceneManager
                 );
             }
@@ -454,12 +461,7 @@ namespace MWC_Localization_Core
 
             if (Application.loadedLevelName == "MainMenu" || Application.loadedLevelName == "GAME")
             {
-                if (fsmTextHookObject != null)
-                {
-                    Object.Destroy(fsmTextHookObject);
-                    fsmTextHookObject = null;
-                }
-                InitializeFsmTextHook();
+                RunFsmTextHook(true);
             }
 
             int totalTranslationsReloaded = translations.Count
@@ -474,25 +476,26 @@ namespace MWC_Localization_Core
             if (translations == null || translations.Count == 0)
                 return;
 
-            if (fsmTextHookObject != null)
-                return;
+            if (fsmTextHook == null)
+            {
+                fsmTextHook = new FsmTextHook();
+            }
 
-            fsmTextHookObject = new GameObject("MWC_FsmTextHook");
-            FsmTextHook hook = fsmTextHookObject.AddComponent<FsmTextHook>();
-            hook.Initialize(translations, fsmTextHookObject, GetPatternTranslationFiles());
-            CoreConsole.Print($"[{Name}] FSM hook created for scene '{Application.loadedLevelName}'");
+            fsmTextHook.Initialize(translations);
+            CoreConsole.Print($"[{Name}] FsmTextHook initialized for scene '{Application.loadedLevelName}'");
         }
 
-        private string[] GetPatternTranslationFiles()
+        void RunFsmTextHook(bool force)
         {
-            string assetsFolder = ModLoader.GetModAssetsFolder(this);
-            return new string[]
+            if (fsmTextHook == null)
             {
-                Path.Combine(assetsFolder, "translate_msc.txt"),
-                Path.Combine(assetsFolder, "translate.txt"),
-                Path.Combine(assetsFolder, "translate_mod.txt"),
-                Path.Combine(assetsFolder, "translate_teletext.txt")
-            };
+                InitializeFsmTextHook();
+            }
+
+            if (fsmTextHook != null)
+            {
+                fsmTextHook.UpdateForCurrentScene(force);
+            }
         }
 
         void TranslateScene()
