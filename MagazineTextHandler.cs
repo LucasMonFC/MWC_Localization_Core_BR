@@ -92,15 +92,18 @@ namespace MWC_Localization_Core
             if (yellowPagesSourcesResolved)
                 return 0;
 
-            int translated = TranslateYellowPagesMagazineFsmSources();
-            if (translated > 0)
+            bool foundSourceFsm;
+            int translated = TranslateYellowPagesMagazineFsmSources(out foundSourceFsm);
+            if (foundSourceFsm && translated == 0)
                 yellowPagesSourcesResolved = true;
 
             return translated;
         }
 
-        private int TranslateYellowPagesMagazineFsmSources()
+        private int TranslateYellowPagesMagazineFsmSources(out bool foundSourceFsm)
         {
+            foundSourceFsm = false;
+
             GameObject root = MLCUtils.FindGameObjectCached("Sheets/YellowPagesMagazine");
             if (root == null)
                 return 0;
@@ -116,6 +119,7 @@ namespace MWC_Localization_Core
                 if (fsm == null || GetFsmName(fsm) != "Generate")
                     continue;
 
+                foundSourceFsm = true;
                 translated += TranslateMagazineGenerateFsm(fsm);
             }
 

@@ -829,28 +829,39 @@ namespace MWC_Localization_Core
             if (typeName != "BuildString" && typeName != "BuildStringFast" && typeName != "StringAddNewLine")
                 return false;
 
+            FieldInfo stringPartsField = GetStringPartsField(action);
+            if (stringPartsField == null)
+                return false;
+
             bool changed = false;
-            HutongGames.PlayMaker.FsmString[] parts = GetStringParts(action);
+            object stringPartsValue = stringPartsField.GetValue(action);
+
+            HutongGames.PlayMaker.FsmString[] parts = stringPartsValue as HutongGames.PlayMaker.FsmString[];
             if (parts != null)
             {
                 for (int i = 0; i < parts.Length; i++)
                 {
                     changed |= TranslateFsmString(parts[i], target);
                 }
+
+                return changed;
             }
 
-            string[] stringParts = GetStringArrayParts(action);
-            if (stringParts != null)
+            string[] literalParts = stringPartsValue as string[];
+            if (literalParts == null)
+                return false;
+
+            for (int i = 0; i < literalParts.Length; i++)
             {
-                for (int i = 0; i < stringParts.Length; i++)
-                {
-                    if (!TranslateString(stringParts[i], target, out string translated))
-                        continue;
+                if (!TranslateString(literalParts[i], target, out string translated))
+                    continue;
 
-                    stringParts[i] = translated;
-                    changed = true;
-                }
+                literalParts[i] = translated;
+                changed = true;
             }
+
+            if (changed)
+                stringPartsField.SetValue(action, literalParts);
 
             return changed;
         }
@@ -1693,7 +1704,7 @@ namespace MWC_Localization_Core
             return false;
         }
 
-        private static HutongGames.PlayMaker.FsmString[] GetStringParts(object action)
+        private static FieldInfo GetStringPartsField(object action)
         {
             if (action == null)
                 return null;
@@ -1706,23 +1717,7 @@ namespace MWC_Localization_Core
                 stringPartsFieldCache[type] = field;
             }
 
-            return field != null ? field.GetValue(action) as HutongGames.PlayMaker.FsmString[] : null;
-        }
-
-        private static string[] GetStringArrayParts(object action)
-        {
-            if (action == null)
-                return null;
-
-            System.Type type = action.GetType();
-            FieldInfo field;
-            if (!stringPartsFieldCache.TryGetValue(type, out field))
-            {
-                field = GetField(type, "stringParts");
-                stringPartsFieldCache[type] = field;
-            }
-
-            return field != null ? field.GetValue(action) as string[] : null;
+            return field;
         }
 
         private static FieldInfo GetField(System.Type type, string name)
