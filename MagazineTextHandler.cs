@@ -113,7 +113,7 @@ namespace MWC_Localization_Core
             for (int i = 0; i < fsms.Length; i++)
             {
                 PlayMakerFSM fsm = fsms[i];
-                if (fsm == null || GetFsmName(fsm) != "Generate")
+                if (fsm == null || MLCFsmUtils.GetFsmName(fsm) != "Generate")
                     continue;
 
                 translated += TranslateMagazineGenerateFsm(fsm);
@@ -194,10 +194,10 @@ namespace MWC_Localization_Core
                     if (state == null || state.Actions == null || state.Name != "State 4")
                         continue;
 
-                    if (state.Actions.Length > 0 && SetNestedStringValue(state.Actions[0], translatedLine, "storeValue"))
+                    if (state.Actions.Length > 0 && MLCFsmUtils.SetNestedStringValue(state.Actions[0], translatedLine, "storeValue"))
                         changed++;
 
-                    if (state.Actions.Length > 1 && SetNestedStringValue(state.Actions[1], translatedLine, "targetProperty", "StringParameter"))
+                    if (state.Actions.Length > 1 && MLCFsmUtils.SetNestedStringValue(state.Actions[1], translatedLine, "targetProperty", "StringParameter"))
                         changed++;
                 }
             }
@@ -214,14 +214,10 @@ namespace MWC_Localization_Core
 
         private int TranslateMagazineBuildStringParts(object action)
         {
-            if (action == null)
+            if (!MLCFsmUtils.IsBuildStringAction(action))
                 return 0;
 
-            string typeName = action.GetType().Name;
-            if (typeName != "BuildString" && typeName != "BuildStringFast" && typeName != "StringAddNewLine")
-                return 0;
-
-            FieldInfo field = action.GetType().GetField("stringParts", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo field = MLCFsmUtils.GetStringPartsField(action);
             if (field == null)
                 return 0;
 
@@ -270,51 +266,6 @@ namespace MWC_Localization_Core
             return true;
         }
 
-        private static bool SetNestedStringValue(object root, string value, params string[] fieldPath)
-        {
-            if (root == null || fieldPath == null || fieldPath.Length == 0)
-                return false;
-
-            object current = root;
-            FieldInfo field = null;
-            for (int i = 0; i < fieldPath.Length; i++)
-            {
-                field = current.GetType().GetField(fieldPath[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                if (field == null)
-                    return false;
-
-                if (i == fieldPath.Length - 1)
-                    break;
-
-                current = field.GetValue(current);
-                if (current == null)
-                    return false;
-            }
-
-            object existing = field.GetValue(current);
-            HutongGames.PlayMaker.FsmString fsmString = existing as HutongGames.PlayMaker.FsmString;
-            if (fsmString != null)
-            {
-                if (fsmString.Value == value)
-                    return false;
-
-                fsmString.Value = value;
-                return true;
-            }
-
-            if (field.FieldType == typeof(string))
-            {
-                string safeValue = value ?? string.Empty;
-                if ((string)existing == safeValue)
-                    return false;
-
-                field.SetValue(current, safeValue);
-                return true;
-            }
-
-            return false;
-        }
-
         private string TranslateMagazineSourceValue(string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -339,17 +290,6 @@ namespace MWC_Localization_Core
             return magazineTranslations.TryGetValue("PHONE", out string translation)
                 ? translation
                 : "PHONE";
-        }
-
-        private static string GetFsmName(PlayMakerFSM fsm)
-        {
-            if (fsm == null)
-                return string.Empty;
-
-            if (fsm.Fsm != null && !string.IsNullOrEmpty(fsm.Fsm.Name))
-                return fsm.Fsm.Name;
-
-            return fsm.FsmName ?? string.Empty;
         }
 
         /// <summary>

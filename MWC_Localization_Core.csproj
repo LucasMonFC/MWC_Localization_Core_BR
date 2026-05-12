@@ -81,6 +81,7 @@
     <Compile Include="TextAdjustment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SceneTranslationManager.cs" />
+    <Compile Include="MLCFsmUtils.cs" />
     <Compile Include="MLCUtils.cs" />
     <Compile Include="TeletextHandler.cs" />
     <Compile Include="TextMeshTranslator.cs" />
