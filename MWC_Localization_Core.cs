@@ -221,6 +221,10 @@ namespace MWC_Localization_Core
             {
                 RunFsmTextHook(false);
             }
+            else if (currentScene == "GAME" && sceneManager.HasSceneBeenTranslated("GAME") && magazineHandler != null)
+            {
+                magazineHandler.MonitorAndTranslateSources();
+            }
 
             // Initial translation pass for Main Menu (Required for hot reloads)
             if (currentScene == "MainMenu" && sceneManager.ShouldTranslateScene("MainMenu"))
@@ -259,6 +263,13 @@ namespace MWC_Localization_Core
             if (hashTableTranslated > 0)
             {
                 CoreConsole.Print($"[{Name}] {logPrefix}translated {hashTableTranslated} hash table items");
+            }
+
+            magazineHandler.ResetRuntimeState();
+            int magazineSourceTranslated = magazineHandler.TranslateAllSources();
+            if (magazineSourceTranslated > 0)
+            {
+                CoreConsole.Print($"[{Name}] {logPrefix}translated {magazineSourceTranslated} magazine FSM source values");
             }
         }
 

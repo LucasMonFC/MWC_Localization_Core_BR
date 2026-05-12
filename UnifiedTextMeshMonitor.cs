@@ -128,10 +128,6 @@ namespace MWC_Localization_Core
             AddPathRule("GUI/HUD/Bodytemp/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("GUI/HUD/Sweat/HUDValue", MonitoringStrategy.FastPolling);
             AddPathRule("GUI/HUD/Jailtime/HUDValue", MonitoringStrategy.FastPolling);
-            
-            // Magazine / Sheets - persistent monitoring due to dynamic content changes and rebuilds
-            AddPathRule("Sheets/YellowPagesMagazine/Page1", MonitoringStrategy.Persistent);
-            AddPathRule("Sheets/YellowPagesMagazine/Page2", MonitoringStrategy.Persistent);
 
             // Magazine product list - parent rebuilds children while sheet is open.
             AddPathRule("Sheets/Magazine/Products", MonitoringStrategy.PersistentRebuilding);
