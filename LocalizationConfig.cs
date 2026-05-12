@@ -17,6 +17,7 @@ namespace MWC_Localization_Core
         public string LanguageCode { get; private set; } = "en-US";
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();
         public List<TextAdjustment> TextAdjustments { get; private set; } = new List<TextAdjustment>();
+        private readonly List<TextAdjustment> driftTrackedAdjustments = new List<TextAdjustment>();
 
         public LocalizationConfig()
         {
@@ -30,6 +31,7 @@ namespace MWC_Localization_Core
             // Make reload idempotent by resetting previously loaded values.
             FontMappings.Clear();
             TextAdjustments.Clear();
+            driftTrackedAdjustments.Clear();
             LanguageName = "Unknown";
             LanguageCode = "en-US";
 
@@ -229,7 +231,11 @@ namespace MWC_Localization_Core
             {
                 if (adjustment.Matches(path))
                 {
-                    return adjustment.ApplyAdjustment(textMesh, path);
+                    bool applied = adjustment.ApplyAdjustment(textMesh, path);
+                    if (applied && adjustment.HasDriftTrackedMeshes && !driftTrackedAdjustments.Contains(adjustment))
+                        driftTrackedAdjustments.Add(adjustment);
+
+                    return applied;
                 }
             }
 
@@ -242,9 +248,13 @@ namespace MWC_Localization_Core
         /// </summary>
         public void RefreshDriftTrackedAdjustments()
         {
-            foreach (TextAdjustment adjustment in TextAdjustments)
+            for (int i = driftTrackedAdjustments.Count - 1; i >= 0; i--)
             {
+                TextAdjustment adjustment = driftTrackedAdjustments[i];
                 adjustment.Refresh();
+
+                if (!adjustment.HasDriftTrackedMeshes)
+                    driftTrackedAdjustments.RemoveAt(i);
             }
         }
 
@@ -254,6 +264,8 @@ namespace MWC_Localization_Core
         /// </summary>
         public void ClearTextAdjustmentCaches()
         {
+            driftTrackedAdjustments.Clear();
+
             foreach (TextAdjustment adjustment in TextAdjustments)
             {
                 adjustment.ClearCache();

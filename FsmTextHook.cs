@@ -12,8 +12,6 @@ namespace MWC_Localization_Core
     /// </summary>
     public partial class FsmTextHook
     {
-        private const float SourcePollInterval = 0.2f;
-
         private readonly List<FsmTarget> targets = new List<FsmTarget>();
         private readonly List<PlayMakerFSM> weatherUpdaterFsmCache = new List<PlayMakerFSM>();
         private readonly Dictionary<string, string> directTranslations = new Dictionary<string, string>();
@@ -25,9 +23,6 @@ namespace MWC_Localization_Core
         private readonly HashSet<string> resolvedTargets = new HashSet<string>();
         private readonly HashSet<string> warnedTargets = new HashSet<string>();
         private readonly HashSet<int> initializedFsmIds = new HashSet<int>();
-
-        private static readonly Dictionary<System.Type, FieldInfo[]> fieldCache = new Dictionary<System.Type, FieldInfo[]>();
-        private static readonly Dictionary<System.Type, FieldInfo> stringPartsFieldCache = new Dictionary<System.Type, FieldInfo>();
 
         private float lastSourcePollTime = -10f;
         private int pendingTargetIndex;
@@ -114,7 +109,7 @@ namespace MWC_Localization_Core
                     return false;
 
                 bool immediateChanged = TryApplyRallyClassSources();
-                if (!ShouldPoll(ref lastSourcePollTime, SourcePollInterval))
+                if (!ShouldPoll(ref lastSourcePollTime, LocalizationConstants.FSM_SOURCE_POLL_INTERVAL))
                     return immediateChanged;
 
                 bool runtimeChanged = immediateChanged;
@@ -475,7 +470,7 @@ namespace MWC_Localization_Core
             if (action.GetType().Name != "SetStringValue")
                 return false;
 
-            FieldInfo stringValueField = GetField(action.GetType(), "stringValue");
+            FieldInfo stringValueField = MLCFsmUtils.GetField(action.GetType(), "stringValue");
             if (stringValueField == null)
                 return false;
 
@@ -489,7 +484,7 @@ namespace MWC_Localization_Core
                 return false;
 
             string translated = TranslateDirectText(fsmString.Value);
-            return SetFsmStringValue(fsmString, translated);
+            return MLCFsmUtils.SetFsmStringValue(fsmString, translated);
         }
 
         private string TranslateDirectText(string value)
@@ -589,16 +584,16 @@ namespace MWC_Localization_Core
             string safeValue = value ?? string.Empty;
             bool changed = false;
             HutongGames.PlayMaker.FsmString text = fsm.FsmVariables != null ? fsm.FsmVariables.GetFsmString("Text") : null;
-            changed |= SetFsmStringValue(text, safeValue);
+            changed |= MLCFsmUtils.SetFsmStringValue(text, safeValue);
 
             HutongGames.PlayMaker.FsmState state = FindState(fsm, "State 1");
             if (state != null && state.Actions != null)
             {
                 if (state.Actions.Length > 0)
-                    changed |= SetNestedStringValue(state.Actions[0], safeValue, "result", "namedVar");
+                    changed |= MLCFsmUtils.SetNestedStringValue(state.Actions[0], safeValue, "result", "namedVar");
 
                 if (state.Actions.Length > 1)
-                    changed |= SetNestedStringValue(state.Actions[1], safeValue, "targetProperty", "StringParameter");
+                    changed |= MLCFsmUtils.SetNestedStringValue(state.Actions[1], safeValue, "targetProperty", "StringParameter");
             }
 
             TextMesh textMesh = fsm.GetComponent<TextMesh>();
@@ -774,11 +769,11 @@ namespace MWC_Localization_Core
                 if (fsm == null || fsm.gameObject == null)
                     continue;
 
-                string path = GetGameObjectPath(fsm.gameObject);
+                string path = MLCUtils.GetGameObjectPath(fsm.gameObject);
                 if (!IsObjectPathMatch(path, target.ObjectPath) && !IsObjectPathMatch(path, scheduleRootPath))
                     continue;
 
-                if (!string.IsNullOrEmpty(target.FsmName) && GetFsmName(fsm) != target.FsmName)
+                if (!string.IsNullOrEmpty(target.FsmName) && MLCFsmUtils.GetFsmName(fsm) != target.FsmName)
                     continue;
 
                 changed |= TranslateWholeFsm(fsm, target);
@@ -791,7 +786,7 @@ namespace MWC_Localization_Core
                 if (proxy == null || proxy.gameObject == null)
                     continue;
 
-                string path = GetGameObjectPath(proxy.gameObject);
+                string path = MLCUtils.GetGameObjectPath(proxy.gameObject);
                 if (!IsObjectPathMatch(path, scheduleRootPath))
                     continue;
 
@@ -808,7 +803,7 @@ namespace MWC_Localization_Core
                 if (textMesh == null || textMesh.gameObject == null)
                     continue;
 
-                string path = GetGameObjectPath(textMesh.gameObject);
+                string path = MLCUtils.GetGameObjectPath(textMesh.gameObject);
                 if (!IsObjectPathMatch(path, target.ObjectPath) && !IsObjectPathMatch(path, scheduleRootPath))
                     continue;
 
@@ -825,18 +820,17 @@ namespace MWC_Localization_Core
 
         private bool TranslateBuildString(object action, FsmTarget target)
         {
-            string typeName = action.GetType().Name;
-            if (typeName != "BuildString" && typeName != "BuildStringFast" && typeName != "StringAddNewLine")
+            if (!MLCFsmUtils.IsBuildStringAction(action))
                 return false;
 
-            FieldInfo stringPartsField = GetStringPartsField(action);
+            FieldInfo stringPartsField = MLCFsmUtils.GetStringPartsField(action);
             if (stringPartsField == null)
                 return false;
 
             bool changed = false;
-            object stringPartsValue = stringPartsField.GetValue(action);
+            object partsValue = stringPartsField != null ? stringPartsField.GetValue(action) : null;
 
-            HutongGames.PlayMaker.FsmString[] parts = stringPartsValue as HutongGames.PlayMaker.FsmString[];
+            HutongGames.PlayMaker.FsmString[] parts = partsValue as HutongGames.PlayMaker.FsmString[];
             if (parts != null)
             {
                 for (int i = 0; i < parts.Length; i++)
@@ -880,7 +874,7 @@ namespace MWC_Localization_Core
             if (action == null || action.GetType().Name != "SetProperty")
                 return false;
 
-            FieldInfo targetPropertyField = GetField(action.GetType(), "targetProperty");
+            FieldInfo targetPropertyField = MLCFsmUtils.GetField(action.GetType(), "targetProperty");
             if (targetPropertyField == null)
                 return false;
 
@@ -888,7 +882,7 @@ namespace MWC_Localization_Core
             if (targetProperty == null)
                 return false;
 
-            FieldInfo stringParameterField = GetField(targetProperty.GetType(), "StringParameter");
+            FieldInfo stringParameterField = MLCFsmUtils.GetField(targetProperty.GetType(), "StringParameter");
             if (stringParameterField == null)
                 return false;
 
@@ -906,7 +900,7 @@ namespace MWC_Localization_Core
                 return false;
 
             bool changed = false;
-            FieldInfo[] fields = GetFields(action.GetType());
+            FieldInfo[] fields = MLCFsmUtils.GetFields(action.GetType());
             for (int i = 0; i < fields.Length; i++)
             {
                 FieldInfo field = fields[i];
@@ -942,7 +936,7 @@ namespace MWC_Localization_Core
                 return false;
 
             bool changed = false;
-            FieldInfo[] fields = GetFields(action.GetType());
+            FieldInfo[] fields = MLCFsmUtils.GetFields(action.GetType());
             for (int i = 0; i < fields.Length; i++)
             {
                 FieldInfo field = fields[i];
@@ -990,7 +984,7 @@ namespace MWC_Localization_Core
                 return false;
 
             bool changed = false;
-            FieldInfo[] fields = GetFields(instance.GetType());
+            FieldInfo[] fields = MLCFsmUtils.GetFields(instance.GetType());
             for (int i = 0; i < fields.Length; i++)
             {
                 FieldInfo field = fields[i];
@@ -1085,7 +1079,7 @@ namespace MWC_Localization_Core
                 if (proxy == null || proxy.gameObject == null || result.Contains(proxy))
                     continue;
 
-                string proxyPath = GetGameObjectPath(proxy.gameObject);
+                string proxyPath = MLCUtils.GetGameObjectPath(proxy.gameObject);
                 if (IsObjectPathMatch(proxyPath, target.ObjectPath) || TextMatchesExact(proxy.referenceName, expectedReference))
                     result.Add(proxy);
             }
@@ -1213,7 +1207,7 @@ namespace MWC_Localization_Core
                     if (textMesh == null || textMesh.gameObject == null)
                         continue;
 
-                    if (!IsObjectPathMatch(GetGameObjectPath(textMesh.gameObject), target.ObjectPath))
+                    if (!IsObjectPathMatch(MLCUtils.GetGameObjectPath(textMesh.gameObject), target.ObjectPath))
                         continue;
 
                     result.Add(textMesh);
@@ -1448,7 +1442,7 @@ namespace MWC_Localization_Core
                     for (int i = 0; i < fsms.Length; i++)
                     {
                         PlayMakerFSM fsm = fsms[i];
-                        if (fsm == null || !IsObjectPathMatch(GetGameObjectPath(fsm.gameObject), target.ObjectPath))
+                        if (fsm == null || !IsObjectPathMatch(MLCUtils.GetGameObjectPath(fsm.gameObject), target.ObjectPath))
                             continue;
 
                         AddMatchingFsm(fsm, target, result);
@@ -1472,7 +1466,7 @@ namespace MWC_Localization_Core
             for (int i = 0; i < fsms.Length; i++)
             {
                 PlayMakerFSM fsm = fsms[i];
-                if (fsm == null || !IsObjectPathMatch(GetGameObjectPath(fsm.gameObject), target.ObjectPath))
+                if (fsm == null || !IsObjectPathMatch(MLCUtils.GetGameObjectPath(fsm.gameObject), target.ObjectPath))
                     continue;
 
                 if (FsmMatches(fsm, target.FsmName, target.StateName))
@@ -1498,7 +1492,7 @@ namespace MWC_Localization_Core
             if (fsm == null)
                 return;
 
-            if (!string.IsNullOrEmpty(target.FsmName) && GetFsmName(fsm) != target.FsmName)
+            if (!string.IsNullOrEmpty(target.FsmName) && MLCFsmUtils.GetFsmName(fsm) != target.FsmName)
                 return;
 
             if (!string.IsNullOrEmpty(target.StateName) && FindState(fsm, target.StateName) == null)
@@ -1529,7 +1523,7 @@ namespace MWC_Localization_Core
             if (fsm == null)
                 return false;
 
-            if (!string.IsNullOrEmpty(fsmName) && GetFsmName(fsm) != fsmName)
+            if (!string.IsNullOrEmpty(fsmName) && MLCFsmUtils.GetFsmName(fsm) != fsmName)
                 return false;
 
             if (!string.IsNullOrEmpty(stateName) && FindState(fsm, stateName) == null)
@@ -1599,22 +1593,6 @@ namespace MWC_Localization_Core
             return null;
         }
 
-        private static string GetGameObjectPath(GameObject gameObject)
-        {
-            if (gameObject == null)
-                return string.Empty;
-
-            Stack<string> names = new Stack<string>();
-            Transform current = gameObject.transform;
-            while (current != null)
-            {
-                names.Push(current.name);
-                current = current.parent;
-            }
-
-            return string.Join("/", names.ToArray());
-        }
-
         private static bool IsObjectPathMatch(string actualPath, string rulePath)
         {
             if (actualPath == rulePath)
@@ -1635,7 +1613,7 @@ namespace MWC_Localization_Core
             if (action == null)
                 return -1;
 
-            FieldInfo atIndexField = GetField(action.GetType(), "atIndex");
+            FieldInfo atIndexField = MLCFsmUtils.GetField(action.GetType(), "atIndex");
             if (atIndexField == null)
                 return -1;
 
@@ -1648,96 +1626,8 @@ namespace MWC_Localization_Core
             if (action == null)
                 return null;
 
-            FieldInfo proxyField = GetField(action.GetType(), "proxy");
+            FieldInfo proxyField = MLCFsmUtils.GetField(action.GetType(), "proxy");
             return proxyField == null ? null : proxyField.GetValue(action) as PlayMakerArrayListProxy;
-        }
-
-        private static bool SetFsmStringValue(HutongGames.PlayMaker.FsmString target, string value)
-        {
-            if (target == null)
-                return false;
-
-            string safeValue = value ?? string.Empty;
-            if (target.Value == safeValue)
-                return false;
-
-            target.Value = safeValue;
-            return true;
-        }
-
-        private static bool SetNestedStringValue(object root, string value, params string[] fieldPath)
-        {
-            if (root == null || fieldPath == null || fieldPath.Length == 0)
-                return false;
-
-            object current = root;
-            FieldInfo field = null;
-            for (int i = 0; i < fieldPath.Length; i++)
-            {
-                field = GetField(current.GetType(), fieldPath[i]);
-                if (field == null)
-                    return false;
-
-                if (i == fieldPath.Length - 1)
-                    break;
-
-                current = field.GetValue(current);
-                if (current == null)
-                    return false;
-            }
-
-            object existing = field.GetValue(current);
-            HutongGames.PlayMaker.FsmString fsmString = existing as HutongGames.PlayMaker.FsmString;
-            if (fsmString != null)
-                return SetFsmStringValue(fsmString, value);
-
-            if (field.FieldType == typeof(string))
-            {
-                string safeValue = value ?? string.Empty;
-                if ((string)existing == safeValue)
-                    return false;
-
-                field.SetValue(current, safeValue);
-                return true;
-            }
-
-            return false;
-        }
-
-        private static FieldInfo GetStringPartsField(object action)
-        {
-            if (action == null)
-                return null;
-
-            FieldInfo field;
-            System.Type type = action.GetType();
-            if (!stringPartsFieldCache.TryGetValue(type, out field))
-            {
-                field = GetField(type, "stringParts");
-                stringPartsFieldCache[type] = field;
-            }
-
-            return field;
-        }
-
-        private static FieldInfo GetField(System.Type type, string name)
-        {
-            if (type == null || string.IsNullOrEmpty(name))
-                return null;
-
-            return type.GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        }
-
-        private static FieldInfo[] GetFields(System.Type type)
-        {
-            FieldInfo[] fields;
-            if (!fieldCache.TryGetValue(type, out fields))
-            {
-                fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                fieldCache[type] = fields;
-            }
-
-            return fields;
         }
 
         private bool IsFsmReady(PlayMakerFSM fsm)
@@ -1840,17 +1730,6 @@ namespace MWC_Localization_Core
         private static bool IsTranslatableDirectStringField(string fieldName)
         {
             return fieldName == "stringValue" || fieldName == "text" || fieldName == "m_stringGenerated";
-        }
-
-        private static string GetFsmName(PlayMakerFSM fsm)
-        {
-            if (fsm == null)
-                return string.Empty;
-
-            if (fsm.Fsm != null && !string.IsNullOrEmpty(fsm.Fsm.Name))
-                return fsm.Fsm.Name;
-
-            return fsm.FsmName ?? string.Empty;
         }
 
         private static bool ShouldPoll(ref float lastPollTime, float interval)

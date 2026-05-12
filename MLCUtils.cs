@@ -41,7 +41,6 @@ namespace MWC_Localization_Core
         private static Dictionary<string, PlayMakerFSM> inactiveFsmPathNameCache = new Dictionary<string, PlayMakerFSM>();
         private static bool fsmIndexBuilt = false;
         private static float lastFsmIndexBuildTime = -1000f;
-        private const float FSM_INDEX_REFRESH_INTERVAL = 1f;
 
         public static string GetGameObjectPath(GameObject obj)
         {
@@ -159,7 +158,7 @@ namespace MWC_Localization_Core
         private static void EnsureFsmIndexFresh()
         {
             float now = Time.realtimeSinceStartup;
-            if (fsmIndexBuilt && now - lastFsmIndexBuildTime < FSM_INDEX_REFRESH_INTERVAL)
+            if (fsmIndexBuilt && now - lastFsmIndexBuildTime < LocalizationConstants.FSM_INDEX_REFRESH_INTERVAL)
                 return;
 
             RebuildFsmIndex(now);
