@@ -3,13 +3,13 @@ using UnityEngine;
 namespace MWC_Localization_Core
 {
     /// <summary>
-    /// MonoBehaviour component for ALL continuous translation monitoring
-    /// Must run in LateUpdate() to translate AFTER game's Update() regenerates text
-    /// Centralizes continuous translation work outside the main mod entry point
+    /// MonoBehaviour component for runtime data-source updates.
+    /// Runs in LateUpdate() so source changes happen after the game's Update().
     /// </summary>
     public class LateUpdateHandler : MonoBehaviour
     {
         // Dependencies
+        private LocalizationConfig config;
         private UnifiedTextMeshMonitor textMeshMonitor;
         private TeletextHandler teletextHandler;
         private ArrayListProxyHandler arrayListHandler;
@@ -25,6 +25,7 @@ namespace MWC_Localization_Core
         private int arrayMonitorStep = 0;
 
         public void Initialize(
+            LocalizationConfig configInstance,
             UnifiedTextMeshMonitor textMeshMonitorInstance,
             TeletextHandler teletextHandlerInstance,
             ArrayListProxyHandler arrayListHandlerInstance,
@@ -32,6 +33,7 @@ namespace MWC_Localization_Core
             FsmTextHook fsmTextHookInstance,
             SceneTranslationManager sceneManagerInstance)
         {
+            config = configInstance;
             textMeshMonitor = textMeshMonitorInstance;
             teletextHandler = teletextHandlerInstance;
             arrayListHandler = arrayListHandlerInstance;
@@ -52,11 +54,15 @@ namespace MWC_Localization_Core
 
             string currentScene = Application.loadedLevelName;
 
-            // GAME scene monitoring
+            // GAME scene runtime updates
             if (currentScene == "GAME" && sceneManager.HasSceneBeenTranslated("GAME"))
             {
-                // Throttled monitoring for regular TextMesh elements
-                textMeshMonitor.Update(Time.deltaTime);
+                if (config != null)
+                    config.RefreshDriftTrackedAdjustments();
+
+                if (textMeshMonitor != null)
+                    textMeshMonitor.Update(Time.deltaTime);
+
                 if (fsmTextHook != null)
                 {
                     fsmTextHook.UpdateForScene(currentScene, false);
@@ -102,12 +108,7 @@ namespace MWC_Localization_Core
                 }
             }
 
-            // Main menu monitoring
-            else if (currentScene == "MainMenu" && sceneManager.HasSceneBeenTranslated("MainMenu"))
-            {
-                // Monitor for dynamic changes in main menu
-                textMeshMonitor.Update(Time.deltaTime);
-            }
+            // Main menu has no TextMesh monitor now; scene/reload passes handle it.
         }
 
         /// <summary>

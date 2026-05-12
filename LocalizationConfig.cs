@@ -17,6 +17,8 @@ namespace MWC_Localization_Core
         public string LanguageCode { get; private set; } = "en-US";
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();
         public List<TextAdjustment> TextAdjustments { get; private set; } = new List<TextAdjustment>();
+        private const float DriftTrackedDiscoveryInterval = 0.35f;
+        private float lastDriftTrackedDiscoveryTime = -1000f;
 
         public LocalizationConfig()
         {
@@ -242,9 +244,42 @@ namespace MWC_Localization_Core
         /// </summary>
         public void RefreshDriftTrackedAdjustments()
         {
+            ApplyDriftTrackedAdjustmentsToRebuiltTextMeshes();
+
             foreach (TextAdjustment adjustment in TextAdjustments)
             {
                 adjustment.Refresh();
+            }
+        }
+
+        private void ApplyDriftTrackedAdjustmentsToRebuiltTextMeshes()
+        {
+            if (TextAdjustments.Count == 0)
+                return;
+
+            float now = Time.realtimeSinceStartup;
+            if (now - lastDriftTrackedDiscoveryTime < DriftTrackedDiscoveryInterval)
+                return;
+
+            lastDriftTrackedDiscoveryTime = now;
+
+            for (int i = 0; i < TextAdjustment.DriftTrackedPathPatterns.Length; i++)
+            {
+                string rootPath = TextAdjustment.DriftTrackedPathPatterns[i];
+                GameObject root = MLCUtils.FindGameObjectCached(rootPath);
+                if (root == null)
+                    continue;
+
+                TextMesh[] textMeshes = root.GetComponentsInChildren<TextMesh>(true);
+                for (int j = 0; j < textMeshes.Length; j++)
+                {
+                    TextMesh textMesh = textMeshes[j];
+                    if (textMesh == null)
+                        continue;
+
+                    string path = MLCUtils.GetGameObjectPath(textMesh.gameObject);
+                    ApplyTextAdjustment(textMesh, path);
+                }
             }
         }
 
@@ -254,6 +289,8 @@ namespace MWC_Localization_Core
         /// </summary>
         public void ClearTextAdjustmentCaches()
         {
+            lastDriftTrackedDiscoveryTime = -1000f;
+
             foreach (TextAdjustment adjustment in TextAdjustments)
             {
                 adjustment.ClearCache();

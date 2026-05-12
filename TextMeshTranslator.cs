@@ -150,9 +150,9 @@ namespace MWC_Localization_Core
                         }
                     }
                 }
-
-                config.ApplyTextAdjustment(textMesh, path);
             }
+
+            config.ApplyTextAdjustment(textMesh, path);
         }
 
         /// <summary>
@@ -302,15 +302,6 @@ namespace MWC_Localization_Core
             return beforeFontName != afterFontName;
         }
         
-        /// <summary>
-        /// Re-pin drift-tracked TextMeshes (e.g. magazine sheets the game rebuilds).
-        /// Invoked each frame from UnifiedTextMeshMonitor.Update().
-        /// </summary>
-        public void RefreshDriftTrackedAdjustments()
-        {
-            config.RefreshDriftTrackedAdjustments();
-        }
-
         /// <summary>
         /// Load FSM patterns from teletext translation file
         /// </summary>

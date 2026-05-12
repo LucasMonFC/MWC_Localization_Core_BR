@@ -32,14 +32,14 @@ namespace MWC_Localization_Core
         // get rebuilt while open). TextMeshes whose path matches any entry get drift-
         // tracked and re-pinned every LateUpdate. Keep this list small - every entry
         // pays a per-frame cost proportional to the number of TextMeshes it has touched.
-        private static readonly string[] DriftTrackedPathPatterns =
+        internal static readonly string[] DriftTrackedPathPatterns =
         {
             "Sheets/Magazine/Products",
         };
 
         private const float PositionToleranceSqr = 1e-7f;
 
-        private static bool IsDriftTracked(string path)
+        internal static bool IsDriftTrackedPath(string path)
         {
             if (string.IsNullOrEmpty(path))
                 return false;
@@ -130,7 +130,7 @@ namespace MWC_Localization_Core
             adjustedTextMeshes.Add(textMesh);
 
             // Opt this mesh into Refresh() only if its path is on the drift-tracked whitelist.
-            if (IsDriftTracked(path))
+            if (IsDriftTrackedPath(path))
                 lastAppliedLocalPositions[textMesh] = newPosition;
 
             return true;
