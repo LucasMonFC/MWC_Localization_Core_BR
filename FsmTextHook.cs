@@ -823,31 +823,39 @@ namespace MWC_Localization_Core
             if (!MLCFsmUtils.IsBuildStringAction(action))
                 return false;
 
-            bool changed = false;
-            FieldInfo partsField = MLCFsmUtils.GetStringPartsField(action);
-            object partsValue = partsField != null ? partsField.GetValue(action) : null;
+            FieldInfo stringPartsField = MLCFsmUtils.GetStringPartsField(action);
+            if (stringPartsField == null)
+                return false;
 
-            HutongGames.PlayMaker.FsmString[] parts = partsValue as HutongGames.PlayMaker.FsmString[];
+            bool changed = false;
+            object stringPartsValue = stringPartsField != null ? stringPartsField.GetValue(action) : null;
+
+            HutongGames.PlayMaker.FsmString[] parts = stringPartsValue as HutongGames.PlayMaker.FsmString[];
             if (parts != null)
             {
                 for (int i = 0; i < parts.Length; i++)
                 {
                     changed |= TranslateFsmString(parts[i], target);
                 }
+
+                return changed;
             }
 
-            string[] stringParts = partsValue as string[];
-            if (stringParts != null)
+            string[] literalParts = stringPartsValue as string[];
+            if (literalParts == null)
+                return false;
+
+            for (int i = 0; i < literalParts.Length; i++)
             {
-                for (int i = 0; i < stringParts.Length; i++)
-                {
-                    if (!TranslateString(stringParts[i], target, out string translated))
-                        continue;
+                if (!TranslateString(literalParts[i], target, out string translated))
+                    continue;
 
-                    stringParts[i] = translated;
-                    changed = true;
-                }
+                literalParts[i] = translated;
+                changed = true;
             }
+
+            if (changed)
+                stringPartsField.SetValue(action, literalParts);
 
             return changed;
         }
