@@ -12,14 +12,10 @@ namespace MWC_Localization_Core
     /// </summary>
     public partial class FsmTextHook
     {
-        private const float RuntimeDynamicPollInterval = 0.2f;
-        private const int RuntimeDynamicTargetBatchSize = 8;
-        private const float WeatherEnnusteDataRescanInterval = 10f;
-        private const string WeatherEnnusteUpdaterPrefix = "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste/";
+        private const float SourcePollInterval = 0.2f;
 
         private readonly List<FsmTarget> targets = new List<FsmTarget>();
-        private readonly List<FsmTarget> runtimeDynamicTargets = new List<FsmTarget>();
-        private readonly List<PlayMakerFSM> weatherEnnusteDataFsmCache = new List<PlayMakerFSM>();
+        private readonly List<PlayMakerFSM> weatherUpdaterFsmCache = new List<PlayMakerFSM>();
         private readonly Dictionary<string, string> directTranslations = new Dictionary<string, string>();
         private readonly Dictionary<string, string> translationCache = new Dictionary<string, string>();
         private readonly Dictionary<string, PlayMakerFSM> exactFsmCache = new Dictionary<string, PlayMakerFSM>();
@@ -33,16 +29,13 @@ namespace MWC_Localization_Core
         private static readonly Dictionary<System.Type, FieldInfo[]> fieldCache = new Dictionary<System.Type, FieldInfo[]>();
         private static readonly Dictionary<System.Type, FieldInfo> stringPartsFieldCache = new Dictionary<System.Type, FieldInfo>();
 
-        private float lastRuntimeDynamicPollTime = -10f;
-        private int runtimeDynamicTargetIndex;
+        private float lastSourcePollTime = -10f;
         private int pendingTargetIndex;
-        private float lastWeatherEnnusteDataFsmScanTime = -1000f;
         private FsmTarget servicePaymentLineTarget;
         private FsmTarget atmTransactionDescriptionTarget;
-        private bool unemployPaperResolved;
-
-        private static readonly string[] UnemployPaperGroups = new string[] { "2A", "2B", "2C", "2D" };
-        private static readonly string[] UnemployPaperButtonVariables = new string[] { "jobNo", "JobNo", "jobYes", "JobYes" };
+        private FsmTarget tvChatDayTarget;
+        private FsmTarget rallyPlayerResultsTarget;
+        private FsmTarget rallyRegistrationClassTarget;
 
         private sealed class FsmRule
         {
@@ -64,7 +57,6 @@ namespace MWC_Localization_Core
             public readonly string StateName;
             public readonly int ActionIndex;
             public readonly bool WholeFsm;
-            public bool RuntimeDynamic;
             public readonly List<FsmRule> Rules = new List<FsmRule>();
 
             public FsmTarget(string objectPath, string fsmName, string stateName, int actionIndex)
@@ -93,10 +85,8 @@ namespace MWC_Localization_Core
 
         public void ResetRuntimeState()
         {
-            lastRuntimeDynamicPollTime = -10f;
-            runtimeDynamicTargetIndex = 0;
+            lastSourcePollTime = -10f;
             pendingTargetIndex = 0;
-            unemployPaperResolved = false;
             ClearRuntimeCaches();
         }
 
@@ -120,20 +110,18 @@ namespace MWC_Localization_Core
             // sources that the game rebuilds after opening a screen.
             if (!force)
             {
-                if (!isGame || !ShouldPoll(ref lastRuntimeDynamicPollTime, RuntimeDynamicPollInterval))
+                if (!isGame)
                     return false;
 
-                bool runtimeChanged = TryApplyFleetariServicePaymentBreakdownSource();
+                bool immediateChanged = TryApplyRallyClassSources();
+                if (!ShouldPoll(ref lastSourcePollTime, SourcePollInterval))
+                    return immediateChanged;
+
+                bool runtimeChanged = immediateChanged;
+                runtimeChanged |= TryApplyFleetariServicePaymentBreakdownSource();
                 runtimeChanged |= TryApplyAtmTransactionDescriptionSource();
-                runtimeChanged |= ApplyRuntimeDynamicTargets(currentScene, RuntimeDynamicTargetBatchSize);
+                runtimeChanged |= TryApplyTvChatDaySource();
                 runtimeChanged |= TryApplyGameTeletextWeatherUpdaterDirectTranslations();
-                if (!unemployPaperResolved)
-                {
-                    bool resolved;
-                    runtimeChanged |= TryApplyGameUnemployPaperButtonTranslations(out resolved);
-                    if (resolved)
-                        unemployPaperResolved = true;
-                }
 
                 return runtimeChanged;
             }
@@ -143,12 +131,9 @@ namespace MWC_Localization_Core
             {
                 changed |= TryApplyFleetariServicePaymentBreakdownSource();
                 changed |= TryApplyAtmTransactionDescriptionSource();
+                changed |= TryApplyTvChatDaySource();
+                changed |= TryApplyRallyClassSources();
                 changed |= TryApplyGameTeletextWeatherUpdaterDirectTranslations();
-
-                bool resolved;
-                changed |= TryApplyGameUnemployPaperButtonTranslations(out resolved);
-                if (resolved)
-                    unemployPaperResolved = true;
             }
 
             changed |= ApplyPendingTargets(currentScene, targets.Count);
@@ -161,10 +146,12 @@ namespace MWC_Localization_Core
         private void BuildTargets()
         {
             targets.Clear();
-            runtimeDynamicTargets.Clear();
             translationCache.Clear();
             servicePaymentLineTarget = null;
             atmTransactionDescriptionTarget = null;
+            tvChatDayTarget = null;
+            rallyPlayerResultsTarget = null;
+            rallyRegistrationClassTarget = null;
 
             Dictionary<string, FsmTarget> byKey = new Dictionary<string, FsmTarget>();
             AddBuiltInTargets(byKey);
@@ -173,18 +160,24 @@ namespace MWC_Localization_Core
             for (int i = 0; i < targets.Count; i++)
             {
                 SortRules(targets[i].Rules);
-                if (targets[i].RuntimeDynamic)
-                    runtimeDynamicTargets.Add(targets[i]);
-
                 if (IsServicePaymentLineTarget(targets[i]))
                     servicePaymentLineTarget = targets[i];
 
                 if (IsAtmTransactionDescriptionTarget(targets[i]))
                     atmTransactionDescriptionTarget = targets[i];
+
+                if (IsTvChatDayTarget(targets[i]))
+                    tvChatDayTarget = targets[i];
+
+                if (IsRallyPlayerResultsTarget(targets[i]))
+                    rallyPlayerResultsTarget = targets[i];
+
+                if (IsRallyRegistrationClassTarget(targets[i]))
+                    rallyRegistrationClassTarget = targets[i];
             }
         }
 
-        private void AddTargetRule(Dictionary<string, FsmTarget> byKey, string objectPath, string fsmName, string stateName, int actionIndex, string source, bool runtimeDynamic = false)
+        private void AddTargetRule(Dictionary<string, FsmTarget> byKey, string objectPath, string fsmName, string stateName, int actionIndex, string source)
         {
             if (byKey == null || string.IsNullOrEmpty(objectPath) || string.IsNullOrEmpty(source))
                 return;
@@ -200,9 +193,6 @@ namespace MWC_Localization_Core
                 target = new FsmTarget(objectPath, fsmName, stateName, actionIndex);
                 byKey[key] = target;
             }
-
-            if (runtimeDynamic)
-                target.RuntimeDynamic = true;
 
             target.Rules.Add(new FsmRule(source, translation));
         }
@@ -251,34 +241,6 @@ namespace MWC_Localization_Core
                     continue;
 
                 processedCount++;
-                bool resolved;
-                changed |= TryApplyTarget(target, out resolved);
-                if (resolved)
-                    MarkTargetResolved(target);
-            }
-
-            return changed;
-        }
-
-        private bool ApplyRuntimeDynamicTargets(string currentScene, int maxTargets)
-        {
-            if (runtimeDynamicTargets.Count == 0 || maxTargets <= 0)
-                return false;
-
-            bool changed = false;
-            int checkedCount = 0;
-            while (checkedCount < runtimeDynamicTargets.Count && checkedCount < maxTargets)
-            {
-                if (runtimeDynamicTargetIndex >= runtimeDynamicTargets.Count)
-                    runtimeDynamicTargetIndex = 0;
-
-                FsmTarget target = runtimeDynamicTargets[runtimeDynamicTargetIndex];
-                runtimeDynamicTargetIndex++;
-                checkedCount++;
-
-                if (target == null || !IsTargetForScene(target, currentScene))
-                    continue;
-
                 bool resolved;
                 changed |= TryApplyTarget(target, out resolved);
                 if (resolved)
@@ -439,68 +401,63 @@ namespace MWC_Localization_Core
                 return false;
 
             bool changed = false;
-            changed |= TranslateWeatherUpdaterLogic("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Nyt");
-            changed |= TranslateWeatherUpdaterLogic("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste");
-            changed |= TranslateWeatherEnnusteDataFsms();
-            return changed;
-        }
-
-        private bool TranslateWeatherUpdaterLogic(string objectPath)
-        {
-            GameObject gameObject = FindGameObjectByPath(objectPath);
-            if (gameObject == null)
-                return false;
-
-            PlayMakerFSM fsm = FindMatchingFsmOnObject(gameObject, "Logic", null);
-            if (!IsFsmReady(fsm))
-                return false;
-
-            return TranslateWeatherUpdaterTokenActions(fsm);
-        }
-
-        private bool TranslateWeatherEnnusteDataFsms()
-        {
-            List<PlayMakerFSM> fsms = GetWeatherEnnusteDataFsms();
-            bool changed = false;
+            List<PlayMakerFSM> fsms = GetWeatherUpdaterFsms();
             for (int i = 0; i < fsms.Count; i++)
             {
-                PlayMakerFSM fsm = fsms[i];
-                if (!IsFsmReady(fsm))
-                    continue;
-
-                changed |= TranslateWeatherUpdaterTokenActions(fsm);
+                changed |= TranslateWeatherUpdaterFsm(fsms[i]);
             }
 
             return changed;
         }
 
-        private bool TranslateWeatherUpdaterTokenActions(PlayMakerFSM fsm)
+        private List<PlayMakerFSM> GetWeatherUpdaterFsms()
         {
-            bool changed = false;
-            changed |= TranslateWeatherSetStringValueActionIndexes(fsm, "State 3", 0, 1);
-            changed |= TranslateWeatherSetStringValueActionIndexes(fsm, "State 4", 0, 1);
-            changed |= TranslateWeatherSetStringValueActionIndexes(fsm, "State 6", 0, 1);
-            changed |= TranslateWeatherSetStringValueActionIndexes(fsm, "State 7", 0, 1);
-            return changed;
+            if (AreFsmsValid(weatherUpdaterFsmCache))
+                return weatherUpdaterFsmCache;
+
+            weatherUpdaterFsmCache.Clear();
+            GameObject root = FindGameObjectByPath("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater");
+            if (root == null)
+                return weatherUpdaterFsmCache;
+
+            PlayMakerFSM[] fsms = root.GetComponentsInChildren<PlayMakerFSM>(true);
+            for (int i = 0; i < fsms.Length; i++)
+            {
+                if (fsms[i] != null && fsms[i].gameObject != null)
+                    weatherUpdaterFsmCache.Add(fsms[i]);
+            }
+
+            return weatherUpdaterFsmCache;
         }
 
-        private bool TranslateWeatherSetStringValueActionIndexes(PlayMakerFSM fsm, string stateName, params int[] actionIndexes)
+        private bool TranslateWeatherUpdaterFsm(PlayMakerFSM fsm)
         {
-            if (fsm == null || actionIndexes == null || actionIndexes.Length == 0)
-                return false;
-
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, stateName);
-            if (state == null || state.Actions == null)
+            if (!IsFsmReady(fsm))
                 return false;
 
             bool changed = false;
-            for (int i = 0; i < actionIndexes.Length; i++)
+            if (fsm.FsmVariables != null && fsm.FsmVariables.StringVariables != null)
             {
-                int actionIndex = actionIndexes[i];
-                if (actionIndex < 0 || actionIndex >= state.Actions.Length)
+                HutongGames.PlayMaker.FsmString[] variables = fsm.FsmVariables.StringVariables;
+                for (int i = 0; i < variables.Length; i++)
+                {
+                    changed |= TranslateWeatherFsmString(variables[i]);
+                }
+            }
+
+            if (fsm.FsmStates == null)
+                return changed;
+
+            for (int stateIndex = 0; stateIndex < fsm.FsmStates.Length; stateIndex++)
+            {
+                HutongGames.PlayMaker.FsmState state = fsm.FsmStates[stateIndex];
+                if (state == null || state.Actions == null)
                     continue;
 
-                changed |= TranslateWeatherSetStringValue(state.Actions[actionIndex]);
+                for (int actionIndex = 0; actionIndex < state.Actions.Length; actionIndex++)
+                {
+                    changed |= TranslateWeatherSetStringValue(state.Actions[actionIndex]);
+                }
             }
 
             return changed;
@@ -527,89 +484,6 @@ namespace MWC_Localization_Core
         }
 
         private bool TranslateWeatherFsmString(HutongGames.PlayMaker.FsmString fsmString)
-        {
-            if (fsmString == null || string.IsNullOrEmpty(fsmString.Value))
-                return false;
-
-            string translated = TranslateDirectText(fsmString.Value);
-            return SetFsmStringValue(fsmString, translated);
-        }
-
-        private List<PlayMakerFSM> GetWeatherEnnusteDataFsms()
-        {
-            if (Time.realtimeSinceStartup - lastWeatherEnnusteDataFsmScanTime < WeatherEnnusteDataRescanInterval)
-                return weatherEnnusteDataFsmCache;
-
-            lastWeatherEnnusteDataFsmScanTime = Time.realtimeSinceStartup;
-            weatherEnnusteDataFsmCache.Clear();
-
-            GameObject root = FindGameObjectByPath("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste");
-            if (root != null)
-            {
-                PlayMakerFSM[] fsms = root.GetComponentsInChildren<PlayMakerFSM>(true);
-                for (int i = 0; i < fsms.Length; i++)
-                {
-                    PlayMakerFSM fsm = fsms[i];
-                    if (fsm == null || GetFsmName(fsm) != "Data")
-                        continue;
-
-                    weatherEnnusteDataFsmCache.Add(fsm);
-                }
-            }
-
-            if (weatherEnnusteDataFsmCache.Count == 0)
-                MLCUtils.FindFsmsIncludingInactiveByPathPrefixAndName(WeatherEnnusteUpdaterPrefix, "Data", weatherEnnusteDataFsmCache);
-
-            return weatherEnnusteDataFsmCache;
-        }
-
-        private bool TryApplyGameUnemployPaperButtonTranslations(out bool resolved)
-        {
-            resolved = false;
-            if (directTranslations.Count == 0)
-                return false;
-
-            bool changed = false;
-            int foundCount = 0;
-            int expectedCount = UnemployPaperGroups.Length * 7;
-            for (int groupIndex = 0; groupIndex < UnemployPaperGroups.Length; groupIndex++)
-            {
-                string group = UnemployPaperGroups[groupIndex];
-                for (int itemIndex = 1; itemIndex <= 7; itemIndex++)
-                {
-                    GameObject gameObject = FindGameObjectByPath("Sheets/UnemployPaper/" + group + "/" + itemIndex.ToString());
-                    if (gameObject == null)
-                        continue;
-
-                    PlayMakerFSM fsm = FindMatchingFsmOnObject(gameObject, "Button", null);
-                    if (!IsFsmReady(fsm))
-                        continue;
-
-                    foundCount++;
-                    changed |= TranslateUnemployPaperButtonVariables(fsm);
-                }
-            }
-
-            resolved = foundCount >= expectedCount;
-            return changed;
-        }
-
-        private bool TranslateUnemployPaperButtonVariables(PlayMakerFSM fsm)
-        {
-            if (fsm == null || fsm.FsmVariables == null)
-                return false;
-
-            bool changed = false;
-            for (int i = 0; i < UnemployPaperButtonVariables.Length; i++)
-            {
-                HutongGames.PlayMaker.FsmString variable = fsm.FsmVariables.GetFsmString(UnemployPaperButtonVariables[i]);
-                changed |= TranslateDirectFsmString(variable);
-            }
-
-            return changed;
-        }
-
-        private bool TranslateDirectFsmString(HutongGames.PlayMaker.FsmString fsmString)
         {
             if (fsmString == null || string.IsNullOrEmpty(fsmString.Value))
                 return false;
@@ -813,6 +687,67 @@ namespace MWC_Localization_Core
             return changed;
         }
 
+        private bool TryApplyTvChatDaySource()
+        {
+            FsmTarget target = tvChatDayTarget;
+            if (target == null)
+                return false;
+
+            GameObject day = FindGameObjectByPath("Systems/TV/TVGraphics/CHAT/Day");
+            if (day == null)
+                return false;
+
+            bool changed = false;
+            PlayMakerArrayListProxy[] proxies = day.GetComponents<PlayMakerArrayListProxy>();
+            for (int i = 0; i < proxies.Length; i++)
+            {
+                PlayMakerArrayListProxy proxy = proxies[i];
+                if (proxy == null || !TextMatchesExact(proxy.referenceName, "Days"))
+                    continue;
+
+                changed |= TranslateArrayListProxy(proxy, target);
+            }
+
+            PlayMakerFSM fsm = FindMatchingFsmOnObject(day, "Text", null);
+            if (IsFsmReady(fsm))
+                changed |= TranslateWholeFsm(fsm, target);
+
+            TextMesh textMesh = day.GetComponent<TextMesh>();
+            if (textMesh != null && TranslateString(textMesh.text, target, out string translatedText))
+            {
+                textMesh.text = translatedText;
+                changed = true;
+            }
+
+            return changed;
+        }
+
+        private bool TryApplyRallyClassSources()
+        {
+            bool changed = false;
+            changed |= TryApplyRallyClassSource(rallyPlayerResultsTarget, "State 1", 5);
+            changed |= TryApplyRallyClassSource(rallyRegistrationClassTarget, "State 1", 3);
+            return changed;
+        }
+
+        private bool TryApplyRallyClassSource(FsmTarget target, string stateName, int actionIndex)
+        {
+            if (target == null)
+                return false;
+
+            PlayMakerFSM fsm = GetFsmForTarget(target);
+            if (!IsFsmReady(fsm))
+                return false;
+
+            bool changed = false;
+            HutongGames.PlayMaker.FsmState state = FindState(fsm, stateName);
+            if (state != null && state.Actions != null && actionIndex >= 0 && actionIndex < state.Actions.Length)
+                changed |= TranslateAction(state.Actions[actionIndex], target);
+
+            changed |= TranslateTextMeshesForTarget(target);
+            return changed;
+        }
+
         private bool TryTranslateTvScheduleTarget(FsmTarget target, out bool handled, out bool resolved)
         {
             handled = false;
@@ -901,6 +836,19 @@ namespace MWC_Localization_Core
                 for (int i = 0; i < parts.Length; i++)
                 {
                     changed |= TranslateFsmString(parts[i], target);
+                }
+            }
+
+            string[] stringParts = GetStringArrayParts(action);
+            if (stringParts != null)
+            {
+                for (int i = 0; i < stringParts.Length; i++)
+                {
+                    if (!TranslateString(stringParts[i], target, out string translated))
+                        continue;
+
+                    stringParts[i] = translated;
+                    changed = true;
                 }
             }
 
@@ -1146,6 +1094,20 @@ namespace MWC_Localization_Core
             return true;
         }
 
+        private static bool AreFsmsValid(List<PlayMakerFSM> fsms)
+        {
+            if (fsms == null || fsms.Count == 0)
+                return false;
+
+            for (int i = 0; i < fsms.Count; i++)
+            {
+                if (fsms[i] == null || fsms[i].gameObject == null)
+                    return false;
+            }
+
+            return true;
+        }
+
         private static bool AreTextMeshesValid(List<TextMesh> textMeshes)
         {
             if (textMeshes == null || textMeshes.Count == 0)
@@ -1285,6 +1247,31 @@ namespace MWC_Localization_Core
                 && target.WholeFsm;
         }
 
+        private static bool IsTvChatDayTarget(FsmTarget target)
+        {
+            return target != null
+                && TextMatchesExact(target.ObjectPath, "Systems/TV/TVGraphics/CHAT/Day")
+                && TextMatchesExact(target.FsmName, "Text")
+                && TextMatchesExact(target.StateName, "State 11")
+                && target.ActionIndex == 0;
+        }
+
+        private static bool IsRallyPlayerResultsTarget(FsmTarget target)
+        {
+            return target != null
+                && TextMatchesExact(target.ObjectPath, "Sheets/RallyResults/PlayerResults")
+                && TextMatchesExact(target.FsmName, "Data")
+                && target.WholeFsm;
+        }
+
+        private static bool IsRallyRegistrationClassTarget(FsmTarget target)
+        {
+            return target != null
+                && TextMatchesExact(target.ObjectPath, "Sheets/RallyRegistration/Functions/Class")
+                && TextMatchesExact(target.FsmName, "Data")
+                && target.WholeFsm;
+        }
+
         private static bool IsTargetForScene(FsmTarget target, string currentScene)
         {
             if (target == null)
@@ -1318,16 +1305,6 @@ namespace MWC_Localization_Core
             translated = value;
             if (string.IsNullOrEmpty(value) || target == null || target.Rules.Count == 0)
                 return false;
-
-            // Dynamic targets observe ArrayLists whose contents rotate (ATM transactions, Fleetari
-            // breakdown, TV schedule rebuilds): each input string is typically seen once, so caching
-            // them just leaks memory over a long session. Static targets keep their cache.
-            if (target.RuntimeDynamic)
-            {
-                string dynResult = ApplyRules(value, target.Rules);
-                translated = dynResult;
-                return dynResult != value;
-            }
 
             string cacheKey = target.Key + "\n" + value;
             if (translationCache.TryGetValue(cacheKey, out translated))
@@ -1732,6 +1709,22 @@ namespace MWC_Localization_Core
             return field != null ? field.GetValue(action) as HutongGames.PlayMaker.FsmString[] : null;
         }
 
+        private static string[] GetStringArrayParts(object action)
+        {
+            if (action == null)
+                return null;
+
+            System.Type type = action.GetType();
+            FieldInfo field;
+            if (!stringPartsFieldCache.TryGetValue(type, out field))
+            {
+                field = GetField(type, "stringParts");
+                stringPartsFieldCache[type] = field;
+            }
+
+            return field != null ? field.GetValue(action) as string[] : null;
+        }
+
         private static FieldInfo GetField(System.Type type, string name)
         {
             if (type == null || string.IsNullOrEmpty(name))
@@ -1851,7 +1844,7 @@ namespace MWC_Localization_Core
 
         private static bool IsTranslatableDirectStringField(string fieldName)
         {
-            return fieldName == "stringValue" || fieldName == "text";
+            return fieldName == "stringValue" || fieldName == "text" || fieldName == "m_stringGenerated";
         }
 
         private static string GetFsmName(PlayMakerFSM fsm)
@@ -1881,11 +1874,10 @@ namespace MWC_Localization_Core
             fsmListCache.Clear();
             arrayListProxyCache.Clear();
             textMeshCache.Clear();
-            weatherEnnusteDataFsmCache.Clear();
+            weatherUpdaterFsmCache.Clear();
             resolvedTargets.Clear();
             warnedTargets.Clear();
             initializedFsmIds.Clear();
-            lastWeatherEnnusteDataFsmScanTime = -1000f;
         }
     }
 }
