@@ -36,10 +36,6 @@ namespace MWC_Localization_Core
         private FsmTarget tvChatDayTarget;
         private FsmTarget rallyPlayerResultsTarget;
         private FsmTarget rallyRegistrationClassTarget;
-        private bool unemployPaperResolved;
-
-        private static readonly string[] UnemployPaperGroups = new string[] { "2A", "2B", "2C", "2D" };
-        private static readonly string[] UnemployPaperButtonVariables = new string[] { "jobNo", "JobNo", "jobYes", "JobYes" };
 
         private sealed class FsmRule
         {
@@ -91,7 +87,6 @@ namespace MWC_Localization_Core
         {
             lastSourcePollTime = -10f;
             pendingTargetIndex = 0;
-            unemployPaperResolved = false;
             ClearRuntimeCaches();
         }
 
@@ -127,13 +122,6 @@ namespace MWC_Localization_Core
                 runtimeChanged |= TryApplyAtmTransactionDescriptionSource();
                 runtimeChanged |= TryApplyTvChatDaySource();
                 runtimeChanged |= TryApplyGameTeletextWeatherUpdaterDirectTranslations();
-                if (!unemployPaperResolved)
-                {
-                    bool resolved;
-                    runtimeChanged |= TryApplyGameUnemployPaperButtonTranslations(out resolved);
-                    if (resolved)
-                        unemployPaperResolved = true;
-                }
 
                 return runtimeChanged;
             }
@@ -146,11 +134,6 @@ namespace MWC_Localization_Core
                 changed |= TryApplyTvChatDaySource();
                 changed |= TryApplyRallyClassSources();
                 changed |= TryApplyGameTeletextWeatherUpdaterDirectTranslations();
-
-                bool resolved;
-                changed |= TryApplyGameUnemployPaperButtonTranslations(out resolved);
-                if (resolved)
-                    unemployPaperResolved = true;
             }
 
             changed |= ApplyPendingTargets(currentScene, targets.Count);
@@ -501,61 +484,6 @@ namespace MWC_Localization_Core
         }
 
         private bool TranslateWeatherFsmString(HutongGames.PlayMaker.FsmString fsmString)
-        {
-            if (fsmString == null || string.IsNullOrEmpty(fsmString.Value))
-                return false;
-
-            string translated = TranslateDirectText(fsmString.Value);
-            return SetFsmStringValue(fsmString, translated);
-        }
-
-        private bool TryApplyGameUnemployPaperButtonTranslations(out bool resolved)
-        {
-            resolved = false;
-            if (directTranslations.Count == 0)
-                return false;
-
-            bool changed = false;
-            int foundCount = 0;
-            int expectedCount = UnemployPaperGroups.Length * 7;
-            for (int groupIndex = 0; groupIndex < UnemployPaperGroups.Length; groupIndex++)
-            {
-                string group = UnemployPaperGroups[groupIndex];
-                for (int itemIndex = 1; itemIndex <= 7; itemIndex++)
-                {
-                    GameObject gameObject = FindGameObjectByPath("Sheets/UnemployPaper/" + group + "/" + itemIndex.ToString());
-                    if (gameObject == null)
-                        continue;
-
-                    PlayMakerFSM fsm = FindMatchingFsmOnObject(gameObject, "Button", null);
-                    if (!IsFsmReady(fsm))
-                        continue;
-
-                    foundCount++;
-                    changed |= TranslateUnemployPaperButtonVariables(fsm);
-                }
-            }
-
-            resolved = foundCount >= expectedCount;
-            return changed;
-        }
-
-        private bool TranslateUnemployPaperButtonVariables(PlayMakerFSM fsm)
-        {
-            if (fsm == null || fsm.FsmVariables == null)
-                return false;
-
-            bool changed = false;
-            for (int i = 0; i < UnemployPaperButtonVariables.Length; i++)
-            {
-                HutongGames.PlayMaker.FsmString variable = fsm.FsmVariables.GetFsmString(UnemployPaperButtonVariables[i]);
-                changed |= TranslateDirectFsmString(variable);
-            }
-
-            return changed;
-        }
-
-        private bool TranslateDirectFsmString(HutongGames.PlayMaker.FsmString fsmString)
         {
             if (fsmString == null || string.IsNullOrEmpty(fsmString.Value))
                 return false;
