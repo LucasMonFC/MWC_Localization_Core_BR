@@ -17,7 +17,6 @@ namespace MWC_Localization_Core
         public string LanguageCode { get; private set; } = "en-US";
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();
         public List<TextAdjustment> TextAdjustments { get; private set; } = new List<TextAdjustment>();
-        private const float DriftTrackedDiscoveryInterval = 0.35f;
         private float lastDriftTrackedDiscoveryTime = -1000f;
 
         public LocalizationConfig()
@@ -258,7 +257,7 @@ namespace MWC_Localization_Core
                 return;
 
             float now = Time.realtimeSinceStartup;
-            if (now - lastDriftTrackedDiscoveryTime < DriftTrackedDiscoveryInterval)
+            if (now - lastDriftTrackedDiscoveryTime < LocalizationConstants.DRIFT_TRACKED_DISCOVERY_INTERVAL)
                 return;
 
             lastDriftTrackedDiscoveryTime = now;

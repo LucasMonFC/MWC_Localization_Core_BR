@@ -42,8 +42,6 @@ namespace MWC_Localization_Core
             }
         }
 
-        private const float RetryInterval = 1f;
-
         private readonly TextMeshTranslator translator;
         private readonly List<GuiTextEntry> guiEntries = new List<GuiTextEntry>();
         private GuiTextEntry interactionEntry;
@@ -108,7 +106,7 @@ namespace MWC_Localization_Core
                 return;
 
             retryTimer += deltaTime;
-            if (retryTimer >= RetryInterval)
+            if (retryTimer >= LocalizationConstants.GUI_MONITOR_RETRY_INTERVAL)
             {
                 RegisterAll();
                 retryTimer = 0f;
