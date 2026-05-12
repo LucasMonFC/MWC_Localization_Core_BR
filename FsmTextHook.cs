@@ -13,11 +13,9 @@ namespace MWC_Localization_Core
     public partial class FsmTextHook
     {
         private const float SourcePollInterval = 0.2f;
-        private const float WeatherEnnusteDataRescanInterval = 10f;
-        private const string WeatherEnnusteUpdaterPrefix = "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste/";
 
         private readonly List<FsmTarget> targets = new List<FsmTarget>();
-        private readonly List<PlayMakerFSM> weatherEnnusteDataFsmCache = new List<PlayMakerFSM>();
+        private readonly List<PlayMakerFSM> weatherUpdaterFsmCache = new List<PlayMakerFSM>();
         private readonly Dictionary<string, string> directTranslations = new Dictionary<string, string>();
         private readonly Dictionary<string, string> translationCache = new Dictionary<string, string>();
         private readonly Dictionary<string, PlayMakerFSM> exactFsmCache = new Dictionary<string, PlayMakerFSM>();
@@ -33,7 +31,6 @@ namespace MWC_Localization_Core
 
         private float lastSourcePollTime = -10f;
         private int pendingTargetIndex;
-        private float lastWeatherEnnusteDataFsmScanTime = -1000f;
         private FsmTarget servicePaymentLineTarget;
         private FsmTarget atmTransactionDescriptionTarget;
         private FsmTarget tvChatDayTarget;
@@ -421,68 +418,63 @@ namespace MWC_Localization_Core
                 return false;
 
             bool changed = false;
-            changed |= TranslateWeatherUpdaterLogic("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Nyt");
-            changed |= TranslateWeatherUpdaterLogic("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste");
-            changed |= TranslateWeatherEnnusteDataFsms();
-            return changed;
-        }
-
-        private bool TranslateWeatherUpdaterLogic(string objectPath)
-        {
-            GameObject gameObject = FindGameObjectByPath(objectPath);
-            if (gameObject == null)
-                return false;
-
-            PlayMakerFSM fsm = FindMatchingFsmOnObject(gameObject, "Logic", null);
-            if (!IsFsmReady(fsm))
-                return false;
-
-            return TranslateWeatherUpdaterTokenActions(fsm);
-        }
-
-        private bool TranslateWeatherEnnusteDataFsms()
-        {
-            List<PlayMakerFSM> fsms = GetWeatherEnnusteDataFsms();
-            bool changed = false;
+            List<PlayMakerFSM> fsms = GetWeatherUpdaterFsms();
             for (int i = 0; i < fsms.Count; i++)
             {
-                PlayMakerFSM fsm = fsms[i];
-                if (!IsFsmReady(fsm))
-                    continue;
-
-                changed |= TranslateWeatherUpdaterTokenActions(fsm);
+                changed |= TranslateWeatherUpdaterFsm(fsms[i]);
             }
 
             return changed;
         }
 
-        private bool TranslateWeatherUpdaterTokenActions(PlayMakerFSM fsm)
+        private List<PlayMakerFSM> GetWeatherUpdaterFsms()
         {
-            bool changed = false;
-            changed |= TranslateWeatherSetStringValueActionIndexes(fsm, "State 3", 0, 1);
-            changed |= TranslateWeatherSetStringValueActionIndexes(fsm, "State 4", 0, 1);
-            changed |= TranslateWeatherSetStringValueActionIndexes(fsm, "State 6", 0, 1);
-            changed |= TranslateWeatherSetStringValueActionIndexes(fsm, "State 7", 0, 1);
-            return changed;
+            if (AreFsmsValid(weatherUpdaterFsmCache))
+                return weatherUpdaterFsmCache;
+
+            weatherUpdaterFsmCache.Clear();
+            GameObject root = FindGameObjectByPath("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater");
+            if (root == null)
+                return weatherUpdaterFsmCache;
+
+            PlayMakerFSM[] fsms = root.GetComponentsInChildren<PlayMakerFSM>(true);
+            for (int i = 0; i < fsms.Length; i++)
+            {
+                if (fsms[i] != null && fsms[i].gameObject != null)
+                    weatherUpdaterFsmCache.Add(fsms[i]);
+            }
+
+            return weatherUpdaterFsmCache;
         }
 
-        private bool TranslateWeatherSetStringValueActionIndexes(PlayMakerFSM fsm, string stateName, params int[] actionIndexes)
+        private bool TranslateWeatherUpdaterFsm(PlayMakerFSM fsm)
         {
-            if (fsm == null || actionIndexes == null || actionIndexes.Length == 0)
-                return false;
-
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, stateName);
-            if (state == null || state.Actions == null)
+            if (!IsFsmReady(fsm))
                 return false;
 
             bool changed = false;
-            for (int i = 0; i < actionIndexes.Length; i++)
+            if (fsm.FsmVariables != null && fsm.FsmVariables.StringVariables != null)
             {
-                int actionIndex = actionIndexes[i];
-                if (actionIndex < 0 || actionIndex >= state.Actions.Length)
+                HutongGames.PlayMaker.FsmString[] variables = fsm.FsmVariables.StringVariables;
+                for (int i = 0; i < variables.Length; i++)
+                {
+                    changed |= TranslateWeatherFsmString(variables[i]);
+                }
+            }
+
+            if (fsm.FsmStates == null)
+                return changed;
+
+            for (int stateIndex = 0; stateIndex < fsm.FsmStates.Length; stateIndex++)
+            {
+                HutongGames.PlayMaker.FsmState state = fsm.FsmStates[stateIndex];
+                if (state == null || state.Actions == null)
                     continue;
 
-                changed |= TranslateWeatherSetStringValue(state.Actions[actionIndex]);
+                for (int actionIndex = 0; actionIndex < state.Actions.Length; actionIndex++)
+                {
+                    changed |= TranslateWeatherSetStringValue(state.Actions[actionIndex]);
+                }
             }
 
             return changed;
@@ -515,34 +507,6 @@ namespace MWC_Localization_Core
 
             string translated = TranslateDirectText(fsmString.Value);
             return SetFsmStringValue(fsmString, translated);
-        }
-
-        private List<PlayMakerFSM> GetWeatherEnnusteDataFsms()
-        {
-            if (Time.realtimeSinceStartup - lastWeatherEnnusteDataFsmScanTime < WeatherEnnusteDataRescanInterval)
-                return weatherEnnusteDataFsmCache;
-
-            lastWeatherEnnusteDataFsmScanTime = Time.realtimeSinceStartup;
-            weatherEnnusteDataFsmCache.Clear();
-
-            GameObject root = FindGameObjectByPath("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste");
-            if (root != null)
-            {
-                PlayMakerFSM[] fsms = root.GetComponentsInChildren<PlayMakerFSM>(true);
-                for (int i = 0; i < fsms.Length; i++)
-                {
-                    PlayMakerFSM fsm = fsms[i];
-                    if (fsm == null || GetFsmName(fsm) != "Data")
-                        continue;
-
-                    weatherEnnusteDataFsmCache.Add(fsm);
-                }
-            }
-
-            if (weatherEnnusteDataFsmCache.Count == 0)
-                MLCUtils.FindFsmsIncludingInactiveByPathPrefixAndName(WeatherEnnusteUpdaterPrefix, "Data", weatherEnnusteDataFsmCache);
-
-            return weatherEnnusteDataFsmCache;
         }
 
         private bool TryApplyGameUnemployPaperButtonTranslations(out bool resolved)
@@ -1196,6 +1160,20 @@ namespace MWC_Localization_Core
             for (int i = 0; i < proxies.Count; i++)
             {
                 if (proxies[i] == null || proxies[i].gameObject == null)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static bool AreFsmsValid(List<PlayMakerFSM> fsms)
+        {
+            if (fsms == null || fsms.Count == 0)
+                return false;
+
+            for (int i = 0; i < fsms.Count; i++)
+            {
+                if (fsms[i] == null || fsms[i].gameObject == null)
                     return false;
             }
 
@@ -1968,11 +1946,10 @@ namespace MWC_Localization_Core
             fsmListCache.Clear();
             arrayListProxyCache.Clear();
             textMeshCache.Clear();
-            weatherEnnusteDataFsmCache.Clear();
+            weatherUpdaterFsmCache.Clear();
             resolvedTargets.Clear();
             warnedTargets.Clear();
             initializedFsmIds.Clear();
-            lastWeatherEnnusteDataFsmScanTime = -1000f;
         }
     }
 }
