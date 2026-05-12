@@ -76,7 +76,6 @@ namespace MWC_Localization_Core
             if (magazineHandler.IsMagazineText(path))
             {
                 ApplyCustomFont(textMesh, path);
-                magazineHandler.HandleMagazineText(textMesh);
                 return true;
             }
 

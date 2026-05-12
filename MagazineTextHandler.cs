@@ -1,6 +1,7 @@
 // 'Classified Magazine' Text Handler
 
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace MWC_Localization_Core
@@ -12,6 +13,7 @@ namespace MWC_Localization_Core
     public class MagazineTextHandler
     {
         private Dictionary<string, string> magazineTranslations = new Dictionary<string, string>();
+        private bool yellowPagesSourcesResolved;
 
         /// <summary>
         /// Load magazine-specific translations from separate file
@@ -39,48 +41,18 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Handle magazine text translation
-        /// </summary>
-        public bool HandleMagazineText(TextMesh textMesh)
-        {
-            if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
-                return false;
-
-            // Skip placeholder text immediately - return false to prevent monitoring registration
-            // Placeholder text isn't ready yet, will be filled with real content later
-            if (textMesh.text == "88888888888888888888888888888")
-                return false;
-
-            // Handling price and phone number line (format: "h.149,- puh.123456")
-            if (textMesh.text.StartsWith("h.") && textMesh.text.Contains(",- puh."))
-            {
-                TranslatePricePhoneLine(textMesh);
-                return true; // Handled
-            }
-
-            // Try updating rest of the magazine lines in standard way
-            string key = MLCUtils.FormatUpperKey(textMesh.text);
-            if (magazineTranslations.TryGetValue(key, out string translation))
-            {
-                textMesh.text = translation;
-                return true; // Handled
-            }
-
-            // No translation found - mark as handled to prevent infinite retries
-            //CoreConsole.Warning($"[MagazineTextHandler] No translation found for: '{textMesh.text}' (key: '{key}')");
-            return true; // Handled (even though not translated)
-        }
-
-        /// <summary>
         /// Translate price and phone number line (e.g., "h.149,- puh.123456" -> "149 MK, PHONE - 123456")
         /// Uses PHONE key from translate_magazine.txt for the phone label
         /// </summary>
-        private void TranslatePricePhoneLine(TextMesh textMesh)
+        private string FormatPricePhoneLine(string value)
         {
             try
             {
+                if (string.IsNullOrEmpty(value) || !value.StartsWith("h.") || !value.Contains(",- puh."))
+                    return null;
+
                 // Remove "h." prefix and split by ",- puh."
-                string withoutPrefix = textMesh.text.Substring(2);
+                string withoutPrefix = value.Substring(2);
                 string[] parts = withoutPrefix.Split(new string[] { ",- puh." }, System.StringSplitOptions.None);
 
                 if (parts.Length == 2)
@@ -93,13 +65,291 @@ namespace MWC_Localization_Core
                         ? translation
                         : "PHONE";
 
-                    textMesh.text = $"{pricePart} MK, {phoneLabel} - {phonePart}";
+                    return $"{pricePart} MK, {phoneLabel} - {phonePart}";
                 }
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Warning($"[MagazineTextHandler] Failed to parse magazine price/phone line: {textMesh.text} - {ex.Message}");
+                CoreConsole.Warning($"[MagazineTextHandler] Failed to parse magazine price/phone line: {value} - {ex.Message}");
             }
+
+            return null;
+        }
+
+        public void ResetRuntimeState()
+        {
+            yellowPagesSourcesResolved = false;
+        }
+
+        public int TranslateAllSources()
+        {
+            yellowPagesSourcesResolved = false;
+            return MonitorAndTranslateSources();
+        }
+
+        public int MonitorAndTranslateSources()
+        {
+            if (yellowPagesSourcesResolved)
+                return 0;
+
+            int translated = TranslateYellowPagesMagazineFsmSources();
+            if (translated > 0)
+                yellowPagesSourcesResolved = true;
+
+            return translated;
+        }
+
+        private int TranslateYellowPagesMagazineFsmSources()
+        {
+            GameObject root = MLCUtils.FindGameObjectCached("Sheets/YellowPagesMagazine");
+            if (root == null)
+                return 0;
+
+            PlayMakerFSM[] fsms = root.GetComponentsInChildren<PlayMakerFSM>(true);
+            if (fsms == null || fsms.Length == 0)
+                return 0;
+
+            int translated = 0;
+            for (int i = 0; i < fsms.Length; i++)
+            {
+                PlayMakerFSM fsm = fsms[i];
+                if (fsm == null || GetFsmName(fsm) != "Generate")
+                    continue;
+
+                translated += TranslateMagazineGenerateFsm(fsm);
+            }
+
+            if (translated > 0)
+                CoreConsole.Print($"[MagazineTextHandler] Translated {translated} Yellow Pages magazine FSM source values");
+
+            return translated;
+        }
+
+        private int TranslateMagazineGenerateFsm(PlayMakerFSM fsm)
+        {
+            int translated = 0;
+
+            if (fsm.FsmVariables != null && fsm.FsmVariables.StringVariables != null)
+            {
+                HutongGames.PlayMaker.FsmString[] variables = fsm.FsmVariables.StringVariables;
+                for (int i = 0; i < variables.Length; i++)
+                {
+                    if (TranslateMagazineFsmString(variables[i]))
+                        translated++;
+                }
+            }
+
+            if (fsm.FsmStates == null)
+                return translated;
+
+            for (int stateIndex = 0; stateIndex < fsm.FsmStates.Length; stateIndex++)
+            {
+                HutongGames.PlayMaker.FsmState state = fsm.FsmStates[stateIndex];
+                if (state == null || state.Actions == null)
+                    continue;
+
+                for (int actionIndex = 0; actionIndex < state.Actions.Length; actionIndex++)
+                {
+                    object action = state.Actions[actionIndex];
+                    if (action == null)
+                        continue;
+
+                    translated += TranslateMagazineBuildStringParts(action);
+                }
+            }
+
+            translated += SyncMagazineYellowLineDisplay(fsm);
+            return translated;
+        }
+
+        private int SyncMagazineYellowLineDisplay(PlayMakerFSM fsm)
+        {
+            if (fsm == null || fsm.gameObject == null || fsm.FsmVariables == null)
+                return 0;
+
+            string path = MLCUtils.GetGameObjectPath(fsm.gameObject);
+            if (string.IsNullOrEmpty(path) || path.IndexOf("/Lines/YellowLine", System.StringComparison.OrdinalIgnoreCase) < 0)
+                return 0;
+
+            HutongGames.PlayMaker.FsmString line = fsm.FsmVariables.GetFsmString("Line");
+            if (line == null || string.IsNullOrEmpty(line.Value))
+                return 0;
+
+            string translatedLine = TranslateMagazineSourceValue(line.Value);
+            if (string.IsNullOrEmpty(translatedLine))
+                return 0;
+
+            int changed = 0;
+            if (line.Value != translatedLine)
+            {
+                line.Value = translatedLine;
+                changed++;
+            }
+
+            if (fsm.FsmStates != null)
+            {
+                for (int stateIndex = 0; stateIndex < fsm.FsmStates.Length; stateIndex++)
+                {
+                    HutongGames.PlayMaker.FsmState state = fsm.FsmStates[stateIndex];
+                    if (state == null || state.Actions == null || state.Name != "State 4")
+                        continue;
+
+                    if (state.Actions.Length > 0 && SetNestedStringValue(state.Actions[0], translatedLine, "storeValue"))
+                        changed++;
+
+                    if (state.Actions.Length > 1 && SetNestedStringValue(state.Actions[1], translatedLine, "targetProperty", "StringParameter"))
+                        changed++;
+                }
+            }
+
+            TextMesh textMesh = fsm.GetComponent<TextMesh>();
+            if (textMesh != null && textMesh.text != translatedLine)
+            {
+                textMesh.text = translatedLine;
+                changed++;
+            }
+
+            return changed;
+        }
+
+        private int TranslateMagazineBuildStringParts(object action)
+        {
+            if (action == null)
+                return 0;
+
+            string typeName = action.GetType().Name;
+            if (typeName != "BuildString" && typeName != "BuildStringFast" && typeName != "StringAddNewLine")
+                return 0;
+
+            FieldInfo field = action.GetType().GetField("stringParts", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (field == null)
+                return 0;
+
+            int translated = 0;
+            object value = field.GetValue(action);
+
+            HutongGames.PlayMaker.FsmString[] fsmStrings = value as HutongGames.PlayMaker.FsmString[];
+            if (fsmStrings != null)
+            {
+                for (int i = 0; i < fsmStrings.Length; i++)
+                {
+                    if (TranslateMagazineFsmString(fsmStrings[i]))
+                        translated++;
+                }
+
+                return translated;
+            }
+
+            string[] stringParts = value as string[];
+            if (stringParts == null)
+                return 0;
+
+            for (int i = 0; i < stringParts.Length; i++)
+            {
+                string translatedValue = TranslateMagazineSourceValue(stringParts[i]);
+                if (translatedValue != stringParts[i])
+                {
+                    stringParts[i] = translatedValue;
+                    translated++;
+                }
+            }
+
+            return translated;
+        }
+
+        private bool TranslateMagazineFsmString(HutongGames.PlayMaker.FsmString fsmString)
+        {
+            if (fsmString == null || string.IsNullOrEmpty(fsmString.Value))
+                return false;
+
+            string translated = TranslateMagazineSourceValue(fsmString.Value);
+            if (translated == null || translated == fsmString.Value)
+                return false;
+
+            fsmString.Value = translated;
+            return true;
+        }
+
+        private static bool SetNestedStringValue(object root, string value, params string[] fieldPath)
+        {
+            if (root == null || fieldPath == null || fieldPath.Length == 0)
+                return false;
+
+            object current = root;
+            FieldInfo field = null;
+            for (int i = 0; i < fieldPath.Length; i++)
+            {
+                field = current.GetType().GetField(fieldPath[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (field == null)
+                    return false;
+
+                if (i == fieldPath.Length - 1)
+                    break;
+
+                current = field.GetValue(current);
+                if (current == null)
+                    return false;
+            }
+
+            object existing = field.GetValue(current);
+            HutongGames.PlayMaker.FsmString fsmString = existing as HutongGames.PlayMaker.FsmString;
+            if (fsmString != null)
+            {
+                if (fsmString.Value == value)
+                    return false;
+
+                fsmString.Value = value;
+                return true;
+            }
+
+            if (field.FieldType == typeof(string))
+            {
+                string safeValue = value ?? string.Empty;
+                if ((string)existing == safeValue)
+                    return false;
+
+                field.SetValue(current, safeValue);
+                return true;
+            }
+
+            return false;
+        }
+
+        private string TranslateMagazineSourceValue(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return value;
+
+            if (value == "h.")
+                return string.Empty;
+
+            if (value.Trim() == ",- puh.")
+                return " MK, " + GetPhoneLabel() + " - ";
+
+            string formatted = FormatPricePhoneLine(value);
+            if (!string.IsNullOrEmpty(formatted))
+                return formatted;
+
+            // Piece and title text is translated earlier in the backing array/hash table sources.
+            return value;
+        }
+
+        private string GetPhoneLabel()
+        {
+            return magazineTranslations.TryGetValue("PHONE", out string translation)
+                ? translation
+                : "PHONE";
+        }
+
+        private static string GetFsmName(PlayMakerFSM fsm)
+        {
+            if (fsm == null)
+                return string.Empty;
+
+            if (fsm.Fsm != null && !string.IsNullOrEmpty(fsm.Fsm.Name))
+                return fsm.Fsm.Name;
+
+            return fsm.FsmName ?? string.Empty;
         }
 
         /// <summary>
@@ -108,6 +358,7 @@ namespace MWC_Localization_Core
         public void ClearTranslations()
         {
             magazineTranslations.Clear();
+            ResetRuntimeState();
         }
 
         /// <summary>
