@@ -894,15 +894,39 @@ namespace MWC_Localization_Core
             if (typeName != "BuildString" && typeName != "BuildStringFast" && typeName != "StringAddNewLine")
                 return false;
 
+            FieldInfo stringPartsField = GetStringPartsField(action);
+            if (stringPartsField == null)
+                return false;
+
             bool changed = false;
-            HutongGames.PlayMaker.FsmString[] parts = GetStringParts(action);
+            object stringPartsValue = stringPartsField.GetValue(action);
+
+            HutongGames.PlayMaker.FsmString[] parts = stringPartsValue as HutongGames.PlayMaker.FsmString[];
             if (parts != null)
             {
                 for (int i = 0; i < parts.Length; i++)
                 {
                     changed |= TranslateFsmString(parts[i], target);
                 }
+
+                return changed;
             }
+
+            string[] literalParts = stringPartsValue as string[];
+            if (literalParts == null)
+                return false;
+
+            for (int i = 0; i < literalParts.Length; i++)
+            {
+                if (!TranslateString(literalParts[i], target, out string translated))
+                    continue;
+
+                literalParts[i] = translated;
+                changed = true;
+            }
+
+            if (changed)
+                stringPartsField.SetValue(action, literalParts);
 
             return changed;
         }
@@ -1716,7 +1740,7 @@ namespace MWC_Localization_Core
             return false;
         }
 
-        private static HutongGames.PlayMaker.FsmString[] GetStringParts(object action)
+        private static FieldInfo GetStringPartsField(object action)
         {
             if (action == null)
                 return null;
@@ -1729,7 +1753,7 @@ namespace MWC_Localization_Core
                 stringPartsFieldCache[type] = field;
             }
 
-            return field != null ? field.GetValue(action) as HutongGames.PlayMaker.FsmString[] : null;
+            return field;
         }
 
         private static FieldInfo GetField(System.Type type, string name)
