@@ -828,9 +828,9 @@ namespace MWC_Localization_Core
                 return false;
 
             bool changed = false;
-            object partsValue = stringPartsField != null ? stringPartsField.GetValue(action) : null;
+            object stringPartsValue = stringPartsField != null ? stringPartsField.GetValue(action) : null;
 
-            HutongGames.PlayMaker.FsmString[] parts = partsValue as HutongGames.PlayMaker.FsmString[];
+            HutongGames.PlayMaker.FsmString[] parts = stringPartsValue as HutongGames.PlayMaker.FsmString[];
             if (parts != null)
             {
                 for (int i = 0; i < parts.Length; i++)
