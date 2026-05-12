@@ -12,8 +12,6 @@ namespace MWC_Localization_Core
     /// </summary>
     public partial class FsmTextHook
     {
-        private const float SourcePollInterval = 0.2f;
-
         private readonly List<FsmTarget> targets = new List<FsmTarget>();
         private readonly List<PlayMakerFSM> weatherUpdaterFsmCache = new List<PlayMakerFSM>();
         private readonly Dictionary<string, string> directTranslations = new Dictionary<string, string>();
@@ -114,7 +112,7 @@ namespace MWC_Localization_Core
                     return false;
 
                 bool immediateChanged = TryApplyRallyClassSources();
-                if (!ShouldPoll(ref lastSourcePollTime, SourcePollInterval))
+                if (!ShouldPoll(ref lastSourcePollTime, LocalizationConstants.FSM_SOURCE_POLL_INTERVAL))
                     return immediateChanged;
 
                 bool runtimeChanged = immediateChanged;
