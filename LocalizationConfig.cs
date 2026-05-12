@@ -17,7 +17,7 @@ namespace MWC_Localization_Core
         public string LanguageCode { get; private set; } = "en-US";
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();
         public List<TextAdjustment> TextAdjustments { get; private set; } = new List<TextAdjustment>();
-        private float lastDriftTrackedDiscoveryTime = -1000f;
+        private readonly List<TextAdjustment> driftTrackedAdjustments = new List<TextAdjustment>();
 
         public LocalizationConfig()
         {
@@ -31,6 +31,7 @@ namespace MWC_Localization_Core
             // Make reload idempotent by resetting previously loaded values.
             FontMappings.Clear();
             TextAdjustments.Clear();
+            driftTrackedAdjustments.Clear();
             LanguageName = "Unknown";
             LanguageCode = "en-US";
 
@@ -230,7 +231,11 @@ namespace MWC_Localization_Core
             {
                 if (adjustment.Matches(path))
                 {
-                    return adjustment.ApplyAdjustment(textMesh, path);
+                    bool applied = adjustment.ApplyAdjustment(textMesh, path);
+                    if (applied && adjustment.HasDriftTrackedMeshes && !driftTrackedAdjustments.Contains(adjustment))
+                        driftTrackedAdjustments.Add(adjustment);
+
+                    return applied;
                 }
             }
 
@@ -243,42 +248,13 @@ namespace MWC_Localization_Core
         /// </summary>
         public void RefreshDriftTrackedAdjustments()
         {
-            ApplyDriftTrackedAdjustmentsToRebuiltTextMeshes();
-
-            foreach (TextAdjustment adjustment in TextAdjustments)
+            for (int i = driftTrackedAdjustments.Count - 1; i >= 0; i--)
             {
+                TextAdjustment adjustment = driftTrackedAdjustments[i];
                 adjustment.Refresh();
-            }
-        }
 
-        private void ApplyDriftTrackedAdjustmentsToRebuiltTextMeshes()
-        {
-            if (TextAdjustments.Count == 0)
-                return;
-
-            float now = Time.realtimeSinceStartup;
-            if (now - lastDriftTrackedDiscoveryTime < LocalizationConstants.DRIFT_TRACKED_DISCOVERY_INTERVAL)
-                return;
-
-            lastDriftTrackedDiscoveryTime = now;
-
-            for (int i = 0; i < TextAdjustment.DriftTrackedPathPatterns.Length; i++)
-            {
-                string rootPath = TextAdjustment.DriftTrackedPathPatterns[i];
-                GameObject root = MLCUtils.FindGameObjectCached(rootPath);
-                if (root == null)
-                    continue;
-
-                TextMesh[] textMeshes = root.GetComponentsInChildren<TextMesh>(true);
-                for (int j = 0; j < textMeshes.Length; j++)
-                {
-                    TextMesh textMesh = textMeshes[j];
-                    if (textMesh == null)
-                        continue;
-
-                    string path = MLCUtils.GetGameObjectPath(textMesh.gameObject);
-                    ApplyTextAdjustment(textMesh, path);
-                }
+                if (!adjustment.HasDriftTrackedMeshes)
+                    driftTrackedAdjustments.RemoveAt(i);
             }
         }
 
@@ -288,7 +264,7 @@ namespace MWC_Localization_Core
         /// </summary>
         public void ClearTextAdjustmentCaches()
         {
-            lastDriftTrackedDiscoveryTime = -1000f;
+            driftTrackedAdjustments.Clear();
 
             foreach (TextAdjustment adjustment in TextAdjustments)
             {

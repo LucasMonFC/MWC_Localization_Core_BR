@@ -28,10 +28,9 @@ namespace MWC_Localization_Core
     /// </summary>
     public class TextAdjustment
     {
-        // Paths whose transforms the game rewrites repeatedly (e.g. magazine sheets that
-        // get rebuilt while open). TextMeshes whose path matches any entry get drift-
-        // tracked and re-pinned every LateUpdate. Keep this list small - every entry
-        // pays a per-frame cost proportional to the number of TextMeshes it has touched.
+        // Paths whose transforms the game rewrites repeatedly. TextMeshes whose path
+        // matches any entry opt into drift refresh after a normal adjustment applies.
+        // Keep this list small - every touched TextMesh is checked during LateUpdate.
         internal static readonly string[] DriftTrackedPathPatterns =
         {
             "Sheets/Magazine/Products",
@@ -70,6 +69,11 @@ namespace MWC_Localization_Core
         // Pre-allocated buffers for Refresh(); avoids per-frame heap allocation.
         private readonly List<TextMesh> refreshSnapshot = new List<TextMesh>();
         private readonly List<TextMesh> staleBuffer = new List<TextMesh>();
+
+        public bool HasDriftTrackedMeshes
+        {
+            get { return lastAppliedLocalPositions.Count > 0; }
+        }
 
         public TextAdjustment(string conditionsString, Vector3 offset, float? fontSize = null, float? lineSpacing = null, float? widthScale = null)
         {

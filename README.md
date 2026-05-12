@@ -232,7 +232,7 @@ X,Y,Z[,FontSize,LineSpacing,WidthScale]
 
 ### Drift-tracked paths
 
-A few sheets (e.g. `Sheets/Magazine/Products`) are rebuilt by the game while the screen is open, which would normally let the rebuilt transform overwrite the position offset. These paths are listed in a small in-code whitelist (`TextAdjustment.DriftTrackedPathPatterns`) and re-pinned every frame. Adding a path to the whitelist is a code change, not a config change — open an issue if you find another sheet that flickers.
+A few sheets (e.g. `Sheets/Magazine/Products`) can have their transform rewritten by the game while the screen is open, which would normally let the position offset drift. These paths are listed in a small in-code whitelist (`TextAdjustment.DriftTrackedPathPatterns`). Once a matching TextMesh is adjusted by the normal translation pass, only that touched TextMesh is re-pinned during LateUpdate. Adding a path to the whitelist is a code change, not a config change — open an issue if you find another sheet that flickers.
 
 ## Creating Custom Fonts (Optional)
 
