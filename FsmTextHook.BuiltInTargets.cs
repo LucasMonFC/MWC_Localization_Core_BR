@@ -56,7 +56,7 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Systems/Teletext", "", "State 1", 4, "stop");
             AddTargetRule(byKey, "Systems/Teletext", "", "State 1", 4, "haku");
 
-            // TV Graphics: CHAT day/time, GFXTanaan schedule overlays (runtime-dynamic)
+            // TV Graphics: CHAT day/time, GFXTanaan schedule overlays
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day/Time", "Clock", "State 3", 2, "KLO");
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "maanantai");
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "tiistai");
@@ -65,29 +65,29 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "perjantai");
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "lauantai");
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "sunnuntai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "ohjelmat", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "maanantai", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "tiistai", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "keskiviikko", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "torstai", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "perjantai", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat1/Text", "Text", "", -1, "ohjelmat", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun1/Text", "Text", "", -1, "ohjelmat", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat1/Text", "Text", "", -1, "lauantai", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun1/Text", "Text", "", -1, "sunnuntai", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat2/Text", "Text", "", -1, "ohjelmat", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun2/Text", "Text", "", -1, "ohjelmat", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat2/Text", "Text", "", -1, "lauantai", runtimeDynamic: true);
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun2/Text", "Text", "", -1, "sunnuntai", runtimeDynamic: true);
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "ohjelmat");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "maanantai");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "tiistai");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "keskiviikko");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "torstai");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "perjantai");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat1/Text", "Text", "", -1, "ohjelmat");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun1/Text", "Text", "", -1, "ohjelmat");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat1/Text", "Text", "", -1, "lauantai");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun1/Text", "Text", "", -1, "sunnuntai");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat2/Text", "Text", "", -1, "ohjelmat");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun2/Text", "Text", "", -1, "ohjelmat");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat2/Text", "Text", "", -1, "lauantai");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun2/Text", "Text", "", -1, "sunnuntai");
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Moderator", "Text", "State 11", 1, "Valvojana:");
 
-            // Sheets: Rally results / registration / penalties (runtime-dynamic where game rebuilds rows)
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Junior", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Amateur", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "- Class", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Junior", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Amateur", runtimeDynamic: true);
-            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "- Class", runtimeDynamic: true);
+            // Sheets: Rally results / registration / penalties
+            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Junior");
+            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Amateur");
+            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "- Class");
+            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Junior");
+            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Amateur");
+            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "- Class");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "Time penalty:");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "sec.");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "Parc Ferme violation:");
@@ -96,6 +96,64 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "State 1", 6, "sec.");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "State 1", 7, "Parc Ferme violation:");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "State 1", 8, "Jump start violation:");
+
+            // Sheets: Unemployment paper status buttons
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/1", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/1", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/2", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/2", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/3", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/3", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/4", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/4", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/5", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/5", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/6", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/6", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/7", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2A/7", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/1", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/1", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/2", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/2", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/3", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/3", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/4", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/4", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/5", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/5", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/6", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/6", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/7", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2B/7", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/1", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/1", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/2", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/2", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/3", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/3", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/4", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/4", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/5", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/5", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/6", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/6", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/7", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2C/7", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/1", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/1", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/2", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/2", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/3", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/3", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/4", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/4", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/5", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/5", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/6", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/6", "Button", "", -1, "t\u00f6iss\u00e4    8");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/7", "Button", "", -1, "ty\u00f6t\u00f6n");
+            AddTargetRule(byKey, "Sheets/UnemployPaper/2D/7", "Button", "", -1, "t\u00f6iss\u00e4    8");
 
             // Sheets: Traffic Ticket (DUI / speeding fine descriptions)
             AddTargetRule(byKey, "Sheets/TrafficTicket/TicketData", "Data", "Calc fine 2", 4, "DUI. Alc. breath test");
