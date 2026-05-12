@@ -75,7 +75,6 @@
     <Compile Include="FsmTextHook.cs" />
     <Compile Include="FsmTextHook.BuiltInTargets.cs" />
     <Compile Include="HashTableProxyHandler.cs" />
-    <Compile Include="MonitoringStrategy.cs" />
     <Compile Include="MWC_Localization_Core.cs" />
     <Compile Include="PatternMatcher.cs" />
     <Compile Include="TextAdjustment.cs" />
@@ -86,6 +85,7 @@
     <Compile Include="TeletextHandler.cs" />
     <Compile Include="TextMeshTranslator.cs" />
     <Compile Include="TranslationFileParser.cs" />
+    <Compile Include="TranslationMode.cs" />
     <Compile Include="TranslationPattern.cs" />
     <Compile Include="UnifiedTextMeshMonitor.cs" />
   </ItemGroup>

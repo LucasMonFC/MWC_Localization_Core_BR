@@ -41,7 +41,7 @@ namespace MWC_Localization_Core
         private HashTableProxyHandler hashTableHandler;
         private TextMeshTranslator translator;
 
-        // Unified managers
+        // Scene manager
         private SceneTranslationManager sceneManager;
         private UnifiedTextMeshMonitor textMeshMonitor;
         
@@ -134,7 +134,6 @@ namespace MWC_Localization_Core
             hashTableHandler = new HashTableProxyHandler(magazineHandler);
             hashTableHandler.InitializeTargetPaths();
             
-            // Initialize unified text mesh monitor
             textMeshMonitor = new UnifiedTextMeshMonitor(translator);
             InitializeFsmTextHook();
 
@@ -160,7 +159,8 @@ namespace MWC_Localization_Core
             lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
             lateUpdateHandler = lateUpdateHandlerObject.AddComponent<LateUpdateHandler>();
             lateUpdateHandler.Initialize(
-                textMeshMonitor, 
+                config,
+                textMeshMonitor,
                 teletextHandler, 
                 arrayListHandler, 
                 hashTableHandler,
@@ -201,6 +201,10 @@ namespace MWC_Localization_Core
                 if (translator != null)
                 {
                     translator.ClearRuntimeCaches();
+                }
+                if (textMeshMonitor != null)
+                {
+                    textMeshMonitor.Clear();
                 }
                 if (lateUpdateHandlerObject != null)
                 {
@@ -429,12 +433,12 @@ namespace MWC_Localization_Core
             translator.LoadFsmPatterns(teletextPath);
             InitializeFsmTextHook();
             
-            // Reset and re-initialize LateUpdateHandler to find critical UI again
+            // Reset and re-initialize runtime handlers with the reloaded config.
             if (lateUpdateHandler != null)
             {
                 lateUpdateHandler.ClearCache();
-                // Re-initialize to find critical UI components again
                 lateUpdateHandler.Initialize(
+                    config,
                     textMeshMonitor,
                     teletextHandler,
                     arrayListHandler,
@@ -446,7 +450,8 @@ namespace MWC_Localization_Core
 
             // Reset managers
             sceneManager.ResetAll();
-            textMeshMonitor.Clear();
+            if (textMeshMonitor != null)
+                textMeshMonitor.Clear();
 
             // Reset teletext handler
             teletextHandler.Reset();
@@ -511,7 +516,8 @@ namespace MWC_Localization_Core
 
         void TranslateScene()
         {
-            textMeshMonitor.RegisterAllPathRuleElements();
+            if (textMeshMonitor != null)
+                textMeshMonitor.RegisterAll();
 
             // Find all TextMesh components in the scene, including inactive objects.
             TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();

@@ -4,487 +4,305 @@ using UnityEngine;
 namespace MWC_Localization_Core
 {
     /// <summary>
-    /// Represents a TextMesh component being monitored for translation
-    /// </summary>
-    public class TextMeshEntry
-    {
-        public TextMesh TextMesh;
-        public GameObject GameObject;
-        public string Path;
-        public MonitoringStrategy Strategy;
-        public string LastText;
-        public bool HasProcessedText;
-        public bool WasTranslated;
-        public bool IsVisible;
-
-        public TextMeshEntry(TextMesh textMesh, string path, MonitoringStrategy strategy)
-        {
-            TextMesh = textMesh;
-            GameObject = textMesh != null ? textMesh.gameObject : null;
-            Path = path;
-            Strategy = strategy;
-            LastText = textMesh != null ? textMesh.text : "";
-            HasProcessedText = false;
-            WasTranslated = false;
-            IsVisible = GameObject != null && GameObject.activeInHierarchy;
-        }
-
-        public bool IsValid()
-        {
-            return TextMesh != null && GameObject != null;
-        }
-
-        public bool HasTextChanged()
-        {
-            if (TextMesh == null || string.IsNullOrEmpty(TextMesh.text))
-                return false;
-
-            return LastText != TextMesh.text;
-        }
-
-        public void UpdateLastText()
-        {
-            if (TextMesh != null)
-            {
-                LastText = TextMesh.text;
-            }
-        }
-
-        public void UpdateVisibility()
-        {
-            IsVisible = GameObject != null && GameObject.activeInHierarchy;
-        }
-    }
-
-    /// <summary>
-    /// Unified path-based monitoring system for TextMesh translation.
-    /// Consolidates priority and dynamic TextMesh polling into one scheduler.
+    /// Lightweight direct GUI monitor, modeled after the old LanguageFramework HUD pass.
+    /// The primary TextMesh is translated once, then copied to shadow/paired meshes.
     /// </summary>
     public class UnifiedTextMeshMonitor
     {
-        private TextMeshTranslator translator;
+        private class GuiTextEntry
+        {
+            public string PrimaryPath;
+            public string[] CopyPaths;
+            public TextMesh PrimaryTextMesh;
+            public TextMesh[] CopyTextMeshes;
+            public string LastText;
+            public bool HasProcessedText;
+            public bool HasBaseLayout;
+            public Vector3 PrimaryBaseLocalPosition;
+            public Vector3[] CopyBaseLocalPositions;
+            public bool[] CopyHasBaseLayout;
+            public float LastLayoutYOffset;
 
-        // Throttling timers
-        private float fastPollingTimer;
-        private float slowPollingTimer;
-        private float visibilityPollingTimer;
+            public GuiTextEntry(string primaryPath, params string[] copyPaths)
+            {
+                PrimaryPath = primaryPath;
+                CopyPaths = copyPaths ?? new string[0];
+                CopyTextMeshes = new TextMesh[CopyPaths.Length];
+                CopyBaseLocalPositions = new Vector3[CopyPaths.Length];
+                CopyHasBaseLayout = new bool[CopyPaths.Length];
+                LastText = string.Empty;
+                HasProcessedText = false;
+                HasBaseLayout = false;
+                LastLayoutYOffset = 0f;
+            }
 
-        // Path-based monitoring rules (pattern -> strategy mapping)
-        private Dictionary<string, MonitoringStrategy> pathRules;
-        
-        // Instance-based storage (supports multiple TextMeshes per path)
-        private Dictionary<int, TextMeshEntry> instanceEntries;  // instanceID -> entry
-        private Dictionary<MonitoringStrategy, HashSet<int>> strategyGroups;  // strategy -> instanceIDs
-        private HashSet<string> monitoredPaths = new HashSet<string>();
-        // Subset of pathRules whose strategy is PersistentRebuilding. Re-scanned every
-        // frame so newly-spawned child TextMeshes are picked up the same frame they
-        // appear. Kept small on purpose - every entry pays a per-frame
-        // GetComponentsInChildren walk.
-        private HashSet<string> rebuildingPaths = new HashSet<string>();
-        private List<int> removalBuffer = new List<int>(64);
-        private List<string> stringRemovalBuffer = new List<string>(16);
+            public bool HasPrimary()
+            {
+                return PrimaryTextMesh != null && PrimaryTextMesh.gameObject != null;
+            }
+        }
+
+        private readonly TextMeshTranslator translator;
+        private readonly List<GuiTextEntry> guiEntries = new List<GuiTextEntry>();
+        private GuiTextEntry interactionEntry;
+        private GuiTextEntry partnameEntry;
+        private GuiTextEntry subtitlesEntry;
+        private float retryTimer;
 
         public UnifiedTextMeshMonitor(TextMeshTranslator translator)
         {
             this.translator = translator;
-            pathRules = new Dictionary<string, MonitoringStrategy>();
-            instanceEntries = new Dictionary<int, TextMeshEntry>();
-            strategyGroups = new Dictionary<MonitoringStrategy, HashSet<int>>();
-
-            // Initialize strategy groups
-            foreach (MonitoringStrategy strategy in System.Enum.GetValues(typeof(MonitoringStrategy)))
-            {
-                strategyGroups[strategy] = new HashSet<int>();
-            }
-
-            InitializeDefaultPathRules();
+            InitializeGuiEntries();
         }
 
-        private void InitializeDefaultPathRules()
+        private void InitializeGuiEntries()
         {
-            // Critical UI - every frame
-            AddPathRule("GUI/Indicators/Interaction", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/Indicators/Interaction/Shadow", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/Indicators/Partname", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/Indicators/Partname/Shadow", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/Indicators/Subtitles", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/Indicators/Subtitles/Shadow", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/Indicators/TaxiGUI", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/Indicators/TaxiGUI/Shadow", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/Indicators/Gear", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/Indicators/Gear/Shadow", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/HUD/Thrist/HUDLabel", MonitoringStrategy.EveryFrame);
-            AddPathRule("GUI/HUD/Thrist/HUDLabel/Shadow", MonitoringStrategy.EveryFrame);
+            guiEntries.Clear();
+            interactionEntry = null;
+            partnameEntry = null;
+            subtitlesEntry = null;
 
-            // Active HUD - fast polling (~6.6 FPS by default)
-            AddPathRule("GUI/HUD/Mortal/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Day/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Thirst/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Hunger/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Stress/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Urine/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Fatigue/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Money/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Bodytemp/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Sweat/HUDValue", MonitoringStrategy.FastPolling);
-            AddPathRule("GUI/HUD/Jailtime/HUDValue", MonitoringStrategy.FastPolling);
+            interactionEntry = AddGuiEntry("GUI/Indicators/Interaction", "GUI/Indicators/Interaction/Shadow");
+            partnameEntry = AddGuiEntry("GUI/Indicators/Partname", "GUI/Indicators/Partname/Shadow");
+            subtitlesEntry = AddGuiEntry("GUI/Indicators/Subtitles", "GUI/Indicators/Subtitles/Shadow");
+            AddGuiEntry("GUI/Indicators/TaxiGUI", "GUI/Indicators/TaxiGUI/Shadow");
+            AddGuiEntry("GUI/Indicators/Gear", "GUI/Indicators/Gear/Shadow");
+            AddGuiEntry("GUI/HUD/Thrist/HUDLabel", "GUI/HUD/Thrist/HUDLabel/Shadow");
 
-            // Magazine product list - parent rebuilds children while sheet is open.
-            AddPathRule("Sheets/Magazine/Products", MonitoringStrategy.PersistentRebuilding);
+            AddGuiEntry("GUI/HUD/Mortal/HUDValue");
+            AddGuiEntry("GUI/HUD/Day/HUDValue");
+            AddGuiEntry("GUI/HUD/Thirst/HUDValue");
+            AddGuiEntry("GUI/HUD/Hunger/HUDValue");
+            AddGuiEntry("GUI/HUD/Stress/HUDValue");
+            AddGuiEntry("GUI/HUD/Urine/HUDValue");
+            AddGuiEntry("GUI/HUD/Fatigue/HUDValue");
+            AddGuiEntry("GUI/HUD/Money/HUDValue");
+            AddGuiEntry("GUI/HUD/Bodytemp/HUDValue");
+            AddGuiEntry("GUI/HUD/Sweat/HUDValue");
+            AddGuiEntry("GUI/HUD/Jailtime/HUDValue");
         }
 
-        public void AddPathRule(string pathPattern, MonitoringStrategy strategy)
+        private GuiTextEntry AddGuiEntry(string primaryPath, params string[] copyPaths)
         {
-            pathRules[pathPattern] = strategy;
-            if (strategy == MonitoringStrategy.PersistentRebuilding)
-                rebuildingPaths.Add(pathPattern);
+            GuiTextEntry entry = new GuiTextEntry(primaryPath, copyPaths);
+            guiEntries.Add(entry);
+            return entry;
         }
 
-        // A parent scan must not absorb TextMeshes that have their own more-specific rule,
-        // or the more-specific strategy gets silently demoted into the parent strategy.
-        private bool HasMoreSpecificRule(string textMeshPath, string parentPath)
+        public void RegisterAll()
         {
-            int parentLen = parentPath.Length;
-            foreach (var rule in pathRules.Keys)
-            {
-                if (rule.Length <= parentLen)
-                    continue;
-                if (rule == textMeshPath || textMeshPath.StartsWith(rule + "/"))
-                    return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Register all TextMeshes under defined path rules
-        /// </summary>
-        public void RegisterAllPathRuleElements()
-        {
-            foreach (string parentPath in pathRules.Keys)
-            {
-                MonitoringStrategy strategy = pathRules[parentPath];
-                int registered = Register(parentPath, strategy);
-
-                // Only queue for late retry if the initial Register couldn't find the parent yet
-                // (registered == 0). Persistent and OnVisibilityChange stay queued so rebuilt
-                // children get picked up.
-                bool needsLateQueue = strategy == MonitoringStrategy.LateTranslateOnce ||
-                                      strategy == MonitoringStrategy.LateApplyFontOnce ||
-                                      strategy == MonitoringStrategy.OnVisibilityChange ||
-                                      strategy == MonitoringStrategy.Persistent;
-                if (needsLateQueue && (registered == 0 ||
-                                       strategy == MonitoringStrategy.Persistent ||
-                                       strategy == MonitoringStrategy.OnVisibilityChange))
-                {
-                    monitoredPaths.Add(parentPath);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Periodically monitor TextMeshes to be available for monitoring
-        /// </summary>
-        public void MonitorLateRegister()
-        {
-            stringRemovalBuffer.Clear();
-            foreach (string parentPath in monitoredPaths)
-            {
-                MonitoringStrategy strategy;
-                if (!pathRules.TryGetValue(parentPath, out strategy))
-                    strategy = MonitoringStrategy.LateTranslateOnce;
-
-                int registered = Register(parentPath, strategy);
-
-                // Remove from monitoring list if successfully registered.
-                // Persistent and OnVisibilityChange paths stay in the scan because their
-                // child TextMeshes can be rebuilt.
-                if (registered > 0 &&
-                    strategy != MonitoringStrategy.Persistent &&
-                    strategy != MonitoringStrategy.OnVisibilityChange)
-                {
-                    stringRemovalBuffer.Add(parentPath);
-                }
-            }
-            for (int i = 0; i < stringRemovalBuffer.Count; i++)
-            {
-                monitoredPaths.Remove(stringRemovalBuffer[i]);
-            }
-        }
-
-        /// <summary>
-        /// Register a TextMesh for monitoring
-        /// Supports multiple TextMeshes at the same path
-        /// </summary>
-        public int Register(string parentPath, MonitoringStrategy? strategy = null)
-        {
-            int registeredCount = 0;
-
-            // Determine strategy if not provided
-            MonitoringStrategy finalStrategy = strategy ?? pathRules[parentPath];
-
-            GameObject parent = MLCUtils.FindGameObjectCached(parentPath);
-            if (parent == null)
-                return registeredCount;
-
-            // Get all TextMesh components under this parent
-            TextMesh[] textMeshes = parent.GetComponentsInChildren<TextMesh>(true);
-
-            // Font-only fast path: these TextMeshes are translated upstream at the data
-            // source, so we only need to swap the font once and then forget about them.
-            // No per-instance tracking or follow-up monitoring is needed - the translator's
-            // appliedFontCache already prevents redundant re-application.
-            if (finalStrategy == MonitoringStrategy.LateApplyFontOnce)
-            {
-                foreach (var textMesh in textMeshes)
-                {
-                    if (textMesh == null)
-                        continue;
-
-                    string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
-                    if (HasMoreSpecificRule(textMeshPath, parentPath))
-                        continue;
-                    translator.ApplyFontOnly(textMesh, textMeshPath);
-                    registeredCount++;
-                }
-                return registeredCount;
-            }
-
-            foreach (var textMesh in textMeshes)
-            {
-                if (textMesh == null)
-                    continue;
-
-                int instanceID = textMesh.GetInstanceID();
-
-                // Skip if this specific instance is already registered
-                if (instanceEntries.ContainsKey(instanceID))
-                    continue;
-
-                string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
-
-                // A more-specific path rule (e.g. child Late/OnVisibility rule) must handle this
-                // TextMesh instead of it being captured by this parent scan.
-                if (HasMoreSpecificRule(textMeshPath, parentPath))
-                    continue;
-
-                // Translate first to reduce visible unlocalized text
-                bool translated = translator.TranslateAndApplyFont(textMesh, textMeshPath);
-
-                TextMeshEntry entry = new TextMeshEntry(textMesh, textMeshPath, finalStrategy);
-                entry.HasProcessedText = true;
-                entry.UpdateLastText();
-                if (translated)
-                {
-                    entry.WasTranslated = true;
-                }
-
-                if (finalStrategy == MonitoringStrategy.LateTranslateOnce && entry.WasTranslated)
-                {
-                    registeredCount++;
-                    continue;
-                }
-
-                // Register instance
-                instanceEntries[instanceID] = entry;
-                
-                // Group by strategy
-                strategyGroups[finalStrategy].Add(instanceID);
-
-                registeredCount++;
-            }
-            return registeredCount;
-        }
-
-        /// <summary>
-        /// Unregister a specific TextMesh instance
-        /// </summary>
-        public void UnregisterInstance(int instanceID)
-        {
-            TextMeshEntry entry;
-            if (!instanceEntries.TryGetValue(instanceID, out entry))
+            if (Application.loadedLevelName != "GAME")
                 return;
 
-            // Remove from strategy group
-            strategyGroups[entry.Strategy].Remove(instanceID);
-
-            // Remove instance
-            instanceEntries.Remove(instanceID);
-        }
-
-        /// <summary>
-        /// Re-run Register() for PersistentRebuilding parents so newly-spawned child
-        /// TextMeshes are picked up the same frame they appear. Register() already
-        /// deduplicates by instanceID; the dominant cost is one
-        /// GetComponentsInChildren&lt;TextMesh&gt;(true) per parent, so rebuildingPaths
-        /// must stay tiny.
-        /// </summary>
-        private void ScanRebuildingPaths()
-        {
-            foreach (string parentPath in rebuildingPaths)
+            for (int i = 0; i < guiEntries.Count; i++)
             {
-                Register(parentPath, MonitoringStrategy.PersistentRebuilding);
+                RegisterEntry(guiEntries[i]);
             }
         }
 
-        /// <summary>
-        /// Main update loop - called every frame
-        /// </summary>
         public void Update(float deltaTime)
         {
-            // Per-frame work for content the game rebuilds in place.
-            // ScanRebuildingPaths catches new child TextMeshes; the translator's
-            // drift-tracked refresh re-pins meshes whose transforms the game rewrites
-            // every frame. Both lists are deliberately tiny.
-            ScanRebuildingPaths();
-            translator.RefreshDriftTrackedAdjustments();
+            if (Application.loadedLevelName != "GAME")
+                return;
 
-            // Always update EveryFrame
-            UpdateGroup(MonitoringStrategy.EveryFrame);
-
-            // Throttled fast polling (LocalizationConstants.FAST_POLLING_INTERVAL)
-            fastPollingTimer += deltaTime;
-            if (fastPollingTimer >= LocalizationConstants.FAST_POLLING_INTERVAL)
+            retryTimer += deltaTime;
+            if (retryTimer >= LocalizationConstants.GUI_MONITOR_RETRY_INTERVAL)
             {
-                UpdateGroup(MonitoringStrategy.FastPolling);
-                UpdateGroup(MonitoringStrategy.Persistent);
-                UpdateGroup(MonitoringStrategy.PersistentRebuilding);
-                fastPollingTimer = 0f;
+                RegisterAll();
+                retryTimer = 0f;
             }
 
-            // Throttled slow polling (1.0s)
-            slowPollingTimer += deltaTime;
-            if (slowPollingTimer >= LocalizationConstants.SLOW_POLLING_INTERVAL)
+            for (int i = 0; i < guiEntries.Count; i++)
             {
-                UpdateGroup(MonitoringStrategy.LateTranslateOnce);
-                MonitorLateRegister(); // Also check for late registrations
-                slowPollingTimer = 0f;
+                UpdateEntry(guiEntries[i]);
             }
 
-            // OnVisibilityChange - check at a throttled interval
-            visibilityPollingTimer += deltaTime;
-            if (visibilityPollingTimer >= LocalizationConstants.VISIBILITY_POLLING_INTERVAL)
-            {
-                UpdateVisibilityChangeGroup();
-                visibilityPollingTimer = 0f;
-            }
+            UpdatePartnameMultilineLayout();
         }
 
-        private void UpdateGroup(MonitoringStrategy strategy)
-        {
-            var instanceIDs = strategyGroups[strategy];
-            removalBuffer.Clear();
-
-            foreach (int instanceID in instanceIDs)
-            {
-                TextMeshEntry entry;
-                if (!instanceEntries.TryGetValue(instanceID, out entry))
-                    continue;
-
-                // Check validity first to avoid NullReferenceException on destroyed objects
-                if (!entry.IsValid())
-                {
-                    removalBuffer.Add(instanceID);
-                    continue;
-                }
-
-                if (strategy == MonitoringStrategy.LateTranslateOnce && entry.WasTranslated)
-                {
-                    removalBuffer.Add(instanceID);
-                    continue;
-                }
-
-                // Skip inactive entries for polling strategies.
-                // OnVisibilityChange has its own dedicated pass.
-                if (!entry.GameObject.activeInHierarchy)
-                    continue;
-
-                bool textChanged = entry.HasTextChanged();
-                if (textChanged)
-                {
-                    entry.HasProcessedText = false;
-                }
-                
-                if (textChanged || !entry.HasProcessedText)
-                {
-                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);
-                    entry.HasProcessedText = true;
-                    entry.UpdateLastText();
-                    if (translated)
-                    {
-                        entry.WasTranslated = true;
-
-                        // Late one-shot entries can stop monitoring after the first successful translation.
-                        if (strategy == MonitoringStrategy.LateTranslateOnce)
-                        {
-                            removalBuffer.Add(instanceID);
-                        }
-                    }
-                }
-            }
-
-            // Clean up removed instances
-            foreach (int instanceID in removalBuffer)
-            {
-                UnregisterInstance(instanceID);
-            }
-        }
-
-        private void UpdateVisibilityChangeGroup()
-        {
-            var instanceIDs = strategyGroups[MonitoringStrategy.OnVisibilityChange];
-            removalBuffer.Clear();
-
-            foreach (int instanceID in instanceIDs)
-            {
-                TextMeshEntry entry;
-                if (!instanceEntries.TryGetValue(instanceID, out entry))
-                    continue;
-
-                if (!entry.IsValid())
-                {
-                    removalBuffer.Add(instanceID);
-                    continue;
-                }
-
-                bool wasVisible = entry.IsVisible;
-                entry.UpdateVisibility();
-
-                // Only translate when visibility changes from hidden to visible
-                if (!wasVisible && entry.IsVisible)
-                {
-                    bool translated = translator.TranslateAndApplyFont(entry.TextMesh, entry.Path);
-                    entry.HasProcessedText = true;
-                    entry.UpdateLastText();
-                    if (translated)
-                    {
-                        entry.WasTranslated = true;
-                    }
-                }
-            }
-
-            foreach (int instanceID in removalBuffer)
-            {
-                UnregisterInstance(instanceID);
-            }
-        }
-
-        /// <summary>
-        /// Clear all monitored entries
-        /// </summary>
         public void Clear()
         {
-            foreach (var group in strategyGroups.Values)
+            retryTimer = 0f;
+            InitializeGuiEntries();
+        }
+
+        private void RegisterEntry(GuiTextEntry entry)
+        {
+            if (entry == null)
+                return;
+
+            if (!entry.HasPrimary())
             {
-                group.Clear();
+                GameObject primaryObject = MLCUtils.FindGameObjectCached(entry.PrimaryPath);
+                entry.PrimaryTextMesh = primaryObject != null ? primaryObject.GetComponent<TextMesh>() : null;
+                entry.LastText = string.Empty;
+                entry.HasProcessedText = false;
+                entry.HasBaseLayout = false;
             }
-            instanceEntries.Clear();
-            pathRules.Clear();
-            monitoredPaths.Clear();
-            rebuildingPaths.Clear();
-            fastPollingTimer = 0f;
-            slowPollingTimer = 0f;
-            visibilityPollingTimer = 0f;
-            InitializeDefaultPathRules();
+
+            for (int i = 0; i < entry.CopyPaths.Length; i++)
+            {
+                TextMesh copyTextMesh = entry.CopyTextMeshes[i];
+                if (copyTextMesh != null && copyTextMesh.gameObject != null)
+                    continue;
+
+                GameObject copyObject = MLCUtils.FindGameObjectCached(entry.CopyPaths[i]);
+                entry.CopyTextMeshes[i] = copyObject != null ? copyObject.GetComponent<TextMesh>() : null;
+                if (entry.HasBaseLayout && entry.CopyTextMeshes[i] != null)
+                    CaptureCopyBasePosition(entry, i);
+            }
+        }
+
+        private void UpdateEntry(GuiTextEntry entry)
+        {
+            if (entry == null || !entry.HasPrimary() || !entry.PrimaryTextMesh.gameObject.activeInHierarchy)
+                return;
+
+            string sourceText = entry.PrimaryTextMesh.text;
+            if (string.IsNullOrEmpty(sourceText))
+            {
+                if (!string.IsNullOrEmpty(entry.LastText))
+                    ClearCopiedText(entry);
+
+                return;
+            }
+
+            bool textChanged = entry.LastText != sourceText;
+            if (!textChanged && entry.HasProcessedText)
+                return;
+
+            translator.TranslateAndApplyFont(entry.PrimaryTextMesh, entry.PrimaryPath);
+            string translatedText = entry.PrimaryTextMesh.text;
+            entry.LastText = translatedText;
+            entry.HasProcessedText = true;
+
+            for (int i = 0; i < entry.CopyTextMeshes.Length; i++)
+            {
+                TextMesh copyTextMesh = entry.CopyTextMeshes[i];
+                if (copyTextMesh == null || copyTextMesh.gameObject == null)
+                    continue;
+
+                copyTextMesh.text = translatedText;
+                translator.ApplyCustomFont(copyTextMesh, entry.CopyPaths[i]);
+            }
+        }
+
+        private void ClearCopiedText(GuiTextEntry entry)
+        {
+            entry.LastText = string.Empty;
+            entry.HasProcessedText = false;
+
+            for (int i = 0; i < entry.CopyTextMeshes.Length; i++)
+            {
+                TextMesh copyTextMesh = entry.CopyTextMeshes[i];
+                if (copyTextMesh != null && copyTextMesh.gameObject != null)
+                    copyTextMesh.text = string.Empty;
+            }
+        }
+
+        private void UpdatePartnameMultilineLayout()
+        {
+            if (partnameEntry == null || !partnameEntry.HasPrimary())
+                return;
+
+            int maxLineCount = GetVisibleLineCount(partnameEntry);
+            maxLineCount = System.Math.Max(maxLineCount, GetVisibleLineCount(interactionEntry));
+            maxLineCount = System.Math.Max(maxLineCount, GetVisibleLineCount(subtitlesEntry));
+
+            EnsureBaseLayout(partnameEntry);
+
+            if (maxLineCount <= 1)
+            {
+                ApplyPartnameOffset(0f);
+                return;
+            }
+
+            float offset = 0.74f + ((float)(maxLineCount - 2) * 0.50f);
+            if (offset > 2.24f)
+                offset = 2.24f;
+
+            ApplyPartnameOffset(offset);
+        }
+
+        private int GetVisibleLineCount(GuiTextEntry entry)
+        {
+            if (entry == null || !entry.HasPrimary() || !entry.PrimaryTextMesh.gameObject.activeInHierarchy)
+                return 1;
+
+            string text = entry.PrimaryTextMesh.text;
+            if (string.IsNullOrEmpty(text))
+                return 1;
+
+            int lines = 1;
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] == '\n')
+                    lines++;
+            }
+
+            return lines;
+        }
+
+        private void EnsureBaseLayout(GuiTextEntry entry)
+        {
+            if (entry.HasBaseLayout || !entry.HasPrimary())
+                return;
+
+            entry.PrimaryBaseLocalPosition = entry.PrimaryTextMesh.transform.localPosition;
+            for (int i = 0; i < entry.CopyTextMeshes.Length; i++)
+            {
+                CaptureCopyBasePosition(entry, i);
+            }
+
+            entry.HasBaseLayout = true;
+        }
+
+        private void CaptureCopyBasePosition(GuiTextEntry entry, int index)
+        {
+            TextMesh copyTextMesh = entry.CopyTextMeshes[index];
+            if (copyTextMesh == null || copyTextMesh.gameObject == null)
+                return;
+
+            if (entry.HasPrimary() && copyTextMesh.transform.parent == entry.PrimaryTextMesh.transform)
+            {
+                entry.CopyBaseLocalPositions[index] = copyTextMesh.transform.localPosition;
+            }
+            else
+            {
+                entry.CopyBaseLocalPositions[index] =
+                    copyTextMesh.transform.localPosition - new Vector3(0f, entry.LastLayoutYOffset, 0f);
+            }
+
+            entry.CopyHasBaseLayout[index] = true;
+        }
+
+        private void ApplyPartnameOffset(float yOffset)
+        {
+            Vector3 offset = new Vector3(0f, yOffset, 0f);
+            Vector3 primaryPosition = partnameEntry.PrimaryBaseLocalPosition + offset;
+
+            partnameEntry.PrimaryTextMesh.transform.localPosition = primaryPosition;
+
+            for (int i = 0; i < partnameEntry.CopyTextMeshes.Length; i++)
+            {
+                TextMesh copyTextMesh = partnameEntry.CopyTextMeshes[i];
+                if (copyTextMesh == null || copyTextMesh.gameObject == null)
+                    continue;
+
+                if (!partnameEntry.CopyHasBaseLayout[i])
+                    CaptureCopyBasePosition(partnameEntry, i);
+
+                if (copyTextMesh.transform.parent == partnameEntry.PrimaryTextMesh.transform)
+                {
+                    copyTextMesh.transform.localPosition = partnameEntry.CopyBaseLocalPositions[i];
+                }
+                else
+                {
+                    copyTextMesh.transform.localPosition = partnameEntry.CopyBaseLocalPositions[i] + offset;
+                }
+            }
+
+            partnameEntry.LastLayoutYOffset = yOffset;
         }
     }
 }
