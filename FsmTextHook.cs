@@ -14,7 +14,7 @@ namespace MWC_Localization_Core
     {
         private readonly List<FsmTarget> targets = new List<FsmTarget>();
         private readonly List<PlayMakerFSM> weatherUpdaterFsmCache = new List<PlayMakerFSM>();
-        private readonly Dictionary<string, string> directTranslations = new Dictionary<string, string>();
+        private TranslationDictionary translations;
         private readonly Dictionary<string, string> translationCache = new Dictionary<string, string>();
         private readonly Dictionary<string, PlayMakerFSM> exactFsmCache = new Dictionary<string, PlayMakerFSM>();
         private readonly Dictionary<string, List<PlayMakerFSM>> fsmListCache = new Dictionary<string, List<PlayMakerFSM>>();
@@ -65,15 +65,9 @@ namespace MWC_Localization_Core
             }
         }
 
-        public void Initialize(Dictionary<string, string> translations)
+        public void Initialize(TranslationDictionary translations)
         {
-            directTranslations.Clear();
-            if (translations != null)
-            {
-                foreach (KeyValuePair<string, string> entry in translations)
-                    directTranslations[entry.Key] = entry.Value;
-            }
-
+            this.translations = translations;
             BuildTargets();
             ResetRuntimeState();
         }
@@ -178,7 +172,7 @@ namespace MWC_Localization_Core
                 return;
 
             string translation;
-            if (!directTranslations.TryGetValue(LocalizationUtils.FormatUpperKey(source), out translation) || string.IsNullOrEmpty(translation))
+            if (translations == null || !translations.TryGetExact(source, out translation) || string.IsNullOrEmpty(translation))
                 return;
 
             string key = BuildKey(objectPath, fsmName, stateName, actionIndex);
@@ -392,7 +386,7 @@ namespace MWC_Localization_Core
 
         private bool TryApplyGameTeletextWeatherUpdaterDirectTranslations()
         {
-            if (directTranslations.Count == 0)
+            if (translations == null || translations.Count == 0)
                 return false;
 
             bool changed = false;
@@ -489,11 +483,11 @@ namespace MWC_Localization_Core
 
         private string TranslateDirectText(string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value) || translations == null)
                 return value;
 
             string translated;
-            if (directTranslations.TryGetValue(LocalizationUtils.FormatUpperKey(value), out translated))
+            if (translations.TryGetExact(value, out translated))
                 return translated;
 
             if (value.IndexOf('\n') < 0)
@@ -503,8 +497,7 @@ namespace MWC_Localization_Core
             bool changed = false;
             for (int i = 0; i < lines.Length; i++)
             {
-                string line = lines[i];
-                if (directTranslations.TryGetValue(LocalizationUtils.FormatUpperKey(line), out translated))
+                if (translations.TryGetExact(lines[i], out translated))
                 {
                     lines[i] = translated;
                     changed = true;

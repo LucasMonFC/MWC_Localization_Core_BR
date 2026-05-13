@@ -16,7 +16,7 @@ namespace MWC_Localization_Core
         public override Game SupportedGames => Game.MyWinterCar;
 
         // Translation data
-        private Dictionary<string, string> translations = new Dictionary<string, string>();
+        private TranslationDictionary translations = new TranslationDictionary();
         private bool hasLoadedTranslations = false;
         private static readonly string[] ForcedFontPathPrefixes = new string[]
         {
@@ -91,7 +91,7 @@ namespace MWC_Localization_Core
         {
             ModConsole.Print($"[{Name}] Main Menu loaded - initializing localization core...");
             // Initialize collections
-            translations = new Dictionary<string, string>();
+            translations = new TranslationDictionary();
             customFonts = new Dictionary<string, Font>();
 
             // Initialize configuration
@@ -345,10 +345,7 @@ namespace MWC_Localization_Core
                 normalizeKeys: true,
                 overwriteExisting: true);
 
-            foreach (var pair in loadedTranslations)
-            {
-                translations[pair.Key] = pair.Value;
-            }
+            translations.AddAll(loadedTranslations);
 
             hasLoadedTranslations = true;
             CoreConsole.Print($"[{Name}] Loaded {loadedTranslations.Count} translations from {Path.GetFileName(translationPath)} ({translations.Count} total)");

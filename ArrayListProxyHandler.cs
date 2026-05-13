@@ -9,8 +9,8 @@ namespace MWC_Localization_Core
 {
     public class ArrayListProxyHandler
     {
-        // Reference to main translation dictionaries (from Plugin)
-        private Dictionary<string, string> mainTranslations;
+        // Reference to main translation dictionary (from Plugin)
+        private TranslationDictionary mainTranslations;
         private MagazineTextHandler magazineHandler;
         private TextMeshTranslator translator;
         
@@ -36,8 +36,8 @@ namespace MWC_Localization_Core
             = new Dictionary<string, PlayMakerArrayListProxy>();
 
         public ArrayListProxyHandler(
-            Dictionary<string, string> translations, 
-            MagazineTextHandler magazineHandler, 
+            TranslationDictionary translations,
+            MagazineTextHandler magazineHandler,
             TextMeshTranslator translator
         )
         {
@@ -232,21 +232,12 @@ namespace MWC_Localization_Core
         // Find translation from main translations or magazine translations
         private string FindTranslation(string original)
         {
-            // Try main translations first (with normalized key)
-            string normalizedKey = LocalizationUtils.FormatUpperKey(original);
-            if (mainTranslations.TryGetValue(normalizedKey, out string translation))
-            {
+            // Try main translations first (TryGetExact handles normalization + LRU cache).
+            if (mainTranslations.TryGetExact(original, out string translation))
                 return translation;
-            }
 
             // Try magazine translations using the magazine handler's normalized lookup.
-            translation = magazineHandler.GetTranslation(original);
-            if (translation != null)
-            {
-                return translation;
-            }
-
-            return null;
+            return magazineHandler.GetTranslation(original);
         }
 
         // Apply localized fonts to TextMesh components displaying array data
