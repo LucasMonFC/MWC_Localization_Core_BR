@@ -42,7 +42,7 @@ The game rebuilds TextMesh content, FSM string values, and ArrayList contents du
 
 Every place the mod patches text is modeled as an `ITranslationSurface` ([TranslationSurface.cs](TranslationSurface.cs)). The main class holds a single `List<ITranslationSurface>` and dispatches the lifecycle uniformly:
 
-```
+```csharp
 ctx = new TranslationContext(translations, customFonts, config, translator, magazine, assetsFolder);
 foreach (s in surfaces) s.Initialize(ctx);
 foreach (s in surfaces) s.InitialPass();          // on scene load + F8 reload
@@ -108,7 +108,7 @@ When adding new state to a surface, ensure both `Reset()` (runtime caches) and `
 
 - `LocalizationUtils` caches `GameObject` paths (up to 10k entries), `GameObject.Find` lookups, and a Resources-based FSM index for inactive objects.
 - `TextMeshTranslator` caches per-instance applied font and font-bundle texture to skip redundant assignment each frame.
-- `TranslationDictionary` keeps a bounded (128-entry) raw-source → translation LRU absorbing the per-frame repeated lookups that HUD monitors generate. Cleared on `Clear()` / `ResetPatterns()` / `AddAll()`.
+- `TranslationDictionary` keeps a bounded (128-entry) raw-source → translation recent-lookups cache absorbing the per-frame repeated lookups that HUD monitors generate. Cleared on `Clear()` / `ResetPatterns()` / `AddAll()` and bulk-cleared when it fills (not strict LRU).
 - `FsmTextHook` caches resolved `PlayMakerFSM`s, ArrayList proxies, TextMeshes per target plus a per-target translation cache keyed on `(targetKey, sourceString)`.
 - **Scene change** uses `LocalizationUtils.PruneCaches()`, which drops only entries pointing at destroyed Unity objects (the FSM index is fully rebuilt). Stable HUD paths survive the scene transition cold-start free.
 - **F8 reload** uses `LocalizationUtils.ClearCaches()` for a full wipe.
