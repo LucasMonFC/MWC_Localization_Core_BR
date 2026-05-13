@@ -65,6 +65,10 @@ namespace MWC_Localization_Core
         /// <summary>How often MonitorTick should fire after InitialPass.</summary>
         SurfaceCadence Cadence { get; }
 
+        /// <summary>True once the surface has nothing more to do; scheduler stops ticking it.
+        /// Surfaces that monitor inherently-live data (HUD, dynamic FSM sources, chat) return false.</summary>
+        bool IsComplete { get; }
+
         /// <summary>Wire up dependencies. Called once after construction and again on F8 reload.</summary>
         void Initialize(TranslationContext ctx);
 

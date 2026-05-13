@@ -14,6 +14,7 @@ namespace MWC_Localization_Core
     {
         public string Name { get { return "FsmTextHook"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Fast; } }
+        public bool IsComplete { get { return false; } }
 
         public int InitialPass()
         {

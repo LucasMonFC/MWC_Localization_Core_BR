@@ -22,6 +22,8 @@ namespace MWC_Localization_Core
     {
         public string Name { get { return "TeletextHandler"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
+        public bool IsComplete { get { return IsStaticArrayMonitoringComplete; } }
+        public bool IsStaticArrayMonitoringComplete { get; private set; }
 
         // Dynamic TV chat is split into TeletextChatHandler (Medium cadence). This handler
         // owns the loaded translation data; the chat handler reads it via TryGetChatTranslations.
@@ -148,9 +150,13 @@ namespace MWC_Localization_Core
         /// </summary>
         public int MonitorAndTranslateArrays()
         {
+            if (IsStaticArrayMonitoringComplete)
+                return 0;
+
             try
             {
                 int totalTranslated = 0;
+                bool allStaticArraysComplete = true;
 
                 foreach (var pathPrefix in pathPrefixes.Keys)
                 {
@@ -163,7 +169,11 @@ namespace MWC_Localization_Core
                     {
                         // First time accessing this path - cache proxies
                         GameObject dataObject = LocalizationUtils.FindGameObjectCached(pathPrefix);
-                        if (dataObject == null) continue;
+                        if (dataObject == null)
+                        {
+                            allStaticArraysComplete = false;
+                            continue;
+                        }
 
                         proxies = dataObject.GetComponents<PlayMakerArrayListProxy>();
                         proxyCache[pathPrefix] = proxies;
@@ -207,8 +217,14 @@ namespace MWC_Localization_Core
                                 translatedArrays.Add(arrayKey);
                             }
                         }
+
+                        if (!translatedArrays.Contains(arrayKey))
+                            allStaticArraysComplete = false;
                     }
                 }
+
+                if (allStaticArraysComplete)
+                    IsStaticArrayMonitoringComplete = true;
 
                 return totalTranslated;
             }
@@ -307,6 +323,7 @@ namespace MWC_Localization_Core
         {
             translatedArrays.Clear();
             proxyCache.Clear();
+            IsStaticArrayMonitoringComplete = false;
         }
     }
 }

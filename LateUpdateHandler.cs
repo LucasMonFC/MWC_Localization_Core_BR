@@ -12,6 +12,8 @@ namespace MWC_Localization_Core
     {
         private List<ITranslationSurface> surfaces;
         private float[] nextTickTimes;
+        private bool[] loggedRetired;
+        private bool loggedAllRetired;
         private LocalizationConfig config;
         private Func<bool> isGameSceneReady;
         private bool isInitialized;
@@ -25,6 +27,8 @@ namespace MWC_Localization_Core
             this.config = config;
             this.isGameSceneReady = isGameSceneReady;
             nextTickTimes = surfaces != null ? new float[surfaces.Count] : new float[0];
+            loggedRetired = surfaces != null ? new bool[surfaces.Count] : new bool[0];
+            loggedAllRetired = false;
 
             // Stagger Slow surfaces so they don't all fire on the same frame.
             // Each Slow surface fires every ARRAY_MONITOR_INTERVAL, but consecutive
@@ -61,9 +65,26 @@ namespace MWC_Localization_Core
 
             float now = Time.time;
             float dt = Time.deltaTime;
+            bool allSlowRetired = !loggedAllRetired;
             for (int i = 0; i < surfaces.Count; i++)
             {
                 ITranslationSurface s = surfaces[i];
+
+                if (s.IsComplete)
+                {
+                    if (!loggedRetired[i])
+                    {
+                        CoreConsole.Print($"[LateUpdateHandler] {s.Name} complete; retiring");
+                        loggedRetired[i] = true;
+                    }
+                    continue;
+                }
+
+                // Track whether every Slow surface (array/proxy monitors) has retired.
+                // Surfaces that monitor live data (HUD/Fast/Medium) are intentionally ignored.
+                if (s.Cadence == SurfaceCadence.Slow)
+                    allSlowRetired = false;
+
                 switch (s.Cadence)
                 {
                     case SurfaceCadence.PerFrame:
@@ -102,6 +123,12 @@ namespace MWC_Localization_Core
                         // No tick.
                         break;
                 }
+            }
+
+            if (allSlowRetired && !loggedAllRetired)
+            {
+                CoreConsole.Print("[LateUpdateHandler] All Slow-cadence surfaces complete; scheduler retired for this scene");
+                loggedAllRetired = true;
             }
         }
 

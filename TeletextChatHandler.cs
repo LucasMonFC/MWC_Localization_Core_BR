@@ -16,6 +16,7 @@ namespace MWC_Localization_Core
     {
         public string Name { get { return "TeletextChatHandler"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Medium; } }
+        public bool IsComplete { get { return false; } }
 
         private readonly TeletextHandler teletext;
 
