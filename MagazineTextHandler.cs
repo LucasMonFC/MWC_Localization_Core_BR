@@ -1,6 +1,7 @@
 // 'Classified Magazine' Text Handler
 
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 
@@ -10,10 +11,36 @@ namespace MWC_Localization_Core
     /// Handles Yellow Pages magazine text translation.
     /// Performs direct line lookup and price/phone line formatting.
     /// </summary>
-    public class MagazineTextHandler
+    public class MagazineTextHandler : ITranslationSurface
     {
+        public string Name { get { return "MagazineTextHandler"; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
+
         private Dictionary<string, string> magazineTranslations = new Dictionary<string, string>();
         private bool yellowPagesSourcesResolved;
+        private string assetsFolder;
+
+        public void Initialize(TranslationContext ctx)
+        {
+            assetsFolder = ctx.AssetsFolder;
+            string path = Path.Combine(assetsFolder, "translate_magazine.txt");
+            LoadMagazineTranslations(path);
+        }
+
+        public int InitialPass()
+        {
+            return TranslateAllSources();
+        }
+
+        public int MonitorTick(float deltaTime)
+        {
+            return MonitorAndTranslateSources();
+        }
+
+        public void Reset()
+        {
+            ResetRuntimeState();
+        }
 
         /// <summary>
         /// Load magazine-specific translations from separate file

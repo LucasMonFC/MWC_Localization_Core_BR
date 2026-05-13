@@ -10,8 +10,34 @@ namespace MWC_Localization_Core
     /// Applies hardcoded PlayMaker FSM source translations through loaded translation data.
     /// The registration table itself lives in <c>FsmTextHook.BuiltInTargets.cs</c>.
     /// </summary>
-    public partial class FsmTextHook
+    public partial class FsmTextHook : ITranslationSurface
     {
+        public string Name { get { return "FsmTextHook"; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.Fast; } }
+
+        public int InitialPass()
+        {
+            UpdateForCurrentScene(true);
+            return 0;
+        }
+
+        public int MonitorTick(float deltaTime)
+        {
+            UpdateForCurrentScene(false);
+            return 0;
+        }
+
+        public void Reset()
+        {
+            ResetRuntimeState();
+        }
+
+        public void ClearTranslations()
+        {
+            // Translation data is owned by the shared TranslationDictionary.
+            // Reset() will clear runtime caches; pattern data lives elsewhere.
+        }
+
         private readonly List<FsmTarget> targets = new List<FsmTarget>();
         private readonly List<PlayMakerFSM> weatherUpdaterFsmCache = new List<PlayMakerFSM>();
         private TranslationDictionary translations;
@@ -65,9 +91,9 @@ namespace MWC_Localization_Core
             }
         }
 
-        public void Initialize(TranslationDictionary translations)
+        public void Initialize(TranslationContext ctx)
         {
-            this.translations = translations;
+            this.translations = ctx.Translations;
             BuildTargets();
             ResetRuntimeState();
         }

@@ -7,8 +7,11 @@ using System.Collections;
 
 namespace MWC_Localization_Core
 {
-    public class ArrayListProxyHandler
+    public class ArrayListProxyHandler : ITranslationSurface
     {
+        public string Name { get { return "ArrayListProxyHandler"; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
+
         // Reference to main translation dictionary (from Plugin)
         private TranslationDictionary mainTranslations;
         private MagazineTextHandler magazineHandler;
@@ -35,15 +38,26 @@ namespace MWC_Localization_Core
         private Dictionary<string, PlayMakerArrayListProxy> arrayProxyCache 
             = new Dictionary<string, PlayMakerArrayListProxy>();
 
-        public ArrayListProxyHandler(
-            TranslationDictionary translations,
-            MagazineTextHandler magazineHandler,
-            TextMeshTranslator translator
-        )
+        public void Initialize(TranslationContext ctx)
         {
-            this.mainTranslations = translations;
-            this.magazineHandler = magazineHandler;
-            this.translator = translator;
+            mainTranslations = ctx.Translations;
+            magazineHandler = ctx.Magazine;
+            translator = ctx.Translator;
+            InitializeArrayPaths();
+        }
+
+        public int InitialPass()
+        {
+            int total = TranslateAllArrays();
+            ApplyFontsToArrayElements();
+            return total;
+        }
+
+        public int MonitorTick(float deltaTime)
+        {
+            int total = MonitorAndTranslateArrays();
+            ApplyFontsToArrayElements();
+            return total;
         }
 
         public void InitializeArrayPaths()
