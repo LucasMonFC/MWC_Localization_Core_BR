@@ -25,6 +25,39 @@ namespace MWC_Localization_Core
     /// </summary>
     public class LocalizationConfig
     {
+        /// <summary>
+        /// Path prefixes that always get the localized font applied, regardless of whether
+        /// the displayed text is in the translation dictionary. Used for teletext, computer
+        /// POS, TV graphics, etc., where the original text stays in-game but the font must
+        /// be swapped so non-ASCII glyphs render correctly.
+        /// </summary>
+        public static readonly string[] ForcedFontPathPrefixes = new string[]
+        {
+            "Systems/TV/Teletext/VKTekstiTV/PAGES",
+            "Systems/TV/Teletext/VKTekstiTV/HEADER",
+            "COMPUTER/SYSTEM/POS",
+            "Sheets/UnemployPaper",
+            "Systems/TV/TVGraphics/CHAT",
+            "Sheets/ServicePayment",
+            "Sheets/RallyRegistration/Functions/Class",
+            "Systems/TV/TVGraphics/GFXTanaanWeek/Text",
+            "Systems/TV/TVGraphics/GFXTanaanSat1/Text",
+            "Systems/TV/TVGraphics/GFXTanaanSat2/Text",
+            "Systems/TV/TVGraphics/GFXTanaanSun1/Text",
+            "Systems/TV/TVGraphics/GFXTanaanSun2/Text"
+        };
+
+        public static bool IsForcedFontPath(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return false;
+            for (int i = 0; i < ForcedFontPathPrefixes.Length; i++)
+            {
+                if (path.StartsWith(ForcedFontPathPrefixes[i]))
+                    return true;
+            }
+            return false;
+        }
+
         public string LanguageName { get; private set; } = "Unknown";
         public string LanguageCode { get; private set; } = "en-US";
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();

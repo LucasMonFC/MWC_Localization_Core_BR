@@ -22,31 +22,19 @@ namespace MWC_Localization_Core
             "translate_mod.txt"
         };
 
-        private static readonly string[] ForcedFontPathPrefixes = new string[]
-        {
-            "Systems/TV/Teletext/VKTekstiTV/PAGES",
-            "Systems/TV/Teletext/VKTekstiTV/HEADER",
-            "COMPUTER/SYSTEM/POS",
-            "Sheets/UnemployPaper",
-            "Systems/TV/TVGraphics/CHAT",
-            "Sheets/ServicePayment",
-            "Sheets/RallyRegistration/Functions/Class",
-            "Systems/TV/TVGraphics/GFXTanaanWeek/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSat1/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSat2/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSun1/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSun2/Text"
-        };
-
         // Shared state
         private TranslationDictionary translations = new TranslationDictionary();
         private Dictionary<string, Font> customFonts = new Dictionary<string, Font>();
         private LocalizationConfig config;
         private TextMeshTranslator translator;
-        private SceneTranslationManager sceneManager;
         private MagazineTextHandler magazineHandler;
         private TranslationContext ctx;
         private List<ITranslationSurface> surfaces;
+
+        // Scene state (formerly SceneTranslationManager).
+        // Leaving a scene clears its translated flag so we re-translate on return.
+        private string currentScene = string.Empty;
+        private readonly HashSet<string> translatedScenes = new HashSet<string>();
 
         // LateUpdate driver
         private GameObject lateUpdateHandlerObject;
@@ -92,7 +80,8 @@ namespace MWC_Localization_Core
             CoreConsole.Initialize(showDebugLogs, showWarningLogs);
 
             magazineHandler = new MagazineTextHandler();
-            sceneManager = new SceneTranslationManager();
+            translatedScenes.Clear();
+            currentScene = string.Empty;
 
             LoadCustomFonts();
 
@@ -125,7 +114,7 @@ namespace MWC_Localization_Core
 
             CoreConsole.Print($"[{Name}] Translating Main Menu...");
             TranslateScene();
-            sceneManager.MarkSceneTranslated("MainMenu");
+            MarkSceneTranslated("MainMenu");
             RunSurfaceInitialPasses(null);
         }
 
@@ -133,13 +122,13 @@ namespace MWC_Localization_Core
         {
             ModConsole.Print($"[{Name}] Game fully loaded - translating...");
             TranslateScene();
-            sceneManager.MarkSceneTranslated("GAME");
+            MarkSceneTranslated("GAME");
             RunSurfaceInitialPasses(null);
 
             // ALL continuous monitoring runs in LateUpdate to get correct timing relative to game updates.
             lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
             lateUpdateHandler = lateUpdateHandlerObject.AddComponent<LateUpdateHandler>();
-            lateUpdateHandler.Initialize(surfaces, config, sceneManager);
+            lateUpdateHandler.Initialize(surfaces, config, () => HasSceneBeenTranslated("GAME"));
         }
 
         private void Mod_Update()
@@ -153,8 +142,8 @@ namespace MWC_Localization_Core
                 return;
             }
 
-            string currentScene = Application.loadedLevelName;
-            bool sceneChanged = sceneManager.UpdateScene(currentScene);
+            string sceneName = Application.loadedLevelName;
+            bool sceneChanged = UpdateScene(sceneName);
 
             if (sceneChanged)
             {
@@ -178,26 +167,44 @@ namespace MWC_Localization_Core
                     lateUpdateHandler = null;
                 }
 
-                CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
+                CoreConsole.Print($"[{Name}] Scene changed to '{sceneName}' - cleared caches");
             }
 
             // Initial translation pass for the current scene (covers hot reloads where
             // OnMenuLoad / PostLoad already fired but the scene was reset).
-            if (currentScene == "MainMenu" && sceneManager.ShouldTranslateScene("MainMenu"))
+            if (sceneName == "MainMenu" && ShouldTranslateScene("MainMenu"))
             {
                 CoreConsole.Print($"[{Name}] Translating Main Menu...");
                 TranslateScene();
-                sceneManager.MarkSceneTranslated("MainMenu");
+                MarkSceneTranslated("MainMenu");
                 RunSurfaceInitialPasses(null);
             }
-            else if (currentScene == "GAME" && sceneManager.ShouldTranslateScene("GAME"))
+            else if (sceneName == "GAME" && ShouldTranslateScene("GAME"))
             {
                 CoreConsole.Print($"[{Name}] Translating Game scene...");
                 TranslateScene();
-                sceneManager.MarkSceneTranslated("GAME");
+                MarkSceneTranslated("GAME");
                 RunSurfaceInitialPasses("Initial ");
             }
         }
+
+        // Scene tracking (formerly SceneTranslationManager). Leaving a known scene
+        // clears its translated flag so returning to it re-runs the initial pass.
+        private bool UpdateScene(string newScene)
+        {
+            if (string.IsNullOrEmpty(newScene) || currentScene == newScene)
+                return false;
+
+            if (!string.IsNullOrEmpty(currentScene))
+                translatedScenes.Remove(currentScene);
+
+            currentScene = newScene;
+            return true;
+        }
+
+        private bool ShouldTranslateScene(string scene) { return !translatedScenes.Contains(scene); }
+        private bool HasSceneBeenTranslated(string scene) { return translatedScenes.Contains(scene); }
+        private void MarkSceneTranslated(string scene) { translatedScenes.Add(scene); }
 
         private void RunSurfaceInitialPasses(string logPrefix)
         {
@@ -318,7 +325,7 @@ namespace MWC_Localization_Core
             for (int i = 0; i < surfaces.Count; i++)
                 surfaces[i].Initialize(ctx);
 
-            sceneManager.ResetAll();
+            translatedScenes.Clear();
 
             // Reapply fonts to existing TextMeshes (re-translate happens via the per-scene initial pass)
             TextMesh[] allTextMeshes = LocalizationUtils.GetAllTextMeshesIncludingInactive();
@@ -333,10 +340,11 @@ namespace MWC_Localization_Core
             }
 
             // Force initial passes for the current scene if applicable
-            string currentScene = Application.loadedLevelName;
-            if (currentScene == "MainMenu" || currentScene == "GAME")
+            string sceneName = Application.loadedLevelName;
+            if (sceneName == "MainMenu" || sceneName == "GAME")
             {
-                sceneManager.MarkSceneTranslated(currentScene);
+                currentScene = sceneName;
+                MarkSceneTranslated(sceneName);
                 RunSurfaceInitialPasses("Reload ");
             }
 
@@ -344,7 +352,7 @@ namespace MWC_Localization_Core
             if (lateUpdateHandler != null)
             {
                 lateUpdateHandler.ClearCache();
-                lateUpdateHandler.Initialize(surfaces, config, sceneManager);
+                lateUpdateHandler.Initialize(surfaces, config, () => HasSceneBeenTranslated("GAME"));
             }
 
             CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");
@@ -370,26 +378,11 @@ namespace MWC_Localization_Core
                         translatedCount++;
                 }
 
-                if (PathStartsWithAny(path, ForcedFontPathPrefixes) && translator.ApplyFontOnly(tm, path))
+                if (LocalizationConfig.IsForcedFontPath(path) && translator.ApplyFontOnly(tm, path))
                     forcedFontAppliedCount++;
             }
 
             CoreConsole.Print($"[{Name}] Scene translation complete: {translatedCount}/{allTextMeshes.Length} TextMesh objects translated, forced font pass: {forcedFontAppliedCount}");
-        }
-
-        private bool PathStartsWithAny(string path, string[] prefixes)
-        {
-            if (string.IsNullOrEmpty(path) || prefixes == null || prefixes.Length == 0)
-                return false;
-
-            for (int i = 0; i < prefixes.Length; i++)
-            {
-                string prefix = prefixes[i];
-                if (!string.IsNullOrEmpty(prefix) && path.StartsWith(prefix))
-                    return true;
-            }
-
-            return false;
         }
     }
 }

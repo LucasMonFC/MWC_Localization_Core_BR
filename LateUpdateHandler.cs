@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,17 +13,17 @@ namespace MWC_Localization_Core
         private List<ITranslationSurface> surfaces;
         private float[] nextTickTimes;
         private LocalizationConfig config;
-        private SceneTranslationManager sceneManager;
+        private Func<bool> isGameSceneReady;
         private bool isInitialized;
 
         public void Initialize(
             List<ITranslationSurface> surfaces,
             LocalizationConfig config,
-            SceneTranslationManager sceneManager)
+            Func<bool> isGameSceneReady)
         {
             this.surfaces = surfaces;
             this.config = config;
-            this.sceneManager = sceneManager;
+            this.isGameSceneReady = isGameSceneReady;
             nextTickTimes = surfaces != null ? new float[surfaces.Count] : new float[0];
 
             // Stagger Slow surfaces so they don't all fire on the same frame.
@@ -50,8 +51,9 @@ namespace MWC_Localization_Core
             if (!isInitialized)
                 return;
 
-            string currentScene = Application.loadedLevelName;
-            if (currentScene != "GAME" || !sceneManager.HasSceneBeenTranslated("GAME"))
+            if (Application.loadedLevelName != "GAME")
+                return;
+            if (isGameSceneReady == null || !isGameSceneReady())
                 return;
 
             if (config != null)

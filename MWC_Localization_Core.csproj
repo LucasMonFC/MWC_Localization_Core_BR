@@ -78,7 +78,6 @@
     <Compile Include="MWC_Localization_Core.cs" />
     <Compile Include="TextAdjustment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SceneTranslationManager.cs" />
     <Compile Include="TeletextHandler.cs" />
     <Compile Include="TextMeshTranslator.cs" />
     <Compile Include="TranslationDictionary.cs" />
