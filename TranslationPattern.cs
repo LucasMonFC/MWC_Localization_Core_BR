@@ -4,6 +4,27 @@ using System.Collections.Generic;
 namespace MWC_Localization_Core
 {
     /// <summary>
+    /// Defines which translation method to use.
+    /// </summary>
+    public enum TranslationMode
+    {
+        /// <summary>
+        /// Pattern matching with {0}, {1}, and similar placeholders.
+        /// </summary>
+        FsmPattern,
+
+        /// <summary>
+        /// Use a custom handler for more complex translation logic.
+        /// </summary>
+        CustomHandler,
+
+        /// <summary>
+        /// Pattern matching with placeholders plus translation of extracted parameters.
+        /// </summary>
+        FsmPatternWithTranslation
+    }
+
+    /// <summary>
     /// Represents a translation pattern with extraction and formatting logic
     /// Supports placeholders and custom handlers
     /// </summary>
@@ -20,7 +41,7 @@ namespace MWC_Localization_Core
         // For FsmPattern mode
         private string[] originalParts;
         // For CustomHandler mode
-        public Func<string, string, Dictionary<string, string>, CustomHandlerResult> CustomHandler { get; set; }
+        public Func<string, string, TranslationDictionary, CustomHandlerResult> CustomHandler { get; set; }
         
         // Result struct for custom handlers (NET35 compatible)
         public struct CustomHandlerResult
@@ -132,16 +153,16 @@ namespace MWC_Localization_Core
         /// Extract values from text and apply translation template
         /// Returns null if extraction failed
         /// </summary>
-        public string TryTranslate(string text, string path, Dictionary<string, string> translations)
+        public string TryTranslate(string text, string path, TranslationDictionary translations)
         {
             if (!Matches(text, path))
                 return null;
-            
+
             switch (Mode)
             {
                 case TranslationMode.FsmPattern:
                     return TranslateWithFsmPattern(text);
-                    
+
                 case TranslationMode.FsmPatternWithTranslation:
                     return TranslateWithFsmPatternAndTranslateParams(text, translations);
                 case TranslationMode.CustomHandler:
@@ -152,7 +173,7 @@ namespace MWC_Localization_Core
                     }
                     break;
             }
-            
+
             return null;
         }
 
@@ -171,29 +192,29 @@ namespace MWC_Localization_Core
             return result;
         }
 
-        private string TranslateWithFsmPatternAndTranslateParams(string text, Dictionary<string, string> translations)
+        private string TranslateWithFsmPatternAndTranslateParams(string text, TranslationDictionary translations)
         {
             string[] values = TryExtractFsmValues(text);
             if (values == null)
                 return null;
-            
+
             string result = TranslatedTemplate;
             for (int i = 0; i < values.Length; i++)
             {
                 string originalValue = values[i];
-                
+
                 // Try to translate the parameter value
                 string translatedValue = originalValue;
-                string key = MLCUtils.FormatUpperKey(originalValue);
-                
-                if (translations.TryGetValue(key, out string translation))
+                string key = LocalizationUtils.FormatUpperKey(originalValue);
+
+                if (translations != null && translations.TryGetByNormalizedKey(key, out string translation))
                 {
                     translatedValue = translation;
                 }
-                
+
                 result = result.Replace("{" + i + "}", translatedValue);
             }
-            
+
             return result;
         }
 

@@ -9,9 +9,12 @@ namespace MWC_Localization_Core
     /// Translates PlayMakerHashTableProxy data used by the magazine keyword system.
     /// Updates the live hash table, snapshot, and prefill string list so runtime and reset paths stay consistent.
     /// </summary>
-    public class HashTableProxyHandler
+    public class HashTableProxyHandler : ITranslationSurface
     {
-        private readonly MagazineTextHandler magazineHandler;
+        public string Name { get { return "HashTableProxyHandler"; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
+
+        private MagazineTextHandler magazineHandler;
         private readonly HashSet<string> targetPaths = new HashSet<string>();
         private readonly HashSet<string> translatedPaths = new HashSet<string>();
         private readonly Dictionary<string, PlayMakerHashTableProxy[]> proxyCache = new Dictionary<string, PlayMakerHashTableProxy[]>();
@@ -19,9 +22,20 @@ namespace MWC_Localization_Core
         private static readonly FieldInfo PreFillStringListField =
             typeof(PlayMakerHashTableProxy).GetField("preFillStringList", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-        public HashTableProxyHandler(MagazineTextHandler magazineHandler)
+        public void Initialize(TranslationContext ctx)
         {
-            this.magazineHandler = magazineHandler;
+            magazineHandler = ctx.Magazine;
+            InitializeTargetPaths();
+        }
+
+        public int InitialPass()
+        {
+            return TranslateAllHashTables();
+        }
+
+        public int MonitorTick(float deltaTime)
+        {
+            return MonitorAndTranslateHashTables();
         }
 
         public void InitializeTargetPaths()
@@ -114,7 +128,7 @@ namespace MWC_Localization_Core
                 proxyCache.Remove(objectPath);
             }
 
-            GameObject obj = MLCUtils.FindGameObjectCached(objectPath);
+            GameObject obj = LocalizationUtils.FindGameObjectCached(objectPath);
             if (obj == null)
                 return null;
 

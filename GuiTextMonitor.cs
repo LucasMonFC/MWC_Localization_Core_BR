@@ -7,8 +7,11 @@ namespace MWC_Localization_Core
     /// Lightweight direct GUI monitor, modeled after the old LanguageFramework HUD pass.
     /// The primary TextMesh is translated once, then copied to shadow/paired meshes.
     /// </summary>
-    public class UnifiedTextMeshMonitor
+    public class GuiTextMonitor : ITranslationSurface
     {
+        public string Name { get { return "GuiTextMonitor"; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.PerFrame; } }
+
         private class GuiTextEntry
         {
             public string PrimaryPath;
@@ -42,17 +45,34 @@ namespace MWC_Localization_Core
             }
         }
 
-        private readonly TextMeshTranslator translator;
+        private TextMeshTranslator translator;
         private readonly List<GuiTextEntry> guiEntries = new List<GuiTextEntry>();
         private GuiTextEntry interactionEntry;
         private GuiTextEntry partnameEntry;
         private GuiTextEntry subtitlesEntry;
         private float retryTimer;
 
-        public UnifiedTextMeshMonitor(TextMeshTranslator translator)
+        public void Initialize(TranslationContext ctx)
         {
-            this.translator = translator;
+            translator = ctx.Translator;
             InitializeGuiEntries();
+        }
+
+        public int InitialPass()
+        {
+            RegisterAll();
+            return guiEntries.Count;
+        }
+
+        public int MonitorTick(float deltaTime)
+        {
+            Update(deltaTime);
+            return 0;
+        }
+
+        public void ClearTranslations()
+        {
+            // GuiTextMonitor has no owned translation data; cache reset only.
         }
 
         private void InitializeGuiEntries()
@@ -120,7 +140,7 @@ namespace MWC_Localization_Core
             UpdatePartnameMultilineLayout();
         }
 
-        public void Clear()
+        public void Reset()
         {
             retryTimer = 0f;
             InitializeGuiEntries();
@@ -133,7 +153,7 @@ namespace MWC_Localization_Core
 
             if (!entry.HasPrimary())
             {
-                GameObject primaryObject = MLCUtils.FindGameObjectCached(entry.PrimaryPath);
+                GameObject primaryObject = LocalizationUtils.FindGameObjectCached(entry.PrimaryPath);
                 entry.PrimaryTextMesh = primaryObject != null ? primaryObject.GetComponent<TextMesh>() : null;
                 entry.LastText = string.Empty;
                 entry.HasProcessedText = false;
@@ -146,7 +166,7 @@ namespace MWC_Localization_Core
                 if (copyTextMesh != null && copyTextMesh.gameObject != null)
                     continue;
 
-                GameObject copyObject = MLCUtils.FindGameObjectCached(entry.CopyPaths[i]);
+                GameObject copyObject = LocalizationUtils.FindGameObjectCached(entry.CopyPaths[i]);
                 entry.CopyTextMeshes[i] = copyObject != null ? copyObject.GetComponent<TextMesh>() : null;
                 if (entry.HasBaseLayout && entry.CopyTextMeshes[i] != null)
                     CaptureCopyBasePosition(entry, i);

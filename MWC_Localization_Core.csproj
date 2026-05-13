@@ -70,24 +70,21 @@
     <Compile Include="CoreConsole.cs" />
     <Compile Include="LateUpdateHandler.cs" />
     <Compile Include="LocalizationConfig.cs" />
-    <Compile Include="LocalizationConstants.cs" />
+    <Compile Include="LocalizationUtils.cs" />
     <Compile Include="MagazineTextHandler.cs" />
     <Compile Include="FsmTextHook.cs" />
     <Compile Include="FsmTextHook.BuiltInTargets.cs" />
     <Compile Include="HashTableProxyHandler.cs" />
     <Compile Include="MWC_Localization_Core.cs" />
-    <Compile Include="PatternMatcher.cs" />
     <Compile Include="TextAdjustment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SceneTranslationManager.cs" />
-    <Compile Include="MLCFsmUtils.cs" />
-    <Compile Include="MLCUtils.cs" />
     <Compile Include="TeletextHandler.cs" />
     <Compile Include="TextMeshTranslator.cs" />
+    <Compile Include="TranslationDictionary.cs" />
     <Compile Include="TranslationFileParser.cs" />
-    <Compile Include="TranslationMode.cs" />
     <Compile Include="TranslationPattern.cs" />
-    <Compile Include="UnifiedTextMeshMonitor.cs" />
+    <Compile Include="TranslationSurface.cs" />
+    <Compile Include="GuiTextMonitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

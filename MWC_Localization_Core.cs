@@ -1,4 +1,4 @@
-﻿using MSCLoader;
+using MSCLoader;
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
@@ -15,56 +15,40 @@ namespace MWC_Localization_Core
         public override string Description => "Multi-language core localization framework for My Winter Car";
         public override Game SupportedGames => Game.MyWinterCar;
 
-        // Translation data
-        private Dictionary<string, string> translations = new Dictionary<string, string>();
-        private bool hasLoadedTranslations = false;
-        private static readonly string[] ForcedFontPathPrefixes = new string[]
+        private static readonly string[] MainTranslationFiles = new string[]
         {
-            "Systems/TV/Teletext/VKTekstiTV/PAGES",
-            "Systems/TV/Teletext/VKTekstiTV/HEADER",
-            "COMPUTER/SYSTEM/POS",
-            "Sheets/UnemployPaper",
-            "Systems/TV/TVGraphics/CHAT",
-            "Sheets/ServicePayment",
-            "Sheets/RallyRegistration/Functions/Class",
-            "Systems/TV/TVGraphics/GFXTanaanWeek/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSat1/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSat2/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSun1/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSun2/Text"
+            "translate_msc.txt",
+            "translate.txt",
+            "translate_mod.txt"
         };
 
-        // Core handlers
-        private MagazineTextHandler magazineHandler;
-        private TeletextHandler teletextHandler;
-        private ArrayListProxyHandler arrayListHandler;
-        private HashTableProxyHandler hashTableHandler;
+        // Shared state
+        private TranslationDictionary translations = new TranslationDictionary();
+        private Dictionary<string, Font> customFonts = new Dictionary<string, Font>();
+        private LocalizationConfig config;
         private TextMeshTranslator translator;
+        private MagazineTextHandler magazineHandler;
+        private TranslationContext ctx;
+        private List<ITranslationSurface> surfaces;
 
-        // Scene manager
-        private SceneTranslationManager sceneManager;
-        private UnifiedTextMeshMonitor textMeshMonitor;
-        
-        // LateUpdate monitoring host
+        // Scene state (formerly SceneTranslationManager).
+        // Leaving a scene clears its translated flag so we re-translate on return.
+        private string currentScene = string.Empty;
+        private readonly HashSet<string> translatedScenes = new HashSet<string>();
+
+        // LateUpdate driver
         private GameObject lateUpdateHandlerObject;
         private LateUpdateHandler lateUpdateHandler;
 
-        // FSM/action source translations
-        private FsmTextHook fsmTextHook;
-
-        // Font management
-        private static AssetBundle fontBundle;  // Static to persist across MSCLoader instance recreation
-        private Dictionary<string, Font> customFonts = new Dictionary<string, Font>();
-
-        // Localization configuration
-        private LocalizationConfig config;
+        // Font bundle (static so it persists across MSCLoader instance recreation)
+        private static AssetBundle fontBundle;
+        private bool hasLoadedTranslations = false;
 
         // MSCLoader settings
         private SettingsKeybind reloadKey;
         private SettingsCheckBox showDebugLogs;
         private SettingsCheckBox showWarningLogs;
 
-        // Registration phase - NO logic here, only SetupFunction calls!
         public override void ModSetup()
         {
             SetupFunction(Setup.ModSettings, Mod_Settings);
@@ -73,139 +57,109 @@ namespace MWC_Localization_Core
             SetupFunction(Setup.Update, Mod_Update);
         }
 
-        // Define settings UI
         private void Mod_Settings()
         {
-            // Keybind for reloading translations
             Keybind.AddHeader("Localization Plugin Hotkeys");
             reloadKey = Keybind.Add("reloadKey", "Reload Translations", KeyCode.F8);
 
-            // Show debug console messages
             Settings.AddHeader("Miscellaneous Options");
             showDebugLogs = Settings.AddCheckBox("showDebugLogs", "Show debug messages in console", false);
             showWarningLogs = Settings.AddCheckBox("showWarningLogs", "Show warning / error messages in console", false);
         }
 
-        // Main menu loaded - initialize everything
         private void Mod_OnMenuLoad()
         {
             ModConsole.Print($"[{Name}] Main Menu loaded - initializing localization core...");
-            // Initialize collections
-            translations = new Dictionary<string, string>();
+
+            translations = new TranslationDictionary();
             customFonts = new Dictionary<string, Font>();
 
-            // Initialize configuration
             config = new LocalizationConfig();
-            string configPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "config.txt");
-            config.LoadConfig(configPath);
+            config.LoadConfig(Path.Combine(ModLoader.GetModAssetsFolder(this), "config.txt"));
 
-            // Initialize core console
             CoreConsole.Initialize(showDebugLogs, showWarningLogs);
 
-            // Initialize handlers
             magazineHandler = new MagazineTextHandler();
-            teletextHandler = new TeletextHandler();
+            translatedScenes.Clear();
+            currentScene = string.Empty;
 
-            // Initialize scene manager
-            sceneManager = new SceneTranslationManager();
-
-            // Load fonts
             LoadCustomFonts();
 
-            // Initialize translator after fonts are loaded
             translator = new TextMeshTranslator(translations, customFonts, magazineHandler, config);
-            translator.ResetPatterns();
 
-            // Load translations immediately
-            LoadTranslations();
+            LoadAllMainTranslationFiles();
 
-            // Load magazine translations from separate file
-            string magazinePath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_magazine.txt");
-            magazineHandler.LoadMagazineTranslations(magazinePath);
-            
-            // Load teletext translations from separate file
-            string teletextPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_teletext.txt");
-            teletextHandler.LoadTeletextTranslations(teletextPath);
-            translator.LoadFsmPatterns(teletextPath); // Load additional FSM patterns
-            
-            // Initialize array handler with translation dictionaries and translator
-            arrayListHandler = new ArrayListProxyHandler(translations, magazineHandler, translator);
-            arrayListHandler.InitializeArrayPaths();
-            hashTableHandler = new HashTableProxyHandler(magazineHandler);
-            hashTableHandler.InitializeTargetPaths();
-            
-            textMeshMonitor = new UnifiedTextMeshMonitor(translator);
-            InitializeFsmTextHook();
+            ctx = new TranslationContext(
+                translations,
+                customFonts,
+                config,
+                translator,
+                magazineHandler,
+                ModLoader.GetModAssetsFolder(this));
 
-            // Translate main menu
+            // MagazineTextHandler is both a service (used by other surfaces via ctx.Magazine)
+            // and itself a surface, so the same instance appears in both places.
+            surfaces = new List<ITranslationSurface>
+            {
+                new GuiTextMonitor(),
+                magazineHandler,
+                new TeletextHandler(),
+                new ArrayListProxyHandler(),
+                new HashTableProxyHandler(),
+                new FsmTextHook(),
+            };
+
+            for (int i = 0; i < surfaces.Count; i++)
+                surfaces[i].Initialize(ctx);
+
             CoreConsole.Print($"[{Name}] Translating Main Menu...");
             TranslateScene();
-            sceneManager.MarkSceneTranslated("MainMenu");
-            RunFsmTextHook(true);
+            MarkSceneTranslated("MainMenu");
+            RunSurfaceInitialPasses(null);
         }
 
-        // Game fully loaded - translate everything
         private void Mod_PostLoad()
         {
-            // Translate game scene
             ModConsole.Print($"[{Name}] Game fully loaded - translating...");
             TranslateScene();
-            sceneManager.MarkSceneTranslated("GAME");
-            RunFsmTextHook(true);
-            InitializeGameDataSources("");
-            
-            // Create MonoBehaviour for LateUpdate monitoring
-            // ALL continuous monitoring logic runs in LateUpdate to ensure correct timing
+            MarkSceneTranslated("GAME");
+            RunSurfaceInitialPasses(null);
+
+            // ALL continuous monitoring runs in LateUpdate to get correct timing relative to game updates.
             lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
             lateUpdateHandler = lateUpdateHandlerObject.AddComponent<LateUpdateHandler>();
-            lateUpdateHandler.Initialize(
-                config,
-                textMeshMonitor,
-                teletextHandler, 
-                arrayListHandler, 
-                hashTableHandler,
-                fsmTextHook,
-                sceneManager
-            );
+            lateUpdateHandler.Initialize(surfaces, config, () => HasSceneBeenTranslated("GAME"));
         }
 
-        // Every frame - hotkeys, scheduling, and scene management.
-        // Continuous monitoring runs in LateUpdateHandler.LateUpdate().
         private void Mod_Update()
         {
             if (!hasLoadedTranslations)
                 return;
 
-            // Hotkey check - F8 to reload translations
             if (reloadKey != null && reloadKey.GetKeybindDown())
             {
                 ReloadTranslations();
                 return;
             }
 
-            string currentScene = Application.loadedLevelName;
-            
-            // Update scene manager and handle scene changes
-            bool sceneChanged = sceneManager.UpdateScene(currentScene);
-            
-            // Clear caches when entering a new scene
+            string sceneName = Application.loadedLevelName;
+            bool sceneChanged = UpdateScene(sceneName);
+
             if (sceneChanged)
             {
-                MLCUtils.ClearCaches();
+                LocalizationUtils.PruneCaches();
 
-                // Clear MonoBehaviour cache and destroy old monitor
                 if (lateUpdateHandler != null)
-                {
                     lateUpdateHandler.ClearCache();
-                }
                 if (translator != null)
-                {
                     translator.ClearRuntimeCaches();
-                }
-                if (textMeshMonitor != null)
+
+                if (surfaces != null)
                 {
-                    textMeshMonitor.Clear();
+                    for (int i = 0; i < surfaces.Count; i++)
+                        surfaces[i].Reset();
                 }
+
                 if (lateUpdateHandlerObject != null)
                 {
                     Object.Destroy(lateUpdateHandlerObject);
@@ -213,67 +167,77 @@ namespace MWC_Localization_Core
                     lateUpdateHandler = null;
                 }
 
-                if (fsmTextHook != null)
-                {
-                    fsmTextHook.ResetRuntimeState();
-                }
-
-                CoreConsole.Print($"[{Name}] Scene changed to '{currentScene}' - cleared caches");
+                CoreConsole.Print($"[{Name}] Scene changed to '{sceneName}' - cleared caches");
             }
 
-            if (currentScene == "MainMenu" && sceneManager.HasSceneBeenTranslated("MainMenu"))
-            {
-                RunFsmTextHook(false);
-            }
-            else if (currentScene == "GAME" && sceneManager.HasSceneBeenTranslated("GAME") && magazineHandler != null)
-            {
-                magazineHandler.MonitorAndTranslateSources();
-            }
-
-            // Initial translation pass for Main Menu (Required for hot reloads)
-            if (currentScene == "MainMenu" && sceneManager.ShouldTranslateScene("MainMenu"))
+            // Initial translation pass for the current scene (covers hot reloads where
+            // OnMenuLoad / PostLoad already fired but the scene was reset).
+            if (sceneName == "MainMenu" && ShouldTranslateScene("MainMenu"))
             {
                 CoreConsole.Print($"[{Name}] Translating Main Menu...");
                 TranslateScene();
-                sceneManager.MarkSceneTranslated("MainMenu");
-                RunFsmTextHook(true);
+                MarkSceneTranslated("MainMenu");
+                RunSurfaceInitialPasses(null);
             }
-
-            // Initial translation pass for Game scene (Required for hot reloads)
-            if (currentScene == "GAME" && sceneManager.ShouldTranslateScene("GAME"))
+            else if (sceneName == "GAME" && ShouldTranslateScene("GAME"))
             {
                 CoreConsole.Print($"[{Name}] Translating Game scene...");
                 TranslateScene();
-                sceneManager.MarkSceneTranslated("GAME");
-                RunFsmTextHook(true);
-                InitializeGameDataSources("Initial ");
+                MarkSceneTranslated("GAME");
+                RunSurfaceInitialPasses("Initial ");
             }
         }
 
-        private void InitializeGameDataSources(string logPrefix)
+        // Scene tracking (formerly SceneTranslationManager). Leaving a known scene
+        // clears its translated flag so returning to it re-runs the initial pass.
+        private bool UpdateScene(string newScene)
         {
-            teletextHandler.Reset();
-            arrayListHandler.Reset();
-            hashTableHandler.Reset();
+            if (string.IsNullOrEmpty(newScene) || currentScene == newScene)
+                return false;
 
-            int arrayTranslated = arrayListHandler.TranslateAllArrays();
-            if (arrayTranslated > 0)
+            if (!string.IsNullOrEmpty(currentScene))
+                translatedScenes.Remove(currentScene);
+
+            currentScene = newScene;
+            return true;
+        }
+
+        private bool ShouldTranslateScene(string scene) { return !translatedScenes.Contains(scene); }
+        private bool HasSceneBeenTranslated(string scene) { return translatedScenes.Contains(scene); }
+        private void MarkSceneTranslated(string scene) { translatedScenes.Add(scene); }
+
+        private void RunSurfaceInitialPasses(string logPrefix)
+        {
+            if (surfaces == null) return;
+            for (int i = 0; i < surfaces.Count; i++)
             {
-                CoreConsole.Print($"[{Name}] {logPrefix}translated {arrayTranslated} array items");
+                int count = surfaces[i].InitialPass();
+                if (count > 0)
+                    CoreConsole.Print($"[{Name}] {logPrefix ?? string.Empty}{surfaces[i].Name}: translated {count}");
             }
-            arrayListHandler.ApplyFontsToArrayElements();
+        }
 
-            int hashTableTranslated = hashTableHandler.TranslateAllHashTables();
-            if (hashTableTranslated > 0)
+        private void LoadAllMainTranslationFiles()
+        {
+            string assets = ModLoader.GetModAssetsFolder(this);
+            foreach (string fileName in MainTranslationFiles)
             {
-                CoreConsole.Print($"[{Name}] {logPrefix}translated {hashTableTranslated} hash table items");
-            }
+                string path = Path.Combine(assets, fileName);
+                if (!File.Exists(path))
+                {
+                    CoreConsole.Warning($"[{Name}] Translation file not found: {path}");
+                    continue;
+                }
 
-            magazineHandler.ResetRuntimeState();
-            int magazineSourceTranslated = magazineHandler.TranslateAllSources();
-            if (magazineSourceTranslated > 0)
-            {
-                CoreConsole.Print($"[{Name}] {logPrefix}translated {magazineSourceTranslated} magazine FSM source values");
+                Dictionary<string, string> loaded = TranslationFileParser.ParseKeyValueFile(
+                    path,
+                    normalizeKeys: true,
+                    overwriteExisting: true);
+                translations.AddAll(loaded);
+                translations.LoadPatternsFromFile(path);
+
+                hasLoadedTranslations = true;
+                CoreConsole.Print($"[{Name}] Loaded {loaded.Count} translations from {fileName} ({translations.Count} total)");
             }
         }
 
@@ -281,7 +245,6 @@ namespace MWC_Localization_Core
         {
             CoreConsole.Print($"[{Name}] Loading fonts...");
 
-            // Skip font loading if no font mappings configured
             if (config.FontMappings.Count == 0)
             {
                 CoreConsole.Print($"[{Name}] No font mappings configured - using default fonts");
@@ -290,13 +253,12 @@ namespace MWC_Localization_Core
 
             try
             {
-                // Load bundle only if not already loaded
                 if (fontBundle == null)
                 {
                     fontBundle = LoadAssets.LoadBundle(this, "fonts.unity3d");
                     CoreConsole.Print($"[{Name}] Bundle loaded, result: {(fontBundle == null ? "NULL" : "NOT NULL")}");
                 }
-                
+
                 if (fontBundle == null)
                 {
                     CoreConsole.Warning($"[{Name}] Failed to load font bundle");
@@ -325,11 +287,9 @@ namespace MWC_Localization_Core
                     CoreConsole.Print($"[{Name}] Loaded {customFonts.Count} custom fonts");
                     return true;
                 }
-                else
-                {
-                    CoreConsole.Warning($"[{Name}] No fonts loaded from bundle");
-                    return false;
-                }
+
+                CoreConsole.Warning($"[{Name}] No fonts loaded from bundle");
+                return false;
             }
             catch (System.Exception ex)
             {
@@ -338,189 +298,70 @@ namespace MWC_Localization_Core
             }
         }
 
-        void InsertTranslationLines(string translationPath)
-        {
-            Dictionary<string, string> loadedTranslations = TranslationFileParser.ParseKeyValueFile(
-                translationPath,
-                normalizeKeys: true,
-                overwriteExisting: true);
-
-            foreach (var pair in loadedTranslations)
-            {
-                translations[pair.Key] = pair.Value;
-            }
-
-            hasLoadedTranslations = true;
-            CoreConsole.Print($"[{Name}] Loaded {loadedTranslations.Count} translations from {Path.GetFileName(translationPath)} ({translations.Count} total)");
-        }
-
-        void LoadTranslations()
-        {
-            // Load translation file used in My Summer Car first
-            string mscTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_msc.txt");
-            
-            if (!File.Exists(mscTranslationPath))
-            {
-                CoreConsole.Warning($"[{Name}] Translation file not found: {mscTranslationPath}");
-            }
-            else 
-            {
-                InsertTranslationLines(mscTranslationPath);
-                translator.LoadFsmPatterns(mscTranslationPath);
-            }
-
-            // Load main translation file for My Winter Car
-            string translationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
-
-            if (!File.Exists(translationPath))
-            {
-                CoreConsole.Warning($"[{Name}] Translation file not found: {translationPath}");
-            }
-            else 
-            {
-                InsertTranslationLines(translationPath);
-                translator.LoadFsmPatterns(translationPath);
-            }
-
-            // Load mod translation file for My Winter Car
-            string modTranslationPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_mod.txt");
-
-            if (!File.Exists(modTranslationPath))
-            {
-                CoreConsole.Warning($"[{Name}] Translation file not found: {modTranslationPath}");
-            }
-            else 
-            {
-                InsertTranslationLines(modTranslationPath);
-                translator.LoadFsmPatterns(modTranslationPath);
-            }
-        }
-
         void ReloadTranslations()
         {
             CoreConsole.Print($"[{Name}] [F8] Reloading translations...");
 
-            // Clear existing translations
+            // Drop translation data
             translations.Clear();
-            magazineHandler.ClearTranslations();
-            arrayListHandler.ClearTranslations();
-            hashTableHandler.ClearTranslations();
+            translations.ResetPatterns();
+            for (int i = 0; i < surfaces.Count; i++)
+                surfaces[i].ClearTranslations();
+
+            // Clear global + service caches; let surfaces reset their own runtime state.
+            LocalizationUtils.ClearCaches();
             translator.ClearRuntimeCaches();
-            translator.ResetPatterns();
-            MLCUtils.ClearCaches();
-
-            // Reset text adjustment caches and reload config
             config.ClearTextAdjustmentCaches();
-            string configPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "config.txt");
-            config.LoadConfig(configPath);
+            for (int i = 0; i < surfaces.Count; i++)
+                surfaces[i].Reset();
 
-            // Reload from file
-            LoadTranslations();
-
-            // Reload magazine translations
-            string magazinePath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_magazine.txt");
-            magazineHandler.LoadMagazineTranslations(magazinePath);
-            
-            // Reload teletext translations
-            string teletextPath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_teletext.txt");
-            teletextHandler.LoadTeletextTranslations(teletextPath);
-            
-            // Reload FSM patterns from main file first
-            string mainTranslatePath = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate.txt");
-            translator.LoadFsmPatterns(mainTranslatePath);
-            
-            // Reload additional FSM patterns from teletext file
-            translator.LoadFsmPatterns(teletextPath);
-            InitializeFsmTextHook();
-            
-            // Reset and re-initialize runtime handlers with the reloaded config.
-            if (lateUpdateHandler != null)
-            {
-                lateUpdateHandler.ClearCache();
-                lateUpdateHandler.Initialize(
-                    config,
-                    textMeshMonitor,
-                    teletextHandler,
-                    arrayListHandler,
-                    hashTableHandler,
-                    fsmTextHook,
-                    sceneManager
-                );
-            }
-
-            // Reset managers
-            sceneManager.ResetAll();
-            if (textMeshMonitor != null)
-                textMeshMonitor.Clear();
-
-            // Reset teletext handler
-            teletextHandler.Reset();
-            arrayListHandler.Reset();
-            hashTableHandler.Reset();
-
-            // Reload custom font mappings from config so edits to FontMappings take effect.
+            // Reload config + fonts + main translation files
+            config.LoadConfig(Path.Combine(ModLoader.GetModAssetsFolder(this), "config.txt"));
             customFonts.Clear();
             LoadCustomFonts();
+            LoadAllMainTranslationFiles();
 
-            // Reapply fonts and adjustments to all TextMeshes (after restore)
-            TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();
+            // Re-init surfaces (each loads its own translation files in Initialize)
+            for (int i = 0; i < surfaces.Count; i++)
+                surfaces[i].Initialize(ctx);
+
+            translatedScenes.Clear();
+
+            // Reapply fonts to existing TextMeshes (re-translate happens via the per-scene initial pass)
+            TextMesh[] allTextMeshes = LocalizationUtils.GetAllTextMeshesIncludingInactive();
             int reappliedCount = 0;
             foreach (TextMesh tm in allTextMeshes)
             {
-                if (tm != null && !string.IsNullOrEmpty(tm.text))
-                {
-                    string path = MLCUtils.GetGameObjectPath(tm.gameObject);
-                    translator.ApplyCustomFont(tm, path);
-                    reappliedCount++;
-                }
+                if (tm == null || string.IsNullOrEmpty(tm.text))
+                    continue;
+                string path = LocalizationUtils.GetGameObjectPath(tm.gameObject);
+                translator.ApplyCustomFont(tm, path);
+                reappliedCount++;
             }
 
-            if (Application.loadedLevelName == "MainMenu" || Application.loadedLevelName == "GAME")
+            // Force initial passes for the current scene if applicable
+            string sceneName = Application.loadedLevelName;
+            if (sceneName == "MainMenu" || sceneName == "GAME")
             {
-                RunFsmTextHook(true);
+                currentScene = sceneName;
+                MarkSceneTranslated(sceneName);
+                RunSurfaceInitialPasses("Reload ");
             }
 
-            int totalTranslationsReloaded = translations.Count
-                + magazineHandler.GetTranslationCount()
-                + teletextHandler.GetTranslationCount();
-
-            CoreConsole.Print($"[{Name}] [F8] Reloaded {totalTranslationsReloaded} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");
-        }
-
-        void InitializeFsmTextHook()
-        {
-            if (translations == null || translations.Count == 0)
-                return;
-
-            if (fsmTextHook == null)
+            // Restart LateUpdate driver with the new surface list (instance hasn't changed but its tick state has)
+            if (lateUpdateHandler != null)
             {
-                fsmTextHook = new FsmTextHook();
+                lateUpdateHandler.ClearCache();
+                lateUpdateHandler.Initialize(surfaces, config, () => HasSceneBeenTranslated("GAME"));
             }
 
-            fsmTextHook.Initialize(translations);
-            CoreConsole.Print($"[{Name}] FsmTextHook initialized for scene '{Application.loadedLevelName}'");
-        }
-
-        void RunFsmTextHook(bool force)
-        {
-            if (fsmTextHook == null)
-            {
-                InitializeFsmTextHook();
-            }
-
-            if (fsmTextHook != null)
-            {
-                fsmTextHook.UpdateForCurrentScene(force);
-            }
+            CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");
         }
 
         void TranslateScene()
         {
-            if (textMeshMonitor != null)
-                textMeshMonitor.RegisterAll();
-
             // Find all TextMesh components in the scene, including inactive objects.
-            TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();
+            TextMesh[] allTextMeshes = LocalizationUtils.GetAllTextMeshesIncludingInactive();
             int translatedCount = 0;
             int forcedFontAppliedCount = 0;
 
@@ -529,41 +370,19 @@ namespace MWC_Localization_Core
                 if (tm == null)
                     continue;
 
-                // Get GameObject path
-                string path = MLCUtils.GetGameObjectPath(tm.gameObject);
+                string path = LocalizationUtils.GetGameObjectPath(tm.gameObject);
 
-                // Translate and apply font
                 if (!string.IsNullOrEmpty(tm.text))
                 {
-                    bool translated = translator.TranslateAndApplyFont(tm, path);
-                    if (translated)
-                    {
+                    if (translator.TranslateAndApplyFont(tm, path))
                         translatedCount++;
-                    }
                 }
 
-                if (PathStartsWithAny(path, ForcedFontPathPrefixes) && translator.ApplyFontOnly(tm, path))
-                {
+                if (LocalizationConfig.IsForcedFontPath(path) && translator.ApplyFontOnly(tm, path))
                     forcedFontAppliedCount++;
-                }
             }
 
             CoreConsole.Print($"[{Name}] Scene translation complete: {translatedCount}/{allTextMeshes.Length} TextMesh objects translated, forced font pass: {forcedFontAppliedCount}");
-        }
-
-        private bool PathStartsWithAny(string path, string[] prefixes)
-        {
-            if (string.IsNullOrEmpty(path) || prefixes == null || prefixes.Length == 0)
-                return false;
-
-            for (int i = 0; i < prefixes.Length; i++)
-            {
-                string prefix = prefixes[i];
-                if (!string.IsNullOrEmpty(prefix) && path.StartsWith(prefix))
-                    return true;
-            }
-
-            return false;
         }
     }
 }

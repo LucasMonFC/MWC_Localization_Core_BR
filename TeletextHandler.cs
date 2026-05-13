@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace MWC_Localization_Core
@@ -15,10 +16,16 @@ namespace MWC_Localization_Core
     /// [kotimaa]
     /// News headline = News headline (localized)
     /// 
-    /// NOTE: FSM pattern matching lives in the separate PatternMatcher system.
+    /// NOTE: FSM pattern matching lives in TranslationDictionary (placeholder patterns).
     /// </summary>
-    public class TeletextHandler
+    public class TeletextHandler : ITranslationSurface
     {
+        public string Name { get { return "TeletextHandler"; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
+
+        private TranslationDictionary sharedTranslations;
+        private string teletextFilePath;
+
         // Category-based translations: [referenceName][originalText] = translatedText (for key-based lookup)
         private Dictionary<string, Dictionary<string, string>> categoryTranslations = 
             new Dictionary<string, Dictionary<string, string>>();
@@ -46,6 +53,33 @@ namespace MWC_Localization_Core
 
         public TeletextHandler()
         {
+        }
+
+        public void Initialize(TranslationContext ctx)
+        {
+            sharedTranslations = ctx.Translations;
+            teletextFilePath = Path.Combine(ctx.AssetsFolder, "translate_teletext.txt");
+            LoadTeletextTranslations(teletextFilePath);
+            // Teletext file also carries placeholder FSM patterns shared across the dictionary.
+            sharedTranslations.LoadPatternsFromFile(teletextFilePath);
+        }
+
+        public int InitialPass()
+        {
+            return MonitorAndTranslateArrays();
+        }
+
+        public int MonitorTick(float deltaTime)
+        {
+            return MonitorAndTranslateArrays();
+        }
+
+        public void ClearTranslations()
+        {
+            categoryTranslations.Clear();
+            indexBasedTranslations.Clear();
+            lastLoadedTranslationCount = 0;
+            Reset();
         }
 
         /// <summary>
@@ -106,7 +140,7 @@ namespace MWC_Localization_Core
                     if (!proxyCache.ContainsKey(pathPrefix))
                     {
                         // First time accessing this path - cache proxies
-                        GameObject dataObject = MLCUtils.FindGameObjectCached(pathPrefix);
+                        GameObject dataObject = LocalizationUtils.FindGameObjectCached(pathPrefix);
                         if (dataObject == null) continue;
 
                         proxies = dataObject.GetComponents<PlayMakerArrayListProxy>();

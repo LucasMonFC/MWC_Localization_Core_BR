@@ -1,123 +1,105 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MWC_Localization_Core
 {
     /// <summary>
-    /// MonoBehaviour component for runtime data-source updates.
+    /// MonoBehaviour driver for surface MonitorTicks.
     /// Runs in LateUpdate() so source changes happen after the game's Update().
     /// </summary>
     public class LateUpdateHandler : MonoBehaviour
     {
-        // Dependencies
+        private List<ITranslationSurface> surfaces;
+        private float[] nextTickTimes;
         private LocalizationConfig config;
-        private UnifiedTextMeshMonitor textMeshMonitor;
-        private TeletextHandler teletextHandler;
-        private ArrayListProxyHandler arrayListHandler;
-        private HashTableProxyHandler hashTableHandler;
-        private FsmTextHook fsmTextHook;
-        private SceneTranslationManager sceneManager;
-
-        private bool isInitialized = false;
-        
-        // Throttling timer for array/proxy monitoring. Split the work across
-        // frames so lazy-load checks do not land as one frametime spike.
-        private float lastArrayMonitorStepTime = 0f;
-        private int arrayMonitorStep = 0;
+        private Func<bool> isGameSceneReady;
+        private bool isInitialized;
 
         public void Initialize(
-            LocalizationConfig configInstance,
-            UnifiedTextMeshMonitor textMeshMonitorInstance,
-            TeletextHandler teletextHandlerInstance,
-            ArrayListProxyHandler arrayListHandlerInstance,
-            HashTableProxyHandler hashTableHandlerInstance,
-            FsmTextHook fsmTextHookInstance,
-            SceneTranslationManager sceneManagerInstance)
+            List<ITranslationSurface> surfaces,
+            LocalizationConfig config,
+            Func<bool> isGameSceneReady)
         {
-            config = configInstance;
-            textMeshMonitor = textMeshMonitorInstance;
-            teletextHandler = teletextHandlerInstance;
-            arrayListHandler = arrayListHandlerInstance;
-            hashTableHandler = hashTableHandlerInstance;
-            fsmTextHook = fsmTextHookInstance;
-            sceneManager = sceneManagerInstance;
+            this.surfaces = surfaces;
+            this.config = config;
+            this.isGameSceneReady = isGameSceneReady;
+            nextTickTimes = surfaces != null ? new float[surfaces.Count] : new float[0];
+
+            // Stagger Slow surfaces so they don't all fire on the same frame.
+            // Each Slow surface fires every ARRAY_MONITOR_INTERVAL, but consecutive
+            // ones are offset by ARRAY_MONITOR_STEP_INTERVAL — same effective load
+            // as the old hardcoded 4-step rotation.
+            float now = Time.time;
+            int slowIndex = 0;
+            for (int i = 0; i < nextTickTimes.Length; i++)
+            {
+                float offset = 0f;
+                if (surfaces[i].Cadence == SurfaceCadence.Slow)
+                {
+                    offset = slowIndex * LocalizationConstants.ARRAY_MONITOR_STEP_INTERVAL;
+                    slowIndex++;
+                }
+                nextTickTimes[i] = now + offset;
+            }
+
             isInitialized = true;
         }
 
-        /// <summary>
-        /// LateUpdate runs AFTER all Update() calls (including MSCLoader and game's Update)
-        /// This ensures we translate AFTER the game regenerates the text
-        /// </summary>
         private void LateUpdate()
         {
             if (!isInitialized)
                 return;
 
-            string currentScene = Application.loadedLevelName;
+            if (Application.loadedLevelName != "GAME")
+                return;
+            if (isGameSceneReady == null || !isGameSceneReady())
+                return;
 
-            // GAME scene runtime updates
-            if (currentScene == "GAME" && sceneManager.HasSceneBeenTranslated("GAME"))
+            if (config != null)
+                config.RefreshDriftTrackedAdjustments();
+
+            float now = Time.time;
+            float dt = Time.deltaTime;
+            for (int i = 0; i < surfaces.Count; i++)
             {
-                if (config != null)
-                    config.RefreshDriftTrackedAdjustments();
-
-                if (textMeshMonitor != null)
-                    textMeshMonitor.Update(Time.deltaTime);
-
-                if (fsmTextHook != null)
+                ITranslationSurface s = surfaces[i];
+                switch (s.Cadence)
                 {
-                    fsmTextHook.UpdateForScene(currentScene, false);
-                }
-                
-                // Throttled array monitoring (teletext, PlayMaker ArrayLists).
-                // Each category still runs once per ARRAY_MONITOR_INTERVAL, but
-                // the work is staggered across four smaller passes.
-                if (Time.time - lastArrayMonitorStepTime >= LocalizationConstants.ARRAY_MONITOR_STEP_INTERVAL)
-                {
-                    if (arrayMonitorStep == 0)
-                    {
-                        int translated = teletextHandler.MonitorAndTranslateArrays();
-                        if (translated > 0)
-                        {
-                            CoreConsole.Print($"[LateUpdateHandler] Translated {translated} newly-loaded teletext items");
-                        }
-                    }
-                    else if (arrayMonitorStep == 1)
-                    {
-                        int arrayTranslated = arrayListHandler.MonitorAndTranslateArrays();
-                        if (arrayTranslated > 0)
-                        {
-                            CoreConsole.Print($"[LateUpdateHandler] Translated {arrayTranslated} newly-loaded array items");
-                        }
-                    }
-                    else if (arrayMonitorStep == 2)
-                    {
-                        int hashTableTranslated = hashTableHandler.MonitorAndTranslateHashTables();
-                        if (hashTableTranslated > 0)
-                        {
-                            CoreConsole.Print($"[LateUpdateHandler] Translated {hashTableTranslated} newly-loaded hash table items");
-                        }
-                    }
-                    else
-                    {
-                        // Monitor and apply fonts to late-initialized TextMesh components
-                        arrayListHandler.ApplyFontsToArrayElements();
-                    }
+                    case SurfaceCadence.PerFrame:
+                        s.MonitorTick(dt);
+                        break;
 
-                    arrayMonitorStep = (arrayMonitorStep + 1) % 4;
-                    lastArrayMonitorStepTime = Time.time;
+                    case SurfaceCadence.Fast:
+                        if (now >= nextTickTimes[i])
+                        {
+                            s.MonitorTick(dt);
+                            nextTickTimes[i] = now + LocalizationConstants.FSM_SOURCE_POLL_INTERVAL;
+                        }
+                        break;
+
+                    case SurfaceCadence.Slow:
+                        if (now >= nextTickTimes[i])
+                        {
+                            int translated = s.MonitorTick(dt);
+                            if (translated > 0)
+                                CoreConsole.Print($"[LateUpdateHandler] {s.Name}: translated {translated} item(s)");
+                            nextTickTimes[i] = now + LocalizationConstants.ARRAY_MONITOR_INTERVAL;
+                        }
+                        break;
+
+                    case SurfaceCadence.OncePerScene:
+                        // No tick.
+                        break;
                 }
             }
-
-            // Main menu has no TextMesh monitor now; scene/reload passes handle it.
         }
 
         /// <summary>
-        /// Reset handler scheduling state when scene changes.
+        /// Reset scheduler state when scene changes. Surfaces' own Reset() is called by the main class.
         /// </summary>
         public void ClearCache()
         {
-            lastArrayMonitorStepTime = 0f;
-            arrayMonitorStep = 0;
             isInitialized = false;
         }
     }

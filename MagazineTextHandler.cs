@@ -1,6 +1,7 @@
 // 'Classified Magazine' Text Handler
 
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 
@@ -10,10 +11,36 @@ namespace MWC_Localization_Core
     /// Handles Yellow Pages magazine text translation.
     /// Performs direct line lookup and price/phone line formatting.
     /// </summary>
-    public class MagazineTextHandler
+    public class MagazineTextHandler : ITranslationSurface
     {
+        public string Name { get { return "MagazineTextHandler"; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
+
         private Dictionary<string, string> magazineTranslations = new Dictionary<string, string>();
         private bool yellowPagesSourcesResolved;
+        private string assetsFolder;
+
+        public void Initialize(TranslationContext ctx)
+        {
+            assetsFolder = ctx.AssetsFolder;
+            string path = Path.Combine(assetsFolder, "translate_magazine.txt");
+            LoadMagazineTranslations(path);
+        }
+
+        public int InitialPass()
+        {
+            return TranslateAllSources();
+        }
+
+        public int MonitorTick(float deltaTime)
+        {
+            return MonitorAndTranslateSources();
+        }
+
+        public void Reset()
+        {
+            ResetRuntimeState();
+        }
 
         /// <summary>
         /// Load magazine-specific translations from separate file
@@ -104,7 +131,7 @@ namespace MWC_Localization_Core
         {
             foundSourceFsm = false;
 
-            GameObject root = MLCUtils.FindGameObjectCached("Sheets/YellowPagesMagazine");
+            GameObject root = LocalizationUtils.FindGameObjectCached("Sheets/YellowPagesMagazine");
             if (root == null)
                 return 0;
 
@@ -116,7 +143,7 @@ namespace MWC_Localization_Core
             for (int i = 0; i < fsms.Length; i++)
             {
                 PlayMakerFSM fsm = fsms[i];
-                if (fsm == null || MLCFsmUtils.GetFsmName(fsm) != "Generate")
+                if (fsm == null || FsmUtils.GetFsmName(fsm) != "Generate")
                     continue;
 
                 foundSourceFsm = true;
@@ -171,7 +198,7 @@ namespace MWC_Localization_Core
             if (fsm == null || fsm.gameObject == null || fsm.FsmVariables == null)
                 return 0;
 
-            string path = MLCUtils.GetGameObjectPath(fsm.gameObject);
+            string path = LocalizationUtils.GetGameObjectPath(fsm.gameObject);
             if (string.IsNullOrEmpty(path) || path.IndexOf("/Lines/YellowLine", System.StringComparison.OrdinalIgnoreCase) < 0)
                 return 0;
 
@@ -198,10 +225,10 @@ namespace MWC_Localization_Core
                     if (state == null || state.Actions == null || state.Name != "State 4")
                         continue;
 
-                    if (state.Actions.Length > 0 && MLCFsmUtils.SetNestedStringValue(state.Actions[0], translatedLine, "storeValue"))
+                    if (state.Actions.Length > 0 && FsmUtils.SetNestedStringValue(state.Actions[0], translatedLine, "storeValue"))
                         changed++;
 
-                    if (state.Actions.Length > 1 && MLCFsmUtils.SetNestedStringValue(state.Actions[1], translatedLine, "targetProperty", "StringParameter"))
+                    if (state.Actions.Length > 1 && FsmUtils.SetNestedStringValue(state.Actions[1], translatedLine, "targetProperty", "StringParameter"))
                         changed++;
                 }
             }
@@ -218,10 +245,10 @@ namespace MWC_Localization_Core
 
         private int TranslateMagazineBuildStringParts(object action)
         {
-            if (!MLCFsmUtils.IsBuildStringAction(action))
+            if (!FsmUtils.IsBuildStringAction(action))
                 return 0;
 
-            FieldInfo field = MLCFsmUtils.GetStringPartsField(action);
+            FieldInfo field = FsmUtils.GetStringPartsField(action);
             if (field == null)
                 return 0;
 
@@ -314,7 +341,7 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(original))
                 return null;
 
-            string normalizedKey = MLCUtils.FormatUpperKey(original);
+            string normalizedKey = LocalizationUtils.FormatUpperKey(original);
             if (magazineTranslations.TryGetValue(normalizedKey, out string translation))
             {
                 return translation;

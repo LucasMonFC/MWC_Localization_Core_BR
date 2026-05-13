@@ -7,10 +7,13 @@ using System.Collections;
 
 namespace MWC_Localization_Core
 {
-    public class ArrayListProxyHandler
+    public class ArrayListProxyHandler : ITranslationSurface
     {
-        // Reference to main translation dictionaries (from Plugin)
-        private Dictionary<string, string> mainTranslations;
+        public string Name { get { return "ArrayListProxyHandler"; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
+
+        // Reference to main translation dictionary (from Plugin)
+        private TranslationDictionary mainTranslations;
         private MagazineTextHandler magazineHandler;
         private TextMeshTranslator translator;
         
@@ -35,15 +38,26 @@ namespace MWC_Localization_Core
         private Dictionary<string, PlayMakerArrayListProxy> arrayProxyCache 
             = new Dictionary<string, PlayMakerArrayListProxy>();
 
-        public ArrayListProxyHandler(
-            Dictionary<string, string> translations, 
-            MagazineTextHandler magazineHandler, 
-            TextMeshTranslator translator
-        )
+        public void Initialize(TranslationContext ctx)
         {
-            this.mainTranslations = translations;
-            this.magazineHandler = magazineHandler;
-            this.translator = translator;
+            mainTranslations = ctx.Translations;
+            magazineHandler = ctx.Magazine;
+            translator = ctx.Translator;
+            InitializeArrayPaths();
+        }
+
+        public int InitialPass()
+        {
+            int total = TranslateAllArrays();
+            ApplyFontsToArrayElements();
+            return total;
+        }
+
+        public int MonitorTick(float deltaTime)
+        {
+            int total = MonitorAndTranslateArrays();
+            ApplyFontsToArrayElements();
+            return total;
         }
 
         public void InitializeArrayPaths()
@@ -143,7 +157,7 @@ namespace MWC_Localization_Core
                 }
 
                 // Find GameObject
-                GameObject obj = MLCUtils.FindGameObjectCached(objectPath);
+                GameObject obj = LocalizationUtils.FindGameObjectCached(objectPath);
                 if (obj == null)
                 {
                     // Not available yet - this is normal for lazy-loaded content
@@ -232,21 +246,12 @@ namespace MWC_Localization_Core
         // Find translation from main translations or magazine translations
         private string FindTranslation(string original)
         {
-            // Try main translations first (with normalized key)
-            string normalizedKey = MLCUtils.FormatUpperKey(original);
-            if (mainTranslations.TryGetValue(normalizedKey, out string translation))
-            {
+            // Try main translations first (TryGetExact handles normalization + LRU cache).
+            if (mainTranslations.TryGetExact(original, out string translation))
                 return translation;
-            }
 
             // Try magazine translations using the magazine handler's normalized lookup.
-            translation = magazineHandler.GetTranslation(original);
-            if (translation != null)
-            {
-                return translation;
-            }
-
-            return null;
+            return magazineHandler.GetTranslation(original);
         }
 
         // Apply localized fonts to TextMesh components displaying array data
@@ -269,7 +274,7 @@ namespace MWC_Localization_Core
                 if (completedParentPaths.Contains(parentPath))
                     continue;
 
-                GameObject parent = MLCUtils.FindGameObjectCached(parentPath);
+                GameObject parent = LocalizationUtils.FindGameObjectCached(parentPath);
                 if (parent == null)
                     continue; // Not loaded yet - will try again later
 
@@ -288,7 +293,7 @@ namespace MWC_Localization_Core
                     if (fontAppliedInstances.Contains(instanceId))
                         continue;
 
-                    string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
+                    string textMeshPath = LocalizationUtils.GetGameObjectPath(textMesh.gameObject);
 
                     // Apply font to this TextMesh
                     if (translator.ApplyFontOnly(textMesh, textMeshPath))

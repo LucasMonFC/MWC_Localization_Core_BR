@@ -8,10 +8,9 @@ namespace MWC_Localization_Core
     /// </summary>
     public class TextMeshTranslator
     {
-        private Dictionary<string, string> translations;
+        private TranslationDictionary translations;
         private Dictionary<string, Font> customFonts;
         private MagazineTextHandler magazineHandler;
-        private PatternMatcher patternMatcher;
         private LocalizationConfig config;
         private Dictionary<int, string> appliedFontCache = new Dictionary<int, string>();
         private Dictionary<int, Texture> appliedRuntimeTextureCache = new Dictionary<int, Texture>();
@@ -28,7 +27,7 @@ namespace MWC_Localization_Core
         };
 
         public TextMeshTranslator(
-            Dictionary<string, string> translations,
+            TranslationDictionary translations,
             Dictionary<string, Font> customFonts,
             MagazineTextHandler magazineHandler,
             LocalizationConfig config
@@ -38,9 +37,6 @@ namespace MWC_Localization_Core
             this.customFonts = customFonts;
             this.magazineHandler = magazineHandler;
             this.config = config;
-
-            // Initialize unified pattern matcher
-            this.patternMatcher = new PatternMatcher(translations);
 
             // Build reverse font lookup for O(1) access by font.name
             RebuildFontNameLookup();
@@ -160,7 +156,7 @@ namespace MWC_Localization_Core
         /// </summary>
         bool ApplyPatternTranslation(TextMesh textMesh, string path)
         {
-            string patternResult = patternMatcher.TryTranslateWithPattern(textMesh.text, path);
+            string patternResult = translations.TryMatchPattern(textMesh.text, path);
             if (patternResult != null)
             {
                 ApplyCustomFont(textMesh, path);
@@ -180,12 +176,10 @@ namespace MWC_Localization_Core
             if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
                 return false;
 
-            // Normalize current text for lookup
             string currentText = textMesh.text;
-            string normalizedKey = MLCUtils.FormatUpperKey(currentText);
 
-            // Check if translation exists
-            if (!translations.TryGetValue(normalizedKey, out string translation))
+            // Direct lookup (with LRU + already-normalized fast path inside the dict)
+            if (!translations.TryGetExact(currentText, out string translation))
             {
                 if (currentText.IndexOf('\n') >= 0)
                 {
@@ -249,7 +243,7 @@ namespace MWC_Localization_Core
 
             string lineNoCr = line.Replace("\r", string.Empty);
             string translated;
-            if (translations.TryGetValue(MLCUtils.FormatUpperKey(lineNoCr), out translated))
+            if (translations.TryGetExact(lineNoCr, out translated))
                 return translated;
 
             int textStart = FindTextStartAfterNumericPrefix(lineNoCr);
@@ -257,7 +251,7 @@ namespace MWC_Localization_Core
                 return line;
 
             string suffix = lineNoCr.Substring(textStart);
-            if (!translations.TryGetValue(MLCUtils.FormatUpperKey(suffix), out translated))
+            if (!translations.TryGetExact(suffix, out translated))
                 return line;
 
             return lineNoCr.Substring(0, textStart) + translated;
@@ -303,11 +297,11 @@ namespace MWC_Localization_Core
         }
         
         /// <summary>
-        /// Load FSM patterns from teletext translation file
+        /// Load FSM patterns from translation file (delegates to TranslationDictionary).
         /// </summary>
         public void LoadFsmPatterns(string filePath)
         {
-            patternMatcher.LoadPatternsFromFile(filePath);
+            translations.LoadPatternsFromFile(filePath);
         }
 
         /// <summary>
@@ -315,7 +309,7 @@ namespace MWC_Localization_Core
         /// </summary>
         public void ResetPatterns()
         {
-            patternMatcher.ResetPatterns();
+            translations.ResetPatterns();
         }
 
         /// <summary>
