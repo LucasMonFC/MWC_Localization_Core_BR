@@ -75,6 +75,24 @@ namespace MWC_Localization_Core
             get { return lastAppliedLocalPositions.Count > 0; }
         }
 
+        /// <summary>
+        /// True when any condition is GameObjectEquals — the adjustment targets a parent
+        /// GameObject transform rather than individual TextMesh components.
+        /// Set automatically during ParseConditions.
+        /// </summary>
+        internal bool TargetsGameObject { get; private set; }
+
+        // Track adjusted GameObjects and their pinned positions for drift refresh.
+        private readonly Dictionary<GameObject, Vector3> originalGOPositions = new Dictionary<GameObject, Vector3>();
+        private readonly Dictionary<GameObject, Vector3> lastAppliedGOPositions = new Dictionary<GameObject, Vector3>();
+        private readonly List<GameObject> goRefreshSnapshot = new List<GameObject>();
+        private readonly List<GameObject> goStaleBuffer = new List<GameObject>();
+
+        public bool HasTrackedGameObjects
+        {
+            get { return lastAppliedGOPositions.Count > 0; }
+        }
+
         public TextAdjustment(string conditionsString, Vector3 offset, float? fontSize = null, float? lineSpacing = null, float? widthScale = null)
         {
             Offset = offset;
@@ -82,6 +100,69 @@ namespace MWC_Localization_Core
             LineSpacing = lineSpacing;
             WidthScale = widthScale;
             ParseConditions(conditionsString);
+        }
+
+        /// <summary>
+        /// Apply position offset to a parent GameObject. No-op if already applied.
+        /// Only uses the Offset; FontSize/LineSpacing/WidthScale are TextMesh-specific.
+        /// </summary>
+        /// <returns>True if the adjustment was applied</returns>
+        public bool ApplyToGameObject(GameObject go)
+        {
+            if (go == null)
+                return false;
+
+            if (lastAppliedGOPositions.ContainsKey(go))
+                return false;
+
+            if (!originalGOPositions.ContainsKey(go))
+                originalGOPositions[go] = go.transform.localPosition;
+
+            Vector3 newPos = go.transform.localPosition + Offset;
+            go.transform.localPosition = newPos;
+            lastAppliedGOPositions[go] = newPos;
+            return true;
+        }
+
+        /// <summary>
+        /// Re-pin drift-tracked GameObjects whose local position the game has rewritten.
+        /// Called every LateUpdate via LocalizationConfig. No-op when nothing is tracked.
+        /// </summary>
+        public void RefreshGameObject()
+        {
+            if (lastAppliedGOPositions.Count == 0)
+                return;
+
+            goRefreshSnapshot.Clear();
+            goRefreshSnapshot.AddRange(lastAppliedGOPositions.Keys);
+            goStaleBuffer.Clear();
+
+            foreach (GameObject go in goRefreshSnapshot)
+            {
+                if (go == null)
+                {
+                    goStaleBuffer.Add(go);
+                    continue;
+                }
+
+                Vector3 currentPos = go.transform.localPosition;
+                Vector3 lastApplied = lastAppliedGOPositions[go];
+                if ((currentPos - lastApplied).sqrMagnitude <= PositionToleranceSqr)
+                    continue;
+
+                Vector3 newPos = currentPos + Offset;
+                go.transform.localPosition = newPos;
+                lastAppliedGOPositions[go] = newPos;
+                originalGOPositions[go] = currentPos;
+            }
+
+            goRefreshSnapshot.Clear();
+
+            for (int i = 0; i < goStaleBuffer.Count; i++)
+            {
+                lastAppliedGOPositions.Remove(goStaleBuffer[i]);
+                originalGOPositions.Remove(goStaleBuffer[i]);
+            }
         }
 
         /// <summary>
@@ -235,6 +316,15 @@ namespace MWC_Localization_Core
             // adjustedTextMeshes is already cleared by RestoreOriginal() calls
             originalStates.Clear();
             lastAppliedLocalPositions.Clear();
+
+            // Restore adjusted GameObjects
+            foreach (var go in new List<GameObject>(originalGOPositions.Keys))
+            {
+                if (go != null)
+                    go.transform.localPosition = originalGOPositions[go];
+            }
+            originalGOPositions.Clear();
+            lastAppliedGOPositions.Clear();
         }
 
         /// <summary>
@@ -276,6 +366,12 @@ namespace MWC_Localization_Core
                 {
                     string value = trimmed.Substring(7, trimmed.Length - 8);
                     Conditions.Add(new PathCondition(ConditionType.Equals, value, negate));
+                }
+                else if (trimmed.StartsWith("GameObjectEquals(") && trimmed.EndsWith(")"))
+                {
+                    string value = trimmed.Substring(17, trimmed.Length - 18);
+                    Conditions.Add(new PathCondition(ConditionType.GameObjectEquals, value, negate));
+                    TargetsGameObject = true;
                 }
             }
         }
@@ -338,6 +434,10 @@ namespace MWC_Localization_Core
                 case ConditionType.Equals:
                     result = path == Value;
                     break;
+
+                case ConditionType.GameObjectEquals:
+                    result = path == Value;
+                    break;
             }
 
             // Apply negation if needed
@@ -353,6 +453,11 @@ namespace MWC_Localization_Core
         Contains,
         EndsWith,
         StartsWith,
-        Equals
+        Equals,
+        /// <summary>
+        /// Targets a parent GameObject by exact path instead of a TextMesh.
+        /// Adjustments applied via this type go to the GameObject transform directly.
+        /// </summary>
+        GameObjectEquals
     }
 }

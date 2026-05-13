@@ -116,6 +116,38 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
+        /// Like FindGameObjectCached but also searches inactive GameObjects.
+        /// Falls back to Resources.FindObjectsOfTypeAll when the active-only
+        /// GameObject.Find misses. The result is cached for future calls.
+        /// </summary>
+        public static GameObject FindGameObjectIncludingInactive(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            GameObject found = FindGameObjectCached(path);
+            if (found != null)
+                return found;
+
+            // Pre-filter by leaf name before building full paths.
+            string leafName = path.Substring(path.LastIndexOf('/') + 1);
+            Transform[] all = Resources.FindObjectsOfTypeAll<Transform>();
+            for (int i = 0; i < all.Length; i++)
+            {
+                Transform t = all[i];
+                if (t == null || t.name != leafName)
+                    continue;
+                if (GetGameObjectPath(t.gameObject) == path)
+                {
+                    gameObjectFindCache[path] = t.gameObject;
+                    return t.gameObject;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Shared accessor for all TextMeshes including inactive ones.
         /// </summary>
         public static TextMesh[] GetAllTextMeshesIncludingInactive()

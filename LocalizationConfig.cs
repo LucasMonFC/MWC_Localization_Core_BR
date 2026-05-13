@@ -62,7 +62,9 @@ namespace MWC_Localization_Core
         public string LanguageCode { get; private set; } = "en-US";
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();
         public List<TextAdjustment> TextAdjustments { get; private set; } = new List<TextAdjustment>();
+        public List<TextAdjustment> GameObjectAdjustments { get; private set; } = new List<TextAdjustment>();
         private readonly List<TextAdjustment> driftTrackedAdjustments = new List<TextAdjustment>();
+        private readonly List<TextAdjustment> goAdjustmentsActive = new List<TextAdjustment>();
 
         public LocalizationConfig()
         {
@@ -76,7 +78,9 @@ namespace MWC_Localization_Core
             // Make reload idempotent by resetting previously loaded values.
             FontMappings.Clear();
             TextAdjustments.Clear();
+            GameObjectAdjustments.Clear();
             driftTrackedAdjustments.Clear();
+            goAdjustmentsActive.Clear();
             LanguageName = "Unknown";
             LanguageCode = "en-US";
 
@@ -132,7 +136,7 @@ namespace MWC_Localization_Core
 
                 CoreConsole.Print($"[LocalizationConfig] Configuration loaded: {LanguageName} ({LanguageCode})");
                 CoreConsole.Print($"[LocalizationConfig] Font mappings: {FontMappings.Count}");
-                CoreConsole.Print($"[LocalizationConfig] Position adjustments: {TextAdjustments.Count}");
+                CoreConsole.Print($"[LocalizationConfig] Position adjustments: {TextAdjustments.Count} TextMesh, {GameObjectAdjustments.Count} GameObject");
 
                 return true;
             }
@@ -244,7 +248,10 @@ namespace MWC_Localization_Core
                 }
 
                 TextAdjustment adjustment = new TextAdjustment(conditionsString, offset, fontSize, lineSpacing, widthScale);
-                TextAdjustments.Add(adjustment);
+                if (adjustment.TargetsGameObject)
+                    GameObjectAdjustments.Add(adjustment);
+                else
+                    TextAdjustments.Add(adjustment);
             }
             catch (System.Exception ex)
             {
@@ -288,8 +295,39 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Re-pin drift-tracked TextMeshes whose transform was rewritten by the game
-        /// since the last frame. Called every LateUpdate by the monitor.
+        /// Find each GameObjectEquals adjustment's target and apply its offset.
+        /// Call after TranslateScene / InitialPass on each scene load and F8 reload.
+        /// </summary>
+        public void ApplyGameObjectAdjustments()
+        {
+            for (int i = 0; i < GameObjectAdjustments.Count; i++)
+            {
+                TextAdjustment adj = GameObjectAdjustments[i];
+                for (int j = 0; j < adj.Conditions.Count; j++)
+                {
+                    PathCondition cond = adj.Conditions[j];
+                    if (cond.Type != ConditionType.GameObjectEquals || cond.Negate)
+                        continue;
+
+                    GameObject go = LocalizationUtils.FindGameObjectIncludingInactive(cond.Value);
+                    if (go == null)
+                    {
+                        CoreConsole.Print($"[LocalizationConfig] GameObjectEquals: '{cond.Value}' not present in this scene, skipping");
+                        continue;
+                    }
+
+                    bool applied = adj.ApplyToGameObject(go);
+                    if (applied && adj.HasTrackedGameObjects && !goAdjustmentsActive.Contains(adj))
+                        goAdjustmentsActive.Add(adj);
+
+                    break; // one lookup per rule is sufficient
+                }
+            }
+        }
+
+        /// <summary>
+        /// Re-pin drift-tracked TextMeshes and GameObjects whose transform was rewritten
+        /// by the game since the last frame. Called every LateUpdate by the monitor.
         /// </summary>
         public void RefreshDriftTrackedAdjustments()
         {
@@ -301,20 +339,31 @@ namespace MWC_Localization_Core
                 if (!adjustment.HasDriftTrackedMeshes)
                     driftTrackedAdjustments.RemoveAt(i);
             }
+
+            for (int i = goAdjustmentsActive.Count - 1; i >= 0; i--)
+            {
+                TextAdjustment adjustment = goAdjustmentsActive[i];
+                adjustment.RefreshGameObject();
+
+                if (!adjustment.HasTrackedGameObjects)
+                    goAdjustmentsActive.RemoveAt(i);
+            }
         }
 
         /// <summary>
-        /// Clear all position adjustment caches
-        /// Useful for F8 reload functionality to reapply adjustments
+        /// Clear all position adjustment caches.
+        /// Useful for F8 reload functionality to reapply adjustments.
         /// </summary>
         public void ClearTextAdjustmentCaches()
         {
             driftTrackedAdjustments.Clear();
+            goAdjustmentsActive.Clear();
 
             foreach (TextAdjustment adjustment in TextAdjustments)
-            {
                 adjustment.ClearCache();
-            }
+
+            foreach (TextAdjustment adjustment in GameObjectAdjustments)
+                adjustment.ClearCache();
         }
     }
 }
