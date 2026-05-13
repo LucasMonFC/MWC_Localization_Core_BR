@@ -39,6 +39,8 @@ namespace MWC_Localization_Core
         private static Dictionary<GameObject, string> pathCache = new Dictionary<GameObject, string>();
         // Cache for expensive GameObject.Find(path) lookups
         private static Dictionary<string, GameObject> gameObjectFindCache = new Dictionary<string, GameObject>();
+        // Paths confirmed absent after a full inactive-object scan; cleared on scene change / F8.
+        private static HashSet<string> notFoundPaths = new HashSet<string>();
 
         // Reusable scratch buffers for path construction. Unity is single-threaded so no locking needed.
         private static Transform[] pathChain = new Transform[32];
@@ -116,6 +118,43 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
+        /// Like FindGameObjectCached but also searches inactive GameObjects.
+        /// Falls back to Resources.FindObjectsOfTypeAll when the active-only
+        /// GameObject.Find misses. The result is cached for future calls.
+        /// </summary>
+        public static GameObject FindGameObjectIncludingInactive(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            GameObject found = FindGameObjectCached(path);
+            if (found != null)
+                return found;
+
+            // Skip the expensive scan if a previous call already confirmed this path absent.
+            if (notFoundPaths.Contains(path))
+                return null;
+
+            // Pre-filter by leaf name before building full paths.
+            string leafName = path.Substring(path.LastIndexOf('/') + 1);
+            Transform[] all = Resources.FindObjectsOfTypeAll<Transform>();
+            for (int i = 0; i < all.Length; i++)
+            {
+                Transform t = all[i];
+                if (t == null || t.name != leafName)
+                    continue;
+                if (GetGameObjectPath(t.gameObject) == path)
+                {
+                    gameObjectFindCache[path] = t.gameObject;
+                    return t.gameObject;
+                }
+            }
+
+            notFoundPaths.Add(path);
+            return null;
+        }
+
+        /// <summary>
         /// Shared accessor for all TextMeshes including inactive ones.
         /// </summary>
         public static TextMesh[] GetAllTextMeshesIncludingInactive()
@@ -131,6 +170,7 @@ namespace MWC_Localization_Core
         {
             pathCache.Clear();
             gameObjectFindCache.Clear();
+            notFoundPaths.Clear();
         }
 
         /// <summary>
@@ -170,6 +210,9 @@ namespace MWC_Localization_Core
                 for (int i = 0; i < staleFindKeys.Count; i++)
                     gameObjectFindCache.Remove(staleFindKeys[i]);
             }
+
+            // A path absent in one scene may exist in the next; always reset on scene change.
+            notFoundPaths.Clear();
         }
     }
 

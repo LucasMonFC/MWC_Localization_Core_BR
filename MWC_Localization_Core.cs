@@ -120,6 +120,7 @@ namespace MWC_Localization_Core
             TranslateScene();
             MarkSceneTranslated("MainMenu");
             RunSurfaceInitialPasses(null);
+            config.ApplyGameObjectAdjustments();
         }
 
         private void Mod_PostLoad()
@@ -128,11 +129,12 @@ namespace MWC_Localization_Core
             TranslateScene();
             MarkSceneTranslated("GAME");
             RunSurfaceInitialPasses(null);
+            config.ApplyGameObjectAdjustments();
 
             // ALL continuous monitoring runs in LateUpdate to get correct timing relative to game updates.
             lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
             lateUpdateHandler = lateUpdateHandlerObject.AddComponent<LateUpdateHandler>();
-            lateUpdateHandler.Initialize(surfaces, config, () => HasSceneBeenTranslated("GAME"));
+            lateUpdateHandler.Initialize(surfaces, () => HasSceneBeenTranslated("GAME"));
         }
 
         private void Mod_Update()
@@ -182,6 +184,7 @@ namespace MWC_Localization_Core
                 TranslateScene();
                 MarkSceneTranslated("MainMenu");
                 RunSurfaceInitialPasses(null);
+                config.ApplyGameObjectAdjustments();
             }
             else if (sceneName == "GAME" && ShouldTranslateScene("GAME"))
             {
@@ -189,6 +192,7 @@ namespace MWC_Localization_Core
                 TranslateScene();
                 MarkSceneTranslated("GAME");
                 RunSurfaceInitialPasses("Initial ");
+                config.ApplyGameObjectAdjustments();
             }
         }
 
@@ -350,13 +354,14 @@ namespace MWC_Localization_Core
                 currentScene = sceneName;
                 MarkSceneTranslated(sceneName);
                 RunSurfaceInitialPasses("Reload ");
+                config.ApplyGameObjectAdjustments();
             }
 
             // Restart LateUpdate driver with the new surface list (instance hasn't changed but its tick state has)
             if (lateUpdateHandler != null)
             {
                 lateUpdateHandler.ClearCache();
-                lateUpdateHandler.Initialize(surfaces, config, () => HasSceneBeenTranslated("GAME"));
+                lateUpdateHandler.Initialize(surfaces, () => HasSceneBeenTranslated("GAME"));
             }
 
             CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");

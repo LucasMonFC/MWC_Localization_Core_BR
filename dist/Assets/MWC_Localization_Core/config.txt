@@ -71,3 +71,8 @@ Contains(COMPUTER/SYSTEM/TELEBBS/Software) & EndsWith(/text 2) = 0,0,0,2,
 Contains(COMPUTER/SYSTEM/TELEBBS/Software) & EndsWith(/BaudRate) = 0,0,0,2,
 Contains(COMPUTER/SYSTEM/TELEBBS/Software) & EndsWith(/StatusBar) = 0,0,0,2,
 Contains(COMPUTER/SYSTEM/TELEBBS/CONLINE) = 0,0,0,2,
+## Parts Magazine Product List
+## - Adjust font size via 'Sheets/Magazine/Products'
+## - Adjust X/Y/Z offset via 'Sheets/Magazine/List'
+Contains(Sheets/Magazine/Products) = 0,0,0,0.0024
+GameObjectEquals(Sheets/Magazine/List) = 0,-0.002,0
