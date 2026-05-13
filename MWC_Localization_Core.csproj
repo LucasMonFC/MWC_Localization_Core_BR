@@ -84,6 +84,7 @@
     <Compile Include="TranslationDictionary.cs" />
     <Compile Include="TranslationFileParser.cs" />
     <Compile Include="TranslationPattern.cs" />
+    <Compile Include="TranslationSurface.cs" />
     <Compile Include="GuiTextMonitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
