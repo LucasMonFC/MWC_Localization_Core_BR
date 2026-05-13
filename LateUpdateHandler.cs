@@ -78,6 +78,16 @@ namespace MWC_Localization_Core
                         }
                         break;
 
+                    case SurfaceCadence.Medium:
+                        if (now >= nextTickTimes[i])
+                        {
+                            int translated = s.MonitorTick(dt);
+                            if (translated > 0)
+                                CoreConsole.Print($"[LateUpdateHandler] {s.Name}: translated {translated} item(s)");
+                            nextTickTimes[i] = now + LocalizationConstants.CHAT_MONITOR_INTERVAL;
+                        }
+                        break;
+
                     case SurfaceCadence.Slow:
                         if (now >= nextTickTimes[i])
                         {

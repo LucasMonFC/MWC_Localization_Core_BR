@@ -13,9 +13,11 @@ namespace MWC_Localization_Core
         OncePerScene,
         /// <summary>Every LateUpdate frame. For HUD-style monitors that mirror text per frame.</summary>
         PerFrame,
-        /// <summary>~5 ticks/sec. For small dynamic FSM sources that the game rebuilds per screen open.</summary>
+        /// <summary>FSM_SOURCE_POLL_INTERVAL. For small dynamic FSM sources that the game rebuilds per screen open.</summary>
         Fast,
-        /// <summary>~2 ticks/sec, staggered across surfaces. For ArrayList/HashTable proxies that lazy-load.</summary>
+        /// <summary>CHAT_MONITOR_INTERVAL (~1s). For dynamic-but-cheap monitors like TV chat with per-slot caching.</summary>
+        Medium,
+        /// <summary>ARRAY_MONITOR_INTERVAL, staggered across surfaces. For ArrayList/HashTable proxies that lazy-load.</summary>
         Slow,
     }
 
