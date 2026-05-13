@@ -63,9 +63,6 @@ namespace MWC_Localization_Core
         public Dictionary<string, string> FontMappings { get; private set; } = new Dictionary<string, string>();
         public List<TextAdjustment> TextAdjustments { get; private set; } = new List<TextAdjustment>();
         public List<TextAdjustment> GameObjectAdjustments { get; private set; } = new List<TextAdjustment>();
-        private readonly List<TextAdjustment> driftTrackedAdjustments = new List<TextAdjustment>();
-        private readonly List<TextAdjustment> goAdjustmentsActive = new List<TextAdjustment>();
-
         public LocalizationConfig()
         {
         }
@@ -79,8 +76,6 @@ namespace MWC_Localization_Core
             FontMappings.Clear();
             TextAdjustments.Clear();
             GameObjectAdjustments.Clear();
-            driftTrackedAdjustments.Clear();
-            goAdjustmentsActive.Clear();
             LanguageName = "Unknown";
             LanguageCode = "en-US";
 
@@ -283,11 +278,7 @@ namespace MWC_Localization_Core
             {
                 if (adjustment.Matches(path))
                 {
-                    bool applied = adjustment.ApplyAdjustment(textMesh, path);
-                    if (applied && adjustment.HasDriftTrackedMeshes && !driftTrackedAdjustments.Contains(adjustment))
-                        driftTrackedAdjustments.Add(adjustment);
-
-                    return applied;
+                    return adjustment.ApplyAdjustment(textMesh);
                 }
             }
 
@@ -316,37 +307,9 @@ namespace MWC_Localization_Core
                         continue;
                     }
 
-                    bool applied = adj.ApplyToGameObject(go);
-                    if (applied && adj.HasTrackedGameObjects && !goAdjustmentsActive.Contains(adj))
-                        goAdjustmentsActive.Add(adj);
-
+                    adj.ApplyToGameObject(go);
                     break; // one lookup per rule is sufficient
                 }
-            }
-        }
-
-        /// <summary>
-        /// Re-pin drift-tracked TextMeshes and GameObjects whose transform was rewritten
-        /// by the game since the last frame. Called every LateUpdate by the monitor.
-        /// </summary>
-        public void RefreshDriftTrackedAdjustments()
-        {
-            for (int i = driftTrackedAdjustments.Count - 1; i >= 0; i--)
-            {
-                TextAdjustment adjustment = driftTrackedAdjustments[i];
-                adjustment.Refresh();
-
-                if (!adjustment.HasDriftTrackedMeshes)
-                    driftTrackedAdjustments.RemoveAt(i);
-            }
-
-            for (int i = goAdjustmentsActive.Count - 1; i >= 0; i--)
-            {
-                TextAdjustment adjustment = goAdjustmentsActive[i];
-                adjustment.RefreshGameObject();
-
-                if (!adjustment.HasTrackedGameObjects)
-                    goAdjustmentsActive.RemoveAt(i);
             }
         }
 
@@ -356,9 +319,6 @@ namespace MWC_Localization_Core
         /// </summary>
         public void ClearTextAdjustmentCaches()
         {
-            driftTrackedAdjustments.Clear();
-            goAdjustmentsActive.Clear();
-
             foreach (TextAdjustment adjustment in TextAdjustments)
                 adjustment.ClearCache();
 

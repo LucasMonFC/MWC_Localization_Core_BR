@@ -134,7 +134,7 @@ namespace MWC_Localization_Core
             // ALL continuous monitoring runs in LateUpdate to get correct timing relative to game updates.
             lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
             lateUpdateHandler = lateUpdateHandlerObject.AddComponent<LateUpdateHandler>();
-            lateUpdateHandler.Initialize(surfaces, config, () => HasSceneBeenTranslated("GAME"));
+            lateUpdateHandler.Initialize(surfaces, () => HasSceneBeenTranslated("GAME"));
         }
 
         private void Mod_Update()
@@ -361,7 +361,7 @@ namespace MWC_Localization_Core
             if (lateUpdateHandler != null)
             {
                 lateUpdateHandler.ClearCache();
-                lateUpdateHandler.Initialize(surfaces, config, () => HasSceneBeenTranslated("GAME"));
+                lateUpdateHandler.Initialize(surfaces, () => HasSceneBeenTranslated("GAME"));
             }
 
             CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");

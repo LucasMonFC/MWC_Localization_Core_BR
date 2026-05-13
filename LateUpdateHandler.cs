@@ -14,17 +14,14 @@ namespace MWC_Localization_Core
         private float[] nextTickTimes;
         private bool[] loggedRetired;
         private bool loggedAllRetired;
-        private LocalizationConfig config;
         private Func<bool> isGameSceneReady;
         private bool isInitialized;
 
         public void Initialize(
             List<ITranslationSurface> surfaces,
-            LocalizationConfig config,
             Func<bool> isGameSceneReady)
         {
             this.surfaces = surfaces;
-            this.config = config;
             this.isGameSceneReady = isGameSceneReady;
             nextTickTimes = surfaces != null ? new float[surfaces.Count] : new float[0];
             loggedRetired = surfaces != null ? new bool[surfaces.Count] : new bool[0];
@@ -59,9 +56,6 @@ namespace MWC_Localization_Core
                 return;
             if (isGameSceneReady == null || !isGameSceneReady())
                 return;
-
-            if (config != null)
-                config.RefreshDriftTrackedAdjustments();
 
             float now = Time.time;
             float dt = Time.deltaTime;

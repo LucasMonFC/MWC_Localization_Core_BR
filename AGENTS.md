@@ -115,10 +115,6 @@ When adding new state to a surface, ensure both `Reset()` (runtime caches) and `
 - If you add a new long-lived cache, wire it into the corresponding surface's `Reset()` or, for global utilities, into `ClearCaches`/`PruneCaches` in `LocalizationUtils`.
 - Exception: `fontBundle` is intentionally `static` because MSCLoader can reconstruct the `Mod` instance during a session — reloading the AssetBundle leaks Unity assets.
 
-### Drift-tracked paths
-
-The game rewrites the transform of some sheets after we adjust them (e.g. `Sheets/Magazine/Products`). `TextAdjustment.DriftTrackedPathPatterns` is a small **code-side** whitelist of substring matches; meshes whose path matches get re-pinned in `LateUpdate` via `LocalizationConfig.RefreshDriftTrackedAdjustments`. Adding a path is a code change, not a config change.
-
 ### Forced-font path prefixes
 
 `LocalizationConfig.ForcedFontPathPrefixes` lists path roots that get the custom font applied even when the text isn't in the translation dictionary (teletext display, computer POS, unemployment letter, rally/service sheets, TV graphics). Check via `LocalizationConfig.IsForcedFontPath(path)`. New "show foreign font correctly even when text stays original" cases go here.

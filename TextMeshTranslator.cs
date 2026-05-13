@@ -196,8 +196,7 @@ namespace MWC_Localization_Core
             }
 
             // Already-localized text still needs its font + adjustments applied so
-            // one-shot monitors can stop cleanly and so drift-tracked meshes get
-            // entered into lastAppliedLocalPositions on first contact.
+            // one-shot monitors can stop cleanly.
             if (!forceUpdate && currentText == translation)
             {
                 ApplyCustomFont(textMesh, path);

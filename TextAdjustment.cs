@@ -28,28 +28,6 @@ namespace MWC_Localization_Core
     /// </summary>
     public class TextAdjustment
     {
-        // Paths whose transforms the game rewrites repeatedly. TextMeshes whose path
-        // matches any entry opt into drift refresh after a normal adjustment applies.
-        // Keep this list small - every touched TextMesh is checked during LateUpdate.
-        internal static readonly string[] DriftTrackedPathPatterns =
-        {
-            "Sheets/Magazine/Products",
-        };
-
-        private const float PositionToleranceSqr = 1e-7f;
-
-        internal static bool IsDriftTrackedPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return false;
-            for (int i = 0; i < DriftTrackedPathPatterns.Length; i++)
-            {
-                if (path.Contains(DriftTrackedPathPatterns[i]))
-                    return true;
-            }
-            return false;
-        }
-
         public List<PathCondition> Conditions { get; private set; } = new List<PathCondition>();
         public Vector3 Offset { get; private set; }
         public float? FontSize { get; private set; }
@@ -62,19 +40,6 @@ namespace MWC_Localization_Core
         // Store original state of adjusted TextMesh objects for restoration
         private Dictionary<TextMesh, OriginalTextMeshState> originalStates = new Dictionary<TextMesh, OriginalTextMeshState>();
 
-        // Last position written by this rule, for drift-tracked TextMeshes only.
-        // Presence in this dict is the marker that a mesh participates in Refresh().
-        private Dictionary<TextMesh, Vector3> lastAppliedLocalPositions = new Dictionary<TextMesh, Vector3>();
-
-        // Pre-allocated buffers for Refresh(); avoids per-frame heap allocation.
-        private readonly List<TextMesh> refreshSnapshot = new List<TextMesh>();
-        private readonly List<TextMesh> staleBuffer = new List<TextMesh>();
-
-        public bool HasDriftTrackedMeshes
-        {
-            get { return lastAppliedLocalPositions.Count > 0; }
-        }
-
         /// <summary>
         /// True when any condition is GameObjectEquals — the adjustment targets a parent
         /// GameObject transform rather than individual TextMesh components.
@@ -82,16 +47,7 @@ namespace MWC_Localization_Core
         /// </summary>
         internal bool TargetsGameObject { get; private set; }
 
-        // Track adjusted GameObjects and their pinned positions for drift refresh.
         private readonly Dictionary<GameObject, Vector3> originalGOPositions = new Dictionary<GameObject, Vector3>();
-        private readonly Dictionary<GameObject, Vector3> lastAppliedGOPositions = new Dictionary<GameObject, Vector3>();
-        private readonly List<GameObject> goRefreshSnapshot = new List<GameObject>();
-        private readonly List<GameObject> goStaleBuffer = new List<GameObject>();
-
-        public bool HasTrackedGameObjects
-        {
-            get { return lastAppliedGOPositions.Count > 0; }
-        }
 
         public TextAdjustment(string conditionsString, Vector3 offset, float? fontSize = null, float? lineSpacing = null, float? widthScale = null)
         {
@@ -109,60 +65,12 @@ namespace MWC_Localization_Core
         /// <returns>True if the adjustment was applied</returns>
         public bool ApplyToGameObject(GameObject go)
         {
-            if (go == null)
+            if (go == null || originalGOPositions.ContainsKey(go))
                 return false;
 
-            if (lastAppliedGOPositions.ContainsKey(go))
-                return false;
-
-            if (!originalGOPositions.ContainsKey(go))
-                originalGOPositions[go] = go.transform.localPosition;
-
-            Vector3 newPos = go.transform.localPosition + Offset;
-            go.transform.localPosition = newPos;
-            lastAppliedGOPositions[go] = newPos;
+            originalGOPositions[go] = go.transform.localPosition;
+            go.transform.localPosition += Offset;
             return true;
-        }
-
-        /// <summary>
-        /// Re-pin drift-tracked GameObjects whose local position the game has rewritten.
-        /// Called every LateUpdate via LocalizationConfig. No-op when nothing is tracked.
-        /// </summary>
-        public void RefreshGameObject()
-        {
-            if (lastAppliedGOPositions.Count == 0)
-                return;
-
-            goRefreshSnapshot.Clear();
-            goRefreshSnapshot.AddRange(lastAppliedGOPositions.Keys);
-            goStaleBuffer.Clear();
-
-            foreach (GameObject go in goRefreshSnapshot)
-            {
-                if (go == null)
-                {
-                    goStaleBuffer.Add(go);
-                    continue;
-                }
-
-                Vector3 currentPos = go.transform.localPosition;
-                Vector3 lastApplied = lastAppliedGOPositions[go];
-                if ((currentPos - lastApplied).sqrMagnitude <= PositionToleranceSqr)
-                    continue;
-
-                Vector3 newPos = currentPos + Offset;
-                go.transform.localPosition = newPos;
-                lastAppliedGOPositions[go] = newPos;
-                originalGOPositions[go] = currentPos;
-            }
-
-            goRefreshSnapshot.Clear();
-
-            for (int i = 0; i < goStaleBuffer.Count; i++)
-            {
-                lastAppliedGOPositions.Remove(goStaleBuffer[i]);
-                originalGOPositions.Remove(goStaleBuffer[i]);
-            }
         }
 
         /// <summary>
@@ -170,7 +78,7 @@ namespace MWC_Localization_Core
         /// Uses HashSet to prevent duplicate adjustments
         /// </summary>
         /// <returns>True if adjustment was applied, false if already adjusted</returns>
-        public bool ApplyAdjustment(TextMesh textMesh, string path)
+        public bool ApplyAdjustment(TextMesh textMesh)
         {
             if (textMesh == null)
                 return false;
@@ -214,64 +122,7 @@ namespace MWC_Localization_Core
             // Mark as adjusted
             adjustedTextMeshes.Add(textMesh);
 
-            // Opt this mesh into Refresh() only if its path is on the drift-tracked whitelist.
-            if (IsDriftTrackedPath(path))
-                lastAppliedLocalPositions[textMesh] = newPosition;
-
             return true;
-        }
-
-        /// <summary>
-        /// Re-pin drift-tracked TextMeshes whose local position the game has rewritten
-        /// since the last frame. Caller invokes every LateUpdate. No-op when nothing is tracked.
-        /// </summary>
-        public void Refresh()
-        {
-            if (lastAppliedLocalPositions.Count == 0)
-                return;
-
-            // Snapshot keys into the pre-allocated buffer so we can mutate the dict
-            // during the pass without allocating a new List each frame.
-            refreshSnapshot.Clear();
-            refreshSnapshot.AddRange(lastAppliedLocalPositions.Keys);
-            staleBuffer.Clear();
-
-            foreach (TextMesh tm in refreshSnapshot)
-            {
-                if (tm == null)
-                {
-                    staleBuffer.Add(tm);
-                    continue;
-                }
-
-                Vector3 currentPos = tm.transform.localPosition;
-                Vector3 lastApplied = lastAppliedLocalPositions[tm];
-                if ((currentPos - lastApplied).sqrMagnitude <= PositionToleranceSqr)
-                    continue;
-
-                // Game wrote a new local position. Treat it as the new baseline so we
-                // don't accumulate drift, then re-apply the offset.
-                OriginalTextMeshState state;
-                if (originalStates.TryGetValue(tm, out state))
-                {
-                    state.LocalPosition = currentPos;
-                    originalStates[tm] = state;
-                }
-
-                Vector3 newPos = currentPos + Offset;
-                tm.transform.localPosition = newPos;
-                lastAppliedLocalPositions[tm] = newPos;
-            }
-
-            // Release snapshot refs promptly so Unity can manage TextMesh lifetime.
-            refreshSnapshot.Clear();
-
-            for (int i = 0; i < staleBuffer.Count; i++)
-            {
-                lastAppliedLocalPositions.Remove(staleBuffer[i]);
-                originalStates.Remove(staleBuffer[i]);
-                adjustedTextMeshes.Remove(staleBuffer[i]);
-            }
         }
 
         /// <summary>
@@ -296,7 +147,6 @@ namespace MWC_Localization_Core
 
             // Remove from adjusted set so it can be re-adjusted
             adjustedTextMeshes.Remove(textMesh);
-            lastAppliedLocalPositions.Remove(textMesh);
 
             return true;
         }
@@ -315,7 +165,6 @@ namespace MWC_Localization_Core
             }
             // adjustedTextMeshes is already cleared by RestoreOriginal() calls
             originalStates.Clear();
-            lastAppliedLocalPositions.Clear();
 
             // Restore adjusted GameObjects
             foreach (var go in new List<GameObject>(originalGOPositions.Keys))
@@ -324,7 +173,6 @@ namespace MWC_Localization_Core
                     go.transform.localPosition = originalGOPositions[go];
             }
             originalGOPositions.Clear();
-            lastAppliedGOPositions.Clear();
         }
 
         /// <summary>
