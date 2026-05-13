@@ -424,7 +424,7 @@ namespace MWC_Localization_Core
                 return weatherUpdaterFsmCache;
 
             weatherUpdaterFsmCache.Clear();
-            GameObject root = FindGameObjectByPath("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater");
+            GameObject root = LocalizationUtils.FindGameObjectIncludingInactive("Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater");
             if (root == null)
                 return weatherUpdaterFsmCache;
 
@@ -624,7 +624,7 @@ namespace MWC_Localization_Core
             if (target == null)
                 return false;
 
-            GameObject orderFleetari = FindGameObjectByPath("REPAIRSHOP/OrderFleetari");
+            GameObject orderFleetari = LocalizationUtils.FindGameObjectIncludingInactive("REPAIRSHOP/OrderFleetari");
             if (orderFleetari == null)
                 return false;
 
@@ -655,7 +655,7 @@ namespace MWC_Localization_Core
             if (target == null)
                 return false;
 
-            GameObject bankAccount = FindGameObjectByPath("Systems/BankAccount");
+            GameObject bankAccount = LocalizationUtils.FindGameObjectIncludingInactive("Systems/BankAccount");
             if (bankAccount == null)
                 return false;
 
@@ -700,7 +700,7 @@ namespace MWC_Localization_Core
             if (target == null)
                 return false;
 
-            GameObject day = FindGameObjectByPath("Systems/TV/TVGraphics/CHAT/Day");
+            GameObject day = LocalizationUtils.FindGameObjectIncludingInactive("Systems/TV/TVGraphics/CHAT/Day");
             if (day == null)
                 return false;
 
@@ -767,8 +767,8 @@ namespace MWC_Localization_Core
                 ? GetParentPath(target.ObjectPath)
                 : target.ObjectPath;
 
-            GameObject root = FindGameObjectByPath(scheduleRootPath)
-                ?? FindGameObjectByPath(target.ObjectPath)
+            GameObject root = LocalizationUtils.FindGameObjectIncludingInactive(scheduleRootPath)
+                ?? LocalizationUtils.FindGameObjectIncludingInactive(target.ObjectPath)
                 ?? FindNearestGameObjectForPath(target.ObjectPath);
             if (root == null)
                 return false;
@@ -1057,7 +1057,7 @@ namespace MWC_Localization_Core
 
             List<PlayMakerArrayListProxy> result = new List<PlayMakerArrayListProxy>();
             string expectedReference = GetLastPathSegment(target.ObjectPath);
-            GameObject currentObject = FindGameObjectByPath(target.ObjectPath) ?? FindNearestGameObjectForPath(target.ObjectPath);
+            GameObject currentObject = LocalizationUtils.FindGameObjectIncludingInactive(target.ObjectPath) ?? FindNearestGameObjectForPath(target.ObjectPath);
             Transform current = currentObject != null ? currentObject.transform : null;
             int depth = 0;
             while (current != null && depth < 6)
@@ -1209,7 +1209,7 @@ namespace MWC_Localization_Core
                 return cached;
 
             List<TextMesh> result = new List<TextMesh>();
-            GameObject root = FindGameObjectByPath(target.ObjectPath) ?? FindNearestGameObjectForPath(target.ObjectPath);
+            GameObject root = LocalizationUtils.FindGameObjectIncludingInactive(target.ObjectPath) ?? FindNearestGameObjectForPath(target.ObjectPath);
             if (root != null)
             {
                 TextMesh[] textMeshes = root.GetComponentsInChildren<TextMesh>(true);
@@ -1421,7 +1421,7 @@ namespace MWC_Localization_Core
             if (exactFsmCache.TryGetValue(cacheKey, out cached) && cached != null)
                 return cached;
 
-            GameObject exactObject = FindGameObjectByPath(target.ObjectPath);
+            GameObject exactObject = LocalizationUtils.FindGameObjectIncludingInactive(target.ObjectPath);
             PlayMakerFSM fsm = FindMatchingFsmOnObject(exactObject, target.FsmName, target.StateName);
             if (fsm == null)
                 fsm = FindMatchingFsmByPrefix(target);
@@ -1439,7 +1439,7 @@ namespace MWC_Localization_Core
                 return cached;
 
             List<PlayMakerFSM> result = new List<PlayMakerFSM>();
-            GameObject exactObject = FindGameObjectByPath(target.ObjectPath);
+            GameObject exactObject = LocalizationUtils.FindGameObjectIncludingInactive(target.ObjectPath);
             if (exactObject != null)
             {
                 AddMatchingFsms(exactObject.GetComponents<PlayMakerFSM>(), target, result);
@@ -1559,35 +1559,6 @@ namespace MWC_Localization_Core
             return null;
         }
 
-        private GameObject FindGameObjectByPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return null;
-
-            GameObject found = LocalizationUtils.FindGameObjectCached(path);
-            if (found != null)
-                return found;
-
-            string[] parts = path.Split('/');
-            if (parts.Length == 0)
-                return null;
-
-            GameObject root = GameObject.Find(parts[0]);
-            if (root == null)
-                return null;
-
-            Transform current = root.transform;
-            for (int i = 1; i < parts.Length; i++)
-            {
-                if (current == null)
-                    return null;
-
-                current = current.Find(parts[i]);
-            }
-
-            return current != null ? current.gameObject : null;
-        }
-
         private GameObject FindNearestGameObjectForPath(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -1597,7 +1568,7 @@ namespace MWC_Localization_Core
             for (int length = parts.Length; length >= 1; length--)
             {
                 string candidate = string.Join("/", parts, 0, length);
-                GameObject found = FindGameObjectByPath(candidate);
+                GameObject found = LocalizationUtils.FindGameObjectIncludingInactive(candidate);
                 if (found != null)
                     return found;
             }
