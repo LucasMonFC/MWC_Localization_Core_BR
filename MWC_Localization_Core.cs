@@ -191,7 +191,7 @@ namespace MWC_Localization_Core
             // Clear caches when entering a new scene
             if (sceneChanged)
             {
-                LocalizationUtils.ClearCaches();
+                LocalizationUtils.PruneCaches();
 
                 // Clear MonoBehaviour cache and destroy old monitor
                 if (lateUpdateHandler != null)

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 
 namespace MWC_Localization_Core
 {
@@ -44,6 +45,10 @@ namespace MWC_Localization_Core
         private static bool fsmIndexBuilt = false;
         private static float lastFsmIndexBuildTime = -1000f;
 
+        // Reusable scratch buffers for path construction. Unity is single-threaded so no locking needed.
+        private static Transform[] pathChain = new Transform[32];
+        private static readonly StringBuilder pathBuilder = new StringBuilder(128);
+
         public static string GetGameObjectPath(GameObject obj)
         {
             if (obj == null)
@@ -53,19 +58,32 @@ namespace MWC_Localization_Core
             if (pathCache.TryGetValue(obj, out string cachedPath))
                 return cachedPath;
 
-            // Build path using List + Reverse
-            List<string> pathParts = new List<string>();
+            // Walk parents into a reusable buffer, then build forward into a reusable StringBuilder.
+            // Avoids List<string>/Reverse/ToArray/string.Join allocations on every uncached call.
+            int depth = 0;
             Transform current = obj.transform;
-
             while (current != null)
             {
-                pathParts.Add(current.name);
+                if (depth >= pathChain.Length)
+                {
+                    Transform[] bigger = new Transform[pathChain.Length * 2];
+                    System.Array.Copy(pathChain, bigger, depth);
+                    pathChain = bigger;
+                }
+                pathChain[depth++] = current;
                 current = current.parent;
             }
 
-            // Reverse and join
-            pathParts.Reverse();
-            string path = string.Join("/", pathParts.ToArray());
+            pathBuilder.Length = 0;
+            for (int i = depth - 1; i >= 0; i--)
+            {
+                if (pathBuilder.Length > 0)
+                    pathBuilder.Append('/');
+                pathBuilder.Append(pathChain[i].name);
+                pathChain[i] = null;
+            }
+
+            string path = pathBuilder.ToString();
 
             // Cache the path (limit cache size to prevent memory bloat)
             if (pathCache.Count < 10000)
@@ -201,12 +219,56 @@ namespace MWC_Localization_Core
 
         /// <summary>
         /// Clear all runtime caches.
-        /// Call this on scene changes and reloads.
+        /// Use on F8 reload. For scene changes prefer PruneCaches so static paths stay warm.
         /// </summary>
         public static void ClearCaches()
         {
             pathCache.Clear();
             gameObjectFindCache.Clear();
+            inactiveFsmPathNameCache.Clear();
+            fsmIndexBuilt = false;
+            lastFsmIndexBuildTime = -1000f;
+        }
+
+        /// <summary>
+        /// Drop only entries that reference destroyed Unity objects, and reset the scene-scoped FSM index.
+        /// Lets stable paths (HUD, indicators) survive a MainMenu->GAME transition cold-start free.
+        /// </summary>
+        public static void PruneCaches()
+        {
+            // Path cache: Unity overrides == to return true for destroyed objects, so we can detect them.
+            // Dictionary still tracks them by reference identity, so Remove(key) works.
+            List<GameObject> stalePathKeys = null;
+            foreach (KeyValuePair<GameObject, string> entry in pathCache)
+            {
+                if (entry.Key == null)
+                {
+                    if (stalePathKeys == null) stalePathKeys = new List<GameObject>();
+                    stalePathKeys.Add(entry.Key);
+                }
+            }
+            if (stalePathKeys != null)
+            {
+                for (int i = 0; i < stalePathKeys.Count; i++)
+                    pathCache.Remove(stalePathKeys[i]);
+            }
+
+            List<string> staleFindKeys = null;
+            foreach (KeyValuePair<string, GameObject> entry in gameObjectFindCache)
+            {
+                if (entry.Value == null)
+                {
+                    if (staleFindKeys == null) staleFindKeys = new List<string>();
+                    staleFindKeys.Add(entry.Key);
+                }
+            }
+            if (staleFindKeys != null)
+            {
+                for (int i = 0; i < staleFindKeys.Count; i++)
+                    gameObjectFindCache.Remove(staleFindKeys[i]);
+            }
+
+            // FSM index is scene-scoped; force a rebuild on next access.
             inactiveFsmPathNameCache.Clear();
             fsmIndexBuilt = false;
             lastFsmIndexBuildTime = -1000f;

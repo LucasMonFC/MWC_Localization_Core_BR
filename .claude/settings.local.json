@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\jwlee\\\\project\\\\MWC_Localization_Core\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(git checkout *)",
+      "Bash(git rm *)",
+      "Bash(dotnet build *)",
+      "Bash(where msbuild *)",
+      "Read(//c/Program Files \\(x86\\)/Reference Assemblies/Microsoft/Framework/.NETFramework/**)",
+      "Read(//c/Program Files/Microsoft Visual Studio/**)",
+      "Read(//c/Program Files \\(x86\\)/Microsoft Visual Studio/**)",
+      "Bash(\"/c/Program Files \\(x86\\)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe\" -nologo -t:Build -p:Configuration=Release -v:minimal)",
+      "Bash(ls \"/d/SteamLibrary/steamapps/common/My Winter Car/mywintercar_Data/Managed/\" 2>&1 | head -5)",
+      "Read(//d/SteamLibrary/steamapps/common/My Winter Car/mywintercar_Data/**)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}
