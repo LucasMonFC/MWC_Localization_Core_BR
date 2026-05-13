@@ -7,7 +7,7 @@ namespace MWC_Localization_Core
     /// Lightweight direct GUI monitor, modeled after the old LanguageFramework HUD pass.
     /// The primary TextMesh is translated once, then copied to shadow/paired meshes.
     /// </summary>
-    public class UnifiedTextMeshMonitor
+    public class GuiTextMonitor
     {
         private class GuiTextEntry
         {
@@ -49,7 +49,7 @@ namespace MWC_Localization_Core
         private GuiTextEntry subtitlesEntry;
         private float retryTimer;
 
-        public UnifiedTextMeshMonitor(TextMeshTranslator translator)
+        public GuiTextMonitor(TextMeshTranslator translator)
         {
             this.translator = translator;
             InitializeGuiEntries();

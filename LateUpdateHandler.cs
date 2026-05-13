@@ -10,7 +10,7 @@ namespace MWC_Localization_Core
     {
         // Dependencies
         private LocalizationConfig config;
-        private UnifiedTextMeshMonitor textMeshMonitor;
+        private GuiTextMonitor textMeshMonitor;
         private TeletextHandler teletextHandler;
         private ArrayListProxyHandler arrayListHandler;
         private HashTableProxyHandler hashTableHandler;
@@ -26,7 +26,7 @@ namespace MWC_Localization_Core
 
         public void Initialize(
             LocalizationConfig configInstance,
-            UnifiedTextMeshMonitor textMeshMonitorInstance,
+            GuiTextMonitor textMeshMonitorInstance,
             TeletextHandler teletextHandlerInstance,
             ArrayListProxyHandler arrayListHandlerInstance,
             HashTableProxyHandler hashTableHandlerInstance,

@@ -43,7 +43,7 @@ namespace MWC_Localization_Core
 
         // Scene manager
         private SceneTranslationManager sceneManager;
-        private UnifiedTextMeshMonitor textMeshMonitor;
+        private GuiTextMonitor textMeshMonitor;
         
         // LateUpdate monitoring host
         private GameObject lateUpdateHandlerObject;
@@ -134,7 +134,7 @@ namespace MWC_Localization_Core
             hashTableHandler = new HashTableProxyHandler(magazineHandler);
             hashTableHandler.InitializeTargetPaths();
             
-            textMeshMonitor = new UnifiedTextMeshMonitor(translator);
+            textMeshMonitor = new GuiTextMonitor(translator);
             InitializeFsmTextHook();
 
             // Translate main menu
