@@ -20,6 +20,7 @@ namespace MWC_Localization_Core
         private Dictionary<string, string> magazineTranslations = new Dictionary<string, string>();
         private bool yellowPagesSourcesResolved;
         private string assetsFolder;
+        private readonly HashSet<int> initializedFsmIds = new HashSet<int>();
 
         public void Initialize(TranslationContext ctx)
         {
@@ -68,45 +69,36 @@ namespace MWC_Localization_Core
             return path.Contains("Sheets/YellowPagesMagazine/Page") && path.EndsWith("/Lines/YellowLine");
         }
 
-        /// <summary>
-        /// Translate price and phone number line (e.g., "h.149,- puh.123456" -> "149 MK, PHONE - 123456")
-        /// Uses PHONE key from translate_magazine.txt for the phone label
-        /// </summary>
-        private string FormatPricePhoneLine(string value)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(value) || !value.StartsWith("h.") || !value.Contains(",- puh."))
-                    return null;
-
-                // Remove "h." prefix and split by ",- puh."
-                string withoutPrefix = value.Substring(2);
-                string[] parts = withoutPrefix.Split(new string[] { ",- puh." }, System.StringSplitOptions.None);
-
-                if (parts.Length == 2)
-                {
-                    string pricePart = parts[0].Trim();
-                    string phonePart = parts[1].Trim();
-
-                    // Get phone label from translations (default to "PHONE" if not found)
-                    string phoneLabel = magazineTranslations.TryGetValue("PHONE", out string translation)
-                        ? translation
-                        : "PHONE";
-
-                    return $"{pricePart} MK, {phoneLabel} - {phonePart}";
-                }
-            }
-            catch (System.Exception ex)
-            {
-                CoreConsole.Warning($"[MagazineTextHandler] Failed to parse magazine price/phone line: {value} - {ex.Message}");
-            }
-
-            return null;
-        }
-
         public void ResetRuntimeState()
         {
             yellowPagesSourcesResolved = false;
+            initializedFsmIds.Clear();
+        }
+
+        private bool IsFsmReady(PlayMakerFSM fsm)
+        {
+            if (fsm == null || fsm.Fsm == null)
+                return false;
+
+            if (!fsm.Fsm.Initialized)
+            {
+                int id = fsm.GetInstanceID();
+                if (!initializedFsmIds.Contains(id))
+                {
+                    initializedFsmIds.Add(id);
+                    try
+                    {
+                        fsm.Fsm.InitData();
+                    }
+                    catch
+                    {
+                        // Some FSMs are not safe to initialize early (action.Init NREs on inactive
+                        // dependencies); their serialized states/variables are still readable below.
+                    }
+                }
+            }
+
+            return fsm.FsmStates != null;
         }
 
         public int TranslateAllSources()
@@ -132,7 +124,7 @@ namespace MWC_Localization_Core
         {
             foundSourceFsm = false;
 
-            GameObject root = LocalizationUtils.FindGameObjectCached("Sheets/YellowPagesMagazine");
+            GameObject root = LocalizationUtils.FindGameObjectIncludingInactive("Sheets/YellowPagesMagazine");
             if (root == null)
                 return 0;
 
@@ -160,6 +152,9 @@ namespace MWC_Localization_Core
         private int TranslateMagazineGenerateFsm(PlayMakerFSM fsm)
         {
             int translated = 0;
+
+            if (!IsFsmReady(fsm))
+                return translated;
 
             if (fsm.FsmVariables != null && fsm.FsmVariables.StringVariables != null)
             {
@@ -308,10 +303,6 @@ namespace MWC_Localization_Core
 
             if (value.Trim() == ",- puh.")
                 return " MK, " + GetPhoneLabel() + " - ";
-
-            string formatted = FormatPricePhoneLine(value);
-            if (!string.IsNullOrEmpty(formatted))
-                return formatted;
 
             // Piece and title text is translated earlier in the backing array/hash table sources.
             return value;
