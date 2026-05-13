@@ -143,7 +143,7 @@ namespace MWC_Localization_Core
                 }
 
                 // Find GameObject
-                GameObject obj = MLCUtils.FindGameObjectCached(objectPath);
+                GameObject obj = LocalizationUtils.FindGameObjectCached(objectPath);
                 if (obj == null)
                 {
                     // Not available yet - this is normal for lazy-loaded content
@@ -233,7 +233,7 @@ namespace MWC_Localization_Core
         private string FindTranslation(string original)
         {
             // Try main translations first (with normalized key)
-            string normalizedKey = MLCUtils.FormatUpperKey(original);
+            string normalizedKey = LocalizationUtils.FormatUpperKey(original);
             if (mainTranslations.TryGetValue(normalizedKey, out string translation))
             {
                 return translation;
@@ -269,7 +269,7 @@ namespace MWC_Localization_Core
                 if (completedParentPaths.Contains(parentPath))
                     continue;
 
-                GameObject parent = MLCUtils.FindGameObjectCached(parentPath);
+                GameObject parent = LocalizationUtils.FindGameObjectCached(parentPath);
                 if (parent == null)
                     continue; // Not loaded yet - will try again later
 
@@ -288,7 +288,7 @@ namespace MWC_Localization_Core
                     if (fontAppliedInstances.Contains(instanceId))
                         continue;
 
-                    string textMeshPath = MLCUtils.GetGameObjectPath(textMesh.gameObject);
+                    string textMeshPath = LocalizationUtils.GetGameObjectPath(textMesh.gameObject);
 
                     // Apply font to this TextMesh
                     if (translator.ApplyFontOnly(textMesh, textMeshPath))

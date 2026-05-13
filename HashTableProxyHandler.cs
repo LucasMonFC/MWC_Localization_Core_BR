@@ -114,7 +114,7 @@ namespace MWC_Localization_Core
                 proxyCache.Remove(objectPath);
             }
 
-            GameObject obj = MLCUtils.FindGameObjectCached(objectPath);
+            GameObject obj = LocalizationUtils.FindGameObjectCached(objectPath);
             if (obj == null)
                 return null;
 

@@ -182,7 +182,7 @@ namespace MWC_Localization_Core
 
             // Normalize current text for lookup
             string currentText = textMesh.text;
-            string normalizedKey = MLCUtils.FormatUpperKey(currentText);
+            string normalizedKey = LocalizationUtils.FormatUpperKey(currentText);
 
             // Check if translation exists
             if (!translations.TryGetValue(normalizedKey, out string translation))
@@ -249,7 +249,7 @@ namespace MWC_Localization_Core
 
             string lineNoCr = line.Replace("\r", string.Empty);
             string translated;
-            if (translations.TryGetValue(MLCUtils.FormatUpperKey(lineNoCr), out translated))
+            if (translations.TryGetValue(LocalizationUtils.FormatUpperKey(lineNoCr), out translated))
                 return translated;
 
             int textStart = FindTextStartAfterNumericPrefix(lineNoCr);
@@ -257,7 +257,7 @@ namespace MWC_Localization_Core
                 return line;
 
             string suffix = lineNoCr.Substring(textStart);
-            if (!translations.TryGetValue(MLCUtils.FormatUpperKey(suffix), out translated))
+            if (!translations.TryGetValue(LocalizationUtils.FormatUpperKey(suffix), out translated))
                 return line;
 
             return lineNoCr.Substring(0, textStart) + translated;

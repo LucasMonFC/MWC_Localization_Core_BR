@@ -106,7 +106,7 @@ namespace MWC_Localization_Core
                     if (!proxyCache.ContainsKey(pathPrefix))
                     {
                         // First time accessing this path - cache proxies
-                        GameObject dataObject = MLCUtils.FindGameObjectCached(pathPrefix);
+                        GameObject dataObject = LocalizationUtils.FindGameObjectCached(pathPrefix);
                         if (dataObject == null) continue;
 
                         proxies = dataObject.GetComponents<PlayMakerArrayListProxy>();

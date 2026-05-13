@@ -104,7 +104,7 @@ namespace MWC_Localization_Core
         {
             foundSourceFsm = false;
 
-            GameObject root = MLCUtils.FindGameObjectCached("Sheets/YellowPagesMagazine");
+            GameObject root = LocalizationUtils.FindGameObjectCached("Sheets/YellowPagesMagazine");
             if (root == null)
                 return 0;
 
@@ -116,7 +116,7 @@ namespace MWC_Localization_Core
             for (int i = 0; i < fsms.Length; i++)
             {
                 PlayMakerFSM fsm = fsms[i];
-                if (fsm == null || MLCFsmUtils.GetFsmName(fsm) != "Generate")
+                if (fsm == null || FsmUtils.GetFsmName(fsm) != "Generate")
                     continue;
 
                 foundSourceFsm = true;
@@ -171,7 +171,7 @@ namespace MWC_Localization_Core
             if (fsm == null || fsm.gameObject == null || fsm.FsmVariables == null)
                 return 0;
 
-            string path = MLCUtils.GetGameObjectPath(fsm.gameObject);
+            string path = LocalizationUtils.GetGameObjectPath(fsm.gameObject);
             if (string.IsNullOrEmpty(path) || path.IndexOf("/Lines/YellowLine", System.StringComparison.OrdinalIgnoreCase) < 0)
                 return 0;
 
@@ -198,10 +198,10 @@ namespace MWC_Localization_Core
                     if (state == null || state.Actions == null || state.Name != "State 4")
                         continue;
 
-                    if (state.Actions.Length > 0 && MLCFsmUtils.SetNestedStringValue(state.Actions[0], translatedLine, "storeValue"))
+                    if (state.Actions.Length > 0 && FsmUtils.SetNestedStringValue(state.Actions[0], translatedLine, "storeValue"))
                         changed++;
 
-                    if (state.Actions.Length > 1 && MLCFsmUtils.SetNestedStringValue(state.Actions[1], translatedLine, "targetProperty", "StringParameter"))
+                    if (state.Actions.Length > 1 && FsmUtils.SetNestedStringValue(state.Actions[1], translatedLine, "targetProperty", "StringParameter"))
                         changed++;
                 }
             }
@@ -218,10 +218,10 @@ namespace MWC_Localization_Core
 
         private int TranslateMagazineBuildStringParts(object action)
         {
-            if (!MLCFsmUtils.IsBuildStringAction(action))
+            if (!FsmUtils.IsBuildStringAction(action))
                 return 0;
 
-            FieldInfo field = MLCFsmUtils.GetStringPartsField(action);
+            FieldInfo field = FsmUtils.GetStringPartsField(action);
             if (field == null)
                 return 0;
 
@@ -314,7 +314,7 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(original))
                 return null;
 
-            string normalizedKey = MLCUtils.FormatUpperKey(original);
+            string normalizedKey = LocalizationUtils.FormatUpperKey(original);
             if (magazineTranslations.TryGetValue(normalizedKey, out string translation))
             {
                 return translation;

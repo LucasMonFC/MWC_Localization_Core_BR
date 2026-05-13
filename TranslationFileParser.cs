@@ -55,7 +55,7 @@ namespace MWC_Localization_Core
                         continue;
 
                     if (normalizeKeys)
-                        key = MLCUtils.FormatUpperKey(key);
+                        key = LocalizationUtils.FormatUpperKey(key);
 
                     string processedValue = value.Replace("\\n", "\n");
 

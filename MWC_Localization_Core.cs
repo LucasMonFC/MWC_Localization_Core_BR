@@ -191,7 +191,7 @@ namespace MWC_Localization_Core
             // Clear caches when entering a new scene
             if (sceneChanged)
             {
-                MLCUtils.ClearCaches();
+                LocalizationUtils.ClearCaches();
 
                 // Clear MonoBehaviour cache and destroy old monitor
                 if (lateUpdateHandler != null)
@@ -407,7 +407,7 @@ namespace MWC_Localization_Core
             hashTableHandler.ClearTranslations();
             translator.ClearRuntimeCaches();
             translator.ResetPatterns();
-            MLCUtils.ClearCaches();
+            LocalizationUtils.ClearCaches();
 
             // Reset text adjustment caches and reload config
             config.ClearTextAdjustmentCaches();
@@ -463,13 +463,13 @@ namespace MWC_Localization_Core
             LoadCustomFonts();
 
             // Reapply fonts and adjustments to all TextMeshes (after restore)
-            TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();
+            TextMesh[] allTextMeshes = LocalizationUtils.GetAllTextMeshesIncludingInactive();
             int reappliedCount = 0;
             foreach (TextMesh tm in allTextMeshes)
             {
                 if (tm != null && !string.IsNullOrEmpty(tm.text))
                 {
-                    string path = MLCUtils.GetGameObjectPath(tm.gameObject);
+                    string path = LocalizationUtils.GetGameObjectPath(tm.gameObject);
                     translator.ApplyCustomFont(tm, path);
                     reappliedCount++;
                 }
@@ -520,7 +520,7 @@ namespace MWC_Localization_Core
                 textMeshMonitor.RegisterAll();
 
             // Find all TextMesh components in the scene, including inactive objects.
-            TextMesh[] allTextMeshes = MLCUtils.GetAllTextMeshesIncludingInactive();
+            TextMesh[] allTextMeshes = LocalizationUtils.GetAllTextMeshesIncludingInactive();
             int translatedCount = 0;
             int forcedFontAppliedCount = 0;
 
@@ -530,7 +530,7 @@ namespace MWC_Localization_Core
                     continue;
 
                 // Get GameObject path
-                string path = MLCUtils.GetGameObjectPath(tm.gameObject);
+                string path = LocalizationUtils.GetGameObjectPath(tm.gameObject);
 
                 // Translate and apply font
                 if (!string.IsNullOrEmpty(tm.text))

@@ -133,7 +133,7 @@ namespace MWC_Localization_Core
 
             if (!entry.HasPrimary())
             {
-                GameObject primaryObject = MLCUtils.FindGameObjectCached(entry.PrimaryPath);
+                GameObject primaryObject = LocalizationUtils.FindGameObjectCached(entry.PrimaryPath);
                 entry.PrimaryTextMesh = primaryObject != null ? primaryObject.GetComponent<TextMesh>() : null;
                 entry.LastText = string.Empty;
                 entry.HasProcessedText = false;
@@ -146,7 +146,7 @@ namespace MWC_Localization_Core
                 if (copyTextMesh != null && copyTextMesh.gameObject != null)
                     continue;
 
-                GameObject copyObject = MLCUtils.FindGameObjectCached(entry.CopyPaths[i]);
+                GameObject copyObject = LocalizationUtils.FindGameObjectCached(entry.CopyPaths[i]);
                 entry.CopyTextMeshes[i] = copyObject != null ? copyObject.GetComponent<TextMesh>() : null;
                 if (entry.HasBaseLayout && entry.CopyTextMeshes[i] != null)
                     CaptureCopyBasePosition(entry, i);
