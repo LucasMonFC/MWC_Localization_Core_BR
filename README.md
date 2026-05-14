@@ -1,6 +1,7 @@
 # MSC Localization Core
 
-MSCLoader localization framework for **My Summer Car**. The packaged Brazilian Portuguese language pack ships the `.txt` files and optional `fonts.unity3d` under `Mods/Assets/MSC_Localization_Core_BR/`; this DLL loads them and applies translations to TextMesh, PlayMaker FSM strings, teletext arrays, HUD text, rally sheets, computer screens, and selected ArrayList-backed game data.
+MSCLoader localization framework for **My Summer Car**. 
+The packaged Brazilian Portuguese language pack ships the `.txt` files and optional `fonts.unity3d` under `Mods/Assets/MSC_Localization_Core_BR/`; this DLL loads them and applies translations to TextMesh, PlayMaker FSM strings, teletext arrays, HUD text, rally sheets, computer screens, and selected ArrayList-backed game data.
 
 ## Quick Start
 
