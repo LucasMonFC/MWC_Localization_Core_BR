@@ -35,7 +35,6 @@ namespace MSC_Localization_Core
             "Systems/Teletext/VKTekstiTV/PAGES",
             "Systems/Teletext/VKTekstiTV/HEADER",
             "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS",
-            "Sheets/UnemployPaper",
             "Sheets/RallyResults",
             "RALLY/RallyTV"
         };

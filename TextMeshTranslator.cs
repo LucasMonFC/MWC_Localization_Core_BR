@@ -18,9 +18,6 @@ namespace MSC_Localization_Core
 
         private static readonly string[] ExcludedPath = new string[]
         {
-            "HOMENEW/Functions/FunctionsDisable/Stereos/Player/Screen/Settings/Bass/LCD",
-            "Sheets/ServiceBrochure/PagePaintRims/Buttons/CustomColors",
-            "Sheets/ServiceBrochure/PagePaintCar/Buttons/CustomColors",
             "GUI/HUD/FPS"
         };
 

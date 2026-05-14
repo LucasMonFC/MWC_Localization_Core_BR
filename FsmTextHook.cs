@@ -264,24 +264,6 @@ namespace MSC_Localization_Core
             resolved = false;
             if (target.WholeFsm)
             {
-                bool scheduleHandled;
-                bool scheduleResolved;
-                bool scheduleChanged = TryTranslateTvScheduleTarget(target, out scheduleHandled, out scheduleResolved);
-                if (scheduleHandled)
-                {
-                    resolved = scheduleResolved;
-                    return scheduleChanged;
-                }
-
-                bool handled;
-                bool indexedResolved;
-                bool indexedChanged = TryTranslateIndexedLineTarget(target, out handled, out indexedResolved);
-                if (handled)
-                {
-                    resolved = indexedResolved;
-                    return indexedChanged;
-                }
-
                 List<PlayMakerFSM> fsms = GetFsmsForWholeTarget(target);
                 bool changed = false;
                 changed |= TranslateArrayListProxiesForTarget(target);
@@ -380,98 +362,6 @@ namespace MSC_Localization_Core
             changed |= TranslateArrayListGetProxy(action, target);
             changed |= TranslateActionDirectStringFields(action, target);
             changed |= TranslateActionFsmStringFields(action, target);
-            return changed;
-        }
-
-        private bool TryTranslateIndexedLineTarget(FsmTarget target, out bool handled, out bool resolved)
-        {
-            handled = false;
-            resolved = false;
-            if (target == null || !target.WholeFsm || !TextMatchesExact(GetLastPathSegment(target.ObjectPath), "Line"))
-                return false;
-
-            handled = true;
-            List<PlayMakerFSM> fsms = GetFsmsForWholeTarget(target);
-            if (fsms.Count == 0)
-                return false;
-
-            bool changed = false;
-            for (int i = 0; i < fsms.Count; i++)
-            {
-                changed |= SyncIndexedLineFromArrayList(fsms[i], target);
-            }
-
-            resolved = true;
-            return changed;
-        }
-
-        private bool SyncIndexedLineFromArrayList(PlayMakerFSM fsm, FsmTarget target)
-        {
-            if (!IsFsmReady(fsm) || fsm.FsmStates == null)
-                return false;
-
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, "State 1");
-            if (state == null || state.Actions == null || state.Actions.Length == 0)
-                return false;
-
-            object action = state.Actions[0];
-            if (action == null || action.GetType().Name != "ArrayListGet")
-                return false;
-
-            int index = GetArrayListGetIndex(action);
-            PlayMakerArrayListProxy proxy = GetArrayListGetProxy(action);
-            if (proxy == null || proxy._arrayList == null)
-                return false;
-
-            if (index < 0 || index >= proxy._arrayList.Count || proxy._arrayList[index] == null)
-                return SetIndexedLineValue(fsm, string.Empty);
-
-            string sourceLine = proxy._arrayList[index].ToString();
-            if (string.IsNullOrEmpty(sourceLine))
-                return SetIndexedLineValue(fsm, string.Empty);
-
-            string displayLine;
-            if (!TranslateString(sourceLine, target, out displayLine))
-                displayLine = sourceLine;
-
-            bool changed = false;
-            if (proxy._arrayList[index] as string != displayLine)
-            {
-                proxy._arrayList[index] = displayLine;
-                changed = true;
-            }
-
-            changed |= SetIndexedLineValue(fsm, displayLine);
-            return changed;
-        }
-
-        private bool SetIndexedLineValue(PlayMakerFSM fsm, string value)
-        {
-            if (fsm == null || fsm.gameObject == null)
-                return false;
-
-            string safeValue = value ?? string.Empty;
-            bool changed = false;
-            HutongGames.PlayMaker.FsmString text = fsm.FsmVariables != null ? fsm.FsmVariables.GetFsmString("Text") : null;
-            changed |= FsmUtils.SetFsmStringValue(text, safeValue);
-
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, "State 1");
-            if (state != null && state.Actions != null)
-            {
-                if (state.Actions.Length > 0)
-                    changed |= FsmUtils.SetNestedStringValue(state.Actions[0], safeValue, "result", "namedVar");
-
-                if (state.Actions.Length > 1)
-                    changed |= FsmUtils.SetNestedStringValue(state.Actions[1], safeValue, "targetProperty", "StringParameter");
-            }
-
-            TextMesh textMesh = fsm.GetComponent<TextMesh>();
-            if (textMesh != null && textMesh.text != safeValue)
-            {
-                textMesh.text = safeValue;
-                changed = true;
-            }
-
             return changed;
         }
 
@@ -758,81 +648,6 @@ namespace MSC_Localization_Core
                 changed |= TranslateAction(state.Actions[target.ActionIndex], target);
 
             changed |= TranslateTextMeshesForTarget(target);
-            return changed;
-        }
-
-        private bool TryTranslateTvScheduleTarget(FsmTarget target, out bool handled, out bool resolved)
-        {
-            handled = false;
-            resolved = false;
-            if (target == null || !target.WholeFsm || target.ObjectPath.IndexOf("TVGraphics/GFXTanaan", System.StringComparison.OrdinalIgnoreCase) < 0)
-                return false;
-
-            handled = true;
-            string scheduleRootPath = TextMatchesExact(GetLastPathSegment(target.ObjectPath), "Text")
-                ? GetParentPath(target.ObjectPath)
-                : target.ObjectPath;
-
-            GameObject root = LocalizationUtils.FindGameObjectIncludingInactive(scheduleRootPath)
-                ?? LocalizationUtils.FindGameObjectIncludingInactive(target.ObjectPath)
-                ?? FindNearestGameObjectForPath(target.ObjectPath);
-            if (root == null)
-                return false;
-
-            bool changed = false;
-            PlayMakerFSM[] fsms = root.GetComponentsInChildren<PlayMakerFSM>(true);
-            for (int i = 0; i < fsms.Length; i++)
-            {
-                PlayMakerFSM fsm = fsms[i];
-                if (fsm == null || fsm.gameObject == null)
-                    continue;
-
-                string path = LocalizationUtils.GetGameObjectPath(fsm.gameObject);
-                if (!IsObjectPathMatch(path, target.ObjectPath) && !IsObjectPathMatch(path, scheduleRootPath))
-                    continue;
-
-                if (!string.IsNullOrEmpty(target.FsmName) && FsmUtils.GetFsmName(fsm) != target.FsmName)
-                    continue;
-
-                changed |= TranslateWholeFsm(fsm, target);
-            }
-
-            PlayMakerArrayListProxy[] proxies = root.GetComponentsInChildren<PlayMakerArrayListProxy>(true);
-            for (int i = 0; i < proxies.Length; i++)
-            {
-                PlayMakerArrayListProxy proxy = proxies[i];
-                if (proxy == null || proxy.gameObject == null)
-                    continue;
-
-                string path = LocalizationUtils.GetGameObjectPath(proxy.gameObject);
-                if (!IsObjectPathMatch(path, scheduleRootPath))
-                    continue;
-
-                if (!TextMatchesExact(proxy.referenceName, "Days"))
-                    continue;
-
-                changed |= TranslateArrayListProxy(proxy, target);
-            }
-
-            TextMesh[] textMeshes = root.GetComponentsInChildren<TextMesh>(true);
-            for (int i = 0; i < textMeshes.Length; i++)
-            {
-                TextMesh textMesh = textMeshes[i];
-                if (textMesh == null || textMesh.gameObject == null)
-                    continue;
-
-                string path = LocalizationUtils.GetGameObjectPath(textMesh.gameObject);
-                if (!IsObjectPathMatch(path, target.ObjectPath) && !IsObjectPathMatch(path, scheduleRootPath))
-                    continue;
-
-                if (!TranslateString(textMesh.text, target, out string translatedText))
-                    continue;
-
-                textMesh.text = translatedText;
-                changed = true;
-            }
-
-            resolved = true;
             return changed;
         }
 
@@ -1639,19 +1454,6 @@ namespace MSC_Localization_Core
             return next == '/' || char.IsDigit(next);
         }
 
-        private static int GetArrayListGetIndex(object action)
-        {
-            if (action == null)
-                return -1;
-
-            FieldInfo atIndexField = FsmUtils.GetField(action.GetType(), "atIndex");
-            if (atIndexField == null)
-                return -1;
-
-            HutongGames.PlayMaker.FsmInt atIndex = atIndexField.GetValue(action) as HutongGames.PlayMaker.FsmInt;
-            return atIndex == null ? -1 : atIndex.Value;
-        }
-
         private static PlayMakerArrayListProxy GetArrayListGetProxy(object action)
         {
             if (action == null)
@@ -1742,15 +1544,6 @@ namespace MSC_Localization_Core
             return slashIndex >= 0 && slashIndex + 1 < path.Length
                 ? path.Substring(slashIndex + 1)
                 : path;
-        }
-
-        private static string GetParentPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return string.Empty;
-
-            int slashIndex = path.LastIndexOf('/');
-            return slashIndex > 0 ? path.Substring(0, slashIndex) : path;
         }
 
         private static bool TextMatchesExact(string value, string expected)
