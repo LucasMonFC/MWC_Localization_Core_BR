@@ -1,4 +1,4 @@
-Liquor Store
+//Liquor Store
 BOOZE 199.95 MK  = 51 199.95 МК
 BEER 16.65 MK = CERVEJA 16.65 МК
 BEER 99.95 MK = CAIXA DE CERVEJA 99.95 МК
@@ -15,7 +15,7 @@ BOOZE CASE = CAIXA DE VODKA
 SPIRIT CASE = CAIXA DE ÁLCOOL
 KURJALA BEER CASE = BEER CRATE KURJALA
 
-Mods Variados
+//Mods Variados
 BOLT TOO BIG = PARAFUSO MUITO GRANDE
 BOLT SLIGHTLY TOO BIG = PARAFUSO LEVE DEMASIADO GRANDE
 BOLT AWAY TOO BIG = PARAFUSO MUITO GRANDE
@@ -79,19 +79,19 @@ donate 1 MK = Doar 1 MK
 Unfold seat = DESDOBRE O ASSENTO
 fuse holderTU = SUPORTE DE FUSÍVEL
 
-HONDA NSR50
+//HONDA NSR50
 Tank Bag = BOLSA DO TANQUE
 Fuel = COMBUSTÍVEL
 Light = LUZES
 Blinker = PISCA-ALERTA
 Hi / Lo = ALTO / BAIXO
 
-Mokia Townsman
+//Mokia Townsman
 Mokia Townsman = MOKIA
 MOKIA TOWNSMAN, 2499 MK = MOKIA HOMEM DA CIDADE, 2499 MK
 PHONE HOLDER = SUPORTE DO TELEFONE
 
-Drivable Ricochet
+//Drivable Ricochet
 "1972 Ricochet ST for sale. Good condition, though it may need a tune-up. Would like 20,000mk for it but open to offers, located at the white house south of the dirt road exiting Peräjärvi." = "1972 Ricochet ST para venda. Bom estado, embora possa precisar de um ajuste. Gostaria de 20.000 mk por ele, \nmas aberto a ofertas, localizado na casa branca ao sul da estrada de terra que sai de Peräjärvi."
 "I suppose that you are here for the car?" = "Suponho que esteja aqui pelo carro?"
 "I guess I can lower the price a little, 19000 MK?" = "Acho que posso baixar um pouco o preço, 19.000 MK?"
@@ -117,14 +117,14 @@ Ricochet Rear Window Louvres = RICOCHET GRADE DA JANELA
 LONGCHAMP WHELLS 5649MK = RODAS TALA LARGA 5649 MK
 LONGCHAMP WHELL = RODA TALA LARGA
 
-DeliveryJobs
+//DeliveryJobs
 Show available delivery jobs = Mostrar trabalhos de entrega disponíveis
 DELIVERY PACKAGE = PACOTE DE ENTREGA
 DELIVER THIS BOX = ENTREGUE ESTA CAIXA
 Delivery status = STATUS DE ENTREGA
 Job Details = DETALHES DO TRABALHO
 
-Tangerine FZ-120 Pickup
+//Tangerine FZ-120 Pickup
 CLOSE LID = FECHAR TAMPA
 OPEN LID = ABRIR TAMPA
 SCREW CAP = TAMPA DO COMBUSTÍVEL
@@ -132,12 +132,12 @@ TANGERINE PHONE HOLDER = SUPORTE DO TELEFONE
 AND CAR KEYS = E CHAVE DO CARRO
 Sunvisor = QUEBRA-SOL
 
-Trailer Hitch System
+//Trailer Hitch System
 Connect = CONECTAR
 Disconnect = DESCONECTAR
 Trailer = REBOQUE
 
-Body panels seller
+//Body panels seller
 BUY Door Left 1099MK = COMPRAR PORTA ESQUEDA 1099 MK
 BUY Door Right 1099MK = COMPRAR PORTA DIREITA 1099 MK
 BUY Grille 539MK = COMPRAR GRELHA 539 MK
@@ -150,15 +150,15 @@ BUY Hood 699MK = COMPRAR CAPO 699 MK
 BUY Bootlid 599MK = TAMPA DO PORTA-MALAS 599 MK
 BUY PARTS {0}MK = COMPRAR PEÇAS {0} MK
 
-Strawberry Delivery
+//Strawberry Delivery
 Hello! I'm looking for experienced drivers to deliver strawberries to a strawberry sale site! More info below. Location: Strawberry Field, Sell Point: Near the church, Payment: 30mk each box. Make sure to make the delivery between 8:00 and 18:00 = Olá! Estou procurando motoristas experientes para entregar morangos em um ponto de venda de morangos! Mais informações abaixo.\nLocalização: Strawberry Field, Ponto de venda: Perto da igreja, Pagamento: 30mk cada caixa.\nCertifique-se de fazer a entrega entre 8:00 e 18:00
 TAKE JOB. = ACEITAR TRABALHO.
 
-Dumpsters
+//Dumpsters
 Trashbin = LIXEIRA
 shovel = PÁ
 
-Repairable Ruscko Main Mod
+//Repairable Ruscko Main Mod
 Blown Ruscko Radiator = RADIADOR FURADO
 Old Ruscko Starter = MOTOR DE PARTIDA ESTRAGADO
 Ruscko Seatbelt Kit 2249 MK = CINTO DE SEGURANÇA RUSCKO 2249 MK
@@ -187,19 +187,19 @@ Ruscko Mirror = ESPELHO RUSCKO
 Ruscko Window Roller = MANIVELA RUSCKO
 FIXING WIRING... {0}% = CONSERTANDO FIAÇÃO... {0}%
 
-Mod Shop
+//Mod Shop
 Shopping cart ({0} items) = Carrinho de compras ({0} itens)
 Get item from bag ({0} items) = Pegar item ({0} itens)
 
-Jack Stands
+//Jack Stands
 Jackstand = MACACO
 CANT ATTACH JACKSTAND - CAR NOT HIGH ENOUGH = NÃO É POSSÍVEL FIXAR O MACACO - O CARRO NÃO ESTA ALTO O SUFICIENTE
 Jackstand - 300 MK = Macaco - 300 MK
 
-Second Helmet
+//Second Helmet
 Motorcycle Helmet - 1299 MK = Capacete de Motocicleta - 1299 MK
 
-Automatic Fuses
+//Automatic Fuses
 Automatic Fuse (10A) - 20 MK = FUSÍVEL AUTOMÁTICO (10A) - 20 MK
 Automatic Fuse (16A) - 40 MK = FUSÍVEL AUTOMÁTICO (16A) - 40 MK
 Automatic Fuse (20A) - 50 MK = FUSÍVEL AUTOMÁTICO (20A) - 50 MK
@@ -217,7 +217,7 @@ Slot: Kitchen = COZINHA
 Slot: Garage = GARAGEM
 Slot: Bedroom, bathroom = QUARTO, BANHEIRO
 
-CD Player Enhanced
+//CD Player Enhanced
 Rack for 10 CDs - 50 MK = RACK PARA 10 CDS - 50 MK
 cd case ({0}) = CD {0}
 cd case (7) = CD 6
@@ -230,13 +230,13 @@ Put CD back = COLOCAR CD
 CD Rack = RACK CD
 CD Player is off = CD PLAYER DESLIGADO
 
-Audio Visualizers
+//Audio Visualizers
 LED VU meter - 250 MK = MEDIDOR LED VU - 250 MK
 LED VU meter = MEDIDOR LED VU
 LED VU Meter (Stereo) = MEDIDOR LED VU (ESTÉREO)
 LED VU meter (stereo) - 500 MK = MEDIDOR LED VU (ESTÉREO) - 500 MK
 
-Mirror Accessories
+//Mirror Accessories
 White Fur Dices - 29 MK = Dados de Pele Branca - 29 MK
 Black Fur Dices - 29 MK = Dados de Pele Preta - 29 MK
 Custom Fur Dices - 29 MK = Dados de Pele Personalizados - 29 MK
@@ -260,10 +260,10 @@ Beer Mirror Decoration = Decoração de Espelho de Cerveja
 Piston Mirror Decoration = Decoração de Espelho de Pistão
 Balfield Mirror Decoration = Decoração de Espelho Balfield
 
-Speedometer Cable
+//Speedometer Cable
 speedometer cable = CABO DO VELOCÍMETRO
 
-Part Inspector
+//Part Inspector
 water pump - 0% = BOMBA DE ÁGUA QUEBRADO
 water pump - {0}% = BOMBA DE ÁGUA {0}%
 fuel pump - 0% = BOMBA DE COMBUSTIVEL QUEBRADO
@@ -489,7 +489,7 @@ r20 battery box - {0} left = CAIXA DE BATERIA - {0} RESTANTE
 spark plug box - {0} left = CAIXA DE VELA DE IGNIÇÃO - {0} RESTANTE
 fuse package - {0} left = CAIXA DE FUSÍVEIS - {0} RESTANTE
 
-VHSPlayer
+//VHSPlayer
 *I don't have any signal* = *Não tenho sinal*
 VHS Player (complete set) - 4250 MK = LEITOR VHS (CONJUNTO COMPLETO) - 4250 MK
 Preview items = VISUALIZAR ITENS
@@ -514,18 +514,18 @@ Open Case = ABRIR
 Close Case = FECHAR
 Glovebox = ABRIR/FECHAR
 
-Haybale Improvement
+//Haybale Improvement
 Press "Use" To tie Haybale = AMARRAR
 Press "Use" To Untie Haybale = DESAMARRAR
 Lock Prop Rod = ABRIR HASTE
 Release Prop Rod = FECHAR HASTE
 
-Panier 250
+//Panier 250
 "Hello, thank you again for helping me with the haybales. Due to my poor health I'm not driving anymore, so I'm giving you my old car, you can find it at the farm. Tohvakka" = "Olá, muito obrigado novamente por me ajudar com os fardos de feno. Devido à minha saúde debilitada, não \nestou mais dirigindo, então estou lhe dando meu carro velho, você pode encontrá-lo na fazenda. Tohvakka"
 PANIER HUBCAP = CALOTA
 UNLOCK DOOR = DESTRANCAR
 Lock Door = TRANCAR
-LOCK DOOR - TRANCAR
+//LOCK DOOR - TRANCAR
 CANT UNLOCK - KEY IN IGNITION = NÃO POSSO DESTRANCAR - CHAVE NA IGNIÇÃO
 UNLOCK BOOT = DESTRANCAR
 LOCK BOOT = TRANCAR
@@ -583,7 +583,7 @@ Body = CARROCERIA
 Reset Trip Meter = RESETAR TRIP
 Panier Rear Mirror = ESPELHO RETROVISOR CENTRAL
 
-Moose Hunter
+//Moose Hunter
 Night vision goggles = ÓCULOS DE VISÃO NOTURNA
 Night vision goggles 527 mk = Óculos de visão noturna 527 mk
 7.62x54mm rounds box 47 mk = Caixa com munição 7,62x54mm 47 mk
@@ -694,21 +694,21 @@ Nuori mies hirven raadeltuna Peräjärvellä. = Um jovem atacado por \num alce e
 Young male smashed by a moose in Peräjärvi. = Jovem \nesmagado \npor um \nalce em \nPeräjärvi.
 chimney gun holder = PORTA ARMA DE CHAMINÉ
 
-Bottle Recycling
+//Bottle Recycling
 Bottle deposits: Glass bottle 0,33 (1mk), Empty beer case (14mk), Full beer case (38mk). No goverment's booze bottles! = Depósitos de garrafas: \nGarrafa de vidro 0,33L (1mk) \nCaixa de cerveja vazia (14mk) \nCaixa de cerveja cheia (38mk) \nNenhuma garrafa de bebida para governo!!!
 CANT LOCK-KEY IN IGNITION = NÃO É POSSÍVEL TRAVAR A CHAVE NA IGNIÇÃO
 Put bottle to beer case = COLOCAR GARRAFA
 
-SatsDirtMod
+//SatsDirtMod
 Sponge = ESPONJA
 Wet Sponge = ESPONJA MOLHADA
 Damp Sponge = ESPONJA ÚMIDA
 
-Jail Harmonica
+//Jail Harmonica
 Harmonica = GAITA
 Play Harmonica = TOCAR GAITA
 
-Random Rally Parts
+//Random Rally Parts
 Skidtray 1799mk = PROTETOR DE CÁRTER 1799 MK
 Trunk Divider Panel 599mk = PAINEL DIVISOR 599 MK
 Door Panels 999mk = PAINÉIS DE PORTAS 999 MK
@@ -717,11 +717,11 @@ Sheet Metal Skidtray = PROTETOR DE CÁRTER
 Sheet Metal Door Panel (Right) = PAINEL DE PORTA ( DIREITO )
 Sheet Metal Door Panel (Left) = PAINEL DE PORTA ( ESQUERDO )
 
-Portable Television
+//Portable Television
 PRESS F TO TURN TV ON/OFF = LIGAR/DESLIGAR
 Television = TV
 
-Satsuma LX
+//Satsuma LX
 rear carpet = CARPETE TRASEIRO
 grile limited lx = GRADE LIMITADA LX
 grile 120tz = GRADE 120 TZ
@@ -740,14 +740,14 @@ CONNECT DOOR LIGHT WIRE = CONECTE O FIO DA LUZ DA PORTA
 ashtray amp = AMPLIFICADOR DE CINZEIRO
 ashtray amp lx = AMPLIFICADOR DE CINZEIRO LX
 
-Display Bolt Sizes
+//Display Bolt Sizes
 Wrench Slightly Too Small = Chave um pouco pequena demais
 Wrench Way Too Small = Chave muito pequena
 Wrench Slightly Too Big = Chave um pouco grande demais
 Wrench Way Too Big = Chave muito grande
 SIZE {0} = TAMANHO {0}
 
-Expanded Winter Features
+//Expanded Winter Features
 HEATER = AQUECEDOR
 MAKING A SNOWBALL = FAZENDO BOLA DE NEVE
 snowball = BOLA DE NEVE
@@ -864,7 +864,7 @@ SWEAT = SUOR
 ENTER SITTING MODE = ENTRAR NO MODO SENTADO
 Young male found dead from cold in region of Alivieska = Jovem \nencontrado \ncongelado \nem Alivieska
 
-Expanded Shop
+//Expanded Shop
 Can opener 79 MK = ABRIDOR DE LATA 79 MK
 Mustard 7.95 MK = MOSTARDA 7.95 MK
 Canned meatballs 10.99 MK = ALMÔNDEGAS ENLATADAS 10.99 MK
@@ -918,7 +918,7 @@ Spoiled Meat soup = SOPA DE CARNE ESTRAGADO
 Spoiled meatballs = ALMÔNDEGAS ENLATADAS ESTRAGADO
 Spoiled Pea soup = SOPA DE ERVILHA ESTRAGADO
 
-Country House
+//Country House
 For sale a house near a farm, built in 1990, in good condition, has all the furniture and a telephone line, I will give a boombox as a gift = Vende-se uma casa perto de uma fazenda, construída em 1990, em bom estado, \ntem todos os móveis e linha telefônica, darei de presente uma JBL.
 BUY COUNTRY HOUSE - 24000MK = COMPRAR UMA CASA DE CAMPO - 24000 МК
 Thanks for the deal, keep the keys to the house = Obrigado pelo acordo, fique com as chaves da casa
@@ -936,7 +936,7 @@ BUY RED PAINT 750MK = COMPRAR TINTA VERMELHA - 750 МК
 BUY WHITE PAINT 750MK = COMPRAR TINTA BRANCA - 750 МК
 LADDER = ESCADA
 
-Moonshine Still Revived
+//Moonshine Still Revived
 Call Seppo = Ligue para Seppo
 Sepon puhelinnumero = Ligue para Seppo
 Seppo's telephone number = Número de telefone do Seppo
@@ -994,7 +994,7 @@ Start fire = COMEÇAR FOGO
 Empty out = ESVAZIAR ALAMBIQUE
 *doesn't smell right* = *não cheira bem*
 
-Donner TechRacing Turbocharger
+//Donner TechRacing Turbocharger
 Open catalog = ABRIR CATALOGO
 Racing Turbo = TURBO DE CORRIDA
 Press [F] to Unpack Racing Turbo = PEGAR TURBO DE CORRIDA
@@ -1126,7 +1126,7 @@ Screw size: 14mm = TAMANHO 14
 [Left mouse] or [F] to switch to Analog [SCROLL UP/Down] to change color = ANALÓGICO / SCROOL MUDAR COR
 [Left mouse] or [F] to switch to Digital [SCROLL UP/Down] to change color = DIGITAL / SCROOL MUDAR COR
 
-Eagle Eye Item Inspector
+//Eagle Eye Item Inspector
 *it just started fermentig* = *começou a fermentar*
 *about 0 minutes left until finished* = *esta quase pronto*
 *about {0} minutes left until finished* = *faltam cerca de {0} minutos para terminar*
@@ -1147,19 +1147,19 @@ Eagle Eye Item Inspector
 *There are {0} beer bottles left* = *Restam {0} garrafa de cerveja*
 *There is just 0 beer bottles left I should buy some more* = *Acabou as garrafas de cerveja, devo comprar mais*
 
-Openable Cabinets
+//Openable Cabinets
 Cant open - other door in way = Não consigo abrir \noutra porta está no caminho
 
-Satsuma Optional Extras Mod (And X-1 Trim)
+//Satsuma Optional Extras Mod (And X-1 Trim)
 Right Speaker Grille = GRADE DIREITA ALTO-FALANTE
 Left Speaker Grille = GRADE ESQUERDA ALTO-FALANTE
 
-Pre Facelift Satsuma
+//Pre Facelift Satsuma
 Adjust mirror up / down = AJUSTE CIMA / BAIXO
 Fender Mirror (Left) = ESPELHO PARA-LAMA
 Fender Mirror (Right)= ESPELHO PARA-LAMA
 
-Canned Beer
+//Canned Beer
 Canned Beer 6.5 mk = CERVEJA EM LATA 6.5 MK
 Canned Beer Pack 125 mk = PACOTE CERVEJA EM LATA 125 MK
 canned beer pack = PACOTE DE CERVAJA EM LATA
@@ -1174,7 +1174,7 @@ Cooler Box = Caixa refrigeradora
 Cooler Box 50 mk = CAIXA REFRIGERADORA 50 MK
 Cooler = CAIXA REFRIGERADORA
 
-73'Burnet Ferndale Suburbano
+//73'Burnet Ferndale Suburbano
 TAILGATE | "DOOR" = PORTA
 "TAILGATE" | DOOR = PORTA TRASEIRA
 RELEASE PARKINGBRAKE = LIBERE O FREIO DE ESTACIONAMENTO
@@ -1183,7 +1183,7 @@ LOW = BAIXO
 DRIVE = DIRIGIR
 "You seem to really enjoy collecting junk, I have some in my yard for you, pick it up soon. Best regards, Fleetari" = "Você parece gostar muito de colecionar lixo, tenho alguns no meu quintal para você, pegue logo. Atenciosamente, Fleetari."
 
-Rent Apartment Revived
+//Rent Apartment Revived
 Hello, are you interested in renting my apartment? = Olá, você tem interesse em alugar meu apartamento?
 Very nice, here you go, that will be 1350 marks please = Muito bom, aqui está, serão 1350 marcos, por favor.
 Don't forget to pay the rent next week, I'll be here when it's time = Não se esqueça de pagar o aluguel na próxima semana, estarei aqui quando chegar a hora.
@@ -1197,20 +1197,20 @@ PACK UP OBJECTS = EMBALAR OBJETOS
 RETRIEVE OBJECTS = RECUPERAR OBJETOS
 return keys and move out = DEVOLVER AS CHAVES E SAIR
 
-Kekmet Addons
+//Kekmet Addons
 Back Worklight = LUZ DE TRABALHO TRASEIRO
 Turn signals = SETA
 
-Kebabtech AC
+//Kebabtech AC
 kebabtech ac badge = EMBLEMA KEBABTECH AC
 AC Control Unit = UNIDADE DE CONTROLE AR
 Fan speed = VELOCIDADE DO VENTILADOR
 
-BoxGifu
+//BoxGifu
 OPEN RAMP = ABRIR RAMPA
 CLOSE RAMP = FECHAR RAMPA
 
-Highway Car Breakdowns
+//Highway Car Breakdowns
 "Hello there, I need your help, my car doesn't start." = "Olá, preciso da sua ajuda, meu carro não liga."
 "Hello there, I need your help, my car is broken." = "Olá, preciso da sua ajuda, meu carro está quebrado."
 "Thank you so much for helping me! Here's a bit of money for you." = "Muito obrigado por me ajudar! Aqui está um pouco de dinheiro para você."
@@ -1225,12 +1225,12 @@ The car has no fuel and therefore it can't start. = O carro não tem combustíve
 Inspect the car = Inspecione o carro
 INSPECTING: {0}% = INSPEÇÃO: {0}%
 
-Buyable Water
+//Buyable Water
 {0} Sips left = {0} Goles restantes
 Saaremaa Vesi 19.21MK = SAAREMAA VESI 19.21 MK
 Saaremaa Vesi = SAAREMAA VESI
 
-Energy Drink
+//Energy Drink
 energy drink = BEBIDA ENERGÉTICA
 Energy Drink 18.99 mk = BEBIDA ENERGÉTICA 18.99 MK
 "I can't drink this new stuff from over the pond. Way to sweet for me. I'll stick to Nivalan Kalia, its best in cans." = "Não posso beber essa coisa nova. Muito doce para mim. Vou ficar com Nivalan Kalia, é melhor."
@@ -1248,20 +1248,20 @@ Energy Drink 18.99 mk = BEBIDA ENERGÉTICA 18.99 MK
 "I need to tell you the truth about the thing with the energy drink. You fell for something. April Fools!" = "Eu preciso te contar a verdade sobre a bebida energética. Você se apaixonou por algo volumoso? Primeiro de Abril hehe!"
 "Today whatever the young people like is getting sold... But as long as it runs my store, I'm fine with it But I have the taste of that Energy Drink." = "Hoje tudo o que os jovens gostam está sendo vendido... Mas enquanto administro minha loja, \nestou bem com isso. Mas tenho o sabor daquela bebida energética."
 
-LoppeHouse
+//LoppeHouse
 HOUSE 19900MK = CASA 19900 MK
 Wanna get a house with incredible lake view? There it is! Costs only 19900MK = Quer uma casa com vista incrível para o lago? Aí está! Custa apenas 19900MK
 Pack Items = EMPACOTAR
 Unpack Items = DESEMPACOTAR
 PERAJARVI ELECTRICITY = ELETRICIDADE
 
-Stock Hayosiko
+//Stock Hayosiko
 shelf = PRATELEIRA
 bed = CAMA
 Stove = FOGÃO
 WIRE STOVE = COLOCAR FIO DA FORÇA NO FOGÃO
 
-Saker 300 Series
+//Saker 300 Series
 "Lately, I've been feeling worse and worse... I think my diabetes is acting up." = "Ultimamente, tenho me sentido cada vez pior... Acho que meu diabetes está piorando."
 "My eyesight is gone bad, I can barely read a book. I have no energy, can't do anything. And the doctors have banned alcohol and all that." = "Minha visão está ruim, mal consigo ler um livro. Não tenho energia, não consigo fazer nada. E os médicos proibiram o álcool e tudo mais."
 "I heard your dad left you his old Satsuma. I think It's gonna be tough at first, so take keys to my Säker. It's just sitting there doing nothing anyway." = "Ouvi dizer que seu pai deixou seu velho Satsuma para você. Acho que vai ser difícil no começo, \nentão pegue as chaves do meu Säker. Ele está parado ali, sem fazer nada, de qualquer forma."
@@ -1270,6 +1270,11 @@ Saker 300 Series
 "My car is just sitting there too. I stopped driving because of my eyesight and overall condition. I used to drive it for work, hauling stuff around. It's a really reliable machine." = "Meu carro também está parado. Parei de dirigir por causa da minha visão e condição geral. \nEu costumava dirigi-lo para o trabalho, transportando coisas por aí. É uma máquina realmente confiável."
 "I heard your dad left you his old Satsuma. I think It's gonna be tough at first, so take the keys to my Säker. It's just sitting there doing nothing anyway." = "Ouvi dizer que seu pai deixou seu velho Satsuma para você. Acho que vai ser difícil no começo, então pegue as chaves do meu Säker. \nEle está parado ali, sem fazer nada, de qualquer forma."
 "Hello, it's Doctor. Your granduncle Valentin is in a coma. Rehabilitation isn't cheap, so Sirkka suggested leaving money on the table, or she'll have to sell some car." = "Olá, aqui é o Doutor. Seu tio-avô Valentin está em um coma. A reabilitação não é barata, então sua avó sugeriu deixar dinheiro na mesa dela, ou ela terá que vender o carro."
+"Hello, it's Doctor. I want to remind you that there a few days left, after that your granduncles's chances of survival are minimal without rehabilitaion." = "Olá, aqui é o Doutor. Quero lembrá-lo de que restam poucos dias; depois disso, as chances de sobrevivência do seu tio-avô serão mínimas sem reabilitação."
+"Oh goodness, you're drunk! I can't give you these!" = "Meu Deus, você está bêbado! Não posso te dar isto!"
+"Listen boy, you can't drive when you're that drunk!" = "Escute, garoto, você não pode dirigir tão bêbado assim!"
+"You're in no condition to drive." = "Você não está em condições de dirigir."
+"Well, fuck you then." = "Bom, então vai se ferrar."
 PAY 9500MK FOR REHABILITATION. = PAGUE 9500MK PARA REABILITAÇÃO DO SEU TIO-AVÓ
 TAKE KEYS = PEGUE A CHAVE
 rear seat = BANCO TRASEIRO
@@ -1282,7 +1287,7 @@ DOORS ONLY = COM PORTAS ABERTA
 OFF = DESLIGAR
 NEED MONEY: 9500 = PAGAR REABILITAÇÃO DO SEU TIO-AVÓ: 9500 MK
 
-Actual Drivable Lamore
+//Actual Drivable Lamore
 TAKE MONEY 1200 MK AND LAMORE KEYS = PEGAR 1200 MK E AS CHAVES DO "LAMORE"
 LAMORE PLATE = PLACA DO "LAMORE"
 LAMORE TRUNK WALL = PAREDE DO PORTA-MALAS DO "LAMORE"
@@ -1298,7 +1303,7 @@ ORDER CREAMY INTERIOR INSTALLATION 4595 MK = INSTALAÇÃO DE INTERIOR CREME: 459
 ORDER GOOMER GOBRA TIRES INSTALLATION SERVICE 1450 MK = INSTALAÇÃO DE PNEUS "GOOMER GOBRA": 1450 MK
 You can take my Ferndale if you need to get back home. = "Pode pegar meu Ferndale se precisar voltar pra casa. Só cuidado, ele tem bastante potência, então pega leve no acelerador. E você sabe dirigir automático?"
 
-More Furniture
+//More Furniture
 FRIDGE = GELADEIRA  
 CLOSET = GUARDA-ROUPA  
 TABLE {0} = MESA {0}
@@ -1340,7 +1345,7 @@ PLASTIC CHAIR {0} (LOCKED) = CADEIRA DE PLÁSTICO {0} (TRAVADO)
 DESK (LOCKED) = ESCRITÓRIO (TRAVADO)  
 ARM CHAIR (LOCKED) = POLTRONA (TRAVADO)
 
-Call Your Cousin 2
+//Call Your Cousin 2
 Call Your Cousin = Ligue para seu primo
 Read Note = Leia a nota
 "Why did you write his number down? You know how much he drinks while driving. Be careful!" = "Por que você anotou o número dele? Você sabe quanto ele bebe enquanto dirige. Tenha cuidado!"
@@ -1358,7 +1363,7 @@ Not Enough Money On Phone = Saldo insuficiente no telefone
 Get Coins = Pegue as moedas
 No Money On Phone = Sem dinheiro no telefone
 
-LiquorSeller
+//LiquorSeller
 Hi! = Ola Ola!
 See you around and have a good day! = Vejo você por aí e tenham um bom dia!
 nivalan seat cover (169 MK) = capa de assento nivalan (169 MK)
@@ -1399,7 +1404,7 @@ Nivalan Case = CAIXA DE CERVEJA
 "I'd love to go fishing but my fishing rod snapped because of a pike, I've never seen such a beast before!" = "Eu adoraria ir pescar, mas minha vara de pescar quebrou por causa de um lúcio. Nunca vi uma fera dessas antes!"
 "I wonder how well would my van do on the dragstrip, probably not too good, this thing's a behemoth in terms of weight." = "Gostaria de saber como minha van se sairia na pista de arrancada. \nProvavelmente não muito bem, essa coisa é um gigante em termos de peso."
 
-CamperSiko
+//CamperSiko
 PumpKit = KIT DE BOMBA
 Click to copy the blueprint. = Clique para copiar o projeto.
 Click to deliver the blueprint = Clique para entregar o projeto.
@@ -1433,23 +1438,26 @@ Oven ( {0} MK) = FUGÃO ( {0} MK)
 CABINET ( {0} MK) = COZINHA ( {0} MK)
 UPGRADE HAYOSIKO TO CAMPER ( {0} ) = ATUALIZAÇÃO DE HAYOSIKO PARA CAMPER ( {0} )
 
-Kekmet hydraulic arm
+//Kekmet hydraulic arm
 Base rotation = ROTAÇÃO
 Arm {0} = BRAÇO {0}
 Grappler = GARRA
 
-Dirt Track Racing
+//Dirt Track Racing
 "Ayo fool, what you doin round here? There's a race poppin any minute now." = "Ei, idiota, o que você está fazendo aqui? Tem uma corrida acontecendo a qualquer momento."
 "Oh haha, aight fool but you gotta pay up sum race fee first" = "Oh haha, tudo bem idiota, mas você tem que pagar uma taxa de corrida primeiro"
 "You in? If not, then get lost!" = "Você está dentro? Se não, então suma!"
 "Thank you dude, more money for me" = "Obrigado cara, mais dinheiro para mim"
 "Haha fool you stood no chance! Thanks for the tip!" = "Haha idiota, você não teve chance! Obrigado pela gorjeta!"
-Give money 500 MK = Pague 500 MK
-Drive up to the race start position = Dirija até a posição de largada da corrida
+*Speak to accept* = *Fale para aceitar*
+Give money 500 MK = PAGUE 500 MK
+Drive up to the race start position = DIRIJA ATÉ A POSIÇÃO DE LARGADA
+You have to be driving a vehicle! = VOCÊ PRECISA ESTAR DIRIGINDO UM VEÍCULO!
 "Damn man I ain't gon lie I can't believe you took our prize! Here, take the money..." = "Caramba, cara, não vou mentir. Não acredito que você levou o nosso prêmio! Aqui, pega o dinheiro..."
 "Now get out of here before I change my mind." = "Agora saia daqui antes que eu mude de ideia."
 GET READY = PREPARE-SE
 GO! = VÁ!
+YOU WON = VOCÊ VENCEU
 ELIMINATED = ELIMINADO
 YOU LOST = VOCÊ PERDEU
 YOU LOST THE RACE. = VOCÊ PERDEU A CORRIDA.
@@ -1457,22 +1465,32 @@ YOU FINISHED FIRST = VOCÊ TERMINOU EM PRIMEIRO
 YOU FINISHED SECOND = VOCÊ TERMINOU EM SEGUNDO
 YOU FINISHED THIRD = VOCÊ TERMINOU EM TERCEIRO
 YOU FINISHED FOURTH = VOCÊ TERMINOU EM QUARTO
+NEXT RACE = PRÓXIMA CORRIDA
+WINNER = VENCEDOR
+You = Você
+Player = JOGADOR
+Lap time: {0} =TEMPO DA VOLTA: {0}
+New best lap time! = NOVO MELHOR TEMPO DE VOLTA!
+Best lap: {0}; Avg lap: {1}; Your time: {2} = MELHOR VOLTA: {0}; MÉDIA: {1}; SEU TEMPO: {2}
+You advance to the next round. = VOCÊ AVANÇOU PARA A PRÓXIMA RODADA.
+You lost the race. = VOCÊ PERDEU A CORRIDA.
+Visit Lars to claim the prize. = VISITE LARS PARA RECEBER O PRÊMIO.
 
-Hayosiko 4x4
+//Hayosiko 4x4
 4x4 Selector(H2) = Seletor 4x4 (H2)
 4x4 Selector(H4) = Seletor 4x4 (H4)
 4x4 Selector(L4) = Seletor 4x4 (L4)
 Something feels disconnected... = Algo parece desconectado...
 4x4 Shift Arm Linkage = Articulação do braço de mudança 4x4
 
-Cassette Tapes
+//Cassette Tapes
 RACK FOR 12 CASSETTES - 60 MK = RACK PARA 12 CASSETES - 60 MK
 RACK FOR 24 CASSETTES - 120 MK = RACK PARA 24 CASSETES - 120 MK
 Cassette Rack ({0} tapes) = Porta-cassetes ({0} fitas)
 Put casette into rack = Coloque a fita no suporte
 Cassette Box ({0}) = CASSETE {0}
 
-ForestAddon
+//ForestAddon
 TURN LIGHT ON = LIGAR A LUZ
 TURN LIGHT OFF = DESLIGUE A LUZ
 KNOCK ON THE DOOR = BATA NA PORTA
@@ -1501,7 +1519,7 @@ NOT ENOUGH BERRIES. = NÃO HÁ FRUTAS VERMELHAS SUFICIENTES.
 "By the way, it's really dark down there." = "A propósito, está muito escuro lá embaixo."
 "I'm not sure if the light still works, so you might want to take a flashlight or a lantern." = "Não tenho certeza se a luz ainda funciona, então talvez seja melhor levar uma lanterna ou um lampião."
 
-Farm Restoration Project
+//Farm Restoration Project
 "Good morning and welcome to Property Management." = "Bom dia e bem-vindo à Administração de Imóveis."
 "Okay, that should do it. We had trouble selling that place for a while now. Apparently it's haunted. Watch out." = "Certo, isso deve resolver o problema. Estivemos com dificuldades para vender aquele lugar por um tempo. Aparentemente, é assombrado. Cuidado."
 "This will be a tough one.. I don't even know if this is possible. I will call Leif Kentauri. Check the farmhouse out in a few days to see if his company managed to fix it." = "Essa vai ser difícil... Nem sei se é possível. Vou ligar para o Leif Kentauri. Vou dar uma olhada \nna casa de campo daqui a alguns dias para ver se a empresa dele conseguiu consertar."
@@ -1535,7 +1553,7 @@ BUY FURNITURE & GET IT DELIVERED {0}MK = COMPRE MÓVEIS E RECEBA EM CASA {0} MK
 HIRE COMPANY TO REPLACE FARM WINDOWS AND ELECTRICITY {0}MK = CONTRATE UMA EMPRESA PARA SUBSTITUIR JANELAS E ENERGIA ELÉTRICA DA FAZENDA {0} MK
 PAY ELECTRICITY BILLS {0} MK = PAGAR CONTA DE ENERGIA ELÉTRICA {0} MK
 
-Second Hayosiko Pace
+//Second Hayosiko Pace
 OPEN SIDE WINDOW = ABRIR JANELA
 CLOSE SIDE WINDOW = FECHAR JANELA
 cargo mat = TAPETE PARA HAYOSIKO PACE
@@ -1543,7 +1561,7 @@ panel mess = PROTEÇÃO LATERAL PARA HAYOSIKO PACE
 YOU CAN'T AFFORD THIS.. = VOCÊ NÃO PODE PAGAR POR ISSO.
 BUY HAYOSIKO PACE FOR {0} MK = COMPRE HAYOSIKO PACE POR {0} MK
 
-Bus Driver Job
+//Bus Driver Job
 "What are you waiting for? Get to work." = "O que você está esperando? Mãos à obra."
 End your shift first! = Termine seu turno primeiro!
 Oh, and don't crash please. Kari will kill me. = Ah, e não bata o onibus, por favor. O Kari vai me matar.
@@ -1579,7 +1597,7 @@ GIVE BUS TICKET 25 MK (SALARY: 15) = DÊ 25 MK DA PASSAGEM DE ÔNIBUS (SALÁRIO:
 "Cely den zobru lidi o desitku, a co? Ani korunu! Vsichni jen koukaj a delaj, ze me nevidi!" = "Vou ficar tirando dinheiro dos outros o dia todo, e daí? Nem um centavo! Todo mundo fica olhando e finge que não me vê!"
 PAYDAY - BUS DRIVER: {0} MK = DIA DE PAGAMENTO - MOTORISTA DE ÔNIBUS: {0} MK
 
-Camping Tent
+//Camping Tent
 tent = TENDA
 cushion = TRAVESEIRO
 matress roll = ROLO DE COLCHÃO
@@ -1589,11 +1607,11 @@ ROLLING MATRESS.. {0} % = ARMANDO O COLCHÃO {0} %
 ROLLING CARPET.. {0} % = ARMANDO O CARPET {0} %
 ROLLING TENT.. {0} % = ARMANDO A TENDA {0} %
 
-Finnish Quarry
+//Finnish Quarry
 EXTRACT STONE = EXTRAIR PEDRA
 Stone = PEDRA
 
-Better MSC
+//Better MSC
 ALARM CLOCK = DESPERTADOR
 NPC = NPC
 Scale = BALANÇA
@@ -1655,7 +1673,7 @@ Thanks to all who shared our sadness and grief, showed us support and kindness, 
 Thanks to all who shared our sadness and grief, showed us support and kindness, and attended the Holy Mass and funeral of our beloved daughter, SUSANNA OJANTO. Since we were unable to respond to everyone, we wish to inform you that Suski died in a car accident. = Agradecemos a todos que compartilharam nossa tristeza e luto, demonstraram apoio e carinho e compareceram à missa e ao funeral de nossa \namada filha, SUSANNA OJANTO. Como não conseguimos responder a todos, informamos que Suski faleceu em um acidente de carro.
 Thanks to all who shared our sadness and grief, showed us support and kindness, and attended the Holy Mass and funeral of our beloved daughter, SUSANNA OJANTO. Since we were unable to respond to everyone, we wish to inform you that Suski died because she was attacked by wild boars. = Agradecemos a todos que compartilharam nossa tristeza e luto, demonstraram apoio e carinho e compareceram à missa e ao funeral de nossa \namada filha, SUSANNA OJANTO. Como não conseguimos responder a todos, informamos que Suski faleceu após ser atacada por javalis.
 
-Suski IA
+//Suski IA
 Hi! Are you free today? Maybe we could go somewhere together? = Oi! Você está livre hoje? Talvez a gente possa ir a algum lugar juntos?
 Hi! Can you find time for me today? = Oi! Você consegue arrumar um tempo pra mim hoje?
 Hey sweetie! I've been waiting for you. Shall we spend today together? Please don't say no. = Oi, querido! Eu estava te esperando. Vamos passar o dia juntos? Por favor, não diga não.
@@ -1828,7 +1846,7 @@ You did the right thing. Impudent faggots... = Você fez a coisa certa. Seus via
 You fucking drunken brute! = Seu bêbado bruto do caralho!
 Oh God... What have you done?! Let's get out of here! = Meu Deus... o que você fez?! Vamos sair daqui!
 Recently, when I was walking home through the forest, I came across some wild boars. Luckily, I managed to get around them. I was very scared then. = Recentemente eu estava voltando pra casa e encontrei uns javalis selvagens. Por sorte consegui desviar deles, fiquei morrendo de medo.
-Recentemente eu estava voltando pra casa e encontrei uns javalis selvagens. Por sorte consegui desviar deles, fiquei morrendo de medo.
+//Recentemente eu estava voltando pra casa e encontrei uns javalis selvagens. Por sorte consegui desviar deles, fiquei morrendo de medo.
 How did I get home from the island? I waved to this guy who always boats nearby and he gave me a lift home. = Como eu voltei pra casa da ilha? Acenei praquele cara que vive passando de barco por ali e ele me deu carona.
 I'm already sleepy. I'd like to be home soon. Take me home by boat. = Já estou com sono. Queria chegar em casa logo. Me leva de barco pra casa.
 I'm already sleepy. I'd like to be home soon. Would you take me home? = Já estou com sono. Queria estar em casa logo. Você me leva pra casa?
@@ -1947,10 +1965,10 @@ You were supposed to take me home before 02:00. If I could, I would go home alon
 I earned {0} mk for filling {1} boxes. It's a pretty unprofitable job, don't you think? =  Eu ganhei {0} mk por encher {1} caixas. É um trabalho bem pouco lucrativo, você não acha?
 I earned {0} mk for filling 1 box. It's a pretty unprofitable job, don't you think? =  Eu ganhei {0} mk por encher 1 caixa. É um trabalho bem pouco lucrativo, você não acha?
 
-Homura's Tweaks and Additions Pack
+//Homura's Tweaks and Additions Pack
 YOUR HAND: {0} OPPONENT'S HAND: {1} = SUA MÃO: {0} \nMÃO DO OPONENTE: {1}
 
-Installable Under Glow Kit
+//Installable Under Glow Kit
 Ne = Neon
 YELLOW NEON KIT (249.99 MK) = KIT DE NEON AMARELO: 249.99 MK
 GREEN NEON KIT (249.99 MK) = KIT DE NEON VERDE: 249.99 MK
@@ -1967,7 +1985,7 @@ REAR TUBE = TUBO TRASEIRO
 LEFT TUBE = TUBO ESQUERDO
 RIGHT RUBE = TUBO DIREITO
 
-Rally Spotlights
+//Rally Spotlights
 SPOTLIGHTS = FARÓIS AUXILIARES
 SPOTLIGHT COVERS: 200 MK = CAPAS DOS FARÓIS AUXILIARES: 200 MK
 SPOTLIGHT COVERS = CAPAS DOS FARÓIS AUXILIARES
@@ -1975,7 +1993,7 @@ PUT ON COVERS = COLOCAR CAPAS
 TAKE OFF COVERS = REMOVER CAPAS
 PRICE TOTAL: 200 MK = PREÇO TOTAL: 200 MK
 
-Sleeping Pills
+//Sleeping Pills
 SLEEPING PILLS 2000 MK = COMPRIMIDOS PARA DORMIR: 2000 MK
 SLEEPING PILLS = COMPRIMIDOS PARA DORMIR
 SLEEPING PILLS (ALREADY TAKEN ONE) (10 LEFT) = COMPRIMIDOS PARA DORMIR (JÁ TOMOU UM) (10 RESTANTES)
@@ -1990,7 +2008,7 @@ SLEEPING PILLS (STILL SWALLOWING) (2 LEFT) = COMPRIMIDOS PARA DORMIR (AINDA ENGO
 SLEEPING PILLS (STILL SWALLOWING) (1 LEFT) = COMPRIMIDOS PARA DORMIR (AINDA ENGOLINDO) (1 RESTANTE)
 SLEEPING PILLS (STILL SWALLOWING) (0 LEFT) = COMPRIMIDOS PARA DORMIR (AINDA ENGOLINDO) (0 RESTANTES)
 
-Cardboard Bodykit
+//Cardboard Bodykit
 HOOD SCOOP VENT = ENTRADA DE AR DO CAPÔ
 DIRECT FORCED INDUCTION PIPE = TUBO DE ADMISSÃO FORÇADA DIRETA
 PAPRATTE-LEDL ECU = ECU PAPRATTE-LEDL
@@ -2009,13 +2027,13 @@ CARDBOARD FLARE FR = ALARGADOR DE PARALAMA DIANT. DIR.
 CARDBOARD FLARE RL = ALARGADOR DE PARALAMA TRAS. ESQ.
 CARDBOARD FLARE RR = ALARGADOR DE PARALAMA TRAS. DIR.
 
-Kebab
+//Kebab
 BUY KEBAB 29.95 MK = COMPRAR KEBAB: 29.95 MK
 KEBAB = KEBAB
 KEB = KEBAB
 One Kebab at a time is enough fatso, there are other customers too! = "Um kebab por vez já chega, gordão. Tem outros clientes também!"
 
-Tunable Hayosiko
+//Tunable Hayosiko
 VAN REAR SPOILER = AEROFÓLIO TRASEIRO DA VAN
 VAN FRONT LIP = LIP DIANTEIRO DA VAN
 VAN ROOF SCOOP = TOMADA DE AR NO TETO DA VAN
@@ -2023,13 +2041,13 @@ FAKE VAN SCOOP = TOMADA DE AR FALSA DA VAN
 VAN EXHAUST TIP = PONTEIRA DUPLA DE ESCAPAMENTO DA VAN
 VAN SUNVISOR = QUEBRA-SOL DA VAN
 
-Respects for a Dead
+//Respects for a Dead
 PURCHASE CEMETARY CANDLE 10MK = COMPRAR VELA DE CEMITÉRIO: 10 MK
 PURCHASE CEMETARY FLOWERS 40 MK = COMPRAR FLORES DE CEMITÉRIO: 40 MK
 CEMETARY CANDLE = VELA DE CEMITÉRIO
 CEMETARY FLOWERS = FLORES DE CEMITÉRIO
 
-Psycho
+//Psycho
 PSYCHO = SANIDADE
 STRANGE LETTER = CARTA ESTRANHA
 PILLS = COMPRIMIDOS
@@ -2049,21 +2067,109 @@ FERNFLOWER = FLOR DE SAMAMBAIA
 BLACKEGG = OVO PRETO
 CHURCHCANDLE = VELA DE IGREJA
 
-My Summer Fishing Trip
+//My Summer Fishing Trip
 REMOVE FISH = REMOVER PEIXE
 
-Fishing Mod
+//Fishing Mod
 FISHING ROD = VARA DE PESCA
+fishingrod = VARA DE PESCA
+fishingrod(itemx) = VARA DE PESCA
+fishfinder = LOCALIZADOR DE PEIXES
+fishfinder(clone) = LOCALIZADOR DE PEIXES
+fishfinder_mesh = LOCALIZADOR DE PEIXES
+rod_holder = SUPORTE DA VARA
+rod_holder(Clone) = SUPORTE DA VARA
 BAIT CAN = LATA DE ISCA
-YOU PICKED UP A WORM = VOCÊ PEGOU UM MINHOCA
+Remove Fish = REMOVER PEIXE
+Turn on = LIGAR
+Turn off = DESLIGAR
+Disable fish finder = Desativar localizador de peixes
+Reset rod = Resetar vara
+Reset the rod to the holder (use in-game) = Resetar a vara para o suporte (use dentro do jogo)
+YOU PICKED UP A WORM = VOCÊ PEGOU UMA MINHOCA
 YOU AlREADY HAVE A WORM = VOCÊ JÁ TEM UMA MINHOCA
 YOU HAVE NO BAIT! = VOCÊ NÃO TEM ISCA!
 NOTHING BIT... = NADA MORDEU...
 YOU LOST YOUR BAIT... = VOCÊ PERDEU A ISCA...
 YOU CAUGHT ONE! = VOCÊ PEGOU UM!
 IT'S EMPTY = ESTÁ VAZIO
+Perch = PERCA
+Pike = LÚCIO
+Trout = TRUTA
+Salmon = SALMÃO
+Bottle = GARRAFA
+Empty Bottle = GARRAFA VAZIA
+Empty bottle = GARRAFA VAZIA
+empty bottle(Clone) = GARRAFA VAZIA
+perch = PERCA
+trout = TRUTA
+salmon = SALMÃO
+Trophy Perch[{0}kg] = PERCA TROFÉU [{0} kg]
+Trophy Pike[{0}kg] = LÚCIO TROFÉU [{0} kg]
+Trophy Trout[{0}kg] = TRUTA TROFÉU [{0} kg]
+Trophy Salmon[{0}kg] = SALMÃO TROFÉU [{0} kg]
+Perch[{0}kg] = PERCA [{0} kg]
+Pike[{0}kg] = LÚCIO [{0} kg]
+Trout[{0}kg] = TRUTA [{0} kg]
+Salmon[{0}kg] = SALMÃO [{0} kg]
+Cooked Perch[{0}kg] = PERCA COZIDA [{0} kg]
+Cooked Trout[{0}kg] = TRUTA COZIDA [{0} kg]
+Cooked Salmon[{0}kg] = SALMÃO COZIDO [{0} kg]
+Burnt Perch[{0}kg] = PERCA QUEIMADA [{0} kg]
+Burnt Trout[{0}kg] = TRUTA QUEIMADA [{0} kg]
+Burnt Salmon[{0}kg] = SALMÃO QUEIMADO [{0} kg]
+Cooked Trophy Perch[{0}kg] = PERCA TROFÉU COZIDA [{0} kg]
+Cooked Trophy Trout[{0}kg] = TRUTA TROFÉU COZIDA [{0} kg]
+Cooked Trophy Salmon[{0}kg] = SALMÃO TROFÉU COZIDO [{0} kg]
+Burnt Trophy Perch[{0}kg] = PERCA TROFÉU QUEIMADA [{0} kg]
+Burnt Trophy Trout[{0}kg] = TRUTA TROFÉU QUEIMADA [{0} kg]
+Burnt Trophy Salmon[{0}kg] = SALMÃO TROFÉU QUEIMADO [{0} kg]
+Caught a {0}! = Você pescou {0}!
+Sold {0} for {1}MK = Vendeu {0} por {1} MK
+Won the derby with {0} and got {1}MK! = Venceu o derby com {0} e ganhou {1} MK!
+{0} did not win the derby. Got {1}MK = {0} não venceu o derby. Recebeu {1} MK
+Caught a Perch[{0}kg]! = Você pescou uma perca de {0} kg!
+Caught a Pike[{0}kg]! = Você pescou um lúcio de {0} kg!
+Caught a Trout[{0}kg]! = Você pescou uma truta de {0} kg!
+Caught a Salmon[{0}kg]! = Você pescou um salmão de {0} kg!
+Caught a Trophy Perch[{0}kg]! = Você pescou uma perca troféu de {0} kg!
+Caught a Trophy Pike[{0}kg]! = Você pescou um lúcio troféu de {0} kg!
+Caught a Trophy Trout[{0}kg]! = Você pescou uma truta troféu de {0} kg!
+Caught a Trophy Salmon[{0}kg]! = Você pescou um salmão troféu de {0} kg!
+Caught a Empty Bottle! = Você pescou uma garrafa vazia!
+Sold Perch[{0}kg] for {1}MK = Vendeu uma perca de {0} kg por {1} MK
+Sold Pike[{0}kg] for {1}MK = Vendeu um lúcio de {0} kg por {1} MK
+Sold Trout[{0}kg] for {1}MK = Vendeu uma truta de {0} kg por {1} MK
+Sold Salmon[{0}kg] for {1}MK = Vendeu um salmão de {0} kg por {1} MK
+Sold Trophy Perch[{0}kg] for {1}MK = Vendeu uma perca troféu de {0} kg por {1} MK
+Sold Trophy Pike[{0}kg] for {1}MK = Vendeu um lúcio troféu de {0} kg por {1} MK
+Sold Trophy Trout[{0}kg] for {1}MK = Vendeu uma truta troféu de {0} kg por {1} MK
+Sold Trophy Salmon[{0}kg] for {1}MK = Vendeu um salmão troféu de {0} kg por {1} MK
+Won the derby with Perch[{0}kg] and got {1}MK! = Venceu o derby com uma perca de {0} kg e ganhou {1} MK!
+Won the derby with Pike[{0}kg] and got {1}MK! = Venceu o derby com um lúcio de {0} kg e ganhou {1} MK!
+Won the derby with Trout[{0}kg] and got {1}MK! = Venceu o derby com uma truta de {0} kg e ganhou {1} MK!
+Won the derby with Salmon[{0}kg] and got {1}MK! = Venceu o derby com um salmão de {0} kg e ganhou {1} MK!
+Won the derby with Trophy Perch[{0}kg] and got {1}MK! = Venceu o derby com uma perca troféu de {0} kg e ganhou {1} MK!
+Won the derby with Trophy Pike[{0}kg] and got {1}MK! = Venceu o derby com um lúcio troféu de {0} kg e ganhou {1} MK!
+Won the derby with Trophy Trout[{0}kg] and got {1}MK! = Venceu o derby com uma truta troféu de {0} kg e ganhou {1} MK!
+Won the derby with Trophy Salmon[{0}kg] and got {1}MK! = Venceu o derby com um salmão troféu de {0} kg e ganhou {1} MK!
+Perch[{0}kg] did not win the derby. Got {1}MK = A perca de {0} kg não venceu o derby. Recebeu {1} MK
+Pike[{0}kg] did not win the derby. Got {1}MK = O lúcio de {0} kg não venceu o derby. Recebeu {1} MK
+Trout[{0}kg] did not win the derby. Got {1}MK = A truta de {0} kg não venceu o derby. Recebeu {1} MK
+Salmon[{0}kg] did not win the derby. Got {1}MK = O salmão de {0} kg não venceu o derby. Recebeu {1} MK
+Trophy Perch[{0}kg] did not win the derby. Got {1}MK = A perca troféu de {0} kg não venceu o derby. Recebeu {1} MK
+Trophy Pike[{0}kg] did not win the derby. Got {1}MK = O lúcio troféu de {0} kg não venceu o derby. Recebeu {1} MK
+Trophy Trout[{0}kg] did not win the derby. Got {1}MK = A truta troféu de {0} kg não venceu o derby. Recebeu {1} MK
+Trophy Salmon[{0}kg] did not win the derby. Got {1}MK = O salmão troféu de {0} kg não venceu o derby. Recebeu {1} MK
+OPEN = ABERTO
+CLOSED = FECHADO
+PERÄJÄRVENDERBYNEXTTOURNAMENT:WEDNESDAY5AM-9PM-----------------WINNINGFISH:1000MKBONUS = Derby de Peräjärvi\n\nPróximo torneio:\n   QUARTA\n   5h - 21h\n\n\n-----------------\n\nPeixe vencedor:\nBônus de 1000 mk
+PERÄJÄRVIFISHMARKET----------------MON-SAT8AM-7PMOPENPERCH:40MKPIKE:65MKTROUT:90MKSALMON:120MKPRICESMAYVARY = Peräjärvi\nMercado Peixes\n----------------\nSeg-Sáb 8h-19h\nABERTO\n\nPerca:      40 mk\nLúcio:      65 mk\nTruta:      90 mk\nSalmão:   120 mk\n\nOs preços variam
+PERÄJÄRVIFISHMARKET----------------MON-SAT8AM-7PMCLOSEDPERCH:40MKPIKE:65MKTROUT:90MKSALMON:120MKPRICESMAYVARY = Peräjärvi\nMercado Peixes\n----------------\nSeg-Sáb 8h-19h\nFECHADO\n\nPerca:      40 mk\nLúcio:      65 mk\nTruta:      90 mk\nSalmão:   120 mk\n\nOs preços variam
+PERÄJÄRVENDERBYTODAY!5AM-9PMTOURNAMENTFISH:{0}CATCHTOBEAT:{1}KG-----------------WINNINGFISH:1000MKBONUS = Derby de Peräjärvi\n\n   HOJE!\n   5h - 21h\n\nPeixe torneio:\n      {0}\n\nMarca a superar:\n     {1} kg\n\n-----------------\n\nPeixe vencedor:\nBônus de 1000 mk
+PERÄJÄRVENDERBYWON!TOURNAMENTFISH:{0}WINNINGCATCH:{1}KG = Derby de Peräjärvi\n\nVENCEU!\n\n\nPeixe torneio:\n      {0}\n\nCaptura vencedora:\n     {1} kg
 
-Punch Anyone
+//Punch Anyone
 TEIMO = TEIMO
 UNCLE = TIO
 LINDELL = LINDELL
@@ -2160,7 +2266,7 @@ ECU CABLE HARNESS = CHICOTE DA ECU
 CHIP PROGRAMMER = CHIP PROGRAMADOR
 CHIP {0} = CHIP {0}
 
-Blow-Through Supercharger
+//Blow-Through Supercharger
 SUPERCHARGER KIT = KIT DE SUPERCHARGER
 SUPERCHARGER = SUPERCHARGER
 SUPERCHARGER BRACKET = SUPORTE DO SUPERCHARGER
@@ -2168,7 +2274,7 @@ SUPERCHARGER PULLEY = POLIA DO SUPERCHARGER
 SUPERCHARGER TUBING = TUBULAÇÃO DO SUPERCHARGER
 CARB HAT = TAMPA DO CARBURADOR
 
-Let It Rust
+//Let It Rust
 *I am sooo hungry, I should go to the fridge and get something to eat* = "Estou com muuita fome, vou até a geladeira pegar algo pra comer"
 Don't be lazy! Maybe you can find out something about dad's old car, you know he still regrets selling in. Fleetari surely knows something about the car! I've seen drive it once. Since I don't expect you to drive that old Ruscko, maybe try to borrow your uncle van. We will come back when we get bored. Yours mom and dad = "Não seja preguiçoso! Talvez você consiga descobrir algo sobre o carro antigo do seu pai.\nVocê sabe que ele ainda se arrepende de ter vendido. O Fleetari com certeza sabe alguma coisa! Já vi ele dirigindo uma vez.\nComo não espero que você dirija aquele velho Ruscko, talvez tente pegar a van do seu tio emprestada.\nVoltamos quando ficarmos entediados. Seus pais."
 Press K to talk with Fleetari = PRESSIONE [K] PARA FALAR COM FLEETARI
@@ -2196,14 +2302,14 @@ It's not a good idea to steal from this guy = NÃO É UMA BOA IDEIA ROUBAR DESSE
 Place 3600 mk on counter = COLOCAR 3600 MK NO BALCÃO
 You don's have enough money = VOCÊ NÃO TEM DINHEIRO SUFICIENTE
 
-Lifter
+//Lifter
 12.000 MK = COBERTURA COM ELEVADOR: 12000 MK
 TRASH = LIXEIRA
 OPEN TRASH = ABRIR
 CLOSE TRASH = FECHAR
 PRESS MOUSE LEFT BUTTON TO UP LIFT, PRESS MOUSE RIGHT BUTTON TO DOWN LIFT = PRESSIONE [BOTÃO ESQ.] PARA SUBIR O ELEVADOR \nPRESSIONE [BOTÃO DIR.] PARA DESCER O ELEVADOR
 
-New House
+//New House
 REMOTE CONTROL GATE = CONTROLE DO PORTÃO
 RADIO2 = RÁDIO 2
 SPANNER SET2 = JOGO DE CHAVES 2
@@ -2225,7 +2331,7 @@ COUCH = SOFÁ
 NIGHTSTAND = CRIADO-MUDO
 POUF = PUF
 
-ZAZ Zaporozhets 968
+//ZAZ Zaporozhets 968
 Hello. Do you have any Jonnez EZ moped? I want to buy it for an old ZAZ Zaporozhets imported from Poland. = "Olá. Você tem algum ciclomotor Jonnez EZ? Quero trocar por um ZAZ Zaporozhets antigo importado da Polônia."
 TAKE KEY = PEGAR CHAVES DO "ZAZ ZAPOROZHETS"
 DOOR LOCK = CARRO TRANCADO
@@ -2234,14 +2340,14 @@ REMOVE BATTERY [RMB] = REMOVER BATERIA
 UNRUST CAR [LMB] = REMOVER FERRUGEM
 PAINT CAR = PINTAR CARRO
 
-FRS Srolonez
+//FRS Srolonez
 HOOD SROLONEZ = CAPÔ "SROLONEZ"
 FRONT BUMPER SROLONEZ = PARA-CHOQUE DIANTEIRO "SROLONEZ"
 REAR BUMPER SROLONEZ = PARA-CHOQUE TRASEIRO "SROLONEZ"
 SPOILER SROLONEZ = AEROFÓLIO "SROLONEZ"
 FRONT LIP SROLONEZ = LIP DIANTEIRO "SROLONEZ"
 
-Drivable Fittan Revamped
+//Drivable Fittan Revamped
 CARBURETOR = CARBURADOR
 PEDALS = PEDAIS
 FUEL GAUGE = MEDIDOR DE COMBUSTÍVEL
@@ -2249,14 +2355,14 @@ BREAKPADSET = JOGO DE PASTILHAS DE FREIO
 LAUAVIIN = VODKA "LAUA"
 PAINT BODY = PINTAR CARROCERIA
 
-Drivable Orca
+//Drivable Orca
 BUY ORCA - 10,000MK = "ORCA": 10000 MK
 HEADLIGHTS = FARÓIS
 ARMCENTER = CONSOLE CENTRAL
 DRIVER DOOR PANEL = FORRO DA PORTA ESQ.
 PASSENGER DOOR PANEL = FORRO DA PORTA DIR.
 
-RCO Rikkota
+//RCO Rikkota
 Those are just some notes on how to get revenge on Fleetari. = "Isso são apenas algumas anotações sobre como se vingar do Fleetari."
 You know how he has a thing for wrecked cars. I want to take the wrecked cars away from him. = "Você sabe como ele é obcecado por carros destruídos. Eu quero tirar esses carros dele."
 If you're up to it, use the truck in the back to tow at least two wrecked cars back to me. I'll let you keep the truck even = "Se você topar, use o caminhão lá atrás pra rebocar pelo menos dois carros destruídos até mim.\nEu até deixo você ficar com o caminhão."
@@ -2264,7 +2370,7 @@ ASK ABOUT PAPER = PERGUNTAR SOBRE O PAPEL
 INTERIOR LIGHTS = LUZ INTERNA
 ENABLE PARKING BRAKE = ATIVAR FREIO DE MÃO
 
-Restored Fury Remake
+//Restored Fury Remake
 UNLOCK TRUNK = ABRIR PORTA-MALAS
 LOCK TRUNK = FECHAR PORTA-MALAS
 Door unlocked = "Carro destrancado."
@@ -2282,9 +2388,9 @@ Fan Speed: 3 = "Velocidade do ventilador: 3"
 Temperature set to: Heat. = "Temperatura: Aquecer."
 Temperature set to: Cool. = "Temperatura: Resfriar.
 
-Final Lista de MODs
+//Final Lista de MODs
 
-Tradução de pagamentos para MODs
+//Tradução de pagamentos para MODs
 Take money {0} MK = PEGUE DINHEIRO {0} MK
 BUY {0} MK = PAGAR {0} MK
 PAY {0} MK = PAGUE {0} MK

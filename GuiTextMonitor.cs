@@ -105,6 +105,10 @@ namespace MSC_Localization_Core
             AddGuiEntry("GUI/HUD/Bodytemp/HUDValue");
             AddGuiEntry("GUI/HUD/Sweat/HUDValue");
             AddGuiEntry("GUI/HUD/Jailtime/HUDValue");
+
+            // FishingMod rewrites market/derby boards as shop state changes.
+            AddGuiEntry("selltext");
+            AddGuiEntry("comptext");
         }
 
         private GuiTextEntry AddGuiEntry(string primaryPath, params string[] copyPaths)
