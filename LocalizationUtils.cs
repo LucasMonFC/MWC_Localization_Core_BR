@@ -155,6 +155,34 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
+        /// Like FindGameObjectIncludingInactive but returns every GameObject whose
+        /// full hierarchy path equals <paramref name="path"/>. The game has sibling
+        /// objects sharing an identical path (e.g. TV forecast page 188 slots), and
+        /// the single-object find/cache cannot represent them. Not globally cached;
+        /// callers should cache the result.
+        /// </summary>
+        public static List<GameObject> FindAllGameObjectsIncludingInactive(string path)
+        {
+            List<GameObject> result = new List<GameObject>();
+            if (string.IsNullOrEmpty(path))
+                return result;
+
+            // Pre-filter by leaf name before building full paths.
+            string leafName = path.Substring(path.LastIndexOf('/') + 1);
+            Transform[] all = Resources.FindObjectsOfTypeAll<Transform>();
+            for (int i = 0; i < all.Length; i++)
+            {
+                Transform t = all[i];
+                if (t == null || t.name != leafName)
+                    continue;
+                if (GetGameObjectPath(t.gameObject) == path)
+                    result.Add(t.gameObject);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Shared accessor for all TextMeshes including inactive ones.
         /// </summary>
         public static TextMesh[] GetAllTextMeshesIncludingInactive()
