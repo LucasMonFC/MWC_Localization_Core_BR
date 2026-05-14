@@ -85,6 +85,9 @@ namespace MWC_Localization_Core
             arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/VINLIST_TirePics:1"); // Tire picture descriptions (FI)
             arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/VINLIST_TirePics:2"); // Tire picture descriptions (EN)
 
+            // Bank Account
+            arrayPaths.Add("Systems/BankAccount:0"); // Selite : Transaction descriptions (FI)
+
             // Initialize TextMesh display path mappings
             InitializeTextMeshMappings();
         }
