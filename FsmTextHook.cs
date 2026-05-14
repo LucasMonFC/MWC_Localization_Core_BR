@@ -13,18 +13,18 @@ namespace MWC_Localization_Core
     public partial class FsmTextHook : ITranslationSurface
     {
         public string Name { get { return "FsmTextHook"; } }
-        public SurfaceCadence Cadence { get { return SurfaceCadence.Fast; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.OncePerScene; } }
         public bool IsComplete { get { return false; } }
 
         public int InitialPass()
         {
-            UpdateForCurrentScene(true);
+            UpdateForCurrentScene();
             return 0;
         }
 
+        // FsmTextHook runs at OncePerScene cadence, so LateUpdateHandler never ticks it.
         public int MonitorTick(float deltaTime)
         {
-            UpdateForCurrentScene(false);
             return 0;
         }
 
@@ -51,9 +51,6 @@ namespace MWC_Localization_Core
         private readonly HashSet<string> warnedTargets = new HashSet<string>();
         private readonly HashSet<int> initializedFsmIds = new HashSet<int>();
 
-        private int pendingTargetIndex;
-        private FsmTarget servicePaymentLineTarget;
-        private FsmTarget atmTransactionDescriptionTarget;
         private FsmTarget tvChatDayTarget;
         private FsmTarget rallyPlayerResultsTarget;
         private FsmTarget rallyRegistrationClassTarget;
@@ -100,16 +97,15 @@ namespace MWC_Localization_Core
 
         public void ResetRuntimeState()
         {
-            pendingTargetIndex = 0;
             ClearRuntimeCaches();
         }
 
-        public bool UpdateForCurrentScene(bool force)
+        private bool UpdateForCurrentScene()
         {
-            return UpdateForScene(Application.loadedLevelName, force);
+            return UpdateForScene(Application.loadedLevelName);
         }
 
-        public bool UpdateForScene(string currentScene, bool force)
+        private bool UpdateForScene(string currentScene)
         {
             if (targets.Count == 0)
                 return false;
@@ -119,34 +115,17 @@ namespace MWC_Localization_Core
             if (!isMainMenu && !isGame)
                 return false;
 
-            // Runtime polling only handles sources that are known to be rebuilt while
-            // their sheets are open. Other FSM sources are patched by scene/reload passes.
-            // Scheduler (LateUpdateHandler) already paces this surface at FSM_SOURCE_POLL_INTERVAL.
-            if (!force)
-            {
-                if (!isGame)
-                    return false;
-
-                bool runtimeChanged = false;
-                runtimeChanged |= TryApplyFleetariServicePaymentBreakdownSource();
-                runtimeChanged |= TryApplyAtmTransactionDescriptionSource();
-
-                return runtimeChanged;
-            }
-
             bool changed = false;
             if (isGame)
             {
-                changed |= TryApplyFleetariServicePaymentBreakdownSource();
-                changed |= TryApplyAtmTransactionDescriptionSource();
                 changed |= TryApplyTvChatDaySource();
                 changed |= TryApplyRallyClassSources();
                 changed |= TryApplyGameTeletextWeatherUpdaterDirectTranslations();
             }
 
-            changed |= ApplyPendingTargets(currentScene, targets.Count);
+            changed |= ApplySceneTargets(currentScene);
             if (changed)
-                CoreConsole.Print("[FsmTextHook] Applied pending hardcoded FSM translations in " + currentScene);
+                CoreConsole.Print("[FsmTextHook] Applied hardcoded FSM translations in " + currentScene);
 
             return changed;
         }
@@ -155,8 +134,6 @@ namespace MWC_Localization_Core
         {
             targets.Clear();
             translationCache.Clear();
-            servicePaymentLineTarget = null;
-            atmTransactionDescriptionTarget = null;
             tvChatDayTarget = null;
             rallyPlayerResultsTarget = null;
             rallyRegistrationClassTarget = null;
@@ -168,12 +145,6 @@ namespace MWC_Localization_Core
             for (int i = 0; i < targets.Count; i++)
             {
                 SortRules(targets[i].Rules);
-                if (IsServicePaymentLineTarget(targets[i]))
-                    servicePaymentLineTarget = targets[i];
-
-                if (IsAtmTransactionDescriptionTarget(targets[i]))
-                    atmTransactionDescriptionTarget = targets[i];
-
                 if (IsTvChatDayTarget(targets[i]))
                     tvChatDayTarget = targets[i];
 
@@ -228,27 +199,15 @@ namespace MWC_Localization_Core
             });
         }
 
-        private bool ApplyPendingTargets(string currentScene, int maxTargets)
+        private bool ApplySceneTargets(string currentScene)
         {
             bool changed = false;
-            if (targets.Count == 0 || maxTargets <= 0)
-                return false;
-
-            int checkedCount = 0;
-            int processedCount = 0;
-            while (checkedCount < targets.Count && processedCount < maxTargets)
+            for (int i = 0; i < targets.Count; i++)
             {
-                if (pendingTargetIndex >= targets.Count)
-                    pendingTargetIndex = 0;
-
-                FsmTarget target = targets[pendingTargetIndex];
-                pendingTargetIndex++;
-                checkedCount++;
-
+                FsmTarget target = targets[i];
                 if (target == null || resolvedTargets.Contains(target.Key) || !IsTargetForScene(target, currentScene))
                     continue;
 
-                processedCount++;
                 bool resolved;
                 changed |= TryApplyTarget(target, out resolved);
                 if (resolved)
@@ -613,82 +572,6 @@ namespace MWC_Localization_Core
             {
                 textMesh.text = safeValue;
                 changed = true;
-            }
-
-            return changed;
-        }
-
-        private bool TryApplyFleetariServicePaymentBreakdownSource()
-        {
-            FsmTarget target = servicePaymentLineTarget;
-            if (target == null)
-                return false;
-
-            GameObject orderFleetari = LocalizationUtils.FindGameObjectIncludingInactive("REPAIRSHOP/OrderFleetari");
-            if (orderFleetari == null)
-                return false;
-
-            bool changed = false;
-            PlayMakerArrayListProxy[] proxies = orderFleetari.GetComponents<PlayMakerArrayListProxy>();
-            for (int i = 0; i < proxies.Length; i++)
-            {
-                PlayMakerArrayListProxy proxy = proxies[i];
-                if (proxy == null || !TextMatchesExact(proxy.referenceName, "Breakdown"))
-                    continue;
-
-                changed |= TranslateArrayListProxy(proxy, target);
-            }
-
-            if (changed)
-            {
-                bool handled;
-                bool resolved;
-                changed |= TryTranslateIndexedLineTarget(target, out handled, out resolved);
-            }
-
-            return changed;
-        }
-
-        private bool TryApplyAtmTransactionDescriptionSource()
-        {
-            FsmTarget target = atmTransactionDescriptionTarget;
-            if (target == null)
-                return false;
-
-            GameObject bankAccount = LocalizationUtils.FindGameObjectIncludingInactive("Systems/BankAccount");
-            if (bankAccount == null)
-                return false;
-
-            bool changed = false;
-            PlayMakerArrayListProxy[] proxies = bankAccount.GetComponents<PlayMakerArrayListProxy>();
-            for (int i = 0; i < proxies.Length; i++)
-            {
-                PlayMakerArrayListProxy proxy = proxies[i];
-                if (proxy == null || !TextMatchesExact(proxy.referenceName, "Selite"))
-                    continue;
-
-                changed |= TranslateArrayListProxy(proxy, target);
-            }
-
-            if (changed)
-                changed |= SyncAtmTransactionDescriptionLines(target);
-
-            return changed;
-        }
-
-        private bool SyncAtmTransactionDescriptionLines(FsmTarget target)
-        {
-            if (target == null)
-                return false;
-
-            List<PlayMakerFSM> fsms = GetFsmsForWholeTarget(target);
-            if (fsms.Count == 0)
-                return false;
-
-            bool changed = false;
-            for (int i = 0; i < fsms.Count; i++)
-            {
-                changed |= SyncIndexedLineFromArrayList(fsms[i], target);
             }
 
             return changed;
@@ -1246,22 +1129,6 @@ namespace MWC_Localization_Core
                 return;
 
             resolvedTargets.Add(target.Key);
-        }
-
-        private static bool IsServicePaymentLineTarget(FsmTarget target)
-        {
-            return target != null
-                && TextMatchesExact(target.ObjectPath, "Sheets/ServicePayment/Line")
-                && TextMatchesExact(target.FsmName, "GetLine")
-                && target.WholeFsm;
-        }
-
-        private static bool IsAtmTransactionDescriptionTarget(FsmTarget target)
-        {
-            return target != null
-                && TextMatchesExact(target.ObjectPath, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite")
-                && TextMatchesExact(target.FsmName, "GetData")
-                && target.WholeFsm;
         }
 
         private static bool IsTvChatDayTarget(FsmTarget target)
