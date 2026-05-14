@@ -82,12 +82,10 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Moderator", "Text", "State 11", 1, "Valvojana:");
 
             // Sheets: Rally results / registration / penalties
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Junior");
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "Amateur");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "- Class");
-            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Junior");
-            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "Amateur");
+            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "State 1", 5, "- Class");
             AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "- Class");
+            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "State 1", 3, "- Class");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "Time penalty:");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "sec.");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "Parc Ferme violation:");
@@ -96,6 +94,15 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "State 1", 6, "sec.");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "State 1", 7, "Parc Ferme violation:");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "State 1", 8, "Jump start violation:");
+            // Rally class name source values (SetStringValue.stringValue) the sheets read back from
+            AddTargetRule(byKey, "RACES/RALLY/ResultsWeekend", "Data", "State 5", 2, "Amateur");
+            AddTargetRule(byKey, "RACES/RALLY/ResultsWeekend", "Data", "State 6", 2, "Junior");
+            AddTargetRule(byKey, "RACES/RALLY/ResultsWeekend", "Data", "State 8", 2, "Amateur");
+            AddTargetRule(byKey, "RACES/RALLY/ResultsWeekend", "Data", "State 9", 2, "Junior");
+            AddTargetRule(byKey, "RACES/RALLY/ResultsWeekend", "Data", "State 11", 2, "Amateur");
+            AddTargetRule(byKey, "RACES/RALLY/ResultsWeekend", "Data", "State 12", 2, "Junior");
+            AddTargetRule(byKey, "RACES/RALLY/ResultsWeekend", "Data", "State 18", 0, "Amateur");
+            AddTargetRule(byKey, "RACES/RALLY/ResultsWeekend", "Data", "State 19", 0, "Junior");
 
             // Sheets: Unemployment paper status buttons
             AddTargetRule(byKey, "Sheets/UnemployPaper/2A/1", "Button", "", -1, "ty\u00f6t\u00f6n");
