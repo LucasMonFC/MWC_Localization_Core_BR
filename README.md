@@ -2,7 +2,7 @@
 
 MSCLoader localization framework for **My Summer Car**. 
 
-The packaged Brazilian Portuguese language pack ships the `.txt` files and optional `fonts.unity3d` under `Mods/Assets/MSC_Localization_Core_BR/`; this DLL loads them and applies translations to TextMesh, PlayMaker FSM strings, teletext arrays, HUD text, rally sheets, computer screens, and selected ArrayList-backed game data.
+The bundled language pack ships the `.txt` files and optional `fonts.unity3d` under `Mods/Assets/MSC_Localization_Core/`, matching the current mod ID; this DLL loads them and applies translations to TextMesh, PlayMaker FSM strings, teletext arrays, HUD text, rally sheets, computer screens, and selected ArrayList-backed game data.
 
 ## Quick Start
 
@@ -41,7 +41,7 @@ The project references My Summer Car managed assemblies from the path configured
 ```text
 dist/
 |-- Assets/
-|   `-- MSC_Localization_Core_BR/
+|   `-- MSC_Localization_Core/
 |       |-- config.txt
 |       |-- translate.txt
 |       |-- translate_teletext.txt
@@ -50,10 +50,10 @@ dist/
 `-- MSC_Localization_Core.dll
 ```
 
-At runtime, MSCLoader resolves the assets folder from the mod ID. For this repository's bundled BR package, place the assets under:
+At runtime, MSCLoader resolves the assets folder from the mod ID. With the current generic ID, place the assets under:
 
 ```text
-Mods/Assets/MSC_Localization_Core_BR/
+Mods/Assets/MSC_Localization_Core/
 ```
 
 ## Configuration
@@ -231,7 +231,7 @@ For languages requiring accented glyphs, Cyrillic, Japanese, Korean, Chinese, or
 2. Create Unity font assets with a Unity 5.x editor compatible with the game.
 3. Build an AssetBundle named `fonts.unity3d`.
 4. Make sure each font asset name matches the right side of the `[FONTS]` mapping in `config.txt`.
-5. Place `fonts.unity3d` alongside the translation files in `Mods/Assets/MSC_Localization_Core_BR/`.
+5. Place `fonts.unity3d` alongside the translation files in `Mods/Assets/MSC_Localization_Core/`.
 
 The bundle build target should match the game platform, normally Windows Standalone.
 

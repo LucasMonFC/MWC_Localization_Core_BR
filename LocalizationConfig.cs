@@ -27,7 +27,7 @@ namespace MSC_Localization_Core
         /// <summary>
         /// Path prefixes that always get the localized font applied, regardless of whether
         /// the displayed text is in the translation dictionary. Used for teletext, computer
-        /// POS, TV graphics, etc., where the original text stays in-game but the font must
+        /// POS, teletext, rally TV, etc., where the original text stays in-game but the font must
         /// be swapped so non-ASCII glyphs render correctly.
         /// </summary>
         public static readonly string[] ForcedFontPathPrefixes = new string[]

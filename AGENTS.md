@@ -4,7 +4,7 @@ This file provides guidance to AI agents when working with code in this reposito
 
 ## Project
 
-MSCLoader mod for **My Summer Car** (Unity 5.x + PlayMaker FSM). It acts as a localization framework for the MSC port: language packs ship `.txt` files and optional `fonts.unity3d` under the MSCLoader asset folder for the mod ID. In this BR package that path is `Mods/Assets/MSC_Localization_Core_BR/`, and the DLL applies the files at runtime.
+MSCLoader mod for **My Summer Car** (Unity 5.x + PlayMaker FSM). It acts as a localization framework for the MSC port: language packs ship `.txt` files and optional `fonts.unity3d` under the MSCLoader asset folder for the mod ID. The current generic mod ID is `MSC_Localization_Core`, so the runtime asset path is `Mods/Assets/MSC_Localization_Core/`.
 
 End-user docs for translation file formats, position adjustment syntax, and the F8 reload workflow live in [README.md](README.md). This file covers runtime architecture and maintenance notes.
 
@@ -108,4 +108,4 @@ When adding new state to a surface, wire it into `Reset()` for runtime caches an
 
 ## Output Layout
 
-The shipping mod is `MSC_Localization_Core.dll` plus the contents of [dist/Assets/MSC_Localization_Core_BR/](dist/Assets/MSC_Localization_Core_BR/). At runtime this BR build expects those assets under `Mods/Assets/MSC_Localization_Core_BR/`.
+The shipping mod is `MSC_Localization_Core.dll` plus the contents of [dist/Assets/MSC_Localization_Core/](dist/Assets/MSC_Localization_Core/). At runtime the mod expects those assets under `Mods/Assets/MSC_Localization_Core/`.
