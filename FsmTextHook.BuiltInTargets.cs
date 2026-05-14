@@ -13,14 +13,10 @@ namespace MWC_Localization_Core
         private void AddBuiltInTargets(Dictionary<string, FsmTarget> byKey)
         {
             // Radio (MainMenu)
-            AddTargetRule(byKey, "Radio/Folk", "", "", -1, "NOT IMPORTED");
-            AddTargetRule(byKey, "Radio/Folk", "", "", -1, "RADIO NOT IMPORTED");
-            AddTargetRule(byKey, "Radio/Folk", "", "Off", 1, "RADIO IMPORTED");
-            AddTargetRule(byKey, "Radio/Folk", "", "Off", 1, "RADIO NOT IMPORTED");
-            AddTargetRule(byKey, "Radio/CD", "", "", -1, "NOT IMPORTED");
-            AddTargetRule(byKey, "Radio/CD", "", "", -1, "CD NOT IMPORTED");
-            AddTargetRule(byKey, "Radio/CD", "", "State 1", 0, "CD'S IMPORTED");
-            AddTargetRule(byKey, "Radio/CD", "", "State 1", 0, "CD NOT IMPORTED");
+            AddTargetRule(byKey, "Radio/Folk", "LoadSongs", "", -1, "NOT IMPORTED");
+            AddTargetRule(byKey, "Radio/Folk", "LoadSongs", "Off", 1, "RADIO IMPORTED");
+            AddTargetRule(byKey, "Radio/CD", "Playlist", "", -1, "NOT IMPORTED");
+            AddTargetRule(byKey, "Radio/CD", "Playlist", "State 1", 0, "CD'S IMPORTED");
 
             // TV Teletext pages (240/241/302 results, Teletext command bar)
             AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1", "Data", "State 1", 2, "P\u00e4\u00e4sarjan kierroksen");
@@ -31,14 +27,6 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1", "Data", "State 1", 2, "tulokset");
             AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1", "Data", "State 1", 3, "Kierros");
             AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1", "Data", "State 1", 3, "pelikohteet");
-            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1", "Data", "", -1, "P\u00e4\u00e4sarjan kierroksen");
-            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/240/Texts/Data/Bottomline 1", "Data", "", -1, "tulokset.");
-            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/241/Texts/Data/Bottomline 1", "Data", "", -1, "Sarjatilanne kun pelattu");
-            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/241/Texts/Data/Bottomline 1", "Data", "", -1, "ottelua.");
-            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1", "Data", "", -1, "Kierros");
-            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1", "Data", "", -1, "tulokset");
-            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1", "Data", "", -1, "Kierros");
-            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1", "Data", "", -1, "pelikohteet");
             AddTargetRule(byKey, "Systems/TV/Teletext", "", "", -1, "stop");
             AddTargetRule(byKey, "Systems/TV/Teletext", "", "", -1, "haku");
             AddTargetRule(byKey, "Systems/TV/Teletext", "", "Load", 0, "stop");
@@ -56,29 +44,23 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Systems/Teletext", "", "State 1", 4, "stop");
             AddTargetRule(byKey, "Systems/Teletext", "", "State 1", 4, "haku");
 
+            // TV Forecast: 188
+            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Nyt", "Logic", "State 4", 0, "lumisadetta");
+            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Nyt", "Logic", "State 4", 1, "Ls");
+            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Nyt", "Logic", "State 6", 0, "selke\u00e4\u00e4");
+            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Nyt", "Logic", "State 6", 1, "se");
+            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste/Temp/Short", "Data", "State 4", 0, "lumisadetta");
+            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste/Temp/Short", "Data", "State 4", 1, "Ls");
+            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste/Temp/Short", "Data", "State 6", 0, "selke\u00e4\u00e4");
+            AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Ennuste/Temp/Short", "Data", "State 6", 1, "se");
+
             // TV Graphics: CHAT day/time, GFXTanaan schedule overlays
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day/Time", "Clock", "State 3", 2, "KLO");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "maanantai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "tiistai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "keskiviikko");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "torstai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "perjantai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "lauantai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Day", "Text", "State 11", 0, "sunnuntai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "ohjelmat");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "maanantai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "tiistai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "keskiviikko");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "torstai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "", -1, "perjantai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat1/Text", "Text", "", -1, "ohjelmat");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun1/Text", "Text", "", -1, "ohjelmat");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat1/Text", "Text", "", -1, "lauantai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun1/Text", "Text", "", -1, "sunnuntai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat2/Text", "Text", "", -1, "ohjelmat");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun2/Text", "Text", "", -1, "ohjelmat");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat2/Text", "Text", "", -1, "lauantai");
-            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun2/Text", "Text", "", -1, "sunnuntai");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanWeek/Text", "Text", "State 11", 0, "ohjelmat");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat1/Text", "Text", "State 11", 0, "ohjelmat");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun1/Text", "Text", "State 11", 0, "ohjelmat");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSat2/Text", "Text", "State 11", 0, "ohjelmat");
+            AddTargetRule(byKey, "Systems/TV/TVGraphics/GFXTanaanSun2/Text", "Text", "State 11", 0, "ohjelmat");
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Moderator", "Text", "State 11", 1, "Valvojana:");
 
             // Sheets: Rally results / registration / penalties

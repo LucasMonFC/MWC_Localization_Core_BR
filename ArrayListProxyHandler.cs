@@ -88,6 +88,14 @@ namespace MWC_Localization_Core
             // Bank Account
             arrayPaths.Add("Systems/BankAccount:0"); // Selite : Transaction descriptions (FI)
 
+            // Day Array
+            arrayPaths.Add("Systems/TV/TVGraphics/CHAT/Day:0");
+            arrayPaths.Add("Systems/TV/TVGraphics/GFXTanaanWeek/Text:0");
+            arrayPaths.Add("Systems/TV/TVGraphics/GFXTanaanSat1/Text:0");
+            arrayPaths.Add("Systems/TV/TVGraphics/GFXTanaanSun1/Text:0");
+            arrayPaths.Add("Systems/TV/TVGraphics/GFXTanaanSat2/Text:0");
+            arrayPaths.Add("Systems/TV/TVGraphics/GFXTanaanSun2/Text:0");
+
             // Initialize TextMesh display path mappings
             InitializeTextMeshMappings();
         }
@@ -166,7 +174,7 @@ namespace MWC_Localization_Core
                 }
 
                 // Find GameObject
-                GameObject obj = LocalizationUtils.FindGameObjectCached(objectPath);
+                GameObject obj = LocalizationUtils.FindGameObjectIncludingInactive(objectPath);
                 if (obj == null)
                 {
                     // Not available yet - this is normal for lazy-loaded content
@@ -188,7 +196,18 @@ namespace MWC_Localization_Core
 
             // Translate array contents using existing translation dictionaries
             int translatedCount = 0;
+
+            // Translate the serialized prefill list first. It exists even while the
+            // GameObject is inactive, so when PlayMaker prefills the runtime arrayList
+            // on activation it copies already-translated strings instead of the
+            // original text - removing the visible original-then-translated flip.
+            translatedCount += TranslatePreFillStringList(proxy);
+
             ArrayList arrayList = proxy.arrayList;
+
+            // Inactive objects' proxies may not have populated arrayList yet - retry next tick.
+            if (arrayList == null)
+                return translatedCount;
 
             for (int i = 0; i < arrayList.Count; i++)
             {
@@ -252,6 +271,31 @@ namespace MWC_Localization_Core
             return totalTranslated;
         }
 
+        // Translate a proxy's serialized prefill list in place. Returns count translated.
+        private int TranslatePreFillStringList(PlayMakerArrayListProxy proxy)
+        {
+            List<string> preFill = proxy.preFillStringList;
+            if (preFill == null || preFill.Count == 0)
+                return 0;
+
+            int translatedCount = 0;
+            for (int i = 0; i < preFill.Count; i++)
+            {
+                string original = preFill[i];
+                if (string.IsNullOrEmpty(original))
+                    continue;
+
+                string translation = FindTranslation(original);
+                if (translation != null)
+                {
+                    preFill[i] = translation;
+                    translatedCount++;
+                }
+            }
+
+            return translatedCount;
+        }
+
         // Find translation from main translations or magazine translations
         private string FindTranslation(string original)
         {
@@ -283,7 +327,7 @@ namespace MWC_Localization_Core
                 if (completedParentPaths.Contains(parentPath))
                     continue;
 
-                GameObject parent = LocalizationUtils.FindGameObjectCached(parentPath);
+                GameObject parent = LocalizationUtils.FindGameObjectIncludingInactive(parentPath);
                 if (parent == null)
                     continue; // Not loaded yet - will try again later
 
