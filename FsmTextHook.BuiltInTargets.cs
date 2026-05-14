@@ -212,17 +212,21 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Sheets/EnviroCrime/TicketData", "Data", "Fetch data", 11, "litres.");
 
             // ATM transaction description labels
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "Vuokra");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "Jakopalkkio");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "Nosto");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "Asumistuki");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "PSKPerajarviAutom");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "PSK Pera Autom.");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "Ty\u00f6tt\u00f6myystuki");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "TaksiPalkka");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "Palkka");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "Talletuskorko");
-            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/ATMs/MoneyATM/Screen/Tapahtumat/Tapahtumat/Selite", "GetData", "", -1, "Talletus");
+            AddTargetRule(byKey, "Systems/BankAccount", "Data", "Interest", 5, "Talletuskorko");
+            AddTargetRule(byKey, "Systems/Expenses", "Rent", "Rent", 6, "Vuokra");
+            AddTargetRule(byKey, "Systems/Expenses", "Kela", "Pay", 5, "Ty\u00f6tt\u00f6myystuki");
+            AddTargetRule(byKey, "Systems/Expenses", "Livingsupport", "Asumistuki", 4, "Asumistuki");
+            AddTargetRule(byKey, "JOBS/ADs", "Data", "Bank transfer 2", 5, "Jakopalkkio");
+            AddTargetRule(byKey, "JOBS/FACTORY", "PlayerData", "Base salary", 5, "Palkka");
+            AddTargetRule(byKey, "JOBS/FACTORY", "PlayerData", "High salary", 5, "Palkka");
+            AddTargetRule(byKey, "JOBS/TAXIJOB/MACHTWAGEN/TaxiFunctions", "Payments", "Payment", 6, "TaksiPalkka");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD100/ATM/Automat", "Logic", "Update account", 1, "Nosto");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD100/ATM/Automat", "Logic", "Bank transfer 2", 5, "Talletus");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD100/Store/VoittousArea/TrashTrigger", "Logic", "Bank", 4, "Voittous");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD300/FuelPumps_1-2/Pump1", "Functions", "Update account", 3, "PSKPerajarviAutom");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD300/FuelPumps_1-2/Pump2", "Functions", "Update account", 3, "PSKPerajarviAutom");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD300/FuelPumps_1-2/Pump1", "Functions", "Update account", 3, "PSK Pera Autom.");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD300/FuelPumps_1-2/Pump2", "Functions", "Update account", 3, "PSK Pera Autom.");
 
             // COMPUTER: POS boot / shell command output
             AddTargetRule(byKey, "COMPUTER/SYSTEM/POS/BootSequence", "Use", "State 1", 0, "Starting RS-POS...");
@@ -337,27 +341,27 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "COMPUTER/SYSTEM/RAMI-Simppa&Jokke/Seikailu-Tekstit/Text-Lersman-Oven", "", "", -1, "Oven");
 
             // Sheets: Service Payment line items (Fleetari breakdown source)
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Vanteiden kiilotus / Rim polish");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Rengasty\u00f6t / tire job");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Custom automaalaus / Custom paint");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Metalliv\u00e4ri / Metallic color");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Alkuper\u00e4isv\u00e4ri / original color");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Tehtaan erikoismaalaus / factory special paint");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Vanteet metalliv\u00e4ri / Rim metallic");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Vanteet maalattuna / Rim paint");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Moottorin s\u00e4\u00e4t\u00f6 / Engine adjust");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Aurauskulmien s\u00e4\u00e4t\u00f6 / Toe adjust");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Jarruhuolto / brake service");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Moottorin viritys / engine tune up");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Ripustusten suoristus / susp. repair");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Ovien turvaverkot / door safety nets");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Turvakehikon asennus / rollcage install");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Tuulilasin vaihto / windshield replacement");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Per\u00e4v\u00e4lityksen vaihto / ratio change");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Turvakehikon poisto / rollcage removal");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Peltity\u00f6t / sheet metal work");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Vinyylikaton poisto / vinyl removal");
-            AddTargetRule(byKey, "Sheets/ServicePayment/Line", "GetLine", "", -1, "Mittatilausjouset / Coil spring order");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/RimPolish", "Work", "Polish", 2, "Vanteiden kiilotus / Rim polish");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/TireJob", "Work", "Cost 2", 2, "Rengasty\u00f6t / tire job");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/Paintjob", "Work", "Art", 3, "Custom automaalaus / Custom paint");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/Paintjob", "Work", "Metallic", 3, "Metalliv\u00e4ri / Metallic color");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/Paintjob", "Work", "Original", 3, "Alkuper\u00e4isv\u00e4ri / original color");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/Paintjob", "Work", "State 7", 2, "Tehtaan erikoismaalaus / factory special paint");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/RimPolish", "Work", "Metallic", 2, "Vanteet metalliv\u00e4ri / Rim metallic");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/RimPolish", "Work", "Original", 2, "Vanteet maalattuna / Rim paint");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/EngineAdjust", "Work", "Cost 2", 2, "Moottorin s\u00e4\u00e4t\u00f6 / Engine adjust");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/ToeAdjust", "Work", "Cost 2", 2, "Aurauskulmien s\u00e4\u00e4t\u00f6 / Toe adjust");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/Brakes", "Work", "Cost 2", 2, "Jarruhuolto / brake service");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/EngineTune", "Work", "Cost 2", 2, "Moottorin viritys / engine tune up");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/SuspensionRepair", "Work", "Cost 2", 2, "Ripustusten suoristus / susp. repair");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/SafetyNet", "Work", "Cost 2", 2, "Ovien turvaverkot / door safety nets");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/Rollcage", "Work", "Cost 2", 2, "Turvakehikon asennus / rollcage install");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/Windshield", "Work", "Cost 2", 2, "Tuulilasin vaihto / windshield replacement");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/GearRatios", "Work", "Cost", 2, "Per\u00e4v\u00e4lityksen vaihto / ratio change");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/RollcageRemove", "Work", "Cost 2", 2, "Turvakehikon poisto / rollcage removal");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/Bodyfix", "Work", "Cost 2", 2, "Peltity\u00f6t / sheet metal work");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/VinylRemoval", "Work", "Cost 2", 2, "Vinyylikaton poisto / Vinyl removal");
+            AddTargetRule(byKey, "REPAIRSHOP/Jobs/Springs", "Work", "Cost 2", 2, "Mittatilausjouset / Coil spring order");
         }
     }
 }
