@@ -4,133 +4,108 @@ This file provides guidance to AI agents when working with code in this reposito
 
 ## Project
 
-MSCLoader mod for **My Winter Car** (Unity 5.0.0f4 + PlayMaker FSM). Acts as a generic localization framework — community language packs ship the `.txt` files and `fonts.unity3d` under `Mods/Assets/MWC_Localization_Core/`, this DLL applies them.
+MSCLoader mod for **My Summer Car** (Unity 5.x + PlayMaker FSM). It acts as a localization framework for the MSC port: language packs ship `.txt` files and optional `fonts.unity3d` under the MSCLoader asset folder for the mod ID. In this BR package that path is `Mods/Assets/MSC_Localization_Core_BR/`, and the DLL applies the files at runtime.
 
-End-user docs (translation file formats, position adjustment syntax, F8 reload workflow) live in [README.md](README.md). This file covers the runtime architecture and the moving parts that aren't obvious from the file tree.
+End-user docs for translation file formats, position adjustment syntax, and the F8 reload workflow live in [README.md](README.md). This file covers runtime architecture and maintenance notes.
 
 ## Build
 
-```
+```bash
 dotnet build -c Release
 ```
 
-- Target framework: **.NET 3.5 / Unity Full v3.5** with `LangVersion 13` (newer C# syntax compiles down — but no BCL APIs added after .NET 3.5).
-- Assembly references in [MWC_Localization_Core.csproj](MWC_Localization_Core.csproj) are **hard-coded to `D:\SteamLibrary\steamapps\common\My Winter Car\mywintercar_Data\Managed\*.dll`**. Update the `<HintPath>` entries if the game lives elsewhere; the build fails otherwise.
-- The `PostBuildEvent` block copies the resulting DLL/PDB into the game's `Mods` folder (and optionally `MSCMODSFOLDER` / `MWCMODSFOLDER` if those MSBuild properties are set). It also invokes `debug.bat` in that folder when present — that's MSCLoader's auto-debug hook. Releases skip the PDB and the debug.bat call.
-- No tests, no lint. CI is GitHub Actions only for releases — local verification = build + load into the game.
+- Target framework: **.NET 3.5 / Unity Full v3.5** with `LangVersion 13`.
+- Assembly references in [MSC_Localization_Core.csproj](MSC_Localization_Core.csproj) are hard-coded to the local My Summer Car managed assembly path. Update `<HintPath>` entries if the game lives elsewhere.
+- The `PostBuildEvent` copies the resulting DLL/PDB into the game's `Mods` folder, and optionally `MSCMODSFOLDER` if that MSBuild property is set. It also invokes `debug.bat` in that folder when present. Release builds skip the PDB and debug hook.
+- No tests, no lint. Local verification is build plus loading the mod in-game.
 
-## Runtime architecture
+## Runtime Architecture
 
 ### MSCLoader lifecycle wiring
 
-[MWC_Localization_Core.cs](MWC_Localization_Core.cs) registers callbacks in `ModSetup()` — that method must stay logic-free. Real work happens in:
+[MSC_Localization_Core.cs](MSC_Localization_Core.cs) registers callbacks in `ModSetup()`; that method should stay logic-free. Real work happens in:
 
 | Callback | When | Responsibility |
 |---|---|---|
 | `Mod_Settings` | once, settings UI build | F8 reload keybind, debug-log toggles |
-| `Mod_OnMenuLoad` | each MainMenu enter | Load config + fonts + main translation files, build the surface list, run initial passes for MainMenu |
-| `Mod_PostLoad` | once after GAME loads | Translate scene, run initial passes for GAME, spawn the `MWC_LateUpdateHandler` GameObject |
-| `Mod_Update` | every frame | F8 hotkey, scene-change detection (cache prune + LateUpdateHandler teardown), initial pass after hot reload — **not** continuous monitoring |
+| `Mod_OnMenuLoad` | each MainMenu enter | Load config + fonts + main translation files, build surfaces, run initial passes for MainMenu |
+| `Mod_PostLoad` | once after GAME loads | Translate scene, run initial passes for GAME, spawn the `MSC_LateUpdateHandler` GameObject |
+| `Mod_Update` | every frame | F8 hotkey, scene-change detection, cache pruning, LateUpdateHandler teardown |
 
-**Important:** `LateUpdate` and `FixedUpdate` declared on a `Mod` subclass do **not** auto-run. Continuous per-frame work is delegated to [LateUpdateHandler.cs](LateUpdateHandler.cs), a `MonoBehaviour` hosted on a created GameObject `MWC_LateUpdateHandler`. This MonoBehaviour is destroyed and recreated on every scene change.
+`LateUpdate` and `FixedUpdate` declared on a `Mod` subclass do not auto-run. Continuous per-frame work is delegated to [LateUpdateHandler.cs](LateUpdateHandler.cs), a `MonoBehaviour` hosted on a created GameObject `MSC_LateUpdateHandler`.
 
-### Why LateUpdate matters
+### Why LateUpdate Matters
 
-The game rebuilds TextMesh content, FSM string values, and ArrayList contents during its own `Update()`. Patching during MSCLoader's `Update` callback frequently gets overwritten the same frame. `LateUpdateHandler.LateUpdate` runs after all `Update` calls, so monitor/translate work there is stable. The `Mod_Update` callback is reserved for input and scene-transition bookkeeping.
+The game rebuilds TextMesh content, FSM string values, and ArrayList contents during its own `Update()`. Patching during MSCLoader's `Update` callback can be overwritten the same frame. `LateUpdateHandler.LateUpdate` runs after all `Update` calls, so monitor/translate work there is stable.
 
-### Surface abstraction
+### Surface Abstraction
 
-Every place the mod patches text is modeled as an `ITranslationSurface` ([TranslationSurface.cs](TranslationSurface.cs)). The main class holds a single `List<ITranslationSurface>` and dispatches the lifecycle uniformly:
+Every place the mod patches text is modeled as an `ITranslationSurface` ([TranslationSurface.cs](TranslationSurface.cs)). The main class holds a single `List<ITranslationSurface>` and dispatches lifecycle calls uniformly:
 
 ```csharp
-ctx = new TranslationContext(translations, customFonts, config, translator, magazine, assetsFolder);
+ctx = new TranslationContext(translations, customFonts, config, translator, assetsFolder);
 foreach (s in surfaces) s.Initialize(ctx);
-foreach (s in surfaces) s.InitialPass();          // on scene load + F8 reload
-// LateUpdateHandler iterates surfaces and calls s.MonitorTick(dt) at each surface's Cadence
-foreach (s in surfaces) s.Reset();                // scene change
-foreach (s in surfaces) s.ClearTranslations();    // F8: before reloading from disk
+foreach (s in surfaces) s.InitialPass();
+foreach (s in surfaces) s.Reset();
+foreach (s in surfaces) s.ClearTranslations();
 ```
 
-Each surface declares a `SurfaceCadence` so the scheduler knows how often to tick it:
-
-| Cadence | Interval | Used by |
-|---|---|---|
-| `PerFrame` | every LateUpdate | `GuiTextMonitor` — HUD primary→shadow mirroring needs to keep up with per-frame text changes |
-| `Fast` | `FSM_SOURCE_POLL_INTERVAL` (0.2s) | `FsmTextHook` — small dynamic FSM sources the game rebuilds per screen open |
-| `Slow` | `ARRAY_MONITOR_INTERVAL` (2s), staggered | `MagazineTextHandler`, `TeletextHandler`, `ArrayListProxyHandler`, `HashTableProxyHandler` |
-| `OncePerScene` | never (only InitialPass) | reserved; no current surfaces |
-
-`LateUpdateHandler.Initialize` offsets the first tick time of consecutive `Slow` surfaces by `ARRAY_MONITOR_STEP_INTERVAL` (0.5s) so they don't all fire on the same frame.
-
-### Translation pipeline
-
-1. **Config** ([LocalizationConfig.cs](LocalizationConfig.cs)) — parses `config.txt`: language metadata, `[FONTS]` mapping (original font name → custom font asset name), and `[POSITION_ADJUSTMENTS]` rules into [TextAdjustment.cs](TextAdjustment.cs) instances. Also hosts `LocalizationConstants` (polling intervals) and `LocalizationConfig.ForcedFontPathPrefixes` / `IsForcedFontPath` (see "Forced-font path prefixes" below).
-2. **Translation files** — loaded in this order, later files override earlier:
-   - `translate_msc.txt` (optional My Summer Car base) — main class
-   - `translate.txt` (main) — main class
-   - `translate_mod.txt` (optional mod content) — main class
-   - `translate_magazine.txt` → `MagazineTextHandler.Initialize` (price/phone line formatting, abbreviated keywords)
-   - `translate_teletext.txt` → `TeletextHandler.Initialize` (category-section INI format; some categories are **index-ordered**, not key-matched). Teletext also feeds FSM patterns into the shared dictionary.
-   - All key=value files are normalized by `LocalizationUtils.FormatUpperKey` (uppercase, strip whitespace) at insertion into `TranslationDictionary`. `\=` escapes `=`; `\n` becomes a newline in values.
-3. **Pattern translations** — Entries with `{0}`/`{1}` placeholders are detected during pattern-load scans and become `TranslationPattern`s stored inside `TranslationDictionary`. Modes: `FsmPattern` (literal replacement), `FsmPatternWithTranslation` (extracted params translated through the dictionary), `CustomHandler` (code-only delegate).
-
-### Where translations get applied
-
-Each row below is one `ITranslationSurface` implementation. The "Component" column doubles as the file pointer.
+Current surfaces:
 
 | Surface | What it patches | Cadence |
 |---|---|---|
-| [GuiTextMonitor.cs](GuiTextMonitor.cs) | HUD primary→shadow paired meshes (Interaction, PartName, Subtitles) and HUD value meshes (Day/Money/Thirst/etc.) | PerFrame |
-| [MagazineTextHandler.cs](MagazineTextHandler.cs) | Yellow Pages magazine FSM string sources + price/phone line formatting | Slow |
-| [TeletextHandler.cs](TeletextHandler.cs) | Teletext/TV `PlayMakerArrayListProxy._arrayList` content with category-based + index-based lookup | Slow |
-| [ArrayListProxyHandler.cs](ArrayListProxyHandler.cs) | `PlayMakerArrayListProxy._arrayList` for hardcoded paths (HUD days, magazine keyword pools, tire pics). Also applies fonts to TextMeshes under known parent paths. | Slow |
-| [HashTableProxyHandler.cs](HashTableProxyHandler.cs) | `PlayMakerHashTableProxy` (`KeywordsFI`/`KeywordsEN`): live hashtable + snapshot + `preFillStringList` via reflection | Slow |
-| [FsmTextHook.cs](FsmTextHook.cs) + [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) | FSM action fields, `FsmString` variables, `BuildString` parts, `SetProperty` `StringParameter`. Each target is `(objectPath, fsmName, stateName, actionIndex)` or `WholeFsm`. | Fast |
+| [GuiTextMonitor.cs](GuiTextMonitor.cs) | HUD primary/shadow paired meshes and HUD value meshes, including rally HUD GUI | PerFrame |
+| [TeletextHandler.cs](TeletextHandler.cs) | `Systems/Teletext/VKTekstiTV/Database` ArrayList content through category/index lookup | Slow |
+| [ArrayListProxyHandler.cs](ArrayListProxyHandler.cs) | Hardcoded ArrayList paths such as HUD day names, plus known parent font paths | Slow |
+| [FsmTextHook.cs](FsmTextHook.cs) + [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) | FSM action fields, `FsmString` variables, `BuildString` parts, `SetStringValue`, `SetProperty` string parameters, runtime teletext/weather/rally text, and rally result sheet sources | Fast |
+| [SubtitleTimingHandler.cs](SubtitleTimingHandler.cs) | ExtraTranslate-compatible `Wait.time` extensions for selected long subtitles; also exposes the retained-subtitle duration map used by `GuiTextMonitor` | Slow |
 
-`TextMeshTranslator` ([TextMeshTranslator.cs](TextMeshTranslator.cs)) is a **service**, not a surface. Surfaces and the main-class scene scan call it to translate one TextMesh + apply the mapped font + adjustment. Its caches are reset alongside the surfaces on scene change.
+`LateUpdateHandler.Initialize` offsets consecutive `Slow` surfaces by `ARRAY_MONITOR_STEP_INTERVAL` so they do not all fire on the same frame.
 
-`Mod_OnMenuLoad` / `Mod_PostLoad` run a one-shot pass over every `TextMesh` (`LocalizationUtils.GetAllTextMeshesIncludingInactive`) plus the surface `InitialPass` for hardcoded array/hashtable/FSM targets.
+## Translation Pipeline
 
-### Hot reload (F8)
+1. **Config** ([LocalizationConfig.cs](LocalizationConfig.cs)) parses `config.txt`: language metadata, `[FONTS]` mapping, and `[POSITION_ADJUSTMENTS]`. Forced-font path prefixes and polling constants live in code.
+2. **Main translation files** load in this order, with later files overriding earlier files:
+   - `translate.txt`
+   - `translate_mod.txt`
+3. **Teletext** loads `translate_teletext.txt` in [TeletextHandler.cs](TeletextHandler.cs). TV chat sections are intentionally not supported for MSC.
+4. **FSM/runtime translations** use the same shared dictionary. `FsmTextHook` handles direct `SetStringValue` assignments for long subtitles and runtime teletext strings such as page 188 weather and page 250 rally day labels.
+5. **Pattern translations** are detected from entries with `{0}`/`{1}` placeholders and stored in `TranslationDictionary`.
 
-`ReloadTranslations()` in [MWC_Localization_Core.cs](MWC_Localization_Core.cs) is the canonical "reset everything" path. The full sequence:
+All key/value files are normalized by `LocalizationUtils.FormatUpperKey` at insertion into `TranslationDictionary`. Use `\=` for literal equals signs and `\n` for newlines in values.
 
-1. `translations.Clear()` + `translations.ResetPatterns()` + `foreach surface.ClearTranslations()`
-2. `LocalizationUtils.ClearCaches()` + `translator.ClearRuntimeCaches()` + `config.ClearTextAdjustmentCaches()` + `foreach surface.Reset()`
-3. Reload config + fonts + main translation files
-4. `foreach surface.Initialize(ctx)` — each surface re-loads its own translation file
-5. Reset scene flags, reapply fonts to all TextMeshes, run `InitialPass` for the current scene
-6. Restart the `LateUpdateHandler` scheduler
+## Hot Reload
 
-When adding new state to a surface, ensure both `Reset()` (runtime caches) and `ClearTranslations()` (owned translation data, if any) cover it.
+`ReloadTranslations()` in [MSC_Localization_Core.cs](MSC_Localization_Core.cs) is the canonical reset path:
 
-### Caching invariants
+1. Clear dictionaries, patterns, and surface-owned translations.
+2. Clear/prune runtime caches and reset surfaces.
+3. Reload config, fonts, `translate.txt`, and `translate_mod.txt`.
+4. Reinitialize all surfaces; teletext reloads its own file.
+5. Reapply fonts/translations to TextMeshes and run `InitialPass`.
+6. Restart the `LateUpdateHandler` scheduler.
 
-- `LocalizationUtils` caches `GameObject` paths (up to 10k entries), `GameObject.Find` lookups, and a Resources-based FSM index for inactive objects.
-- `TextMeshTranslator` caches per-instance applied font and font-bundle texture to skip redundant assignment each frame.
-- `TranslationDictionary` keeps a bounded (128-entry) raw-source → translation recent-lookups cache absorbing the per-frame repeated lookups that HUD monitors generate. Cleared on `Clear()` / `ResetPatterns()` / `AddAll()` and bulk-cleared when it fills (not strict LRU).
-- `FsmTextHook` caches resolved `PlayMakerFSM`s, ArrayList proxies, TextMeshes per target plus a per-target translation cache keyed on `(targetKey, sourceString)`.
-- **Scene change** uses `LocalizationUtils.PruneCaches()`, which drops only entries pointing at destroyed Unity objects (the FSM index is fully rebuilt). Stable HUD paths survive the scene transition cold-start free.
-- **F8 reload** uses `LocalizationUtils.ClearCaches()` for a full wipe.
-- If you add a new long-lived cache, wire it into the corresponding surface's `Reset()` or, for global utilities, into `ClearCaches`/`PruneCaches` in `LocalizationUtils`.
-- Exception: `fontBundle` is intentionally `static` because MSCLoader can reconstruct the `Mod` instance during a session — reloading the AssetBundle leaks Unity assets.
+When adding new state to a surface, wire it into `Reset()` for runtime caches and `ClearTranslations()` for owned translation data.
 
-### Forced-font path prefixes
+## Caching Invariants
 
-`LocalizationConfig.ForcedFontPathPrefixes` lists path roots that get the custom font applied even when the text isn't in the translation dictionary (teletext display, computer POS, unemployment letter, rally/service sheets, TV graphics). Check via `LocalizationConfig.IsForcedFontPath(path)`. New "show foreign font correctly even when text stays original" cases go here.
+- `LocalizationUtils` caches GameObject paths, `GameObject.Find` lookups, and a Resources-based FSM index.
+- `TextMeshTranslator` caches per-instance applied font and AssetBundle texture.
+- `TranslationDictionary` keeps a bounded recent raw-source lookup cache.
+- `FsmTextHook` caches resolved FSMs, ArrayList proxies, TextMeshes, and per-target translation results.
+- `GuiTextMonitor` mirrors translated GUI primary/shadow TextMeshes and retains only the long subtitles whose timings are declared in `SubtitleTimingHandler`.
+- Scene changes use `LocalizationUtils.PruneCaches()`; F8 reload uses `LocalizationUtils.ClearCaches()`.
+- `fontBundle` is intentionally static because MSCLoader can reconstruct the `Mod` instance during a session.
 
-### Excluded paths
+## Porting Notes
 
-`TextMeshTranslator.ExcludedPath` is the explicit "do not touch" list — stereo bass LCD, VIN plate, custom-color picker buttons, FPS counter. Those have either dynamic numeric content or critical formatting.
+- `translate_msc.txt` and `translate_magazine.txt` are not loaded in the MSC port.
+- Magazine, MWC VIN plate, TV chat, ATM, Fleetari payment, and PostSystem keyword hash-table logic have been removed.
+- Rally result sheets remain supported through FSM hooks and forced-font paths.
+- ExtraTranslate-style long subtitle text hooks belong in `FsmTextHook.BuiltInTargets.cs`; their matching `Wait.time` rules belong in `SubtitleTimingHandler.cs` so translated subtitles stay visible for the same duration.
+- New PlayMaker FSM hooks belong in [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) via `AddTargetRule(...)`.
+- Console output should go through `CoreConsole.Print/Warning/Error`, not `ModConsole` directly.
 
-## Conventions
+## Output Layout
 
-- Translation lookups go through `TranslationDictionary` ([TranslationDictionary.cs](TranslationDictionary.cs)): `TryGetExact(source, out value)` for direct lookup (with LRU + already-normalized fast path) and `TryMatchPattern(source, path)` for pattern fallback. Don't reach into the underlying `Dictionary<string, string>` directly — normalization + caching happens inside.
-- Adding a new translation surface = new class implementing `ITranslationSurface`, then append to the `surfaces` list in `Mod_OnMenuLoad`. No edits to `LateUpdateHandler` or `ReloadTranslations` needed.
-- New PlayMaker FSM hooks go in [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) via `AddTargetRule(...)`. Each rule lists a single source string; rules with the same `(objectPath, fsmName, stateName, actionIndex)` are grouped automatically and sorted longest-source-first to handle overlapping matches.
-- FSM reflection: use the `FsmUtils` helpers in [LocalizationUtils.cs](LocalizationUtils.cs) (`GetFields`, `GetField`, `SetFsmStringValue`, `SetNestedStringValue`). The FieldInfo cache there matters — uncached reflection during scene scans is visibly expensive.
-- Console: use `CoreConsole.Print/Warning/Error` ([CoreConsole.cs](CoreConsole.cs)), not `ModConsole` directly, so the in-game debug toggles work.
-
-## Output layout
-
-The shipping mod is `MWC_Localization_Core.dll` plus the contents of [dist/Assets/MWC_Localization_Core/](dist/Assets/MWC_Localization_Core/) (the Korean reference language pack), which the game expects under `Mods/Assets/MWC_Localization_Core/` at runtime. `ModLoader.GetModAssetsFolder(this)` resolves to that path.
+The shipping mod is `MSC_Localization_Core.dll` plus the contents of [dist/Assets/MSC_Localization_Core_BR/](dist/Assets/MSC_Localization_Core_BR/). At runtime this BR build expects those assets under `Mods/Assets/MSC_Localization_Core_BR/`.

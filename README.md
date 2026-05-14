@@ -1,292 +1,291 @@
-# MWC Localization Core
+# MSC Localization Core
 
-A MSCLoader plugin system for My Winter Car that enables automatic localization without code modifications.
-
-See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
+MSCLoader localization framework for **My Summer Car**. The packaged Brazilian Portuguese language pack ships the `.txt` files and optional `fonts.unity3d` under `Mods/Assets/MSC_Localization_Core_BR/`; this DLL loads them and applies translations to TextMesh, PlayMaker FSM strings, teletext arrays, HUD text, rally sheets, computer screens, and selected ArrayList-backed game data.
 
 ## Quick Start
 
 ### For Language Pack Creators
 
-1. **Copy template files** from `dist/`
-2. **Edit `l10n_assets/config.txt`** with your language settings
-3. **Update translation files**:
-   - `translate.txt` - Main UI text
-   - `translate_msc.txt (optional)` - previous My Summer Car text
-   - `translate_magazine.txt` - Classified Magazine content
-   - `translate_teletext.txt` - TV/Teletext content
-   - `translate_mod.txt (optional)` - Mod content
-4. **(Optional)** Create custom fonts in `fonts.unity3d`
-5. **Test in-game with F8 reload!**
+1. Copy the template files from `dist/`.
+2. Edit `dist/Assets/MSC_Localization_Core_BR/config.txt` with your language settings.
+3. Update translation files:
+   - `translate.txt` - main game/UI/FSM text, including the former MSC-specific entries.
+   - `translate_teletext.txt` - teletext database text.
+   - `translate_mod.txt` - optional mod text.
+4. Optionally create custom fonts in `fonts.unity3d`.
+5. Test in-game with F8 reload.
 
 ### For Developers
 
+```bash
+& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MSC_Localization_Core.sln" /p:Configuration=Release
 ```
-dotnet build -c Release
-```
+
+The project references My Summer Car managed assemblies from the path configured in `MSC_Localization_Core.csproj`. Update the `<HintPath>` values if your game is installed somewhere else.
 
 ## Features
 
-**Automatic Translation** - Scans TextMesh components and replaces text  
-**Teletext/TV Translation** - TV news, weather, recipes get translated  
-**Magazine Translations** - Special handling for Yellow Pages magazine  
-**Configurable Fonts** - Map game fonts to localized custom fonts  
-**Position Adjustments** - Fine-tune text placement per language  
-**Live Reload** - Press F8 to test changes without restarting  
-**Non-Latin Support** - Korean, Japanese, Chinese, Cyrillic, etc.  
-**My Summer Car Compatibility** - Use previous MSC translation as basis
+**Automatic Translation** - Scans TextMesh components and replaces text.
+**PlayMaker FSM Hooks** - Patches known FSM action fields and variables used by menus, sheets, rally UI, computer screens, and teletext.
+**Teletext Translation** - Translates `VKTekstiTV` database pages through `translate_teletext.txt`, plus runtime weather and rally-day strings on teletext pages that the game rebuilds while the TV is open.
+**Long Subtitle Timing** - Mirrors ExtraTranslate's longer `Wait` timings for selected long subtitles and keeps the translated subtitle visible until the matching wait expires.
+**Configurable Fonts** - Maps original game fonts to localized custom fonts.
+**Non-ASCII Support** - Custom fonts and forced-font paths keep accented text and other non-ASCII glyphs readable on surfaces that the game rebuilds dynamically.
+**Position Adjustments** - Fine-tunes text placement per language.
+**Live Reload** - Press F8 to reload config, translations, and runtime caches without restarting the game.
 
 ## File Structure
 
-```
-BepInEx/plugins/dist/
-├── l10n_assets/
-│   ├── config.txt                  # Language configuration
-│   ├── translate.txt               # Main UI translations
-│   ├── translate_magazine.txt      # Yellow Pages magazine translations
-│   ├── translate_teletext.txt      # TV/Teletext content translations
-│   ├── translate_msc.txt           # Optional: My Summer Car compatibility
-│   ├── translate_mod.txt           # Optional: Mod content translations
-│   └── fonts.unity3d               # Optional: Custom font asset bundle
-└── MWC_Localization_Core.dll       # Core plugin module
+```text
+dist/
+|-- Assets/
+|   `-- MSC_Localization_Core_BR/
+|       |-- config.txt
+|       |-- translate.txt
+|       |-- translate_teletext.txt
+|       |-- translate_mod.txt
+|       `-- fonts.unity3d
+`-- MSC_Localization_Core.dll
 ```
 
-## Configuration (config.txt)
+At runtime, MSCLoader resolves the assets folder from the mod ID. For this repository's bundled BR package, place the assets under:
+
+```text
+Mods/Assets/MSC_Localization_Core_BR/
+```
+
+## Configuration
 
 ### Basic Settings
 
 ```ini
-# Your language information
-LANGUAGE_NAME = Korean
-LANGUAGE_CODE = ko-KR
+LANGUAGE_NAME = Brazilian Portuguese
+LANGUAGE_CODE = pt-BR
 ```
 
 | Setting | Purpose | Example |
 |---------|---------|---------|
-| `LANGUAGE_NAME` | Display name | `Korean`, `Español`, `日本語` |
-| `LANGUAGE_CODE` | ISO language code | `ko-KR`, `es-ES`, `ja-JP` |
+| `LANGUAGE_NAME` | Display name | `Brazilian Portuguese` |
+| `LANGUAGE_CODE` | ISO language code | `pt-BR` |
 
 ### Font Mappings
 
-If you are using custom fonts, you must map original game fonts to them via `config.txt`:
+If you use custom fonts, map original game font names to AssetBundle font names:
 
 ```ini
 [FONTS]
-OriginalGameFont = YourCustomFont
-FugazOne-Regular = MyFont-Bold
-Heebo-Black = MyFont-Regular
+FugazOne-Regular = MyLocalizedFont
+Heebo-Black = MyLocalizedFont-Bold
 ```
 
-Font assets must exist in `fonts.unity3d` with matching names (right side values).
+Font assets must exist in `fonts.unity3d` with names matching the right side values.
 
 ## Translation Files
 
-### translate.txt - Main UI Translations
+### translate.txt
 
-Main translation file that covers My Winter Car lines.
+Main translation file for UI, TextMesh scans, FSM hook source strings, HUD text, computer text, rally sheets, and dynamic strings handled by the shared translation dictionary.
 
-```
-# Comments use #
-# Keys are auto-normalized: UPPERCASE, no spaces
+```ini
+# Comments use # or //
+# Keys are normalized internally: uppercase and whitespace-stripped
 
-BEER = 맥주
-BUCKET = 양동이
-MONDAY = 월요일
-WITHDRAWAL = 출금
+MONDAY = SEGUNDA-FEIRA
+CONNECTION CLOSED = CONEXAO ENCERRADA
+WELCOME TO YOUR NEW LIFE = BEM-VINDO A SUA NOVA VIDA
 
-# Multiline support (Use \n)
-Welcome to My Winter Car = 마이 윈터 카에\n오신 것을 환영합니다
-```
-
-### translate_magazine.txt - Classified Magazine
-
-This file involves special logic for handling comma-separated random words & Price line in Classified Magazine.
-
-```
-# Magazine abbreviations (comma-separated)
-headlgh.l = 좌.전조등
-headgskt. = 헤.가스켓
-supp.arm = 서스.암
-
-# Phone label for price lines
-# Used in lines like "h.149,- puh.123456" -> "149 MK, ${PHONE} - (08)123456"
-PHONE = 전화
+# Multiline support
+RALLY RESULTS = RESULTADOS DO RALLY
 ```
 
-**Magazine-specific formatting:**
-- Abbreviated words use periods and commas
-- Price lines get special phone number treatment
-- Different from regular UI text
-
-### translate_teletext.txt - TV/Teletext Content
-
-Category-based translations for TV teletext (news, weather, recipes, etc.) & TV chat pages.
-This separate file was introduced to workaround the game constantly trying to overwrite translations from plugin.
-
-**ORDER & [CATEGORY] MATTERS!**
-At least in this file. It's recommended NOT to modify these.
-
+Use `\=` when a source or translation contains a literal equals sign, and `\n` for new lines.
+Pattern entries with placeholders such as `{0}` and `{1}` are also supported for game-generated text that contains dynamic numbers or names.
+```ini
+Overspeeding. {0}km/h at {1}km/h vehicle limit. = Excesso de velocidade. {0} km/h em zona de {1} km/h.
 ```
-# Category sections match teletext pages
+`translate_msc.txt` is no longer loaded in the MSC port; keep those entries in `translate.txt`. `translate_magazine.txt` is also not loaded because MSC does not have the MWC magazine surface.
+
+### translate_teletext.txt
+Category-based translations for the teletext database. Some categories are index-ordered, so keep section order and entry order aligned with the source data. This separate file is used because the game rebuilds some teletext content while the TV is open.
+
+**Order and category names matter.** Keep the `[category]` headers and entry order aligned with the source pages unless you are intentionally updating the teletext database mapping. TV chat sections are intentionally not supported in the MSC port.
+
+```ini
 [day]
-MONDAY = 월요일
-TUESDAY = 화요일
+MONDAY = SEGUNDA-FEIRA
+TUESDAY = TERCA-FEIRA
 
 [kotimaa]
-# Domestic news headlines (in order they appear)
-MAKELIN CEO FIRED = 마켈린 CEO 해고
-TAXI REFORM PLANNED = 택시 개혁안
-
-[urheilu]
-# Sports news
-FOOTBALL RESULTS = 축구 결과
-
-# Multi-line format:
-Long news
-Headline here
+Original headline
 =
-긴 뉴스
-헤드라인
+Manchete traduzida
 ```
 
-**Categories:**
-- `day` - Day names
-- `kotimaa` - Domestic news
-- `ulkomaat` - Foreign news  
-- `talous` - Economy news
-- `urheilu` - Sports news
-- `ruoka` - Recipes
-- `ajatus` - Quotes
-- `kulttuuri` - Culture
+For multiline teletext entries, keep the `=` separator on its own line. The translated block can use more lines than the original, but should still be written to fit the TV page width and the normal teletext body area.
 
-Please note that few TV lines might not 'look translated' due to the reason mentioned above.
+Current MSC teletext sections:
 
-### translate_msc.txt - My Summer Car Compatibility (Optional)
+| Section     | Content       |
+|-------------|---------------|
+| `day`       | Day names     |
+| `kotimaa`   | Domestic news |
+| `ulkomaat`  | Foreign news  |
+| `talous`    | Economy news  |
+| `urheilu`   | Sports news   |
+| `ruoka`     | Recipes       |
+| `ajatus`    | Quotes        |
+| `kulttuuri` | Culture       |
 
-You can reuse translation files from My Summer Car as a base. Many UI texts are shared between games.
+Some short dynamic strings on teletext pages, such as page 188 weather conditions and page 250 rally day labels, are handled through `FsmTextHook` rules while still using translations from the shared dictionary.
 
-Contents from `translate.txt` (MWC-specific) will override `translate_msc.txt` entries.
+### translate_mod.txt
 
-## Text Adjustments (Optional)
+Optional extra translations for modded content. It uses the same `key = value` format as `translate.txt`.
 
-Fine-tune text placement, size, spacing, and width for better appearance without code changes.
+## Removed MWC Surfaces
+
+The MSC port does not load or maintain the old MWC-only magazine, VIN plate, ATM/payment, Fleetari payment breakdown, TV chat, or PostSystem keyword hash-table translation paths.
+
+## Text Adjustments
+
+Use `[POSITION_ADJUSTMENTS]` in `config.txt` to fine-tune position, font size, line spacing, and width scale for matched TextMesh paths. Rules are matched against full GameObject paths.
 
 ### Configuration
 
 ```ini
 [POSITION_ADJUSTMENTS]
-Conditions = X,Y,Z[,FontSize,LineSpacing,WidthScale]
+Contains(GUI/HUD/) & EndsWith(/HUDLabel) = 0,-0.05,0
+Contains(Sheets/RallyResults) = 0,0,0,0.08,0.9,1.1
 ```
 
 ### Condition Syntax
 
-| Condition | Matches When |
-|-----------|--------------|
-| `Contains(path)` | Path contains text |
-| `EndsWith(path)` | Path ends with text |
-| `StartsWith(path)` | Path starts with text |
-| `Equals(path)` | Path exactly matches |
-| `!Contains(path)` | Path does NOT contain (negation) |
+Combine multiple conditions with `&`. Prefix a condition with `!` to negate it.
 
-**Tip:** Use the BepInEx console (F12) to see GameObject paths when text appears. This helps you write conditions.
+| Condition                | Matches When                                                       |
+|--------------------------|--------------------------------------------------------------------|
+| `Contains(path)`         | Path contains text                                                 |
+| `EndsWith(path)`         | Path ends with text                                                |
+| `StartsWith(path)`       | Path starts with text                                              |
+| `Equals(path)`           | Path exactly matches                                               |
+| `GameObjectEquals(path)` | Applies the offset to the matched GameObject instead of a TextMesh |
+| `!Contains(path)`        | Path does not contain text                                         |
+
+Use the MSCLoader console/debug options or an object inspection tool to find GameObject paths while tuning rules.
 
 ### Examples
 
 ```ini
-# Position adjustment only: Shift HUD labels down (Y = -0.05)
+# Position adjustment only: shift HUD labels down
 Contains(GUI/HUD/) & EndsWith(/HUDLabel) = 0,-0.05,0
 
-# Make text wider: Scale width to 1.2x (last parameter)
-Contains(Systems/Narrow/Text) = 0,0,0,,,1.2
+# Make text wider: scale width to 1.2x
+Contains(YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS) = 0,0,0,,,1.2
 
 # Full adjustment: position + size + line spacing + width
-Contains(GUI/Menu/Title) = 0,0.1,0,0.12,1.0,1.3
+Contains(Sheets/RallyResults) = 0,0,0,0.08,0.9,1.1
 
-# Skip parameters with commas: position + width scale (skip font size and line spacing)
-Contains(PERAPORTTI/ATMs/) & EndsWith(/Text) = 0,0.25,0,,,0.9
+# Skip font size and line spacing, only changing width
+Contains(Systems/Teletext/) & EndsWith(/Text) = 0,0,0,,,0.95
+
+# Move a whole GameObject once
+GameObjectEquals(Sheets/RallyResults) = 0,0.05,0
 
 # Combine multiple conditions with negation
-Contains(PERAPORTTI/ATMs/) & !Contains(/Row) & EndsWith(/Text) = 0,0.25,0
+Contains(GUI/Indicators/) & !Contains(/Shadow) = 0,0,0,0.12
 ```
 
 ### Parameter Format
 
+Format:
+
+```text
+Conditions = X,Y,Z[,FontSize,LineSpacing,WidthScale]
 ```
-X,Y,Z[,FontSize,LineSpacing,WidthScale]
-```
 
-| Parameter | Type | Purpose | Example Values |
-|-----------|------|---------|----------------|
-| **X** | Required | Horizontal offset (+ right, - left) | `0`, `0.5`, `-0.3` |
-| **Y** | Required | Vertical offset (+ up, - down) | `0`, `0.25`, `-0.05` |
-| **Z** | Required | Depth offset (rarely needed) | `0` |
-| **FontSize** | Optional | Character size (TextMesh.characterSize) | `0.1`, `0.15`, `0.2` |
-| **LineSpacing** | Optional | Line spacing multiplier | `1.0`, `1.2`, `0.8` |
-| **WidthScale** | Optional | Character width scale (transform.localScale.x) | `1.0`, `1.2` (wider), `0.8` (narrower) |
+| Parameter     | Type     | Purpose                  | Example Values       |
+|---------------|----------|--------------------------|----------------------|
+| `X`           | Required | Horizontal offset        | `0`, `0.5`, `-0.3`   |
+| `Y`           | Required | Vertical offset          | `0`, `0.25`, `-0.05` |
+| `Z`           | Required | Depth offset             | `0`                  |
+| `FontSize`    | Optional | `TextMesh.characterSize` | `0.1`, `0.15`, `0.2` |
+| `LineSpacing` | Optional | `TextMesh.lineSpacing`   | `1.0`, `1.2`, `0.8`  |
+| `WidthScale`  | Optional | `transform.localScale.x` | `1.0`, `1.2`, `0.8`  |
 
-**Tips:**
-- Leave optional parameters empty to skip: `0,0,0,,1.2` (skip FontSize, set LineSpacing)
-- Use `WidthScale > 1.0` to make text wider (good for narrow fonts)
-- Use `WidthScale < 1.0` to make text narrower (good for condensed layouts)
-- Combine with FontSize to control both height and width independently
+Leave optional parameters empty to skip them, for example `0,0,0,,1.2`.
 
-### Drift-tracked paths
+Tips:
 
-A few sheets (e.g. `Sheets/Magazine/Products`) can have their transform rewritten by the game while the screen is open, which would normally let the position offset drift. These paths are listed in a small in-code whitelist (`TextAdjustment.DriftTrackedPathPatterns`). Once a matching TextMesh is adjusted by the normal translation pass, only that touched TextMesh is re-pinned during LateUpdate. Adding a path to the whitelist is a code change, not a config change — open an issue if you find another sheet that flickers.
+- Use `WidthScale > 1.0` to make text wider.
+- Use `WidthScale < 1.0` to make text narrower.
+- Combine `FontSize` and `WidthScale` when a translated string fits vertically but not horizontally.
+- `GameObjectEquals` only uses the `X,Y,Z` offset; font size, line spacing, and width scale are TextMesh-specific.
 
-## Creating Custom Fonts (Optional)
+## Creating Custom Fonts
 
-For languages requiring special font support (better readability, special characters, etc.):
+For languages requiring accented glyphs, Cyrillic, Japanese, Korean, Chinese, or other custom character coverage:
 
-1. **Prepare fonts** - TrueType (.ttf) or OpenType (.otf)
-2. **Create Unity assets** - Use Unity 5.0.0f4 (same version as My Winter Car)
-3. **Build AssetBundle** - Name it `fonts.unity3d`
-4. **Match names** - Font asset names must match `config.txt` [FONTS] section values
-5. **Place in l10n_assets** - Put `fonts.unity3d` alongside other translation files
+1. Prepare TrueType (`.ttf`) or OpenType (`.otf`) fonts.
+2. Create Unity font assets with a Unity 5.x editor compatible with the game.
+3. Build an AssetBundle named `fonts.unity3d`.
+4. Make sure each font asset name matches the right side of the `[FONTS]` mapping in `config.txt`.
+5. Place `fonts.unity3d` alongside the translation files in `Mods/Assets/MSC_Localization_Core_BR/`.
 
-**Unity Setup Notes:**
-- Unity 5.0.0f4 has broken licensing - install 5.6.7f1 first to activate, then run 5.0.0f4
-- AssetBundle build target must match game (typically Windows Standalone)
+The bundle build target should match the game platform, normally Windows Standalone.
 
 ## Testing & Development
 
-### Live Reload (F8 Key)
+### Live Reload
 
-Press **F8** in-game to reload all configuration and translation files instantly:
-- Edit `config.txt`, translation files, etc.
-- No game restart needed
-- Perfect for iterative translation work
+Press **F8** in-game to reload configuration, translations, fonts, surface caches, and runtime hooks:
+
+- Edit `config.txt`, `translate.txt`, `translate_teletext.txt`, or `translate_mod.txt`.
+- Return to the game and press F8.
+- Check the console/output log for load counts, missing files, and warnings.
+
+Code changes still need a rebuild, copying the DLL, and restarting/reloading the mod. F8 is for data/config iteration.
 
 ### Debug Workflow
 
-1. Enable BepInEx console: Edit `BepInEx/config/BepInEx.cfg`
-   - Set `Enabled = true` under `[Logging.Console]`
-2. Launch game and press **F12** to open console
-3. Check for configuration errors and translation status
-4. Watch for GameObject paths when text appears (helps with position adjustments)
-5. Edit files and press **F8** to test changes
-6. Repeat until perfect
+1. Enable debug and warning messages in the mod settings.
+2. Launch the game and reproduce the text surface you are tuning.
+3. Check MSCLoader console output or `output_log.txt` for configuration errors and translation status.
+4. Use the object path shown by debug tooling, or inspect the scene with a developer/object toolkit, when writing `[POSITION_ADJUSTMENTS]`.
+5. Edit files and press **F8** to test changes without restarting.
 
 ### Common Issues
 
 **Text not translating?**
-- Enable console messages via MSCLoader Mod settings
-- Check console (F12) for errors
-- Make sure key matches
-- For teletext, check if you're using the right category section
 
-**Wrong font?**
-- Verify font names in `config.txt` [FONTS] section
-- Check if `fonts.unity3d` exists and loads successfully
-- Console will show "Loaded [font] for [original]" messages
+- Make sure the source text exists in the correct file.
+- Use `translate.txt` for normal TextMesh/FSM/HUD/computer/sheet text.
+- Use `translate_teletext.txt` only for teletext database categories.
+- Check that escaped equals signs use `\=` and multiline values use `\n`.
+- For dynamic text with numbers or names, prefer a `{0}`/`{1}` pattern entry in `translate.txt`.
+- For dynamic FSM text, add or update an `AddTargetRule(...)` entry in `FsmTextHook.BuiltInTargets.cs`.
+
+**Wrong font or missing accents?**
+
+- Verify the original font name on the left side of `[FONTS]`.
+- Verify the AssetBundle font asset name on the right side of `[FONTS]`.
+- Make sure `fonts.unity3d` exists in the mod asset folder.
+- Check the console for `Loaded font` messages.
 
 **Text position off?**
-- Use `Developer Toolkit` or something else to find GameObject path
-- Add position adjustment in `config.txt`
-- Test with F8 reload
 
-### Building the Plugin
+- Find the full GameObject path.
+- Add or refine a `[POSITION_ADJUSTMENTS]` rule.
+- Use F8 reload to test small changes quickly.
+
+**Teletext still shows original short words?**
+
+- Database articles belong in `translate_teletext.txt`.
+- Runtime strings rebuilt by FSMs, such as weather conditions and rally day labels, need entries in `translate.txt` plus matching FSM target rules.
+
+## Build
 
 ```bash
-dotnet build -c Release
+& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" ".\MSC_Localization_Core.sln" /p:Configuration=Release
 ```
+
+Local verification is build plus loading the mod in My Summer Car. There are no automated tests in this repository.

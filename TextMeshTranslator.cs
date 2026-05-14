@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MWC_Localization_Core
+namespace MSC_Localization_Core
 {
     /// <summary>
     /// Handles TextMesh translation, mapped font application, and position adjustments.
@@ -10,7 +10,6 @@ namespace MWC_Localization_Core
     {
         private TranslationDictionary translations;
         private Dictionary<string, Font> customFonts;
-        private MagazineTextHandler magazineHandler;
         private LocalizationConfig config;
         private Dictionary<int, string> appliedFontCache = new Dictionary<int, string>();
         private Dictionary<int, Texture> appliedRuntimeTextureCache = new Dictionary<int, Texture>();
@@ -20,7 +19,6 @@ namespace MWC_Localization_Core
         private static readonly string[] ExcludedPath = new string[]
         {
             "HOMENEW/Functions/FunctionsDisable/Stereos/Player/Screen/Settings/Bass/LCD",
-            "CARPARTS/VINPlate",
             "Sheets/ServiceBrochure/PagePaintRims/Buttons/CustomColors",
             "Sheets/ServiceBrochure/PagePaintCar/Buttons/CustomColors",
             "GUI/HUD/FPS"
@@ -29,13 +27,11 @@ namespace MWC_Localization_Core
         public TextMeshTranslator(
             TranslationDictionary translations,
             Dictionary<string, Font> customFonts,
-            MagazineTextHandler magazineHandler,
             LocalizationConfig config
         )
         {
             this.translations = translations;
             this.customFonts = customFonts;
-            this.magazineHandler = magazineHandler;
             this.config = config;
 
             // Build reverse font lookup for O(1) access by font.name
@@ -67,12 +63,6 @@ namespace MWC_Localization_Core
             {
                 if (path.StartsWith(excluded))
                     return false;
-            }
-
-            if (magazineHandler.IsMagazineText(path))
-            {
-                ApplyCustomFont(textMesh, path);
-                return true;
             }
 
             // Use standard translation before pattern matching; dictionary lookup is cheaper.

@@ -1,0 +1,1301 @@
+[day]
+MAANANTAI = SEGUNDA
+TIISTAI = TERÇA
+KESKIVIIKKO = QUARTA
+TORSTAI = QUINTA
+PERJANTAI = SEXTA
+LAUANTAI = SÁBADO
+SUNNUNTAI = DOMINGO
+
+[talous]
+PÖRSSISSÄ VILLI AAMUPÄIVÄ
+Helsingin pörssissä koettiin villi
+aamu kun tuntemattomasta syystä pörs-
+siin oli päässyt sisälle sikoja ja
+lehmiä. Eläimet käyttivät tietokonei-
+ta ja puhelimia. Kurssit notkahtivat
+mutta ne saatiin lopulta vakautettua
+puoleenpäivään mennessä. Taloustut-
+kija Jaffan af Harjula uskoo että
+eläimillä ei kuitenkaan ollut
+merkittävää vaikutusta notkahdukseen.
+=
+BOLSA TEM MANHA AGITADA 
+A bolsa de Helsinque teve uma manha 
+agitada quando, por motivo desconhecido,
+porcos e vacas conseguiram entrar no
+predio. Os animais usaram
+computadores e telefones. As
+cotacoes cairam, mas foram
+estabilizadas ate o meio-dia. O
+economista Jaffan af Harjula
+acredita que os animais nao tiveram
+efeito significativo na queda.
+
+JÄÄKIEKKOMAAJOUKKUE LISTAUTUU?
+Jääkiekkopiireissä kiertää huhu että
+mestaruusjoukkue listautuisi pörs-
+siin. Nimettömänä pysyttelevä tun-
+nettu vaikuttaja kommentoi: "Nyt
+mestaruushuumassa olisi hyvä sauma
+listautua. Uskon että varsinkin pien-
+sijoittajat olisivat innokkaasti
+liikkeellä kännissä ja läpällä."
+=
+SELECAO DE HOCKEY VAI ABRIR CAPITAL?
+Circula nos meios do hockey o boato
+de que o time campeao entraria na
+bolsa. Uma figura conhecida, que
+prefere ficar anonima, comentou:
+"Com a euforia do titulo, seria uma
+boa chance. Acredito que pequenos
+investidores entrariam com vontade,
+bebados e na brincadeira."
+
+MYYNTIÄ ENEMMÄN KUIN OSTOA
+Tuore Talouslaitoksen tutkimus
+osoittaa että suomalaiset myyvät
+enemmän kuin ostavat. Laskennallisia
+myyntiyrityksiä kohtaan on vain pieni
+murto-osa vastaavia ostotapahtumia.
+Eroa kuitenkin tasaa se että suoma-
+lainen ostaessaan maksaa enemmän kuin
+mitä haluaisi. Tutkimus on osa
+valtion rahoittamia strategisia
+tutkimushankkeita.
+=
+MAIS VENDA DO QUE COMPRA 
+Um novo estudo do Instituto Econômico
+mostra que os finlandeses vendem mais 
+do que compram. Para cada tentativa de
+venda calculada existe apenas uma
+pequena fracao de compras
+correspondentes. A diferenca e
+compensada porque, quando compra, o
+finlandes paga mais do que gostaria.
+O estudo faz parte de projetos
+estrategicos financiados pelo
+estado.
+
+BRUTTOKANSANTUOTE KASVUSSA
+Suomen bruttokansantuote on tasaisessa
+kasvussa 90-luvun alun laman jälkeen.
+Toisaalta nettokansantuotetta arvioi-
+taessa huomataan että himmeleillä ja
+kahvipakettikasseilla ei katsota
+olevan suurta arvoa. Bruttokansan-
+tuote on siksi merkittävä talouden
+mittari.
+=
+PRODUTO INTERNO BRUTO EM ALTA 
+O produto interno bruto da Finlandia
+cresce de forma constante depois da
+recessao do inicio dos anos 90. Por
+outro lado, ao avaliar o produto
+interno liquido, percebe-se que
+enfeites de palha e sacolas feitas
+de pacotes de cafe nao sao vistos
+como algo de grande valor. Por isso
+o PIB e um indicador importante da
+economia.
+
+DIESEL KALLIIMPAA KUIN BENSIINI?
+Joillakin paikkakunnilla on havaittu
+erikoinen ilmiö kun dieselin litra-
+hinta on kivunnut bensiiniä kalliim-
+maksi. H-ryhmän polttoainejakelun
+päällikkö Rauno Vesiraja myöntää
+ilmiön: "Dieselin hintaa on nostettu,
+koska ihmiset maksavat sen kuitenkin.
+Harvalla on aidosti varaa poltto-
+öljyyn suurten veroseuraamusten
+pelossa."
+=
+DIESEL MAIS CARO QUE GASOLINA? 
+Em algumas localidades foi observado
+um fenomeno estranho: o preco do 
+litro do diesel subiu acima do da
+gasolina. Rauno Vesiraja, chefe de
+distribuicao de combustivel do grupo
+H, admite o fato: "O preco do diesel
+foi aumentado porque as pessoas
+pagam mesmo assim. Poucos tem
+condicoes reais de usar oleo
+combustivel com medo das
+consequencias fiscais."
+
+SOPIMUS KOMMUNISTIEN KANSSA
+Valtio on tekemässä sopimusta kommu-
+nistien kanssa, joka hyödyttäisi sekä
+kapitalisteja että kommunisteja. So-
+pimuksen mukaan kommunistit saisivat
+palkkaa, mutta maksaisivat palkois-
+taan 100% verojen muodossa takaisin
+valtiolle. Ainoa vastustava taho on
+verohallinto, jonka mukaan veron-
+perinnän hauskuus loppuu, jos sii-
+hen suostutaan näin helposti.
+=
+ACORDO COM OS COMUNISTAS 
+O estado esta preparando um acordo
+com os comunistas que beneficiaria 
+tanto capitalistas quanto comunistas.
+Pelo acordo, os comunistas receberiam
+salario, mas devolveriam 100% dele
+ao estado na forma de impostos. O
+unico opositor e a Receita, segundo
+a qual a diversao da cobranca acaba
+se tudo for aceito com tanta
+facilidade.
+
+TALOUTTA PARANTAVA LAKIALOITE KAATUI
+Lakialoite, jonka mukaan yritysten
+olisi helpompi palkata työntekijöitä
+ja kasvaa kannattavammiksi ja sitä
+myötä parantaa Suomen taloutta on
+hylätty yksimielisesti.
+"Emme me täällä siksi ole, että asiat
+helpommiksi muuttuisi. Kyllä vaikeim-
+man kautta pitää tehdä. Niin on tehty
+aina", toteaa valtiovarainministeri
+Aina Samanlainen.
+=
+PROJETO PARA MELHORAR ECONOMIA CAIU
+O projeto de lei que facilitaria a
+contratacao de funcionarios pelas
+empresas, aumentaria sua
+rentabilidade e, com isso,
+melhoraria a economia finlandesa foi
+rejeitado por unanimidade. "Nao
+estamos aqui para tornar as coisas
+mais faceis. Tudo deve ser feito
+pelo caminho mais dificil. Sempre
+foi assim", diz a ministra da
+Fazenda Aina Samanlainen.
+
+GSM-TEKNIIKKA VALTAA SUOMEN
+GSM-matkapuhelin povataan löytyvän
+lähes jokaiselta suomalaiselta 2000-
+luvun alkuun mennessä. "20:n vuoden
+kuluttua puhelimella luetaan uutis-
+ryhmät ja tehdään webbisivut", povaa
+Futufonin käytettävyyssuunnittelija
+Raffe Koistinen. Puhelimien tekniikan
+kehityksestä odotetaan nopeaa.
+=
+TECNOLOGIA GSM TOMA A FINLANDIA
+Prevê-se que o telefone celular GSM
+sera encontrado com quase todos os
+finlandeses ate o inicio dos anos
+2000. "Daqui a 20 anos, o telefone
+vai ler grupos de noticias e criar
+paginas na web", prevê Raffe
+Koistinen, designer de usabilidade
+da Futufon. Espera-se uma evolucao
+rapida da tecnologia dos telefones.
+
+FUTUFON-TUOTANTOA MAAKUNTIIN?
+Tuoreessa elinkeinoministeriön
+mietinnässä nostetaan esille mahdol-
+lisuus painottaa elektroniikkateol-
+lisuuden valtiontukia laman
+seurauksista kärsiviin maakuntiin.
+Tarkoituksena ei ole tukea yrityksiä
+suoraan, vaan kaupunkeja ja kuntia
+jotka onnistuvat houkuttelemaan
+alueelleen uutta elektroniikka-
+teollisuutta.
+=
+PRODUCAO DA FUTUFON NO INTERIOR? 
+Um novo relatorio do Ministerio da
+Industria levanta a possibilidade de
+direcionar subsidios da industria
+eletronica para regioes afetadas
+pela recessao. A ideia nao e apoiar
+empresas diretamente, mas cidades e
+municipios que consigam atrair nova
+industria eletronica para seus
+territorios.
+
+[kotimaa]
+MAKELIN TOIMINNANJOHTAJA EROTETTIIN
+Maatalouden kehitysliitto irtisanoo
+toiminnanjohtajansa Asko Alisukevan
+mielipidekirjoituskohun johdosta.
+Alisukeva kirjoitti Ylivetelän kunnan-
+talon ilmoitustaululle asioita, joita
+ei tässä yhteydessä voi mainita.
+Poliisin mukaan ilmoitustaululla ei
+ole mitään nähtävää.
+=
+DIRETOR DA MAKELIN FOI DEMITIDO
+A Liga de Desenvolvimento Agricola
+demitiu seu diretor executivo Asko
+Alisukeva depois de um escandalo
+envolvendo artigo de opiniao.
+Alisukeva escreveu no mural da
+prefeitura de Ylivetela coisas que
+nao podem ser citadas neste
+contexto. Segundo a policia, nao ha
+nada para ver no mural.
+
+SOKERIJUURIKASSATO JÄÄ PIENEKSI
+Sokerijuurikastuottajien etuliitto
+varoittaa huonosta juurikassadosta.
+Sokerijuurikkaat kasvavat hitaasti ja
+tulevat jäämään odotettua pienemmiksi.
+Satoa on verottanut Suomen valtio.
+=
+SAFRA DE BETERRABA FICARA PEQUENA 
+A associação dos produtores de
+beterraba açucareira alerta para uma
+safra ruim. As beterrabas crescem
+devagar e ficarão menores do que o
+esperado. A safra foi prejudicada
+pelo estado finlandês.
+
+VEROHALLINTO KIISTÄÄ ONGELMAT
+Verohallinnon alipäällikkö Hauni
+Kuivala kiistää että sokerijuurikas-
+verotuspäätöksessä olis mitään poik-
+keuksellista. "Kuten yleensä liike-
+toiminnassa, niin kasvusta syntyvä
+tulos verotetaan normaalisti progres-
+sion mukaan."
+=
+RECEITA NEGA PROBLEMAS Hauni
+Kuivala, subchefe da Receita, nega
+que a decisão sobre a tributação da
+beterraba tenha algo de excepcional.
+"Como geralmente acontece nos
+negócios, o resultado gerado pelo
+crescimento e tributado normalmente,
+conforme a progressão."
+
+"PITÄÄKÖ IHMISTÄKIN VEROTTAA?"
+Biologi Usko Kasvisto ihmettelee
+verottajan kantaa. Kasviston mukaan on
+arveluttavaa verottaa kasvia kasvami-
+sesta, koska kasvi ei omaan kasvuunsa
+voi vaikuttaa. "Entäs ihmiset sitten,
+pitääkö ihmistäkin verottaa kasvamise-
+sestaan?" Kasviston mukaan valtiossa
+ei voi olla instanssia joka mielival-
+taisesti päättää biosfäärioikeuksista.
+=
+"DEVEMOS TAXAR HUMANOS TAMBEM?"
+O biólogo Usko Kasvisto estranha a
+posição do fisco. Segundo Kasvisto,
+e questionável tributar uma planta
+por crescer, pois a planta não pode
+influenciar o próprio crescimento.
+"E os humanos, então? Também devem
+ser tributados por crescer?" Para
+ele, o estado não pode ter uma
+instancia que decida arbitrariamente
+sobre direitos da biosfera.
+
+EKI:N MAVELA IHMETTELEE KOHUA
+EKI:n kansliapuuhisti Raija Mavela
+on yllättynyt sokerijuurikaskohusta.
+"Verottaja verottaa kasvusta, myös
+ihmistä. Kun ihminen kasvaa, se syö
+ja kuluttaa suhteessa enemmän. Tuosta
+kulutuksesta maksetaan välillisiä
+veroja." On arvioitu että kansantalou-
+dellisesti ihmisten kasvun merkitys
+on miljardeja markkoja vuodessa.
+=
+MAVELA DA EKI ESTRANHA O CASO
+Raija Mavela, da EKI, se surpreende
+com a confusão da beterraba. "O
+fisco taxa o crescimento, também o
+das pessoas. Quando alguém cresce,
+come e consome mais. Disso saem
+impostos indiretos." O crescimento
+humano pode valer bilhões de marcos
+por ano para a economia.
+
+JUURIKASVILJELIJÄT UHKAAVAT LAKOLLA
+Sokerijuurikkaan viljelijät uhkaavat
+lakolla mikäli verottaja ei peru
+juurikkaan verotuspäätöstä. "Maksam-
+me jo nyt veroa juurikkaan myynnis-
+tä. Vasta kasvavaan juurikkaaseen
+kohdistuva verotus on naurettavaa.
+Jos ei muu auta niin menemme sitten
+lakkoon", uhkaa Kusvalainen viljelijä
+Aito-Kauno Valio.
+=
+PRODUTORES DE BETERRABA AMEACAM GREVE
+Os produtores de beterraba
+ameaçam entrar em greve caso o fisco
+não cancele a decisão tributaria
+sobre a raiz. "Já pagamos imposto
+sobre a venda da beterraba. Tributar
+uma beterraba ainda em crescimento e
+ridículo. Se nada resolver,
+entraremos em greve", ameaça o
+produtor Aito-Kauno Valio, de
+Kusvalainen.
+
+"JUURIKKAAT VOISIVAT MENNÄ LAKKOON"
+Pääministeri Kulkeron kanta juurikas-
+tuottajien lakkoon on kielteinen.
+"Eihän tässä viljelijää veroteta,
+vaan juurikasta. Jos jonkun pitää
+ryhtyä lakkoon niin niiden juurik-
+kaiden. Onko niistä sitten lakkoon,
+enpä usko." Pääministeri uskoo myös
+että verottaja on tehnyt asiassa
+oikean linjauksen.
+=
+"AS BETERRABAS PODERIAM FAZER GREVE"
+A posição do primeiro-ministro
+Kulkero sobre a greve dos produtores
+e negativa. "Não e o produtor que
+esta sendo tributado, mas a
+beterraba. Se alguém deve fazer
+greve, são as beterrabas. Se elas
+conseguem fazer isso, eu duvido." O
+primeiro-ministro também acredita
+que o fisco tomou a linha correta.
+
+PAUKOSTA TAAS EX-LOTTOMILJONÄÄRI
+Kertaalleen lottovoittonsa juonut
+Tauno Paukko voitti jälleen loton
+päävoiton. Mannu Larpon tv-ohjelmasta
+kansalle tuttu Paukko kertoo
+juoneensa jo nämäkin voitot.
+Leipäjonosta tavoitettu Paukko sanoo:
+"Jos voitan vielä kolmannen kerran,
+lupaan lopettaa juomisen. Muuten en."
+=
+EX-MILIONARIO GANHAR NA LOTERIA
+Tauno Paukko, que já bebeu uma
+fortuna ganha na loteria, venceu
+novamente o premio principal.
+Conhecido pelo povo por um programa
+de TV de Mannu Larpo, Paukko conta
+que já bebeu também estes novos
+ganhos. Encontrado na fila do pão,
+ele diz: "Se eu ganhar pela terceira
+vez, prometo parar de beber. Caso
+contrario, não."
+
+KÄYKYLÄN MURHATUTKINNASSA KÄÄNNE
+Käykylässä sattuneen henkirikoksen
+tutkinnassa on tapahtunut yllättävä
+käänne. Poliisijohtaja Yli-Tempulan
+mukaan mitään rikosta ei olekaan
+tapahtunut. "Teon tunnustanut olikin
+kännissä. Teon todistanut oli myös
+kännissä. Oletettu uhrikin oli vain
+harvinaisen kännissä. Vaikuttaa siltä
+että osa tutkijoistakin oli kännissä"
+selventää Yli-Tempula.
+=
+VIRADA NA INVESTIGACAO DE KAYKYLA 
+A investigação de um homicídio
+ocorrido em Kaykyla teve uma
+reviravolta inesperada. Segundo o
+chefe de policia Yli-Tempula, nenhum
+crime aconteceu. "Quem confessou
+estava bêbado. A testemunha também
+estava bêbada. A suposta vitima
+estava apenas excepcionalmente
+bêbada. Parece que parte dos
+investigadores também estava
+bêbada", esclarece Yli-Tempula.
+
+SUOMEEN EI SITTENKÄÄN KUNINGASTA
+Lakialoite Suomen muuttamisesta ku-
+ningaskunnaksi on hylätty. Aloitteen
+mukaan ensimmäiseksi kuninkaaksi
+olisi valittu se henkilö, joka ensim-
+mäisenä ajaa kaikki valtion tiet itse
+läpi. Ehdotus hylättiin välittömästi,
+kun kerrottiin, että taksia ei saa
+käyttää tehtävän läpivientiin. "Kuka
+hullu nyt omalla autollaan itse ajaa"
+toteaa pääministeri Kulkero.
+=
+FINLANDIA NAO VIRA REINO
+Projeto para tornar a Finlândia um
+reino foi rejeitado. O primeiro rei
+seria quem dirigisse por todas as
+estradas do estado sozinho. A
+proposta caiu quando avisaram que
+taxi não valeria. "Que doido faria
+isso no próprio carro?", disse
+Kulkero.
+
+DEMENTIAEPIDEMIA EDUSKUNNASSA
+Yli puolella eduskunnan jäsenistä on
+todettu joko alkava tai vakavassa
+vaiheessa oleva dementia. Eduskunnan
+puhemiehen mukaan syytä huoleen ei
+ole: "Ei tämä ole mitään muutosta
+tuonut eduskunnan toimiin. Ihan en-
+tiseen malliin kaikki ovat työnsä
+tehneet. Jos nyt muistan oikein, niin
+jotkut jopa muistavat hyvinkin paljon
+sanomisiaan ja tekemisiään."
+=
+EPIDEMIA DE DEMENCIA NO PARLAMENTO
+Mais da metade dos membros do
+parlamento foi diagnosticada com
+demência inicial ou em fase grave.
+Segundo o presidente do parlamento,
+não há motivo para preocupação:
+"Isso não mudou nada nos trabalhos.
+Todos fizeram suas tarefas como
+sempre. Se me lembro bem, alguns ate
+se lembram de muitas coisas que
+disseram e fizeram."
+
+MARKKINAVOITTAJALLE TYÖTARJOUKSIA
+Vuoden paskanpuhujaksi Ääviön
+Paskamarkkinoilla valittu Pauni
+Vetokumpu on saanut runsaasti työ-
+tarjouksia. Viihdemarkkinointiyritys-
+ten lisäksi runsaasti tarjouksia ovat
+tehneet puhelinmarkkinointiyritykset,
+oikeuslaitos ja eduskunta.
+=
+VENCEDOR DO MERCADO RECEBE OFERTAS
+Pauni Vetokumpu, eleito o falador de
+besteira do ano no Paskamarkkinat de
+Aavio, recebeu muitas ofertas de
+trabalho. Além das empresas de
+marketing de entretenimento, também
+fizeram propostas empresas de
+telemarketing, o sistema de justiça
+e o parlamento.
+
+VENÄLÄINEN PALKKAMURHAAJA KIINNI
+Verohallintolaitos ilmiantoi venäläi-
+sen palkkamurhaajan, kun tämä anoi
+Suomen kaksoiskansalaisuutta, mutta
+ei ollut maksanut tarpeeksi veroja.
+"Emme me muuten olisi hänestä
+välittäneet paskan vertaa, mutta kun
+nämä veroasiat olivat hänellä pieles-
+sä", toteaa verokarhu K. Ontio.
+=
+ASSASSINO DE ALUGUEL RUSSO FOI PRESO
+A Receita denunciou um assassino de
+aluguel russo quando ele pediu dupla
+cidadania finlandesa, mas não havia
+pago impostos suficientes. "Fora
+isso, não nos importaríamos nem um
+pouco com ele, mas esses assuntos
+fiscais estavam errados", afirma o
+fiscal K. Ontio.
+
+PERNARUTTOEPIDEMIAEPÄILY AIHEETON
+Aiemmin uutisoitu pernaruttovaara
+on ohi. Poliisiylijohtaja Vauno
+Lato-Naippa oli puhtaaksikirjoitus-
+vaiheessa kirjoittanut maanviljelijän
+lähettämän perunaruttoilmoituksen
+väärin. Poliisiavustaja kommentoi:
+"Ei johtajia pitäisi koskaan päästää
+kirjoittamaan mitään. Emme tiedä
+miksi näin pääsi käymään. Joko innos-
+tui liikaa tai oli kännissä."
+=
+SUSPEITA DE EPIDEMIA DE ANTRAZ
+O perigo de antraz noticiado
+anteriormente já passou. Durante a
+digitação final, o diretor da
+policia Vauno Lato-Naippa escreveu
+errado o aviso de praga da batata
+enviado por um agricultor. Um
+assistente comenta: "Chefes nunca
+deveriam poder escrever nada. Não
+sabemos como isso aconteceu. Ou ele
+se empolgou demais, ou estava
+bêbado."
+
+KASVISEURAN OSALLISTUJAMÄÄRÄ KASVOI
+Joukko kylänmiehiä osallistui
+paikallisen kasviseuran retkeen
+nostaen seuran osallistujamäärän
+ennätyssuureksi. Seuran johtaja
+kommentoi: "Ensin heillä oli hyvin
+hauskaa, kun kuulivat, että humala
+on kasvi. Harmi, että kaikki
+poistuivat, kun heille selvisi,
+että se humala todellakin on vain
+kasvi eikä lupaus tulevasta."
+=
+PUBLICO DA SOCIEDADE DE PLANTAS
+CRESCEU Um grupo de moradores
+participou de uma excursão da
+sociedade local de plantas, elevando
+o numero de participantes a um
+recorde. O diretor da sociedade
+comentou: "Primeiro eles se
+divertiram ao ouvir que o lúpulo e
+uma planta. Pena que todos foram
+embora quando descobriram que o
+lúpulo era mesmo só uma planta, e
+não uma promessa para depois."
+
+MIES KATEISSA KÄNNELMÄESSÄ
+Kännelmäen Taikuriksi kutsuttu Aippe
+Laukonen kadotti firmansa rahat,
+avaimet, luottokortit ja toimiston
+ja on nyt kadonnut itsekin.
+Ystävä muistelee Laukosta:
+"Laukonen kadotteli milloin mitäkin.
+Jos virkamiesten täytyy joistain
+veronkiertotodisteista päästä eroon,
+niin antakaa ne Aippelle. Varmasti
+katoavat ja lopullisesti, heh heh!"
+=
+HOMEM DESAPARECIDO EM KANNELMAKI
+Aippe Laukonen, conhecido como o
+Magico de Kannelmaki, perdeu o
+dinheiro da firma, as chaves, os
+cartões de credito e o escritório, e
+agora ele próprio desapareceu. Um
+amigo recorda: "Laukonen vivia
+perdendo todo tipo de coisa. Se
+funcionários precisam sumir com
+provas de sonegação, entreguem ao
+Aippe. Com certeza desaparecem para
+sempre."
+
+HYHNÄVÄN KUNTA TALOUSVAIKEUKSISSA
+Hyhnävän kaupunginvaltuuston
+puheenjohtaja Jaapo Ala-Mäystö on
+kadottanut koko kunnan kaikki rahat.
+"Puhetta johtaessa kaikkea sattuu ja
+tapahtuu. Nyt kävi näin. Ensin rahat
+oli. Sitten niitä ei enää ollut",
+toteaa Ala-Mäystö.
+=
+MUNICIPIO DE HYHNAVA EM DIFICULDADES
+Jaapo Ala-Maysto, presidente da
+câmara municipal de Hyhnava, perdeu
+todo o dinheiro do município.
+"Quando se preside uma reunião, todo
+tipo de coisa acontece. Desta vez
+foi assim. Primeiro havia dinheiro.
+Depois não havia mais", afirma
+Ala-Maysto.
+
+TYÖTTÖMIÄ ENNÄTYSMÄÄRÄ
+Talouslama ja Neuvostoliiton kaupan
+romahtaminen ovat ajaneet kymmeniä
+tuhansia ihmisiä työttömyyspalvelujen
+piiriin. Hypoteesi-ajatuspajan turhuus-
+strategikko Marita von Schitte ymmärtää
+vaikean työllistymistilanteen, mutta
+neuvoo työttömiä: "Menkää töihin."
+=
+NUMERO RECORDE DE DESEMPREGADOS
+A recessão e o colapso do comercio com
+a União Soviética levaram dezenas de
+milhares de pessoas aos serviços de
+desemprego. Marita von Schitte,
+estrategista de inutilidade do
+instituto de ideias Hipotese,
+entende a difícil situação de
+emprego, mas aconselha os
+desempregados: "Vão trabalhar."
+
+[ajatus]
+Hopeinen kana,
+    kultainen muna.
+	       -Ulun Yo
+=
+Galinha prateada,
+ovo dourado.
+-Ulun Yo
+
+Sokea kurkkaa maskin takaa.
+   Kuuro höristää hatun alta.
+  Kuka törmää peiliin?
+    -Afel Paatinen
+=
+O cego espia por trás da mascara.
+O surdo apura o ouvido sob o chapéu.
+Quem bate no espelho?
+-Afel Paatinen
+
+Kukka on kuin pieni lapsi,
+	Siemenestä kaunistuu,
+  vanhana kuivistuu.
+        -Lauvo
+=
+A flor e como uma criança,
+da semente fica bela,
+velha, seca.
+-Lauvo
+
+Tuntematon osti suuren tavaran.
+	Hän ei nähnyt sen takaa.
+	   -Pertti Kaukolaita
+=
+Um desconhecido comprou uma coisa
+grande.
+Ele não enxergou por trás dela.
+-Pertti Kaukolaita
+
+Kiviset portaat ovat raskaat,
+		mutta puisissa kuulet
+	 matkaavasi.
+	       -Gaul Badeul
+=
+Escadas de pedra são pesadas,
+mas nas de madeira você ouve
+sua viagem.
+-Gaul Badeul
+
+Näkymätön junalippu jättää
+	asemalle. Näkymätön on mielesi,
+	  mutta se ei jätä koskaan.
+	  -Kati Jafulsson
+=
+A passagem de trem invisível deixa
+você
+na estação. Invisível e sua mente,
+mas ela nunca abandona.
+-Kati Jafulsson
+
+Those who calculate,
+         shall
+	calculate forever.
+		   -Jefton Croft
+=
+Aqueles que calculam,
+deverão
+calcular para sempre.
+-Jefton Croft
+
+Ihmiset ovat kuin vuoria.
+	Pieni ei ole koskaan suuri.
+		Ehkä ylösalaisin.
+		-Santiago de Kazell
+=
+As pessoas são como montanhas.
+O pequeno nunca e grande.
+Talvez de cabeça para baixo.
+-Santiago de Kazell
+
+Nukkuva koira ei herätä
+      nukkuvaa
+	   karhua.
+	    -Kung Yum Ping
+=
+O cachorro que dorme não acorda
+o urso
+que dorme.
+-Kung Yum Ping
+
+Turhaa on julistaa sota
+         sodassa.
+	-Pavel Kur
+=
+E inutil declarar guerra
+durante a guerra.
+-Pavel Kur
+
+Liian pienet saappaat.
+  Liian suuret jalat.
+     Pienentääkö ihminen?
+	      -Aate Kauninen
+=
+Botas pequenas demais.
+Pês grandes demais.
+O ser humano encolhe?
+-Aate Kauninen
+
+[ulkomaat]
+VIRON SOTAUHKAUS AIHEETON
+Vuorokauden ajan jännitteitä nostanut
+sotauhkaus on vedetty takaisin.
+Viro uhkasi sekä Suomea että Venäjää
+sodalla, mikäli vaatimuksiin ei suos-
+tuttaisi. Vaatimuksia ei saatukaan
+koskaan kuulla ja kyse olikin Viron
+puolustusministeri Kuimo Allin
+hetkellisestä ylilyönnistä pieleen
+menneiden autokauppojen jälkeen.
+=
+AMEACA DE GUERRA DA ESTONIA ERA FALSA
+A ameaça de guerra que elevou
+as tensões por um dia foi retirada.
+A Estônia ameaçou tanto a Finlândia
+quanto a Rússia com guerra caso suas
+exigências não fossem aceitas. As
+exigências nunca chegaram a ser
+ouvidas; tudo não passou de um
+exagero momentâneo do ministro da
+Defesa estoniano Kuimo Alli após
+negócios de carro que deram errado.
+
+KORJAUS UUTISEEN
+Uutinen, jonka mukaan ulkomailta oli
+löytynyt ankka, ja jonka mukaan
+kukaan ei tiennyt mistä ankka oli
+tullut ja minne ankka oli menossa,
+olikin uutis-ankka.
+Pahoittelemme virhettä.
+=
+CORRECAO DE NOTICIA
+A noticia segundo a qual um pato havia 
+sido encontrado no exterior, sem que
+ninguém soubesse de onde ele vinha
+ou para onde ia, era uma noticia
+falsa. Pedimos desculpas pelo erro.
+
+UUSI MANNER LÖYTYNYT?
+Arvostettu kansainvälinen maantieteel-
+linen julkaisu Geology Future julkaisi
+artikkelin jossa todetaan uuden mante-
+reen löytyneen Australian itäpuolelta.
+Tiedeyhteisö ei pääse yhteisymmärryk-
+seen siitä pitääkö mannerta nimetessä
+käyttää "New" -etuliitettä ja millä
+kielellä. Kriittisen kannan mukaan
+tärkempää on mantereen löytyminen kuin
+sen nimeämisestä noussut kiista.
+=
+NOVO CONTINENTE DESCOBERTO? 
+A respeitada publicação internacional
+de geografia Geology Future publicou
+um artigo afirmando que um novo
+continente foi descoberto a leste da
+Austrália. A comunidade cientifica
+não chega a um acordo sobre usar o
+prefixo "New" no nome, nem em qual
+idioma. A visão critica diz que a
+descoberta do continente e mais
+importante do que a disputa sobre
+seu nome.
+
+ITALIA SYYTTÄÄ UUTTA-SEELANTIA
+Italian parlamentti vaatii Uudelta-
+Seelannilta korvauksia kopioinnista.
+Taustalla on löydös jossa osoitetaan
+Uuden-Seelannin valtion kopioineen
+Italian alueen tunnetun saapas-muodon.
+Uuden-Seelannin valtio vastaa että
+kyseessä ei ole kopio sillä alue on
+peilikuva ja se on halkaistu meri-
+alueella. Kiista on menossa YK:n
+tuomioistuimeen.
+=
+ITALIA ACUSA A NOVA ZELANDIA
+O parlamento italiano exige
+indenização da Nova Zelândia por
+copia. A acusação se baseia na
+descoberta de que o estado
+neozelandês copiou o famoso formato
+de bota da região italiana. A Nova
+Zelândia responde que não e copia,
+pois a área e um reflexo espelhado e
+foi dividida por uma região
+marítima. A disputa segue para o
+tribunal da ONU.
+
+ÖLJY-YHTIÖ EI USKO ESIINTYMÄÄN
+Norjan johtava öljy-yhtiö uskoo, että
+Tukholmalaisen kauppakeskuksen parkki-
+paikalta löytynyt öljyesiintymä ei ole
+kaupallisesti hyödynnettävissä. Yhtiö
+perustelee kantaansa sillä, että
+esiintymä on peräisin paikalla
+seisseestä autosta.
+=
+PETROLEIRA NAO ACREDITA NA JAZIDA 
+A principal petrolífera da Noruega
+acredita que a jazida de petróleo
+encontrada no estacionamento de um
+shopping de Estocolmo não pode ser
+explorada comercialmente. A empresa
+justifica sua posição afirmando que
+a ocorrência veio de um carro que
+estava parado no local.
+
+[kulttuuri]
+REVYYPERINTEELLE TAKAPAKKIA
+Seuraava uudenvuoden revyy
+uhkaa peruuntua. Ministeritasolla
+revyyn peruuttaminen koetaan kesän
+tärkeimmäksi asiaksi.
+"On hyvä estää tällaiset hömpöttelyt
+ajoissa. Ei meistä ministereistä
+kukaan näistä tykkää. Tuskin tykkää
+kansakaan", sanoo kulttuuriministeri
+Seppo Ankea.
+=
+TRADICAO DE REVISTAS SOFRE REVES 
+A próxima revista de ano-novo corre o
+risco de ser cancelada. Em nível
+ministerial, o cancelamento da
+revista e visto como o assunto mais
+importante do verão. "E bom impedir
+essas bobagens a tempo. Nenhum de
+nos, ministros, gosta disso. O povo
+provavelmente também não gosta", diz
+o ministro da Cultura Seppo Ankea.
+
+KULTTUURITUKEA KANSALAISILLE
+Suomen kirjallisuussäätiö on
+myöntänyt kulttuuritukea satunnai-
+sesti valituille kirjojen lukemista
+vältteleville kansalaisille kirja-
+lahjoitusten muodossa.
+Tuen ensimmäisenä saanut rekkakuski
+Eijo Vähä-Rästi kommentoi asiaa:
+"Roskiin menevät välittömästi."
+=
+APOIO CULTURAL PARA CIDADAOS 
+A Fundação Finlandesa de Literatura
+concedeu apoio cultural a cidadãos
+escolhidos aleatoriamente que evitam
+ler livros, na forma de doações de
+livros. O caminhoneiro Eijo
+Vaha-Rasti, primeiro a receber o
+apoio, comentou: "Vão direto para o
+lixo."
+
+BALETTI SAA VALTIOLTA TUKEA
+Valtakunnallinen balettiteatteri
+on kerännyt tänä vuonna -213 katsojaa
+mutta saa kulttuuritukea jatkossakin.
+"Jotenkin katsojaluku on saatu tänä
+vuonna menemään miinuksen puolelle,
+mutta totta kai me tätä jatkamme",
+toteaa baletin johtaja Vesa Leuhka.
+"Vaimon mukaan köyhiä pitää auttaa",
+kommentoi kulttuuriministeri Ankea.
+=
+BALE RECEBE APOIO DO ESTADO 
+O teatro nacional de bale acumulou 
+-213 espectadores este ano, mas
+continuara recebendo apoio cultural.
+"De algum modo conseguimos fazer o
+numero de publico ficar negativo
+este ano, mas e claro que vamos
+continuar", diz o diretor do bale
+Vesa Leuhka. "Segundo minha esposa,
+os pobres devem ser ajudados",
+comenta o ministro da Cultura Ankea.
+
+OOPPERASSA ERIKOINEN TILANNE
+Suositussa oopperassa toinen laula-
+jista lauloi niin korkealta, että
+kukaan ei kuullut ja toinen taas lau-
+loi, niin matalalta, että kukaan ei
+kuullut sitäkään. Oopperan ohjaaja
+kommentoi: "Kaupungin koirat kyllä
+kuulivat ja haukkuivat enemmän, kuin
+kaikki kriitikot yhteensä koskaan."
+=
+SITUACAO ESTRANHA NA OPERA 
+Em uma opera popular, um dos cantores
+cantou tão agudo que ninguém ouviu,
+enquanto o outro cantou tão grave
+que ninguém ouviu também. O diretor
+da opera comentou: "Os cães da
+cidade ouviram e latiram mais do que
+todos os críticos juntos jamais
+fizeram."
+
+TAITEILIJA-APURAHAT KELAN PIIRIIN?
+Kulttuuriministeriö esittää muutosta
+apurahajärjestelmään. Uudessa mallissa
+apurahat kytkettäisiin nykyiseen työ-
+markkinatukijärjestelmään. Sen sijaan
+että työttömyysturvahakemukseen mer-
+kittäisiin "työtön", taiteilijat
+käyttäisivät merkintää "taiteilija".
+=
+BOLSAS DE ARTISTA PELO KELA? 
+O Ministério da Cultura propõe uma
+mudança no sistema de bolsas. No
+novo modelo, as bolsas seriam
+ligadas ao sistema atual de auxilio
+ao mercado de trabalho. Em vez de
+marcar "desempregado" no pedido de
+seguro- desemprego, os artistas
+usariam a marcação "artista".
+
+UUSI TUNTEMATON SOTILAS TEKEILLÄ
+Ohjaaja Jake Aumakatto paljastaa
+tekeillä olevan uuden Tuntemattoman
+sotilaan. Aumakatto avaa että uudessa
+versiossa tuntemattoman sotilaan
+henkilöllisyys viimein paljastetaan.
+Elokuvan on määrä siirtyä tuotanto-
+vaiheeseen kunhan sotilaan henki-
+löllisyys ensin selviää.
+=
+NOVO SOLDADO DESCONHECIDO EM PRODUCAO
+O diretor Jake Aumakatto
+revelou que um novo O Soldado
+Desconhecido esta sendo preparado.
+Aumakatto explica que, nesta nova
+versao, a identidade do soldado
+desconhecido finalmente será
+revelada. O filme deve entrar em
+produção assim que a identidade do
+soldado for descoberta.
+
+KOTIMAINEN ELOKUVA NOSTEESSA
+Kotimainen elokuva nostaa tasaisesti
+katsojamääriään. Kulttuuritutkija
+Tauko-Riitta Iijoki selittää suosiota
+aihevalinnoilla: "Elokuvissa ryypätään
+ja kiroillaan nykyään enemmän." Tuot-
+taja Kari Elin ei niele selitystä:
+"Mielummin sitä itse ryyppää, kuin
+katsoo muiden ryyppäämistä."
+=
+CINEMA NACIONAL EM ALTA 
+O cinema nacional vem aumentando seu 
+publico de forma constante. A pesquisadora
+cultural Tauko-Riitta Iijoki explica
+a popularidade pelos temas
+escolhidos: "Nos filmes, hoje se
+bebe e se xinga mais." O produtor
+Kari Elin não aceita a explicação:
+"Prefiro beber eu mesmo a assistir
+outras pessoas bebendo."
+
+ARTISTI TEKI SINKKULISTAENNÄTYKSEN
+Kotimainen artisti teki uuden sinkku-
+listaennätyksen rekisteröidyttyään
+Suomen jokaiseen seuranhakupalveluun
+yhtäaikaisesti.
+=
+ARTISTA BATE RECORDE DE SOLTEIROS 
+Um artista nacional bateu
+um novo recorde na lista de
+solteiros ao se cadastrar
+simultaneamente em todos os serviços
+de encontros da Finlândia.
+
+[ruoka]
+NOPEA JOULUNODOTUSHERKKULAATIKKO
+1. Pohjalle imelletty perunalaatikko
+2. Kuori nyrkillinen valkosipulin-
+kynsiä ja laita perunalaatikon päälle
+3. Asettele kynsien päälle noin 1 cm
+paksuudelta kermajuustoa
+4. Lämmitä mikrossa kunnes juusto on
+sulanut
+=
+CAIXA RAPIDA DE NATAL
+1. No fundo, coloque purê doce de
+batata
+2. Descasque um punhado de dentes de
+alho
+e coloque sobre a batata
+3. Cubra os dentes com cerca de 1 cm
+de cream cheese
+4. Aqueça no micro-ondas ate o
+queijo
+derreter
+
+TULINEN RUOKAPUURO ISOON NÄLKÄÄN
+1. Sekoita kattilassa vesi, chili,
+soijakastike sekä pasta-ateriapussi
+2. Kuumenna sisältö ja lisää grilli-
+makkaraa sekä omenoita paloina
+3. Lisää kaurahiutaleita hämmentäen
+4. Hauduta miedolla lämmöllä kunnes
+kaurahiutaleet ovat puuroutuneet
+=
+PAPINHO PICANTE PARA FOME GRANDE
+1. Misture numa panela agua, chili,
+molho de soja e o pacote de macarrão
+2. Aqueça e adicione linguiça
+grelhada
+e pedaços de maçã
+3. Acrescente flocos de aveia
+mexendo
+4. Cozinhe em fogo baixo ate a aveia
+engrossar
+
+ITÄMAINEN EIHEKI-KEITTO
+1. Keitä kattilassa vettä sekä hie-
+nonnettuja sipuleita
+2. Lisää makaroni
+3. Keitä kunnes makaroni on valmis
+ja lisää muutama kananmuna
+4. Lisää vielä 100g kermajuustoa ja
+hauduta kunnes juusto on sulanut
+=
+SOPA ORIENTAL EIHEKI
+1. Ferva agua numa panela com
+cebolas
+picadas
+2. Adicione o macarrão
+3. Cozinhe ate o macarrão ficar
+pronto
+e adicione alguns ovos
+4. Acrescente 100g de cream cheese e
+cozinhe ate o queijo derreter
+
+RUKIINEN TYÖMIEHEN SOPPA
+1. Keitä kattilassa vesi ja makaroni
+2. Lisää kattilaan 100g tuorejuustoa
+3. Keitä makaronit pehmeiksi ja lisää
+muutama siivu ruisleipää
+4. Hauduta kunnes leivät pehmenevät
+ja lisää toiset 100g tuorejuustoa
+=
+SOPA DE TRABALHADOR COM CENTEIO
+1. Ferva agua e macarrão na panela
+2. Adicione 100g de cream cheese
+3. Cozinhe ate o macarrão ficar
+macio
+e acrescente algumas fatias de pao
+de centeio
+4. Cozinhe ate o pão amolecer e
+adicione mais 100g de cream cheese
+
+TIISTAIN MAANANTAIPATA
+1. Ota muutama siivu ruisleipää ja
+asettele päälle kermajuustosiivuja
+2. Keitä kattilassa vesi ja lisää
+kaurahiutaleita ja mausteita
+3. Keitä kaurahiutaleet valmiiksi
+ja lisää sekaan ruisleipäsiivut
+4. Hauduta kunnes leipäsiivut ovat
+pehmenneet
+=
+PANELA DE SEGUNDA NA TERÇA
+1. Pegue fatias de pão de centeio
+e cubra com cream cheese
+2. Ferva agua, aveia e temperos
+3. Cozinhe a aveia e junte o pão
+4. Cozinhe ate o pão amolecer
+
+[urheilu]
+KEIHÄÄN KÄRKITULOS KULEVAN KISOISSA
+Teppo Säty kiskaisi keihäässä hurjan
+ennätysheiton mitalla 99,99 metriä.
+Kulevan kisojen katsojia hellittiin
+suorituksella, mutta Säty itse ei
+ollut täysin vakuuttunut: "Sata
+metriä sentistä kiinni saatana."
+=
+MELHOR DARDO NOS JOGOS DE KULEVA
+Teppo Säty lançou 99,99 metros, novo
+recorde. O público vibrou, mas ele
+reclamou: "Cem metros escaparam por
+um centímetro."
+
+JAKOSTABIN TATUOINNISTA ONGELMA
+Suomen maakomitean saaman tiedonannon
+mukaan aituri Turi Jakostab ei voi
+osallistua 1996 kisoihin tatuointinsa
+vuoksi. Jakostabin otsassa lukee
+"Pernajan Maanrakennus". Sääntöjen
+mukaan urheilijat eivät saa mainostaa
+sponsoreitaan. Maakomitea miettii
+tatuoinnin peittämistä meikillä.
+=
+TATUAGEM DE JAKOSTAB CAUSA PROBLEMA
+O comitê informou que o corredor
+Turi Jakostab pode ficar fora dos
+jogos de 1996. Na testa dele está
+escrito "Pernajan Maanrakennus",
+propaganda proibida. O comitê pensa
+em cobrir com maquiagem.
+
+SUOMEN SUURIN URHEILIJA VALITTIIN
+Yleisöäänestys Suomen suurimmasta
+urheilijasta on päättynyt. Entinen
+koripallo- ja painonnostolegenda
+Kilosentti, eli Kauno Vitjakka
+päihitti Paavo Nurmen selvällä äänten
+enemmistöllä. Pituutta Vitjakalla on
+yhtä paljon kuin painoakin, eli 218.
+=
+MAIOR ATLETA DA FINLANDIA ELEITO
+A votação popular terminou.
+Kilosentti, lenda do basquete e do
+levantamento, derrotou Paavo Nurmi
+com folga. Kauno Vitjakka mede tanto
+quanto pesa: 218.
+
+KISANNON VESAT EI PÄÄSARJAAN
+Vastoin aikaisempaa tietoa, KiVes ei
+osallistu jääkiekon Pääsarjaan alka-
+valla kaudella. KiVesin hallituksen
+pj Laiste Maukonen kommentoi että
+osallistumisilmoitus meni vahingossa
+Pääsarjan organisaatioon, eikä
+Koillismaan puulaakisarjan
+osoitteeseen.
+=
+KIVES NAO VAI A SERIE PRINCIPAL
+Ao contrario do informado, KiVes não
+jogara a serie principal de hockey.
+O presidente Laiste Maukonen diz que
+a inscrição foi enviada por engano
+para a liga errada.
+
+KIVES SITTENKIN PÄÄSARJAAN?
+Jääkiekon Pääsarjan tiedottaja kertoo
+että KiVesin ilmoittautuminen on
+sitova, eikä joukkue voi jättäytyä
+sarjasta ilman sanktioita. KiVesin
+taloudellinen tilanne ei mahdollista
+sanktioiden maksua, joten KiVes
+saattaa sittenkin pelata Pääsarjassa
+ainakin kaudella 95-96.
+=
+KIVES VAI MESMO A SERIE PRINCIPAL?
+A liga diz que a inscrição do KiVes
+e vinculante. Como o clube não pode
+pagar a multa, talvez tenha de jogar
+a serie principal na temporada
+95-96.
+
+KIVESTÄ EI HALUTA
+Maailmanmestari ja nelinkertainen
+Pääsarja-kultamitalisti Raitti Vakone
+tyrmää KiVesin osallistumisen:
+"Suomalaisest jäkiksest on tullu
+herrapelii. Kovakaulukse päättä miel-
+valtasest kekä Pääsarjas pela. Koht
+ykkösjoukkuee siirtyy ulkolaissi
+sarjoihin ku Suomes pelata jottan
+pihakiakkopaskaa."
+=
+NINGUEM QUER O KIVES
+O campeão Raitti Vakone critica a
+entrada do KiVes. Para ele, o hockey
+finlandês virou jogo de gabinete e
+logo os grandes clubes vão procurar
+ligas estrangeiras.
+
+KORI- JA LENTOPALLO YHTEISTYÖHÖN
+Pallolajien isäntäliitot aloittavat
+KoLeRa-kampanjan missä katsoja voi
+saada ilmaislipun Pääsarjan kiekko-
+otteluun. Ehtona on että katsoja
+käy katsomassa yhden koripallo
+sekä lentopallo-ottelun. Tarkoi-
+tuksena on kasvattaa em. lajien
+katsojamääriä.
+=
+BASQUETE E VOLEI EM COOPERACAO
+As federações lançam a campanha
+KoLeRa. Quem assistir a um jogo de
+basquete e um de vôlei ganha
+ingresso para uma partida da serie
+principal de hockey.
+
+KRITIIKKIÄ KOLERA-KAMPANJALLE
+Jalkapallovaikuttaja Pita Kehab ei
+ymmärrä KoLeRa-kampanjaa: "Miksei
+meiltä kysytty? Olisimme mekin
+voineet jakaa ilmaislippuja. Stadi-
+oneilla on tilaa. Kukkuu? Pitäisi
+olla niissä pöydissä missä päätöksiä
+tehdään, mutta nekin ovat tyhjiä."
+=
+CRITICAS A CAMPANHA KOLERA
+O dirigente Pita Kehab não entende a
+campanha: "Por que não perguntaram a
+nos? Também poderíamos dar
+ingressos. Há espaço nos estádios e
+mesas vazias onde decidem tudo."
+
+TAKKINEN AJOI SEINÄÄN ITALIASSA
+Avo-ohjaamokuljettaja Mako Takkinen
+ajoi seinään Italian aika-ajoissa.
+Takkinen selvisi vammoitta, mutta
+auto tuhoutui kokonaan.
+Seinä ei ollut siinä vielä eilen,
+eikä toistaiseksi tiedetä kuka sen
+siihen laittoi.
+=
+TAKKINEN BATEU NO MURO NA ITALIA
+O piloto Mako Takkinen bateu no muro
+no treino classificatório. Ele saiu
+ileso, mas o carro destruiu. O muro
+não estava lá ontem e ninguém sabe
+quem colocou.
+
+RALLISSA MENTIIN HILJEMPAA
+Vasta päättyneessä Caliman rallissa
+ajettiin tänä vuonna hiljempaa kuin
+viime vuonna. Suomalainen rallilegenda
+Tamo Silonen ei lähde arvuuttelemaan
+syytä, mutta kommentoi kuitenkin että
+luultavasti painettiin vähemmän kaasua
+tai enemmän jarrua.
+=
+RALLY FOI MAIS DEVAGAR
+No rally Calima, os pilotos andaram
+mais devagar que no ano passado. A
+lenda Tamo Silonen não arrisca o
+motivo, mas comenta que devem ter
+usado menos acelerador ou mais
+freio.
+
+SARPA VOITTI MESTARUUDEN
+Kyytänän Sarpa voitti Pellinkuran
+paikallisliigan pesäpallomestaruuden
+ensimmäistä kertaa sisähallissa
+käydyssä pesäpallo-ottelussa.
+Hävinneen Kutun Villien valmentaja
+Kallu Pikkainen kritisoi:
+"Ei pesäpalloa voi sisällä pelata.
+Emme suostu enää koskaan käyttämään
+Kuisevan hallia pelipaikkana."
+=
+SARPA VENCEU O CAMPEONATO
+Kyytänän Sarpa ganhou pela primeira
+vez a liga local de pesäpallo em
+jogo coberto. O técnico adversário
+critica: "Pesäpallo nao se joga
+dentro de ginásio."
+
+PÄÄTUOMARILLE TERVEYSAPUA
+Jääkiekon mestaruusliigan päätuoma-
+rille on hankittu yhteisrahoituksella
+uusi puusilmä. Entinen putosi viime
+kaudella kesken ottelun kentälle
+vähentäen kiistanalaisten tuomioiden
+määrää merkittävästi. "Kyllä niistä
+tuomioista aina toinen joukkue
+tykkää", kommentoi päätuomari.
+=
+ARBITRO GANHA AJUDA DE SAUDE
+O arbitro principal do hockey
+recebeu um novo olho de madeira por
+financiamento coletivo. O antigo
+caiu no gelo e reduziu muito as
+decisões polemicas.
+
+ALIVIESKASSA AJETAAN TAAS SPRINTTIÄ
+Jo perinteeksi muodostunut Peräjärven
+Suvi-Sprint ajetaan taas tulevana vii-
+konloppuna. Kilpailussa ajetaan SM
+-ja amatööriluokissa. Tapahtumaa on
+aiemmin kritisoitu puutteellisista
+turvatoimista, mutta organisaattori
+Leif Fleetari lupaa niiden olevan
+kunnossa: "Kun ajetaan niin ajetaan
+täysillä. Joskus tulee virheitä ja
+sitten mennään vähän hiljempaa."
+=
+SPRINT VOLTA A ALIVIESKA
+O tradicional Peräjärvi Suvi-Sprint
+acontece no fim de semana, com
+classes SM e amador. Leif Fleetari
+garante segurança: "Quando se corre,
+se corre no máximo."

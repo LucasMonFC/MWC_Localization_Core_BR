@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace MWC_Localization_Core
+namespace MSC_Localization_Core
 {
     /// <summary>
     /// Handles direct translation of Teletext/TV content by modifying underlying data sources
@@ -25,11 +25,6 @@ namespace MWC_Localization_Core
         public bool IsComplete { get { return IsStaticArrayMonitoringComplete; } }
         public bool IsStaticArrayMonitoringComplete { get; private set; }
 
-        // Dynamic TV chat is split into TeletextChatHandler (Medium cadence). This handler
-        // owns the loaded translation data; the chat handler reads it via TryGetChatTranslations.
-        public const string ChatMessagesPath = "Systems/TV/ChatMessages";
-        public const string ChatMessagesCategoryName = "ChatMessages.Messages";
-
         private TranslationDictionary sharedTranslations;
         private string teletextFilePath;
 
@@ -48,12 +43,9 @@ namespace MWC_Localization_Core
         private int lastLoadedTranslationCount = 0;
         
         // GameObject path to category mapping.
-        // ChatMessagesPath is registered so the alias setup still applies, but
-        // MonitorAndTranslateArrays skips it — TeletextChatHandler owns the chat tick.
         private Dictionary<string, string> pathPrefixes = new Dictionary<string, string>
         {
-            { "Systems/TV/Teletext/VKTekstiTV/Database", "" },  // Use referenceName directly
-            { ChatMessagesPath, "ChatMessages" },               // Prefix with "ChatMessages."
+            { "Systems/Teletext/VKTekstiTV/Database", "" },  // Use referenceName directly
         };
         
         // Path Prefix Proxy cache
@@ -105,19 +97,6 @@ namespace MWC_Localization_Core
             categoryTranslations = loadedCategoryTranslations;
             indexBasedTranslations = loadedIndexBasedTranslations;
 
-            // Create alias: ChatMessages.Messages uses ChatMessages.All translations.
-            // Mirror the alias on the index-based map too so the ordered fallback in
-            // TranslateArrayListProxy works for ChatMessages.Messages - otherwise entries
-            // that don't exact-match by key fall through with no translation at all.
-            if (categoryTranslations.TryGetValue("ChatMessages.All", out Dictionary<string, string> chatAllDict))
-            {
-                categoryTranslations["ChatMessages.Messages"] = chatAllDict;
-            }
-            if (indexBasedTranslations.TryGetValue("ChatMessages.All", out List<string> chatAllList))
-            {
-                indexBasedTranslations["ChatMessages.Messages"] = chatAllList;
-            }
-
             lastLoadedTranslationCount = 0;
             foreach (var category in categoryTranslations.Values)
             {
@@ -131,17 +110,6 @@ namespace MWC_Localization_Core
         public int GetTranslationCount()
         {
             return lastLoadedTranslationCount;
-        }
-
-        /// <summary>
-        /// Exposes the loaded chat-messages translation tables for TeletextChatHandler.
-        /// Returns false if no chat data was loaded from translate_teletext.txt.
-        /// </summary>
-        public bool TryGetChatTranslations(out Dictionary<string, string> exact, out List<string> indexed)
-        {
-            categoryTranslations.TryGetValue(ChatMessagesCategoryName, out exact);
-            indexBasedTranslations.TryGetValue(ChatMessagesCategoryName, out indexed);
-            return exact != null && exact.Count > 0;
         }
 
         /// <summary>
@@ -160,10 +128,6 @@ namespace MWC_Localization_Core
 
                 foreach (var pathPrefix in pathPrefixes.Keys)
                 {
-                    // Dynamic TV chat is handled by TeletextChatHandler at Medium cadence.
-                    if (pathPrefix == ChatMessagesPath)
-                        continue;
-
                     PlayMakerArrayListProxy[] proxies;
                     if (!proxyCache.ContainsKey(pathPrefix))
                     {
@@ -195,8 +159,8 @@ namespace MWC_Localization_Core
                         // Create unique key for this array
                         string arrayKey = $"{pathPrefix}[{i}]:{refName}";
 
-                        // Try translating only if not already done. Chat is excluded above,
-                        // so everything reaching here is static and can be marked done.
+                        // Try translating only if not already done.
+                        // Teletext arrays are static and can be marked done.
                         if (!translatedArrays.Contains(arrayKey))
                         {
                             int translated = TranslateArrayListProxy(proxies[i], categoryName);

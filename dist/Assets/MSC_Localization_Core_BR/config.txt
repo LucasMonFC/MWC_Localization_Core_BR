@@ -1,0 +1,31 @@
+LANGUAGE_NAME = Português
+LANGUAGE_CODE = pt-BR
+
+[FONTS]
+FugazOne-Regular = FugazOne-Regular
+Heebo-Black = Heebo-Black
+AlfaSlabOne-Regular = AlfaSlabOne-Regular
+ArchivoBlack-Regular = ArchivoBlack-Regular
+Cour10Bd = Cour10Bd
+RAGE = RAGE
+Dosis-SemiBold = Dosis-SemiBold
+Dosis-SemiBold LowCase = Dosis-SemiBold
+VT323-Regular = VT323-Regular
+DroidSerif-Bold = DroidSerif-Bold
+PlayfairDisplay-Bold = PlayfairDisplay-Bold
+WalterTurncoat-Regular = WalterTurncoat-Regular
+BLUEHIGD = Blue-Highway-D
+
+[POSITION_ADJUSTMENTS]
+## Options
+Contains(Systems/OptionsMenu) & Contains(/GUITextlabel) = 0,0,0,0.07
+Contains(Systems/OptionsMenu) & Contains(/GUITextLabel) = 0,0,0,0.07
+Contains(Systems/OptionsMenu) & Contains(/GUITextHeader) = 0,0,0,0.08
+##Death Paper
+Contains(Systems/Death/GameOverScreen/Paper) = 0,0,0,,0.77
+##TV Teletext
+Contains(Systems/Teletext/VKTekstiTV/HEADER/Texts/Status) = 0.5,0,0
+Contains(Systems/Teletext/VKTekstiTV/PAGES/175/Texts/Newsline 2) = 0.5,0.2,0
+Contains(Systems/Teletext/VKTekstiTV/PAGES/175/Texts/Newsline) = 0,0.2,0
+Contains(Systems/Teletext/VKTekstiTV/PAGES/172/Texts/Newsline) = 0,0.2,0
+

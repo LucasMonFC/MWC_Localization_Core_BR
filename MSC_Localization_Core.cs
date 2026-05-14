@@ -3,21 +3,20 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MWC_Localization_Core
+namespace MSC_Localization_Core
 {
-    public class MWC_Localization_Core : Mod
+    public class MSC_Localization_Core : Mod
     {
         // Mod metadata
-        public override string ID => "MWC_Localization_Core";
-        public override string Name => "MWC_Localization_Core";
-        public override string Author => "potatosalad775";
-        public override string Version => "1.0.9";
-        public override string Description => "Multi-language core localization framework for My Winter Car";
-        public override Game SupportedGames => Game.MyWinterCar;
+        public override string ID => "MSC_Localization_Core_BR";
+        public override string Name => "MSC_Localization_Core";
+        public override string Author => "LucasMonOficial";
+        public override string Version => "1.0.0";
+        public override string Description => "Multi-language core localization framework for My Summer Car";
+        public override Game SupportedGames => Game.MySummerCar;
 
         private static readonly string[] MainTranslationFiles = new string[]
         {
-            "translate_msc.txt",
             "translate.txt",
             "translate_mod.txt"
         };
@@ -27,7 +26,6 @@ namespace MWC_Localization_Core
         private Dictionary<string, Font> customFonts = new Dictionary<string, Font>();
         private LocalizationConfig config;
         private TextMeshTranslator translator;
-        private MagazineTextHandler magazineHandler;
         private TranslationContext ctx;
         private List<ITranslationSurface> surfaces;
 
@@ -79,13 +77,12 @@ namespace MWC_Localization_Core
 
             CoreConsole.Initialize(showDebugLogs, showWarningLogs);
 
-            magazineHandler = new MagazineTextHandler();
             translatedScenes.Clear();
             currentScene = string.Empty;
 
             LoadCustomFonts();
 
-            translator = new TextMeshTranslator(translations, customFonts, magazineHandler, config);
+            translator = new TextMeshTranslator(translations, customFonts, config);
 
             LoadAllMainTranslationFiles();
 
@@ -94,23 +91,16 @@ namespace MWC_Localization_Core
                 customFonts,
                 config,
                 translator,
-                magazineHandler,
                 ModLoader.GetModAssetsFolder(this));
 
-            // MagazineTextHandler is both a service (used by other surfaces via ctx.Magazine)
-            // and itself a surface, so the same instance appears in both places.
-            // TeletextChatHandler reads chat translation data from TeletextHandler, so it
-            // takes a reference to the shared instance.
             var teletext = new TeletextHandler();
             surfaces = new List<ITranslationSurface>
             {
                 new GuiTextMonitor(),
-                magazineHandler,
                 teletext,
-                new TeletextChatHandler(teletext),
                 new ArrayListProxyHandler(),
-                new HashTableProxyHandler(),
                 new FsmTextHook(),
+                new SubtitleTimingHandler(),
             };
 
             for (int i = 0; i < surfaces.Count; i++)
@@ -126,13 +116,14 @@ namespace MWC_Localization_Core
         private void Mod_PostLoad()
         {
             ModConsole.Print($"[{Name}] Game fully loaded - translating...");
+            LocalizationUtils.PruneCaches();
             TranslateScene();
             MarkSceneTranslated("GAME");
             RunSurfaceInitialPasses(null);
             config.ApplyGameObjectAdjustments();
 
             // ALL continuous monitoring runs in LateUpdate to get correct timing relative to game updates.
-            lateUpdateHandlerObject = new GameObject("MWC_LateUpdateHandler");
+            lateUpdateHandlerObject = new GameObject("MSC_LateUpdateHandler");
             lateUpdateHandler = lateUpdateHandlerObject.AddComponent<LateUpdateHandler>();
             lateUpdateHandler.Initialize(surfaces, () => HasSceneBeenTranslated("GAME"));
         }
@@ -316,7 +307,7 @@ namespace MWC_Localization_Core
             for (int i = 0; i < surfaces.Count; i++)
                 surfaces[i].ClearTranslations();
 
-            // Clear global + service caches; let surfaces reset their own runtime state.
+            // Clear global caches; let surfaces reset their own runtime state.
             LocalizationUtils.ClearCaches();
             translator.ClearRuntimeCaches();
             config.ClearTextAdjustmentCaches();

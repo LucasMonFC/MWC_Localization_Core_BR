@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MWC_Localization_Core
+namespace MSC_Localization_Core
 {
     /// <summary>
     /// MonoBehaviour driver for surface MonitorTicks.
@@ -75,7 +75,7 @@ namespace MWC_Localization_Core
                 }
 
                 // Track whether every Slow surface (array/proxy monitors) has retired.
-                // Surfaces that monitor live data (HUD/Fast/Medium) are intentionally ignored.
+                // Surfaces that monitor live data (HUD/Fast) are intentionally ignored.
                 if (s.Cadence == SurfaceCadence.Slow)
                     allSlowRetired = false;
 
@@ -89,17 +89,7 @@ namespace MWC_Localization_Core
                         if (now >= nextTickTimes[i])
                         {
                             s.MonitorTick(dt);
-                            nextTickTimes[i] = now + LocalizationConstants.FSM_SOURCE_POLL_INTERVAL;
-                        }
-                        break;
-
-                    case SurfaceCadence.Medium:
-                        if (now >= nextTickTimes[i])
-                        {
-                            int translated = s.MonitorTick(dt);
-                            if (translated > 0)
-                                CoreConsole.Print($"[LateUpdateHandler] {s.Name}: translated {translated} item(s)");
-                            nextTickTimes[i] = now + LocalizationConstants.CHAT_MONITOR_INTERVAL;
+                            nextTickTimes[i] = now + LocalizationConstants.FSM_TEXT_HOOK_POLL_INTERVAL;
                         }
                         break;
 

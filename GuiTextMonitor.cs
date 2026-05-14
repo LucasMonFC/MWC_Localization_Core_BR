@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MWC_Localization_Core
+namespace MSC_Localization_Core
 {
     /// <summary>
     /// Lightweight direct GUI monitor, modeled after the old LanguageFramework HUD pass.
@@ -48,14 +48,18 @@ namespace MWC_Localization_Core
 
         private TextMeshTranslator translator;
         private readonly List<GuiTextEntry> guiEntries = new List<GuiTextEntry>();
+        private readonly Dictionary<string, float> retainedSubtitleDurations = new Dictionary<string, float>();
         private GuiTextEntry interactionEntry;
         private GuiTextEntry partnameEntry;
         private GuiTextEntry subtitlesEntry;
         private float retryTimer;
+        private string retainedSubtitleText;
+        private float retainedSubtitleUntil;
 
         public void Initialize(TranslationContext ctx)
         {
             translator = ctx.Translator;
+            SubtitleTimingHandler.PopulateRetainedSubtitleDurations(ctx.Translations, retainedSubtitleDurations);
             InitializeGuiEntries();
         }
 
@@ -86,7 +90,7 @@ namespace MWC_Localization_Core
             interactionEntry = AddGuiEntry("GUI/Indicators/Interaction", "GUI/Indicators/Interaction/Shadow");
             partnameEntry = AddGuiEntry("GUI/Indicators/Partname", "GUI/Indicators/Partname/Shadow");
             subtitlesEntry = AddGuiEntry("GUI/Indicators/Subtitles", "GUI/Indicators/Subtitles/Shadow");
-            AddGuiEntry("GUI/Indicators/TaxiGUI", "GUI/Indicators/TaxiGUI/Shadow");
+            AddGuiEntry("GUI/Indicators/RallyCountdown", "GUI/Indicators/RallyCountdown/Shadow");
             AddGuiEntry("GUI/Indicators/Gear", "GUI/Indicators/Gear/Shadow");
             AddGuiEntry("GUI/HUD/Thrist/HUDLabel", "GUI/HUD/Thrist/HUDLabel/Shadow");
 
@@ -144,6 +148,8 @@ namespace MWC_Localization_Core
         public void Reset()
         {
             retryTimer = 0f;
+            retainedSubtitleText = null;
+            retainedSubtitleUntil = 0f;
             InitializeGuiEntries();
         }
 
@@ -182,30 +188,108 @@ namespace MWC_Localization_Core
             string sourceText = entry.PrimaryTextMesh.text;
             if (string.IsNullOrEmpty(sourceText))
             {
+                if (entry == subtitlesEntry && TryRestoreRetainedSubtitle(entry))
+                    return;
+
+                if (entry == subtitlesEntry)
+                    ClearRetainedSubtitleState();
+
                 if (!string.IsNullOrEmpty(entry.LastText))
                     ClearCopiedText(entry);
 
                 return;
             }
 
+            if (entry == subtitlesEntry && TryClearExpiredRetainedSubtitle(entry, sourceText))
+                return;
+
             bool textChanged = entry.LastText != sourceText;
             if (!textChanged && entry.HasProcessedText)
+            {
+                if (entry == subtitlesEntry)
+                    translator.ApplyCustomFont(entry.PrimaryTextMesh, entry.PrimaryPath);
+
+                SyncCopiedText(entry, entry.LastText, false);
                 return;
+            }
 
             translator.TranslateAndApplyFont(entry.PrimaryTextMesh, entry.PrimaryPath);
             string translatedText = entry.PrimaryTextMesh.text;
             entry.LastText = translatedText;
             entry.HasProcessedText = true;
 
+            if (entry == subtitlesEntry)
+            {
+                translator.ApplyCustomFont(entry.PrimaryTextMesh, entry.PrimaryPath);
+                UpdateRetainedSubtitle(translatedText);
+            }
+
+            SyncCopiedText(entry, translatedText, true);
+        }
+
+        private void SyncCopiedText(GuiTextEntry entry, string translatedText, bool forceFont)
+        {
             for (int i = 0; i < entry.CopyTextMeshes.Length; i++)
             {
                 TextMesh copyTextMesh = entry.CopyTextMeshes[i];
                 if (copyTextMesh == null || copyTextMesh.gameObject == null)
                     continue;
 
-                copyTextMesh.text = translatedText;
-                translator.ApplyCustomFont(copyTextMesh, entry.CopyPaths[i]);
+                bool needsTextSync = copyTextMesh.text != translatedText;
+                if (needsTextSync)
+                    copyTextMesh.text = translatedText;
+
+                if (forceFont || needsTextSync)
+                    translator.ApplyCustomFont(copyTextMesh, entry.CopyPaths[i]);
             }
+        }
+
+        private void UpdateRetainedSubtitle(string text)
+        {
+            float seconds;
+            if (!retainedSubtitleDurations.TryGetValue(text, out seconds))
+            {
+                ClearRetainedSubtitleState();
+                return;
+            }
+
+            retainedSubtitleText = text;
+            retainedSubtitleUntil = Time.time + seconds;
+        }
+
+        private bool TryRestoreRetainedSubtitle(GuiTextEntry entry)
+        {
+            if (entry == null || string.IsNullOrEmpty(retainedSubtitleText) || Time.time >= retainedSubtitleUntil)
+                return false;
+
+            entry.PrimaryTextMesh.text = retainedSubtitleText;
+            entry.LastText = retainedSubtitleText;
+            entry.HasProcessedText = true;
+            translator.ApplyCustomFont(entry.PrimaryTextMesh, entry.PrimaryPath);
+            SyncCopiedText(entry, retainedSubtitleText, true);
+            return true;
+        }
+
+        private bool TryClearExpiredRetainedSubtitle(GuiTextEntry entry, string sourceText)
+        {
+            if (entry == null
+                || string.IsNullOrEmpty(retainedSubtitleText)
+                || Time.time < retainedSubtitleUntil
+                || sourceText != retainedSubtitleText)
+            {
+                return false;
+            }
+
+            entry.PrimaryTextMesh.text = string.Empty;
+            ClearCopiedText(entry);
+            ClearRetainedSubtitleState();
+            return true;
+        }
+
+        private void ClearRetainedSubtitleState()
+        {
+            retainedSubtitleText = null;
+            retainedSubtitleUntil = 0f;
         }
 
         private void ClearCopiedText(GuiTextEntry entry)
@@ -254,6 +338,11 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(text))
                 return 1;
 
+            return CountLineBreaks(text);
+        }
+
+        private int CountLineBreaks(string text)
+        {
             int lines = 1;
             for (int i = 0; i < text.Length; i++)
             {

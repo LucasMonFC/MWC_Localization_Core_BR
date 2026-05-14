@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MWC_Localization_Core
+namespace MSC_Localization_Core
 {
     /// <summary>
     /// How often a surface's MonitorTick should fire after its initial pass.
@@ -13,11 +13,9 @@ namespace MWC_Localization_Core
         OncePerScene,
         /// <summary>Every LateUpdate frame. For HUD-style monitors that mirror text per frame.</summary>
         PerFrame,
-        /// <summary>FSM_SOURCE_POLL_INTERVAL. For small dynamic FSM sources that the game rebuilds per screen open.</summary>
+        /// <summary>FSM_TEXT_HOOK_POLL_INTERVAL. For small dynamic FSM sources that the game rebuilds per screen open.</summary>
         Fast,
-        /// <summary>CHAT_MONITOR_INTERVAL (~1s). For dynamic-but-cheap monitors like TV chat with per-slot caching.</summary>
-        Medium,
-        /// <summary>ARRAY_MONITOR_INTERVAL, staggered across surfaces. For ArrayList/HashTable proxies that lazy-load.</summary>
+        /// <summary>ARRAY_MONITOR_INTERVAL, staggered across surfaces. For ArrayList-style sources that lazy-load.</summary>
         Slow,
     }
 
@@ -32,7 +30,6 @@ namespace MWC_Localization_Core
         public Dictionary<string, Font> CustomFonts { get; private set; }
         public LocalizationConfig Config { get; private set; }
         public TextMeshTranslator Translator { get; private set; }
-        public MagazineTextHandler Magazine { get; private set; }
         public string AssetsFolder { get; private set; }
 
         public TranslationContext(
@@ -40,21 +37,19 @@ namespace MWC_Localization_Core
             Dictionary<string, Font> customFonts,
             LocalizationConfig config,
             TextMeshTranslator translator,
-            MagazineTextHandler magazine,
             string assetsFolder)
         {
             Translations = translations;
             CustomFonts = customFonts;
             Config = config;
             Translator = translator;
-            Magazine = magazine;
             AssetsFolder = assetsFolder;
         }
     }
 
     /// <summary>
-    /// Common lifecycle contract for translation surfaces (HUD, magazine, teletext,
-    /// ArrayList/HashTable proxies, FSM hook). Implementing this lets the main class
+    /// Common lifecycle contract for translation surfaces (HUD, teletext,
+    /// ArrayList proxies, FSM hook). Implementing this lets the main class
     /// treat them as a uniform List&lt;ITranslationSurface&gt; instead of seven named fields.
     /// </summary>
     public interface ITranslationSurface
@@ -66,7 +61,7 @@ namespace MWC_Localization_Core
         SurfaceCadence Cadence { get; }
 
         /// <summary>True once the surface has nothing more to do; scheduler stops ticking it.
-        /// Surfaces that monitor inherently-live data (HUD, dynamic FSM sources, chat) return false.</summary>
+        /// Surfaces that monitor inherently-live data (HUD, dynamic FSM sources) return false.</summary>
         bool IsComplete { get; }
 
         /// <summary>Wire up dependencies. Called once after construction and again on F8 reload.</summary>

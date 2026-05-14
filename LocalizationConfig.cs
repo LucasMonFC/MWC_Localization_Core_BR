@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-namespace MWC_Localization_Core
+namespace MSC_Localization_Core
 {
     /// <summary>
     /// Centralized timing constants for the localization system.
@@ -14,8 +14,7 @@ namespace MWC_Localization_Core
     {
         public const float ARRAY_MONITOR_INTERVAL = 4.0f;                                  // Check arrays every 4 seconds
         public const float ARRAY_MONITOR_STEP_INTERVAL = ARRAY_MONITOR_INTERVAL / 4f;      // Four staggered passes share one full array/proxy monitoring cycle.
-        public const float CHAT_MONITOR_INTERVAL = 1.0f;                                   // Check dynamic TV chat messages once per second
-        public const float FSM_SOURCE_POLL_INTERVAL = 5.0f;                                // Check Fleetari/ATM FSM dynamic sources once every 5 seconds
+        public const float FSM_TEXT_HOOK_POLL_INTERVAL = 1.0f;                             // Check dynamic FSM text hooks once every second
         public const float GUI_MONITOR_RETRY_INTERVAL = 1.0f;                              // Retry missing GUI TextMesh references once per second
     }
 
@@ -33,18 +32,12 @@ namespace MWC_Localization_Core
         /// </summary>
         public static readonly string[] ForcedFontPathPrefixes = new string[]
         {
-            "Systems/TV/Teletext/VKTekstiTV/PAGES",
-            "Systems/TV/Teletext/VKTekstiTV/HEADER",
-            "COMPUTER/SYSTEM/POS",
+            "Systems/Teletext/VKTekstiTV/PAGES",
+            "Systems/Teletext/VKTekstiTV/HEADER",
+            "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS",
             "Sheets/UnemployPaper",
-            "Systems/TV/TVGraphics/CHAT",
-            "Sheets/ServicePayment",
-            "Sheets/RallyRegistration/Functions/Class",
-            "Systems/TV/TVGraphics/GFXTanaanWeek/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSat1/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSat2/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSun1/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSun2/Text"
+            "Sheets/RallyResults",
+            "RALLY/RallyTV"
         };
 
         public static bool IsForcedFontPath(string path)
@@ -264,13 +257,10 @@ namespace MWC_Localization_Core
             if (textMesh == null || string.IsNullOrEmpty(path))
                 return false;
 
-            if (path.Contains("GUI/Indicators/Subtitles"))
+            if (path.Contains("GUI/Indicators/Subtitles") || path.Contains("GUI/Indicators/Partname"))
             {
-                // Special handling for subtitles to center-align and lower position
                 textMesh.alignment = TextAlignment.Center;
                 textMesh.anchor = TextAnchor.LowerCenter;
-                if (!path.Contains("/Shadow"))
-                    textMesh.transform.localPosition = new Vector3(textMesh.transform.localPosition.x, -1.0f, textMesh.transform.localPosition.z);
             }
 
             // Find matching adjustment and apply it

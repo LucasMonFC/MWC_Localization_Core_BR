@@ -1,11 +1,11 @@
 // Handler for translating configured PlayMakerArrayListProxy data sources.
-// Used for HUD, magazine, and other known array-backed content.
+// Used for HUD and other known array-backed content.
 
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
-namespace MWC_Localization_Core
+namespace MSC_Localization_Core
 {
     public class ArrayListProxyHandler : ITranslationSurface
     {
@@ -20,7 +20,6 @@ namespace MWC_Localization_Core
 
         // Reference to main translation dictionary (from Plugin)
         private TranslationDictionary mainTranslations;
-        private MagazineTextHandler magazineHandler;
         private TextMeshTranslator translator;
         
         // Config: List of array paths to translate (path:index)
@@ -47,7 +46,6 @@ namespace MWC_Localization_Core
         public void Initialize(TranslationContext ctx)
         {
             mainTranslations = ctx.Translations;
-            magazineHandler = ctx.Magazine;
             translator = ctx.Translator;
             InitializeArrayPaths();
         }
@@ -75,16 +73,6 @@ namespace MWC_Localization_Core
             // HUD Elements
             arrayPaths.Add("GUI/HUD/Day/HUDValue:0");  // Day names: MONDAY, TUESDAY, etc.
             
-            // Magazine System
-            arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/KeywordsFI:0"); // LinesSelected (FI)
-            arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/KeywordsFI:1"); // LinesRandom1 (FI)
-            arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/KeywordsFI:2"); // LinesRandom2 (FI)
-            arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/KeywordsEN:0"); // LinesSelected (EN)
-            arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/KeywordsEN:1"); // LinesRandom1 (EN)
-            arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/KeywordsEN:2"); // LinesRandom2 (EN)
-            arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/VINLIST_TirePics:1"); // Tire picture descriptions (FI)
-            arrayPaths.Add("CARPARTS/PARTSYSTEM/PostSystem/VINLIST_TirePics:2"); // Tire picture descriptions (EN)
-
             // Initialize TextMesh display path mappings
             InitializeTextMeshMappings();
         }
@@ -96,11 +84,6 @@ namespace MWC_Localization_Core
             parentSearchPaths = new List<string>
             {
                 "GUI/HUD/Day",                            // HUD Day Display
-                "Sheets/YellowPagesMagazine/Page1/Row1",  // Magazine Page 1 Row 1
-                "Sheets/YellowPagesMagazine/Page1/Row2",  // Magazine Page 1 Row 2
-                "Sheets/YellowPagesMagazine/Page2/Row3",  // Magazine Page 2 Row 3
-                "Sheets/YellowPagesMagazine/Page2/Row4",  // Magazine Page 2 Row 4
-                // Add more parent paths as needed
             };
         }
 
@@ -249,15 +232,14 @@ namespace MWC_Localization_Core
             return totalTranslated;
         }
 
-        // Find translation from main translations or magazine translations
+        // Find translation from main translations.
         private string FindTranslation(string original)
         {
             // Try main translations first (TryGetExact handles normalization + LRU cache).
             if (mainTranslations.TryGetExact(original, out string translation))
                 return translation;
 
-            // Try magazine translations using the magazine handler's normalized lookup.
-            return magazineHandler.GetTranslation(original);
+            return null;
         }
 
         // Apply localized fonts to TextMesh components displaying array data
