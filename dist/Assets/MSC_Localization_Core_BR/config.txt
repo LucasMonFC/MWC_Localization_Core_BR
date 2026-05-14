@@ -25,7 +25,5 @@ Contains(Systems/OptionsMenu) & Contains(/GUITextHeader) = 0,0,0,0.08
 Contains(Systems/Death/GameOverScreen/Paper) = 0,0,0,,0.77
 ##TV Teletext
 Contains(Systems/Teletext/VKTekstiTV/HEADER/Texts/Status) = 0.5,0,0
-Contains(Systems/Teletext/VKTekstiTV/PAGES/175/Texts/Newsline 2) = 0.5,0.2,0
-Contains(Systems/Teletext/VKTekstiTV/PAGES/175/Texts/Newsline) = 0,0.2,0
-Contains(Systems/Teletext/VKTekstiTV/PAGES/172/Texts/Newsline) = 0,0.2,0
-
+## Computer
+Contains(YARD/Building/BEDROOM1/COMPUTER/SYSTEM/TELEBBS/CONLINE) = 0,0.08,0

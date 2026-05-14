@@ -188,6 +188,7 @@ namespace MSC_Localization_Core
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/TELEBBS/CONLINE/Initialize", "", "Too short", 0, "Needs to be at least one characters long!");
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/TELEBBS/CONLINE/CHAT", "", "Download", 1, "Sending...");
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/TELEBBS/CONLINE/CHAT", "", "Fail", 0, "Sending Failed!");
+            AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/TELEBBS/CONLINE/CHAT", "", "", -1, "Could Not Connect");
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/TELEBBS/CONLINE/CHAT", "", "Upload", 1, "Sending...");
 
             // COMPUTER: Kaappis-Fishgame
