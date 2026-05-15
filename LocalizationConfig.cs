@@ -14,7 +14,6 @@ namespace MSC_Localization_Core
     {
         public const float ARRAY_MONITOR_INTERVAL = 4.0f;                                  // Check arrays every 4 seconds
         public const float ARRAY_MONITOR_STEP_INTERVAL = ARRAY_MONITOR_INTERVAL / 4f;      // Four staggered passes share one full array/proxy monitoring cycle.
-        public const float FSM_TEXT_HOOK_POLL_INTERVAL = 1.0f;                             // Check dynamic FSM text hooks once every second
         public const float GUI_MONITOR_RETRY_INTERVAL = 1.0f;                              // Retry missing GUI TextMesh references once per second
     }
 

@@ -75,7 +75,7 @@ namespace MSC_Localization_Core
                 }
 
                 // Track whether every Slow surface (array/proxy monitors) has retired.
-                // Surfaces that monitor live data (HUD/Fast) are intentionally ignored.
+                // Per-frame surfaces that monitor live HUD data are intentionally ignored.
                 if (s.Cadence == SurfaceCadence.Slow)
                     allSlowRetired = false;
 
@@ -83,14 +83,6 @@ namespace MSC_Localization_Core
                 {
                     case SurfaceCadence.PerFrame:
                         s.MonitorTick(dt);
-                        break;
-
-                    case SurfaceCadence.Fast:
-                        if (now >= nextTickTimes[i])
-                        {
-                            s.MonitorTick(dt);
-                            nextTickTimes[i] = now + LocalizationConstants.FSM_TEXT_HOOK_POLL_INTERVAL;
-                        }
                         break;
 
                     case SurfaceCadence.Slow:

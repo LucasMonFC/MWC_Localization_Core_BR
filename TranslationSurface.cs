@@ -13,8 +13,6 @@ namespace MSC_Localization_Core
         OncePerScene,
         /// <summary>Every LateUpdate frame. For HUD-style monitors that mirror text per frame.</summary>
         PerFrame,
-        /// <summary>FSM_TEXT_HOOK_POLL_INTERVAL. For small dynamic FSM sources that the game rebuilds per screen open.</summary>
-        Fast,
         /// <summary>ARRAY_MONITOR_INTERVAL, staggered across surfaces. For ArrayList-style sources that lazy-load.</summary>
         Slow,
     }
