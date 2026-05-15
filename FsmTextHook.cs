@@ -13,8 +13,8 @@ namespace MSC_Localization_Core
     public partial class FsmTextHook : ITranslationSurface
     {
         public string Name { get { return "FsmTextHook"; } }
-        public SurfaceCadence Cadence { get { return SurfaceCadence.Fast; } }
-        public bool IsComplete { get { return false; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.OncePerScene; } }
+        public bool IsComplete { get { return true; } }
 
         public int InitialPass()
         {
@@ -24,7 +24,6 @@ namespace MSC_Localization_Core
 
         public int MonitorTick(float deltaTime)
         {
-            UpdateForCurrentScene(false);
             return 0;
         }
 
@@ -51,8 +50,6 @@ namespace MSC_Localization_Core
         private readonly HashSet<int> initializedFsmIds = new HashSet<int>();
 
         private int pendingTargetIndex;
-        private readonly List<FsmTarget> rallyPlayerResultsTargets = new List<FsmTarget>();
-        private readonly List<FsmTarget> runtimeLongSubtitleTargets = new List<FsmTarget>();
 
         private sealed class FsmRule
         {
@@ -115,25 +112,13 @@ namespace MSC_Localization_Core
             if (!isMainMenu && !isGame)
                 return false;
 
-            // Runtime polling only handles sources that are known to be rebuilt while
-            // their sheets are open. Other FSM sources are patched by scene/reload passes.
-            // Scheduler (LateUpdateHandler) already paces this surface at FSM_TEXT_HOOK_POLL_INTERVAL.
             if (!force)
-            {
-                if (!isGame)
-                    return false;
-
-                bool runtimeChanged = false;
-                runtimeChanged |= TryApplyRuntimeTeletextTargets();
-                runtimeChanged |= TryApplyRuntimeLongSubtitleTargets();
-                return runtimeChanged;
-            }
+                return false;
 
             bool changed = false;
             if (isGame)
             {
-                changed |= TryApplyRallyClassSources();
-                changed |= TryApplyRuntimeTeletextTargets();
+                changed |= TryApplyTeletextTargets();
             }
 
             changed |= ApplyPendingTargets(currentScene, targets.Count);
@@ -147,8 +132,6 @@ namespace MSC_Localization_Core
         {
             targets.Clear();
             translationCache.Clear();
-            rallyPlayerResultsTargets.Clear();
-            runtimeLongSubtitleTargets.Clear();
 
             Dictionary<string, FsmTarget> byKey = new Dictionary<string, FsmTarget>();
             AddBuiltInTargets(byKey);
@@ -157,10 +140,6 @@ namespace MSC_Localization_Core
             for (int i = 0; i < targets.Count; i++)
             {
                 SortRules(targets[i].Rules);
-                if (IsRallyPlayerResultsTarget(targets[i]))
-                    rallyPlayerResultsTargets.Add(targets[i]);
-                if (IsRuntimeLongSubtitleTarget(targets[i]))
-                    runtimeLongSubtitleTargets.Add(targets[i]);
             }
         }
 
@@ -365,18 +344,7 @@ namespace MSC_Localization_Core
             return changed;
         }
 
-        private bool TryApplyRallyClassSources()
-        {
-            bool changed = false;
-            for (int i = 0; i < rallyPlayerResultsTargets.Count; i++)
-            {
-                changed |= TryApplyRallyClassSource(rallyPlayerResultsTargets[i]);
-            }
-
-            return changed;
-        }
-
-        private bool TryApplyRuntimeTeletextTargets()
+        private bool TryApplyTeletextTargets()
         {
             bool changed = false;
             for (int i = 0; i < targets.Count; i++)
@@ -400,27 +368,6 @@ namespace MSC_Localization_Core
                     }
 
                     changed |= TranslateTextMeshesForTarget(target);
-                }
-            }
-
-            return changed;
-        }
-
-        private bool TryApplyRuntimeLongSubtitleTargets()
-        {
-            bool changed = false;
-            for (int i = 0; i < runtimeLongSubtitleTargets.Count; i++)
-            {
-                FsmTarget target = runtimeLongSubtitleTargets[i];
-                if (target == null || resolvedTargets.Contains(target.Key))
-                    continue;
-
-                bool resolved;
-                bool targetChanged = TryApplyTarget(target, out resolved);
-                changed |= targetChanged;
-                if (resolved)
-                {
-                    MarkTargetResolved(target);
                 }
             }
 
@@ -475,9 +422,6 @@ namespace MSC_Localization_Core
                 return true;
 
             if (TryTranslateTargetTextMeshValue(target, out translated))
-                return true;
-
-            if (TryGetTeletextRallyTitleWithDay(target, out translated))
                 return true;
 
             if (target.Rules.Count == 1)
@@ -556,58 +500,6 @@ namespace MSC_Localization_Core
             return false;
         }
 
-        private bool TryGetTeletextRallyTitleWithDay(FsmTarget target, out string translated)
-        {
-            translated = null;
-            if (target == null
-                || !TextMatchesExact(target.ObjectPath, "Systems/Teletext/VKTekstiTV/PAGES/250/Texts/TeleTextResults")
-                || !TextMatchesExact(target.StateName, "State 2")
-                || target.ActionIndex != 0)
-            {
-                return false;
-            }
-
-            string day;
-            if (!TryGetVisibleTeletextRallyDay(out day))
-                return false;
-
-            translated = "RALLISPRINT-SM PERÄJÄRVI, " + day;
-            return true;
-        }
-
-        private bool TryGetVisibleTeletextRallyDay(out string day)
-        {
-            day = null;
-            GameObject root = LocalizationUtils.FindGameObjectIncludingInactive("Systems/Teletext");
-            if (root == null)
-                return false;
-
-            TextMesh[] textMeshes = root.GetComponentsInChildren<TextMesh>(true);
-            for (int i = 0; i < textMeshes.Length; i++)
-            {
-                TextMesh textMesh = textMeshes[i];
-                if (textMesh == null || string.IsNullOrEmpty(textMesh.text))
-                    continue;
-
-                string value = textMesh.text;
-                if (value.IndexOf("SÁBADO", System.StringComparison.OrdinalIgnoreCase) >= 0
-                    || value.IndexOf("LAUANTAI", System.StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    day = "SÁBADO";
-                    return true;
-                }
-
-                if (value.IndexOf("DOMINGO", System.StringComparison.OrdinalIgnoreCase) >= 0
-                    || value.IndexOf("SUNNUNTAI", System.StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    day = "DOMINGO";
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         private bool ForceSetPropertyStringParameter(object action, string value)
         {
             return FsmUtils.SetNestedStringValue(action, value, "targetProperty", "StringParameter");
@@ -631,24 +523,6 @@ namespace MSC_Localization_Core
 
             HutongGames.PlayMaker.FsmString stringValue = stringValueField.GetValue(action) as HutongGames.PlayMaker.FsmString;
             return FsmUtils.SetFsmStringValue(stringValue, value);
-        }
-
-        private bool TryApplyRallyClassSource(FsmTarget target)
-        {
-            if (target == null)
-                return false;
-
-            PlayMakerFSM fsm = GetFsmForTarget(target);
-            if (!IsFsmReady(fsm))
-                return false;
-
-            bool changed = false;
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, target.StateName);
-            if (state != null && state.Actions != null && target.ActionIndex >= 0 && target.ActionIndex < state.Actions.Length)
-                changed |= TranslateAction(state.Actions[target.ActionIndex], target);
-
-            changed |= TranslateTextMeshesForTarget(target);
-            return changed;
         }
 
         private bool TranslateBuildString(object action, FsmTarget target)
@@ -1101,15 +975,6 @@ namespace MSC_Localization_Core
             resolvedTargets.Add(target.Key);
         }
 
-        private static bool IsRallyPlayerResultsTarget(FsmTarget target)
-        {
-            return target != null
-                && TextMatchesExact(target.ObjectPath, "Sheets/RallyResults/PlayerResults")
-                && TextMatchesExact(target.FsmName, "Data")
-                && ((TextMatchesExact(target.StateName, "State 1") && target.ActionIndex == 0)
-                    || (TextMatchesExact(target.StateName, "State 3") && target.ActionIndex == 2));
-        }
-
         private static bool IsRuntimeTeletextTarget(FsmTarget target)
         {
             if (target == null || string.IsNullOrEmpty(target.ObjectPath))
@@ -1129,19 +994,6 @@ namespace MSC_Localization_Core
 
             return target.ObjectPath.IndexOf("Systems/Teletext/VKTekstiTV/PAGES/188/Texts/", System.StringComparison.OrdinalIgnoreCase) >= 0
                 || target.ObjectPath.IndexOf("Systems/Teletext/VKTekstiTV/PAGES/250/Texts/", System.StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-
-        private static bool IsRuntimeLongSubtitleTarget(FsmTarget target)
-        {
-            if (target == null || string.IsNullOrEmpty(target.ObjectPath))
-                return false;
-
-            return TextMatchesExact(target.ObjectPath, "STORE/TeimoInShop/Pivot/Speak")
-                || TextMatchesExact(target.ObjectPath, "KILJUGUY/HikerPivot/JokkeHiker2")
-                || TextMatchesExact(target.ObjectPath, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring")
-                || TextMatchesExact(target.ObjectPath, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations")
-                || TextMatchesExact(target.ObjectPath, "JOBS/Mummola/TalkEngine")
-                || TextMatchesExact(target.ObjectPath, "YARD/UNCLE/Home/UncleDrinking/Uncle");
         }
 
         private static bool IsTargetForScene(FsmTarget target, string currentScene)

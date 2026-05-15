@@ -44,8 +44,8 @@ namespace MSC_Localization_Core
         }
 
         public string Name { get { return "SubtitleTimingHandler"; } }
-        public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
-        public bool IsComplete { get { return resolvedRules.Count >= rules.Count; } }
+        public SurfaceCadence Cadence { get { return SurfaceCadence.OncePerScene; } }
+        public bool IsComplete { get { return true; } }
 
         public void Initialize(TranslationContext ctx)
         {
@@ -62,10 +62,7 @@ namespace MSC_Localization_Core
 
         public int MonitorTick(float deltaTime)
         {
-            if (Application.loadedLevelName != "GAME")
-                return 0;
-
-            return ApplyTimings();
+            return 0;
         }
 
         public void Reset()

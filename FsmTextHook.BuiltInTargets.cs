@@ -43,9 +43,8 @@ namespace MSC_Localization_Core
             AddTargetRule(byKey, "Systems/Teletext/VKTekstiTV/PAGES/188/Texts/Forecast", "", "State 6", 0, "SELKE\u00c4\u00c4");
 
             // Teletext rally pages
-            AddTargetRule(byKey, "Systems/Teletext/VKTekstiTV/PAGES/250/Texts/TeleTextResults", "", "State 2", 0, "Rallisprintin SM-osakilpailu Per\u00e4j\u00e4rvi, Alivieska");
+            AddTargetRule(byKey, "Systems/Teletext/VKTekstiTV/PAGES/250/Texts/TeleTextResults", "", "State 2", 0, "Rallisprint-SM Per\u00e4j\u00e4rvi, Lauantai");
             AddTargetRule(byKey, "Systems/Teletext/VKTekstiTV/PAGES/250/Texts/TeleTextResults", "", "State 3", 0, "RALLISPRINT-SM PER\u00c4J\u00c4RVI, SUNNUNTAI");
-            AddTargetRule(byKey, "Systems/Teletext/VKTekstiTV/PAGES/250/Texts/TeleTextResults", "", "State 3", 0, "RALLISPRINT-SM PER\u00c4J\u00c4RVI, LAUANTAI");
             AddTargetRule(byKey, "RALLY/RallyTV/Program/RallyTVGUI/Results", "", "State 2", 0, "Rallisprintin SM-osakilpailu Per\u00e4j\u00e4rvi, Alivieska");
             AddTargetRule(byKey, "RALLY/RallyTV/Program/RallyTVGUI/Results", "", "State 3", 0, "Rallisprint-SM Per\u00e4j\u00e4rvi, Sunnantai");
 
