@@ -115,26 +115,9 @@ namespace MSC_Localization_Core
             AddTargetRule(byKey, "Sheets/Arrestwarrant/Texts/Description", "", "State 1", 2, "n. 180cm,");
             AddTargetRule(byKey, "Sheets/Arrestwarrant/Texts/Description", "", "State 1", 2, "kg / likainen");
 
-            // Long subtitle FSM text
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 34", 2, "\"And drunk again? Please do not puke inside the frozen fish fridge, like that one occasion.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 15", 2, "\"They say fuel price is high. I say, they haven't seen anything yet. It will cost more than milk one day.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 21", 2, "\"You know the green car that drives the backroads and never stops for gas? I think the car runs with alcohol.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 22", 2, "\"I do not think that mosquito spray really works. Even after spraying full can those little punks keep flying around.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 16", 2, "\"This economic regression. It can get quite bad. I might need to discount sausage prices.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 11", 2, "\"I can't understand today's music at all. Must be something that has been made for punks.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 24", 2, "\"Those punks. Why do they keep calling me in the middle of the night? I have since unplugged my phone for the night.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 5", 2, "\"Did you know I used to be a wrestler? Not professional though.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 6", 2, "\"What and odd summer. It rains and then rain stops.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 7", 2, "\"Have you listened a radio lately? It is full of punks these days.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 8", 2, "\"I used to be a quite a fisherman. Thats one thing I used to be.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 10", 2, "\"I used to have a dog. Again one thing I used to have.\"");
-            AddTargetRule(byKey, "STORE/TeimoInShop/Pivot/Speak", "", "State 27", 2, "\"So, are you participating the rally? I was once second when there were two competitors. Sometimes you come out alive.\"");
-            AddTargetRule(byKey, "KILJUGUY/HikerPivot/JokkeHiker2", "", "Marriage 2", 1, "\"My wife is going to move to Vaasa and get herself a finnswede man. Those are so clean and sober! 30 years of marriage down the drain.\"");
-            AddTargetRule(byKey, "KILJUGUY/HikerPivot/JokkeHiker2", "", "Lotto1 2", 1, "\"My wife did not know she had a winning Lottery ticket. I took it and got the money myself... 5 million marks!\"");
+            // Long subtitle FSM text with extended waits
             AddTargetRule(byKey, "KILJUGUY/HikerPivot/JokkeHiker2", "", "Lotto1 3", 1, "\"I have the money in a hidden suitcase. But I can't use the money because wife would get suspicious... She would leave me if she had that money!\"");
             AddTargetRule(byKey, "KILJUGUY/HikerPivot/JokkeHiker2", "", "Lotto1 4", 1, "\"I need to act like I always do... I am richest drunk bum there is! At least my wife stays with me. Not with some dorky finnswede tomato farmer.\"");
-            AddTargetRule(byKey, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "", "Drunk lift", 0, "\"I tried to call everybody. Please can you pick me up from the Pub and drive me home?\"");
-            AddTargetRule(byKey, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "", "Moving", 0, "\"My wife left me. I bought a apartment with nice lakeview. Could you come by and help me with moving my stuff?\"");
             AddTargetRule(byKey, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "", "Fleetari rally", 1, "\"I can't believe it... You are rally winner. I must admit you have such big balls. I thought you were going to die, but you won!\"");
             AddTargetRule(byKey, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "", "State 12", 0, "\"It's Fleetari here! You moron, bring back my car or I make sure your shit bucket car does not see another day!\"");
             AddTargetRule(byKey, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "", "Fleetari shit", 1, "\"It is Fleetari here. Want to earn 10 bottles of booze? Dump some shit at the front of the Lindell inspection shop. That sucker deserves it.\"");
@@ -143,9 +126,7 @@ namespace MSC_Localization_Core
             AddTargetRule(byKey, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "", "State 23", 0, "\"Is Teimo selling you that shit? He should sell some Kurjala instead. Everything is just shit.\"");
             AddTargetRule(byKey, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "", "State 14", 0, "\"Stop dancing with your fist female. I will smack your face and you fly like a wooden javelin!\"");
             AddTargetRule(byKey, "JOBS/Mummola/TalkEngine", "", "Speak 1", 1, "\"Your dad is quite sober man. I thought he would start drinking after being rejected from 1972 Olympics.\"");
-            AddTargetRule(byKey, "YARD/UNCLE/Home/UncleDrinking/Uncle", "", "", -1, "\"Now that I am drunk, I need to avoid those crap wells... There are no cops to lift me up. There were once, I was able to get out.\"");
             AddTargetRule(byKey, "YARD/UNCLE/Home/UncleDrinking/Uncle", "", "No license", 2, "\"Damn, I was speeding and got caught! So I lost my drivers license... I could have explained that I need it for my job, but well...\"");
-            AddTargetRule(byKey, "YARD/UNCLE/Home/UncleDrinking/Uncle", "", "", -1, "\"I've been thinking that there should be alcohol in the clouds. If it rains, you could drink it. Or fill up bottles and sell it.\"");
             AddTargetRule(byKey, "YARD/UNCLE/Home/UncleDrinking/Uncle", "", "No license 2", 0, "\"I haven't exactly paid my income taxes, so basically in legal terms, I am not doing any work either... He he.\"");
 
             // COMPUTER: POS boot / shell command output
