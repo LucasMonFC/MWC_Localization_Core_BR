@@ -55,10 +55,10 @@ Current surfaces:
 | Surface | What it patches | Cadence |
 |---|---|---|
 | [GuiTextMonitor.cs](GuiTextMonitor.cs) | HUD primary/shadow paired meshes and HUD value meshes, including rally HUD GUI | PerFrame |
-| [FsmArrayTranslator.cs](FsmArrayTranslator.cs) | `Systems/Teletext/VKTekstiTV/Database` ArrayList content through category/index lookup, temporarily activating teletext like ExtraTranslate when needed | Slow until complete |
+| [FsmArrayTranslator.cs](FsmArrayTranslator.cs) | `Systems/Teletext/VKTekstiTV/Database` ArrayList content through category/index lookup, temporarily activating teletext when needed | Slow until complete |
 | [ArrayListProxyHandler.cs](ArrayListProxyHandler.cs) | Hardcoded ArrayList paths such as HUD day names, plus known parent font paths | Slow |
 | [FsmTextHook.cs](FsmTextHook.cs) + [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) | FSM action fields, `FsmString` variables, `BuildString` parts, `SetStringValue`, `SetProperty` string parameters, runtime teletext/weather/rally text, and rally result sheet sources | Fast |
-| [SubtitleTimingHandler.cs](SubtitleTimingHandler.cs) | ExtraTranslate-compatible `Wait.time` extensions for selected long subtitles; also exposes the retained-subtitle duration map used by `GuiTextMonitor` | Slow |
+| [SubtitleTimingHandler.cs](SubtitleTimingHandler.cs) | `Wait.time` extensions for selected long subtitles; also exposes the retained-subtitle duration map used by `GuiTextMonitor` | Slow |
 
 `LateUpdateHandler.Initialize` offsets consecutive `Slow` surfaces by `ARRAY_MONITOR_STEP_INTERVAL` so they do not all fire on the same frame.
 
@@ -102,7 +102,7 @@ When adding new state to a surface, wire it into `Reset()` for runtime caches an
 - `translate_msc.txt` and `translate_magazine.txt` are not loaded in the MSC port.
 - Magazine, MWC VIN plate, TV chat, ATM, Fleetari payment, and PostSystem keyword hash-table logic have been removed.
 - Rally result sheets remain supported through FSM hooks and forced-font paths.
-- ExtraTranslate-style long subtitle text hooks belong in `FsmTextHook.BuiltInTargets.cs`; their matching `Wait.time` rules belong in `SubtitleTimingHandler.cs` so translated subtitles stay visible for the same duration.
+- Long subtitle text hooks belong in `FsmTextHook.BuiltInTargets.cs`; their matching `Wait.time` rules belong in `SubtitleTimingHandler.cs` so translated subtitles stay visible for the same duration.
 - New PlayMaker FSM hooks belong in [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) via `AddTargetRule(...)`.
 - Console output should go through `CoreConsole.Print/Warning/Error`, not `ModConsole` directly.
 

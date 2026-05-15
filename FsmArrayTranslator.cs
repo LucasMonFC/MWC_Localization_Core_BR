@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MSC_Localization_Core
 {
     /// <summary>
-    /// MSC teletext database translator. Mirrors ExtraTranslate's safe strategy:
+    /// MSC teletext database translator. Uses the safe in-game strategy:
     /// temporarily activate Systems/Teletext so the database ArrayLists populate,
     /// translate those lists, then restore the previous active state.
     /// </summary>

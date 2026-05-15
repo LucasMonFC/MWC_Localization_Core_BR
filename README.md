@@ -30,7 +30,7 @@ The project references My Summer Car managed assemblies from the path configured
 **Automatic Translation** - Scans TextMesh components and replaces text.
 **PlayMaker FSM Hooks** - Patches known FSM action fields and variables used by menus, sheets, rally UI, computer screens, and teletext.
 **Teletext Translation** - Translates `VKTekstiTV` database pages through `translate_teletext.txt`, plus runtime weather and rally-day strings on teletext pages that the game rebuilds while the TV is open.
-**Long Subtitle Timing** - Mirrors ExtraTranslate's longer `Wait` timings for selected long subtitles and keeps the translated subtitle visible until the matching wait expires.
+**Long Subtitle Timing** - Extends selected long subtitle `Wait` timings and keeps the translated subtitle visible until the matching wait expires.
 **Configurable Fonts** - Maps original game fonts to localized custom fonts.
 **Non-ASCII Support** - Custom fonts and forced-font paths keep accented text and other non-ASCII glyphs readable on surfaces that the game rebuilds dynamically.
 **Position Adjustments** - Fine-tunes text placement per language.

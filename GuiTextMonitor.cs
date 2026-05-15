@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MSC_Localization_Core
 {
     /// <summary>
-    /// Lightweight direct GUI monitor, modeled after the old LanguageFramework HUD pass.
+    /// Lightweight direct GUI monitor for HUD text meshes.
     /// The primary TextMesh is translated once, then copied to shadow/paired meshes.
     /// </summary>
     public class GuiTextMonitor : ITranslationSurface
