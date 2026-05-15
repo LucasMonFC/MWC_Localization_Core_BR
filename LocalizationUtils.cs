@@ -155,6 +155,33 @@ namespace MSC_Localization_Core
         }
 
         /// <summary>
+        /// Like FindGameObjectIncludingInactive but returns every GameObject whose
+        /// full hierarchy path equals path. Some MSC hierarchies reuse identical
+        /// paths for sibling objects, so callers that need every match should cache
+        /// this result locally instead of using the single-object cache.
+        /// </summary>
+        public static List<GameObject> FindAllGameObjectsIncludingInactive(string path)
+        {
+            List<GameObject> result = new List<GameObject>();
+            if (string.IsNullOrEmpty(path))
+                return result;
+
+            string leafName = path.Substring(path.LastIndexOf('/') + 1);
+            Transform[] all = Resources.FindObjectsOfTypeAll<Transform>();
+            for (int i = 0; i < all.Length; i++)
+            {
+                Transform t = all[i];
+                if (t == null || t.name != leafName)
+                    continue;
+
+                if (GetGameObjectPath(t.gameObject) == path)
+                    result.Add(t.gameObject);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Shared accessor for all TextMeshes including inactive ones.
         /// </summary>
         public static TextMesh[] GetAllTextMeshesIncludingInactive()

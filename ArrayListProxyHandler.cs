@@ -146,7 +146,7 @@ namespace MSC_Localization_Core
                 }
 
                 // Find GameObject
-                GameObject obj = LocalizationUtils.FindGameObjectCached(objectPath);
+                GameObject obj = LocalizationUtils.FindGameObjectIncludingInactive(objectPath);
                 if (obj == null)
                 {
                     // Not available yet - this is normal for lazy-loaded content
@@ -168,7 +168,11 @@ namespace MSC_Localization_Core
 
             // Translate array contents using existing translation dictionaries
             int translatedCount = 0;
+            translatedCount += TranslatePreFillStringList(proxy);
+
             ArrayList arrayList = proxy.arrayList;
+            if (arrayList == null)
+                return translatedCount;
 
             for (int i = 0; i < arrayList.Count; i++)
             {
@@ -232,6 +236,31 @@ namespace MSC_Localization_Core
             return totalTranslated;
         }
 
+        // Translate a proxy's serialized prefill list in place. Returns count translated.
+        private int TranslatePreFillStringList(PlayMakerArrayListProxy proxy)
+        {
+            if (proxy == null || proxy.preFillStringList == null || proxy.preFillStringList.Count == 0)
+                return 0;
+
+            int translatedCount = 0;
+            List<string> preFill = proxy.preFillStringList;
+            for (int i = 0; i < preFill.Count; i++)
+            {
+                string original = preFill[i];
+                if (string.IsNullOrEmpty(original))
+                    continue;
+
+                string translation = FindTranslation(original);
+                if (translation == null)
+                    continue;
+
+                preFill[i] = translation;
+                translatedCount++;
+            }
+
+            return translatedCount;
+        }
+
         // Find translation from main translations.
         private string FindTranslation(string original)
         {
@@ -262,7 +291,7 @@ namespace MSC_Localization_Core
                 if (completedParentPaths.Contains(parentPath))
                     continue;
 
-                GameObject parent = LocalizationUtils.FindGameObjectCached(parentPath);
+                GameObject parent = LocalizationUtils.FindGameObjectIncludingInactive(parentPath);
                 if (parent == null)
                     continue; // Not loaded yet - will try again later
 

@@ -255,10 +255,12 @@ namespace MSC_Localization_Core
             if (textMesh == null || string.IsNullOrEmpty(path))
                 return false;
 
-            if (path.Contains("GUI/Indicators/Subtitles") || path.Contains("GUI/Indicators/Partname"))
+            if (path.Contains("GUI/Indicators/Subtitles"))
             {
                 textMesh.alignment = TextAlignment.Center;
                 textMesh.anchor = TextAnchor.LowerCenter;
+                if (!path.Contains("/Shadow"))
+                    textMesh.transform.localPosition = new Vector3(textMesh.transform.localPosition.x, -1.0f, textMesh.transform.localPosition.z);
             }
 
             // Find matching adjustment and apply it

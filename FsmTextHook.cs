@@ -18,7 +18,7 @@ namespace MSC_Localization_Core
 
         public int InitialPass()
         {
-            UpdateForCurrentScene(true);
+            UpdateForCurrentScene();
             return 0;
         }
 
@@ -41,15 +41,13 @@ namespace MSC_Localization_Core
         private readonly List<FsmTarget> targets = new List<FsmTarget>();
         private TranslationDictionary translations;
         private readonly Dictionary<string, string> translationCache = new Dictionary<string, string>();
-        private readonly Dictionary<string, PlayMakerFSM> exactFsmCache = new Dictionary<string, PlayMakerFSM>();
+        private readonly Dictionary<string, List<PlayMakerFSM>> indexedFsmCache = new Dictionary<string, List<PlayMakerFSM>>();
         private readonly Dictionary<string, List<PlayMakerFSM>> fsmListCache = new Dictionary<string, List<PlayMakerFSM>>();
         private readonly Dictionary<string, List<PlayMakerArrayListProxy>> arrayListProxyCache = new Dictionary<string, List<PlayMakerArrayListProxy>>();
         private readonly Dictionary<string, List<TextMesh>> textMeshCache = new Dictionary<string, List<TextMesh>>();
         private readonly HashSet<string> resolvedTargets = new HashSet<string>();
         private readonly HashSet<string> warnedTargets = new HashSet<string>();
         private readonly HashSet<int> initializedFsmIds = new HashSet<int>();
-
-        private int pendingTargetIndex;
 
         private sealed class FsmRule
         {
@@ -93,16 +91,15 @@ namespace MSC_Localization_Core
 
         public void ResetRuntimeState()
         {
-            pendingTargetIndex = 0;
             ClearRuntimeCaches();
         }
 
-        public bool UpdateForCurrentScene(bool force)
+        private bool UpdateForCurrentScene()
         {
-            return UpdateForScene(Application.loadedLevelName, force);
+            return UpdateForScene(Application.loadedLevelName);
         }
 
-        public bool UpdateForScene(string currentScene, bool force)
+        private bool UpdateForScene(string currentScene)
         {
             if (targets.Count == 0)
                 return false;
@@ -112,18 +109,15 @@ namespace MSC_Localization_Core
             if (!isMainMenu && !isGame)
                 return false;
 
-            if (!force)
-                return false;
-
             bool changed = false;
             if (isGame)
             {
                 changed |= TryApplyTeletextTargets();
             }
 
-            changed |= ApplyPendingTargets(currentScene, targets.Count);
+            changed |= ApplySceneTargets(currentScene);
             if (changed)
-                CoreConsole.Print("[FsmTextHook] Applied pending hardcoded FSM translations in " + currentScene);
+                CoreConsole.Print("[FsmTextHook] Applied hardcoded FSM translations in " + currentScene);
 
             return changed;
         }
@@ -186,27 +180,15 @@ namespace MSC_Localization_Core
             });
         }
 
-        private bool ApplyPendingTargets(string currentScene, int maxTargets)
+        private bool ApplySceneTargets(string currentScene)
         {
             bool changed = false;
-            if (targets.Count == 0 || maxTargets <= 0)
-                return false;
-
-            int checkedCount = 0;
-            int processedCount = 0;
-            while (checkedCount < targets.Count && processedCount < maxTargets)
+            for (int i = 0; i < targets.Count; i++)
             {
-                if (pendingTargetIndex >= targets.Count)
-                    pendingTargetIndex = 0;
-
-                FsmTarget target = targets[pendingTargetIndex];
-                pendingTargetIndex++;
-                checkedCount++;
-
+                FsmTarget target = targets[i];
                 if (target == null || resolvedTargets.Contains(target.Key) || !IsTargetForScene(target, currentScene))
                     continue;
 
-                processedCount++;
                 bool resolved;
                 changed |= TryApplyTarget(target, out resolved);
                 if (resolved)
@@ -257,16 +239,23 @@ namespace MSC_Localization_Core
                 return changed;
             }
 
-            PlayMakerFSM fsm = GetFsmForTarget(target);
-            if (!IsFsmReady(fsm) || fsm.FsmStates == null)
-                return false;
+            List<PlayMakerFSM> indexedFsms = GetFsmsForIndexedTarget(target);
+            bool indexedChanged = false;
+            for (int i = 0; i < indexedFsms.Count; i++)
+            {
+                PlayMakerFSM fsm = indexedFsms[i];
+                if (!IsFsmReady(fsm) || fsm.FsmStates == null)
+                    continue;
 
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, target.StateName);
-            if (state == null || state.Actions == null || target.ActionIndex < 0 || target.ActionIndex >= state.Actions.Length)
-                return false;
+                HutongGames.PlayMaker.FsmState state = FindState(fsm, target.StateName);
+                if (state == null || state.Actions == null || target.ActionIndex < 0 || target.ActionIndex >= state.Actions.Length)
+                    continue;
 
-            resolved = true;
-            return TranslateAction(state.Actions[target.ActionIndex], target);
+                resolved = true;
+                indexedChanged |= TranslateAction(state.Actions[target.ActionIndex], target);
+            }
+
+            return indexedChanged;
         }
 
         private bool TranslateWholeFsm(PlayMakerFSM fsm, FsmTarget target)
@@ -360,9 +349,13 @@ namespace MSC_Localization_Core
                 }
                 else
                 {
-                    PlayMakerFSM fsm = GetFsmForTarget(target);
-                    if (IsFsmReady(fsm))
+                    List<PlayMakerFSM> fsms = GetFsmsForIndexedTarget(target);
+                    for (int fsmIndex = 0; fsmIndex < fsms.Count; fsmIndex++)
                     {
+                        PlayMakerFSM fsm = fsms[fsmIndex];
+                        if (!IsFsmReady(fsm))
+                            continue;
+
                         changed |= ForceRuntimeTeletextActionValue(fsm, target);
                         changed |= TranslateActionTarget(fsm, target, out resolved);
                     }
@@ -1129,22 +1122,30 @@ namespace MSC_Localization_Core
             builder.Append(translation);
         }
 
-        private PlayMakerFSM GetFsmForTarget(FsmTarget target)
+        private List<PlayMakerFSM> GetFsmsForIndexedTarget(FsmTarget target)
         {
-            string cacheKey = target.Key;
-            PlayMakerFSM cached;
-            if (exactFsmCache.TryGetValue(cacheKey, out cached) && cached != null)
+            List<PlayMakerFSM> cached;
+            if (indexedFsmCache.TryGetValue(target.Key, out cached) && AreFsmsValid(cached))
                 return cached;
 
-            GameObject exactObject = LocalizationUtils.FindGameObjectIncludingInactive(target.ObjectPath);
-            PlayMakerFSM fsm = FindMatchingFsmOnObject(exactObject, target.FsmName, target.StateName);
-            if (fsm == null)
-                fsm = FindMatchingFsmByPrefix(target);
+            List<PlayMakerFSM> result = new List<PlayMakerFSM>();
+            List<GameObject> objects = LocalizationUtils.FindAllGameObjectsIncludingInactive(target.ObjectPath);
+            for (int i = 0; i < objects.Count; i++)
+            {
+                AddMatchingFsms(objects[i].GetComponents<PlayMakerFSM>(), target, result);
+            }
 
-            if (fsm != null)
-                exactFsmCache[cacheKey] = fsm;
+            if (result.Count == 0)
+            {
+                PlayMakerFSM fallback = FindMatchingFsmByPrefix(target);
+                if (fallback != null)
+                    result.Add(fallback);
+            }
 
-            return fsm;
+            if (result.Count > 0)
+                indexedFsmCache[target.Key] = result;
+
+            return result;
         }
 
         private List<PlayMakerFSM> GetFsmsForWholeTarget(FsmTarget target)
@@ -1411,7 +1412,7 @@ namespace MSC_Localization_Core
         private void ClearRuntimeCaches()
         {
             translationCache.Clear();
-            exactFsmCache.Clear();
+            indexedFsmCache.Clear();
             fsmListCache.Clear();
             arrayListProxyCache.Clear();
             textMeshCache.Clear();
