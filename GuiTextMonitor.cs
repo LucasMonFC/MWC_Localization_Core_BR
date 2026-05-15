@@ -109,6 +109,10 @@ namespace MSC_Localization_Core
             // FishingMod rewrites market/derby boards as shop state changes.
             AddGuiEntry("selltext");
             AddGuiEntry("comptext");
+
+            // LetItRust creates these HUD prompts after scene load.
+            AddGuiEntry("GUI/HUD/FleetariDialoguePrompt", "GUI/HUD/FleetariDialoguePrompt/HUDLabelShadow");
+            AddGuiEntry("GUI/HUD/VenttiDialoguePrompt", "GUI/HUD/VenttiDialoguePrompt/HUDLabelShadow");
         }
 
         private GuiTextEntry AddGuiEntry(string primaryPath, params string[] copyPaths)

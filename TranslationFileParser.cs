@@ -36,8 +36,8 @@ namespace MSC_Localization_Core
                     if (separatorIndex <= 0)
                         continue;
 
-                    // Extract key and value, unescape \= -> =
-                    string key = line.Substring(0, separatorIndex).Trim().Replace("\\=", "=");
+                    // Extract key and value, unescape authoring escapes.
+                    string key = UnescapeString(line.Substring(0, separatorIndex).Trim());
                     // Preserve intentional leading AND trailing spaces in translation values.
                     // Spaces are needed for proper formatting in concatenated strings
                     string value = line.Substring(separatorIndex + 1).Replace("\\=", "=");
