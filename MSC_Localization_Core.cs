@@ -186,6 +186,13 @@ namespace MSC_Localization_Core
                 RunSurfaceInitialPasses("Initial ");
                 config.ApplyGameObjectAdjustments();
             }
+            else if (sceneName == "Ending" && ShouldTranslateScene("Ending"))
+            {
+                CoreConsole.Print($"[{Name}] Translating Ending scene...");
+                TranslateScene();
+                MarkSceneTranslated("Ending");
+                config.ApplyGameObjectAdjustments();
+            }
         }
 
         // Scene tracking (formerly SceneTranslationManager). Leaving a known scene
@@ -341,11 +348,12 @@ namespace MSC_Localization_Core
 
             // Force initial passes for the current scene if applicable
             string sceneName = Application.loadedLevelName;
-            if (sceneName == "MainMenu" || sceneName == "GAME")
+            if (sceneName == "MainMenu" || sceneName == "GAME" || sceneName == "Ending")
             {
                 currentScene = sceneName;
                 MarkSceneTranslated(sceneName);
-                RunSurfaceInitialPasses("Reload ");
+                if (sceneName != "Ending")
+                    RunSurfaceInitialPasses("Reload ");
                 config.ApplyGameObjectAdjustments();
             }
 
