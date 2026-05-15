@@ -885,8 +885,8 @@ Voitonjako:       kpl             mk = Premiados:       QUANT         MARCOS
 Lottoarvonta aina lauantaisin klo 21. = Loteria sempre aos sábados às 21h.
 RALLISPRINT-SM PERÄJÄRVI, SUNNUNTAI = RALLISPRINT-SM PERÄJÄRVI, DOMINGO
 RALLISPRINT-SM PERÄJÄRVI, LAUANTAI = RALLISPRINT-SM PERÄJÄRVI, SÁBADO
-haku = BUSCA
-STOP = PARE
+haku = BUSCANDO
+STOP = PÚBLICA
 
 //Computer POS
 CONNECTION ESTABLISHED: WAITING = CONEXÃO ESTABELECIDA: AGUARDANDO

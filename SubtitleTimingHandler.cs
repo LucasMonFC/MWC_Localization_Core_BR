@@ -102,33 +102,69 @@ namespace MSC_Localization_Core
         {
             List<TimingRule> createdRules = new List<TimingRule>();
 
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 34", -1, 30f,
+                "\"And drunk again? Please do not puke inside the frozen fish fridge, like that one occasion.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 15", -1, 30f,
+                "\"They say fuel price is high. I say, they haven't seen anything yet. It will cost more than milk one day.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 21", -1, 30f,
+                "\"You know the green car that drives the backroads and never stops for gas? I think the car runs with alcohol.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 22", -1, 30f,
+                "\"I do not think that mosquito spray really works. Even after spraying full can those little punks keep flying around.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 16", -1, 30f,
+                "\"This economic regression. It can get quite bad. I might need to discount sausage prices.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 11", -1, 30f,
+                "\"I can't understand today's music at all. Must be something that has been made for punks.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 24", -1, 30f,
+                "\"Those punks. Why do they keep calling me in the middle of the night? I have since unplugged my phone for the night.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 5", -1, 30f,
+                "\"Did you know I used to be a wrestler? Not professional though.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 6", -1, 30f,
+                "\"What and odd summer. It rains and then rain stops.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 7", -1, 30f,
+                "\"Have you listened a radio lately? It is full of punks these days.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 8", -1, 30f,
+                "\"I used to be a quite a fisherman. Thats one thing I used to be.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 10", -1, 30f,
+                "\"I used to have a dog. Again one thing I used to have.\"");
+            AddRule(createdRules, "STORE/TeimoInShop/Pivot/Speak", "State 27", -1, 30f,
+                "\"So, are you participating the rally? I was once second when there were two competitors. Sometimes you come out alive.\"");
+            AddRule(createdRules, "KILJUGUY/HikerPivot/JokkeHiker2", "Marriage 2", -1, 25f,
+                "\"My wife is going to move to Vaasa and get herself a finnswede man. Those are so clean and sober! 30 years of marriage down the drain.\"");
+            AddRule(createdRules, "KILJUGUY/HikerPivot/JokkeHiker2", "Lotto1 2", -1, 25f,
+                "\"My wife did not know she had a winning Lottery ticket. I took it and got the money myself... 5 million marks!\"");
             AddRule(createdRules, "KILJUGUY/HikerPivot/JokkeHiker2", "Lotto1 3", 3, 60f,
                 "\"I have the money in a hidden suitcase. But I can't use the money because wife would get suspicious... She would leave me if she had that money!\"");
             AddRule(createdRules, "KILJUGUY/HikerPivot/JokkeHiker2", "Lotto1 4", 3, 60f,
                 "\"I need to act like I always do... I am richest drunk bum there is! At least my wife stays with me. Not with some dorky finnswede tomato farmer.\"");
-
+            AddRule(createdRules, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "Drunk lift", -1, 25f,
+                "\"I tried to call everybody. Please can you pick me up from the Pub and drive me home?\"");
+            AddRule(createdRules, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "Moving", -1, 25f,
+                "\"My wife left me. I bought a apartment with nice lakeview. Could you come by and help me with moving my stuff?\"");
             AddRule(createdRules, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "Fleetari rally", 3, 80f,
                 "\"I can't believe it... You are rally winner. I must admit you have such big balls. I thought you were going to die, but you won!\"");
             AddRule(createdRules, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "State 12", 2, 80f,
                 "\"It's Fleetari here! You moron, bring back my car or I make sure your shit bucket car does not see another day!\"");
             AddRule(createdRules, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "Fleetari shit", 6, 80f,
                 "\"It is Fleetari here. Want to earn 10 bottles of booze? Dump some shit at the front of the Lindell inspection shop. That sucker deserves it.\"");
-
             AddRule(createdRules, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "Race", 2, 50f,
                 "\"So you would like to race with that shit bucket of yours? Which one is faster?\"");
             AddRule(createdRules, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "State 3", 2, 25f,
                 "\"Who is this pussy-ass idiot?\"");
-            AddRule(createdRules, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "State 23", 2, 35f,
+            AddRule(createdRules, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "State 23", 2, 25f,
                 "\"Is Teimo selling you that shit? He should sell some Kurjala instead. Everything is just shit.\"");
             AddRule(createdRules, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "State 14", 2, 25f,
                 "\"Stop dancing with your fist female. I will smack your face and you fly like a wooden javelin!\"");
-
             AddRule(createdRules, "JOBS/Mummola/TalkEngine", "Speak 1", 2, 60f,
                 "\"Your dad is quite sober man. I thought he would start drinking after being rejected from 1972 Olympics.\"");
-
-            AddRule(createdRules, "YARD/UNCLE/Home/UncleDrinking/Uncle", "No license", 3, 30f, 1,
+            AddRule(createdRules, "REPAIRSHOP/LOD/Office/Fleetari", "Say fuck", -1, 25f,
+                "\"That car of yours ruins my driveway.\"");
+            AddRule(createdRules, "YARD/UNCLE/Home/UncleDrinking/Uncle", "", -1, 25f,
+                "\"Now that I am drunk, I need to avoid those crap wells... There are no cops to lift me up. There were once, I was able to get out.\"");
+            AddRule(createdRules, "YARD/UNCLE/Home/UncleDrinking/Uncle", "No license", 3, 25f, 1,
                 "\"Damn, I was speeding and got caught! So I lost my drivers license... I could have explained that I need it for my job, but well...\"");
-            AddRule(createdRules, "YARD/UNCLE/Home/UncleDrinking/Uncle", "No license 2", 1, 30f, 1,
+            AddRule(createdRules, "YARD/UNCLE/Home/UncleDrinking/Uncle", "", -1, 25f,
+                "\"I've been thinking that there should be alcohol in the clouds. If it rains, you could drink it. Or fill up bottles and sell it.\"");
+            AddRule(createdRules, "YARD/UNCLE/Home/UncleDrinking/Uncle", "No license 2", 1, 25f, 1,
                 "\"I haven't exactly paid my income taxes, so basically in legal terms, I am not doing any work either... He he.\"");
 
             return createdRules;
@@ -151,6 +187,8 @@ namespace MSC_Localization_Core
             {
                 TimingRule rule = rules[i];
                 if (resolvedRules.Contains(rule.Key))
+                    continue;
+                if (rule.ActionIndex < 0)
                     continue;
 
                 bool changed;
