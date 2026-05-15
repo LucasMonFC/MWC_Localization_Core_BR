@@ -43,7 +43,7 @@ The game rebuilds TextMesh content, FSM string values, and ArrayList contents du
 Every place the mod patches text is modeled as an `ITranslationSurface` ([TranslationSurface.cs](TranslationSurface.cs)). The main class holds a single `List<ITranslationSurface>` and dispatches the lifecycle uniformly:
 
 ```csharp
-ctx = new TranslationContext(translations, customFonts, config, translator, magazine, assetsFolder);
+ctx = new TranslationContext(translations, customFonts, config, translator, assetsFolder);
 foreach (s in surfaces) s.Initialize(ctx);
 foreach (s in surfaces) s.InitialPass();          // on scene load + F8 reload
 // LateUpdateHandler iterates surfaces and calls s.MonitorTick(dt) at each surface's Cadence
@@ -57,7 +57,7 @@ Each surface declares a `SurfaceCadence` so the scheduler knows how often to tic
 |---|---|---|
 | `PerFrame` | every LateUpdate | `GuiTextMonitor` — HUD primary→shadow mirroring needs to keep up with per-frame text changes |
 | `Fast` | `FSM_SOURCE_POLL_INTERVAL` (0.2s) | `FsmTextHook` — small dynamic FSM sources the game rebuilds per screen open |
-| `Slow` | `ARRAY_MONITOR_INTERVAL` (2s), staggered | `MagazineTextHandler`, `FsmArrayTranslator`, `ArrayListProxyHandler`, `HashTableProxyHandler` |
+| `Slow` | `ARRAY_MONITOR_INTERVAL` (2s), staggered | `FsmArrayTranslator`, `ArrayListProxyHandler`, `HashTableProxyHandler` |
 | `OncePerScene` | never (only InitialPass) | reserved; no current surfaces |
 
 `LateUpdateHandler.Initialize` offsets the first tick time of consecutive `Slow` surfaces by `ARRAY_MONITOR_STEP_INTERVAL` (0.5s) so they don't all fire on the same frame.
@@ -69,7 +69,7 @@ Each surface declares a `SurfaceCadence` so the scheduler knows how often to tic
    - `translate_msc.txt` (optional My Summer Car base) — main class
    - `translate.txt` (main) — main class
    - `translate_mod.txt` (optional mod content) — main class
-   - `translate_magazine.txt` → `MagazineTextHandler.Initialize` (price/phone line formatting, abbreviated keywords)
+   - `translate_magazine.txt` → main class compatibility shim (bulk-imports Yellow Pages keyword translations into the shared dictionary, then derives the price/phone `BuildString` pieces used by `FsmTextHook` from `PHONE`)
    - `translate_teletext.txt` → `FsmArrayTranslator.Initialize` (category-section INI format kept for backward compatibility; entries are merged into a single flat dictionary at load time, multi-line news keys normalized via `TranslationFileParser.NormalizeMultiLineKey`). Teletext file also feeds FSM patterns into the shared dictionary. At lookup time the FsmArrayTranslator tries its teletext dict first, then falls back to the global `TranslationDictionary` (translate.txt etc.), so shared phrases don't have to be duplicated into `translate_teletext.txt`.
    - All key=value files are normalized by `LocalizationUtils.FormatUpperKey` (uppercase, strip whitespace) at insertion into `TranslationDictionary`. `\=` escapes `=`; `\n` becomes a newline in values.
 3. **Pattern translations** — Entries with `{0}`/`{1}` placeholders are detected during pattern-load scans and become `TranslationPattern`s stored inside `TranslationDictionary`. Modes: `FsmPattern` (literal replacement), `FsmPatternWithTranslation` (extracted params translated through the dictionary), `CustomHandler` (code-only delegate).
@@ -81,7 +81,6 @@ Each row below is one `ITranslationSurface` implementation. The "Component" colu
 | Surface | What it patches | Cadence |
 |---|---|---|
 | [GuiTextMonitor.cs](GuiTextMonitor.cs) | HUD primary→shadow paired meshes (Interaction, PartName, Subtitles) and HUD value meshes (Day/Money/Thirst/etc.) | PerFrame |
-| [MagazineTextHandler.cs](MagazineTextHandler.cs) | Yellow Pages magazine FSM string sources + price/phone line formatting | Slow |
 | [FsmArrayTranslator.cs](FsmArrayTranslator.cs) | Teletext news pages + TV chat: at scene init, splices a custom `FsmStateAction` into every PlayMaker state right after each `SplitTextToArrayList` action; the injected action translates the just-populated `_arrayList` in place before any reader sees it. Lookup chain is `translate_teletext.txt` first, then the global `TranslationDictionary` as fallback. Also translates already-populated proxies (chat's `All` pool) in the same pass. Retires once every tracked path has been processed. | Slow |
 | [ArrayListProxyHandler.cs](ArrayListProxyHandler.cs) | `PlayMakerArrayListProxy._arrayList` for hardcoded paths (HUD days, magazine keyword pools, tire pics). Also applies fonts to TextMeshes under known parent paths. | Slow |
 | [HashTableProxyHandler.cs](HashTableProxyHandler.cs) | `PlayMakerHashTableProxy` (`KeywordsFI`/`KeywordsEN`): live hashtable + snapshot + `preFillStringList` via reflection | Slow |
@@ -97,7 +96,7 @@ Each row below is one `ITranslationSurface` implementation. The "Component" colu
 
 1. `translations.Clear()` + `translations.ResetPatterns()` + `foreach surface.ClearTranslations()`
 2. `LocalizationUtils.ClearCaches()` + `translator.ClearRuntimeCaches()` + `config.ClearTextAdjustmentCaches()` + `foreach surface.Reset()`
-3. Reload config + fonts + main translation files
+3. Reload config + fonts + main translation files + magazine format shim
 4. `foreach surface.Initialize(ctx)` — each surface re-loads its own translation file
 5. Reset scene flags, reapply fonts to all TextMeshes, run `InitialPass` for the current scene
 6. Restart the `LateUpdateHandler` scheduler
@@ -117,7 +116,7 @@ When adding new state to a surface, ensure both `Reset()` (runtime caches) and `
 
 ### Forced-font path prefixes
 
-`LocalizationConfig.ForcedFontPathPrefixes` lists path roots that get the custom font applied even when the text isn't in the translation dictionary (teletext display, computer POS, unemployment letter, rally/service sheets, TV graphics). Check via `LocalizationConfig.IsForcedFontPath(path)`. New "show foreign font correctly even when text stays original" cases go here.
+`LocalizationConfig.ForcedFontPathPrefixes` lists path roots that get the custom font applied even when the text isn't in the translation dictionary (teletext display, computer POS, unemployment letter, rally/service sheets, Yellow Pages, TV graphics). Check via `LocalizationConfig.IsForcedFontPath(path)`. New "show foreign font correctly even when text stays original" cases go here.
 
 ### Excluded paths
 

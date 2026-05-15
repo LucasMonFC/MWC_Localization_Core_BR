@@ -20,7 +20,6 @@ namespace MWC_Localization_Core
 
         // Reference to main translation dictionary (from Plugin)
         private TranslationDictionary mainTranslations;
-        private MagazineTextHandler magazineHandler;
         private TextMeshTranslator translator;
         
         // Config: List of array paths to translate (path:index)
@@ -47,7 +46,6 @@ namespace MWC_Localization_Core
         public void Initialize(TranslationContext ctx)
         {
             mainTranslations = ctx.Translations;
-            magazineHandler = ctx.Magazine;
             translator = ctx.Translator;
             InitializeArrayPaths();
         }
@@ -296,15 +294,14 @@ namespace MWC_Localization_Core
             return translatedCount;
         }
 
-        // Find translation from main translations or magazine translations
+        // Find translation from the shared dictionary. Magazine entries are loaded
+        // into it by the main class compatibility shim.
         private string FindTranslation(string original)
         {
-            // Try main translations first (TryGetExact handles normalization + LRU cache).
             if (mainTranslations.TryGetExact(original, out string translation))
                 return translation;
 
-            // Try magazine translations using the magazine handler's normalized lookup.
-            return magazineHandler.GetTranslation(original);
+            return null;
         }
 
         // Apply localized fonts to TextMesh components displaying array data

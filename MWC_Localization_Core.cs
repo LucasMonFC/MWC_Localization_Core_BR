@@ -27,7 +27,6 @@ namespace MWC_Localization_Core
         private Dictionary<string, Font> customFonts = new Dictionary<string, Font>();
         private LocalizationConfig config;
         private TextMeshTranslator translator;
-        private MagazineTextHandler magazineHandler;
         private TranslationContext ctx;
         private List<ITranslationSurface> surfaces;
 
@@ -79,30 +78,26 @@ namespace MWC_Localization_Core
 
             CoreConsole.Initialize(showDebugLogs, showWarningLogs);
 
-            magazineHandler = new MagazineTextHandler();
             translatedScenes.Clear();
             currentScene = string.Empty;
 
             LoadCustomFonts();
 
-            translator = new TextMeshTranslator(translations, customFonts, magazineHandler, config);
+            translator = new TextMeshTranslator(translations, customFonts, config);
 
             LoadAllMainTranslationFiles();
+            LoadMagazineFormatTranslations();
 
             ctx = new TranslationContext(
                 translations,
                 customFonts,
                 config,
                 translator,
-                magazineHandler,
                 ModLoader.GetModAssetsFolder(this));
 
-            // MagazineTextHandler is both a service (used by other surfaces via ctx.Magazine)
-            // and itself a surface, so the same instance appears in both places.
             surfaces = new List<ITranslationSurface>
             {
                 new GuiTextMonitor(),
-                magazineHandler,
                 new FsmArrayTranslator(),
                 new ArrayListProxyHandler(),
                 new HashTableProxyHandler(),
@@ -245,6 +240,29 @@ namespace MWC_Localization_Core
             }
         }
 
+        private void LoadMagazineFormatTranslations()
+        {
+            string path = Path.Combine(ModLoader.GetModAssetsFolder(this), "translate_magazine.txt");
+            Dictionary<string, string> loaded = TranslationFileParser.ParseKeyValueFile(
+                path,
+                normalizeKeys: true,
+                overwriteExisting: true);
+
+            string phoneLabel;
+            if (!loaded.TryGetValue("PHONE", out phoneLabel) || string.IsNullOrEmpty(phoneLabel))
+                phoneLabel = "PHONE";
+
+            translations.AddAll(loaded);
+            translations.Add("h.", string.Empty);
+            translations.Add(",- puh.", " MK, " + phoneLabel + " -");
+            hasLoadedTranslations = true;
+
+            if (File.Exists(path))
+                CoreConsole.Print($"[{Name}] Loaded {loaded.Count} magazine translations from translate_magazine.txt");
+            else
+                CoreConsole.Warning($"[{Name}] Magazine format file not found: {path}; using default phone label");
+        }
+
         bool LoadCustomFonts()
         {
             CoreConsole.Print($"[{Name}] Loading fonts...");
@@ -324,6 +342,7 @@ namespace MWC_Localization_Core
             customFonts.Clear();
             LoadCustomFonts();
             LoadAllMainTranslationFiles();
+            LoadMagazineFormatTranslations();
 
             // Re-init surfaces (each loads its own translation files in Initialize)
             for (int i = 0; i < surfaces.Count; i++)

@@ -32,7 +32,6 @@ namespace MWC_Localization_Core
         public Dictionary<string, Font> CustomFonts { get; private set; }
         public LocalizationConfig Config { get; private set; }
         public TextMeshTranslator Translator { get; private set; }
-        public MagazineTextHandler Magazine { get; private set; }
         public string AssetsFolder { get; private set; }
 
         public TranslationContext(
@@ -40,20 +39,18 @@ namespace MWC_Localization_Core
             Dictionary<string, Font> customFonts,
             LocalizationConfig config,
             TextMeshTranslator translator,
-            MagazineTextHandler magazine,
             string assetsFolder)
         {
             Translations = translations;
             CustomFonts = customFonts;
             Config = config;
             Translator = translator;
-            Magazine = magazine;
             AssetsFolder = assetsFolder;
         }
     }
 
     /// <summary>
-    /// Common lifecycle contract for translation surfaces (HUD, magazine, teletext,
+    /// Common lifecycle contract for translation surfaces (HUD, teletext,
     /// ArrayList/HashTable proxies, FSM hook). Implementing this lets the main class
     /// treat them as a uniform List&lt;ITranslationSurface&gt; instead of seven named fields.
     /// </summary>

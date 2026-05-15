@@ -10,7 +10,6 @@ namespace MWC_Localization_Core
     {
         private TranslationDictionary translations;
         private Dictionary<string, Font> customFonts;
-        private MagazineTextHandler magazineHandler;
         private LocalizationConfig config;
         private Dictionary<int, string> appliedFontCache = new Dictionary<int, string>();
         private Dictionary<int, Texture> appliedRuntimeTextureCache = new Dictionary<int, Texture>();
@@ -29,13 +28,11 @@ namespace MWC_Localization_Core
         public TextMeshTranslator(
             TranslationDictionary translations,
             Dictionary<string, Font> customFonts,
-            MagazineTextHandler magazineHandler,
             LocalizationConfig config
         )
         {
             this.translations = translations;
             this.customFonts = customFonts;
-            this.magazineHandler = magazineHandler;
             this.config = config;
 
             // Build reverse font lookup for O(1) access by font.name
@@ -69,18 +66,18 @@ namespace MWC_Localization_Core
                     return false;
             }
 
-            if (magazineHandler.IsMagazineText(path))
-            {
-                ApplyCustomFont(textMesh, path);
-                return true;
-            }
-
             // Use standard translation before pattern matching; dictionary lookup is cheaper.
             if (ApplyTranslation(textMesh, path))
                 return true;
 
             if (ApplyPatternTranslation(textMesh, path))
                 return true;
+
+            if (LocalizationConfig.IsForcedFontPath(path))
+            {
+                ApplyCustomFont(textMesh, path);
+                return true;
+            }
 
             return false;
         }

@@ -10,6 +10,12 @@ namespace MWC_Localization_Core
     /// </summary>
     public partial class FsmTextHook
     {
+        private void AddMagazineFormatRules(Dictionary<string, FsmTarget> byKey, string objectPath)
+        {
+            AddTargetRule(byKey, objectPath, "Generate", "Format", 2, "h.");
+            AddTargetRule(byKey, objectPath, "Generate", "Format", 2, ",- puh.");
+        }
+
         private void AddBuiltInTargets(Dictionary<string, FsmTarget> byKey)
         {
             // Radio (MainMenu)
@@ -27,22 +33,12 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data/Bottomline 1", "Data", "State 1", 2, "tulokset");
             AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1", "Data", "State 1", 3, "Kierros");
             AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/302/Texts/Data 1/Bottomline 1", "Data", "State 1", 3, "pelikohteet");
-            AddTargetRule(byKey, "Systems/TV/Teletext", "", "", -1, "stop");
-            AddTargetRule(byKey, "Systems/TV/Teletext", "", "", -1, "haku");
-            AddTargetRule(byKey, "Systems/TV/Teletext", "", "Load", 0, "stop");
-            AddTargetRule(byKey, "Systems/TV/Teletext", "", "Load", 0, "haku");
-            AddTargetRule(byKey, "Systems/TV/Teletext", "", "Open page", 0, "stop");
-            AddTargetRule(byKey, "Systems/TV/Teletext", "", "Open page", 0, "haku");
-            AddTargetRule(byKey, "Systems/TV/Teletext", "", "State 1", 4, "stop");
-            AddTargetRule(byKey, "Systems/TV/Teletext", "", "State 1", 4, "haku");
-            AddTargetRule(byKey, "Systems/Teletext", "", "", -1, "stop");
-            AddTargetRule(byKey, "Systems/Teletext", "", "", -1, "haku");
-            AddTargetRule(byKey, "Systems/Teletext", "", "Load", 0, "stop");
-            AddTargetRule(byKey, "Systems/Teletext", "", "Load", 0, "haku");
-            AddTargetRule(byKey, "Systems/Teletext", "", "Open page", 0, "stop");
-            AddTargetRule(byKey, "Systems/Teletext", "", "Open page", 0, "haku");
-            AddTargetRule(byKey, "Systems/Teletext", "", "State 1", 4, "stop");
-            AddTargetRule(byKey, "Systems/Teletext", "", "State 1", 4, "haku");
+            AddTargetRule(byKey, "Systems/TV/Teletext", "Pages", "Reset page", 4, "stop");
+            AddTargetRule(byKey, "Systems/TV/Teletext", "Pages", "Reset page", 4, "haku");
+            AddTargetRule(byKey, "Systems/TV/Teletext", "Pages", "Load", 0, "stop");
+            AddTargetRule(byKey, "Systems/TV/Teletext", "Pages", "Load", 0, "haku");
+            AddTargetRule(byKey, "Systems/TV/Teletext", "Pages", "Open page", 0, "stop");
+            AddTargetRule(byKey, "Systems/TV/Teletext", "Pages", "Open page", 0, "haku");
 
             // TV Forecast: 188
             AddTargetRule(byKey, "Systems/TV/Teletext/VKTekstiTV/PAGES/188/Texts/Updater/Nyt", "Logic", "State 4", 0, "lumisadetta");
@@ -64,14 +60,8 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Systems/TV/TVGraphics/CHAT/Moderator", "Text", "State 11", 1, "Valvojana:");
 
             // Sheets: Rally results / registration / penalties
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "", -1, "- Class");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerResults", "Data", "State 1", 5, "- Class");
-            AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "", -1, "- Class");
             AddTargetRule(byKey, "Sheets/RallyRegistration/Functions/Class", "Data", "State 1", 3, "- Class");
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "Time penalty:");
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "sec.");
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "Parc Ferme violation:");
-            AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "", -1, "Jump start violation:");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "State 1", 6, "Time penalty:");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "State 1", 6, "sec.");
             AddTargetRule(byKey, "Sheets/RallyResults/PlayerPenalties", "Data", "State 1", 7, "Parc Ferme violation:");
@@ -344,6 +334,29 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "REPAIRSHOP/Jobs/Bodyfix", "Work", "Cost 2", 2, "Peltity\u00f6t / sheet metal work");
             AddTargetRule(byKey, "REPAIRSHOP/Jobs/VinylRemoval", "Work", "Cost 2", 2, "Vinyylikaton poisto / Vinyl removal");
             AddTargetRule(byKey, "REPAIRSHOP/Jobs/Springs", "Work", "Cost 2", 2, "Mittatilausjouset / Coil spring order");
+
+            // Sheets: Yellow Pages Magazine ad text
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row1/Random/ListRandom10");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row1/Regular/ListRegular10");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row1/Regular/ListRegular03");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row1/Random/ListRandom02");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row2/Random/ListRandom06");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row2/Regular/ListRegular06");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row2/Regular/ListRegular07");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row2/Regular/ListRegular09");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Regular/ListRegular01");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Regular/ListRegular02");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Random/ListRandom05");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Regular/ListRegular05");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Regular/ListRegular04");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Random/ListRandom03");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Random/ListRandom04");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Random/ListRandom07");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Random/ListRandom01");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Regular/ListRegular08");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Random/ListRandom08");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Random/ListRandom09");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Pic/ListPic01");
         }
     }
 }

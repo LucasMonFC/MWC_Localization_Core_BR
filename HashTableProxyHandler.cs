@@ -16,7 +16,7 @@ namespace MWC_Localization_Core
         public bool IsComplete { get { return IsMonitoringComplete; } }
         public bool IsMonitoringComplete { get { return translatedPaths.Count >= targetPaths.Count; } }
 
-        private MagazineTextHandler magazineHandler;
+        private TranslationDictionary translations;
         private readonly HashSet<string> targetPaths = new HashSet<string>();
         private readonly HashSet<string> translatedPaths = new HashSet<string>();
         private readonly Dictionary<string, PlayMakerHashTableProxy[]> proxyCache = new Dictionary<string, PlayMakerHashTableProxy[]>();
@@ -26,7 +26,7 @@ namespace MWC_Localization_Core
 
         public void Initialize(TranslationContext ctx)
         {
-            magazineHandler = ctx.Magazine;
+            translations = ctx.Translations;
             InitializeTargetPaths();
         }
 
@@ -169,7 +169,7 @@ namespace MWC_Localization_Core
                 if (string.IsNullOrEmpty(original))
                     continue;
 
-                string translated = magazineHandler.GetTranslation(original);
+                string translated = FindTranslation(original);
                 if (string.IsNullOrEmpty(translated) || translated == original)
                     continue;
 
@@ -205,7 +205,7 @@ namespace MWC_Localization_Core
                 if (string.IsNullOrEmpty(original))
                     continue;
 
-                string translated = magazineHandler.GetTranslation(original);
+                string translated = FindTranslation(original);
                 if (string.IsNullOrEmpty(translated) || translated == original)
                     continue;
 
@@ -214,6 +214,14 @@ namespace MWC_Localization_Core
             }
 
             return translatedCount;
+        }
+
+        private string FindTranslation(string original)
+        {
+            string translated;
+            return translations != null && translations.TryGetExact(original, out translated)
+                ? translated
+                : null;
         }
     }
 }

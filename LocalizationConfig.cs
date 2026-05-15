@@ -39,6 +39,7 @@ namespace MWC_Localization_Core
             "Sheets/UnemployPaper",
             "Systems/TV/TVGraphics/CHAT",
             "Sheets/ServicePayment",
+            "Sheets/YellowPagesMagazine",
             "Sheets/RallyRegistration/Functions/Class",
             "Systems/TV/TVGraphics/GFXTanaanWeek/Text",
             "Systems/TV/TVGraphics/GFXTanaanSat1/Text",

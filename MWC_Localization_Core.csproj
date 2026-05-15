@@ -71,7 +71,6 @@
     <Compile Include="LateUpdateHandler.cs" />
     <Compile Include="LocalizationConfig.cs" />
     <Compile Include="LocalizationUtils.cs" />
-    <Compile Include="MagazineTextHandler.cs" />
     <Compile Include="FsmTextHook.cs" />
     <Compile Include="FsmTextHook.BuiltInTargets.cs" />
     <Compile Include="HashTableProxyHandler.cs" />

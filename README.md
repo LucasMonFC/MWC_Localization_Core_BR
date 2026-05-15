@@ -13,7 +13,7 @@ See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
 3. **Update translation files**:
    - `translate.txt` - Main UI text
    - `translate_msc.txt (optional)` - previous My Summer Car text
-   - `translate_magazine.txt` - Classified Magazine content
+   - `translate_magazine.txt` - Classified Magazine keywords and price/phone format label
    - `translate_teletext.txt` - TV/Teletext content
    - `translate_mod.txt (optional)` - Mod content
 4. **(Optional)** Create custom fonts in `fonts.unity3d`
@@ -43,7 +43,7 @@ BepInEx/plugins/dist/
 ├── l10n_assets/
 │   ├── config.txt                  # Language configuration
 │   ├── translate.txt               # Main UI translations
-│   ├── translate_magazine.txt      # Yellow Pages magazine translations
+│   ├── translate_magazine.txt      # Yellow Pages keywords and price/phone format label
 │   ├── translate_teletext.txt      # TV/Teletext content translations
 │   ├── translate_msc.txt           # Optional: My Summer Car compatibility
 │   ├── translate_mod.txt           # Optional: Mod content translations
@@ -98,9 +98,9 @@ WITHDRAWAL = 출금
 Welcome to My Winter Car = 마이 윈터 카에\n오신 것을 환영합니다
 ```
 
-### translate_magazine.txt - Classified Magazine
+### translate_magazine.txt - Classified Magazine Format
 
-This file involves special logic for handling comma-separated random words & Price line in Classified Magazine.
+This file keeps legacy Yellow Pages keyword translations plus the phone-label syntax for the price line format. The entries are loaded into the shared translation dictionary; generalized ArrayList/HashTable/FSM paths apply them at runtime.
 
 ```
 # Magazine abbreviations (comma-separated)
@@ -113,10 +113,9 @@ supp.arm = 서스.암
 PHONE = 전화
 ```
 
-**Magazine-specific formatting:**
-- Abbreviated words use periods and commas
-- Price lines get special phone number treatment
-- Different from regular UI text
+The loader derives the FSM `BuildString` pieces from this entry:
+- `h.` becomes empty
+- `,- puh.` becomes ` MK, ${PHONE} - `
 
 ### translate_teletext.txt - TV/Teletext Content
 
