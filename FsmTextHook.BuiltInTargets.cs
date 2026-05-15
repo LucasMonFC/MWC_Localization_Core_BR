@@ -115,20 +115,6 @@ namespace MSC_Localization_Core
             AddTargetRule(byKey, "Sheets/Arrestwarrant/Texts/Description", "", "State 1", 2, "n. 180cm,");
             AddTargetRule(byKey, "Sheets/Arrestwarrant/Texts/Description", "", "State 1", 2, "kg / likainen");
 
-            // Long subtitle FSM text with extended waits
-            AddTargetRule(byKey, "KILJUGUY/HikerPivot/JokkeHiker2", "", "Lotto1 3", 1, "\"I have the money in a hidden suitcase. But I can't use the money because wife would get suspicious... She would leave me if she had that money!\"");
-            AddTargetRule(byKey, "KILJUGUY/HikerPivot/JokkeHiker2", "", "Lotto1 4", 1, "\"I need to act like I always do... I am richest drunk bum there is! At least my wife stays with me. Not with some dorky finnswede tomato farmer.\"");
-            AddTargetRule(byKey, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "", "Fleetari rally", 1, "\"I can't believe it... You are rally winner. I must admit you have such big balls. I thought you were going to die, but you won!\"");
-            AddTargetRule(byKey, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "", "State 12", 0, "\"It's Fleetari here! You moron, bring back my car or I make sure your shit bucket car does not see another day!\"");
-            AddTargetRule(byKey, "YARD/Building/LIVINGROOM/Telephone/Logic/Ring", "", "Fleetari shit", 1, "\"It is Fleetari here. Want to earn 10 bottles of booze? Dump some shit at the front of the Lindell inspection shop. That sucker deserves it.\"");
-            AddTargetRule(byKey, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "", "Race", 0, "\"So you would like to race with that shit bucket of yours? Which one is faster?\"");
-            AddTargetRule(byKey, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "", "State 3", 0, "\"Who is this pussy-ass idiot?\"");
-            AddTargetRule(byKey, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "", "State 23", 0, "\"Is Teimo selling you that shit? He should sell some Kurjala instead. Everything is just shit.\"");
-            AddTargetRule(byKey, "NPC_CARS/Amikset/KYLAJANI/Driver/Animations", "", "State 14", 0, "\"Stop dancing with your fist female. I will smack your face and you fly like a wooden javelin!\"");
-            AddTargetRule(byKey, "JOBS/Mummola/TalkEngine", "", "Speak 1", 1, "\"Your dad is quite sober man. I thought he would start drinking after being rejected from 1972 Olympics.\"");
-            AddTargetRule(byKey, "YARD/UNCLE/Home/UncleDrinking/Uncle", "", "No license", 2, "\"Damn, I was speeding and got caught! So I lost my drivers license... I could have explained that I need it for my job, but well...\"");
-            AddTargetRule(byKey, "YARD/UNCLE/Home/UncleDrinking/Uncle", "", "No license 2", 0, "\"I haven't exactly paid my income taxes, so basically in legal terms, I am not doing any work either... He he.\"");
-
             // COMPUTER: POS boot / shell command output
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/BootSequence", "", "State 1", 0, "Starting RS-POS...");
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/BootSequence", "", "State 3", 0, "HIMEM is testing extended memory...done.");
