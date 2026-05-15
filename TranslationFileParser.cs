@@ -119,17 +119,16 @@ namespace MWC_Localization_Core
         }
 
         /// <summary>
-        /// Parse INI-style category-based file with [categoryName] sections
-        /// Used for teletext translations with category-based + index-based lookups
-        /// Returns both dictionary-based and list-based (index-based) translations
+        /// Parse INI-style category-based file with [categoryName] sections.
+        /// Multi-line keys/values are normalized via NormalizeMultiLineKey so that
+        /// per-line trailing whitespace authored in the file does not break exact-match
+        /// lookups against the game's runtime strings.
         /// </summary>
         public static void ParseCategoryBasedFile(
             string filePath,
-            out Dictionary<string, Dictionary<string, string>> categoryTranslations,
-            out Dictionary<string, List<string>> indexBasedTranslations)
+            out Dictionary<string, Dictionary<string, string>> categoryTranslations)
         {
             categoryTranslations = new Dictionary<string, Dictionary<string, string>>();
-            indexBasedTranslations = new Dictionary<string, List<string>>();
 
             if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
                 return;
@@ -138,7 +137,6 @@ namespace MWC_Localization_Core
             {
                 string currentCategory = null;
                 Dictionary<string, string> currentDict = null;
-                List<string> currentIndexList = null;
                 int loadedCount = 0;
 
                 string[] lines = File.ReadAllLines(filePath, Encoding.UTF8);
@@ -162,7 +160,7 @@ namespace MWC_Localization_Core
                         // Save previous entry if exists
                         if (keyLines.Count > 0 && currentDict != null)
                         {
-                            SaveEntry(currentDict, currentIndexList, keyLines, valueLines, ref loadedCount);
+                            SaveEntry(currentDict, keyLines, valueLines, ref loadedCount);
                         }
 
                         keyLines.Clear();
@@ -174,11 +172,7 @@ namespace MWC_Localization_Core
                         if (!categoryTranslations.ContainsKey(currentCategory))
                             categoryTranslations[currentCategory] = new Dictionary<string, string>();
 
-                        if (!indexBasedTranslations.ContainsKey(currentCategory))
-                            indexBasedTranslations[currentCategory] = new List<string>();
-
                         currentDict = categoryTranslations[currentCategory];
-                        currentIndexList = indexBasedTranslations[currentCategory];
                         continue;
                     }
 
@@ -188,7 +182,7 @@ namespace MWC_Localization_Core
                         // Empty line between entries - save current entry
                         if (keyLines.Count > 0 && currentDict != null)
                         {
-                            SaveEntry(currentDict, currentIndexList, keyLines, valueLines, ref loadedCount);
+                            SaveEntry(currentDict, keyLines, valueLines, ref loadedCount);
                             keyLines.Clear();
                             valueLines.Clear();
                             readingValue = false;
@@ -208,22 +202,14 @@ namespace MWC_Localization_Core
                     if (equalsIndex > 0 && !readingValue)
                     {
                         // Single-line format: KEY = VALUE
-                        // Teletext format historically trims both sides - individual category
-                        // entries don't carry leading/trailing whitespace the way translate.txt
-                        // concatenation fragments do, and the lookup side (TranslateArrayListProxy)
-                        // trims the game-provided original before dict lookup, so preserving
-                        // trailing whitespace here would cause keys to silently miss.
-                        string key = line.Substring(0, equalsIndex).Trim();
-                        string value = line.Substring(equalsIndex + 1).Trim();
-
-                        // Unescape special characters
-                        key = UnescapeString(key);
-                        value = UnescapeString(value);
+                        // Trim and unescape - single-line teletext entries don't carry
+                        // meaningful boundary whitespace, and the lookup side trims too.
+                        string key = NormalizeMultiLineKey(UnescapeString(line.Substring(0, equalsIndex)));
+                        string value = UnescapeString(line.Substring(equalsIndex + 1)).Trim();
 
                         if (!string.IsNullOrEmpty(key) && currentDict != null)
                         {
                             currentDict[key] = value;
-                            currentIndexList.Add(value); // Add to index list in order
                             loadedCount++;
                         }
                         continue;
@@ -246,7 +232,7 @@ namespace MWC_Localization_Core
                 // Save last entry if exists
                 if (keyLines.Count > 0 && currentDict != null)
                 {
-                    SaveEntry(currentDict, currentIndexList, keyLines, valueLines, ref loadedCount);
+                    SaveEntry(currentDict, keyLines, valueLines, ref loadedCount);
                 }
 
                 CoreConsole.Print($"[TranslationFileParser] Loaded {loadedCount} category-based translations from {categoryTranslations.Count} categories");
@@ -271,10 +257,35 @@ namespace MWC_Localization_Core
             return input.Replace("\\=", "=").Replace("\\n", "\n");
         }
 
+        // Normalize a (possibly multi-line) key for matching: trim each line, drop
+        // whitespace-only lines, rejoin with '\n'. This lets multi-line authored keys
+        // match the game's runtime strings even when the game adds positioning tabs/
+        // leading spaces (e.g. ajatus poems) or stray inner-line trailing whitespace
+        // (e.g. ulkomaat news pages).
+        public static string NormalizeMultiLineKey(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+            if (input.IndexOf('\n') < 0)
+                return input.Trim();
+            string[] parts = input.Split('\n');
+            StringBuilder sb = new StringBuilder(input.Length);
+            for (int i = 0; i < parts.Length; i++)
+            {
+                string trimmed = parts[i].Trim();
+                if (trimmed.Length == 0)
+                    continue;
+                if (sb.Length > 0)
+                    sb.Append('\n');
+                sb.Append(trimmed);
+            }
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Helper method to save a multi-line entry
         /// </summary>
-        private static void SaveEntry(Dictionary<string, string> dict, List<string> indexList, List<string> keyLines, List<string> valueLines, ref int count)
+        private static void SaveEntry(Dictionary<string, string> dict, List<string> keyLines, List<string> valueLines, ref int count)
         {
             if (keyLines.Count == 0) return;
 
@@ -282,22 +293,15 @@ namespace MWC_Localization_Core
             string key = string.Join("\n", keyLines.ToArray());
             string value = valueLines.Count > 0 ? string.Join("\n", valueLines.ToArray()) : "";
 
-            // Match the pre-refactor teletext parser: strip boundary whitespace (including
-            // trailing spaces on the last content line and the leading newline introduced by
-            // "=" on its own line). The lookup side (TranslateArrayListProxy) trims the
-            // game-provided original before dict lookup, so keys must be trimmed here to
-            // match; values get trimmed for consistency.
-            key = key.Trim();
-            value = value.Trim();
-
-            // Unescape special characters in both key and value
-            key = UnescapeString(key);
-            value = UnescapeString(value);
+            // Keys get aggressive per-line normalization to match the game's runtime string
+            // even when the game adds positioning whitespace. Values keep authored formatting
+            // (only outer whitespace stripped) so translators can preserve intentional layout.
+            key = NormalizeMultiLineKey(UnescapeString(key));
+            value = UnescapeString(value).Trim();
 
             if (!string.IsNullOrEmpty(key))
             {
                 dict[key] = value;
-                indexList.Add(value); // Add to index list in order
                 count++;
             }
         }
