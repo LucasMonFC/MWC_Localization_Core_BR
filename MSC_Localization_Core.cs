@@ -94,12 +94,11 @@ namespace MSC_Localization_Core
                 translator,
                 ModLoader.GetModAssetsFolder(this));
 
-            var teletext = new TeletextHandler();
             surfaces = new List<ITranslationSurface>
             {
                 new GuiTextMonitor(),
                 new UiTextMonitor(),
-                teletext,
+                new FsmArrayTranslator(),
                 new ArrayListProxyHandler(),
                 new FsmTextHook(),
                 new SubtitleTimingHandler(),

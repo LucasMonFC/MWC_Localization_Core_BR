@@ -207,18 +207,10 @@ namespace MSC_Localization_Core
                     int equalsIndex = FindKeyValueSeparatorIndex(line);
                     if (equalsIndex > 0 && !readingValue)
                     {
-                        // Single-line format: KEY = VALUE
-                        // Teletext format historically trims both sides - individual category
-                        // entries don't carry leading/trailing whitespace the way translate.txt
-                        // concatenation fragments do, and the lookup side (TranslateArrayListProxy)
-                        // trims the game-provided original before dict lookup, so preserving
-                        // trailing whitespace here would cause keys to silently miss.
-                        string key = line.Substring(0, equalsIndex).Trim();
-                        string value = line.Substring(equalsIndex + 1).Trim();
-
-                        // Unescape special characters
-                        key = UnescapeString(key);
-                        value = UnescapeString(value);
+                        // Single-line teletext entries do not carry meaningful boundary
+                        // whitespace. Normalize keys the same way runtime lookups do.
+                        string key = NormalizeMultiLineKey(UnescapeString(line.Substring(0, equalsIndex)));
+                        string value = UnescapeString(line.Substring(equalsIndex + 1)).Trim();
 
                         if (!string.IsNullOrEmpty(key) && currentDict != null)
                         {
@@ -271,6 +263,34 @@ namespace MSC_Localization_Core
             return input.Replace("\\=", "=").Replace("\\n", "\n");
         }
 
+        // Normalize a possibly multi-line teletext key for matching: trim each
+        // line, drop empty spacer lines, and rejoin with '\n'. This makes authored
+        // keys resilient to positioning spaces and trailing whitespace in runtime
+        // strings while preserving the index fallback order separately.
+        public static string NormalizeMultiLineKey(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            if (input.IndexOf('\n') < 0)
+                return input.Trim();
+
+            string[] parts = input.Split('\n');
+            StringBuilder builder = new StringBuilder(input.Length);
+            for (int i = 0; i < parts.Length; i++)
+            {
+                string trimmed = parts[i].Trim();
+                if (trimmed.Length == 0)
+                    continue;
+
+                if (builder.Length > 0)
+                    builder.Append('\n');
+                builder.Append(trimmed);
+            }
+
+            return builder.ToString();
+        }
+
         /// <summary>
         /// Helper method to save a multi-line entry
         /// </summary>
@@ -282,17 +302,11 @@ namespace MSC_Localization_Core
             string key = string.Join("\n", keyLines.ToArray());
             string value = valueLines.Count > 0 ? string.Join("\n", valueLines.ToArray()) : "";
 
-            // Match the pre-refactor teletext parser: strip boundary whitespace (including
-            // trailing spaces on the last content line and the leading newline introduced by
-            // "=" on its own line). The lookup side (TranslateArrayListProxy) trims the
-            // game-provided original before dict lookup, so keys must be trimmed here to
-            // match; values get trimmed for consistency.
-            key = key.Trim();
-            value = value.Trim();
-
-            // Unescape special characters in both key and value
-            key = UnescapeString(key);
-            value = UnescapeString(value);
+            // Keys get per-line normalization so multi-line runtime strings match even
+            // when the game adds positioning whitespace. Values keep authored line
+            // breaks with only outer whitespace stripped.
+            key = NormalizeMultiLineKey(UnescapeString(key));
+            value = UnescapeString(value).Trim();
 
             if (!string.IsNullOrEmpty(key))
             {

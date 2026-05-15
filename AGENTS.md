@@ -55,7 +55,7 @@ Current surfaces:
 | Surface | What it patches | Cadence |
 |---|---|---|
 | [GuiTextMonitor.cs](GuiTextMonitor.cs) | HUD primary/shadow paired meshes and HUD value meshes, including rally HUD GUI | PerFrame |
-| [TeletextHandler.cs](TeletextHandler.cs) | `Systems/Teletext/VKTekstiTV/Database` ArrayList content through category/index lookup | Slow |
+| [FsmArrayTranslator.cs](FsmArrayTranslator.cs) | `Systems/Teletext/VKTekstiTV/Database` ArrayList content through category/index lookup, temporarily activating teletext like ExtraTranslate when needed | Slow until complete |
 | [ArrayListProxyHandler.cs](ArrayListProxyHandler.cs) | Hardcoded ArrayList paths such as HUD day names, plus known parent font paths | Slow |
 | [FsmTextHook.cs](FsmTextHook.cs) + [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) | FSM action fields, `FsmString` variables, `BuildString` parts, `SetStringValue`, `SetProperty` string parameters, runtime teletext/weather/rally text, and rally result sheet sources | Fast |
 | [SubtitleTimingHandler.cs](SubtitleTimingHandler.cs) | ExtraTranslate-compatible `Wait.time` extensions for selected long subtitles; also exposes the retained-subtitle duration map used by `GuiTextMonitor` | Slow |
@@ -68,7 +68,7 @@ Current surfaces:
 2. **Main translation files** load in this order, with later files overriding earlier files:
    - `translate.txt`
    - `translate_mod.txt`
-3. **Teletext** loads `translate_teletext.txt` in [TeletextHandler.cs](TeletextHandler.cs). TV chat sections are intentionally not supported for MSC.
+3. **Teletext** loads `translate_teletext.txt` in [FsmArrayTranslator.cs](FsmArrayTranslator.cs). It translates MSC teletext database arrays by temporarily activating `Systems/Teletext` when needed, preserving category lookup and index fallback. TV chat sections are intentionally not supported for MSC.
 4. **FSM/runtime translations** use the same shared dictionary. `FsmTextHook` handles direct `SetStringValue` assignments for long subtitles and runtime teletext strings such as page 188 weather and page 250 rally day labels.
 5. **Pattern translations** are detected from entries with `{0}`/`{1}` placeholders and stored in `TranslationDictionary`.
 

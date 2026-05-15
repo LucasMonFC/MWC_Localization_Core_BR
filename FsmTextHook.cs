@@ -149,7 +149,7 @@ namespace MSC_Localization_Core
                 return;
 
             string translation;
-            if (translations == null || !translations.TryGetExact(source, out translation) || string.IsNullOrEmpty(translation))
+            if (translations == null || !translations.TryGetExact(source, out translation))
                 return;
 
             string key = BuildKey(objectPath, fsmName, stateName, actionIndex);
