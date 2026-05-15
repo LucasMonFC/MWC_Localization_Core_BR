@@ -486,10 +486,7 @@ FUEL PUMP 320 MK = BOMBA DE COMBUSTIVEL 320 MK
 WATER PUMP 350 MK = BOMBA DE ÁGUA 350 MK
 ALTERNATOR 425 MK = ALTERNADOR 425 MK
 STARTER 295 MK = MOTOR DE PARTIDA 295 MK
-PISTON1 349 MK = PISTÃO1 349 MK
-PISTON2 349 MK = PISTÃO2 349 MK
-PISTON3 349 MK = PISTÃO3 349 MK
-PISTON4 349 MK = PISTÃO4 349 MK
+PISTON{0} {1} MK = PISTÃO {0} {1} MK
 CLUTCH DISC 375 MK = DISCO DE EMBREAGEM 375 MK
 CRANKSHAFT 915 MK = VIRABREQUIM 915 MK
 HEADGASKET 329 MK = JUNTA DO CABEÇOTE 329 MK
@@ -497,10 +494,6 @@ ROCKER SHAFT 729 MK = EIXO DO BALANCIM 729 MK
 BLOCK 2490 MK = BLOCO 2490 MK
 GEARBOX 1950 MK = CAIXA DE VELOCIDADE 1950 MK
 OILPAN 520 MK = CÁRTER DE ÓLEO 520 MK
-PISTON1 200 MK = PISTÃO1 200 MK
-PISTON2 200 MK = PISTÃO2 200 MK
-PISTON3 200 MK = PISTÃO3 200 MK
-PISTON4 200 MK = PISTÃO4 200 MK
 CRANKSHAFT 400 MK = VIRABREQUIM 400 MK
 ROCKER SHAFT 300 MK = EIXO DO BALANCIM 300 MK
 CLUTCH DISC 200 MK = DISCO DE EMBREAGEM 200 MK
@@ -2074,6 +2067,7 @@ DRINK FROM STASH = BEBIDAS
 
 //Jouko phone
 "My wife left me. I bought a apartment with nice lakeview. Could you come by and help me with moving my stuff?" = "Olá, olá, sou eu. Essa é a situação, droga! Minha esposa ainda me deixou. Droga... esse demônio! Agora ela \nestá em Vaasa com um produtor de tomate fodendo como o diabo. Porra! Escute, eu comprei um apartamento na \ncidade, com vista para o lago. Então você poderia vir e me ajudar a mudar para lá? Colocaremos as coisas na \nVan, deixarei tudo pronto para você, então venha me ajudar quando puder. É tudo por agora."
+"I tried to call everybody. Please can you pick me up from the Pub and drive me home?" = "Olá. Tentei ligar para todas as casas, mas ninguém atendeu. Você poderia me pegar no Pub Nappo? Eu preciso ir para casa.\nBebi tanto que não saberia para onde ir eu fui sozinho, então você poderia me dar uma carona para casa? Eu te pagarei. Isso é tudo."
 
 //gray car
 "Hello hello! How's it hanging?" = "Olá Olá! Como está indo?"
