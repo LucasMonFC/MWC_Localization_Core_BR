@@ -22,6 +22,11 @@ namespace MSC_Localization_Core
             return 0;
         }
 
+        public bool ApplyForScene(string sceneName)
+        {
+            return UpdateForScene(sceneName);
+        }
+
         public int MonitorTick(float deltaTime)
         {
             return 0;
@@ -106,7 +111,8 @@ namespace MSC_Localization_Core
 
             bool isMainMenu = currentScene == "MainMenu";
             bool isGame = currentScene == "GAME";
-            if (!isMainMenu && !isGame)
+            bool isIntro = currentScene == "Intro";
+            if (!isMainMenu && !isGame && !isIntro)
                 return false;
 
             bool changed = false;
@@ -995,13 +1001,26 @@ namespace MSC_Localization_Core
                 return false;
 
             bool mainMenuTarget = target.ObjectPath.StartsWith("Radio/", System.StringComparison.Ordinal);
+            bool introTarget = IsSceneRootTarget(target, "Intro");
             if (currentScene == "MainMenu")
                 return mainMenuTarget;
 
             if (currentScene == "GAME")
-                return !mainMenuTarget;
+                return !mainMenuTarget && !introTarget;
+
+            if (currentScene == "Intro")
+                return introTarget;
 
             return false;
+        }
+
+        private static bool IsSceneRootTarget(FsmTarget target, string sceneRoot)
+        {
+            if (target == null || string.IsNullOrEmpty(target.ObjectPath) || string.IsNullOrEmpty(sceneRoot))
+                return false;
+
+            return TextMatchesExact(target.ObjectPath, sceneRoot)
+                || target.ObjectPath.StartsWith(sceneRoot + "/", System.StringComparison.Ordinal);
         }
 
         private bool TranslateFsmString(HutongGames.PlayMaker.FsmString fsmString, FsmTarget target)

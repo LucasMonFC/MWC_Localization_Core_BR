@@ -51,6 +51,7 @@ namespace MSC_Localization_Core
         {
             SetupFunction(Setup.ModSettings, Mod_Settings);
             SetupFunction(Setup.OnMenuLoad, Mod_OnMenuLoad);
+            SetupFunction(Setup.OnNewGame, Mod_OnNewGame);
             SetupFunction(Setup.PostLoad, Mod_PostLoad);
             SetupFunction(Setup.Update, Mod_Update);
         }
@@ -111,6 +112,19 @@ namespace MSC_Localization_Core
             TranslateScene();
             MarkSceneTranslated("MainMenu");
             RunSurfaceInitialPasses(null);
+            config.ApplyGameObjectAdjustments();
+        }
+
+        private void Mod_OnNewGame()
+        {
+            if (!hasLoadedTranslations || translator == null)
+                return;
+
+            CoreConsole.Print($"[{Name}] New game started - translating available intro/loading text...");
+            LocalizationUtils.PruneCaches();
+            translator.ClearRuntimeCaches();
+            TranslateScene();
+            RunFsmTextHookForScene("Intro");
             config.ApplyGameObjectAdjustments();
         }
 
@@ -221,6 +235,21 @@ namespace MSC_Localization_Core
                 int count = surfaces[i].InitialPass();
                 if (count > 0)
                     CoreConsole.Print($"[{Name}] {logPrefix ?? string.Empty}{surfaces[i].Name}: translated {count}");
+            }
+        }
+
+        private void RunFsmTextHookForScene(string sceneName)
+        {
+            if (surfaces == null) return;
+
+            for (int i = 0; i < surfaces.Count; i++)
+            {
+                FsmTextHook hook = surfaces[i] as FsmTextHook;
+                if (hook == null)
+                    continue;
+
+                if (hook.ApplyForScene(sceneName))
+                    CoreConsole.Print($"[{Name}] FsmTextHook: applied hardcoded FSM translations in {sceneName}");
             }
         }
 

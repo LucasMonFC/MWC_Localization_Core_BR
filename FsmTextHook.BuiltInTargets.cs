@@ -22,6 +22,9 @@ namespace MSC_Localization_Core
             AddTargetRule(byKey, "Radio/CD", "", "State 1", 0, "CD'S IMPORTED");
             AddTargetRule(byKey, "Radio/CD", "", "State 1", 0, "CD NOT IMPORTED");
 
+            // Intro
+            AddTargetRule(byKey, "Intro/title/name", "", "State 1", 0, "was born.");
+
             // TV Teletext command bar
             AddTargetRule(byKey, "Systems/Teletext", "", "", -1, "stop");
             AddTargetRule(byKey, "Systems/Teletext", "", "", -1, "haku");
