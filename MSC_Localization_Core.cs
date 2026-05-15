@@ -8,7 +8,7 @@ namespace MSC_Localization_Core
     public class MSC_Localization_Core : Mod
     {
         // Mod metadata
-        public override string ID => "MSC_Localization_Core";
+        public override string ID => "MSC_Localization_Core_BR";
         public override string Name => "MSC_Localization_Core";
         public override string Author => "LucasMonOficial";
         public override string Version => "1.0.0";

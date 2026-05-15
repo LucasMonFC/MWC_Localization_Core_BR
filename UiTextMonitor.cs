@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Reflection;
 using System.Collections.Generic;
 
 namespace MSC_Localization_Core
@@ -12,31 +14,31 @@ namespace MSC_Localization_Core
     {
         public string Name { get { return "UiTextMonitor"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.PerFrame; } }
-        public bool IsComplete { get { return false; } }
+        public bool IsComplete { get { return checkedGameScene && !dirtTrackLoaded; } }
 
         private TranslationDictionary translations;
         private Text[] dirtTrackTexts;
         private readonly Dictionary<int, int> originalFontSizes = new Dictionary<int, int>();
         private readonly Dictionary<int, Vector2> originalAnchoredPositions = new Dictionary<int, Vector2>();
-        private float retryTimer;
-        private bool dirtTrackAvailable;
-        private bool detectionComplete;
-        private int detectionAttempts;
-
-        private const int MaxDetectionAttempts = 12;
+        private float uiRefreshTimer;
+        private bool checkedGameScene;
+        private bool dirtTrackLoaded;
 
         public void Initialize(TranslationContext ctx)
         {
             translations = ctx.Translations;
             dirtTrackTexts = null;
-            retryTimer = 0f;
-            dirtTrackAvailable = false;
-            detectionComplete = false;
-            detectionAttempts = 0;
+            uiRefreshTimer = 0f;
+            checkedGameScene = false;
+            dirtTrackLoaded = false;
         }
 
         public int InitialPass()
         {
+            CheckDirtTrackLoadedForGameScene();
+            if (!dirtTrackLoaded)
+                return 0;
+
             RegisterDirtTrackUi();
             return dirtTrackTexts != null ? dirtTrackTexts.Length : 0;
         }
@@ -46,19 +48,19 @@ namespace MSC_Localization_Core
             if (Application.loadedLevelName != "GAME")
                 return 0;
 
-            retryTimer += deltaTime;
-            if (retryTimer >= LocalizationConstants.GUI_MONITOR_RETRY_INTERVAL)
-            {
-                if (!dirtTrackAvailable && !detectionComplete)
-                    DetectDirtTrack();
-                else if (dirtTrackAvailable && !HasValidDirtTrackUi())
-                    RegisterDirtTrackUi();
-
-                retryTimer = 0f;
-            }
-
-            if (!dirtTrackAvailable)
+            CheckDirtTrackLoadedForGameScene();
+            if (!dirtTrackLoaded)
                 return 0;
+
+            uiRefreshTimer += deltaTime;
+            if (!HasValidDirtTrackUi())
+            {
+                if (uiRefreshTimer < LocalizationConstants.GUI_MONITOR_RETRY_INTERVAL)
+                    return 0;
+
+                RegisterDirtTrackUi();
+                uiRefreshTimer = 0f;
+            }
 
             if (!HasValidDirtTrackUi())
                 return 0;
@@ -92,10 +94,9 @@ namespace MSC_Localization_Core
             dirtTrackTexts = null;
             originalFontSizes.Clear();
             originalAnchoredPositions.Clear();
-            retryTimer = 0f;
-            dirtTrackAvailable = false;
-            detectionComplete = false;
-            detectionAttempts = 0;
+            uiRefreshTimer = 0f;
+            checkedGameScene = false;
+            dirtTrackLoaded = false;
         }
 
         public void ClearTranslations()
@@ -111,23 +112,39 @@ namespace MSC_Localization_Core
             dirtTrackTexts = root != null ? root.GetComponentsInChildren<Text>(true) : null;
         }
 
-        private void DetectDirtTrack()
+        private void CheckDirtTrackLoadedForGameScene()
         {
-            detectionAttempts++;
-
-            GameObject uiRoot = LocalizationUtils.FindGameObjectCached("DIRTTRACK_UI");
-            GameObject trackRoot = LocalizationUtils.FindGameObjectCached("DIRT TRACK");
-            dirtTrackAvailable = uiRoot != null || trackRoot != null;
-
-            if (dirtTrackAvailable)
-            {
-                detectionComplete = true;
-                dirtTrackTexts = uiRoot != null ? uiRoot.GetComponentsInChildren<Text>(true) : null;
+            if (checkedGameScene || Application.loadedLevelName != "GAME")
                 return;
+
+            checkedGameScene = true;
+            dirtTrackLoaded = IsDirtTrackRacingLoaded();
+
+            if (!dirtTrackLoaded)
+                dirtTrackTexts = null;
+        }
+
+        private static bool IsDirtTrackRacingLoaded()
+        {
+            try
+            {
+                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                for (int i = 0; i < assemblies.Length; i++)
+                {
+                    Assembly assembly = assemblies[i];
+                    if (assembly == null)
+                        continue;
+
+                    AssemblyName name = assembly.GetName();
+                    if (name != null && name.Name == "DirtTrackRacing")
+                        return true;
+                }
+            }
+            catch
+            {
             }
 
-            if (detectionAttempts >= MaxDetectionAttempts)
-                detectionComplete = true;
+            return false;
         }
 
         private bool HasValidDirtTrackUi()
@@ -160,7 +177,7 @@ namespace MSC_Localization_Core
         private void ApplyDirtTrackLayout(Text text)
         {
             string role = GetDirtTrackTextRole(text);
-            if (role != "Message header" && role != "Message")
+            if (role != "Message header" && role != "Message" && role != "Message footer")
                 return;
 
             RectTransform roleRect = GetDirtTrackRoleRect(text, role);
@@ -188,6 +205,18 @@ namespace MSC_Localization_Core
                 text.resizeTextMaxSize = System.Math.Max(18, (int)(originalSize * 0.72f));
                 text.fontSize = text.resizeTextMaxSize;
                 roleRect.anchoredPosition = originalPosition + new Vector2(0f, 24f);
+                return;
+            }
+
+            if (role == "Message footer")
+            {
+                text.resizeTextForBestFit = true;
+                text.resizeTextMinSize = System.Math.Max(14, originalSize / 2);
+                text.resizeTextMaxSize = System.Math.Max(20, (int)(originalSize * 0.72f));
+                text.fontSize = text.resizeTextMaxSize;
+                text.horizontalOverflow = HorizontalWrapMode.Overflow;
+                text.verticalOverflow = VerticalWrapMode.Overflow;
+                roleRect.anchoredPosition = originalPosition;
                 return;
             }
 
