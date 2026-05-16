@@ -1489,6 +1489,34 @@ Visit Lars to claim the prize. = VISITE LARS PARA RECEBER O PRÊMIO.
 Something feels disconnected... = Algo parece desconectado...
 4x4 Shift Arm Linkage = Articulação do braço de mudança 4x4
 
+//Hayosiko LX
+Makes Pace to have those fancy side windows. = Faz a Pace ter aquelas janelas laterais chiques.
+OPEN WINDOW = ABRIR JANELA
+CLOSE WINDOW = FECHAR JANELA
+UNLATCH LOCK = DESTRAVAR TRAVA
+LATCH LOCK = TRAVAR TRAVA
+HIGHROOF IS OPENED = O TETO ALTO ESTÁ ABERTO
+INTERIOR LIGHT = LUZ INTERNA
+CAMPING STOVE = FOGÃO DE CAMPING
+AFTERMARKET CAMPER WIRING = FIAÇÃO DO CAMPER
+wiring mess = EMARANHADO DE FIOS
+hayosiko sink = PIA DO HAYOSIKO
+hayosiko heating pan = FOGÃO DE CAMPING DO HAYOSIKO
+hayosiko desk = MESA DO HAYOSIKO
+hayosiko shelf = PRATELEIRA DO HAYOSIKO
+hayosiko counter = BALCÃO DO HAYOSIKO
+hayosiko sink panelling = PAINEL DA PIA DO HAYOSIKO
+hayosiko counter panelling = PAINEL DO BALCÃO DO HAYOSIKO
+hayosiko battery = BATERIA DO HAYOSIKO
+hayosiko bed = CAMA DO HAYOSIKO
+hayosiko square light right = FAROL QUADRADO DIREITO DO HAYOSIKO
+hayosiko square light left = FAROL QUADRADO ESQUERDO DO HAYOSIKO
+hayosiko round light right = FAROL REDONDO DIREITO DO HAYOSIKO
+hayosiko round light left = FAROL REDONDO ESQUERDO DO HAYOSIKO
+hayosiko front lip = SAIA DIANTEIRA DO HAYOSIKO
+xmas lights = LUZES DE NATAL
+highroof = TETO ALTO
+
 //Cassette Tapes
 RACK FOR 12 CASSETTES - 60 MK = RACK PARA 12 CASSETES - 60 MK
 RACK FOR 24 CASSETTES - 120 MK = RACK PARA 24 CASSETES - 120 MK
