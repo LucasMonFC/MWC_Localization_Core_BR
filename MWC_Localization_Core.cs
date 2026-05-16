@@ -97,7 +97,7 @@ namespace MWC_Localization_Core
 
             surfaces = new List<ITranslationSurface>
             {
-                new GuiTextMonitor(),
+                new FsmGuiTranslator(),
                 new FsmArrayTranslator(),
                 new ArrayListProxyHandler(),
                 new HashTableProxyHandler(),

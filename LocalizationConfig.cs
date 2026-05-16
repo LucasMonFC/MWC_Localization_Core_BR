@@ -33,19 +33,29 @@ namespace MWC_Localization_Core
         /// </summary>
         public static readonly string[] ForcedFontPathPrefixes = new string[]
         {
-            "Systems/TV/Teletext/VKTekstiTV/PAGES",
-            "Systems/TV/Teletext/VKTekstiTV/HEADER",
+            // Computer
             "COMPUTER/SYSTEM/POS",
-            "Sheets/UnemployPaper",
-            "Systems/TV/TVGraphics/CHAT",
-            "Sheets/ServicePayment",
-            "Sheets/YellowPagesMagazine",
+            // GUI
+            "GUI/Indicators/Partname",
+            "GUI/Indicators/Interaction",
+            "GUI/Indicators/RallyCountdown",
+            "GUI/Indicators/Gear",
+            "GUI/Indicators/Subtitles",
+            "GUI/Indicators/TaxiGUI",  
+            // Sheets
             "Sheets/RallyRegistration/Functions/Class",
+            "Sheets/ServicePayment",
+            "Sheets/UnemployPaper",
+            "Sheets/YellowPagesMagazine",
+            // TV / Teletext
+            "Systems/TV/TVGraphics/CHAT",
             "Systems/TV/TVGraphics/GFXTanaanWeek/Text",
             "Systems/TV/TVGraphics/GFXTanaanSat1/Text",
             "Systems/TV/TVGraphics/GFXTanaanSat2/Text",
             "Systems/TV/TVGraphics/GFXTanaanSun1/Text",
-            "Systems/TV/TVGraphics/GFXTanaanSun2/Text"
+            "Systems/TV/TVGraphics/GFXTanaanSun2/Text",
+            "Systems/TV/Teletext/VKTekstiTV/PAGES",
+            "Systems/TV/Teletext/VKTekstiTV/HEADER",
         };
 
         public static bool IsForcedFontPath(string path)
