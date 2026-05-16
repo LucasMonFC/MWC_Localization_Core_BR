@@ -1,36 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 
 namespace MSC_Localization_Core
 {
     /// <summary>
-    /// MSC teletext database translator. Uses the safe in-game strategy:
-    /// temporarily activate Systems/Teletext so the database ArrayLists populate,
-    /// translate those lists, then restore the previous active state.
+    /// Translates MSC teletext ArrayLists populated by SplitTextToArrayList.
+    ///
+    /// This follows the upstream main strategy: inject a translation action right after
+    /// SplitTextToArrayList so the populated list is translated before readers consume it.
+    /// The MSC port tracks only the teletext database path; TV chat targets are MWC-only.
     /// </summary>
     public class FsmArrayTranslator : ITranslationSurface
     {
         public string Name { get { return "FsmArrayTranslator"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
-        public bool IsComplete { get { return completed; } }
-
-        private const string TeletextRootPath = "Systems/Teletext";
-        private const string DatabasePath = "Systems/Teletext/VKTekstiTV/Database";
+        public bool IsComplete { get { return processedPaths.Count >= targetPaths.Count; } }
 
         private TranslationDictionary sharedTranslations;
         private string teletextFilePath;
 
-        private readonly Dictionary<string, Dictionary<string, string>> categoryTranslations =
-            new Dictionary<string, Dictionary<string, string>>();
-        private readonly Dictionary<string, List<string>> indexBasedTranslations =
-            new Dictionary<string, List<string>>();
+        // Stable reference used by injected actions. F8 reload clears/refills it in place.
+        private readonly Dictionary<string, string> teletextTranslations = new Dictionary<string, string>();
 
-        private readonly HashSet<string> translatedArrays = new HashSet<string>();
-        private int lastLoadedTranslationCount;
-        private bool completed;
-        private bool activatedTeletextRoot;
+        private readonly HashSet<string> targetPaths = new HashSet<string>
+        {
+            "Systems/Teletext/VKTekstiTV/Database",
+        };
+
+        private readonly HashSet<string> processedPaths = new HashSet<string>();
+        private readonly HashSet<int> initializedFsmIds = new HashSet<int>();
 
         public void Initialize(TranslationContext ctx)
         {
@@ -42,244 +43,267 @@ namespace MSC_Localization_Core
 
         public int InitialPass()
         {
-            return ProcessTeletextDatabase();
+            return ProcessAllPaths();
         }
 
         public int MonitorTick(float deltaTime)
         {
-            return ProcessTeletextDatabase();
+            return ProcessAllPaths();
         }
 
         public void ClearTranslations()
         {
-            categoryTranslations.Clear();
-            indexBasedTranslations.Clear();
-            lastLoadedTranslationCount = 0;
+            teletextTranslations.Clear();
             Reset();
         }
 
         public void Reset()
         {
-            translatedArrays.Clear();
-            completed = false;
-            activatedTeletextRoot = false;
+            processedPaths.Clear();
+            initializedFsmIds.Clear();
         }
 
         public void LoadTeletextTranslations(string filePath)
         {
+            Dictionary<string, Dictionary<string, string>> loadedCategoryTranslations;
+            Dictionary<string, List<string>> ignoredIndexTranslations;
             TranslationFileParser.ParseCategoryBasedFile(
                 filePath,
-                out Dictionary<string, Dictionary<string, string>> loadedCategoryTranslations,
-                out Dictionary<string, List<string>> loadedIndexBasedTranslations);
+                out loadedCategoryTranslations,
+                out ignoredIndexTranslations);
 
-            categoryTranslations.Clear();
-            foreach (KeyValuePair<string, Dictionary<string, string>> category in loadedCategoryTranslations)
-                categoryTranslations[category.Key] = category.Value;
-
-            indexBasedTranslations.Clear();
-            foreach (KeyValuePair<string, List<string>> category in loadedIndexBasedTranslations)
-                indexBasedTranslations[category.Key] = category.Value;
-
-            lastLoadedTranslationCount = 0;
-            foreach (Dictionary<string, string> category in categoryTranslations.Values)
-                lastLoadedTranslationCount += category.Count;
+            teletextTranslations.Clear();
+            foreach (Dictionary<string, string> category in loadedCategoryTranslations.Values)
+            {
+                foreach (KeyValuePair<string, string> pair in category)
+                    teletextTranslations[pair.Key] = pair.Value;
+            }
         }
 
         public int GetTranslationCount()
         {
-            return lastLoadedTranslationCount;
+            return teletextTranslations.Count;
         }
 
-        private int ProcessTeletextDatabase()
+        private int ProcessAllPaths()
         {
-            if (completed)
-                return 0;
-
-            GameObject teletextRoot = LocalizationUtils.FindGameObjectIncludingInactive(TeletextRootPath);
-            if (teletextRoot == null)
-                return 0;
-
-            if (!teletextRoot.activeSelf)
-            {
-                teletextRoot.SetActive(true);
-                activatedTeletextRoot = true;
-            }
-
             try
             {
-                GameObject database = LocalizationUtils.FindGameObjectIncludingInactive(DatabasePath);
-                if (database == null)
-                    return 0;
-
-                PlayMakerArrayListProxy[] proxies = database.GetComponents<PlayMakerArrayListProxy>();
-                if (proxies == null || proxies.Length == 0)
-                    return 0;
-
                 int totalTranslated = 0;
-                bool allKnownArraysComplete = true;
-
-                for (int i = 0; i < proxies.Length; i++)
+                foreach (string path in targetPaths)
                 {
-                    PlayMakerArrayListProxy proxy = proxies[i];
-                    if (proxy == null || string.IsNullOrEmpty(proxy.referenceName))
+                    if (processedPaths.Contains(path))
                         continue;
 
-                    string categoryName = proxy.referenceName;
-                    string arrayKey = i.ToString() + ":" + categoryName;
-                    if (translatedArrays.Contains(arrayKey))
+                    GameObject go = LocalizationUtils.FindGameObjectIncludingInactive(path);
+                    if (go == null)
                         continue;
 
-                    int translated = TranslateProxy(proxy, categoryName, out int fallbackCount);
-                    bool isPopulated = proxy._arrayList != null && proxy._arrayList.Count > 0;
-                    bool hasTranslations = HasTranslationsFor(categoryName);
+                    int injected;
+                    if (!TryInjectTranslationActions(go, out injected))
+                        continue;
 
-                    if (translated > 0 || isPopulated || !hasTranslations)
-                    {
-                        if (translated > 0)
-                        {
-                            if (fallbackCount > 0)
-                                CoreConsole.Print($"[FsmArrayTranslator] '{categoryName}': Used index fallback for {fallbackCount} items");
-                            CoreConsole.Print($"[FsmArrayTranslator] Translated '{categoryName}' with {translated} items");
-                            totalTranslated += translated;
-                        }
+                    if (injected > 0)
+                        CoreConsole.Print($"[FsmArrayTranslator] Injected {injected} teletext translate action(s) under {path}");
 
-                        translatedArrays.Add(arrayKey);
-                    }
-
-                    if (!translatedArrays.Contains(arrayKey))
-                        allKnownArraysComplete = false;
-                }
-
-                if (allKnownArraysComplete)
-                {
-                    completed = true;
-                    RestoreTeletextRootIfNeeded(teletextRoot);
+                    totalTranslated += TranslatePopulatedProxies(go);
+                    processedPaths.Add(path);
                 }
 
                 return totalTranslated;
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Error($"[FsmArrayTranslator] Error processing teletext database: {ex.Message}");
+                CoreConsole.Error($"[FsmArrayTranslator] Error processing teletext paths: {ex.Message}");
                 return 0;
             }
         }
 
-        private void RestoreTeletextRootIfNeeded(GameObject teletextRoot)
+        private bool TryInjectTranslationActions(GameObject go, out int totalInjected)
         {
-            if (!activatedTeletextRoot || teletextRoot == null)
-                return;
+            totalInjected = 0;
+            PlayMakerFSM[] fsms = go.GetComponents<PlayMakerFSM>();
+            for (int fi = 0; fi < fsms.Length; fi++)
+            {
+                PlayMakerFSM fsm = fsms[fi];
+                if (!EnsureFsmInitialized(fsm) || fsm.FsmStates == null)
+                    return false;
 
-            teletextRoot.SetActive(false);
-            activatedTeletextRoot = false;
+                for (int si = 0; si < fsm.FsmStates.Length; si++)
+                {
+                    HutongGames.PlayMaker.FsmState state = fsm.FsmStates[si];
+                    if (state == null || state.Actions == null)
+                        continue;
+
+                    totalInjected += SpliceTranslationActionsInto(state, go);
+                }
+            }
+
+            return true;
         }
 
-        private bool HasTranslationsFor(string categoryName)
+        private bool EnsureFsmInitialized(PlayMakerFSM fsm)
         {
-            Dictionary<string, string> categoryDict;
-            if (categoryTranslations.TryGetValue(categoryName, out categoryDict) && categoryDict != null && categoryDict.Count > 0)
+            if (fsm == null || fsm.Fsm == null)
+                return false;
+            if (fsm.Fsm.Initialized)
                 return true;
 
-            List<string> indexList;
-            return indexBasedTranslations.TryGetValue(categoryName, out indexList) && indexList != null && indexList.Count > 0;
+            int id = fsm.GetInstanceID();
+            if (!initializedFsmIds.Contains(id))
+            {
+                initializedFsmIds.Add(id);
+                try
+                {
+                    fsm.Fsm.InitData();
+                }
+                catch
+                {
+                    // Some FSMs are not safe to initialize early; retry once the game initializes them.
+                }
+            }
+
+            return fsm.FsmStates != null;
         }
 
-        private int TranslateProxy(PlayMakerArrayListProxy proxy, string categoryName, out int fallbackCount)
+        private int SpliceTranslationActionsInto(HutongGames.PlayMaker.FsmState state, GameObject go)
         {
-            fallbackCount = 0;
-            if (proxy == null || proxy._arrayList == null)
-                return 0;
+            HutongGames.PlayMaker.FsmStateAction[] oldActions = state.Actions;
+            for (int i = 0; i < oldActions.Length; i++)
+            {
+                if (oldActions[i] is TranslateArrayListAction)
+                    return 0;
+            }
 
-            int translated = TranslateArrayListInPlace(
-                proxy._arrayList,
-                categoryName,
-                categoryTranslations,
-                indexBasedTranslations,
-                sharedTranslations,
-                out fallbackCount);
+            List<HutongGames.PlayMaker.FsmStateAction> newActions = null;
+            int injected = 0;
 
-            if (translated > 0)
-                SyncPreFill(proxy, categoryName);
+            for (int ai = 0; ai < oldActions.Length; ai++)
+            {
+                HutongGames.PlayMaker.FsmStateAction action = oldActions[ai];
+                if (newActions != null)
+                    newActions.Add(action);
 
-            return translated;
+                if (action == null || action.GetType().Name != "SplitTextToArrayList")
+                    continue;
+
+                TranslateArrayListAction injection = BuildInjectionAction(action, go);
+                if (injection == null)
+                    continue;
+
+                if (newActions == null)
+                {
+                    newActions = new List<HutongGames.PlayMaker.FsmStateAction>(oldActions.Length + 2);
+                    for (int j = 0; j <= ai; j++)
+                        newActions.Add(oldActions[j]);
+                }
+
+                newActions.Add(injection);
+                injected++;
+            }
+
+            if (newActions != null)
+                state.Actions = newActions.ToArray();
+
+            return injected;
         }
 
-        private void SyncPreFill(PlayMakerArrayListProxy proxy, string categoryName)
+        private TranslateArrayListAction BuildInjectionAction(
+            HutongGames.PlayMaker.FsmStateAction splitAction,
+            GameObject go)
         {
-            if (proxy == null || proxy.preFillStringList == null || proxy.preFillStringList.Count == 0)
-                return;
+            FieldInfo referenceField = FsmUtils.GetField(splitAction.GetType(), "reference");
+            if (referenceField == null)
+                return null;
 
-            int ignoredFallbackCount;
-            ArrayList preFillAsArray = new ArrayList();
-            for (int i = 0; i < proxy.preFillStringList.Count; i++)
-                preFillAsArray.Add(proxy.preFillStringList[i]);
+            HutongGames.PlayMaker.FsmString referenceFsm = referenceField.GetValue(splitAction) as HutongGames.PlayMaker.FsmString;
+            string referenceName = referenceFsm != null ? referenceFsm.Value : null;
+            if (string.IsNullOrEmpty(referenceName))
+                return null;
 
-            TranslateArrayListInPlace(
-                preFillAsArray,
-                categoryName,
-                categoryTranslations,
-                indexBasedTranslations,
-                sharedTranslations,
-                out ignoredFallbackCount);
+            PlayMakerArrayListProxy target = null;
+            PlayMakerArrayListProxy[] proxies = go.GetComponents<PlayMakerArrayListProxy>();
+            for (int i = 0; i < proxies.Length; i++)
+            {
+                if (proxies[i] != null && proxies[i].referenceName == referenceName)
+                {
+                    target = proxies[i];
+                    break;
+                }
+            }
 
-            for (int i = 0; i < proxy.preFillStringList.Count && i < preFillAsArray.Count; i++)
-                proxy.preFillStringList[i] = preFillAsArray[i] as string;
+            if (target == null)
+                return null;
+
+            return new TranslateArrayListAction
+            {
+                target = target,
+                teletextTranslations = teletextTranslations,
+                sharedTranslations = sharedTranslations,
+                label = referenceName,
+            };
+        }
+
+        private int TranslatePopulatedProxies(GameObject go)
+        {
+            PlayMakerArrayListProxy[] proxies = go.GetComponents<PlayMakerArrayListProxy>();
+            int totalTranslated = 0;
+
+            for (int i = 0; i < proxies.Length; i++)
+            {
+                PlayMakerArrayListProxy proxy = proxies[i];
+                if (proxy == null || string.IsNullOrEmpty(proxy.referenceName))
+                    continue;
+
+                int translated = TranslateArrayListInPlace(proxy._arrayList, teletextTranslations, sharedTranslations);
+                if (translated > 0)
+                {
+                    CoreConsole.Print($"[FsmArrayTranslator] Translated live '{proxy.referenceName}' with {translated} items");
+                    totalTranslated += translated;
+                }
+            }
+
+            return totalTranslated;
         }
 
         internal static int TranslateArrayListInPlace(
             ArrayList list,
-            string categoryName,
-            Dictionary<string, Dictionary<string, string>> categoryDict,
-            Dictionary<string, List<string>> indexDict,
-            TranslationDictionary fallback,
-            out int fallbackCount)
+            Dictionary<string, string> teletextDict,
+            TranslationDictionary fallback)
         {
-            fallbackCount = 0;
             if (list == null)
                 return 0;
 
-            Dictionary<string, string> categoryTranslations = null;
-            bool hasCategoryTranslations = categoryDict != null
-                && categoryDict.TryGetValue(categoryName, out categoryTranslations)
-                && categoryTranslations != null
-                && categoryTranslations.Count > 0;
-
-            List<string> indexTranslations = null;
-            bool hasIndexFallback = indexDict != null
-                && indexDict.TryGetValue(categoryName, out indexTranslations)
-                && indexTranslations != null
-                && indexTranslations.Count > 0;
-
             int translatedCount = 0;
-            int nonEmptySourceIndex = -1;
-
             for (int i = 0; i < list.Count; i++)
             {
                 if (list[i] == null)
                     continue;
 
                 string original = list[i].ToString();
-                string lookupKey = TranslationFileParser.NormalizeMultiLineKey(TranslationFileParser.UnescapeString(original));
-                if (string.IsNullOrEmpty(lookupKey))
+                if (string.IsNullOrEmpty(original))
                     continue;
 
-                nonEmptySourceIndex++;
-
                 string translation = null;
-                bool hasTranslation = hasCategoryTranslations && categoryTranslations.TryGetValue(lookupKey, out translation);
+                string teletextKey = TranslationFileParser.NormalizeMultiLineKey(
+                    TranslationFileParser.UnescapeString(original));
 
-                if (!hasTranslation && fallback != null)
-                    hasTranslation = fallback.TryGetExact(original, out translation);
-
-                if (!hasTranslation && hasIndexFallback && nonEmptySourceIndex < indexTranslations.Count)
+                if (!string.IsNullOrEmpty(teletextKey)
+                    && teletextDict != null
+                    && teletextDict.TryGetValue(teletextKey, out translation)
+                    && translation == original)
                 {
-                    translation = indexTranslations[nonEmptySourceIndex];
-                    hasTranslation = !string.IsNullOrEmpty(translation);
-                    if (hasTranslation)
-                        fallbackCount++;
+                    translation = null;
                 }
 
-                if (!hasTranslation || translation == original)
+                if (translation == null && fallback != null)
+                {
+                    fallback.TryGetExact(original, out translation);
+                    if (translation == original)
+                        translation = null;
+                }
+
+                if (string.IsNullOrEmpty(translation))
                     continue;
 
                 list[i] = translation;
@@ -287,6 +311,33 @@ namespace MSC_Localization_Core
             }
 
             return translatedCount;
+        }
+
+        public sealed class TranslateArrayListAction : HutongGames.PlayMaker.FsmStateAction
+        {
+            public PlayMakerArrayListProxy target;
+            public Dictionary<string, string> teletextTranslations;
+            public TranslationDictionary sharedTranslations;
+            public string label;
+
+            public override void OnEnter()
+            {
+                try
+                {
+                    if (target != null)
+                    {
+                        int translated = TranslateArrayListInPlace(target._arrayList, teletextTranslations, sharedTranslations);
+                        if (translated > 0)
+                            CoreConsole.Print($"[FsmArrayTranslator] '{label}' post-split: translated {translated} entries");
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    CoreConsole.Error($"[FsmArrayTranslator] OnEnter error ({label}): {ex.Message}");
+                }
+
+                Finish();
+            }
         }
     }
 }

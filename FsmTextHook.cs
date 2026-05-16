@@ -14,7 +14,7 @@ namespace MSC_Localization_Core
     {
         public string Name { get { return "FsmTextHook"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.OncePerScene; } }
-        public bool IsComplete { get { return true; } }
+        public bool IsComplete { get { return false; } }
 
         public int InitialPass()
         {
@@ -115,13 +115,7 @@ namespace MSC_Localization_Core
             if (!isMainMenu && !isGame && !isIntro)
                 return false;
 
-            bool changed = false;
-            if (isGame)
-            {
-                changed |= TryApplyTeletextTargets();
-            }
-
-            changed |= ApplySceneTargets(currentScene);
+            bool changed = ApplySceneTargets(currentScene);
             if (changed)
                 CoreConsole.Print("[FsmTextHook] Applied hardcoded FSM translations in " + currentScene);
 
@@ -231,6 +225,15 @@ namespace MSC_Localization_Core
             resolved = false;
             if (target.WholeFsm)
             {
+                bool handled;
+                bool indexedResolved;
+                bool indexedLineChanged = TryTranslateIndexedLineTarget(target, out handled, out indexedResolved);
+                if (handled)
+                {
+                    resolved = indexedResolved;
+                    return indexedLineChanged;
+                }
+
                 List<PlayMakerFSM> fsms = GetFsmsForWholeTarget(target);
                 bool changed = false;
                 changed |= TranslateArrayListProxiesForTarget(target);
@@ -339,189 +342,96 @@ namespace MSC_Localization_Core
             return changed;
         }
 
-        private bool TryApplyTeletextTargets()
+        private bool TryTranslateIndexedLineTarget(FsmTarget target, out bool handled, out bool resolved)
         {
+            handled = false;
+            resolved = false;
+            if (target == null || !target.WholeFsm || !TextMatchesExact(GetLastPathSegment(target.ObjectPath), "Line"))
+                return false;
+
+            handled = true;
+            List<PlayMakerFSM> fsms = GetFsmsForWholeTarget(target);
+            if (fsms.Count == 0)
+                return false;
+
             bool changed = false;
-            for (int i = 0; i < targets.Count; i++)
+            for (int i = 0; i < fsms.Count; i++)
             {
-                FsmTarget target = targets[i];
-                if (!IsRuntimeTeletextTarget(target))
-                    continue;
-
-                bool resolved;
-                if (target.WholeFsm)
-                {
-                    changed |= TryApplyTarget(target, out resolved);
-                }
-                else
-                {
-                    List<PlayMakerFSM> fsms = GetFsmsForIndexedTarget(target);
-                    for (int fsmIndex = 0; fsmIndex < fsms.Count; fsmIndex++)
-                    {
-                        PlayMakerFSM fsm = fsms[fsmIndex];
-                        if (!IsFsmReady(fsm))
-                            continue;
-
-                        changed |= ForceRuntimeTeletextActionValue(fsm, target);
-                        changed |= TranslateActionTarget(fsm, target, out resolved);
-                    }
-
-                    changed |= TranslateTextMeshesForTarget(target);
-                }
+                changed |= SyncIndexedLineFromArrayList(fsms[i], target);
             }
 
+            resolved = true;
             return changed;
         }
 
-        private bool TranslateActionTarget(PlayMakerFSM fsm, FsmTarget target, out bool resolved)
+        private bool SyncIndexedLineFromArrayList(PlayMakerFSM fsm, FsmTarget target)
         {
-            resolved = false;
             if (!IsFsmReady(fsm) || fsm.FsmStates == null)
                 return false;
 
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, target.StateName);
-            if (state == null || state.Actions == null || target.ActionIndex < 0 || target.ActionIndex >= state.Actions.Length)
+            HutongGames.PlayMaker.FsmState state = FindState(fsm, "State 1");
+            if (state == null || state.Actions == null || state.Actions.Length == 0)
                 return false;
 
-            resolved = true;
-            return TranslateAction(state.Actions[target.ActionIndex], target);
-        }
-
-        private bool ForceRuntimeTeletextActionValue(PlayMakerFSM fsm, FsmTarget target)
-        {
-            if (!IsDirectRuntimeTeletextValueTarget(target) || !IsFsmReady(fsm))
+            object action = state.Actions[0];
+            if (action == null || action.GetType().Name != "ArrayListGet")
                 return false;
 
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, target.StateName);
-            if (state == null || state.Actions == null || target.ActionIndex < 0 || target.ActionIndex >= state.Actions.Length)
+            int index = GetArrayListGetIndex(action);
+            PlayMakerArrayListProxy proxy = GetArrayListGetProxy(action);
+            if (proxy == null || proxy._arrayList == null)
                 return false;
 
-            object action = state.Actions[target.ActionIndex];
-            string translated;
-            if (!TrySelectRuntimeTeletextTranslation(action, target, out translated))
-                return false;
+            if (index < 0 || index >= proxy._arrayList.Count || proxy._arrayList[index] == null)
+                return SetIndexedLineValue(fsm, string.Empty);
+
+            string sourceLine = proxy._arrayList[index].ToString();
+            if (string.IsNullOrEmpty(sourceLine))
+                return SetIndexedLineValue(fsm, string.Empty);
+
+            string displayLine;
+            if (!TranslateString(sourceLine, target, out displayLine))
+                displayLine = sourceLine;
 
             bool changed = false;
-            changed |= ForceSetPropertyStringParameter(action, translated);
-            changed |= ForceSetStringValueAction(action, translated);
+            if (proxy._arrayList[index] as string != displayLine)
+            {
+                proxy._arrayList[index] = displayLine;
+                changed = true;
+            }
+
+            changed |= SetIndexedLineValue(fsm, displayLine);
             return changed;
         }
 
-        private bool TrySelectRuntimeTeletextTranslation(object action, FsmTarget target, out string translated)
+        private bool SetIndexedLineValue(PlayMakerFSM fsm, string value)
         {
-            translated = null;
-            if (target == null || target.Rules.Count == 0)
+            if (fsm == null || fsm.gameObject == null)
                 return false;
 
-            string currentValue;
-            if (TryGetSetPropertyStringParameter(action, out currentValue) && TranslateString(currentValue, target, out translated))
-                return true;
+            string safeValue = value ?? string.Empty;
+            bool changed = false;
+            HutongGames.PlayMaker.FsmString text = fsm.FsmVariables != null ? fsm.FsmVariables.GetFsmString("Text") : null;
+            changed |= FsmUtils.SetFsmStringValue(text, safeValue);
 
-            if (TryTranslateActionFsmStringValue(action, target, out translated))
-                return true;
-
-            if (TryTranslateTargetTextMeshValue(target, out translated))
-                return true;
-
-            if (target.Rules.Count == 1)
+            HutongGames.PlayMaker.FsmState state = FindState(fsm, "State 1");
+            if (state != null && state.Actions != null)
             {
-                translated = target.Rules[0].Translation;
-                return true;
+                if (state.Actions.Length > 0)
+                    changed |= FsmUtils.SetNestedStringValue(state.Actions[0], safeValue, "result", "namedVar");
+
+                if (state.Actions.Length > 1)
+                    changed |= FsmUtils.SetNestedStringValue(state.Actions[1], safeValue, "targetProperty", "StringParameter");
             }
 
-            return false;
-        }
-
-        private bool TryGetSetPropertyStringParameter(object action, out string value)
-        {
-            value = null;
-            if (action == null || action.GetType().Name != "SetProperty")
-                return false;
-
-            FieldInfo targetPropertyField = FsmUtils.GetField(action.GetType(), "targetProperty");
-            if (targetPropertyField == null)
-                return false;
-
-            object targetProperty = targetPropertyField.GetValue(action);
-            if (targetProperty == null)
-                return false;
-
-            FieldInfo stringParameterField = FsmUtils.GetField(targetProperty.GetType(), "StringParameter");
-            if (stringParameterField == null)
-                return false;
-
-            value = stringParameterField.GetValue(targetProperty) as string;
-            return !string.IsNullOrEmpty(value);
-        }
-
-        private bool TryTranslateActionFsmStringValue(object action, FsmTarget target, out string translated)
-        {
-            translated = null;
-            if (action == null)
-                return false;
-
-            FieldInfo[] fields = FsmUtils.GetFields(action.GetType());
-            for (int i = 0; i < fields.Length; i++)
+            TextMesh textMesh = fsm.GetComponent<TextMesh>();
+            if (textMesh != null && textMesh.text != safeValue)
             {
-                FieldInfo field = fields[i];
-                if (field == null || field.IsStatic || ShouldSkipActionField(field))
-                    continue;
-
-                object value;
-                try
-                {
-                    value = field.GetValue(action);
-                }
-                catch
-                {
-                    continue;
-                }
-
-                HutongGames.PlayMaker.FsmString fsmString = value as HutongGames.PlayMaker.FsmString;
-                if (fsmString != null && TranslateString(fsmString.Value, target, out translated))
-                    return true;
+                textMesh.text = safeValue;
+                changed = true;
             }
 
-            return false;
-        }
-
-        private bool TryTranslateTargetTextMeshValue(FsmTarget target, out string translated)
-        {
-            translated = null;
-            List<TextMesh> textMeshes = GetTextMeshesForTarget(target);
-            for (int i = 0; i < textMeshes.Count; i++)
-            {
-                TextMesh textMesh = textMeshes[i];
-                if (textMesh != null && TranslateString(textMesh.text, target, out translated))
-                    return true;
-            }
-
-            return false;
-        }
-
-        private bool ForceSetPropertyStringParameter(object action, string value)
-        {
-            return FsmUtils.SetNestedStringValue(action, value, "targetProperty", "StringParameter");
-        }
-
-        private bool ForceSetStringValueAction(object action, string value)
-        {
-            if (action == null)
-                return false;
-
-            HutongGames.PlayMaker.Actions.SetStringValue typedAction = action as HutongGames.PlayMaker.Actions.SetStringValue;
-            if (typedAction != null)
-                return FsmUtils.SetFsmStringValue(typedAction.stringValue, value);
-
-            if (action.GetType().Name != "SetStringValue")
-                return false;
-
-            FieldInfo stringValueField = FsmUtils.GetField(action.GetType(), "stringValue");
-            if (stringValueField == null)
-                return false;
-
-            HutongGames.PlayMaker.FsmString stringValue = stringValueField.GetValue(action) as HutongGames.PlayMaker.FsmString;
-            return FsmUtils.SetFsmStringValue(stringValue, value);
+            return changed;
         }
 
         private bool TranslateBuildString(object action, FsmTarget target)
@@ -974,27 +884,6 @@ namespace MSC_Localization_Core
             resolvedTargets.Add(target.Key);
         }
 
-        private static bool IsRuntimeTeletextTarget(FsmTarget target)
-        {
-            if (target == null || string.IsNullOrEmpty(target.ObjectPath))
-                return false;
-
-            if (TextMatchesExact(target.ObjectPath, "Systems/Teletext"))
-                return true;
-
-            return target.ObjectPath.IndexOf("Systems/Teletext/VKTekstiTV/PAGES/188/Texts/", System.StringComparison.OrdinalIgnoreCase) >= 0
-                || target.ObjectPath.IndexOf("Systems/Teletext/VKTekstiTV/PAGES/250/Texts/", System.StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-
-        private static bool IsDirectRuntimeTeletextValueTarget(FsmTarget target)
-        {
-            if (target == null || target.WholeFsm)
-                return false;
-
-            return target.ObjectPath.IndexOf("Systems/Teletext/VKTekstiTV/PAGES/188/Texts/", System.StringComparison.OrdinalIgnoreCase) >= 0
-                || target.ObjectPath.IndexOf("Systems/Teletext/VKTekstiTV/PAGES/250/Texts/", System.StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-
         private static bool IsTargetForScene(FsmTarget target, string currentScene)
         {
             if (target == null)
@@ -1324,6 +1213,19 @@ namespace MSC_Localization_Core
 
             char next = actualPath[rulePath.Length];
             return next == '/' || char.IsDigit(next);
+        }
+
+        private static int GetArrayListGetIndex(object action)
+        {
+            if (action == null)
+                return -1;
+
+            FieldInfo atIndexField = FsmUtils.GetField(action.GetType(), "atIndex");
+            if (atIndexField == null)
+                return -1;
+
+            HutongGames.PlayMaker.FsmInt atIndex = atIndexField.GetValue(action) as HutongGames.PlayMaker.FsmInt;
+            return atIndex == null ? -1 : atIndex.Value;
         }
 
         private static PlayMakerArrayListProxy GetArrayListGetProxy(object action)

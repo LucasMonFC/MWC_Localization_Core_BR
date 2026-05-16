@@ -289,8 +289,6 @@ namespace MSC_Localization_Core
         {
             private Text target;
             private TranslationDictionary translations;
-            private readonly Dictionary<int, int> originalFontSizes = new Dictionary<int, int>();
-            private readonly Dictionary<int, Vector2> originalAnchoredPositions = new Dictionary<int, Vector2>();
             private string lastText;
 
             public void Configure(Text target, TranslationDictionary translations)
@@ -334,7 +332,7 @@ namespace MSC_Localization_Core
                     lastText = current;
                 }
 
-                ApplyDirtTrackLayout(target, originalFontSizes, originalAnchoredPositions);
+                PreventDirtTrackLineWrap(target);
             }
         }
 
@@ -351,77 +349,14 @@ namespace MSC_Localization_Core
             return null;
         }
 
-        private static void ApplyDirtTrackLayout(
-            Text text,
-            Dictionary<int, int> originalFontSizes,
-            Dictionary<int, Vector2> originalAnchoredPositions)
+        private static void PreventDirtTrackLineWrap(Text text)
         {
             string role = GetDirtTrackTextRole(text);
             if (role != "Message header" && role != "Message" && role != "Message footer")
                 return;
 
-            RectTransform roleRect = GetDirtTrackRoleRect(text, role);
-
-            int instanceID = text.GetInstanceID();
-            int originalSize;
-            if (!originalFontSizes.TryGetValue(instanceID, out originalSize))
-            {
-                originalSize = text.fontSize;
-                originalFontSizes[instanceID] = originalSize;
-            }
-
-            int roleRectID = roleRect.GetInstanceID();
-            Vector2 originalPosition;
-            if (!originalAnchoredPositions.TryGetValue(roleRectID, out originalPosition))
-            {
-                originalPosition = roleRect.anchoredPosition;
-                originalAnchoredPositions[roleRectID] = originalPosition;
-            }
-
-            if (role == "Message header")
-            {
-                text.resizeTextForBestFit = true;
-                text.resizeTextMinSize = Math.Max(12, originalSize / 2);
-                text.resizeTextMaxSize = Math.Max(18, (int)(originalSize * 0.72f));
-                text.fontSize = text.resizeTextMaxSize;
-                roleRect.anchoredPosition = originalPosition + new Vector2(0f, 24f);
-                return;
-            }
-
-            if (role == "Message footer")
-            {
-                text.resizeTextForBestFit = true;
-                text.resizeTextMinSize = Math.Max(14, originalSize / 2);
-                text.resizeTextMaxSize = Math.Max(20, (int)(originalSize * 0.72f));
-                text.fontSize = text.resizeTextMaxSize;
-                text.horizontalOverflow = HorizontalWrapMode.Overflow;
-                text.verticalOverflow = VerticalWrapMode.Overflow;
-                roleRect.anchoredPosition = originalPosition;
-                return;
-            }
-
-            text.resizeTextForBestFit = true;
-            text.resizeTextMinSize = Math.Max(18, originalSize / 2);
-            text.resizeTextMaxSize = Math.Max(24, (int)(originalSize * 0.84f));
-            text.fontSize = text.resizeTextMaxSize;
-            roleRect.anchoredPosition = originalPosition;
-        }
-
-        private static RectTransform GetDirtTrackRoleRect(Text text, string role)
-        {
-            Transform current = text.transform;
-            if (current.name == role)
-                return text.rectTransform;
-
-            Transform parent = current.parent;
-            if (parent != null && parent.name == role)
-            {
-                RectTransform parentRect = parent as RectTransform;
-                if (parentRect != null)
-                    return parentRect;
-            }
-
-            return text.rectTransform;
+            text.horizontalOverflow = HorizontalWrapMode.Overflow;
+            text.verticalOverflow = VerticalWrapMode.Overflow;
         }
 
         private static string GetDirtTrackTextRole(Text text)

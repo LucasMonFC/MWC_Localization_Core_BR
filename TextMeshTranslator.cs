@@ -69,6 +69,12 @@ namespace MSC_Localization_Core
             if (ApplyPatternTranslation(textMesh, path))
                 return true;
 
+            if (LocalizationConfig.IsForcedFontPath(path))
+            {
+                ApplyCustomFont(textMesh, path);
+                return true;
+            }
+
             return false;
         }
 

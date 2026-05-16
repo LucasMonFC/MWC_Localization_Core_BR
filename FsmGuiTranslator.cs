@@ -5,8 +5,24 @@ using UnityEngine;
 namespace MSC_Localization_Core
 {
     /// <summary>
-    /// Translates built-in GUI TextMeshes by injecting a small action after the
-    /// PlayMaker SetProperty action that writes the TextMesh text.
+    /// Translates the HUD Interaction and Subtitles meshes by splicing a translation
+    /// action right after each PlayMaker SetProperty that writes a TextMesh's "text".
+    ///
+    /// Both indicators share the same FSM shape: an "SetText" FSM contains a state
+    /// with two SetProperty actions - one writing the visible TextMesh, the other the
+    /// child Shadow TextMesh - both sourced from a global FsmString (GUIinteraction
+    /// or GUIsubtitle). Splicing once per state injects translation after both calls,
+    /// so primary + shadow are covered without any per-frame polling.
+    ///
+    /// Strategy:
+    ///   1. At InitialPass, for each target (ObjectPath + FsmName + StateName), find
+    ///      the GameObject, the named FSM, and the named state. For every SetProperty
+    ///      action in that state whose property is "text" and whose target resolves
+    ///      to a TextMesh, splice a TranslateTextMeshAction directly after it. When
+    ///      the FSM runs the state, SetProperty writes the source string, then our
+    ///      injected action immediately translates the TextMesh's text in place.
+    ///   2. Once a target's state has been walked, it is never revisited (the splice
+    ///      is idempotent under F8 reload via the in-state guard below).
     /// </summary>
     public class FsmGuiTranslator : ITranslationSurface
     {
@@ -14,10 +30,7 @@ namespace MSC_Localization_Core
         public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
         public bool IsComplete { get { return processedTargets.Count >= targets.Length; } }
 
-        private TextMeshTranslator translator;
-        private readonly HashSet<string> processedTargets = new HashSet<string>();
-        private readonly HashSet<int> initializedFsmIds = new HashSet<int>();
-        private readonly PartnameLayoutHelper layoutHelper = new PartnameLayoutHelper();
+        private TranslationDictionary translations;
 
         private sealed class IndicatorTarget
         {
@@ -37,25 +50,39 @@ namespace MSC_Localization_Core
 
         private readonly IndicatorTarget[] targets = new IndicatorTarget[]
         {
-            new IndicatorTarget("GUI/Indicators/Partname", "Partname", "On"),
-            new IndicatorTarget("GUI/Indicators/Interaction", "SetText", "State 1"),
-            new IndicatorTarget("GUI/Indicators/RallyCountdown", "SetText", "State 1"),
-            new IndicatorTarget("GUI/Indicators/Gear", "SetText", "State 1"),
-            new IndicatorTarget("GUI/Indicators/Subtitles", "SetText", "State 3"),
-            new IndicatorTarget("GUI/HUD/Thrist/Pivot", "Scale", "State 2"),
-            new IndicatorTarget("GUI/HUD/Thrist/Pivot", "Scale", "State 3"),
+            new IndicatorTarget("GUI/Indicators/Partname",       "Partname", "On"),
+            new IndicatorTarget("GUI/Indicators/Interaction",    "SetText",  "State 1"),
+            new IndicatorTarget("GUI/Indicators/RallyCountdown", "SetText",  "State 1"),
+            new IndicatorTarget("GUI/Indicators/Gear",           "SetText",  "State 1"),
+            new IndicatorTarget("GUI/Indicators/Subtitles",      "SetText",  "State 3"),
+            new IndicatorTarget("GUI/HUD/Thrist/Pivot",          "Scale",    "State 3"),
         };
 
+        private readonly HashSet<string> processedTargets = new HashSet<string>();
+
+        // Tracks FSM instances we've already asked PlayMaker to deserialize. Inactive
+        // GameObjects' FSMs leave action runtime data uninitialized until first use,
+        // so reflection on SetProperty.targetProperty NRE-s without an explicit
+        // InitData() call. Same pattern as FsmTextHook.IsFsmReady.
+        private readonly HashSet<int> initializedFsmIds = new HashSet<int>();
+
+        // Subset of target keys whose state should also get a RefreshPartnameLayoutAction
+        // appended at the end of the action list. These are the indicators whose visible
+        // line count contributes to Partname's vertical offset.
         private readonly HashSet<string> layoutContributorKeys = new HashSet<string>
         {
             "GUI/Indicators/Partname|Partname|On",
-            "GUI/Indicators/Interaction|SetText|State 1",
             "GUI/Indicators/Subtitles|SetText|State 3",
         };
 
+        // Shared helper that captures Partname's base position once and applies the
+        // line-count-driven Y offset. All injected RefreshPartnameLayoutAction
+        // instances share this single helper so they see a consistent base position.
+        private readonly PartnameLayoutHelper layoutHelper = new PartnameLayoutHelper();
+
         public void Initialize(TranslationContext ctx)
         {
-            translator = ctx.Translator;
+            translations = ctx.Translations;
         }
 
         public int InitialPass()
@@ -77,49 +104,50 @@ namespace MSC_Localization_Core
 
         public void ClearTranslations()
         {
+            // No owned translation data; just drop runtime state so the next pass
+            // re-walks and re-confirms the splice is in place.
             Reset();
         }
 
         private int ProcessAllTargets()
         {
-            if (Application.loadedLevelName != "GAME")
-                return 0;
-
             int totalInjected = 0;
             for (int i = 0; i < targets.Length; i++)
             {
-                IndicatorTarget target = targets[i];
-                if (processedTargets.Contains(target.Key))
+                IndicatorTarget t = targets[i];
+                if (processedTargets.Contains(t.Key))
                     continue;
 
                 try
                 {
-                    GameObject go = LocalizationUtils.FindGameObjectIncludingInactive(target.ObjectPath);
-                    if (go == null)
-                        continue;
+                    GameObject go = LocalizationUtils.FindGameObjectIncludingInactive(t.ObjectPath);
+                    if (go == null) continue;
 
-                    PlayMakerFSM fsm = FindFsmByName(go, target.FsmName);
-                    if (fsm == null || !EnsureFsmInitialized(fsm) || fsm.FsmStates == null)
-                        continue;
+                    PlayMakerFSM fsm = FindFsmByName(go, t.FsmName);
+                    if (fsm == null) continue;
 
-                    HutongGames.PlayMaker.FsmState state = FindState(fsm, target.StateName);
-                    if (state == null || state.Actions == null)
-                        continue;
+                    // Inactive FSMs leave serialized action fields uninitialized; force
+                    // deserialization so reflection on targetProperty etc. is safe.
+                    if (!EnsureFsmInitialized(fsm) || fsm.FsmStates == null) continue;
 
-                    bool appendLayoutAction = layoutContributorKeys.Contains(target.Key);
-                    int injected = SpliceTranslationActionsInto(state, appendLayoutAction);
+                    HutongGames.PlayMaker.FsmState state = FindState(fsm, t.StateName);
+                    if (state == null || state.Actions == null) continue;
+
+                    bool appendLayout = layoutContributorKeys.Contains(t.Key);
+                    int injected = SpliceTranslationActionsInto(state, appendLayout);
                     if (injected > 0)
-                        CoreConsole.Print("[FsmGuiTranslator] Injected " + injected + " action(s) into " + target.Key);
+                        CoreConsole.Print($"[FsmGuiTranslator] Injected {injected} action(s) into {t.ObjectPath} ({t.FsmName}/{t.StateName})");
 
-                    processedTargets.Add(target.Key);
+                    processedTargets.Add(t.Key);
                     totalInjected += injected;
                 }
                 catch (System.Exception ex)
                 {
-                    CoreConsole.Warning("[FsmGuiTranslator] Failed processing " + target.Key + ": " + ex.Message);
+                    // Per-target catch so one bad target doesn't abort the rest of the loop.
+                    // Don't mark processed: we'll retry next tick once the FSM is ready.
+                    CoreConsole.Error($"[FsmGuiTranslator] Failed processing {t.ObjectPath} ({t.FsmName}/{t.StateName}): {ex.Message}");
                 }
             }
-
             return totalInjected;
         }
 
@@ -131,16 +159,13 @@ namespace MSC_Localization_Core
                 if (fsms[i] != null && FsmUtils.GetFsmName(fsms[i]) == fsmName)
                     return fsms[i];
             }
-
             return null;
         }
 
         private bool EnsureFsmInitialized(PlayMakerFSM fsm)
         {
-            if (fsm == null || fsm.Fsm == null)
-                return false;
-            if (fsm.Fsm.Initialized)
-                return true;
+            if (fsm == null || fsm.Fsm == null) return false;
+            if (fsm.Fsm.Initialized) return true;
 
             int id = fsm.GetInstanceID();
             if (!initializedFsmIds.Contains(id))
@@ -152,9 +177,10 @@ namespace MSC_Localization_Core
                 }
                 catch
                 {
+                    // Some FSMs are not safe to early-init; skip and retry next tick
+                    // (id stays in the set so we don't loop forever).
                 }
             }
-
             return fsm.FsmStates != null;
         }
 
@@ -166,73 +192,78 @@ namespace MSC_Localization_Core
                 if (states[i] != null && states[i].Name == stateName)
                     return states[i];
             }
-
             return null;
         }
 
         private int SpliceTranslationActionsInto(HutongGames.PlayMaker.FsmState state, bool appendLayoutAction)
         {
             HutongGames.PlayMaker.FsmStateAction[] oldActions = state.Actions;
-            List<HutongGames.PlayMaker.FsmStateAction> existingInjectedActions = null;
+
+            // F8-reload guard: if this state already carries one of our injected
+            // actions (translation or layout), the previous injection is still in
+            // place. The translations reference and layoutHelper instance are stable
+            // across reloads, so updated translations and base positions are picked
+            // up automatically.
+            bool hasInjectedAction = false;
+            List<TranslateTextMeshAction> existingTextActions = null;
             for (int i = 0; i < oldActions.Length; i++)
             {
-                TranslateTextMeshAction existingTranslate = oldActions[i] as TranslateTextMeshAction;
-                if (existingTranslate != null)
+                TranslateTextMeshAction textAction = oldActions[i] as TranslateTextMeshAction;
+                if (textAction != null)
                 {
-                    existingTranslate.translator = translator;
-                    if (existingInjectedActions == null)
-                        existingInjectedActions = new List<HutongGames.PlayMaker.FsmStateAction>();
-                    existingInjectedActions.Add(existingTranslate);
+                    hasInjectedAction = true;
+                    if (existingTextActions == null)
+                        existingTextActions = new List<TranslateTextMeshAction>();
+                    existingTextActions.Add(textAction);
                     continue;
                 }
 
-                RefreshPartnameLayoutAction existingLayout = oldActions[i] as RefreshPartnameLayoutAction;
-                if (existingLayout != null)
-                {
-                    existingLayout.helper = layoutHelper;
-                    if (existingInjectedActions == null)
-                        existingInjectedActions = new List<HutongGames.PlayMaker.FsmStateAction>();
-                    existingInjectedActions.Add(existingLayout);
-                }
+                if (oldActions[i] is RefreshPartnameLayoutAction)
+                    hasInjectedAction = true;
             }
 
-            if (existingInjectedActions != null)
+            if (hasInjectedAction)
             {
-                ActivateInjectedActionsIfStateActive(state, existingInjectedActions);
+                ActivateInjectedTextActionsIfStateActive(state, existingTextActions);
                 return 0;
             }
 
             List<HutongGames.PlayMaker.FsmStateAction> newActions = null;
-            List<HutongGames.PlayMaker.FsmStateAction> injectedActions = null;
+            List<TranslateTextMeshAction> injectedTextActions = null;
             int injected = 0;
 
-            for (int i = 0; i < oldActions.Length; i++)
+            for (int ai = 0; ai < oldActions.Length; ai++)
             {
-                HutongGames.PlayMaker.FsmStateAction action = oldActions[i];
+                HutongGames.PlayMaker.FsmStateAction action = oldActions[ai];
                 if (newActions != null)
                     newActions.Add(action);
 
-                if (action == null || action.GetType().Name != "SetProperty")
-                    continue;
+                if (action == null) continue;
+                if (action.GetType().Name != "SetProperty") continue;
 
-                TranslateTextMeshAction injection = BuildInjectionAction(action);
-                if (injection == null)
-                    continue;
+                TranslateTextMeshAction inj = BuildInjectionAction(action);
+                if (inj == null) continue;
 
+                // First match in this state - lazy-init the new action list with
+                // everything seen so far.
                 if (newActions == null)
                 {
                     newActions = new List<HutongGames.PlayMaker.FsmStateAction>(oldActions.Length + 3);
-                    for (int j = 0; j <= i; j++)
+                    for (int j = 0; j <= ai; j++)
                         newActions.Add(oldActions[j]);
                 }
-
-                newActions.Add(injection);
-                if (injectedActions == null)
-                    injectedActions = new List<HutongGames.PlayMaker.FsmStateAction>();
-                injectedActions.Add(injection);
+                newActions.Add(inj);
+                if (injectedTextActions == null)
+                    injectedTextActions = new List<TranslateTextMeshAction>();
+                injectedTextActions.Add(inj);
                 injected++;
             }
 
+            // Append the layout-refresh action at the very end for layout-contributing
+            // states. Runs after every other action in the state, so the TextMesh
+            // contents it reads are final (post-translation). Injected even when no
+            // translation splices fired, since this state may still need to drive
+            // Partname's offset when its line count changes.
             if (appendLayoutAction)
             {
                 if (newActions == null)
@@ -241,34 +272,29 @@ namespace MSC_Localization_Core
                     for (int j = 0; j < oldActions.Length; j++)
                         newActions.Add(oldActions[j]);
                 }
-
-                RefreshPartnameLayoutAction injection = new RefreshPartnameLayoutAction { helper = layoutHelper };
-                newActions.Add(injection);
-                if (injectedActions == null)
-                    injectedActions = new List<HutongGames.PlayMaker.FsmStateAction>();
-                injectedActions.Add(injection);
+                newActions.Add(new RefreshPartnameLayoutAction { helper = layoutHelper });
                 injected++;
             }
 
             if (newActions != null)
             {
                 state.Actions = newActions.ToArray();
-                ActivateInjectedActionsIfStateActive(state, injectedActions);
+                ActivateInjectedTextActionsIfStateActive(state, injectedTextActions);
             }
 
             return injected;
         }
 
-        private static void ActivateInjectedActionsIfStateActive(
+        private static void ActivateInjectedTextActionsIfStateActive(
             HutongGames.PlayMaker.FsmState state,
-            List<HutongGames.PlayMaker.FsmStateAction> injectedActions)
+            List<TranslateTextMeshAction> injectedTextActions)
         {
-            if (state == null || injectedActions == null || !state.Active)
+            if (state == null || injectedTextActions == null || !state.Active || state.ActiveActions == null)
                 return;
 
-            for (int i = 0; i < injectedActions.Count; i++)
+            for (int i = 0; i < injectedTextActions.Count; i++)
             {
-                HutongGames.PlayMaker.FsmStateAction action = injectedActions[i];
+                TranslateTextMeshAction action = injectedTextActions[i];
                 if (action == null || state.ActiveActions.Contains(action))
                     continue;
 
@@ -284,16 +310,13 @@ namespace MSC_Localization_Core
         private TranslateTextMeshAction BuildInjectionAction(HutongGames.PlayMaker.FsmStateAction setPropertyAction)
         {
             FieldInfo targetPropertyField = FsmUtils.GetField(setPropertyAction.GetType(), "targetProperty");
-            if (targetPropertyField == null)
-                return null;
+            if (targetPropertyField == null) return null;
 
             object targetProperty = targetPropertyField.GetValue(setPropertyAction);
-            if (targetProperty == null)
-                return null;
+            if (targetProperty == null) return null;
 
             FieldInfo propertyNameField = FsmUtils.GetField(targetProperty.GetType(), "PropertyName");
-            if (propertyNameField == null)
-                return null;
+            if (propertyNameField == null) return null;
 
             string propertyName = propertyNameField.GetValue(targetProperty) as string;
             if (string.IsNullOrEmpty(propertyName)
@@ -301,80 +324,79 @@ namespace MSC_Localization_Core
                 return null;
 
             TextMesh textMesh = ResolveTargetTextMesh(targetProperty);
-            if (textMesh == null || textMesh.gameObject == null)
-                return null;
+            if (textMesh == null) return null;
 
-            string path = LocalizationUtils.GetGameObjectPath(textMesh.gameObject);
+            // Mirror the host SetProperty's everyFrame flag. When SetProperty is one-shot,
+            // it self-Finishes and the state can transition on FINISHED only if we
+            // Finish() too. When it's per-frame, it never Finishes (and rewrites the
+            // source every frame), so we must stay un-finished to keep OnUpdate firing
+            // and re-translating. Default to one-shot (Finish) if the field is missing
+            // so a renamed PlayMaker field can't silently block FINISHED transitions.
+            bool sourceEveryFrame = false;
+            FieldInfo everyFrameField = FsmUtils.GetField(setPropertyAction.GetType(), "everyFrame");
+            if (everyFrameField != null)
+            {
+                object v = everyFrameField.GetValue(setPropertyAction);
+                if (v is bool b) sourceEveryFrame = b;
+            }
+
             return new TranslateTextMeshAction
             {
                 target = textMesh,
-                path = path,
-                translator = translator,
+                translations = translations,
+                label = textMesh.gameObject != null ? textMesh.gameObject.name : "?",
+                finishOnEnter = !sourceEveryFrame,
             };
         }
 
+        // PlayMaker's FsmProperty.TargetObject can resolve to either the component
+        // directly (when the user picks a TextMesh in the editor) or to the parent
+        // GameObject. Handle both shapes.
         private static TextMesh ResolveTargetTextMesh(object targetProperty)
         {
             FieldInfo targetObjectField = FsmUtils.GetField(targetProperty.GetType(), "TargetObject");
-            if (targetObjectField == null)
-                return null;
+            if (targetObjectField == null) return null;
 
             HutongGames.PlayMaker.FsmObject fsmObject = targetObjectField.GetValue(targetProperty) as HutongGames.PlayMaker.FsmObject;
-            if (fsmObject == null)
-                return null;
+            if (fsmObject == null) return null;
 
             UnityEngine.Object unityObject = fsmObject.Value;
-            if (unityObject == null)
-                return null;
+            if (unityObject == null) return null;
 
             TextMesh asTextMesh = unityObject as TextMesh;
-            if (asTextMesh != null)
-                return asTextMesh;
+            if (asTextMesh != null) return asTextMesh;
 
             GameObject asGameObject = unityObject as GameObject;
             return asGameObject != null ? asGameObject.GetComponent<TextMesh>() : null;
         }
 
-        private static bool TryGetSetPropertyTextTarget(HutongGames.PlayMaker.FsmStateAction setPropertyAction, out string propertyName, out string targetPath)
-        {
-            propertyName = string.Empty;
-            targetPath = "?";
-
-            if (setPropertyAction == null)
-                return false;
-
-            FieldInfo targetPropertyField = FsmUtils.GetField(setPropertyAction.GetType(), "targetProperty");
-            if (targetPropertyField == null)
-                return false;
-
-            object targetProperty = targetPropertyField.GetValue(setPropertyAction);
-            if (targetProperty == null)
-                return false;
-
-            FieldInfo propertyNameField = FsmUtils.GetField(targetProperty.GetType(), "PropertyName");
-            if (propertyNameField == null)
-                return false;
-
-            propertyName = propertyNameField.GetValue(targetProperty) as string;
-            if (string.IsNullOrEmpty(propertyName) || !string.Equals(propertyName, "text", System.StringComparison.OrdinalIgnoreCase))
-                return false;
-
-            TextMesh textMesh = ResolveTargetTextMesh(targetProperty);
-            if (textMesh != null && textMesh.gameObject != null)
-                targetPath = LocalizationUtils.GetGameObjectPath(textMesh.gameObject);
-
-            return true;
-        }
-
-        public sealed class TranslateTextMeshAction : HutongGames.PlayMaker.FsmStateAction
+        /// <summary>
+        /// Custom FsmStateAction spliced after each SetProperty that writes a
+        /// TextMesh's "text". When the state runs, SetProperty writes the original
+        /// Finnish source from a global FsmString; this action then immediately
+        /// translates the TextMesh's text in place before any subsequent action or
+        /// reader sees it.
+        ///
+        /// Finish behavior mirrors the host SetProperty's everyFrame flag (set by
+        /// BuildInjectionAction). One-shot SetProperty: Finish() in OnEnter so the
+        /// state's FINISHED event can fire and drive the configured transition
+        /// (e.g. Thrist/Pivot:Scale/State 3 -> White). Per-frame SetProperty: skip
+        /// Finish() so OnUpdate keeps re-translating each frame, since SetProperty
+        /// keeps overwriting the TextMesh with the Finnish source. The dict lookup
+        /// is LRU-cached, so the per-frame cost is a hash hit plus a TextMesh.text
+        /// assignment.
+        /// </summary>
+        public class TranslateTextMeshAction : HutongGames.PlayMaker.FsmStateAction
         {
             public TextMesh target;
-            public string path;
-            public TextMeshTranslator translator;
+            public TranslationDictionary translations;
+            public string label;
+            public bool finishOnEnter;
 
             public override void OnEnter()
             {
                 TranslateNow();
+                if (finishOnEnter) Finish();
             }
 
             public override void OnUpdate()
@@ -386,112 +408,107 @@ namespace MSC_Localization_Core
             {
                 try
                 {
-                    if (target == null || target.gameObject == null || translator == null)
-                        return;
+                    if (target == null || target.gameObject == null) return;
 
-                    if (string.IsNullOrEmpty(target.text))
-                        return;
+                    string source = target.text;
+                    if (string.IsNullOrEmpty(source) || translations == null) return;
 
-                    translator.TranslateAndApplyFont(target, path);
-                    translator.ApplyCustomFont(target, path);
+                    if (!translations.TryTranslate(source, null, out string translated)) return;
+                    if (string.IsNullOrEmpty(translated) || translated == source) return;
+
+                    target.text = translated;
                 }
                 catch (System.Exception ex)
                 {
-                    CoreConsole.Warning("[FsmGuiTranslator] Translate action failed for " + path + ": " + ex.Message);
+                    CoreConsole.Error($"[FsmGuiTranslator] Translate error ({label}): {ex.Message}");
                 }
             }
         }
 
-        public sealed class PartnameLayoutHelper
+        /// <summary>
+        /// Holds Partname's base local position and the three TextMesh refs whose
+        /// line counts drive the multi-line Y offset. Owned by FsmGuiTranslator
+        /// and shared across every injected RefreshPartnameLayoutAction so they see a
+        /// consistent base position. Replaces the per-frame loop the old
+        /// GuiTextMonitor.UpdatePartnameMultilineLayout used to run.
+        /// </summary>
+        public class PartnameLayoutHelper
         {
             private const string PartnamePath = "GUI/Indicators/Partname";
-            private const string PartnameShadowPath = "GUI/Indicators/Partname/Shadow";
             private const string InteractionPath = "GUI/Indicators/Interaction";
             private const string SubtitlesPath = "GUI/Indicators/Subtitles";
+
+            // Same magic numbers the old GuiTextMonitor used; preserving the existing
+            // tuned offsets keeps the visual behavior identical for translated text.
+            private const float SingleLineOffset = 0f;
             private const float TwoLineOffset = 0.74f;
             private const float PerExtraLineStep = 0.50f;
             private const float MaxOffset = 2.24f;
 
             private TextMesh partnamePrimary;
-            private TextMesh partnameShadow;
-            private TextMesh interaction;
-            private TextMesh subtitles;
+            private TextMesh interactionMesh;
+            private TextMesh subtitlesMesh;
             private Vector3 partnameBaseLocalPosition;
-            private Vector3 shadowBaseLocalPosition;
             private bool hasBasePosition;
-            private bool hasShadowBasePosition;
 
             public void Refresh()
             {
                 if (partnamePrimary == null || partnamePrimary.gameObject == null)
+                {
                     partnamePrimary = ResolveTextMesh(PartnamePath);
-                if (partnamePrimary == null)
-                    return;
+                    if (partnamePrimary == null) return;
+                }
+                if (interactionMesh == null || interactionMesh.gameObject == null)
+                    interactionMesh = ResolveTextMesh(InteractionPath);
+                if (subtitlesMesh == null || subtitlesMesh.gameObject == null)
+                    subtitlesMesh = ResolveTextMesh(SubtitlesPath);
 
-                if (partnameShadow == null || partnameShadow.gameObject == null)
-                    partnameShadow = ResolveTextMesh(PartnameShadowPath);
-                if (interaction == null || interaction.gameObject == null)
-                    interaction = ResolveTextMesh(InteractionPath);
-                if (subtitles == null || subtitles.gameObject == null)
-                    subtitles = ResolveTextMesh(SubtitlesPath);
-
+                Transform t = partnamePrimary.transform;
                 if (!hasBasePosition)
                 {
-                    partnameBaseLocalPosition = partnamePrimary.transform.localPosition;
+                    // First call - capture Partname's current local position as the
+                    // neutral baseline. Assumes no other code has nudged Partname yet
+                    // (matches the assumption the old GuiTextMonitor made).
+                    partnameBaseLocalPosition = t.localPosition;
                     hasBasePosition = true;
                 }
 
-                if (!hasShadowBasePosition && partnameShadow != null && partnameShadow.gameObject != null)
-                {
-                    shadowBaseLocalPosition = partnameShadow.transform.localPosition;
-                    hasShadowBasePosition = true;
-                }
-
                 int maxLines = CountLines(partnamePrimary);
-                int interactionLines = CountLines(interaction);
-                if (interactionLines > maxLines)
-                    maxLines = interactionLines;
-                int subtitleLines = CountLines(subtitles);
-                if (subtitleLines > maxLines)
-                    maxLines = subtitleLines;
+                int interactionLines = CountLines(interactionMesh);
+                if (interactionLines > maxLines) maxLines = interactionLines;
+                int subtitleLines = CountLines(subtitlesMesh);
+                if (subtitleLines > maxLines) maxLines = subtitleLines;
 
-                float offset = 0f;
-                if (maxLines > 1)
+                float offsetY;
+                if (maxLines <= 1)
                 {
-                    offset = TwoLineOffset + (maxLines - 2) * PerExtraLineStep;
-                    if (offset > MaxOffset)
-                        offset = MaxOffset;
-                }
-
-                Vector3 yOffset = new Vector3(0f, offset, 0f);
-                Vector3 primaryTarget = partnameBaseLocalPosition + yOffset;
-                if (partnamePrimary.transform.localPosition != primaryTarget)
-                    partnamePrimary.transform.localPosition = primaryTarget;
-
-                if (partnameShadow == null || partnameShadow.gameObject == null || !hasShadowBasePosition)
-                    return;
-
-                if (partnameShadow.transform.parent == partnamePrimary.transform)
-                {
-                    if (partnameShadow.transform.localPosition != shadowBaseLocalPosition)
-                        partnameShadow.transform.localPosition = shadowBaseLocalPosition;
+                    offsetY = SingleLineOffset;
                 }
                 else
                 {
-                    Vector3 shadowTarget = shadowBaseLocalPosition + yOffset;
-                    if (partnameShadow.transform.localPosition != shadowTarget)
-                        partnameShadow.transform.localPosition = shadowTarget;
+                    offsetY = TwoLineOffset + (maxLines - 2) * PerExtraLineStep;
+                    if (offsetY > MaxOffset) offsetY = MaxOffset;
                 }
+
+                Vector3 target = new Vector3(
+                    partnameBaseLocalPosition.x,
+                    partnameBaseLocalPosition.y + offsetY,
+                    partnameBaseLocalPosition.z);
+
+                // Skip the write if Partname is already at the target position to
+                // avoid triggering unnecessary transform-changed callbacks. Shadow is
+                // a child of Partname (per the GameObject hierarchy path) so it rides
+                // along automatically when the parent's local position changes.
+                if (t.localPosition != target)
+                    t.localPosition = target;
             }
 
             public void Reset()
             {
                 partnamePrimary = null;
-                partnameShadow = null;
-                interaction = null;
-                subtitles = null;
+                interactionMesh = null;
+                subtitlesMesh = null;
                 hasBasePosition = false;
-                hasShadowBasePosition = false;
             }
 
             private static TextMesh ResolveTextMesh(string path)
@@ -506,21 +523,25 @@ namespace MSC_Localization_Core
                     return 1;
 
                 string text = textMesh.text;
-                if (string.IsNullOrEmpty(text))
-                    return 1;
+                if (string.IsNullOrEmpty(text)) return 1;
 
                 int lines = 1;
                 for (int i = 0; i < text.Length; i++)
                 {
-                    if (text[i] == '\n')
-                        lines++;
+                    if (text[i] == '\n') lines++;
                 }
-
                 return lines;
             }
         }
 
-        public sealed class RefreshPartnameLayoutAction : HutongGames.PlayMaker.FsmStateAction
+        /// <summary>
+        /// Appended at the end of each layout-contributing state (Partname/On,
+        /// Interaction/State 1, Subtitles/State 3). Whenever the state enters, ticks,
+        /// or exits, recomputes Partname's Y offset against the current live line
+        /// counts of all three indicators. OnExit ensures the offset relaxes when an
+        /// indicator's display state transitions out.
+        /// </summary>
+        public class RefreshPartnameLayoutAction : HutongGames.PlayMaker.FsmStateAction
         {
             public PartnameLayoutHelper helper;
 
@@ -543,12 +564,11 @@ namespace MSC_Localization_Core
             {
                 try
                 {
-                    if (helper != null)
-                        helper.Refresh();
+                    if (helper != null) helper.Refresh();
                 }
                 catch (System.Exception ex)
                 {
-                    CoreConsole.Warning("[FsmGuiTranslator] Layout refresh failed: " + ex.Message);
+                    CoreConsole.Error($"[FsmGuiTranslator] Layout refresh error: {ex.Message}");
                 }
             }
         }

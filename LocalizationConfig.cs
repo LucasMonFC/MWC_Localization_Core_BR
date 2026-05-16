@@ -31,6 +31,11 @@ namespace MSC_Localization_Core
         /// </summary>
         public static readonly string[] ForcedFontPathPrefixes = new string[]
         {
+            "GUI/Indicators/Partname",
+            "GUI/Indicators/Interaction",
+            "GUI/Indicators/RallyCountdown",
+            "GUI/Indicators/Gear",
+            "GUI/Indicators/Subtitles",
             "Systems/Teletext/VKTekstiTV/PAGES",
             "Systems/Teletext/VKTekstiTV/HEADER",
             "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS",
