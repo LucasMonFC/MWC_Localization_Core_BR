@@ -230,8 +230,8 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "COMPUTER/SYSTEM/POS/Command", "Typer", "Dir list C", 3, "Volume in drive C is C");
             AddTargetRule(byKey, "COMPUTER/SYSTEM/POS/Command", "Typer", "Spezzer", 1, "EN JOY! ING UR 'PUTER? DIS IS SPE77ER SPOOKING!");
             AddTargetRule(byKey, "COMPUTER/SYSTEM/POS/Command", "Typer", "State 3", 1, ":::::FUCK UR P0RN MAKE YA MOMMA BUY U NEW 'PUTER:::: HA HA:::: SPE77ER DA NAME!");
-            AddTargetRule(byKey, "COMPUTER/SYSTEM/POS/NoOS", "", "State 1", 0, "Insert boot disk and press RETURN...");
-            AddTargetRule(byKey, "COMPUTER/SYSTEM/POS/NoOS", "", "State 3", 0, "Error reading disk.");
+            AddTargetRule(byKey, "COMPUTER/SYSTEM/POS/NoOS", "Use", "State 1", 0, "Insert boot disk and press RETURN...");
+            AddTargetRule(byKey, "COMPUTER/SYSTEM/POS/NoOS", "Use", "State 3", 0, "Error reading disk.");
 
             // COMPUTER: TELEBBS chat/status
             AddTargetRule(byKey, "COMPUTER/SYSTEM/TELEBBS/Software/StatusBar", "", "State 1", 0, "NOT CONNECTED");
