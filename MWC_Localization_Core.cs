@@ -11,7 +11,7 @@ namespace MWC_Localization_Core
         public override string ID => "MWC_Localization_Core";
         public override string Name => "MWC_Localization_Core";
         public override string Author => "potatosalad775";
-        public override string Version => "1.1.0";
+        public override string Version => "1.1.1";
         public override string Description => "Multi-language core localization framework for My Winter Car";
         public override Game SupportedGames => Game.MyWinterCar;
 
