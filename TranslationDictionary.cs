@@ -167,7 +167,10 @@ namespace MWC_Localization_Core
 
                     TranslationPattern pattern;
                     if (TryParseFsmPattern(trimmed, out pattern) && AddPattern(pattern))
+                    {
                         loadedCount++;
+                        DerivePieceEntries(pattern.OriginalPattern, pattern.TranslatedTemplate);
+                    }
                 }
 
                 CoreConsole.Print($"[TranslationDictionary] Loaded {loadedCount} patterns from {Path.GetFileName(filePath)}");
@@ -207,6 +210,44 @@ namespace MWC_Localization_Core
                 translation
             );
             return true;
+        }
+
+        // For single-slot patterns like "A {0} B = X {0} Y", also store the pieces as
+        // plain dictionary entries ("A" -> "X", "B" -> "Y"). The FSM hook substitutes
+        // BuildString StringParameters one piece at a time and never sees the assembled
+        // string, so without this the {0} pattern alone would never fire.
+        private void DerivePieceEntries(string source, string translation)
+        {
+            if (string.IsNullOrEmpty(source) || translation == null) return;
+            if (CountOccurrences(source, "{0}") != 1) return;
+            if (CountOccurrences(translation, "{0}") != 1) return;
+            if (source.IndexOf("{1}", StringComparison.Ordinal) >= 0) return;
+            if (source.IndexOf("{2}", StringComparison.Ordinal) >= 0) return;
+            if (translation.IndexOf("{1}", StringComparison.Ordinal) >= 0) return;
+            if (translation.IndexOf("{2}", StringComparison.Ordinal) >= 0) return;
+
+            int srcSlot = source.IndexOf("{0}", StringComparison.Ordinal);
+            string srcLeft = source.Substring(0, srcSlot).Trim();
+            string srcRight = source.Substring(srcSlot + 3).Trim();
+
+            int tSlot = translation.IndexOf("{0}", StringComparison.Ordinal);
+            string tLeft = translation.Substring(0, tSlot).Trim();
+            string tRight = translation.Substring(tSlot + 3).Trim();
+
+            if (srcLeft.Length > 0) Add(srcLeft, tLeft);
+            if (srcRight.Length > 0) Add(srcRight, tRight);
+        }
+
+        private static int CountOccurrences(string haystack, string needle)
+        {
+            int count = 0;
+            int idx = 0;
+            while ((idx = haystack.IndexOf(needle, idx, StringComparison.Ordinal)) >= 0)
+            {
+                count++;
+                idx += needle.Length;
+            }
+            return count;
         }
 
         private bool AddPattern(TranslationPattern pattern)

@@ -45,6 +45,7 @@ namespace MWC_Localization_Core
             // Sheets
             "Sheets/RallyRegistration/Functions/Class",
             "Sheets/ServicePayment",
+            "Sheets/TrafficTicket",
             "Sheets/UnemployPaper",
             "Sheets/YellowPagesMagazine",
             // TV / Teletext
