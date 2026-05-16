@@ -349,7 +349,7 @@ namespace MWC_Localization_Core
                     string source = target.text;
                     if (string.IsNullOrEmpty(source) || translations == null) return;
 
-                    if (!translations.TryGetExact(source, out string translated)) return;
+                    if (!translations.TryTranslate(source, null, out string translated)) return;
                     if (string.IsNullOrEmpty(translated) || translated == source) return;
 
                     target.text = translated;
