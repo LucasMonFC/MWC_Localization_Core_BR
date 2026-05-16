@@ -63,6 +63,11 @@ Contains(Sheets/ServicePayment) & EndsWith(ServicePayment/Text/Text) = 0,0.01,0
 Contains(Sheets/ServicePayment/Line) = 0,0.002,0
 ## Unemployment Sheet
 Contains(Sheets/UnemployPaper/2) = -0.01,0,0
+Contains(Sheets/UnemployCancelPaper/EN) = 0,0,0,,1.1
+Contains(Sheets/UnemployCancelPaper/FI) = 0,0,0,,1.1
+GameObjectEquals(Sheets/UnemployCancelPaper/CheatedDays) = -0.07,0.005,0
+GameObjectEquals(Sheets/UnemployCancelPaper/CheatedDays/CheatedCost) = 0.02,-0.005,0
+GameObjectEquals(Sheets/UnemployCancelPaper/CheatedDays/PayButton) = 0.07,-0.005,0
 ## Computer
 Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/BIOS) = 0,0,0,2,
 Contains(COMPUTER/SYSTEM/POS/) & EndsWith(/Text) = 0,0,0,2,

@@ -1201,6 +1201,7 @@ Kiiski = 조기
 Lahna = 도미
 Siika = 흰살생선
 Särki = 잉어
+Hauki = 꼬치고기
 Ahven: = 농어:
 g = g
 Tuloksesi virallisessa punnituksessa: = 최종 결과:
