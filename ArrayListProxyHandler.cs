@@ -298,7 +298,7 @@ namespace MSC_Localization_Core
                 // Get all TextMesh components under this parent and apply fonts to ALL of them
                 TextMesh[] textMeshes = parent.GetComponentsInChildren<TextMesh>(true);
                 
-                bool anyNewFonts = false;
+                bool appliedFontThisPass = false;
 
                 foreach (TextMesh textMesh in textMeshes)
                 {
@@ -317,14 +317,14 @@ namespace MSC_Localization_Core
                     {
                         fontsApplied++;
                         fontAppliedInstances.Add(instanceId);
-                        anyNewFonts = true;
+                        appliedFontThisPass = true;
                     }
                 }
 
                 // Only mark this parent path as complete if we actually found TextMeshes under it
                 // and none of them produced a new font application. If textMeshes.Length == 0 the
                 // parent exists but children haven't been lazy-loaded yet - retry on the next tick.
-                if (textMeshes.Length > 0 && !anyNewFonts)
+                if (textMeshes.Length > 0 && !appliedFontThisPass)
                 {
                     completedParentPaths.Add(parentPath);
                 }

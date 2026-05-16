@@ -54,11 +54,11 @@ Current surfaces:
 
 | Surface | What it patches | Cadence |
 |---|---|---|
-| [GuiTextMonitor.cs](GuiTextMonitor.cs) | HUD primary/shadow paired meshes and HUD value meshes, including rally HUD GUI | PerFrame |
+| [FsmGuiTranslator.cs](FsmGuiTranslator.cs) | Built-in GUI indicator TextMeshes by injecting translation actions after PlayMaker `SetProperty` writes; also keeps `Partname` layout aligned with multiline subtitles | Slow until injected |
 | [FsmArrayTranslator.cs](FsmArrayTranslator.cs) | `Systems/Teletext/VKTekstiTV/Database` ArrayList content through category/index lookup, temporarily activating teletext when needed | Slow until complete |
 | [ArrayListProxyHandler.cs](ArrayListProxyHandler.cs) | Hardcoded ArrayList paths such as HUD day names, plus known parent font paths | Slow |
-| [FsmTextHook.cs](FsmTextHook.cs) + [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) | FSM action fields, `FsmString` variables, `BuildString` parts, `SetStringValue`, `SetProperty` string parameters, runtime teletext/weather/rally text, and rally result sheet sources | Fast |
-| [SubtitleTimingHandler.cs](SubtitleTimingHandler.cs) | `Wait.time` extensions for selected long subtitles; also exposes the retained-subtitle duration map used by `GuiTextMonitor` | Slow |
+| [FsmTextHook.cs](FsmTextHook.cs) + [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) | FSM action fields, `FsmString` variables, `BuildString` parts, `SetStringValue`, `SetProperty` string parameters, runtime teletext/weather/rally text, and rally result sheet sources | OncePerScene |
+| [SubtitleTimingHandler.cs](SubtitleTimingHandler.cs) | Source FSM/ArrayList translation for selected long subtitles and audio-clip-based timing for primary/shadow subtitle meshes | OncePerScene |
 
 `LateUpdateHandler.Initialize` offsets consecutive `Slow` surfaces by `ARRAY_MONITOR_STEP_INTERVAL` so they do not all fire on the same frame.
 
@@ -69,8 +69,8 @@ Current surfaces:
    - `translate.txt`
    - `translate_mod.txt`
 3. **Teletext** loads `translate_teletext.txt` in [FsmArrayTranslator.cs](FsmArrayTranslator.cs). It translates MSC teletext database arrays by temporarily activating `Systems/Teletext` when needed, preserving category lookup and index fallback. TV chat sections are intentionally not supported for MSC.
-4. **FSM/runtime translations** use the same shared dictionary. `FsmTextHook` handles direct `SetStringValue` assignments for long subtitles and runtime teletext strings such as page 188 weather and page 250 rally day labels.
-5. **Pattern translations** are detected from entries with `{0}`/`{1}` placeholders and stored in `TranslationDictionary`.
+4. **FSM/runtime translations** use the same shared dictionary. `FsmTextHook` handles direct FSM action/string assignments and runtime teletext strings such as page 188 weather and page 250 rally day labels.
+5. **Pattern translations** are detected from entries with `{0}`/`{1}` placeholders and stored in `TranslationDictionary`; single-slot patterns also derive static piece entries for FSMs that build strings in parts.
 
 All key/value files are normalized by `LocalizationUtils.FormatUpperKey` at insertion into `TranslationDictionary`. Use `\=` for literal equals signs and `\n` for newlines in values.
 
@@ -92,8 +92,8 @@ When adding new state to a surface, wire it into `Reset()` for runtime caches an
 - `LocalizationUtils` caches GameObject paths, `GameObject.Find` lookups, and a Resources-based FSM index.
 - `TextMeshTranslator` caches per-instance applied font and AssetBundle texture.
 - `TranslationDictionary` keeps a bounded recent raw-source lookup cache.
+- `FsmGuiTranslator` caches injected GUI FSM targets and the shared `Partname` layout helper.
 - `FsmTextHook` caches resolved FSMs, ArrayList proxies, TextMeshes, and per-target translation results.
-- `GuiTextMonitor` mirrors translated GUI primary/shadow TextMeshes and retains only the long subtitles whose timings are declared in `SubtitleTimingHandler`.
 - Scene changes use `LocalizationUtils.PruneCaches()`; F8 reload uses `LocalizationUtils.ClearCaches()`.
 - `fontBundle` is intentionally static because MSCLoader can reconstruct the `Mod` instance during a session.
 
@@ -102,7 +102,7 @@ When adding new state to a surface, wire it into `Reset()` for runtime caches an
 - `translate_msc.txt` and `translate_magazine.txt` are not loaded in the MSC port.
 - Magazine, MWC VIN plate, TV chat, ATM, Fleetari payment, and PostSystem keyword hash-table logic have been removed.
 - Rally result sheets remain supported through FSM hooks and forced-font paths.
-- Long subtitle text hooks belong in `FsmTextHook.BuiltInTargets.cs`; their matching `Wait.time` rules belong in `SubtitleTimingHandler.cs` so translated subtitles stay visible for the same duration.
+- Long subtitle timing rules belong in `SubtitleTimingHandler.cs`; it applies those long translations at the source FSM/ArrayList and uses discovered `AudioClip.length` values for matching source FSM waits and subtitle UI timing. Do not add manual duration fallbacks.
 - New PlayMaker FSM hooks belong in [FsmTextHook.BuiltInTargets.cs](FsmTextHook.BuiltInTargets.cs) via `AddTargetRule(...)`.
 - Console output should go through `CoreConsole.Print/Warning/Error`, not `ModConsole` directly.
 

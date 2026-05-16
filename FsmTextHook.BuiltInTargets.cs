@@ -148,8 +148,8 @@ namespace MSC_Localization_Core
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/CommandPrompt", "", "Dir list C", 3, "Volume in drive C is C");
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/CommandPrompt", "", "Spezzer", 1, "EN JOY! ING UR 'PUTER? DIS IS SPE77ER SPOOKING!");
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/CommandPrompt", "", "State 3", 1, ":::::FUCK UR P0RN MAKE YA MOMMA BUY U NEW 'PUTER:::: HA HA:::: SPE77ER DA NAME!");
-            AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/NoOS", "", "State 1", 0, "Insert boot disk and press RETURN...");
-            AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/NoOS", "", "State 3", 0, "Error reading disk.");
+            AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/NoOS", "Use", "State 1", 0, "Insert boot disk and press RETURN...");
+            AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/NoOS", "Use", "State 3", 0, "Error reading disk.");
 
             // COMPUTER: TELEBBS chat/status
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/TELEBBS/Software/StatusBar", "", "State 1", 0, "NOT CONNECTED");

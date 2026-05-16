@@ -96,8 +96,8 @@ namespace MSC_Localization_Core
 
             surfaces = new List<ITranslationSurface>
             {
-                new GuiTextMonitor(),
-                new UiTextMonitor(),
+                new FsmGuiTranslator(),
+                new ModTextTranslator(),
                 new FsmArrayTranslator(),
                 new ArrayListProxyHandler(),
                 new FsmTextHook(),

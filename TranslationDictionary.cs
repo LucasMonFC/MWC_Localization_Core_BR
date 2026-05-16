@@ -167,7 +167,10 @@ namespace MSC_Localization_Core
 
                     TranslationPattern pattern;
                     if (TryParseFsmPattern(trimmed, out pattern) && AddPattern(pattern))
+                    {
                         loadedCount++;
+                        DerivePieceEntries(pattern.OriginalPattern, pattern.TranslatedTemplate);
+                    }
                 }
 
                 CoreConsole.Print($"[TranslationDictionary] Loaded {loadedCount} patterns from {Path.GetFileName(filePath)}");
@@ -222,6 +225,44 @@ namespace MSC_Localization_Core
             // Prepend file-loaded patterns so later files win when patterns overlap.
             patterns.Insert(0, pattern);
             return true;
+        }
+
+        // For single-slot patterns like "A {0} B = X {0} Y", also store the static
+        // pieces as dictionary entries. Some PlayMaker FSMs build the text one part
+        // at a time, so the full pattern is never visible to the normal matcher.
+        private void DerivePieceEntries(string source, string translation)
+        {
+            if (string.IsNullOrEmpty(source) || translation == null) return;
+            if (CountOccurrences(source, "{0}") != 1) return;
+            if (CountOccurrences(translation, "{0}") != 1) return;
+            if (source.IndexOf("{1}", StringComparison.Ordinal) >= 0) return;
+            if (source.IndexOf("{2}", StringComparison.Ordinal) >= 0) return;
+            if (translation.IndexOf("{1}", StringComparison.Ordinal) >= 0) return;
+            if (translation.IndexOf("{2}", StringComparison.Ordinal) >= 0) return;
+
+            int sourceSlot = source.IndexOf("{0}", StringComparison.Ordinal);
+            string sourceLeft = source.Substring(0, sourceSlot).Trim();
+            string sourceRight = source.Substring(sourceSlot + 3).Trim();
+
+            int translationSlot = translation.IndexOf("{0}", StringComparison.Ordinal);
+            string translationLeft = translation.Substring(0, translationSlot).Trim();
+            string translationRight = translation.Substring(translationSlot + 3).Trim();
+
+            if (sourceLeft.Length > 0) Add(sourceLeft, translationLeft);
+            if (sourceRight.Length > 0) Add(sourceRight, translationRight);
+        }
+
+        private static int CountOccurrences(string haystack, string needle)
+        {
+            int count = 0;
+            int index = 0;
+            while ((index = haystack.IndexOf(needle, index, StringComparison.Ordinal)) >= 0)
+            {
+                count++;
+                index += needle.Length;
+            }
+
+            return count;
         }
 
         private void Remember(string source, string result)

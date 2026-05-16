@@ -28,9 +28,10 @@ The project references My Summer Car managed assemblies from the path configured
 ## Features
 
 **Automatic Translation** - Scans TextMesh components and replaces text.
+**FSM GUI Translation** - Injects lightweight PlayMaker actions for vanilla GUI indicators instead of polling those TextMeshes every frame.
 **PlayMaker FSM Hooks** - Patches known FSM action fields and variables used by menus, sheets, rally UI, computer screens, and teletext.
 **Teletext Translation** - Translates `VKTekstiTV` database pages through `translate_teletext.txt`, plus runtime weather and rally-day strings on teletext pages that the game rebuilds while the TV is open.
-**Long Subtitle Timing** - Extends selected long subtitle `Wait` timings and keeps the translated subtitle visible until the matching wait expires.
+**Long Subtitle Timing** - Applies selected long subtitles at their source FSM/ArrayList and uses the matching audio clip length for subtitle/UI timing.
 **Configurable Fonts** - Maps original game fonts to localized custom fonts.
 **Non-ASCII Support** - Custom fonts and forced-font paths keep accented text and other non-ASCII glyphs readable on surfaces that the game rebuilds dynamically.
 **Position Adjustments** - Fine-tunes text placement per language.
@@ -101,7 +102,7 @@ RALLY RESULTS = RESULTADOS DO RALLY
 ```
 
 Use `\=` when a source or translation contains a literal equals sign, and `\n` for new lines.
-Pattern entries with placeholders such as `{0}` and `{1}` are also supported for game-generated text that contains dynamic numbers or names.
+Pattern entries with placeholders such as `{0}` and `{1}` are also supported for game-generated text that contains dynamic numbers or names. Single-slot `{0}` entries also provide their static pieces to FSM text hooks when the game builds a sentence in parts.
 ```ini
 Overspeeding. {0}km/h at {1}km/h vehicle limit. = Excesso de velocidade. {0} km/h em zona de {1} km/h.
 ```

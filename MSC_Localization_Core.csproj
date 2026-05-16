@@ -70,6 +70,8 @@
     <Compile Include="LateUpdateHandler.cs" />
     <Compile Include="LocalizationConfig.cs" />
     <Compile Include="LocalizationUtils.cs" />
+    <Compile Include="FsmGuiTranslator.cs" />
+    <Compile Include="ModTextTranslator.cs" />
     <Compile Include="FsmTextHook.cs" />
     <Compile Include="FsmTextHook.BuiltInTargets.cs" />
     <Compile Include="SubtitleTimingHandler.cs" />
@@ -82,8 +84,6 @@
     <Compile Include="TranslationFileParser.cs" />
     <Compile Include="TranslationPattern.cs" />
     <Compile Include="TranslationSurface.cs" />
-    <Compile Include="GuiTextMonitor.cs" />
-    <Compile Include="UiTextMonitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

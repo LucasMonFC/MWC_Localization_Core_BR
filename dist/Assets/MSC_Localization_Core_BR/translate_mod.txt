@@ -2437,6 +2437,5 @@ Temperature set to: Cool. = "Temperatura: Resfriar.
 //Final Lista de MODs
 
 //Tradução de pagamentos para MODs
-Take money {0} MK = PEGUE DINHEIRO {0} MK
 BUY {0} MK = PAGAR {0} MK
 PAY {0} MK = PAGUE {0} MK
