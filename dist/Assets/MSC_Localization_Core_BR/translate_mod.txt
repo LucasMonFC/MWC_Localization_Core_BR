@@ -1924,8 +1924,6 @@ Maybe next time we'll go to the lake and sit on the pier or sit at home on the c
 Maybe next time we can go dancing or to the top of the ski jump? Take care and goodbye. = Talvez da próxima vez a gente possa ir dançar ou subir até o topo do trampolim de esqui. Se cuida, tchau.
 Thanks for taking me home. = Obrigada por me levar para casa.
 Thanks for walking me home. = Obrigada por me acompanhar até em casa.
-Thanks for taking me home. {0} = Obrigada por me levar para casa. {0}
-Thanks for walking me home. {0} = Obrigada por me acompanhar até em casa. {0}
 Thanks for taking me home. It was a wonderful day! Are you coming back tomorrow? Take care and see you soon! = Obrigada por me levar para casa. Foi um dia maravilhoso! Você vem amanhã de novo? Se cuida e até logo!
 Thanks for walking me home. It was a wonderful day! Are you coming back tomorrow? Take care and see you soon! = Obrigada por me acompanhar até em casa. Foi um dia maravilhoso! Você vem amanhã de novo? Se cuida e até logo!
 Thanks for taking me home. It was a truly romantic day. You are such a sweetheart! Come here and let me repay you... = Obrigada por me levar para casa. Foi um dia realmente romântico. Você é um amor! Vem aqui, deixa eu te recompensar...
