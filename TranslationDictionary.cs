@@ -13,13 +13,34 @@ namespace MWC_Localization_Core
     {
         private readonly Dictionary<string, string> entries = new Dictionary<string, string>();
 
-        // Bounded recent-lookups cache keyed on raw source. Absorbs the per-frame
-        // repeated lookups from HUD monitors etc. Stores nulls so misses also short-circuit.
+        // Bounded recent-lookups cache. Key is raw source for global lookups, or
+        // scopeId + "\0" + source for scoped lookups, so on-scope and off-scope
+        // results for the same source coexist without colliding.
         private readonly Dictionary<string, string> recentLookups = new Dictionary<string, string>(128);
         private const int MaxRecentLookups = 128;
 
         private readonly List<TranslationPattern> patterns = new List<TranslationPattern>();
         private readonly HashSet<string> patternSignatures = new HashSet<string>();
+
+        // Path-scoped entry sets. Entries here are visible only when the lookup's
+        // path starts with one of the scope's prefixes; otherwise they are invisible
+        // even to global lookups. See AddScoped / TryGetExact.
+        private sealed class TranslationScope
+        {
+            public readonly string Id;
+            public readonly string[] Prefixes;
+            public readonly Dictionary<string, string> Entries;
+
+            public TranslationScope(string id, string[] prefixes)
+            {
+                Id = id;
+                Prefixes = prefixes ?? new string[0];
+                Entries = new Dictionary<string, string>();
+            }
+        }
+
+        private readonly List<TranslationScope> scopes = new List<TranslationScope>();
+        private readonly Dictionary<string, TranslationScope> scopesById = new Dictionary<string, TranslationScope>();
 
         public int Count { get { return entries.Count; } }
         public int PatternCount { get { return patterns.Count; } }
@@ -46,6 +67,61 @@ namespace MWC_Localization_Core
         public void Clear()
         {
             entries.Clear();
+            scopes.Clear();
+            scopesById.Clear();
+            recentLookups.Clear();
+        }
+
+        /// <summary>
+        /// Register (or re-register) a path-scoped entry set. Entries are visible
+        /// only when a lookup's path starts with one of the given prefixes;
+        /// off-scope lookups will never see them. Re-calling with the same scopeId
+        /// replaces both prefixes and entries (used by F8 reload).
+        /// </summary>
+        public void AddScoped(string scopeId, IList<string> pathPrefixes, Dictionary<string, string> normalizedEntries)
+        {
+            if (string.IsNullOrEmpty(scopeId)) return;
+
+            string[] prefixes;
+            if (pathPrefixes == null || pathPrefixes.Count == 0)
+                prefixes = new string[0];
+            else
+            {
+                prefixes = new string[pathPrefixes.Count];
+                for (int i = 0; i < pathPrefixes.Count; i++)
+                    prefixes[i] = pathPrefixes[i];
+            }
+
+            TranslationScope existing;
+            if (scopesById.TryGetValue(scopeId, out existing))
+            {
+                scopes.Remove(existing);
+                scopesById.Remove(scopeId);
+            }
+
+            TranslationScope scope = new TranslationScope(scopeId, prefixes);
+            scopesById[scopeId] = scope;
+            scopes.Add(scope);
+
+            if (normalizedEntries != null)
+            {
+                foreach (KeyValuePair<string, string> pair in normalizedEntries)
+                    scope.Entries[pair.Key] = pair.Value;
+            }
+
+            recentLookups.Clear();
+        }
+
+        /// <summary>
+        /// Add a single entry to an existing scope, normalizing the raw key.
+        /// No-op if the scope has not been registered via <see cref="AddScoped"/>.
+        /// </summary>
+        public void AddScopedEntry(string scopeId, string rawKey, string value)
+        {
+            if (string.IsNullOrEmpty(scopeId) || string.IsNullOrEmpty(rawKey)) return;
+            TranslationScope scope;
+            if (!scopesById.TryGetValue(scopeId, out scope)) return;
+            scope.Entries[LocalizationUtils.FormatUpperKey(rawKey)] = value;
             recentLookups.Clear();
         }
 
@@ -60,29 +136,62 @@ namespace MWC_Localization_Core
         /// Dictionary-only lookup with the bounded LRU + already-normalized fast path.
         /// Most callers want this; combine with TryMatchPattern for pattern fallback.
         /// </summary>
-        public bool TryGetExact(string source, out string result)
+        /// <param name="path">
+        /// Caller's object/GameObject path. When it starts with a registered scope's
+        /// prefix, that scope's entries are consulted first and only the global
+        /// dictionary as fallback. When null/empty or off-scope, scoped entries are
+        /// invisible.
+        /// </param>
+        public bool TryGetExact(string source, string path, out string result)
         {
             result = null;
             if (string.IsNullOrEmpty(source))
                 return false;
 
+            TranslationScope matched = (scopes.Count == 0 || string.IsNullOrEmpty(path))
+                ? null
+                : FindMatchingScope(path);
+
+            string cacheKey = matched == null ? source : (matched.Id + "\0" + source);
+
             string cached;
-            if (recentLookups.TryGetValue(source, out cached))
+            if (recentLookups.TryGetValue(cacheKey, out cached))
             {
                 result = cached;
                 return cached != null;
             }
 
             string key = IsAlreadyNormalized(source) ? source : LocalizationUtils.FormatUpperKey(source);
-            if (entries.TryGetValue(key, out result))
+
+            if (matched != null && matched.Entries.TryGetValue(key, out result))
             {
-                Remember(source, result);
+                Remember(cacheKey, result);
                 return true;
             }
 
-            Remember(source, null);
+            if (entries.TryGetValue(key, out result))
+            {
+                Remember(cacheKey, result);
+                return true;
+            }
+
+            Remember(cacheKey, null);
             result = null;
             return false;
+        }
+
+        private TranslationScope FindMatchingScope(string path)
+        {
+            for (int i = 0; i < scopes.Count; i++)
+            {
+                string[] prefixes = scopes[i].Prefixes;
+                for (int j = 0; j < prefixes.Length; j++)
+                {
+                    if (path.StartsWith(prefixes[j], StringComparison.Ordinal))
+                        return scopes[i];
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -136,7 +245,7 @@ namespace MWC_Localization_Core
         /// </summary>
         public bool TryTranslate(string source, string path, out string result)
         {
-            if (TryGetExact(source, out result))
+            if (TryGetExact(source, path, out result))
                 return true;
 
             result = TryMatchPattern(source, path);

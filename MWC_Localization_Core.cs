@@ -22,6 +22,16 @@ namespace MWC_Localization_Core
             "translate_mod.txt"
         };
 
+        // translate_magazine.txt entries are restricted to these object-path prefixes
+        // so that short magazine-only tokens (e.g. "h.") cannot leak into unrelated
+        // game text. See TranslationDictionary.AddScoped.
+        private const string MagazineScopeId = "magazine";
+        private static readonly string[] MagazineScopePathPrefixes = new string[]
+        {
+            "CARPARTS/PARTSYSTEM/PostSystem/",
+            "Sheets/YellowPagesMagazine/",
+        };
+
         // Shared state
         private TranslationDictionary translations = new TranslationDictionary();
         private Dictionary<string, Font> customFonts = new Dictionary<string, Font>();
@@ -252,13 +262,13 @@ namespace MWC_Localization_Core
             if (!loaded.TryGetValue("PHONE", out phoneLabel) || string.IsNullOrEmpty(phoneLabel))
                 phoneLabel = "PHONE";
 
-            translations.AddAll(loaded);
-            translations.Add("h.", string.Empty);
-            translations.Add(",- puh.", " MK, " + phoneLabel + " -");
+            translations.AddScoped(MagazineScopeId, MagazineScopePathPrefixes, loaded);
+            translations.AddScopedEntry(MagazineScopeId, "h.", string.Empty);
+            translations.AddScopedEntry(MagazineScopeId, ",- puh.", " MK, " + phoneLabel + " -");
             hasLoadedTranslations = true;
 
             if (File.Exists(path))
-                CoreConsole.Print($"[{Name}] Loaded {loaded.Count} magazine translations from translate_magazine.txt");
+                CoreConsole.Print($"[{Name}] Loaded {loaded.Count} magazine translations from translate_magazine.txt (scoped)");
             else
                 CoreConsole.Warning($"[{Name}] Magazine format file not found: {path}; using default phone label");
         }

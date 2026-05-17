@@ -169,7 +169,7 @@ namespace MWC_Localization_Core
                 if (string.IsNullOrEmpty(original))
                     continue;
 
-                string translated = FindTranslation(original);
+                string translated = FindTranslation(original, objectPath);
                 if (string.IsNullOrEmpty(translated) || translated == original)
                     continue;
 
@@ -177,7 +177,7 @@ namespace MWC_Localization_Core
                 translatedCount++;
             }
 
-            translatedCount += TranslatePreFillStringList(proxy);
+            translatedCount += TranslatePreFillStringList(proxy, objectPath);
 
             if (translatedCount > 0)
             {
@@ -188,7 +188,7 @@ namespace MWC_Localization_Core
             return translatedCount;
         }
 
-        private int TranslatePreFillStringList(PlayMakerHashTableProxy proxy)
+        private int TranslatePreFillStringList(PlayMakerHashTableProxy proxy, string objectPath)
         {
             if (PreFillStringListField == null)
                 return 0;
@@ -205,7 +205,7 @@ namespace MWC_Localization_Core
                 if (string.IsNullOrEmpty(original))
                     continue;
 
-                string translated = FindTranslation(original);
+                string translated = FindTranslation(original, objectPath);
                 if (string.IsNullOrEmpty(translated) || translated == original)
                     continue;
 
@@ -216,10 +216,10 @@ namespace MWC_Localization_Core
             return translatedCount;
         }
 
-        private string FindTranslation(string original)
+        private string FindTranslation(string original, string objectPath)
         {
             string translated;
-            return translations != null && translations.TryGetExact(original, out translated)
+            return translations != null && translations.TryGetExact(original, objectPath, out translated)
                 ? translated
                 : null;
         }

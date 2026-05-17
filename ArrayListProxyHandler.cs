@@ -152,27 +152,27 @@ namespace MWC_Localization_Core
         private int TranslateArray(string arrayKey)
         {
             // Parse arrayKey: "GameObject/Path:ComponentIndex"
-            if (!arrayKey.Contains(":"))
+            int colonIndex = arrayKey.LastIndexOf(':');
+            if (colonIndex <= 0)
             {
                 CoreConsole.Warning($"Invalid array key format (expected 'path:index'): {arrayKey}");
                 return 0;
             }
 
+            string lookupPath = arrayKey.Substring(0, colonIndex);
+
             PlayMakerArrayListProxy proxy;
             if (!arrayProxyCache.TryGetValue(arrayKey, out proxy))
             {
-                string[] parts = arrayKey.Split(':');
-                string objectPath = parts[0];
                 int componentIndex;
-
-                if (!int.TryParse(parts[1], out componentIndex))
+                if (!int.TryParse(arrayKey.Substring(colonIndex + 1), out componentIndex))
                 {
                     CoreConsole.Warning($"Invalid component index in array key: {arrayKey}");
                     return 0;
                 }
 
                 // Find GameObject
-                GameObject obj = LocalizationUtils.FindGameObjectIncludingInactive(objectPath);
+                GameObject obj = LocalizationUtils.FindGameObjectIncludingInactive(lookupPath);
                 if (obj == null)
                 {
                     // Not available yet - this is normal for lazy-loaded content
@@ -183,7 +183,7 @@ namespace MWC_Localization_Core
                 PlayMakerArrayListProxy[] proxies = obj.GetComponents<PlayMakerArrayListProxy>();
                 if (proxies == null || componentIndex >= proxies.Length)
                 {
-                    CoreConsole.Warning($"PlayMakerArrayListProxy[{componentIndex}] not found at {objectPath}");
+                    CoreConsole.Warning($"PlayMakerArrayListProxy[{componentIndex}] not found at {lookupPath}");
                     return 0;
                 }
 
@@ -199,7 +199,7 @@ namespace MWC_Localization_Core
             // GameObject is inactive, so when PlayMaker prefills the runtime arrayList
             // on activation it copies already-translated strings instead of the
             // original text - removing the visible original-then-translated flip.
-            translatedCount += TranslatePreFillStringList(proxy);
+            translatedCount += TranslatePreFillStringList(proxy, lookupPath);
 
             ArrayList arrayList = proxy.arrayList;
 
@@ -216,7 +216,7 @@ namespace MWC_Localization_Core
                 if (string.IsNullOrEmpty(original))
                     continue;
 
-                string translation = FindTranslation(original);
+                string translation = FindTranslation(original, lookupPath);
                 if (translation != null)
                 {
                     arrayList[i] = translation;
@@ -270,7 +270,7 @@ namespace MWC_Localization_Core
         }
 
         // Translate a proxy's serialized prefill list in place. Returns count translated.
-        private int TranslatePreFillStringList(PlayMakerArrayListProxy proxy)
+        private int TranslatePreFillStringList(PlayMakerArrayListProxy proxy, string lookupPath)
         {
             List<string> preFill = proxy.preFillStringList;
             if (preFill == null || preFill.Count == 0)
@@ -283,7 +283,7 @@ namespace MWC_Localization_Core
                 if (string.IsNullOrEmpty(original))
                     continue;
 
-                string translation = FindTranslation(original);
+                string translation = FindTranslation(original, lookupPath);
                 if (translation != null)
                 {
                     preFill[i] = translation;
@@ -294,11 +294,13 @@ namespace MWC_Localization_Core
             return translatedCount;
         }
 
-        // Find translation from the shared dictionary. Magazine entries are loaded
-        // into it by the main class compatibility shim.
-        private string FindTranslation(string original)
+        // Find translation from the shared dictionary. lookupPath is the proxy's
+        // GameObject path (without the :index suffix); it's used to resolve
+        // path-scoped entries (e.g. translate_magazine.txt restricted to
+        // CARPARTS/PARTSYSTEM/PostSystem/*).
+        private string FindTranslation(string original, string lookupPath)
         {
-            if (mainTranslations.TryGetExact(original, out string translation))
+            if (mainTranslations.TryGetExact(original, lookupPath, out string translation))
                 return translation;
 
             return null;

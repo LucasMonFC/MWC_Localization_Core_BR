@@ -228,6 +228,7 @@ namespace MWC_Localization_Core
                 teletextTranslations = teletextTranslations,
                 sharedTranslations = sharedTranslations,
                 label = refName,
+                path = LocalizationUtils.GetGameObjectPath(go),
             };
         }
 
@@ -237,6 +238,7 @@ namespace MWC_Localization_Core
         {
             PlayMakerArrayListProxy[] proxies = go.GetComponents<PlayMakerArrayListProxy>();
             int totalTranslated = 0;
+            string objectPath = LocalizationUtils.GetGameObjectPath(go);
 
             for (int i = 0; i < proxies.Length; i++)
             {
@@ -244,7 +246,7 @@ namespace MWC_Localization_Core
                 string refName = proxies[i].referenceName;
                 if (string.IsNullOrEmpty(refName)) continue;
 
-                int translated = TranslateArrayListInPlace(proxies[i]._arrayList, teletextTranslations, sharedTranslations);
+                int translated = TranslateArrayListInPlace(proxies[i]._arrayList, teletextTranslations, sharedTranslations, objectPath);
                 if (translated > 0)
                 {
                     CoreConsole.Print($"[FsmArrayTranslator] Translated live '{refName}' with {translated} items");
@@ -256,11 +258,13 @@ namespace MWC_Localization_Core
 
         // Lookup chain: per-entry teletext dict first, global TranslationDictionary second.
         // The teletext dict uses NormalizeMultiLineKey-shaped keys (per-line trim + drop empty
-        // lines); the global dict uses FormatUpperKey-shaped keys via TryGetExact.
+        // lines); the global dict uses FormatUpperKey-shaped keys via TryGetExact. The path
+        // is forwarded so any path-scoped entries in the global dictionary resolve correctly.
         internal static int TranslateArrayListInPlace(
             ArrayList list,
             Dictionary<string, string> teletextDict,
-            TranslationDictionary fallback)
+            TranslationDictionary fallback,
+            string path)
         {
             if (list == null) return 0;
             int count = 0;
@@ -282,7 +286,7 @@ namespace MWC_Localization_Core
                 }
                 if (translation == null && fallback != null)
                 {
-                    fallback.TryGetExact(original, out translation);
+                    fallback.TryGetExact(original, path, out translation);
                     if (translation == original)
                         translation = null;
                 }
@@ -308,6 +312,7 @@ namespace MWC_Localization_Core
             public Dictionary<string, string> teletextTranslations;
             public TranslationDictionary sharedTranslations;
             public string label;
+            public string path;
 
             public override void OnEnter()
             {
@@ -315,7 +320,7 @@ namespace MWC_Localization_Core
                 {
                     if (target != null)
                     {
-                        int n = TranslateArrayListInPlace(target._arrayList, teletextTranslations, sharedTranslations);
+                        int n = TranslateArrayListInPlace(target._arrayList, teletextTranslations, sharedTranslations, path);
                         if (n > 0)
                             CoreConsole.Print($"[FsmArrayTranslator] '{label}' post-split: translated {n} entries");
                     }

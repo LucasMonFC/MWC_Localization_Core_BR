@@ -300,6 +300,7 @@ namespace MWC_Localization_Core
                 target = textMesh,
                 translations = translations,
                 label = textMesh.gameObject != null ? textMesh.gameObject.name : "?",
+                path = textMesh.gameObject != null ? LocalizationUtils.GetGameObjectPath(textMesh.gameObject) : null,
                 finishOnEnter = !sourceEveryFrame,
             };
         }
@@ -346,6 +347,7 @@ namespace MWC_Localization_Core
             public TextMesh target;
             public TranslationDictionary translations;
             public string label;
+            public string path;
             public bool finishOnEnter;
 
             public override void OnEnter()
@@ -368,7 +370,7 @@ namespace MWC_Localization_Core
                     string source = target.text;
                     if (string.IsNullOrEmpty(source) || translations == null) return;
 
-                    if (!translations.TryTranslate(source, null, out string translated)) return;
+                    if (!translations.TryTranslate(source, path, out string translated)) return;
                     if (string.IsNullOrEmpty(translated) || translated == source) return;
 
                     target.text = translated;

@@ -138,7 +138,7 @@ namespace MWC_Localization_Core
                 return;
 
             string translation;
-            if (translations == null || !translations.TryGetExact(source, out translation))
+            if (translations == null || !translations.TryGetExact(source, objectPath, out translation))
                 return;
 
             string key = BuildKey(objectPath, fsmName, stateName, actionIndex);

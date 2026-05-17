@@ -176,11 +176,11 @@ namespace MWC_Localization_Core
             string currentText = textMesh.text;
 
             // Direct lookup (with LRU + already-normalized fast path inside the dict)
-            if (!translations.TryGetExact(currentText, out string translation))
+            if (!translations.TryGetExact(currentText, path, out string translation))
             {
                 if (currentText.IndexOf('\n') >= 0)
                 {
-                    string lineTranslation = TranslateTextByLines(currentText);
+                    string lineTranslation = TranslateTextByLines(currentText, path);
                     if (lineTranslation != currentText)
                     {
                         ApplyCustomFont(textMesh, path);
@@ -208,7 +208,7 @@ namespace MWC_Localization_Core
             return true;
         }
 
-        private string TranslateTextByLines(string text)
+        private string TranslateTextByLines(string text, string path)
         {
             if (string.IsNullOrEmpty(text))
                 return text;
@@ -218,7 +218,7 @@ namespace MWC_Localization_Core
 
             for (int i = 0; i < lines.Length; i++)
             {
-                string translatedLine = TranslateLinePreservingPrefix(lines[i]);
+                string translatedLine = TranslateLinePreservingPrefix(lines[i], path);
                 if (translatedLine != lines[i])
                 {
                     lines[i] = translatedLine;
@@ -232,14 +232,14 @@ namespace MWC_Localization_Core
             return string.Join("\n", lines);
         }
 
-        private string TranslateLinePreservingPrefix(string line)
+        private string TranslateLinePreservingPrefix(string line, string path)
         {
             if (string.IsNullOrEmpty(line))
                 return line;
 
             string lineNoCr = line.Replace("\r", string.Empty);
             string translated;
-            if (translations.TryGetExact(lineNoCr, out translated))
+            if (translations.TryGetExact(lineNoCr, path, out translated))
                 return translated;
 
             int textStart = FindTextStartAfterNumericPrefix(lineNoCr);
@@ -247,7 +247,7 @@ namespace MWC_Localization_Core
                 return line;
 
             string suffix = lineNoCr.Substring(textStart);
-            if (!translations.TryGetExact(suffix, out translated))
+            if (!translations.TryGetExact(suffix, path, out translated))
                 return line;
 
             return lineNoCr.Substring(0, textStart) + translated;
