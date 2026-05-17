@@ -49,7 +49,7 @@ namespace MSC_Localization_Core
                 "GUI/Indicators/AnswerHint/HUDLabelShadow"),
         };
 
-        private readonly HashSet<string> attachedTextMeshKeys = new HashSet<string>();
+        private readonly Dictionary<string, DirectTextMeshTranslator> attachedTextMeshComponents = new Dictionary<string, DirectTextMeshTranslator>();
         private TranslationDictionary translations;
         private TextMeshTranslator textMeshTranslator;
         private int activeTextMeshTargetCount;
@@ -57,6 +57,7 @@ namespace MSC_Localization_Core
         private int textMeshAttachAttempts;
         private int dirtTrackAttachAttempts;
         private bool dirtTrackAttached;
+        private bool hasSupportedModAssemblyLoaded;
 
         public string Name { get { return "ModTextTranslator"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
@@ -64,15 +65,10 @@ namespace MSC_Localization_Core
         {
             get
             {
-                bool textMeshComplete = activeTextMeshTargetCount == 0
-                    || attachedTextMeshKeys.Count >= activeTextMeshTargetCount
-                    || textMeshAttachAttempts >= MaxAttachAttempts;
+                if (!hasSupportedModAssemblyLoaded)
+                    return true;
 
-                bool dirtTrackComplete = !dirtTrackAssemblyLoaded
-                    || dirtTrackAttached
-                    || dirtTrackAttachAttempts >= MaxAttachAttempts;
-
-                return textMeshComplete && dirtTrackComplete;
+                return IsCurrentlyComplete();
             }
         }
 
@@ -80,9 +76,8 @@ namespace MSC_Localization_Core
         {
             translations = ctx.Translations;
             textMeshTranslator = ctx.Translator;
-            activeTextMeshTargetCount = CountActiveTextMeshTargets();
-            dirtTrackAssemblyLoaded = IsAssemblyLoaded(DirtTrackAssemblyName);
             Reset();
+            RefreshActiveModState();
         }
 
         public int InitialPass()
@@ -97,10 +92,13 @@ namespace MSC_Localization_Core
 
         public void Reset()
         {
-            attachedTextMeshKeys.Clear();
+            attachedTextMeshComponents.Clear();
+            activeTextMeshTargetCount = 0;
+            dirtTrackAssemblyLoaded = false;
             textMeshAttachAttempts = 0;
             dirtTrackAttachAttempts = 0;
             dirtTrackAttached = false;
+            hasSupportedModAssemblyLoaded = false;
         }
 
         public void ClearTranslations()
@@ -111,6 +109,11 @@ namespace MSC_Localization_Core
         private int TryAttach()
         {
             if (Application.loadedLevelName != "GAME")
+                return 0;
+
+            RefreshActiveModState();
+
+            if (!hasSupportedModAssemblyLoaded)
                 return 0;
 
             int attached = 0;
@@ -145,8 +148,14 @@ namespace MSC_Localization_Core
         private bool TryAttachTextMeshPath(string assemblyName, string path)
         {
             string key = assemblyName + "|" + path;
-            if (attachedTextMeshKeys.Contains(key))
-                return false;
+            DirectTextMeshTranslator existing;
+            if (attachedTextMeshComponents.TryGetValue(key, out existing))
+            {
+                if (existing != null)
+                    return false;
+
+                attachedTextMeshComponents.Remove(key);
+            }
 
             GameObject go = LocalizationUtils.FindGameObjectIncludingInactive(path);
             if (go == null)
@@ -154,10 +163,7 @@ namespace MSC_Localization_Core
 
             TextMesh textMesh = go.GetComponent<TextMesh>();
             if (textMesh == null)
-            {
-                attachedTextMeshKeys.Add(key);
                 return false;
-            }
 
             DirectTextMeshTranslator component = go.GetComponent<DirectTextMeshTranslator>();
             if (component == null)
@@ -165,14 +171,13 @@ namespace MSC_Localization_Core
 
             component.Configure(textMesh, path, textMeshTranslator);
             component.TranslateNow();
-            attachedTextMeshKeys.Add(key);
+            attachedTextMeshComponents[key] = component;
             return true;
         }
 
         private int TryAttachDirtTrackUi()
         {
             if (translations == null
-                || dirtTrackAttached
                 || dirtTrackAttachAttempts >= MaxAttachAttempts
                 || !dirtTrackAssemblyLoaded)
             {
@@ -209,6 +214,38 @@ namespace MSC_Localization_Core
 
             dirtTrackAttached = true;
             return attached;
+        }
+
+        private bool IsCurrentlyComplete()
+        {
+            bool textMeshComplete = activeTextMeshTargetCount == 0
+                || CountLiveAttachedTextMeshes() >= activeTextMeshTargetCount
+                || textMeshAttachAttempts >= MaxAttachAttempts;
+
+            bool dirtTrackComplete = !dirtTrackAssemblyLoaded
+                || dirtTrackAttached
+                || dirtTrackAttachAttempts >= MaxAttachAttempts;
+
+            return textMeshComplete && dirtTrackComplete;
+        }
+
+        private void RefreshActiveModState()
+        {
+            activeTextMeshTargetCount = CountActiveTextMeshTargets();
+            dirtTrackAssemblyLoaded = IsAssemblyLoaded(DirtTrackAssemblyName);
+            hasSupportedModAssemblyLoaded = activeTextMeshTargetCount > 0 || dirtTrackAssemblyLoaded;
+        }
+
+        private int CountLiveAttachedTextMeshes()
+        {
+            int count = 0;
+            foreach (KeyValuePair<string, DirectTextMeshTranslator> pair in attachedTextMeshComponents)
+            {
+                if (pair.Value != null)
+                    count++;
+            }
+
+            return count;
         }
 
         private static int CountActiveTextMeshTargets()
