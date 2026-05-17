@@ -41,11 +41,19 @@ namespace MSC_Localization_Core
                 "FishingMod",
                 "selltext",
                 "comptext"),
+
+            new TextMeshGroup(
+                "BetterMSC",
+                "GUI/Indicators/AnswerHint",
+                "GUI/Indicators/AnswerHint/Shadow",
+                "GUI/Indicators/AnswerHint/HUDLabelShadow"),
         };
 
         private readonly HashSet<string> attachedTextMeshKeys = new HashSet<string>();
         private TranslationDictionary translations;
         private TextMeshTranslator textMeshTranslator;
+        private int activeTextMeshTargetCount;
+        private bool dirtTrackAssemblyLoaded;
         private int textMeshAttachAttempts;
         private int dirtTrackAttachAttempts;
         private bool dirtTrackAttached;
@@ -56,12 +64,11 @@ namespace MSC_Localization_Core
         {
             get
             {
-                int activeTextMeshTargets = CountActiveTextMeshTargets();
-                bool textMeshComplete = activeTextMeshTargets == 0
-                    || attachedTextMeshKeys.Count >= activeTextMeshTargets
+                bool textMeshComplete = activeTextMeshTargetCount == 0
+                    || attachedTextMeshKeys.Count >= activeTextMeshTargetCount
                     || textMeshAttachAttempts >= MaxAttachAttempts;
 
-                bool dirtTrackComplete = !IsAssemblyLoaded(DirtTrackAssemblyName)
+                bool dirtTrackComplete = !dirtTrackAssemblyLoaded
                     || dirtTrackAttached
                     || dirtTrackAttachAttempts >= MaxAttachAttempts;
 
@@ -73,6 +80,8 @@ namespace MSC_Localization_Core
         {
             translations = ctx.Translations;
             textMeshTranslator = ctx.Translator;
+            activeTextMeshTargetCount = CountActiveTextMeshTargets();
+            dirtTrackAssemblyLoaded = IsAssemblyLoaded(DirtTrackAssemblyName);
             Reset();
         }
 
@@ -112,7 +121,7 @@ namespace MSC_Localization_Core
 
         private int TryAttachTextMeshes()
         {
-            if (textMeshTranslator == null || CountActiveTextMeshTargets() == 0 || textMeshAttachAttempts >= MaxAttachAttempts)
+            if (textMeshTranslator == null || activeTextMeshTargetCount == 0 || textMeshAttachAttempts >= MaxAttachAttempts)
                 return 0;
 
             textMeshAttachAttempts++;
@@ -165,7 +174,7 @@ namespace MSC_Localization_Core
             if (translations == null
                 || dirtTrackAttached
                 || dirtTrackAttachAttempts >= MaxAttachAttempts
-                || !IsAssemblyLoaded(DirtTrackAssemblyName))
+                || !dirtTrackAssemblyLoaded)
             {
                 return 0;
             }
@@ -237,14 +246,16 @@ namespace MSC_Localization_Core
             private TextMesh target;
             private string path;
             private TextMeshTranslator translator;
-            private string lastText;
+            private string lastSourceText;
+            private string lastTranslatedText;
 
             public void Configure(TextMesh target, string path, TextMeshTranslator translator)
             {
                 this.target = target;
                 this.path = path;
                 this.translator = translator;
-                lastText = null;
+                lastSourceText = null;
+                lastTranslatedText = null;
             }
 
             private void OnEnable()
@@ -267,16 +278,25 @@ namespace MSC_Localization_Core
                     string current = target.text;
                     if (string.IsNullOrEmpty(current))
                     {
-                        lastText = current;
+                        lastSourceText = current;
+                        lastTranslatedText = current;
                         return;
                     }
 
-                    if (current == lastText)
+                    if (current == lastTranslatedText)
                         return;
 
+                    if (current == lastSourceText && lastTranslatedText != null)
+                    {
+                        target.text = lastTranslatedText;
+                        return;
+                    }
+
+                    string source = current;
                     translator.TranslateAndApplyFont(target, path);
                     translator.ApplyCustomFont(target, path);
-                    lastText = target.text;
+                    lastSourceText = source;
+                    lastTranslatedText = target.text;
                 }
                 catch (Exception ex)
                 {

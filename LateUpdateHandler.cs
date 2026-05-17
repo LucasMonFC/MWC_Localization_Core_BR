@@ -13,6 +13,7 @@ namespace MSC_Localization_Core
         private List<ITranslationSurface> surfaces;
         private float[] nextTickTimes;
         private bool[] loggedRetired;
+        private bool[] retired;
         private bool loggedAllRetired;
         private Func<bool> isGameSceneReady;
         private bool isInitialized;
@@ -25,6 +26,7 @@ namespace MSC_Localization_Core
             this.isGameSceneReady = isGameSceneReady;
             nextTickTimes = surfaces != null ? new float[surfaces.Count] : new float[0];
             loggedRetired = surfaces != null ? new bool[surfaces.Count] : new bool[0];
+            retired = surfaces != null ? new bool[surfaces.Count] : new bool[0];
             loggedAllRetired = false;
 
             // Stagger Slow surfaces so they don't all fire on the same frame.
@@ -35,6 +37,12 @@ namespace MSC_Localization_Core
             int slowIndex = 0;
             for (int i = 0; i < nextTickTimes.Length; i++)
             {
+                if (surfaces[i].Cadence == SurfaceCadence.OncePerScene)
+                {
+                    retired[i] = true;
+                    continue;
+                }
+
                 float offset = 0f;
                 if (surfaces[i].Cadence == SurfaceCadence.Slow)
                 {
@@ -64,6 +72,9 @@ namespace MSC_Localization_Core
             {
                 ITranslationSurface s = surfaces[i];
 
+                if (retired[i])
+                    continue;
+
                 if (s.IsComplete)
                 {
                     if (!loggedRetired[i])
@@ -71,6 +82,7 @@ namespace MSC_Localization_Core
                         CoreConsole.Print($"[LateUpdateHandler] {s.Name} complete; retiring");
                         loggedRetired[i] = true;
                     }
+                    retired[i] = true;
                     continue;
                 }
 
