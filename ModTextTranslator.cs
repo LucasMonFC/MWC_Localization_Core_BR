@@ -19,11 +19,13 @@ namespace MSC_Localization_Core
         private sealed class TextMeshGroup
         {
             public readonly string AssemblyName;
+            public readonly string SceneName;
             public readonly string[] Paths;
 
-            public TextMeshGroup(string assemblyName, params string[] paths)
+            public TextMeshGroup(string assemblyName, string sceneName, params string[] paths)
             {
                 AssemblyName = assemblyName;
+                SceneName = sceneName;
                 Paths = paths;
             }
         }
@@ -32,6 +34,7 @@ namespace MSC_Localization_Core
         {
             new TextMeshGroup(
                 "LetItRust",
+                "GAME",
                 "GUI/HUD/FleetariDialoguePrompt",
                 "GUI/HUD/FleetariDialoguePrompt/HUDLabelShadow",
                 "GUI/HUD/VenttiDialoguePrompt",
@@ -39,14 +42,21 @@ namespace MSC_Localization_Core
 
             new TextMeshGroup(
                 "FishingMod",
+                "GAME",
                 "selltext",
                 "comptext"),
 
             new TextMeshGroup(
                 "BetterMSC",
+                "GAME",
                 "GUI/Indicators/AnswerHint",
                 "GUI/Indicators/AnswerHint/Shadow",
                 "GUI/Indicators/AnswerHint/HUDLabelShadow"),
+
+            new TextMeshGroup(
+                "CDPlayer",
+                "MainMenu",
+                "Interface/Songs/LoadingCD"),
         };
 
         private readonly Dictionary<string, DirectTextMeshTranslator> attachedTextMeshComponents = new Dictionary<string, DirectTextMeshTranslator>();
@@ -77,7 +87,7 @@ namespace MSC_Localization_Core
             translations = ctx.Translations;
             textMeshTranslator = ctx.Translator;
             Reset();
-            RefreshActiveModState();
+            RefreshActiveModState(Application.loadedLevelName);
         }
 
         public int InitialPass()
@@ -108,21 +118,25 @@ namespace MSC_Localization_Core
 
         private int TryAttach()
         {
-            if (Application.loadedLevelName != "GAME")
+            string sceneName = Application.loadedLevelName;
+            bool isGameScene = sceneName == "GAME";
+            bool isMainMenu = sceneName == "MainMenu";
+            if (!isGameScene && !isMainMenu)
                 return 0;
 
-            RefreshActiveModState();
+            RefreshActiveModState(sceneName);
 
             if (!hasSupportedModAssemblyLoaded)
                 return 0;
 
             int attached = 0;
-            attached += TryAttachTextMeshes();
-            attached += TryAttachDirtTrackUi();
+            attached += TryAttachTextMeshes(sceneName);
+            if (isGameScene)
+                attached += TryAttachDirtTrackUi();
             return attached;
         }
 
-        private int TryAttachTextMeshes()
+        private int TryAttachTextMeshes(string sceneName)
         {
             if (textMeshTranslator == null || activeTextMeshTargetCount == 0 || textMeshAttachAttempts >= MaxAttachAttempts)
                 return 0;
@@ -132,6 +146,8 @@ namespace MSC_Localization_Core
             for (int i = 0; i < TextMeshGroups.Length; i++)
             {
                 TextMeshGroup group = TextMeshGroups[i];
+                if (group.SceneName != sceneName)
+                    continue;
                 if (!IsAssemblyLoaded(group.AssemblyName))
                     continue;
 
@@ -229,10 +245,10 @@ namespace MSC_Localization_Core
             return textMeshComplete && dirtTrackComplete;
         }
 
-        private void RefreshActiveModState()
+        private void RefreshActiveModState(string sceneName)
         {
-            activeTextMeshTargetCount = CountActiveTextMeshTargets();
-            dirtTrackAssemblyLoaded = IsAssemblyLoaded(DirtTrackAssemblyName);
+            activeTextMeshTargetCount = CountActiveTextMeshTargets(sceneName);
+            dirtTrackAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(DirtTrackAssemblyName);
             hasSupportedModAssemblyLoaded = activeTextMeshTargetCount > 0 || dirtTrackAssemblyLoaded;
         }
 
@@ -248,12 +264,14 @@ namespace MSC_Localization_Core
             return count;
         }
 
-        private static int CountActiveTextMeshTargets()
+        private static int CountActiveTextMeshTargets(string sceneName)
         {
             int count = 0;
             for (int i = 0; i < TextMeshGroups.Length; i++)
             {
                 TextMeshGroup group = TextMeshGroups[i];
+                if (group.SceneName != sceneName)
+                    continue;
                 if (IsAssemblyLoaded(group.AssemblyName))
                     count += group.Paths.Length;
             }
