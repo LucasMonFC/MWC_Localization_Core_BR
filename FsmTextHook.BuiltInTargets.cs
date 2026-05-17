@@ -313,27 +313,45 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "REPAIRSHOP/Jobs/Springs", "Work", "Cost 2", 2, "Mittatilausjouset / Coil spring order");
 
             // Sheets: Yellow Pages Magazine ad text
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row1/Random/ListRandom10");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row1/Regular/ListRegular10");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row1/Regular/ListRegular03");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row1/Random/ListRandom02");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row2/Random/ListRandom06");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row2/Regular/ListRegular06");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row2/Regular/ListRegular07");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page1/Row2/Regular/ListRegular09");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Regular/ListRegular01");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Regular/ListRegular02");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Random/ListRandom05");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Regular/ListRegular05");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Regular/ListRegular04");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Random/ListRandom03");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row3/Random/ListRandom04");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Random/ListRandom07");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Random/ListRandom01");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Regular/ListRegular08");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Random/ListRandom08");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Random/ListRandom09");
-            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Page2/Row4/Pic/ListPic01");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Left1/Row1/Random/ListRandom04");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Left1/Row1/Regular/ListRegular10");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Left1/Row1/Regular/ListRegular03");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Left1/Row1/Regular/ListRegular08");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Left1/Row2/Random/ListRandom06");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Left1/Row2/Regular/ListRegular06");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Left1/Row2/Regular/ListRegular07");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Left1/Row2/Regular/ListRegular09");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Left1/Row2/Random/ListRandom08");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row3/Regular/ListRegular01");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row3/Regular/ListRegular02");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row3/Random/ListRandom05");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row3/Regular/ListRegular05");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row3/Regular/ListRegular04");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row3/Random/ListRandom03");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row4/Random/ListRandom07");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row4/Random/ListRandom01");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row4/Regular/ListRegular11");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row4/Random/ListRandom02");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page1/Right1/Row4/Pic/ListPic01");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row3/Regular/ListRegular12");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row3/Regular/ListRegular13");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row3/Random/ListRandom09");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row3/Pic/ListPic02");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row4/Regular/ListRegular14");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row4/Regular/ListRegular15");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row4/Regular/ListRegular16");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row4/Regular/ListRegular17");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row4/Random/ListRandom10");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row4/Random/ListRandom11");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Left2/Row4/Random/ListRandom12");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Right2/Row1/Random/ListRandom13");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Right2/Row1/Regular/ListRegular18");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Right2/Row1/Regular/ListRegular19");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Right2/Row1/Regular/ListRegular20");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Right2/Row2/Regular/ListRegular21");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Right2/Row2/Regular/ListRegular22");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Right2/Row2/Regular/ListRegular23");
+            AddMagazineFormatRules(byKey, "Sheets/YellowPagesMagazine/Pages/Page2/Right2/Row2/Regular/ListRegular24");
         }
     }
 }
