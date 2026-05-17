@@ -8,6 +8,7 @@ AlfaSlabOne-Regular = AlfaSlabOne-Regular
 ArchivoBlack-Regular = ArchivoBlack-Regular
 Cour10Bd = Cour10Bd
 RAGE = RAGE
+Alphabetized = Alphabetized
 Dosis-SemiBold = Dosis-SemiBold
 Dosis-SemiBold LowCase = Dosis-SemiBold
 VT323-Regular = VT323-Regular

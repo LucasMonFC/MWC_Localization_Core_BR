@@ -17,6 +17,10 @@ namespace MSC_Localization_Core
         private const string DirtTrackRootPath = "DIRTTRACK_UI";
         private const string ModsShopAssemblyName = "ModsShop";
         private const string ModsShopCartComponentName = "ModsShop.ShoppingCartUI";
+        private const string DeliveryJobsAssemblyName = "DeliveryJobs";
+        private const string DeliveryJobsJobMapComponentName = "DeliveryJobs.JobMap";
+        private const string DeliveryJobsCanvasPath = "DeliveryJobs Canvas";
+        private const string DeliveryJobsAccentFontName = "Alphabetized";
 
         private sealed class TextMeshGroup
         {
@@ -63,15 +67,19 @@ namespace MSC_Localization_Core
 
         private readonly Dictionary<string, DirectTextMeshTranslator> attachedTextMeshComponents = new Dictionary<string, DirectTextMeshTranslator>();
         private TranslationDictionary translations;
+        private Dictionary<string, Font> customFonts;
         private TextMeshTranslator textMeshTranslator;
         private int activeTextMeshTargetCount;
         private bool dirtTrackAssemblyLoaded;
         private bool modsShopAssemblyLoaded;
+        private bool deliveryJobsAssemblyLoaded;
         private int textMeshAttachAttempts;
         private int dirtTrackAttachAttempts;
         private int modsShopAttachAttempts;
+        private int deliveryJobsAttachAttempts;
         private bool dirtTrackAttached;
         private bool modsShopAttached;
+        private bool deliveryJobsAttached;
         private bool hasSupportedModAssemblyLoaded;
 
         public string Name { get { return "ModTextTranslator"; } }
@@ -90,6 +98,7 @@ namespace MSC_Localization_Core
         public void Initialize(TranslationContext ctx)
         {
             translations = ctx.Translations;
+            customFonts = ctx.CustomFonts;
             textMeshTranslator = ctx.Translator;
             Reset();
             RefreshActiveModState(Application.loadedLevelName);
@@ -111,11 +120,14 @@ namespace MSC_Localization_Core
             activeTextMeshTargetCount = 0;
             dirtTrackAssemblyLoaded = false;
             modsShopAssemblyLoaded = false;
+            deliveryJobsAssemblyLoaded = false;
             textMeshAttachAttempts = 0;
             dirtTrackAttachAttempts = 0;
             modsShopAttachAttempts = 0;
+            deliveryJobsAttachAttempts = 0;
             dirtTrackAttached = false;
             modsShopAttached = false;
+            deliveryJobsAttached = false;
             hasSupportedModAssemblyLoaded = false;
         }
 
@@ -143,6 +155,7 @@ namespace MSC_Localization_Core
             {
                 attached += TryAttachDirtTrackUi();
                 attached += TryAttachModsShopUi();
+                attached += TryAttachDeliveryJobsUi();
             }
             return attached;
         }
@@ -285,6 +298,32 @@ namespace MSC_Localization_Core
             return attached;
         }
 
+        private int TryAttachDeliveryJobsUi()
+        {
+            if (translations == null
+                || deliveryJobsAttached
+                || deliveryJobsAttachAttempts >= MaxAttachAttempts
+                || !deliveryJobsAssemblyLoaded)
+            {
+                return 0;
+            }
+
+            deliveryJobsAttachAttempts++;
+
+            GameObject root = FindGameObjectByNameIncludingInactive(DeliveryJobsCanvasPath);
+            if (root == null)
+                return 0;
+
+            int attached = AttachUiTextTranslators(root, translations);
+
+            GameObject advertUi = FindDeliveryJobsAdvertUi();
+            if (advertUi != null)
+                attached += AttachUiTextTranslators(advertUi, translations, GetCustomFontByName(DeliveryJobsAccentFontName), true);
+
+            deliveryJobsAttached = attached > 0 && advertUi != null;
+            return attached;
+        }
+
         private bool IsCurrentlyComplete()
         {
             bool textMeshComplete = activeTextMeshTargetCount == 0
@@ -299,7 +338,11 @@ namespace MSC_Localization_Core
                 || modsShopAttached
                 || modsShopAttachAttempts >= MaxAttachAttempts;
 
-            return textMeshComplete && dirtTrackComplete && modsShopComplete;
+            bool deliveryJobsComplete = !deliveryJobsAssemblyLoaded
+                || deliveryJobsAttached
+                || deliveryJobsAttachAttempts >= MaxAttachAttempts;
+
+            return textMeshComplete && dirtTrackComplete && modsShopComplete && deliveryJobsComplete;
         }
 
         private void RefreshActiveModState(string sceneName)
@@ -307,7 +350,8 @@ namespace MSC_Localization_Core
             activeTextMeshTargetCount = CountActiveTextMeshTargets(sceneName);
             dirtTrackAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(DirtTrackAssemblyName);
             modsShopAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(ModsShopAssemblyName);
-            hasSupportedModAssemblyLoaded = activeTextMeshTargetCount > 0 || dirtTrackAssemblyLoaded || modsShopAssemblyLoaded;
+            deliveryJobsAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(DeliveryJobsAssemblyName);
+            hasSupportedModAssemblyLoaded = activeTextMeshTargetCount > 0 || dirtTrackAssemblyLoaded || modsShopAssemblyLoaded || deliveryJobsAssemblyLoaded;
         }
 
         private int CountLiveAttachedTextMeshes()
@@ -422,12 +466,28 @@ namespace MSC_Localization_Core
         {
             private Text target;
             private TranslationDictionary translations;
+            private Font fallbackFont;
+            private bool fallbackOnlyForNonAscii;
+            private Font originalFont;
+            private bool hasOriginalFont;
             private string lastText;
 
             public void Configure(Text target, TranslationDictionary translations)
             {
+                Configure(target, translations, null, false);
+            }
+
+            public void Configure(Text target, TranslationDictionary translations, Font fallbackFont, bool fallbackOnlyForNonAscii)
+            {
                 this.target = target;
                 this.translations = translations;
+                this.fallbackFont = fallbackFont;
+                this.fallbackOnlyForNonAscii = fallbackOnlyForNonAscii;
+                if (!hasOriginalFont && target != null)
+                {
+                    originalFont = target.font;
+                    hasOriginalFont = true;
+                }
                 lastText = null;
             }
 
@@ -465,6 +525,7 @@ namespace MSC_Localization_Core
                     lastText = current;
                 }
 
+                ApplyFallbackFontIfNeeded(target, fallbackFont, fallbackOnlyForNonAscii, originalFont, hasOriginalFont);
                 PreventDirtTrackLineWrap(target);
             }
         }
@@ -539,7 +600,37 @@ namespace MSC_Localization_Core
             if (translated != null)
                 return translated;
 
+            translated = TryTranslateUiTextByLines(current, text, translations);
+            if (translated != null)
+                return translated;
+
             return null;
+        }
+
+        private static string TryTranslateUiTextByLines(string current, Text text, TranslationDictionary translations)
+        {
+            if (string.IsNullOrEmpty(current) || current.IndexOf('\n') < 0)
+                return null;
+
+            string[] lines = current.Split('\n');
+            bool changed = false;
+            string path = GetPath(text);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i].Replace("\r", string.Empty);
+                string translated;
+                if (!translations.TryGetExact(line, out translated))
+                    translated = translations.TryMatchPattern(line, path);
+
+                if (translated == null || translated == line)
+                    continue;
+
+                lines[i] = translated;
+                changed = true;
+            }
+
+            return changed ? string.Join("\n", lines) : null;
         }
 
         private static string TryTranslateRichQuantity(string current, Text text, TranslationDictionary translations)
@@ -569,6 +660,11 @@ namespace MSC_Localization_Core
 
         private static bool AttachUiTextTranslator(Text text, TranslationDictionary translations)
         {
+            return AttachUiTextTranslator(text, translations, null, false);
+        }
+
+        private static bool AttachUiTextTranslator(Text text, TranslationDictionary translations, Font fallbackFont, bool fallbackOnlyForNonAscii)
+        {
             if (text == null || text.gameObject == null || translations == null)
                 return false;
 
@@ -580,12 +676,17 @@ namespace MSC_Localization_Core
                 created = true;
             }
 
-            component.Configure(text, translations);
+            component.Configure(text, translations, fallbackFont, fallbackOnlyForNonAscii);
             component.TranslateNow();
             return created;
         }
 
         private static int AttachUiTextTranslators(GameObject root, TranslationDictionary translations)
+        {
+            return AttachUiTextTranslators(root, translations, null, false);
+        }
+
+        private static int AttachUiTextTranslators(GameObject root, TranslationDictionary translations, Font fallbackFont, bool fallbackOnlyForNonAscii)
         {
             if (root == null || translations == null)
                 return 0;
@@ -597,11 +698,29 @@ namespace MSC_Localization_Core
             int attached = 0;
             for (int i = 0; i < texts.Length; i++)
             {
-                if (AttachUiTextTranslator(texts[i], translations))
+                if (AttachUiTextTranslator(texts[i], translations, fallbackFont, fallbackOnlyForNonAscii))
                     attached++;
             }
 
             return attached;
+        }
+
+        private Font GetCustomFontByName(string fontName)
+        {
+            if (string.IsNullOrEmpty(fontName) || customFonts == null)
+                return null;
+
+            Font font;
+            if (customFonts.TryGetValue(fontName, out font) && font != null)
+                return font;
+
+            foreach (KeyValuePair<string, Font> pair in customFonts)
+            {
+                if (pair.Value != null && pair.Value.name == fontName)
+                    return pair.Value;
+            }
+
+            return null;
         }
 
         private static T GetFieldValue<T>(object target, Type type, string fieldName) where T : class
@@ -614,6 +733,80 @@ namespace MSC_Localization_Core
                 return null;
 
             return field.GetValue(target) as T;
+        }
+
+        private static GameObject FindGameObjectByNameIncludingInactive(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            GameObject[] objects = Resources.FindObjectsOfTypeAll<GameObject>();
+            for (int i = 0; i < objects.Length; i++)
+            {
+                GameObject go = objects[i];
+                if (go != null && go.name == name)
+                    return go;
+            }
+
+            return null;
+        }
+
+        private static GameObject FindDeliveryJobsAdvertUi()
+        {
+            MonoBehaviour[] behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
+            if (behaviours == null || behaviours.Length == 0)
+                return null;
+
+            for (int i = 0; i < behaviours.Length; i++)
+            {
+                MonoBehaviour behaviour = behaviours[i];
+                if (behaviour == null || behaviour.gameObject == null)
+                    continue;
+
+                Type behaviourType = behaviour.GetType();
+                if (behaviourType == null || behaviourType.FullName != DeliveryJobsJobMapComponentName)
+                    continue;
+
+                GameObject advertUi = GetFieldValue<GameObject>(behaviour, behaviourType, "advertJobUI");
+                if (advertUi != null)
+                    return advertUi;
+            }
+
+            return null;
+        }
+
+        private static void ApplyFallbackFontIfNeeded(Text text, Font fallbackFont, bool onlyForNonAscii, Font originalFont, bool hasOriginalFont)
+        {
+            if (text == null || fallbackFont == null)
+                return;
+
+            bool shouldUseFallback = true;
+            if (onlyForNonAscii && !ContainsNonAscii(text.text))
+                shouldUseFallback = false;
+
+            if (!shouldUseFallback)
+            {
+                if (hasOriginalFont && originalFont != null && text.font == fallbackFont)
+                    text.font = originalFont;
+                return;
+            }
+
+            if (text.font != fallbackFont)
+                text.font = fallbackFont;
+        }
+
+        private static bool ContainsNonAscii(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return false;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] > 127)
+                    return true;
+            }
+
+            return false;
         }
 
         private static void PreventDirtTrackLineWrap(Text text)

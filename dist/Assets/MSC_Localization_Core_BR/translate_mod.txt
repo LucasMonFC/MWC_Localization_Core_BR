@@ -118,11 +118,53 @@ LONGCHAMP WHELLS 5649MK = RODAS TALA LARGA 5649 MK
 LONGCHAMP WHELL = RODA TALA LARGA
 
 //DeliveryJobs
+Delivery job = Trabalho de entrega
 Show available delivery jobs = Mostrar trabalhos de entrega disponíveis
 DELIVERY PACKAGE = PACOTE DE ENTREGA
 DELIVER THIS BOX = ENTREGUE ESTA CAIXA
 Delivery status = STATUS DE ENTREGA
 Job Details = DETALHES DO TRABALHO
+Take Job = ACEITAR TRABALHO
+Finish Job = FINALIZAR ENTREGA
+Hello, looking for person to take a job = Olá, procuro alguém para fazer uma entrega
+(preffered owner of a van) = (de preferência alguém com uma van)
+It is a small job, no more than <color\=black>15</color> deliveries = É uma entrega pequena, no máximo <color=black>15</color> paradas
+Only <color\=black>Small</color> sized boxes. = Apenas caixas <color=black>pequenas</color>.
+It is a medium job up to <color\=black>20</color> deliveries = É uma entrega média, até <color=black>20</color> paradas
+<color\=black>Small</color> and <color\=black>Medium</color> sized boxes = Caixas <color=black>pequenas</color> e <color=black>médias</color>
+It is a big job up to  <color\=black>{0}</color> deliveries = É uma entrega grande, até <color=black>{0}</color> paradas
+<color\=black>Small</color>, <color\=black>Medium</color> and <color\=black>Big</color> sized boxes = Caixas <color=black>pequenas</color>, <color=black>médias</color> e <color=black>grandes</color>
+<color\=magenta>Can contain fragille stuff</color> = <color=magenta>Pode conter itens frágeis</color>
+It is a <color\=magenta>special</color> job only <color\=black>4</color> to <color\=black>6</color> deliveries = É uma entrega <color=magenta>especial</color>, apenas <color=black>4</color> a <color=black>6</color> paradas
+It contains very <color\=black>Large</color> boxes, with <color\=magenta>fragille</color> stuff = Contém caixas muito <color=black>grandes</color>, com itens <color=magenta>frágeis</color>
+Vehicle with good cargo space required. = Veículo com bom espaço de carga necessário.
+<color\=red>Any unfinished previous devileries will be fined</color> = <color=red>Qualquer entrega anterior inacabada será multada</color>
+Come back on: <color\=black>Monday</color> = Volte na <color=black>segunda-feira</color>
+Come back on: <color\=black>Tuesday</color> = Volte na <color=black>terça-feira</color>
+Come back on: <color\=black>Wednesday</color> = Volte na <color=black>quarta-feira</color>
+Come back on: <color\=black>Thursday</color> = Volte na <color=black>quinta-feira</color>
+Come back on: <color\=black>Friday</color> = Volte na <color=black>sexta-feira</color>
+Come back on: <color\=black>Saturday</color> = Volte no <color=black>sábado</color>
+Come back on: <color\=black>Sunday</color> = Volte no <color=black>domingo</color>
+Delivery: {0} = Entrega: {0}
+<color\=magenta>Waiting for delivery...</color> = <color=magenta>Aguardando entrega...</color>
+You delivered required package. Here are some stats = Você entregou o pacote necessário. Aqui estão alguns dados
+Damage: <b><color\=red>{0}</color>%</b> = Dano: <b><color=red>{0}</color>%</b>
+Est. Payment: <color\=green>{0}</color> MK = Pagamento estimado: <color=green>{0}</color> MK
+Fine: <color\=Red>-{0}</color> MK (Missing Boxes) = Multa: <color=Red>-{0}</color> MK (Caixas faltando)
+Fine: <color\=Red>-{0}</color> MK (Damage) = Multa: <color=Red>-{0}</color> MK (Dano)
+Fine: <color\=Red>-{0}</color> MK (P. Tax) = Multa: <color=Red>-{0}</color> MK (Taxa postal)
+Payment: <color\=green>{0}</color> MK = Pagamento: <color=green>{0}</color> MK
+Payment: <color\=red>{0}</color> MK = Pagamento: <color=red>{0}</color> MK
+Good job = Bom trabalho
+<color\=orange>Be a little more careful next time</color> = <color=orange>Tenha um pouco mais de cuidado da próxima vez</color>
+<color\=red>Start taking out the money, you're paying for that.</color> = <color=red>Vá tirando o dinheiro, você vai pagar por isso.</color>
+Teimo Post Service = Serviço Postal Teimo
+Additional information: = Informações adicionais:
+Mailbox ID: {0} = ID da caixa de correio: {0}
+[Fragille] = [FRÁGIL]
+Deliver to: = Entregar para:
+Signature: = Assinatura:
 
 //Tangerine FZ-120 Pickup
 CLOSE LID = FECHAR TAMPA
