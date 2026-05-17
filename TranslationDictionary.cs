@@ -20,7 +20,6 @@ namespace MSC_Localization_Core
 
         private readonly List<TranslationPattern> patterns = new List<TranslationPattern>();
         private readonly HashSet<string> patternSignatures = new HashSet<string>();
-        private readonly Dictionary<string, string> recentPatternLookups = new Dictionary<string, string>(128);
 
         public int Count { get { return entries.Count; } }
         public int PatternCount { get { return patterns.Count; } }
@@ -33,7 +32,6 @@ namespace MSC_Localization_Core
             if (string.IsNullOrEmpty(rawKey)) return;
             entries[LocalizationUtils.FormatUpperKey(rawKey)] = value;
             recentLookups.Clear();
-            recentPatternLookups.Clear();
         }
 
         /// <summary>Bulk-import entries whose keys have already been normalized (e.g., from TranslationFileParser).</summary>
@@ -43,14 +41,12 @@ namespace MSC_Localization_Core
             foreach (KeyValuePair<string, string> pair in normalizedEntries)
                 entries[pair.Key] = pair.Value;
             recentLookups.Clear();
-            recentPatternLookups.Clear();
         }
 
         public void Clear()
         {
             entries.Clear();
             recentLookups.Clear();
-            recentPatternLookups.Clear();
         }
 
         public void ResetPatterns()
@@ -58,7 +54,6 @@ namespace MSC_Localization_Core
             patterns.Clear();
             patternSignatures.Clear();
             recentLookups.Clear();
-            recentPatternLookups.Clear();
         }
 
         /// <summary>
@@ -112,11 +107,6 @@ namespace MSC_Localization_Core
             if (string.IsNullOrEmpty(source) || patterns.Count == 0)
                 return null;
 
-            string cacheKey = (path ?? string.Empty) + "\n" + source;
-            string cached;
-            if (recentPatternLookups.TryGetValue(cacheKey, out cached))
-                return cached;
-
             string upperText = null;
             for (int i = 0; i < patterns.Count; i++)
             {
@@ -135,13 +125,9 @@ namespace MSC_Localization_Core
 
                 string result = pattern.TryTranslate(inputText, path, this);
                 if (result != null)
-                {
-                    RememberPattern(cacheKey, result);
                     return result;
-                }
             }
 
-            RememberPattern(cacheKey, null);
             return null;
         }
 
@@ -284,13 +270,6 @@ namespace MSC_Localization_Core
             if (recentLookups.Count >= MaxRecentLookups)
                 recentLookups.Clear();
             recentLookups[source] = result;
-        }
-
-        private void RememberPattern(string cacheKey, string result)
-        {
-            if (recentPatternLookups.Count >= MaxRecentLookups)
-                recentPatternLookups.Clear();
-            recentPatternLookups[cacheKey] = result;
         }
 
         /// <summary>

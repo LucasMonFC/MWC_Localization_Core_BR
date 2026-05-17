@@ -126,20 +126,21 @@ namespace MSC_Localization_Core
         private int TranslateArray(string arrayKey)
         {
             // Parse arrayKey: "GameObject/Path:ComponentIndex"
-            if (!arrayKey.Contains(":"))
+            int colonIndex = arrayKey.LastIndexOf(':');
+            if (colonIndex <= 0)
             {
                 CoreConsole.Warning($"Invalid array key format (expected 'path:index'): {arrayKey}");
                 return 0;
             }
 
+            string objectPath = arrayKey.Substring(0, colonIndex);
+
             PlayMakerArrayListProxy proxy;
             if (!arrayProxyCache.TryGetValue(arrayKey, out proxy))
             {
-                string[] parts = arrayKey.Split(':');
-                string objectPath = parts[0];
                 int componentIndex;
 
-                if (!int.TryParse(parts[1], out componentIndex))
+                if (!int.TryParse(arrayKey.Substring(colonIndex + 1), out componentIndex))
                 {
                     CoreConsole.Warning($"Invalid component index in array key: {arrayKey}");
                     return 0;

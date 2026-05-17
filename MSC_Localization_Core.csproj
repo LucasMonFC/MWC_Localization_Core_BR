@@ -93,6 +93,12 @@
       echo .
       echo "== Running post build actions for configuration $(ConfigurationName)! ==="
 
+      IF NOT EXIST "$(ProjectDir)dist" (
+      mkdir "$(ProjectDir)dist"
+      )
+      copy "$(TargetPath)" "$(ProjectDir)dist" /y
+      echo  "Copied dll into dist folder!"
+
       IF NOT "$(MSCMODSFOLDER)" == "NONE" (
       copy "$(TargetPath)" "$(MSCMODSFOLDER)" /y
       echo  "Copied dll into MSC mods folder!"        
