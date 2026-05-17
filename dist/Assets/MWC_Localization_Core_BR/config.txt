@@ -1,0 +1,44 @@
+LANGUAGE_NAME = Português
+LANGUAGE_CODE = pt-BR
+
+[FONTS]
+FugazOne-Regular = FugazOne-Regular
+Heebo-Black = Heebo-Black
+AlfaSlabOne-Regular = AlfaSlabOne-Regular
+ArchivoBlack-Regular = ArchivoBlack-Regular
+Cour10Bd = Cour10Bd
+RAGE = RAGE
+Dosis-SemiBold = Dosis-SemiBold
+Dosis-SemiBold LowCase = Dosis-SemiBold
+VT323-Regular = VT323-Regular
+DroidSerif-Bold = DroidSerif-Bold
+PlayfairDisplay-Bold = PlayfairDisplay-Bold
+WalterTurncoat-Regular = WalterTurncoat-Regular
+BLUEHIGD = Blue-Highway-D
+
+[POSITION_ADJUSTMENTS]
+## Fuel ATM screen (excluding row elements)
+Contains(PERAPORTTI/ActiveFunctions/ATMs/FuelATM/Screen) & !Contains(/CashScreen) & !Contains(/Row) & EndsWith(/Text) = 0,0.35,0
+## Fuel ATM screen rows
+Contains(PERAPORTTI/ActiveFunctions/ATMs/FuelATM/Screen) & Contains(/Row) & EndsWith(/Text) = 0,0.10,0
+## Options
+Contains(Systems/OptionsMenu) & Contains(/GUITextlabel) = 0,0,0,0.07
+Contains(Systems/OptionsMenu) & Contains(/GUITextLabel) = 0,0,0,0.07
+Contains(Systems/OptionsMenu) & Contains(/GUITextHeader) = 0,0,0,0.08
+## Unemployment report sheet
+Contains(Sheets/UnemployPaper/2) = -0.022,0,0,0.002
+Contains(Sheets/UnemployPaper/1) = 0,-0.002,0
+## Death Paper
+Contains(Systems/Death/GameOverScreen/Paper) = 0,0,0,,0.77
+##R ally Registration
+Contains(Sheets/RallyRegistration/Functions/Class) = 0,-0.01,0,0.0024
+## TV Teletext
+Contains(Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status) = 1.25,0,0
+Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/175/Texts/Newsline 2) = 0.5,0.2,0
+Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/175/Texts/Newsline) = 0,0.2,0
+Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/172/Texts/Newsline) = 0,0.2,0
+## Parts Magazine Product List
+Contains(Sheets/Magazine/Products) = 0,0,0,0.0024
+GameObjectEquals(Sheets/Magazine/List) = 0,-0.002,0
+## Fleetari Service Payment Sheet
+Contains(Sheets/ServicePayment) & EndsWith(ServicePayment/Text) = 0,0,0,0.005
