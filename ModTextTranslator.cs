@@ -15,6 +15,8 @@ namespace MSC_Localization_Core
         private const int MaxAttachAttempts = 15;
         private const string DirtTrackAssemblyName = "DirtTrackRacing";
         private const string DirtTrackRootPath = "DIRTTRACK_UI";
+        private const string ModsShopAssemblyName = "ModsShop";
+        private const string ModsShopCartComponentName = "ModsShop.ShoppingCartUI";
 
         private sealed class TextMeshGroup
         {
@@ -64,9 +66,12 @@ namespace MSC_Localization_Core
         private TextMeshTranslator textMeshTranslator;
         private int activeTextMeshTargetCount;
         private bool dirtTrackAssemblyLoaded;
+        private bool modsShopAssemblyLoaded;
         private int textMeshAttachAttempts;
         private int dirtTrackAttachAttempts;
+        private int modsShopAttachAttempts;
         private bool dirtTrackAttached;
+        private bool modsShopAttached;
         private bool hasSupportedModAssemblyLoaded;
 
         public string Name { get { return "ModTextTranslator"; } }
@@ -105,9 +110,12 @@ namespace MSC_Localization_Core
             attachedTextMeshComponents.Clear();
             activeTextMeshTargetCount = 0;
             dirtTrackAssemblyLoaded = false;
+            modsShopAssemblyLoaded = false;
             textMeshAttachAttempts = 0;
             dirtTrackAttachAttempts = 0;
+            modsShopAttachAttempts = 0;
             dirtTrackAttached = false;
+            modsShopAttached = false;
             hasSupportedModAssemblyLoaded = false;
         }
 
@@ -132,7 +140,10 @@ namespace MSC_Localization_Core
             int attached = 0;
             attached += TryAttachTextMeshes(sceneName);
             if (isGameScene)
+            {
                 attached += TryAttachDirtTrackUi();
+                attached += TryAttachModsShopUi();
+            }
             return attached;
         }
 
@@ -232,6 +243,48 @@ namespace MSC_Localization_Core
             return attached;
         }
 
+        private int TryAttachModsShopUi()
+        {
+            if (translations == null
+                || modsShopAttached
+                || modsShopAttachAttempts >= MaxAttachAttempts
+                || !modsShopAssemblyLoaded)
+            {
+                return 0;
+            }
+
+            modsShopAttachAttempts++;
+
+            MonoBehaviour[] behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
+            if (behaviours == null || behaviours.Length == 0)
+                return 0;
+
+            int attached = 0;
+            for (int i = 0; i < behaviours.Length; i++)
+            {
+                MonoBehaviour behaviour = behaviours[i];
+                if (behaviour == null || behaviour.gameObject == null)
+                    continue;
+
+                Type behaviourType = behaviour.GetType();
+                if (behaviourType == null || behaviourType.FullName != ModsShopCartComponentName)
+                    continue;
+
+                ModsShopCartTextTranslator component = behaviour.gameObject.GetComponent<ModsShopCartTextTranslator>();
+                if (component == null)
+                {
+                    component = behaviour.gameObject.AddComponent<ModsShopCartTextTranslator>();
+                    attached++;
+                }
+
+                component.Configure(behaviour, translations);
+                attached += component.AttachNow();
+                modsShopAttached = true;
+            }
+
+            return attached;
+        }
+
         private bool IsCurrentlyComplete()
         {
             bool textMeshComplete = activeTextMeshTargetCount == 0
@@ -242,14 +295,19 @@ namespace MSC_Localization_Core
                 || dirtTrackAttached
                 || dirtTrackAttachAttempts >= MaxAttachAttempts;
 
-            return textMeshComplete && dirtTrackComplete;
+            bool modsShopComplete = !modsShopAssemblyLoaded
+                || modsShopAttached
+                || modsShopAttachAttempts >= MaxAttachAttempts;
+
+            return textMeshComplete && dirtTrackComplete && modsShopComplete;
         }
 
         private void RefreshActiveModState(string sceneName)
         {
             activeTextMeshTargetCount = CountActiveTextMeshTargets(sceneName);
             dirtTrackAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(DirtTrackAssemblyName);
-            hasSupportedModAssemblyLoaded = activeTextMeshTargetCount > 0 || dirtTrackAssemblyLoaded;
+            modsShopAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(ModsShopAssemblyName);
+            hasSupportedModAssemblyLoaded = activeTextMeshTargetCount > 0 || dirtTrackAssemblyLoaded || modsShopAssemblyLoaded;
         }
 
         private int CountLiveAttachedTextMeshes()
@@ -411,6 +469,62 @@ namespace MSC_Localization_Core
             }
         }
 
+        public sealed class ModsShopCartTextTranslator : MonoBehaviour
+        {
+            private MonoBehaviour cart;
+            private TranslationDictionary translations;
+            private GameObject uiRoot;
+            private GameObject listView;
+            private GameObject cartItemPrefab;
+            private Text priceText;
+
+            public void Configure(MonoBehaviour cart, TranslationDictionary translations)
+            {
+                this.cart = cart;
+                this.translations = translations;
+                ResolveFields();
+            }
+
+            public int AttachNow()
+            {
+                ResolveFields();
+
+                int attached = 0;
+                attached += AttachUiTextTranslator(priceText, translations) ? 1 : 0;
+                attached += AttachUiTextTranslators(uiRoot, translations);
+                attached += AttachUiTextTranslators(cartItemPrefab, translations);
+                attached += AttachUiTextTranslators(listView, translations);
+                return attached;
+            }
+
+            private void LateUpdate()
+            {
+                if (cart == null || translations == null)
+                    return;
+
+                if (uiRoot == null || listView == null || priceText == null)
+                    ResolveFields();
+
+                if (uiRoot == null || !uiRoot.activeInHierarchy)
+                    return;
+
+                AttachUiTextTranslator(priceText, translations);
+                AttachUiTextTranslators(listView, translations);
+            }
+
+            private void ResolveFields()
+            {
+                if (cart == null)
+                    return;
+
+                Type type = cart.GetType();
+                uiRoot = GetFieldValue<GameObject>(cart, type, "ui");
+                listView = GetFieldValue<GameObject>(cart, type, "listView");
+                cartItemPrefab = GetFieldValue<GameObject>(cart, type, "cartItem");
+                priceText = GetFieldValue<Text>(cart, type, "priceText");
+            }
+        }
+
         private static string TranslateUiText(string current, Text text, TranslationDictionary translations)
         {
             string translated;
@@ -421,7 +535,85 @@ namespace MSC_Localization_Core
             if (translated != null)
                 return translated;
 
+            translated = TryTranslateRichQuantity(current, text, translations);
+            if (translated != null)
+                return translated;
+
             return null;
+        }
+
+        private static string TryTranslateRichQuantity(string current, Text text, TranslationDictionary translations)
+        {
+            const string quantityMarker = " <color=yellow>x";
+            const string colorClose = "</color>";
+
+            if (string.IsNullOrEmpty(current) || !current.EndsWith(colorClose))
+                return null;
+
+            int markerIndex = current.LastIndexOf(quantityMarker);
+            if (markerIndex <= 0)
+                return null;
+
+            string itemName = current.Substring(0, markerIndex);
+            string suffix = current.Substring(markerIndex);
+            string translatedName;
+            if (translations.TryGetExact(itemName, out translatedName))
+                return translatedName + suffix;
+
+            translatedName = translations.TryMatchPattern(itemName, GetPath(text));
+            if (translatedName != null)
+                return translatedName + suffix;
+
+            return null;
+        }
+
+        private static bool AttachUiTextTranslator(Text text, TranslationDictionary translations)
+        {
+            if (text == null || text.gameObject == null || translations == null)
+                return false;
+
+            bool created = false;
+            DirtTrackTextTranslator component = text.gameObject.GetComponent<DirtTrackTextTranslator>();
+            if (component == null)
+            {
+                component = text.gameObject.AddComponent<DirtTrackTextTranslator>();
+                created = true;
+            }
+
+            component.Configure(text, translations);
+            component.TranslateNow();
+            return created;
+        }
+
+        private static int AttachUiTextTranslators(GameObject root, TranslationDictionary translations)
+        {
+            if (root == null || translations == null)
+                return 0;
+
+            Text[] texts = root.GetComponentsInChildren<Text>(true);
+            if (texts == null || texts.Length == 0)
+                return 0;
+
+            int attached = 0;
+            for (int i = 0; i < texts.Length; i++)
+            {
+                if (AttachUiTextTranslator(texts[i], translations))
+                    attached++;
+            }
+
+            return attached;
+        }
+
+        private static T GetFieldValue<T>(object target, Type type, string fieldName) where T : class
+        {
+            if (target == null || type == null)
+                return null;
+
+            FieldInfo field = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (field == null)
+                return null;
+
+            return field.GetValue(target) as T;
         }
 
         private static void PreventDirtTrackLineWrap(Text text)

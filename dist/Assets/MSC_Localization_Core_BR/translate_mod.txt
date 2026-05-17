@@ -188,8 +188,17 @@ Ruscko Window Roller = MANIVELA RUSCKO
 FIXING WIRING... {0}% = CONSERTANDO FIAÇÃO... {0}%
 
 //Mod Shop
+SHOPPING CART = CARRINHO DE COMPRAS
+Shopping cart = Carrinho de compras
 Shopping cart ({0} items) = Carrinho de compras ({0} itens)
 Get item from bag ({0} items) = Pegar item ({0} itens)
+PURCHASE = COMPRAR
+Total: {0} MK = Total: {0} MK
+Your shopping cart is empty = Seu carrinho de compras está vazio
+To buy stuff just turn around and look at the store shelf to add stuff to your cart. = Para comprar itens, vire-se e olhe para a prateleira da loja para adicionar itens ao carrinho.
+You are too poor for this order! = Você não tem dinheiro suficiente para este pedido!
+Poor man = Sem dinheiro
+[VHS tape] {0} = [FITA VHS] {0}
 
 //Jack Stands
 Jackstand = MACACO
@@ -198,11 +207,15 @@ Jackstand - 300 MK = Macaco - 300 MK
 
 //Second Helmet
 Motorcycle Helmet - 1299 MK = Capacete de Motocicleta - 1299 MK
+Motorcycle Helmet = Capacete de Motocicleta
 
 //Automatic Fuses
 Automatic Fuse (10A) - 20 MK = FUSÍVEL AUTOMÁTICO (10A) - 20 MK
 Automatic Fuse (16A) - 40 MK = FUSÍVEL AUTOMÁTICO (16A) - 40 MK
 Automatic Fuse (20A) - 50 MK = FUSÍVEL AUTOMÁTICO (20A) - 50 MK
+Automatic Fuse (10A) = FUSÍVEL AUTOMÁTICO (10A)
+Automatic Fuse (16A) = FUSÍVEL AUTOMÁTICO (16A)
+Automatic Fuse (20A) = FUSÍVEL AUTOMÁTICO (20A)
 Automatic Fuse 10A = FUSÍVEL 10A
 Automatic Fuse 16A = FUSÍVEL 16A
 Automatic Fuse 20A = FUSÍVEL 20A
@@ -219,6 +232,7 @@ Slot: Bedroom, bathroom = QUARTO, BANHEIRO
 
 //CD Player Enhanced
 Rack for 10 CDs - 50 MK = RACK PARA 10 CDS - 50 MK
+Rack for 10 CDs = RACK PARA 10 CDS
 cd case ({0}) = CD {0}
 cd case (7) = CD 6
 cd case (8) = CD 7
@@ -253,6 +267,12 @@ Black Fur Dices = Dados de Pele Preta
 Custom Fur Dices = Dados de Pele Personalizados
 Tree Air Freshener = Aromatizador de Árvore
 Custom Tree Air Freshener = Aromatizador de Árvore Personalizado
+Llama Mirror Accessory = Acessório de Espelho de Lhama
+Rim Mirror Accessory = Acessório de Espelho de Aro
+Wakaba Leaf Mirror Accessory = Acessório de Espelho de Folha Wakaba
+Beer Mirror Accessory = Acessório de Espelho de Cerveja
+Piston Mirror Accessory = Acessório de Espelho de Pistão
+Balfield Mirror Accessory = Acessório de Espelho Balfield
 Llama Mirror Decoration = Decoração de Espelho de Lhama
 Rim Mirror Decoration = Decoração de Espelho de Aro
 Wakaba Leaf Mirror Decoration = Decoração de Espelho de Folha Wakaba
@@ -492,6 +512,7 @@ fuse package - {0} left = CAIXA DE FUSÍVEIS - {0} RESTANTE
 //VHSPlayer
 *I don't have any signal* = *Não tenho sinal*
 VHS Player (complete set) - 4250 MK = LEITOR VHS (CONJUNTO COMPLETO) - 4250 MK
+VHS Player (complete set) = LEITOR VHS (CONJUNTO COMPLETO)
 Preview items = VISUALIZAR ITENS
 Ruscko Front License Plate = PLACA DIANTEIRA
 Ruscko Rear License Plate = PLACA TRASEIRA
