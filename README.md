@@ -2,14 +2,14 @@
 
 MSCLoader localization framework for **My Summer Car**. 
 
-The bundled language pack ships the `.txt` files and optional `fonts.unity3d` under `Mods/Assets/MSC_Localization_Core/`, matching the current mod ID; this DLL loads them and applies translations to TextMesh, PlayMaker FSM strings, teletext arrays, HUD text, rally sheets, computer screens, and selected ArrayList-backed game data.
+The bundled language pack ships the `.txt` files and optional `fonts.unity3d` under `Mods/Assets/MSC_Localization_Core_BR/`, matching the current mod ID; this DLL loads them and applies translations to TextMesh, PlayMaker FSM strings, teletext arrays, HUD text, rally sheets, computer screens, and selected ArrayList-backed game data.
 
 ## Quick Start
 
 ### For Language Pack Creators
 
 1. Copy the template files from `dist/`.
-2. Edit `dist/Assets/MSC_Localization_Core/config.txt` with your language settings.
+2. Edit `dist/Assets/MSC_Localization_Core_BR/config.txt` with your language settings.
 3. Update translation files:
    - `translate.txt` - main game/UI/FSM text, including the former MSC-specific entries.
    - `translate_teletext.txt` - teletext database text.
@@ -34,6 +34,7 @@ The project references My Summer Car managed assemblies from the path configured
 **Long Subtitle Timing** - Applies selected long subtitles at their source FSM/ArrayList and uses the matching audio clip length for subtitle/UI timing.
 **Configurable Fonts** - Maps original game fonts to localized custom fonts.
 **Non-ASCII Support** - Custom fonts and forced-font paths keep accented text and other non-ASCII glyphs readable on surfaces that the game rebuilds dynamically.
+**PNG Texture Replacements** - Replaces loaded material textures with language-pack PNG files by matching the original Unity texture name.
 **Position Adjustments** - Fine-tunes text placement per language.
 **Live Reload** - Press F8 to reload config, translations, and runtime caches without restarting the game.
 
@@ -42,19 +43,20 @@ The project references My Summer Car managed assemblies from the path configured
 ```text
 dist/
 |-- Assets/
-|   `-- MSC_Localization_Core/
+|   `-- MSC_Localization_Core_BR/
 |       |-- config.txt
 |       |-- translate.txt
 |       |-- translate_teletext.txt
 |       |-- translate_mod.txt
-|       `-- fonts.unity3d
+|       |-- fonts.unity3d
+|       `-- textures/
 `-- MSC_Localization_Core.dll
 ```
 
-At runtime, MSCLoader resolves the assets folder from the mod ID. With the current generic ID, place the assets under:
+At runtime, MSCLoader resolves the assets folder from the mod ID. With the current mod ID, place the assets under:
 
 ```text
-Mods/Assets/MSC_Localization_Core/
+Mods/Assets/MSC_Localization_Core_BR/
 ```
 
 ## Configuration
@@ -82,6 +84,16 @@ Heebo-Black = MyLocalizedFont-Bold
 ```
 
 Font assets must exist in `fonts.unity3d` with names matching the right side values.
+
+### PNG Texture Replacements
+
+Place replacement PNGs under `Mods/Assets/MSC_Localization_Core_BR/textures/`. The file name must match the original Unity texture object name, without extension:
+
+```text
+Mods/Assets/MSC_Localization_Core_BR/textures/my_original_texture.png
+```
+
+The loader scans material texture slots such as `_MainTex`, `_BumpMap`, `_EmissionMap`, and related Unity shader properties. It also handles `ScreenOverlay` textures such as camera helmet overlays. It runs on GAME scene load and again on F8 reload. The menu-only `drivers_lincence.png` replacement is applied during MainMenu load instead.
 
 ## Translation Files
 
@@ -232,7 +244,7 @@ For languages requiring accented glyphs, Cyrillic, Japanese, Korean, Chinese, or
 2. Create Unity font assets with a Unity 5.x editor compatible with the game.
 3. Build an AssetBundle named `fonts.unity3d`.
 4. Make sure each font asset name matches the right side of the `[FONTS]` mapping in `config.txt`.
-5. Place `fonts.unity3d` alongside the translation files in `Mods/Assets/MSC_Localization_Core/`.
+5. Place `fonts.unity3d` alongside the translation files in `Mods/Assets/MSC_Localization_Core_BR/`.
 
 The bundle build target should match the game platform, normally Windows Standalone.
 
