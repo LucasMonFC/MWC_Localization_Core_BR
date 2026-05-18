@@ -17,7 +17,6 @@ namespace MWC_Localization_Core
         private const string MainMenuSceneName = "MainMenu";
         private const string GameSceneName = "GAME";
         private const string DriversLicenceTextureName = "drivers_lincence";
-        private const string SheetsRootName = "Sheets";
         private const string ScreenOverlayTypeName = "UnityStandardAssets.ImageEffects.ScreenOverlay";
         private const string ScreenOverlayTextureFieldName = "texture";
         private const string RallyRegistrationObjectPath = "RallyRegistration";
@@ -128,7 +127,7 @@ namespace MWC_Localization_Core
         private readonly Dictionary<MonoBehaviour, OverlayTextureBackup> originalOverlayTextures =
             new Dictionary<MonoBehaviour, OverlayTextureBackup>();
 
-        private readonly HashSet<string> activeTextureNames =
+        private readonly HashSet<string> sceneTextureKeys =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         private readonly HashSet<string> matchedTextureNames =
@@ -139,28 +138,18 @@ namespace MWC_Localization_Core
         private string loadedSceneName;
         private bool hasApplied;
         private bool hasLoadedReplacementTextures;
-        private bool sheetButtonHooksComplete = true;
 
-        private readonly HashSet<string> hookedSheetButtonNames =
-            new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<string> hookedObjectTargets =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         public string Name { get { return "TextureReplacementSurface"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
-        public bool IsComplete { get { return sheetButtonHooksComplete; } }
+        public bool IsComplete { get { return hasApplied; } }
 
         public void Initialize(TranslationContext ctx)
         {
             texturesFolder = ctx != null ? Path.Combine(ctx.AssetsFolder, TextureFolderName) : null;
-            hasApplied = false;
-            loadedSceneName = null;
-            activeTextureNames.Clear();
-            matchedTextureNames.Clear();
-            hasLoadedReplacementTextures = false;
-            sheetButtonHooksComplete = true;
-            hookedSheetButtonNames.Clear();
-            hookedObjectTargets.Clear();
+            ResetRuntimeState();
         }
 
         public int InitialPass()
@@ -173,7 +162,6 @@ namespace MWC_Localization_Core
             int applied = ApplyMaterialTextures();
             applied += ApplyScreenOverlayTextures();
             applied += InstallDynamicTextureHooks(sceneName);
-            sheetButtonHooksComplete = AreSheetButtonHooksComplete();
             hasApplied = true;
             LogUnmatchedTextures();
             return applied;
@@ -181,18 +169,12 @@ namespace MWC_Localization_Core
 
         public int MonitorTick(float deltaTime)
         {
-            if (Application.loadedLevelName != GameSceneName || sheetButtonHooksComplete)
-                return 0;
-
-            EnsureReplacementTexturesLoaded(GameSceneName);
-            int applied = InstallSheetButtonHooks();
-            sheetButtonHooksComplete = AreSheetButtonHooksComplete();
-            return applied;
+            return 0;
         }
 
         private int InstallDynamicTextureHooks(string sceneName)
         {
-            if (sceneName != GameSceneName || replacementTextures.Count == 0 || activeTextureNames.Count == 0)
+            if (sceneName != GameSceneName || replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
                 return 0;
 
             int installed = 0;
@@ -203,22 +185,15 @@ namespace MWC_Localization_Core
             for (int i = 0; i < DynamicObjectTextureTargets.Length; i++)
                 installed += InstallObjectTextureHook(DynamicObjectTextureTargets[i]);
 
-            installed += InstallSheetButtonHooks();
             return installed;
         }
 
         private int InstallFsmTextureHook(DynamicFsmTextureTarget target)
         {
-            GameObject go = FindDynamicGameObject(target.ObjectPath);
-            if (IsUnityObjectNull(go))
-                return 0;
-
-            PlayMakerFSM fsm = FindFsmByName(go, target.FsmName);
-            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
-                return 0;
-
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, target.StateName);
-            if (state == null)
+            GameObject go;
+            PlayMakerFSM fsm;
+            HutongGames.PlayMaker.FsmState state;
+            if (!TryFindFsmState(target.ObjectPath, target.FsmName, target.StateName, out go, out fsm, out state))
                 return 0;
 
             int injected = AppendFsmTextureHookAction(fsm, state, target);
@@ -230,75 +205,16 @@ namespace MWC_Localization_Core
 
         private int InstallObjectTextureHook(DynamicObjectTextureTarget target)
         {
-            GameObject go = FindDynamicGameObject(target.ObjectPath);
-            if (IsUnityObjectNull(go))
-                return 0;
-
-            PlayMakerFSM fsm = FindFsmByName(go, target.FsmName);
-            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
-                return 0;
-
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, target.StateName);
-            if (state == null)
+            GameObject go;
+            PlayMakerFSM fsm;
+            HutongGames.PlayMaker.FsmState state;
+            if (!TryFindFsmState(target.ObjectPath, target.FsmName, target.StateName, out go, out fsm, out state))
                 return 0;
 
             int injected = AppendObjectTextureAction(fsm, state, go, target);
             if (injected > 0)
             {
                 ReplaceTexturesOnObject(go, target.TextureKeySuffix);
-            }
-
-            return injected;
-        }
-
-        private int InstallSheetButtonHooks()
-        {
-            GameObject sheets = FindDynamicGameObject(SheetsRootName);
-            if (IsUnityObjectNull(sheets))
-                return 0;
-
-            int injected = 0;
-            CollectButtonHooks(sheets.transform, ref injected);
-            return injected;
-        }
-
-        private void CollectButtonHooks(Transform node, ref int injected)
-        {
-            if (node == null)
-                return;
-
-            string objectName = node.gameObject != null ? node.gameObject.name : null;
-            if (IsSheetButtonName(objectName))
-                injected += InstallButtonTextureHook(node.gameObject);
-
-            for (int i = 0; i < node.childCount; i++)
-                CollectButtonHooks(node.GetChild(i), ref injected);
-        }
-
-        private int InstallButtonTextureHook(GameObject button)
-        {
-            if (IsUnityObjectNull(button))
-                return 0;
-
-            PlayMakerFSM fsm = FindFsmByName(button, "Button");
-            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
-                return 0;
-
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, "State 2");
-            if (!TryGetStateActions(state, out _))
-                return 0;
-
-            if (HasAction<ReplaceButtonTextureAction>(state))
-            {
-                hookedSheetButtonNames.Add(button.name);
-                return 0;
-            }
-
-            int injected = AppendButtonTextureAction(fsm, state, button, LocalizationUtils.GetGameObjectPath(button));
-            if (injected > 0)
-            {
-                hookedSheetButtonNames.Add(button.name);
-                ReplaceButtonTexture(button);
             }
 
             return injected;
@@ -356,18 +272,6 @@ namespace MWC_Localization_Core
             return 0;
         }
 
-        private int AppendButtonTextureAction(PlayMakerFSM fsm, HutongGames.PlayMaker.FsmState state, GameObject button, string label)
-        {
-            ReplaceButtonTextureAction action = new ReplaceButtonTextureAction
-            {
-                owner = this,
-                button = button,
-                label = label,
-            };
-
-            return MSCLoader.PlayMakerExtensions.FsmInject(fsm, "State 2", action, -1, false) ? 1 : 0;
-        }
-
         private void MarkStateTextureMatches(HutongGames.PlayMaker.FsmState state)
         {
             HutongGames.PlayMaker.FsmStateAction[] actions;
@@ -387,20 +291,6 @@ namespace MWC_Localization_Core
             }
         }
 
-        private bool AreSheetButtonHooksComplete()
-        {
-            bool needsSheetButtons =
-                activeTextureNames.Contains("ordernow1")
-                || activeTextureNames.Contains("ordernow2")
-                || activeTextureNames.Contains("paynow1")
-                || activeTextureNames.Contains("paynow2");
-
-            if (!needsSheetButtons)
-                return true;
-
-            return hookedSheetButtonNames.Count > 0;
-        }
-
         private int ReplaceSetMaterialTexturesInState(GameObject targetObject, string fsmName, string stateName, string label)
         {
             if (IsUnityObjectNull(targetObject))
@@ -408,8 +298,11 @@ namespace MWC_Localization_Core
 
             try
             {
-                PlayMakerFSM fsm = FindFsmByName(targetObject, fsmName);
-                HutongGames.PlayMaker.FsmState state = FindState(fsm, stateName);
+                PlayMakerFSM fsm;
+                HutongGames.PlayMaker.FsmState state;
+                if (!TryFindFsmState(targetObject, fsmName, stateName, out fsm, out state))
+                    return 0;
+
                 HutongGames.PlayMaker.FsmStateAction[] actions;
                 if (!TryGetStateActions(state, out actions))
                     return 0;
@@ -430,7 +323,6 @@ namespace MWC_Localization_Core
                     CopyTextureSettings(setTexture.texture.Value, replacement);
                     setTexture.texture.Value = replacement;
                     matchedTextureNames.Add(matchedName);
-                    CoreConsole.Print($"[{Name}] Replaced dynamic FSM texture '{matchedName}' ({label})");
                     applied++;
                 }
 
@@ -469,15 +361,6 @@ namespace MWC_Localization_Core
             return applied;
         }
 
-        private int ReplaceButtonTexture(GameObject button)
-        {
-            Renderer renderer = FindButtonRenderer(button);
-            if (IsUnityObjectNull(renderer))
-                return 0;
-
-            return ReplaceTexturesOnObject(renderer.gameObject, null);
-        }
-
         private static bool HasAction<T>(HutongGames.PlayMaker.FsmState state) where T : HutongGames.PlayMaker.FsmStateAction
         {
             HutongGames.PlayMaker.FsmStateAction[] actions;
@@ -512,46 +395,6 @@ namespace MWC_Localization_Core
             }
         }
 
-        private static Renderer FindButtonRenderer(GameObject button)
-        {
-            if (IsUnityObjectNull(button))
-                return null;
-
-            Renderer renderer = button.GetComponent<Renderer>();
-            if (!IsUnityObjectNull(renderer))
-                return renderer;
-
-            Transform parent = button.transform.parent;
-            if (parent != null)
-            {
-                for (int i = 0; i < parent.childCount; i++)
-                {
-                    Transform child = parent.GetChild(i);
-                    if (child == null || child == button.transform)
-                        continue;
-                    if (child.gameObject == null || !child.gameObject.name.Contains("Button"))
-                        continue;
-
-                    renderer = child.GetComponent<Renderer>();
-                    if (!IsUnityObjectNull(renderer))
-                        return renderer;
-                }
-            }
-
-            return button.GetComponentInChildren<Renderer>();
-        }
-
-        private static bool IsSheetButtonName(string objectName)
-        {
-            if (string.IsNullOrEmpty(objectName))
-                return false;
-
-            string lowerName = objectName.ToLowerInvariant();
-            return lowerName.Contains("button")
-                || lowerName.Contains("btn")
-                || lowerName == "pay";
-        }
-
         private static PlayMakerFSM FindFsmByName(GameObject go, string fsmName)
         {
             if (IsUnityObjectNull(go))
@@ -566,6 +409,43 @@ namespace MWC_Localization_Core
             }
 
             return null;
+        }
+
+        private static bool TryFindFsmState(
+            string objectPath,
+            string fsmName,
+            string stateName,
+            out GameObject go,
+            out PlayMakerFSM fsm,
+            out HutongGames.PlayMaker.FsmState state)
+        {
+            go = FindDynamicGameObject(objectPath);
+            if (IsUnityObjectNull(go))
+            {
+                fsm = null;
+                state = null;
+                return false;
+            }
+
+            return TryFindFsmState(go, fsmName, stateName, out fsm, out state);
+        }
+
+        private static bool TryFindFsmState(
+            GameObject go,
+            string fsmName,
+            string stateName,
+            out PlayMakerFSM fsm,
+            out HutongGames.PlayMaker.FsmState state)
+        {
+            fsm = FindFsmByName(go, fsmName);
+            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
+            {
+                state = null;
+                return false;
+            }
+
+            state = FindState(fsm, stateName);
+            return state != null;
         }
 
         private static HutongGames.PlayMaker.FsmState FindState(PlayMakerFSM fsm, string stateName)
@@ -611,13 +491,16 @@ namespace MWC_Localization_Core
 
         public void Reset()
         {
+            ResetRuntimeState();
+        }
+
+        private void ResetRuntimeState()
+        {
             hasApplied = false;
             loadedSceneName = null;
-            activeTextureNames.Clear();
+            sceneTextureKeys.Clear();
             matchedTextureNames.Clear();
             hasLoadedReplacementTextures = false;
-            sheetButtonHooksComplete = true;
-            hookedSheetButtonNames.Clear();
             hookedObjectTargets.Clear();
         }
 
@@ -627,14 +510,7 @@ namespace MWC_Localization_Core
             DestroyReplacementTextures();
             replacementTextures.Clear();
             cachedReplacementKeys = new string[0];
-            activeTextureNames.Clear();
-            matchedTextureNames.Clear();
-            hasApplied = false;
-            loadedSceneName = null;
-            hasLoadedReplacementTextures = false;
-            sheetButtonHooksComplete = true;
-            hookedSheetButtonNames.Clear();
-            hookedObjectTargets.Clear();
+            ResetRuntimeState();
         }
 
         private void EnsureReplacementTexturesLoaded(string sceneName)
@@ -647,7 +523,7 @@ namespace MWC_Localization_Core
 
         private void LoadReplacementTextures(string sceneName)
         {
-            activeTextureNames.Clear();
+            sceneTextureKeys.Clear();
             matchedTextureNames.Clear();
             loadedSceneName = sceneName;
             hasLoadedReplacementTextures = true;
@@ -664,7 +540,7 @@ namespace MWC_Localization_Core
                 if (string.IsNullOrEmpty(textureKey))
                     continue;
 
-                activeTextureNames.Add(textureKey);
+                sceneTextureKeys.Add(textureKey);
 
                 if (replacementTextures.ContainsKey(textureKey))
                     continue;
@@ -678,8 +554,6 @@ namespace MWC_Localization_Core
 
             UpdateReplacementCache();
 
-            if (activeTextureNames.Count > 0)
-                CoreConsole.Print($"[{Name}] Prepared {activeTextureNames.Count} PNG texture replacement(s) for {sceneName}");
         }
 
         private static Texture2D LoadPng(string file, string textureName)
@@ -707,7 +581,7 @@ namespace MWC_Localization_Core
 
         private int ApplyMaterialTextures()
         {
-            if (replacementTextures.Count == 0 || activeTextureNames.Count == 0)
+            if (replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
                 return 0;
 
             Material[] materials = Resources.FindObjectsOfTypeAll<Material>();
@@ -758,7 +632,6 @@ namespace MWC_Localization_Core
                 CopyTextureSettings(currentTexture, replacement);
                 material.SetTexture(propertyName, replacement);
                 matchedTextureNames.Add(matchedName);
-                CoreConsole.Print($"[{Name}] Replaced {propertyName} '{currentTexture.name}' in material '{material.name}'");
                 return 1;
             }
             catch (Exception ex)
@@ -770,7 +643,7 @@ namespace MWC_Localization_Core
 
         private int ApplyScreenOverlayTextures()
         {
-            if (replacementTextures.Count == 0 || activeTextureNames.Count == 0)
+            if (replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
                 return 0;
 
             MonoBehaviour[] behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
@@ -818,7 +691,6 @@ namespace MWC_Localization_Core
                     CopyTextureSettings(currentTexture, replacement);
                     textureField.SetValue(behaviour, replacement);
                     matchedTextureNames.Add(matchedName);
-                    CoreConsole.Print($"[{Name}] Replaced ScreenOverlay '{currentTexture.name}' in '{behaviour.gameObject.name}'");
                     applied++;
                 }
                 catch (Exception ex)
@@ -1104,7 +976,7 @@ namespace MWC_Localization_Core
 
         private void LogUnmatchedTextures()
         {
-            foreach (string textureName in activeTextureNames)
+            foreach (string textureName in sceneTextureKeys)
             {
                 if (matchedTextureNames.Contains(textureName))
                     continue;
@@ -1131,28 +1003,6 @@ namespace MWC_Localization_Core
                 catch (Exception ex)
                 {
                     CoreConsole.Warning($"[TextureReplacementSurface] Dynamic SetMaterialTexture action failed ({label}): {ex.Message}");
-                }
-
-                Finish();
-            }
-        }
-
-        public class ReplaceButtonTextureAction : HutongGames.PlayMaker.FsmStateAction
-        {
-            public TextureReplacementSurface owner;
-            public GameObject button;
-            public string label;
-
-            public override void OnEnter()
-            {
-                try
-                {
-                    if (owner != null)
-                        owner.ReplaceButtonTexture(button);
-                }
-                catch (Exception ex)
-                {
-                    CoreConsole.Warning($"[TextureReplacementSurface] Dynamic button texture action failed ({label}): {ex.Message}");
                 }
 
                 Finish();

@@ -30,15 +30,13 @@ Contains(Sheets/UnemployPaper/2) = -0.022,0,0,0.002
 Contains(Sheets/UnemployPaper/1) = 0,-0.002,0
 ## Death Paper
 Contains(Systems/Death/GameOverScreen/Paper) = 0,0,0,,0.77
-##R ally Registration
+## Rally Registration
 Contains(Sheets/RallyRegistration/Functions/Class) = 0,-0.01,0,0.0024
 ## TV Teletext
-Contains(Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status) = 1.25,0,0
+Contains(Systems/TV/Teletext/VKTekstiTV/HEADER/Texts/Status) = 0.3,0,0
 Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/175/Texts/Newsline 2) = 0.5,0.2,0
 Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/175/Texts/Newsline) = 0,0.2,0
 Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/172/Texts/Newsline) = 0,0.2,0
 ## Parts Magazine Product List
 Contains(Sheets/Magazine/Products) = 0,0,0,0.0024
 GameObjectEquals(Sheets/Magazine/List) = 0,-0.002,0
-## Fleetari Service Payment Sheet
-Contains(Sheets/ServicePayment) & EndsWith(ServicePayment/Text) = 0,0,0,0.005
