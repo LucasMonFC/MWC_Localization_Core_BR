@@ -19,8 +19,10 @@ namespace MSC_Localization_Core
         private const string ModsShopCartComponentName = "ModsShop.ShoppingCartUI";
         private const string DeliveryJobsAssemblyName = "DeliveryJobs";
         private const string DeliveryJobsJobMapComponentName = "DeliveryJobs.JobMap";
+        private const string DeliveryJobsDestinationSignComponentName = "DeliveryJobs.DestinationSign";
         private const string DeliveryJobsCanvasPath = "DeliveryJobs Canvas";
         private const string DeliveryJobsAccentFontName = "Alphabetized";
+        private const string DeliveryJobsDestinationSignKeyPrefix = "DeliveryJobs|DestinationSign|";
 
         private sealed class TextMeshGroup
         {
@@ -77,9 +79,12 @@ namespace MSC_Localization_Core
         private int dirtTrackAttachAttempts;
         private int modsShopAttachAttempts;
         private int deliveryJobsAttachAttempts;
+        private int deliveryJobsSignAttachAttempts;
         private bool dirtTrackAttached;
         private bool modsShopAttached;
         private bool deliveryJobsAttached;
+        private bool deliveryJobsUiAttached;
+        private bool deliveryJobsSignTextAttached;
         private bool hasSupportedModAssemblyLoaded;
 
         public string Name { get { return "ModTextTranslator"; } }
@@ -125,9 +130,12 @@ namespace MSC_Localization_Core
             dirtTrackAttachAttempts = 0;
             modsShopAttachAttempts = 0;
             deliveryJobsAttachAttempts = 0;
+            deliveryJobsSignAttachAttempts = 0;
             dirtTrackAttached = false;
             modsShopAttached = false;
             deliveryJobsAttached = false;
+            deliveryJobsUiAttached = false;
+            deliveryJobsSignTextAttached = false;
             hasSupportedModAssemblyLoaded = false;
         }
 
@@ -300,8 +308,20 @@ namespace MSC_Localization_Core
 
         private int TryAttachDeliveryJobsUi()
         {
+            if (translations == null || !deliveryJobsAssemblyLoaded)
+                return 0;
+
+            int attached = 0;
+            attached += TryAttachDeliveryJobsCanvasUi();
+            attached += TryAttachDeliveryJobsSignTextMeshes();
+            deliveryJobsAttached = deliveryJobsUiAttached && deliveryJobsSignTextAttached;
+            return attached;
+        }
+
+        private int TryAttachDeliveryJobsCanvasUi()
+        {
             if (translations == null
-                || deliveryJobsAttached
+                || deliveryJobsUiAttached
                 || deliveryJobsAttachAttempts >= MaxAttachAttempts
                 || !deliveryJobsAssemblyLoaded)
             {
@@ -320,7 +340,70 @@ namespace MSC_Localization_Core
             if (advertUi != null)
                 attached += AttachUiTextTranslators(advertUi, translations, GetCustomFontByName(DeliveryJobsAccentFontName), true);
 
-            deliveryJobsAttached = attached > 0 && advertUi != null;
+            deliveryJobsUiAttached = attached > 0 && advertUi != null;
+            return attached;
+        }
+
+        private int TryAttachDeliveryJobsSignTextMeshes()
+        {
+            if (textMeshTranslator == null
+                || deliveryJobsSignTextAttached
+                || deliveryJobsSignAttachAttempts >= MaxAttachAttempts
+                || !deliveryJobsAssemblyLoaded)
+            {
+                return 0;
+            }
+
+            deliveryJobsSignAttachAttempts++;
+
+            MonoBehaviour[] behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
+            if (behaviours == null || behaviours.Length == 0)
+                return 0;
+
+            int attached = 0;
+            for (int i = 0; i < behaviours.Length; i++)
+            {
+                MonoBehaviour behaviour = behaviours[i];
+                if (behaviour == null || behaviour.gameObject == null)
+                    continue;
+
+                Type behaviourType = behaviour.GetType();
+                if (behaviourType == null || behaviourType.FullName != DeliveryJobsDestinationSignComponentName)
+                    continue;
+
+                Transform transform = behaviour.transform;
+                if (transform == null || transform.childCount == 0)
+                    continue;
+
+                TextMesh textMesh = transform.GetChild(0).GetComponent<TextMesh>();
+                if (textMesh == null || textMesh.gameObject == null)
+                    continue;
+
+                string key = DeliveryJobsDestinationSignKeyPrefix + textMesh.GetInstanceID();
+                DirectTextMeshTranslator existing;
+                if (attachedTextMeshComponents.TryGetValue(key, out existing))
+                {
+                    if (existing != null)
+                        continue;
+
+                    attachedTextMeshComponents.Remove(key);
+                }
+
+                DirectTextMeshTranslator component = textMesh.gameObject.GetComponent<DirectTextMeshTranslator>();
+                if (component == null)
+                {
+                    component = textMesh.gameObject.AddComponent<DirectTextMeshTranslator>();
+                    attached++;
+                }
+
+                component.Configure(textMesh, LocalizationUtils.GetGameObjectPath(textMesh.gameObject), textMeshTranslator);
+                component.TranslateNow();
+                attachedTextMeshComponents[key] = component;
+            }
+
+            if (attachedTextMeshComponents.Count > 0)
+                deliveryJobsSignTextAttached = HasAttachedDeliveryJobsSignText();
+
             return attached;
         }
 
@@ -338,9 +421,14 @@ namespace MSC_Localization_Core
                 || modsShopAttached
                 || modsShopAttachAttempts >= MaxAttachAttempts;
 
-            bool deliveryJobsComplete = !deliveryJobsAssemblyLoaded
-                || deliveryJobsAttached
+            bool deliveryJobsUiComplete = deliveryJobsUiAttached
                 || deliveryJobsAttachAttempts >= MaxAttachAttempts;
+
+            bool deliveryJobsSignTextComplete = deliveryJobsSignTextAttached
+                || deliveryJobsSignAttachAttempts >= MaxAttachAttempts;
+
+            bool deliveryJobsComplete = !deliveryJobsAssemblyLoaded
+                || (deliveryJobsUiComplete && deliveryJobsSignTextComplete);
 
             return textMeshComplete && dirtTrackComplete && modsShopComplete && deliveryJobsComplete;
         }
@@ -393,6 +481,20 @@ namespace MSC_Localization_Core
                 AssemblyName name = assembly.GetName();
                 if (name != null && string.Equals(name.Name, assemblyName, StringComparison.OrdinalIgnoreCase))
                     return true;
+            }
+
+            return false;
+        }
+
+        private bool HasAttachedDeliveryJobsSignText()
+        {
+            foreach (KeyValuePair<string, DirectTextMeshTranslator> pair in attachedTextMeshComponents)
+            {
+                if (pair.Key.StartsWith(DeliveryJobsDestinationSignKeyPrefix, StringComparison.Ordinal)
+                    && pair.Value != null)
+                {
+                    return true;
+                }
             }
 
             return false;

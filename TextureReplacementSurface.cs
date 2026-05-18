@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MSC_Localization_Core
 {
@@ -20,6 +21,9 @@ namespace MSC_Localization_Core
         private const string ScreenOverlayTextureFieldName = "texture";
         private const string RallySheetMainTextureProperty = "_MainTex";
         internal const int RallySheetRefreshFrames = 90;
+        internal const float LateTextureRefreshDurationSeconds = 10f;
+        internal const float LateTextureRefreshIntervalSeconds = 1f;
+        private const string LateTextureRefreshObjectName = "MSC_TextureLateRefresh";
 
         private static readonly string[] RallySheetDynamicTextureNames = new string[]
         {
@@ -86,6 +90,21 @@ namespace MSC_Localization_Core
         private readonly Dictionary<MonoBehaviour, OverlayTextureBackup> originalOverlayTextures =
             new Dictionary<MonoBehaviour, OverlayTextureBackup>();
 
+        private readonly Dictionary<RawImage, Texture> originalRawImageTextures =
+            new Dictionary<RawImage, Texture>();
+
+        private readonly Dictionary<Image, Sprite> originalImageSprites =
+            new Dictionary<Image, Sprite>();
+
+        private readonly Dictionary<SpriteRenderer, Sprite> originalSpriteRendererSprites =
+            new Dictionary<SpriteRenderer, Sprite>();
+
+        private readonly Dictionary<Sprite, Sprite> replacementSprites =
+            new Dictionary<Sprite, Sprite>();
+
+        private readonly HashSet<Sprite> replacementSpriteSet =
+            new HashSet<Sprite>();
+
         private readonly HashSet<string> matchedTextureNames =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -124,8 +143,10 @@ namespace MSC_Localization_Core
             EnsureReplacementTexturesLoaded(sceneName);
             int applied = ApplyTextures();
             InstallRallySheetTriggers();
+            bool hasPendingLateRefresh = InstallLateTextureRefreshTrigger();
             hasApplied = true;
-            LogUnmatchedTextures();
+            if (!hasPendingLateRefresh)
+                LogUnmatchedTextures();
             return applied;
         }
 
@@ -145,6 +166,9 @@ namespace MSC_Localization_Core
 
         public void ClearTranslations()
         {
+            RestoreOriginalRawImageTextures();
+            RestoreOriginalSprites();
+            DestroyReplacementSprites();
             RestoreOriginalTextures();
             DestroyReplacementTextures();
             replacementTextures.Clear();
@@ -231,6 +255,18 @@ namespace MSC_Localization_Core
             if (textureNames == null || textureNames.Count == 0)
                 return 0;
 
+            int applied = ApplyMaterialTextures(textureNames);
+            applied += ApplyNonMaterialTextures(textureNames);
+            return applied;
+        }
+
+        private int ApplyMaterialTextures(HashSet<string> textureNames)
+        {
+            if (replacementTextures.Count == 0)
+                return 0;
+            if (textureNames == null || textureNames.Count == 0)
+                return 0;
+
             Material[] materials = Resources.FindObjectsOfTypeAll<Material>();
             int applied = 0;
             if (materials != null)
@@ -281,7 +317,21 @@ namespace MSC_Localization_Core
                 }
             }
 
+            return applied;
+        }
+
+        private int ApplyNonMaterialTextures(HashSet<string> textureNames)
+        {
+            if (replacementTextures.Count == 0)
+                return 0;
+            if (textureNames == null || textureNames.Count == 0)
+                return 0;
+
+            int applied = 0;
             applied += ApplyScreenOverlayTextures(textureNames);
+            applied += ApplyRawImageTextures(textureNames);
+            applied += ApplyImageSprites(textureNames);
+            applied += ApplySpriteRendererSprites(textureNames);
             return applied;
         }
 
@@ -342,6 +392,226 @@ namespace MSC_Localization_Core
             }
 
             return applied;
+        }
+
+        private int ApplyRawImageTextures(HashSet<string> textureNames)
+        {
+            RawImage[] images = GetComponentsIncludingInactive<RawImage>();
+            if (images == null || images.Length == 0)
+                return 0;
+
+            int applied = 0;
+            for (int i = 0; i < images.Length; i++)
+            {
+                RawImage image = images[i];
+                if (IsUnityObjectNull(image))
+                    continue;
+
+                try
+                {
+                    Texture currentTexture = image.texture;
+                    if (IsUnityObjectNull(currentTexture))
+                        continue;
+                    if (IsReplacementTexture(currentTexture))
+                    {
+                        if (textureNames.Contains(currentTexture.name))
+                            matchedTextureNames.Add(currentTexture.name);
+                        continue;
+                    }
+                    if (!textureNames.Contains(currentTexture.name))
+                        continue;
+
+                    Texture2D replacement;
+                    if (!replacementTextures.TryGetValue(currentTexture.name, out replacement) || IsUnityObjectNull(replacement))
+                        continue;
+
+                    BackupOriginalRawImageTexture(image, currentTexture);
+                    CopyTextureSettings(currentTexture, replacement);
+                    image.texture = replacement;
+                    matchedTextureNames.Add(replacement.name);
+                    applied++;
+
+                    CoreConsole.Print($"[{Name}] Replaced RawImage texture '{currentTexture.name}' in '{image.gameObject.name}'");
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning($"[{Name}] Skipped RawImage during texture replacement: {ex.Message}");
+                }
+            }
+
+            return applied;
+        }
+
+        private int ApplyImageSprites(HashSet<string> textureNames)
+        {
+            Image[] images = GetComponentsIncludingInactive<Image>();
+            if (images == null || images.Length == 0)
+                return 0;
+
+            int applied = 0;
+            for (int i = 0; i < images.Length; i++)
+            {
+                Image image = images[i];
+                if (IsUnityObjectNull(image))
+                    continue;
+
+                try
+                {
+                    Sprite currentSprite = image.sprite;
+                    if (IsUnityObjectNull(currentSprite) || IsReplacementSprite(currentSprite))
+                        continue;
+
+                    Texture2D replacementTexture;
+                    string matchedTextureName;
+                    if (!TryGetReplacementTextureForSprite(currentSprite, textureNames, out replacementTexture, out matchedTextureName))
+                        continue;
+
+                    BackupOriginalImageSprite(image, currentSprite);
+                    Texture2D sourceTexture = currentSprite.texture;
+                    CopyTextureSettings(sourceTexture, replacementTexture);
+                    Sprite replacementSprite = GetReplacementSprite(currentSprite, replacementTexture);
+                    if (IsUnityObjectNull(replacementSprite))
+                        continue;
+
+                    image.sprite = replacementSprite;
+                    matchedTextureNames.Add(matchedTextureName);
+                    applied++;
+
+                    CoreConsole.Print($"[{Name}] Replaced UI Image sprite '{currentSprite.name}' from texture '{matchedTextureName}'");
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning($"[{Name}] Skipped UI Image during texture replacement: {ex.Message}");
+                }
+            }
+
+            return applied;
+        }
+
+        private int ApplySpriteRendererSprites(HashSet<string> textureNames)
+        {
+            SpriteRenderer[] renderers = GetComponentsIncludingInactive<SpriteRenderer>();
+            if (renderers == null || renderers.Length == 0)
+                return 0;
+
+            int applied = 0;
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                SpriteRenderer renderer = renderers[i];
+                if (IsUnityObjectNull(renderer))
+                    continue;
+
+                try
+                {
+                    Sprite currentSprite = renderer.sprite;
+                    if (IsUnityObjectNull(currentSprite) || IsReplacementSprite(currentSprite))
+                        continue;
+
+                    Texture2D replacementTexture;
+                    string matchedTextureName;
+                    if (!TryGetReplacementTextureForSprite(currentSprite, textureNames, out replacementTexture, out matchedTextureName))
+                        continue;
+
+                    BackupOriginalSpriteRendererSprite(renderer, currentSprite);
+                    Texture2D sourceTexture = currentSprite.texture;
+                    CopyTextureSettings(sourceTexture, replacementTexture);
+                    Sprite replacementSprite = GetReplacementSprite(currentSprite, replacementTexture);
+                    if (IsUnityObjectNull(replacementSprite))
+                        continue;
+
+                    renderer.sprite = replacementSprite;
+                    matchedTextureNames.Add(matchedTextureName);
+                    applied++;
+
+                    CoreConsole.Print($"[{Name}] Replaced SpriteRenderer sprite '{currentSprite.name}' from texture '{matchedTextureName}'");
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning($"[{Name}] Skipped SpriteRenderer during texture replacement: {ex.Message}");
+                }
+            }
+
+            return applied;
+        }
+
+        private bool TryGetReplacementTextureForSprite(Sprite sprite, HashSet<string> textureNames, out Texture2D replacementTexture, out string matchedTextureName)
+        {
+            replacementTexture = null;
+            matchedTextureName = null;
+
+            if (IsUnityObjectNull(sprite))
+                return false;
+
+            if (TryGetReplacementTextureByName(sprite.name, textureNames, out replacementTexture, out matchedTextureName))
+                return true;
+
+            Texture2D sourceTexture = sprite.texture;
+            return !IsUnityObjectNull(sourceTexture)
+                && TryGetReplacementTextureByName(sourceTexture.name, textureNames, out replacementTexture, out matchedTextureName);
+        }
+
+        private bool TryGetReplacementTextureByName(string textureName, HashSet<string> textureNames, out Texture2D replacementTexture, out string matchedTextureName)
+        {
+            replacementTexture = null;
+            matchedTextureName = null;
+
+            if (string.IsNullOrEmpty(textureName) || !textureNames.Contains(textureName))
+                return false;
+
+            Texture2D replacement;
+            if (!replacementTextures.TryGetValue(textureName, out replacement) || IsUnityObjectNull(replacement))
+                return false;
+
+            replacementTexture = replacement;
+            matchedTextureName = textureName;
+            return true;
+        }
+
+        private static T[] GetComponentsIncludingInactive<T>() where T : Component
+        {
+            List<T> components = new List<T>();
+            HashSet<T> seen = new HashSet<T>();
+
+            T[] directComponents = Resources.FindObjectsOfTypeAll<T>();
+            AddUniqueComponents(directComponents, components, seen);
+
+            GameObject[] objects = Resources.FindObjectsOfTypeAll<GameObject>();
+            if (objects != null)
+            {
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    GameObject obj = objects[i];
+                    if (IsUnityObjectNull(obj))
+                        continue;
+
+                    try
+                    {
+                        T[] childComponents = obj.GetComponentsInChildren<T>(true);
+                        AddUniqueComponents(childComponents, components, seen);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+            return components.ToArray();
+        }
+
+        private static void AddUniqueComponents<T>(T[] source, List<T> destination, HashSet<T> seen) where T : Component
+        {
+            if (source == null)
+                return;
+
+            for (int i = 0; i < source.Length; i++)
+            {
+                T item = source[i];
+                if (IsUnityObjectNull(item) || seen.Contains(item))
+                    continue;
+
+                seen.Add(item);
+                destination.Add(item);
+            }
         }
 
         internal int ApplyRallySheetTextures(Renderer[] renderers)
@@ -422,6 +692,23 @@ namespace MSC_Localization_Core
             }
         }
 
+        private bool InstallLateTextureRefreshTrigger()
+        {
+            if (loadedSceneName != GameSceneName || !HasGenericTextures())
+                return false;
+
+            GameObject obj = GameObject.Find(LateTextureRefreshObjectName);
+            if (IsUnityObjectNull(obj))
+                obj = new GameObject(LateTextureRefreshObjectName);
+
+            LateTextureRefreshTrigger trigger = obj.GetComponent<LateTextureRefreshTrigger>();
+            if (trigger == null)
+                trigger = obj.AddComponent<LateTextureRefreshTrigger>();
+
+            trigger.Initialize(this);
+            return true;
+        }
+
         private bool HasRallySheetDynamicTextures()
         {
             for (int i = 0; i < RallySheetDynamicTextureNames.Length; i++)
@@ -431,6 +718,74 @@ namespace MSC_Localization_Core
             }
 
             return false;
+        }
+
+        private bool HasGenericTextures()
+        {
+            foreach (string textureName in activeTextureNames)
+            {
+                if (IsRallySheetDynamicTexture(textureName))
+                    continue;
+                if (replacementTextures.ContainsKey(textureName))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool HasUnmatchedGenericTextures()
+        {
+            foreach (string textureName in activeTextureNames)
+            {
+                if (IsRallySheetDynamicTexture(textureName))
+                    continue;
+                if (replacementTextures.ContainsKey(textureName) && !matchedTextureNames.Contains(textureName))
+                    return true;
+            }
+
+            return false;
+        }
+
+        internal int ApplyLateTextureRefresh()
+        {
+            if (replacementTextures.Count == 0 || activeTextureNames.Count == 0)
+                return 0;
+
+            int applied = ApplyMaterialTextures(GetGenericTextureNames());
+
+            HashSet<string> unmatchedTextureNames = GetUnmatchedGenericTextureNames();
+            if (unmatchedTextureNames.Count > 0)
+                applied += ApplyNonMaterialTextures(unmatchedTextureNames);
+
+            return applied;
+        }
+
+        private HashSet<string> GetGenericTextureNames()
+        {
+            HashSet<string> textureNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (string textureName in activeTextureNames)
+            {
+                if (IsRallySheetDynamicTexture(textureName))
+                    continue;
+                if (replacementTextures.ContainsKey(textureName))
+                    textureNames.Add(textureName);
+            }
+
+            return textureNames;
+        }
+
+        private HashSet<string> GetUnmatchedGenericTextureNames()
+        {
+            HashSet<string> unmatchedTextureNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (string textureName in activeTextureNames)
+            {
+                if (IsRallySheetDynamicTexture(textureName))
+                    continue;
+                if (replacementTextures.ContainsKey(textureName) && !matchedTextureNames.Contains(textureName))
+                    unmatchedTextureNames.Add(textureName);
+            }
+
+            return unmatchedTextureNames;
         }
 
         private string[] GetTextureFilesForScene(string sceneName)
@@ -535,6 +890,67 @@ namespace MSC_Localization_Core
             originalOverlayTextures.Add(behaviour, new OverlayTextureBackup(textureField, originalTexture));
         }
 
+        private void BackupOriginalRawImageTexture(RawImage image, Texture originalTexture)
+        {
+            if (originalRawImageTextures.ContainsKey(image))
+                return;
+
+            originalRawImageTextures.Add(image, originalTexture);
+        }
+
+        private void BackupOriginalImageSprite(Image image, Sprite originalSprite)
+        {
+            if (originalImageSprites.ContainsKey(image))
+                return;
+
+            originalImageSprites.Add(image, originalSprite);
+        }
+
+        private void BackupOriginalSpriteRendererSprite(SpriteRenderer renderer, Sprite originalSprite)
+        {
+            if (originalSpriteRendererSprites.ContainsKey(renderer))
+                return;
+
+            originalSpriteRendererSprites.Add(renderer, originalSprite);
+        }
+
+        private Sprite GetReplacementSprite(Sprite sourceSprite, Texture2D replacementTexture)
+        {
+            Sprite replacementSprite;
+            if (replacementSprites.TryGetValue(sourceSprite, out replacementSprite) && !IsUnityObjectNull(replacementSprite))
+                return replacementSprite;
+
+            Rect sourceRect = sourceSprite.rect;
+            Vector2 pivot = new Vector2(0.5f, 0.5f);
+            if (sourceRect.width > 0f && sourceRect.height > 0f)
+                pivot = new Vector2(sourceSprite.pivot.x / sourceRect.width, sourceSprite.pivot.y / sourceRect.height);
+
+            Rect replacementRect = new Rect(0f, 0f, replacementTexture.width, replacementTexture.height);
+            Texture2D sourceTexture = sourceSprite.texture;
+            if (!IsUnityObjectNull(sourceTexture)
+                && sourceTexture.width == replacementTexture.width
+                && sourceTexture.height == replacementTexture.height)
+            {
+                replacementRect = sourceRect;
+            }
+
+            replacementSprite = Sprite.Create(
+                replacementTexture,
+                replacementRect,
+                pivot,
+                sourceSprite.pixelsPerUnit,
+                0,
+                SpriteMeshType.FullRect,
+                sourceSprite.border);
+            if (IsUnityObjectNull(replacementSprite))
+                return null;
+
+            replacementSprite.name = sourceSprite.name;
+            replacementSprites[sourceSprite] = replacementSprite;
+            replacementSpriteSet.Add(replacementSprite);
+            return replacementSprite;
+        }
+
         private static void CopyTextureSettings(Texture source, Texture2D replacement)
         {
             if (IsUnityObjectNull(source) || IsUnityObjectNull(replacement))
@@ -596,6 +1012,86 @@ namespace MSC_Localization_Core
             originalOverlayTextures.Clear();
         }
 
+        private void RestoreOriginalRawImageTextures()
+        {
+            foreach (KeyValuePair<RawImage, Texture> pair in originalRawImageTextures)
+            {
+                RawImage image = pair.Key;
+                if (IsUnityObjectNull(image))
+                    continue;
+
+                try
+                {
+                    image.texture = pair.Value;
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning($"[{Name}] Skipped restoring a RawImage texture: {ex.Message}");
+                }
+            }
+
+            originalRawImageTextures.Clear();
+        }
+
+        private void RestoreOriginalSprites()
+        {
+            foreach (KeyValuePair<Image, Sprite> pair in originalImageSprites)
+            {
+                Image image = pair.Key;
+                if (IsUnityObjectNull(image))
+                    continue;
+
+                try
+                {
+                    image.sprite = pair.Value;
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning($"[{Name}] Skipped restoring a UI Image sprite: {ex.Message}");
+                }
+            }
+
+            originalImageSprites.Clear();
+
+            foreach (KeyValuePair<SpriteRenderer, Sprite> pair in originalSpriteRendererSprites)
+            {
+                SpriteRenderer renderer = pair.Key;
+                if (IsUnityObjectNull(renderer))
+                    continue;
+
+                try
+                {
+                    renderer.sprite = pair.Value;
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning($"[{Name}] Skipped restoring a SpriteRenderer sprite: {ex.Message}");
+                }
+            }
+
+            originalSpriteRendererSprites.Clear();
+        }
+
+        private void DestroyReplacementSprites()
+        {
+            foreach (KeyValuePair<Sprite, Sprite> pair in replacementSprites)
+            {
+                if (!IsUnityObjectNull(pair.Value))
+                {
+                    try
+                    {
+                        UnityEngine.Object.Destroy(pair.Value);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+            replacementSprites.Clear();
+            replacementSpriteSet.Clear();
+        }
+
         private void DestroyReplacementTextures()
         {
             foreach (KeyValuePair<string, Texture2D> pair in replacementTextures)
@@ -618,7 +1114,12 @@ namespace MSC_Localization_Core
             return ReferenceEquals(obj, null);
         }
 
-        private void LogUnmatchedTextures()
+        private bool IsReplacementSprite(Sprite sprite)
+        {
+            return !IsUnityObjectNull(sprite) && replacementSpriteSet.Contains(sprite);
+        }
+
+        internal void LogUnmatchedTextures()
         {
             foreach (string textureName in activeTextureNames)
             {
@@ -673,6 +1174,55 @@ namespace MSC_Localization_Core
         private void CacheRenderers()
         {
             renderers = GetComponentsInChildren<Renderer>(true);
+        }
+    }
+
+    public sealed class LateTextureRefreshTrigger : MonoBehaviour
+    {
+        private TextureReplacementSurface owner;
+        private bool hasStarted;
+        private float refreshSecondsRemaining;
+        private float refreshSecondsUntilNextPass;
+
+        public void Initialize(TextureReplacementSurface surface)
+        {
+            owner = surface;
+            hasStarted = false;
+            refreshSecondsRemaining = TextureReplacementSurface.LateTextureRefreshDurationSeconds;
+            refreshSecondsUntilNextPass = 0f;
+        }
+
+        private void LateUpdate()
+        {
+            if (owner == null)
+            {
+                UnityEngine.Object.Destroy(gameObject);
+                return;
+            }
+
+            float deltaTime = Time.deltaTime;
+            if (!hasStarted)
+            {
+                hasStarted = true;
+                deltaTime = 0f;
+            }
+
+            if (refreshSecondsUntilNextPass <= 0f)
+            {
+                refreshSecondsUntilNextPass = TextureReplacementSurface.LateTextureRefreshIntervalSeconds;
+                owner.ApplyLateTextureRefresh();
+            }
+            else
+            {
+                refreshSecondsUntilNextPass -= deltaTime;
+            }
+
+            refreshSecondsRemaining -= deltaTime;
+            if (refreshSecondsRemaining <= 0f)
+            {
+                owner.LogUnmatchedTextures();
+                UnityEngine.Object.Destroy(gameObject);
+            }
         }
     }
 }

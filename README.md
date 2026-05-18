@@ -93,7 +93,7 @@ Place replacement PNGs under `Mods/Assets/MSC_Localization_Core_BR/textures/`. T
 Mods/Assets/MSC_Localization_Core_BR/textures/my_original_texture.png
 ```
 
-The loader scans material texture slots such as `_MainTex`, `_BumpMap`, `_EmissionMap`, and related Unity shader properties. It also handles `ScreenOverlay` textures such as camera helmet overlays. It runs on GAME scene load and again on F8 reload. The menu-only `drivers_lincence.png` replacement is applied during MainMenu load instead.
+The loader scans material texture slots such as `_MainTex`, `_BumpMap`, `_EmissionMap`, and related Unity shader properties. It also handles UI sprites and `ScreenOverlay` textures such as camera helmet overlays. It runs on GAME scene load and again on F8 reload. The menu-only `drivers_lincence.png` replacement is applied during MainMenu load instead.
 
 ## Translation Files
 

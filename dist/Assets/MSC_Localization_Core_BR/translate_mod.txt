@@ -146,7 +146,7 @@ Come back on: <color\=black>Thursday</color> = Volte na <color=black>quinta-feir
 Come back on: <color\=black>Friday</color> = Volte na <color=black>sexta-feira</color>
 Come back on: <color\=black>Saturday</color> = Volte no <color=black>sábado</color>
 Come back on: <color\=black>Sunday</color> = Volte no <color=black>domingo</color>
-Delivery: {0} = Entrega: {0}
+Delivery = Entrega
 <color\=magenta>Waiting for delivery...</color> = <color=magenta>Aguardando entrega...</color>
 You delivered required package. Here are some stats = Você entregou o pacote necessário. Aqui estão alguns dados
 Damage: <b><color\=red>{0}</color>%</b> = Dano: <b><color=red>{0}</color>%</b>
@@ -235,7 +235,6 @@ Shopping cart = Carrinho de compras
 Shopping cart ({0} items) = Carrinho de compras ({0} itens)
 Get item from bag ({0} items) = Pegar item ({0} itens)
 PURCHASE = COMPRAR
-Total: {0} MK = Total: {0} MK
 Your shopping cart is empty = Seu carrinho de compras está vazio
 To buy stuff just turn around and look at the store shelf to add stuff to your cart. = Para comprar itens, vire-se e olhe para a prateleira da loja para adicionar itens ao carrinho.
 You are too poor for this order! = Você não tem dinheiro suficiente para este pedido!
