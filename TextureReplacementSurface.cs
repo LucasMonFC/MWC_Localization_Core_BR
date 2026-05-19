@@ -20,7 +20,7 @@ namespace MSC_Localization_Core
         private const string ScreenOverlayTypeName = "UnityStandardAssets.ImageEffects.ScreenOverlay";
         private const string ScreenOverlayTextureFieldName = "texture";
         private const string RallySheetMainTextureProperty = "_MainTex";
-        internal const int RallySheetRefreshFrames = 90;
+        internal const int RallySheetRefreshFrames = 10;
         internal const float LateTextureRefreshDurationSeconds = 10f;
         internal const float LateTextureRefreshIntervalSeconds = 1f;
         private const string LateTextureRefreshObjectName = "MSC_TextureLateRefresh";
@@ -692,6 +692,17 @@ namespace MSC_Localization_Core
             }
         }
 
+        private bool HasRallySheetDynamicTextures()
+        {
+            for (int i = 0; i < RallySheetDynamicTextureNames.Length; i++)
+            {
+                if (replacementTextures.ContainsKey(RallySheetDynamicTextureNames[i]))
+                    return true;
+            }
+
+            return false;
+        }
+
         private bool InstallLateTextureRefreshTrigger()
         {
             if (loadedSceneName != GameSceneName || !HasGenericTextures())
@@ -709,17 +720,6 @@ namespace MSC_Localization_Core
             return true;
         }
 
-        private bool HasRallySheetDynamicTextures()
-        {
-            for (int i = 0; i < RallySheetDynamicTextureNames.Length; i++)
-            {
-                if (replacementTextures.ContainsKey(RallySheetDynamicTextureNames[i]))
-                    return true;
-            }
-
-            return false;
-        }
-
         private bool HasGenericTextures()
         {
             foreach (string textureName in activeTextureNames)
@@ -731,33 +731,6 @@ namespace MSC_Localization_Core
             }
 
             return false;
-        }
-
-        private bool HasUnmatchedGenericTextures()
-        {
-            foreach (string textureName in activeTextureNames)
-            {
-                if (IsRallySheetDynamicTexture(textureName))
-                    continue;
-                if (replacementTextures.ContainsKey(textureName) && !matchedTextureNames.Contains(textureName))
-                    return true;
-            }
-
-            return false;
-        }
-
-        internal int ApplyLateTextureRefresh()
-        {
-            if (replacementTextures.Count == 0 || activeTextureNames.Count == 0)
-                return 0;
-
-            int applied = ApplyMaterialTextures(GetGenericTextureNames());
-
-            HashSet<string> unmatchedTextureNames = GetUnmatchedGenericTextureNames();
-            if (unmatchedTextureNames.Count > 0)
-                applied += ApplyNonMaterialTextures(unmatchedTextureNames);
-
-            return applied;
         }
 
         private HashSet<string> GetGenericTextureNames()
@@ -786,6 +759,20 @@ namespace MSC_Localization_Core
             }
 
             return unmatchedTextureNames;
+        }
+
+        internal int ApplyLateTextureRefresh()
+        {
+            if (replacementTextures.Count == 0 || activeTextureNames.Count == 0)
+                return 0;
+
+            int applied = ApplyMaterialTextures(GetGenericTextureNames());
+
+            HashSet<string> unmatchedTextureNames = GetUnmatchedGenericTextureNames();
+            if (unmatchedTextureNames.Count > 0)
+                applied += ApplyNonMaterialTextures(unmatchedTextureNames);
+
+            return applied;
         }
 
         private string[] GetTextureFilesForScene(string sceneName)
