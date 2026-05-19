@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using HutongGames.PlayMaker.Actions;
 using Ionic.Zip;
+using MSCLoader;
 using UnityEngine;
 
 namespace MWC_Localization_Core
@@ -806,6 +807,7 @@ namespace MWC_Localization_Core
                     return;
                 }
 
+                int totalPngCount = 0;
                 using (ZipFile zip = ZipFile.Read(zipFile))
                 {
                     foreach (ZipEntry entry in zip)
@@ -813,6 +815,7 @@ namespace MWC_Localization_Core
                         if (entry == null || entry.IsDirectory || !IsPngPath(entry.FileName))
                             continue;
 
+                        totalPngCount++;
                         string textureName = Path.GetFileNameWithoutExtension(NormalizeZipPath(entry.FileName));
                         if (!ShouldLoadTextureInScene(textureName, sceneName))
                             continue;
@@ -824,6 +827,9 @@ namespace MWC_Localization_Core
                         }
                     }
                 }
+
+                if (totalPngCount > 0)
+                    ModConsole.Print($"[MWC_LC] [{Name}] Loaded texture ZIP '{Path.GetFileName(zipFile)}' with {totalPngCount} PNG texture replacement(s)");
             }
             catch (Exception ex)
             {
