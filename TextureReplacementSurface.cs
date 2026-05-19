@@ -20,7 +20,6 @@ namespace MSC_Localization_Core
         private const string ScreenOverlayTypeName = "UnityStandardAssets.ImageEffects.ScreenOverlay";
         private const string ScreenOverlayTextureFieldName = "texture";
         private const string RallySheetMainTextureProperty = "_MainTex";
-        internal const int RallySheetRefreshFrames = 10;
         internal const float LateTextureRefreshDurationSeconds = 10f;
         internal const float LateTextureRefreshIntervalSeconds = 1f;
         private const string LateTextureRefreshObjectName = "MSC_TextureLateRefresh";
@@ -682,14 +681,115 @@ namespace MSC_Localization_Core
                 if (IsUnityObjectNull(obj))
                     continue;
 
-                RallySheetTextureRefreshTrigger trigger = obj.GetComponent<RallySheetTextureRefreshTrigger>();
-                if (trigger == null)
-                    trigger = obj.AddComponent<RallySheetTextureRefreshTrigger>();
-
-                trigger.Initialize(this);
-                if (obj.activeInHierarchy)
-                    trigger.QueueRefresh();
+                HookRallySheetFsmTextures(obj);
             }
+        }
+
+        private int HookRallySheetFsmTextures(GameObject sheetBackground)
+        {
+            GameObject sheetRoot = FindRallySheetRoot(sheetBackground);
+            if (IsUnityObjectNull(sheetRoot))
+                return 0;
+
+            int hooked = 0;
+            PlayMakerFSM[] fsms = sheetRoot.GetComponents<PlayMakerFSM>();
+            for (int i = 0; i < fsms.Length; i++)
+            {
+                PlayMakerFSM fsm = fsms[i];
+                if (!EnsureFsmInitialized(fsm) || FsmUtils.GetFsmName(fsm) != "Setup")
+                    continue;
+
+                HutongGames.PlayMaker.FsmState state = FindFsmState(fsm, "Init");
+                if (state == null || state.Actions == null)
+                    continue;
+
+                for (int actionIndex = 0; actionIndex < state.Actions.Length; actionIndex++)
+                {
+                    HutongGames.PlayMaker.FsmStateAction action = state.Actions[actionIndex];
+                    if (action == null || action.GetType().FullName != "HutongGames.PlayMaker.Actions.SetMaterialTexture")
+                        continue;
+
+                    if (HookRallySheetTextureAction(action))
+                        hooked++;
+                }
+            }
+
+            if (hooked > 0)
+                ApplyRallySheetTextures(sheetRoot.GetComponentsInChildren<Renderer>(true));
+
+            return hooked;
+        }
+
+        private GameObject FindRallySheetRoot(GameObject sheetBackground)
+        {
+            if (IsUnityObjectNull(sheetBackground))
+                return null;
+
+            Transform current = sheetBackground.transform;
+            while (current != null && current.parent != null && current.parent.name != "Sheets")
+                current = current.parent;
+
+            return current != null ? current.gameObject : sheetBackground;
+        }
+
+        private bool HookRallySheetTextureAction(HutongGames.PlayMaker.FsmStateAction action)
+        {
+            FieldInfo textureField = FsmUtils.GetField(action.GetType(), "texture");
+            if (textureField == null)
+                return false;
+
+            HutongGames.PlayMaker.FsmTexture textureValue = textureField.GetValue(action) as HutongGames.PlayMaker.FsmTexture;
+            if (textureValue == null || IsUnityObjectNull(textureValue.Value))
+                return false;
+
+            Texture currentTexture = textureValue.Value;
+            if (!IsRallySheetDynamicTexture(currentTexture.name))
+                return false;
+
+            Texture2D replacement;
+            if (!replacementTextures.TryGetValue(currentTexture.name, out replacement) || IsUnityObjectNull(replacement))
+                return false;
+
+            if (IsReplacementTexture(currentTexture))
+                return false;
+
+            CopyTextureSettings(currentTexture, replacement);
+            textureValue.Value = replacement;
+            matchedTextureNames.Add(replacement.name);
+            return true;
+        }
+
+        private bool EnsureFsmInitialized(PlayMakerFSM fsm)
+        {
+            if (fsm == null || fsm.Fsm == null)
+                return false;
+            if (fsm.Fsm.Initialized)
+                return fsm.FsmStates != null;
+
+            try
+            {
+                fsm.Fsm.InitData();
+            }
+            catch
+            {
+            }
+
+            return fsm.FsmStates != null;
+        }
+
+        private static HutongGames.PlayMaker.FsmState FindFsmState(PlayMakerFSM fsm, string stateName)
+        {
+            if (fsm == null || fsm.FsmStates == null)
+                return null;
+
+            for (int i = 0; i < fsm.FsmStates.Length; i++)
+            {
+                HutongGames.PlayMaker.FsmState state = fsm.FsmStates[i];
+                if (state != null && state.Name == stateName)
+                    return state;
+            }
+
+            return null;
         }
 
         private bool HasRallySheetDynamicTextures()
@@ -1117,50 +1217,6 @@ namespace MSC_Localization_Core
 
                 CoreConsole.Warning($"[{Name}] PNG did not match any loaded texture in {loadedSceneName}: {textureName}.png");
             }
-        }
-    }
-
-    public sealed class RallySheetTextureRefreshTrigger : MonoBehaviour
-    {
-        private TextureReplacementSurface owner;
-        private Renderer[] renderers;
-        private int refreshFramesRemaining;
-
-        public void Initialize(TextureReplacementSurface surface)
-        {
-            owner = surface;
-            CacheRenderers();
-        }
-
-        public void QueueRefresh()
-        {
-            CacheRenderers();
-            refreshFramesRemaining = TextureReplacementSurface.RallySheetRefreshFrames;
-        }
-
-        private void Awake()
-        {
-            CacheRenderers();
-        }
-
-        private void OnEnable()
-        {
-            QueueRefresh();
-        }
-
-        private void LateUpdate()
-        {
-            if (refreshFramesRemaining <= 0)
-                return;
-
-            refreshFramesRemaining--;
-            if (owner != null)
-                owner.ApplyRallySheetTextures(renderers);
-        }
-
-        private void CacheRenderers()
-        {
-            renderers = GetComponentsInChildren<Renderer>(true);
         }
     }
 
