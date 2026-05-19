@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Ionic.Zip;
+using MSCLoader;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +15,6 @@ namespace MSC_Localization_Core
     /// </summary>
     public sealed class TextureReplacementSurface : ITranslationSurface
     {
-        private const string TextureFolderName = "textures";
         private const string MainMenuSceneName = "MainMenu";
         private const string GameSceneName = "GAME";
         private const string DriversLicenceTextureName = "drivers_lincence";
@@ -80,6 +81,20 @@ namespace MSC_Localization_Core
             }
         }
 
+        private sealed class TextureFileSource
+        {
+            public readonly string TextureName;
+            public readonly string DisplayName;
+            public readonly byte[] Bytes;
+
+            public TextureFileSource(string textureName, string displayName, byte[] bytes)
+            {
+                TextureName = textureName;
+                DisplayName = displayName;
+                Bytes = bytes;
+            }
+        }
+
         private readonly Dictionary<string, Texture2D> replacementTextures =
             new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
 
@@ -110,7 +125,7 @@ namespace MSC_Localization_Core
         private readonly HashSet<string> activeTextureNames =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        private string texturesFolder;
+        private string assetsFolder;
         private string loadedSceneName;
         private bool hasApplied;
         private bool hasLoadedReplacementTextures;
@@ -125,7 +140,7 @@ namespace MSC_Localization_Core
 
         public void Initialize(TranslationContext ctx)
         {
-            texturesFolder = ctx != null ? Path.Combine(ctx.AssetsFolder, TextureFolderName) : null;
+            assetsFolder = ctx != null ? ctx.AssetsFolder : null;
             hasApplied = false;
             loadedSceneName = null;
             activeTextureNames.Clear();
@@ -192,14 +207,14 @@ namespace MSC_Localization_Core
             loadedSceneName = sceneName;
             hasLoadedReplacementTextures = true;
 
-            if (string.IsNullOrEmpty(texturesFolder) || !Directory.Exists(texturesFolder))
+            if (string.IsNullOrEmpty(assetsFolder) || !Directory.Exists(assetsFolder))
                 return;
 
-            string[] files = GetTextureFilesForScene(sceneName);
-            for (int i = 0; i < files.Length; i++)
+            List<TextureFileSource> sources = GetTextureSourcesForScene(sceneName);
+            for (int i = 0; i < sources.Count; i++)
             {
-                string file = files[i];
-                string textureName = Path.GetFileNameWithoutExtension(file);
+                TextureFileSource source = sources[i];
+                string textureName = source.TextureName;
                 if (string.IsNullOrEmpty(textureName))
                     continue;
 
@@ -208,7 +223,7 @@ namespace MSC_Localization_Core
                 if (replacementTextures.ContainsKey(textureName))
                     continue;
 
-                Texture2D texture = LoadPng(file, textureName);
+                Texture2D texture = LoadPng(source.Bytes, textureName, source.DisplayName);
                 if (IsUnityObjectNull(texture))
                     continue;
 
@@ -219,16 +234,21 @@ namespace MSC_Localization_Core
                 CoreConsole.Print($"[{Name}] Prepared {activeTextureNames.Count} PNG texture replacement(s) for {sceneName}");
         }
 
-        private static Texture2D LoadPng(string file, string textureName)
+        private static Texture2D LoadPng(byte[] bytes, string textureName, string displayName)
         {
+            if (bytes == null || bytes.Length == 0)
+            {
+                CoreConsole.Warning($"[TextureReplacementSurface] Empty PNG data: {displayName}");
+                return null;
+            }
+
             try
             {
-                byte[] bytes = File.ReadAllBytes(file);
                 Texture2D texture = new Texture2D(2, 2);
                 if (!texture.LoadImage(bytes))
                 {
                     UnityEngine.Object.Destroy(texture);
-                    CoreConsole.Warning($"[TextureReplacementSurface] Failed to decode PNG: {file}");
+                    CoreConsole.Warning($"[TextureReplacementSurface] Failed to decode PNG: {displayName}");
                     return null;
                 }
 
@@ -237,7 +257,7 @@ namespace MSC_Localization_Core
             }
             catch (Exception ex)
             {
-                CoreConsole.Warning($"[TextureReplacementSurface] Failed loading PNG '{file}': {ex.Message}");
+                CoreConsole.Warning($"[TextureReplacementSurface] Failed loading PNG '{displayName}': {ex.Message}");
                 return null;
             }
         }
@@ -875,26 +895,80 @@ namespace MSC_Localization_Core
             return applied;
         }
 
-        private string[] GetTextureFilesForScene(string sceneName)
+        private List<TextureFileSource> GetTextureSourcesForScene(string sceneName)
+        {
+            List<TextureFileSource> sources = new List<TextureFileSource>();
+            AddTextureSourcesFromZipFiles(sources, sceneName);
+            return sources;
+        }
+
+        private void AddTextureSourcesFromZipFiles(List<TextureFileSource> sources, string sceneName)
+        {
+            if (string.IsNullOrEmpty(assetsFolder) || !Directory.Exists(assetsFolder))
+                return;
+
+            string[] zipFiles = Directory.GetFiles(assetsFolder, "*.zip", SearchOption.TopDirectoryOnly);
+            for (int i = 0; i < zipFiles.Length; i++)
+                AddTextureSourcesFromZip(sources, zipFiles[i], sceneName);
+        }
+
+        private void AddTextureSourcesFromZip(List<TextureFileSource> sources, string zipFile, string sceneName)
+        {
+            try
+            {
+                if (!ZipFile.IsZipFile(zipFile))
+                {
+                    CoreConsole.Warning($"[TextureReplacementSurface] Invalid texture ZIP: {zipFile}");
+                    return;
+                }
+
+                int totalPngCount = 0;
+                using (ZipFile zip = ZipFile.Read(zipFile))
+                {
+                    foreach (ZipEntry entry in zip)
+                    {
+                        if (entry == null || entry.IsDirectory || !IsPngPath(entry.FileName))
+                            continue;
+
+                        totalPngCount++;
+                        string textureName = Path.GetFileNameWithoutExtension(NormalizeZipPath(entry.FileName));
+                        if (!ShouldLoadTextureInScene(textureName, sceneName))
+                            continue;
+
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            entry.Extract(stream);
+                            sources.Add(new TextureFileSource(textureName, zipFile + "::" + entry.FileName, stream.ToArray()));
+                        }
+                    }
+                }
+
+                if (totalPngCount > 0)
+                    ModConsole.Print($"[MSC_LC] [{Name}] Loaded texture ZIP '{Path.GetFileName(zipFile)}' with {totalPngCount} PNG texture replacement(s)");
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Warning($"[TextureReplacementSurface] Failed reading texture ZIP '{zipFile}': {ex.Message}");
+            }
+        }
+
+        private static bool IsPngPath(string path)
+        {
+            return !string.IsNullOrEmpty(path)
+                && string.Equals(Path.GetExtension(NormalizeZipPath(path)), ".png", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string NormalizeZipPath(string path)
+        {
+            return string.IsNullOrEmpty(path) ? path : path.Replace('/', Path.DirectorySeparatorChar);
+        }
+
+        private static bool ShouldLoadTextureInScene(string textureName, string sceneName)
         {
             if (sceneName == MainMenuSceneName)
-            {
-                string file = Path.Combine(texturesFolder, DriversLicenceTextureName + ".png");
-                return File.Exists(file) ? new string[] { file } : new string[0];
-            }
+                return IsMenuOnlyTexture(textureName);
 
-            string[] files = Directory.GetFiles(texturesFolder, "*.png");
-            List<string> gameFiles = new List<string>();
-            for (int i = 0; i < files.Length; i++)
-            {
-                string textureName = Path.GetFileNameWithoutExtension(files[i]);
-                if (IsMenuOnlyTexture(textureName))
-                    continue;
-
-                gameFiles.Add(files[i]);
-            }
-
-            return gameFiles.ToArray();
+            return !IsMenuOnlyTexture(textureName);
         }
 
         private static bool IsMenuOnlyTexture(string textureName)
