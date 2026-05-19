@@ -60,6 +60,10 @@
       <HintPath>$(GameDir)\PlayMaker.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Ionic.Zip.Reduced">
+      <HintPath>$(GameDir)\Ionic.Zip.Reduced.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(GameDir)\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
