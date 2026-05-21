@@ -296,7 +296,7 @@ namespace MSC_Localization_Core
                     continue;
 
                 Type behaviourType = behaviour.GetType();
-                if (behaviourType == null || behaviourType.FullName != ModsShopCartComponentName)
+                if (!IsComponentType(behaviourType, ModsShopCartComponentName))
                     continue;
 
                 ModsShopCartTextTranslator component = behaviour.gameObject.GetComponent<ModsShopCartTextTranslator>();
@@ -377,7 +377,7 @@ namespace MSC_Localization_Core
                     continue;
 
                 Type behaviourType = behaviour.GetType();
-                if (behaviourType == null || behaviourType.FullName != DeliveryJobsDestinationSignComponentName)
+                if (!IsComponentType(behaviourType, DeliveryJobsDestinationSignComponentName))
                     continue;
 
                 Transform transform = behaviour.transform;
@@ -441,7 +441,7 @@ namespace MSC_Localization_Core
                     continue;
 
                 Type behaviourType = behaviour.GetType();
-                if (behaviourType == null || behaviourType.FullName != DeliveryJobsPackageComponentName)
+                if (!IsComponentType(behaviourType, DeliveryJobsPackageComponentName))
                     continue;
 
                 packageCount++;
@@ -955,6 +955,11 @@ namespace MSC_Localization_Core
             return field.GetValue(target) as T;
         }
 
+        private static bool IsComponentType(Type type, string expectedFullName)
+        {
+            return type != null && string.Equals(type.FullName, expectedFullName, StringComparison.Ordinal);
+        }
+
         private static GameObject FindGameObjectByNameIncludingInactive(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -984,7 +989,7 @@ namespace MSC_Localization_Core
                     continue;
 
                 Type behaviourType = behaviour.GetType();
-                if (behaviourType == null || behaviourType.FullName != DeliveryJobsJobMapComponentName)
+                if (!IsComponentType(behaviourType, DeliveryJobsJobMapComponentName))
                     continue;
 
                 GameObject advertUi = GetFieldValue<GameObject>(behaviour, behaviourType, "advertJobUI");
