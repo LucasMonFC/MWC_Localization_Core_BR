@@ -234,21 +234,16 @@ Ruscko Window Roller = MANIVELA RUSCKO
 FIXING WIRING... {0}% = CONSERTANDO FIAÇÃO... {0}%
 
 //Mod Shop
-SHOPPING CART = CARRINHO DE COMPRAS
-Shopping cart = Carrinho de compras
+SHOPPING CART = CARRINHO
 Shopping cart ({0} items) = Carrinho de compras ({0} itens)
 Get item from bag ({0} items) = Pegar item ({0} itens)
 PURCHASE = COMPRAR
-Your shopping cart is empty = Seu carrinho de compras está vazio
-To buy stuff just turn around and look at the store shelf to add stuff to your cart. = Para comprar itens, vire-se e olhe para a prateleira da loja para adicionar itens ao carrinho.
-You are too poor for this order! = Você não tem dinheiro suficiente para este pedido!
-Poor man = Sem dinheiro
 [VHS tape] {0} = [FITA VHS] {0}
 
 //Jack Stands
 Jackstand = MACACO
 CANT ATTACH JACKSTAND - CAR NOT HIGH ENOUGH = NÃO É POSSÍVEL FIXAR O MACACO - O CARRO NÃO ESTA ALTO O SUFICIENTE
-Jackstand - 300 MK = Macaco - 300 MK
+Jackstand - 300 MK = MACACO - 300 MK
 
 //Second Helmet
 Motorcycle Helmet - 1299 MK = Capacete de Motocicleta - 1299 MK
@@ -1062,6 +1057,24 @@ Empty out = ESVAZIAR ALAMBIQUE
 
 //Donner TechRacing Turbocharger
 Open catalog = ABRIR CATALOGO
+DonnerTechRacing Turbocharger = TURBOCOMPRESSOR DONNERTECHRACING
+Buy = COMPRAR
+Checkout = FINALIZAR COMPRA
+Back = VOLTAR
+Close = FECHAR
+Cart = CARRINHO
+Parts = PECAS
+Money: = DINHEIRO:
+Total cost: = TOTAL:
+Add to cart = ADICIONAR AO CARRINHO
+Remove = REMOVER
+Racing Turbocharger Straight Exhaust = ESCAPE RETO DO TURBO DE CORRIDA
+Racing Turbocharger Blowoff Valve = VALVULA DE ALIVIO DO TURBO DE CORRIDA
+Racing Turbocharger Hood = CAPO DO TURBO DE CORRIDA
+GT Turbocharger Airfilter = FILTRO DE AR DO GT TURBO
+Weber Manifold Kit = KIT COLETOR WEBER
+TwinCarb Manifold Kit = KIT COLETOR CARBURADOR DUPLO
+Turbocharger Exhaust Header = COLETOR DE ESCAPE TURBO
 Racing Turbo = TURBO DE CORRIDA
 Press [F] to Unpack Racing Turbo = PEGAR TURBO DE CORRIDA
 Press [F] to Unpack Racing Turbo Intercooler Tube = PEGAR TUBO DO INTERCOOLER

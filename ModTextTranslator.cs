@@ -15,6 +15,9 @@ namespace MSC_Localization_Core
         private const int MaxAttachAttempts = 15;
         private const string DirtTrackAssemblyName = "DirtTrackRacing";
         private const string DirtTrackRootPath = "DIRTTRACK_UI";
+        private const string MscModApiAssemblyName = "MscModApi";
+        private const string MscModApiShopTypeName = "MscModApi.Shopping.Shop";
+        private const string SatsumaTurboChargerAssemblyName = "SatsumaTurboCharger";
         private const string ModsShopAssemblyName = "ModsShop";
         private const string ModsShopCartComponentName = "ModsShop.ShoppingCartUI";
         private const string DeliveryJobsAssemblyName = "DeliveryJobs";
@@ -75,15 +78,18 @@ namespace MSC_Localization_Core
         private TextMeshTranslator textMeshTranslator;
         private int activeTextMeshTargetCount;
         private bool dirtTrackAssemblyLoaded;
+        private bool mscModApiShopAssemblyLoaded;
         private bool modsShopAssemblyLoaded;
         private bool deliveryJobsAssemblyLoaded;
         private int textMeshAttachAttempts;
         private int dirtTrackAttachAttempts;
+        private int mscModApiShopAttachAttempts;
         private int modsShopAttachAttempts;
         private int deliveryJobsAttachAttempts;
         private int deliveryJobsSignAttachAttempts;
         private int deliveryJobsPackageTextAttempts;
         private bool dirtTrackAttached;
+        private bool mscModApiShopAttached;
         private bool modsShopAttached;
         private bool deliveryJobsAttached;
         private bool deliveryJobsUiAttached;
@@ -129,15 +135,18 @@ namespace MSC_Localization_Core
             attachedTextMeshComponents.Clear();
             activeTextMeshTargetCount = 0;
             dirtTrackAssemblyLoaded = false;
+            mscModApiShopAssemblyLoaded = false;
             modsShopAssemblyLoaded = false;
             deliveryJobsAssemblyLoaded = false;
             textMeshAttachAttempts = 0;
             dirtTrackAttachAttempts = 0;
+            mscModApiShopAttachAttempts = 0;
             modsShopAttachAttempts = 0;
             deliveryJobsAttachAttempts = 0;
             deliveryJobsSignAttachAttempts = 0;
             deliveryJobsPackageTextAttempts = 0;
             dirtTrackAttached = false;
+            mscModApiShopAttached = false;
             modsShopAttached = false;
             deliveryJobsAttached = false;
             deliveryJobsUiAttached = false;
@@ -170,6 +179,7 @@ namespace MSC_Localization_Core
             if (isGameScene)
             {
                 attached += TryAttachDirtTrackUi();
+                attached += TryAttachMscModApiShopUi();
                 attached += TryAttachModsShopUi();
                 attached += TryAttachDeliveryJobsUi();
             }
@@ -269,6 +279,41 @@ namespace MSC_Localization_Core
             }
 
             dirtTrackAttached = true;
+            return attached;
+        }
+
+        private int TryAttachMscModApiShopUi()
+        {
+            if (translations == null
+                || mscModApiShopAttached
+                || mscModApiShopAttachAttempts >= MaxAttachAttempts
+                || !mscModApiShopAssemblyLoaded)
+            {
+                return 0;
+            }
+
+            mscModApiShopAttachAttempts++;
+
+            object shopInterface = GetMscModApiShopInterface();
+            if (shopInterface == null)
+                return 0;
+
+            Type shopInterfaceType = shopInterface.GetType();
+            GameObject root = GetFieldValue<GameObject>(shopInterface, shopInterfaceType, "gameObject");
+            if (root == null)
+                return 0;
+
+            int attached = 0;
+            MscModApiShopTextTranslator component = root.GetComponent<MscModApiShopTextTranslator>();
+            if (component == null)
+            {
+                component = root.AddComponent<MscModApiShopTextTranslator>();
+                attached++;
+            }
+
+            component.Configure(shopInterface, translations);
+            attached += component.AttachNow();
+            mscModApiShopAttached = true;
             return attached;
         }
 
@@ -536,6 +581,10 @@ namespace MSC_Localization_Core
                 || modsShopAttached
                 || modsShopAttachAttempts >= MaxAttachAttempts;
 
+            bool mscModApiShopComplete = !mscModApiShopAssemblyLoaded
+                || mscModApiShopAttached
+                || mscModApiShopAttachAttempts >= MaxAttachAttempts;
+
             bool deliveryJobsUiComplete = deliveryJobsUiAttached
                 || deliveryJobsAttachAttempts >= MaxAttachAttempts;
 
@@ -548,16 +597,23 @@ namespace MSC_Localization_Core
             bool deliveryJobsComplete = !deliveryJobsAssemblyLoaded
                 || (deliveryJobsUiComplete && deliveryJobsSignTextComplete && deliveryJobsPackageTextDone);
 
-            return textMeshComplete && dirtTrackComplete && modsShopComplete && deliveryJobsComplete;
+            return textMeshComplete && dirtTrackComplete && mscModApiShopComplete && modsShopComplete && deliveryJobsComplete;
         }
 
         private void RefreshActiveModState(string sceneName)
         {
             activeTextMeshTargetCount = CountActiveTextMeshTargets(sceneName);
             dirtTrackAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(DirtTrackAssemblyName);
+            mscModApiShopAssemblyLoaded = sceneName == "GAME"
+                && IsAssemblyLoaded(MscModApiAssemblyName)
+                && IsAssemblyLoaded(SatsumaTurboChargerAssemblyName);
             modsShopAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(ModsShopAssemblyName);
             deliveryJobsAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(DeliveryJobsAssemblyName);
-            hasSupportedModAssemblyLoaded = activeTextMeshTargetCount > 0 || dirtTrackAssemblyLoaded || modsShopAssemblyLoaded || deliveryJobsAssemblyLoaded;
+            hasSupportedModAssemblyLoaded = activeTextMeshTargetCount > 0
+                || dirtTrackAssemblyLoaded
+                || mscModApiShopAssemblyLoaded
+                || modsShopAssemblyLoaded
+                || deliveryJobsAssemblyLoaded;
         }
 
         private int CountLiveAttachedTextMeshes()
@@ -806,6 +862,88 @@ namespace MSC_Localization_Core
             }
         }
 
+        public sealed class MscModApiShopTextTranslator : MonoBehaviour
+        {
+            private object shopInterface;
+            private Type shopInterfaceType;
+            private TranslationDictionary translations;
+            private GameObject root;
+            private GameObject partsPanel;
+            private GameObject modsPanel;
+            private GameObject cartPanel;
+            private GameObject partsList;
+            private GameObject modsList;
+            private GameObject cartList;
+            private Text btnBuyTextComp;
+            private Text moneyComp;
+            private Text totalCostComp;
+
+            public void Configure(object shopInterface, TranslationDictionary translations)
+            {
+                this.shopInterface = shopInterface;
+                this.translations = translations;
+                shopInterfaceType = shopInterface != null ? shopInterface.GetType() : null;
+                ResolveFields();
+            }
+
+            public int AttachNow()
+            {
+                ResolveFields();
+
+                int attached = 0;
+                attached += AttachUiTextTranslators(root, translations);
+                attached += AttachUiTextTranslators(partsPanel, translations);
+                attached += AttachUiTextTranslators(modsPanel, translations);
+                attached += AttachUiTextTranslators(cartPanel, translations);
+                attached += AttachUiTextTranslators(partsList, translations);
+                attached += AttachUiTextTranslators(modsList, translations);
+                attached += AttachUiTextTranslators(cartList, translations);
+                attached += AttachUiTextTranslator(btnBuyTextComp, translations) ? 1 : 0;
+                attached += AttachUiTextTranslator(moneyComp, translations) ? 1 : 0;
+                attached += AttachUiTextTranslator(totalCostComp, translations) ? 1 : 0;
+                return attached;
+            }
+
+            private void LateUpdate()
+            {
+                if (shopInterface == null || translations == null)
+                    return;
+
+                if (root == null || partsList == null || modsList == null || cartList == null)
+                    ResolveFields();
+
+                if (root == null || !root.activeInHierarchy)
+                    return;
+
+                AttachUiTextTranslators(partsList, translations);
+                AttachUiTextTranslators(modsList, translations);
+                AttachUiTextTranslators(cartList, translations);
+                AttachUiTextTranslator(btnBuyTextComp, translations);
+                AttachUiTextTranslator(moneyComp, translations);
+                AttachUiTextTranslator(totalCostComp, translations);
+            }
+
+            private void ResolveFields()
+            {
+                if (shopInterface == null)
+                    return;
+
+                if (shopInterfaceType == null)
+                    shopInterfaceType = shopInterface.GetType();
+
+                root = GetFieldValue<GameObject>(shopInterface, shopInterfaceType, "gameObject");
+                partsPanel = GetFieldValue<GameObject>(shopInterface, shopInterfaceType, "partsPanel");
+                modsPanel = GetFieldValue<GameObject>(shopInterface, shopInterfaceType, "modsPanel");
+                cartPanel = GetFieldValue<GameObject>(shopInterface, shopInterfaceType, "cartPanel");
+                partsList = GetFieldValue<GameObject>(shopInterface, shopInterfaceType, "partsList");
+                modsList = GetFieldValue<GameObject>(shopInterface, shopInterfaceType, "modsList");
+                cartList = GetFieldValue<GameObject>(shopInterface, shopInterfaceType, "cartList");
+                btnBuyTextComp = GetFieldValue<Text>(shopInterface, shopInterfaceType, "btnBuyTextComp");
+                moneyComp = GetFieldValue<Text>(shopInterface, shopInterfaceType, "moneyComp");
+                totalCostComp = GetFieldValue<Text>(shopInterface, shopInterfaceType, "totalCostComp");
+            }
+        }
+
         private static string TranslateUiText(string current, Text text, TranslationDictionary translations)
         {
             string translated;
@@ -958,6 +1096,40 @@ namespace MSC_Localization_Core
         private static bool IsComponentType(Type type, string expectedFullName)
         {
             return type != null && string.Equals(type.FullName, expectedFullName, StringComparison.Ordinal);
+        }
+
+        private static object GetMscModApiShopInterface()
+        {
+            Type shopType = FindLoadedType(MscModApiAssemblyName, MscModApiShopTypeName);
+            if (shopType == null)
+                return null;
+
+            FieldInfo field = shopType.GetField("shopInterface", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            if (field == null)
+                return null;
+
+            return field.GetValue(null);
+        }
+
+        private static Type FindLoadedType(string assemblyName, string fullName)
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            for (int i = 0; i < assemblies.Length; i++)
+            {
+                Assembly assembly = assemblies[i];
+                if (assembly == null)
+                    continue;
+
+                AssemblyName name = assembly.GetName();
+                if (name == null || !string.Equals(name.Name, assemblyName, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                Type type = assembly.GetType(fullName, false);
+                if (type != null)
+                    return type;
+            }
+
+            return null;
         }
 
         private static GameObject FindGameObjectByNameIncludingInactive(string name)
