@@ -256,7 +256,7 @@ namespace MWC_Localization_Core
         {
             if (!File.Exists(filePath))
             {
-                CoreConsole.Print("[TranslationDictionary] No pattern file found, no file patterns loaded");
+                CoreConsole.Print("[TranslationDictionary] Nenhum arquivo de padrões encontrado; nenhum padrão de arquivo carregado");
                 return;
             }
 
@@ -282,11 +282,11 @@ namespace MWC_Localization_Core
                     }
                 }
 
-                CoreConsole.Print($"[TranslationDictionary] Loaded {loadedCount} patterns from {Path.GetFileName(filePath)}");
+                CoreConsole.Print($"[TranslationDictionary] Carregou {loadedCount} padrões de {Path.GetFileName(filePath)}");
             }
             catch (Exception ex)
             {
-                CoreConsole.Error($"[TranslationDictionary] Failed to load patterns: {ex.Message}");
+                CoreConsole.Error($"[TranslationDictionary] Falha ao carregar padrões: {ex.Message}");
             }
         }
 

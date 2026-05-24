@@ -112,7 +112,7 @@ namespace MWC_Localization_Core
 
             bool changed = ApplySceneTargets(currentScene);
             if (changed)
-                CoreConsole.Print("[FsmTextHook] Applied hardcoded FSM translations in " + currentScene);
+                CoreConsole.Print("[FsmTextHook] Aplicou traduções FSM fixas em " + currentScene);
 
             return changed;
         }
@@ -208,7 +208,7 @@ namespace MWC_Localization_Core
                 if (!warnedTargets.Contains(target.Key))
                 {
                     warnedTargets.Add(target.Key);
-                    CoreConsole.Warning("[FsmTextHook] FSM target failed once '" + target.Key + "': " + ex.Message);
+                    CoreConsole.Warning("[FsmTextHook] Alvo FSM falhou uma vez '" + target.Key + "': " + ex.Message);
                 }
 
                 return false;

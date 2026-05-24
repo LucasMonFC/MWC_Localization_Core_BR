@@ -137,7 +137,7 @@ namespace MWC_Localization_Core
             PlayMakerHashTableProxy[] proxies = obj.GetComponents<PlayMakerHashTableProxy>();
             if (proxies == null || proxies.Length == 0)
             {
-                CoreConsole.Warning($"PlayMakerHashTableProxy not found at {objectPath}");
+                CoreConsole.Warning($"PlayMakerHashTableProxy não encontrado em {objectPath}");
                 return null;
             }
 
@@ -182,7 +182,7 @@ namespace MWC_Localization_Core
             if (translatedCount > 0)
             {
                 proxy.TakeSnapShot();
-                CoreConsole.Print($"[HashTableProxyHandler] Translated {translatedCount} string values in {objectPath}[{componentIndex}]");
+                CoreConsole.Print($"[HashTableProxyHandler] Traduziu {translatedCount} valores de string em {objectPath}[{componentIndex}]");
             }
 
             return translatedCount;

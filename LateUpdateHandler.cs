@@ -68,7 +68,7 @@ namespace MWC_Localization_Core
                 {
                     if (!loggedRetired[i])
                     {
-                        CoreConsole.Print($"[LateUpdateHandler] {s.Name} complete; retiring");
+                        CoreConsole.Print($"[LateUpdateHandler] {s.Name} concluído; aposentando");
                         loggedRetired[i] = true;
                     }
                     continue;
@@ -98,7 +98,7 @@ namespace MWC_Localization_Core
                         {
                             int translated = s.MonitorTick(dt);
                             if (translated > 0)
-                                CoreConsole.Print($"[LateUpdateHandler] {s.Name}: translated {translated} item(s)");
+                                CoreConsole.Print($"[LateUpdateHandler] {s.Name}: traduziu {translated} item(ns)");
                             nextTickTimes[i] = now + LocalizationConstants.CHAT_MONITOR_INTERVAL;
                         }
                         break;
@@ -108,7 +108,7 @@ namespace MWC_Localization_Core
                         {
                             int translated = s.MonitorTick(dt);
                             if (translated > 0)
-                                CoreConsole.Print($"[LateUpdateHandler] {s.Name}: translated {translated} item(s)");
+                                CoreConsole.Print($"[LateUpdateHandler] {s.Name}: traduziu {translated} item(ns)");
                             nextTickTimes[i] = now + LocalizationConstants.ARRAY_MONITOR_INTERVAL;
                         }
                         break;
@@ -121,7 +121,7 @@ namespace MWC_Localization_Core
 
             if (allSlowRetired && !loggedAllRetired)
             {
-                CoreConsole.Print("[LateUpdateHandler] All Slow-cadence surfaces complete; scheduler retired for this scene");
+                CoreConsole.Print("[LateUpdateHandler] Todas as superfícies de cadência lenta concluídas; agendador aposentado para esta cena");
                 loggedAllRetired = true;
             }
         }

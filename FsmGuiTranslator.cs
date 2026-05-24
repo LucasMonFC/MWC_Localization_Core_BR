@@ -138,7 +138,7 @@ namespace MWC_Localization_Core
                     bool appendLayout = layoutContributorKeys.Contains(t.Key);
                     int injected = SpliceTranslationActionsInto(state, appendLayout);
                     if (injected > 0)
-                        CoreConsole.Print($"[FsmGuiTranslator] Injected {injected} action(s) into {t.ObjectPath} ({t.FsmName}/{t.StateName})");
+                        CoreConsole.Print($"[FsmGuiTranslator] Injetou {injected} ação(ões) em {t.ObjectPath} ({t.FsmName}/{t.StateName})");
 
                     processedTargets.Add(t.Key);
                     totalInjected += injected;
@@ -147,7 +147,7 @@ namespace MWC_Localization_Core
                 {
                     // Per-target catch so one bad target doesn't abort the rest of the loop.
                     // Don't mark processed: we'll retry next tick once the FSM is ready.
-                    CoreConsole.Error($"[FsmGuiTranslator] Failed processing {t.ObjectPath} ({t.FsmName}/{t.StateName}): {ex.Message}");
+                    CoreConsole.Error($"[FsmGuiTranslator] Falha ao processar {t.ObjectPath} ({t.FsmName}/{t.StateName}): {ex.Message}");
                 }
             }
             return totalInjected;
@@ -377,7 +377,7 @@ namespace MWC_Localization_Core
                 }
                 catch (System.Exception ex)
                 {
-                    CoreConsole.Error($"[FsmGuiTranslator] Translate error ({label}): {ex.Message}");
+                    CoreConsole.Error($"[FsmGuiTranslator] Erro de tradução ({label}): {ex.Message}");
                 }
             }
         }
@@ -525,7 +525,7 @@ namespace MWC_Localization_Core
                 }
                 catch (System.Exception ex)
                 {
-                    CoreConsole.Error($"[FsmGuiTranslator] Layout refresh error: {ex.Message}");
+                    CoreConsole.Error($"[FsmGuiTranslator] Erro ao atualizar layout: {ex.Message}");
                 }
             }
         }

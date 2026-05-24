@@ -777,7 +777,7 @@ Eat Fried (Clone) = Comer Frito
 
 //VHSPlayer
 *I don't have any signal* = *Não tenho sinal*
-VHS Player (complete set) - 4250 MK = VHS Player (conjunto completo) - 4250 MK
+VHS PLAYER (COMPLETE SET) - 2999.99 MK{0} IN CART = REPRODUTOR VHS (CONJUNTO COMPLETO) - 2999,99 MK{0} NO CARRINHO
 Preview items = Visualizar itens
 Vhs tape box = Caixa de fita VHS
 VHS tape = Fita VHS

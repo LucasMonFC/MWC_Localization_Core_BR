@@ -65,7 +65,7 @@ namespace MWC_Localization_Core
             }
             catch (Exception ex)
             {
-                CoreConsole.Error($"[TranslationFileParser] Error parsing KEY=VALUE file: {ex.Message}");
+                CoreConsole.Error($"[TranslationFileParser] Erro ao interpretar arquivo KEY=VALUE: {ex.Message}");
             }
 
             return result;
@@ -235,11 +235,11 @@ namespace MWC_Localization_Core
                     SaveEntry(currentDict, keyLines, valueLines, ref loadedCount);
                 }
 
-                CoreConsole.Print($"[TranslationFileParser] Loaded {loadedCount} category-based translations from {categoryTranslations.Count} categories");
+                CoreConsole.Print($"[TranslationFileParser] Carregou {loadedCount} traduções por categoria de {categoryTranslations.Count} categorias");
             }
             catch (Exception ex)
             {
-                CoreConsole.Error($"[TranslationFileParser] Error parsing category-based file: {ex.Message}");
+                CoreConsole.Error($"[TranslationFileParser] Erro ao interpretar arquivo por categoria: {ex.Message}");
             }
         }
 

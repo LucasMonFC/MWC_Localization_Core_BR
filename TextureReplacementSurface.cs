@@ -1,98 +1,44 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using HutongGames.PlayMaker.Actions;
 using Ionic.Zip;
-using MSCLoader;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityStandardAssets.ImageEffects;
 
 namespace MWC_Localization_Core
 {
-    /// <summary>
-    /// Replaces Unity material textures with PNG files placed in the language pack.
-    /// A file named "foo.png" replaces material textures whose Unity object name is "foo".
-    /// </summary>
     public sealed class TextureReplacementSurface : ITranslationSurface
     {
         private const string MainMenuSceneName = "MainMenu";
         private const string GameSceneName = "GAME";
         private const string DriversLicenceTextureName = "drivers_lincence";
-        private const string ScreenOverlayTypeName = "UnityStandardAssets.ImageEffects.ScreenOverlay";
-        private const string ScreenOverlayTextureFieldName = "texture";
         private const string RallyRegistrationObjectPath = "RallyRegistration";
         private const string RallyRegistrationFsmName = "Setup";
         private const string RallyRegistrationStateName = "Init";
+        private const string RallyCoverMaterialName = "cover 1";
+        private const string RallyCoverReplacementTextureName = "rally_registercard";
+        private const int ModTextureDelayFrames = 1;
 
         private static readonly string[] TexturePropertyNames = new string[]
         {
             "_MainTex",
-            "_EmissionMap",
-            "_BumpMap",
             "_MetallicGlossMap",
-            "_OcclusionMap",
-            "_SpecGlossMap",
+            "_BumpMap",
+            "_EmissionMap",
             "_DetailMask",
             "_DetailAlbedoMap",
             "_DetailNormalMap",
+            "_SpecGlossMap",
+            "_Detail",
+            "_DecalTex",
         };
 
         private static readonly string[] IgnoredShaderPrefixes = new string[]
         {
             "Hidden",
             "Particles",
-        };
-
-        private sealed class DynamicFsmTextureTarget
-        {
-            public readonly string ObjectPath;
-            public readonly string FsmName;
-            public readonly string StateName;
-
-            public DynamicFsmTextureTarget(string objectPath, string fsmName, string stateName)
-            {
-                ObjectPath = objectPath;
-                FsmName = fsmName;
-                StateName = stateName;
-            }
-        }
-
-        private sealed class DynamicObjectTextureTarget
-        {
-            public readonly string ObjectPath;
-            public readonly string FsmName;
-            public readonly string StateName;
-            public readonly string TextureKeySuffix;
-
-            public DynamicObjectTextureTarget(string objectPath, string fsmName, string stateName, string textureKeySuffix)
-            {
-                ObjectPath = objectPath;
-                FsmName = fsmName;
-                StateName = stateName;
-                TextureKeySuffix = textureKeySuffix;
-            }
-        }
-
-        private static readonly DynamicFsmTextureTarget[] DynamicFsmTextureTargets = new DynamicFsmTextureTarget[]
-        {
-            new DynamicFsmTextureTarget("REPAIRSHOP/LOD/dyno/dyno_computer/Computer", "Use", "State 1"),
-            new DynamicFsmTextureTarget("Rami-Pokeri", "Game Start", "State 1"),
-            new DynamicFsmTextureTarget("Pokeri-MainMenu", "Menu", "State 1"),
-            new DynamicFsmTextureTarget("Pokeri-Game", "Dealer Setup", "Play Game Over Sound"),
-            new DynamicFsmTextureTarget("Pokeri-Game", "Check Three of a Kind", "THREE OF A KIND"),
-            new DynamicFsmTextureTarget("Pokeri-Game", "Check Jacks or Better", "JACKS OR BETTER"),
-            new DynamicFsmTextureTarget("Pokeri-Game", "Check Two Pairs", "TWO PAIRS"),
-            new DynamicFsmTextureTarget("Pokeri-Game", "Check Jacks or Better", "Double - Wait for Button"),
-        };
-
-        private static readonly DynamicObjectTextureTarget[] DynamicObjectTextureTargets = new DynamicObjectTextureTarget[]
-        {
-            new DynamicObjectTextureTarget("Pokeri-Game", "Dealer Setup", "Bet 1", null),
-            new DynamicObjectTextureTarget("Pokeri-Game", "Dealer Setup", "Bet 2", null),
-            new DynamicObjectTextureTarget("Pokeri-Game", "Dealer Setup", "Bet 3", null),
-            new DynamicObjectTextureTarget("Pokeri-Game", "Dealer Setup", "Bet 4", null),
-            new DynamicObjectTextureTarget("Pokeri-Game", "Dealer Setup", "Bet 5", null),
-            new DynamicObjectTextureTarget(RallyRegistrationObjectPath, RallyRegistrationFsmName, RallyRegistrationStateName, "card"),
         };
 
         private sealed class MaterialTextureBackup
@@ -103,18 +49,6 @@ namespace MWC_Localization_Core
             public MaterialTextureBackup(string propertyName, Texture originalTexture)
             {
                 PropertyName = propertyName;
-                OriginalTexture = originalTexture;
-            }
-        }
-
-        private sealed class OverlayTextureBackup
-        {
-            public readonly FieldInfo TextureField;
-            public readonly Texture OriginalTexture;
-
-            public OverlayTextureBackup(FieldInfo textureField, Texture originalTexture)
-            {
-                TextureField = textureField;
                 OriginalTexture = originalTexture;
             }
         }
@@ -136,11 +70,20 @@ namespace MWC_Localization_Core
         private readonly Dictionary<string, Texture2D> replacementTextures =
             new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
 
-        private readonly Dictionary<Material, List<MaterialTextureBackup>> originalTextures =
+        private readonly Dictionary<Material, List<MaterialTextureBackup>> originalMaterialTextures =
             new Dictionary<Material, List<MaterialTextureBackup>>();
 
-        private readonly Dictionary<MonoBehaviour, OverlayTextureBackup> originalOverlayTextures =
-            new Dictionary<MonoBehaviour, OverlayTextureBackup>();
+        private readonly Dictionary<ScreenOverlay, Texture2D> originalOverlayTextures =
+            new Dictionary<ScreenOverlay, Texture2D>();
+
+        private readonly Dictionary<Image, Sprite> originalImageSprites =
+            new Dictionary<Image, Sprite>();
+
+        private readonly Dictionary<Sprite, Sprite> replacementSprites =
+            new Dictionary<Sprite, Sprite>();
+
+        private readonly HashSet<Sprite> replacementSpriteSet =
+            new HashSet<Sprite>();
 
         private readonly HashSet<string> sceneTextureKeys =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -148,17 +91,30 @@ namespace MWC_Localization_Core
         private readonly HashSet<string> matchedTextureNames =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        private string[] cachedReplacementKeys = new string[0];
+        private readonly Func<bool> getLoadTextureMods;
+        private Material[] capturedMaterials;
+        private ScreenOverlay[] capturedOverlays;
+        private Image[] capturedImages;
         private string assetsFolder;
         private string loadedSceneName;
         private bool hasApplied;
         private bool hasLoadedReplacementTextures;
+        private bool hasInstalledRallyRefreshHook;
+        private bool pendingModTextureApply;
+        private int modTextureDelayFramesRemaining;
 
-        private readonly HashSet<string> hookedObjectTargets =
-            new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        public TextureReplacementSurface()
+            : this(null)
+        {
+        }
+
+        public TextureReplacementSurface(Func<bool> getLoadTextureMods)
+        {
+            this.getLoadTextureMods = getLoadTextureMods;
+        }
 
         public string Name { get { return "TextureReplacementSurface"; } }
-        public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
+        public SurfaceCadence Cadence { get { return ShouldLoadTextureMods() ? SurfaceCadence.PerFrame : SurfaceCadence.OncePerScene; } }
         public bool IsComplete { get { return hasApplied; } }
 
         public void Initialize(TranslationContext ctx)
@@ -174,9 +130,35 @@ namespace MWC_Localization_Core
                 return 0;
 
             EnsureReplacementTexturesLoaded(sceneName);
-            int applied = ApplyMaterialTextures();
-            applied += ApplyScreenOverlayTextures();
-            applied += InstallDynamicTextureHooks(sceneName);
+            if (sceneName == GameSceneName && ShouldLoadTextureMods())
+            {
+                if (replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
+                {
+                    hasApplied = true;
+                    return 0;
+                }
+
+                pendingModTextureApply = true;
+                modTextureDelayFramesRemaining = ModTextureDelayFrames;
+                CoreConsole.Print($"[{Name}] Aguardando um frame para incluir alvos de textura de mods");
+                return 0;
+            }
+
+            return ApplyLoadedTextures();
+        }
+
+        private int ApplyLoadedTextures()
+        {
+            if (hasApplied)
+                return 0;
+
+            int applied = 0;
+            applied += ApplyMaterialTextures();
+            applied += ApplyCameraOverlays();
+            applied += ApplyImageSprites();
+            applied += InstallRallyRefreshHook(loadedSceneName);
+
+            pendingModTextureApply = false;
             hasApplied = true;
             LogUnmatchedTextures();
             return applied;
@@ -184,324 +166,23 @@ namespace MWC_Localization_Core
 
         public int MonitorTick(float deltaTime)
         {
-            return 0;
-        }
-
-        private int InstallDynamicTextureHooks(string sceneName)
-        {
-            if (sceneName != GameSceneName || replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
+            if (!pendingModTextureApply)
                 return 0;
 
-            int installed = 0;
-
-            for (int i = 0; i < DynamicFsmTextureTargets.Length; i++)
-                installed += InstallFsmTextureHook(DynamicFsmTextureTargets[i]);
-
-            for (int i = 0; i < DynamicObjectTextureTargets.Length; i++)
-                installed += InstallObjectTextureHook(DynamicObjectTextureTargets[i]);
-
-            return installed;
-        }
-
-        private int InstallFsmTextureHook(DynamicFsmTextureTarget target)
-        {
-            GameObject go;
-            PlayMakerFSM fsm;
-            HutongGames.PlayMaker.FsmState state;
-            if (!TryFindFsmState(target.ObjectPath, target.FsmName, target.StateName, out go, out fsm, out state))
-                return 0;
-
-            int injected = AppendFsmTextureHookAction(fsm, state, target);
-            if (injected > 0)
-                MarkStateTextureMatches(state);
-
-            return injected;
-        }
-
-        private int InstallObjectTextureHook(DynamicObjectTextureTarget target)
-        {
-            GameObject go;
-            PlayMakerFSM fsm;
-            HutongGames.PlayMaker.FsmState state;
-            if (!TryFindFsmState(target.ObjectPath, target.FsmName, target.StateName, out go, out fsm, out state))
-                return 0;
-
-            int injected = AppendObjectTextureAction(fsm, state, go, target);
-            if (injected > 0)
+            if (Application.loadedLevelName != GameSceneName)
             {
-                ReplaceTexturesOnObject(go, target.TextureKeySuffix);
-            }
-
-            return injected;
-        }
-
-        private int AppendFsmTextureHookAction(
-            PlayMakerFSM fsm,
-            HutongGames.PlayMaker.FsmState state,
-            DynamicFsmTextureTarget target)
-        {
-            if (HasAction<ReplaceSetMaterialTexturesInStateAction>(state))
-                return 0;
-
-            string label = target.ObjectPath + "|" + target.FsmName + "|" + target.StateName;
-            ReplaceSetMaterialTexturesInStateAction action = new ReplaceSetMaterialTexturesInStateAction
-            {
-                owner = this,
-                target = fsm.gameObject,
-                fsmName = target.FsmName,
-                stateName = target.StateName,
-                label = label,
-            };
-
-            return MSCLoader.PlayMakerExtensions.FsmInject(fsm, target.StateName, action, 0, false) ? 1 : 0;
-        }
-
-        private int AppendObjectTextureAction(
-            PlayMakerFSM fsm,
-            HutongGames.PlayMaker.FsmState state,
-            GameObject targetObject,
-            DynamicObjectTextureTarget target)
-        {
-            string label = target.ObjectPath + "|" + target.FsmName + "|" + target.StateName + "|" + target.TextureKeySuffix;
-            if (hookedObjectTargets.Contains(label))
-                return 0;
-
-            bool injected = MSCLoader.PlayMakerExtensions.FsmInject(
-                targetObject,
-                target.FsmName,
-                target.StateName,
-                (Action)delegate
-                {
-                    ReplaceTexturesOnObject(targetObject, target.TextureKeySuffix);
-                },
-                false,
-                -1,
-                false);
-
-            if (injected)
-            {
-                hookedObjectTargets.Add(label);
-                return 1;
-            }
-
-            return 0;
-        }
-
-        private void MarkStateTextureMatches(HutongGames.PlayMaker.FsmState state)
-        {
-            HutongGames.PlayMaker.FsmStateAction[] actions;
-            if (!TryGetStateActions(state, out actions))
-                return;
-
-            for (int i = 0; i < actions.Length; i++)
-            {
-                SetMaterialTexture setTexture = actions[i] as SetMaterialTexture;
-                if (setTexture == null || setTexture.texture == null || IsUnityObjectNull(setTexture.texture.Value))
-                    continue;
-
-                Texture2D replacement;
-                string matchedName;
-                if (TryGetReplacementTexture(setTexture.texture.Value.name, out replacement, out matchedName))
-                    matchedTextureNames.Add(matchedName);
-            }
-        }
-
-        private int ReplaceSetMaterialTexturesInState(GameObject targetObject, string fsmName, string stateName, string label)
-        {
-            if (IsUnityObjectNull(targetObject))
-                return 0;
-
-            try
-            {
-                PlayMakerFSM fsm;
-                HutongGames.PlayMaker.FsmState state;
-                if (!TryFindFsmState(targetObject, fsmName, stateName, out fsm, out state))
-                    return 0;
-
-                HutongGames.PlayMaker.FsmStateAction[] actions;
-                if (!TryGetStateActions(state, out actions))
-                    return 0;
-
-                int applied = 0;
-                for (int i = 0; i < actions.Length; i++)
-                {
-                    SetMaterialTexture setTexture = actions[i] as SetMaterialTexture;
-                    if (setTexture == null || setTexture.texture == null || IsUnityObjectNull(setTexture.texture.Value))
-                        continue;
-
-                    Texture2D replacement;
-                    string matchedName;
-                    if (!TryGetReplacementTexture(setTexture.texture.Value.name, out replacement, out matchedName)
-                        || IsUnityObjectNull(replacement))
-                        continue;
-
-                    CopyTextureSettings(setTexture.texture.Value, replacement);
-                    setTexture.texture.Value = replacement;
-                    matchedTextureNames.Add(matchedName);
-                    applied++;
-                }
-
-                return applied;
-            }
-            catch (Exception ex)
-            {
-                CoreConsole.Warning($"[{Name}] Dynamic FSM texture hook failed ({label}): {ex.Message}");
+                pendingModTextureApply = false;
+                hasApplied = true;
                 return 0;
             }
-        }
 
-        private int ReplaceTexturesOnObject(GameObject obj, string textureKeySuffix)
-        {
-            if (IsUnityObjectNull(obj))
+            if (modTextureDelayFramesRemaining > 0)
+            {
+                modTextureDelayFramesRemaining--;
                 return 0;
-
-            int applied = 0;
-            Renderer renderer = obj.GetComponent<Renderer>();
-            if (!IsUnityObjectNull(renderer) && !IsUnityObjectNull(renderer.sharedMaterial))
-                applied += ApplyMaterialProperty(renderer.sharedMaterial, "_MainTex", textureKeySuffix);
-
-            Renderer[] children = obj.GetComponentsInChildren<Renderer>(true);
-            if (children == null)
-                return applied;
-
-            for (int i = 0; i < children.Length; i++)
-            {
-                Renderer child = children[i];
-                if (IsUnityObjectNull(child) || child == renderer || IsUnityObjectNull(child.sharedMaterial))
-                    continue;
-
-                applied += ApplyMaterialProperty(child.sharedMaterial, "_MainTex", textureKeySuffix);
             }
 
-            return applied;
-        }
-
-        private static bool HasAction<T>(HutongGames.PlayMaker.FsmState state) where T : HutongGames.PlayMaker.FsmStateAction
-        {
-            HutongGames.PlayMaker.FsmStateAction[] actions;
-            if (!TryGetStateActions(state, out actions))
-                return false;
-
-            for (int i = 0; i < actions.Length; i++)
-            {
-                if (actions[i] is T)
-                    return true;
-            }
-
-            return false;
-        }
-
-        private static bool TryGetStateActions(
-            HutongGames.PlayMaker.FsmState state,
-            out HutongGames.PlayMaker.FsmStateAction[] actions)
-        {
-            actions = null;
-            if (state == null)
-                return false;
-
-            try
-            {
-                actions = state.Actions;
-                return actions != null;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static PlayMakerFSM FindFsmByName(GameObject go, string fsmName)
-        {
-            if (IsUnityObjectNull(go))
-                return null;
-
-            PlayMakerFSM[] fsms = go.GetComponents<PlayMakerFSM>();
-            for (int i = 0; i < fsms.Length; i++)
-            {
-                PlayMakerFSM fsm = fsms[i];
-                if (!IsUnityObjectNull(fsm) && FsmUtils.GetFsmName(fsm) == fsmName)
-                    return fsm;
-            }
-
-            return null;
-        }
-
-        private static bool TryFindFsmState(
-            string objectPath,
-            string fsmName,
-            string stateName,
-            out GameObject go,
-            out PlayMakerFSM fsm,
-            out HutongGames.PlayMaker.FsmState state)
-        {
-            go = FindDynamicGameObject(objectPath);
-            if (IsUnityObjectNull(go))
-            {
-                fsm = null;
-                state = null;
-                return false;
-            }
-
-            return TryFindFsmState(go, fsmName, stateName, out fsm, out state);
-        }
-
-        private static bool TryFindFsmState(
-            GameObject go,
-            string fsmName,
-            string stateName,
-            out PlayMakerFSM fsm,
-            out HutongGames.PlayMaker.FsmState state)
-        {
-            fsm = FindFsmByName(go, fsmName);
-            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
-            {
-                state = null;
-                return false;
-            }
-
-            state = FindState(fsm, stateName);
-            return state != null;
-        }
-
-        private static HutongGames.PlayMaker.FsmState FindState(PlayMakerFSM fsm, string stateName)
-        {
-            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
-                return null;
-
-            HutongGames.PlayMaker.FsmState[] states = fsm.FsmStates;
-            for (int i = 0; i < states.Length; i++)
-            {
-                if (states[i] != null && states[i].Name == stateName)
-                    return states[i];
-            }
-
-            return null;
-        }
-
-        private static GameObject FindDynamicGameObject(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return null;
-
-            GameObject found = GameObject.Find(path);
-            if (!IsUnityObjectNull(found))
-                return found;
-
-            string leafName = path.Substring(path.LastIndexOf('/') + 1);
-            bool exactPathRequired = path.IndexOf('/') >= 0;
-            Transform[] all = Resources.FindObjectsOfTypeAll<Transform>();
-            for (int i = 0; i < all.Length; i++)
-            {
-                Transform t = all[i];
-                if (t == null || t.name != leafName)
-                    continue;
-                if (!exactPathRequired)
-                    return t.gameObject;
-                if (LocalizationUtils.GetGameObjectPath(t.gameObject) == path)
-                    return t.gameObject;
-            }
-
-            return null;
+            return ApplyLoadedTextures();
         }
 
         public void Reset()
@@ -509,23 +190,81 @@ namespace MWC_Localization_Core
             ResetRuntimeState();
         }
 
-        private void ResetRuntimeState()
-        {
-            hasApplied = false;
-            loadedSceneName = null;
-            sceneTextureKeys.Clear();
-            matchedTextureNames.Clear();
-            hasLoadedReplacementTextures = false;
-            hookedObjectTargets.Clear();
-        }
-
         public void ClearTranslations()
         {
+            RestoreOriginalImageSprites();
             RestoreOriginalTextures();
+            DestroyReplacementSprites();
             DestroyReplacementTextures();
             replacementTextures.Clear();
-            cachedReplacementKeys = new string[0];
             ResetRuntimeState();
+        }
+
+        internal void CaptureTextureTargetsBeforeMods()
+        {
+            if (ShouldLoadTextureMods())
+            {
+                ClearCapturedTextureTargets();
+                return;
+            }
+
+            CaptureTextureTargets();
+        }
+
+        private void ResetRuntimeState()
+        {
+            loadedSceneName = null;
+            hasApplied = false;
+            hasLoadedReplacementTextures = false;
+            hasInstalledRallyRefreshHook = false;
+            pendingModTextureApply = false;
+            modTextureDelayFramesRemaining = 0;
+            sceneTextureKeys.Clear();
+            matchedTextureNames.Clear();
+        }
+
+        private void CaptureTextureTargets()
+        {
+            capturedMaterials = Resources.FindObjectsOfTypeAll<Material>();
+            capturedOverlays = Resources.FindObjectsOfTypeAll<ScreenOverlay>();
+            capturedImages = Resources.FindObjectsOfTypeAll<Image>();
+            CoreConsole.Print($"[{Name}] Capturou alvos iniciais de textura: {Count(capturedMaterials)} materiais, {Count(capturedOverlays)} overlays, {Count(capturedImages)} imagens");
+        }
+
+        private void ClearCapturedTextureTargets()
+        {
+            capturedMaterials = null;
+            capturedOverlays = null;
+            capturedImages = null;
+        }
+
+        private Material[] GetMaterialTargets()
+        {
+            if (loadedSceneName == GameSceneName && !ShouldLoadTextureMods() && capturedMaterials != null)
+                return capturedMaterials;
+
+            return Resources.FindObjectsOfTypeAll<Material>();
+        }
+
+        private ScreenOverlay[] GetOverlayTargets()
+        {
+            if (loadedSceneName == GameSceneName && !ShouldLoadTextureMods() && capturedOverlays != null)
+                return capturedOverlays;
+
+            return Resources.FindObjectsOfTypeAll<ScreenOverlay>();
+        }
+
+        private Image[] GetImageTargets()
+        {
+            if (loadedSceneName == GameSceneName && !ShouldLoadTextureMods() && capturedImages != null)
+                return capturedImages;
+
+            return Resources.FindObjectsOfTypeAll<Image>();
+        }
+
+        private bool ShouldLoadTextureMods()
+        {
+            return getLoadTextureMods != null && getLoadTextureMods();
         }
 
         private void EnsureReplacementTexturesLoaded(string sceneName)
@@ -540,6 +279,7 @@ namespace MWC_Localization_Core
         {
             sceneTextureKeys.Clear();
             matchedTextureNames.Clear();
+
             loadedSceneName = sceneName;
             hasLoadedReplacementTextures = true;
 
@@ -550,234 +290,20 @@ namespace MWC_Localization_Core
             for (int i = 0; i < sources.Count; i++)
             {
                 TextureFileSource source = sources[i];
-                string textureKey = source.TextureKey;
-                if (string.IsNullOrEmpty(textureKey))
+                if (source == null || string.IsNullOrEmpty(source.TextureKey))
                     continue;
 
-                sceneTextureKeys.Add(textureKey);
+                sceneTextureKeys.Add(source.TextureKey);
 
-                if (replacementTextures.ContainsKey(textureKey))
+                if (replacementTextures.ContainsKey(source.TextureKey))
                     continue;
 
-                Texture2D texture = LoadPng(source.Bytes, textureKey, source.DisplayName);
+                Texture2D texture = LoadPng(source.Bytes, source.TextureKey, source.DisplayName);
                 if (IsUnityObjectNull(texture))
                     continue;
 
-                replacementTextures.Add(textureKey, texture);
+                replacementTextures.Add(source.TextureKey, texture);
             }
-
-            UpdateReplacementCache();
-
-        }
-
-        private static Texture2D LoadPng(byte[] bytes, string textureName, string displayName)
-        {
-            if (bytes == null || bytes.Length == 0)
-            {
-                CoreConsole.Warning($"[TextureReplacementSurface] Empty PNG data: {displayName}");
-                return null;
-            }
-
-            try
-            {
-                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
-                if (!texture.LoadImage(bytes))
-                {
-                    UnityEngine.Object.Destroy(texture);
-                    CoreConsole.Warning($"[TextureReplacementSurface] Failed to decode PNG: {displayName}");
-                    return null;
-                }
-
-                texture.name = textureName;
-                return texture;
-            }
-            catch (Exception ex)
-            {
-                CoreConsole.Warning($"[TextureReplacementSurface] Failed loading PNG '{displayName}': {ex.Message}");
-                return null;
-            }
-        }
-
-        private int ApplyMaterialTextures()
-        {
-            if (replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
-                return 0;
-
-            Material[] materials = Resources.FindObjectsOfTypeAll<Material>();
-            if (materials == null || materials.Length == 0)
-                return 0;
-
-            int applied = 0;
-            for (int i = 0; i < materials.Length; i++)
-            {
-                Material material = materials[i];
-                if (ShouldSkipMaterial(material))
-                    continue;
-
-                for (int j = 0; j < TexturePropertyNames.Length; j++)
-                    applied += ApplyMaterialProperty(material, TexturePropertyNames[j]);
-            }
-
-            return applied;
-        }
-
-        private int ApplyMaterialProperty(Material material, string propertyName, string textureKeySuffix = null)
-        {
-            try
-            {
-                if (!material.HasProperty(propertyName))
-                    return 0;
-
-                Texture currentTexture = material.GetTexture(propertyName);
-                if (IsUnityObjectNull(currentTexture))
-                    return 0;
-
-                Texture2D replacement;
-                string matchedName;
-                if (!TryGetRallyCoverReplacement(material, propertyName, currentTexture, textureKeySuffix, out replacement, out matchedName)
-                    && !TryGetReplacementTexture(currentTexture.name, textureKeySuffix, out replacement, out matchedName)
-                    || IsUnityObjectNull(replacement))
-                {
-                    return 0;
-                }
-
-                if (ReferenceEquals(currentTexture, replacement))
-                {
-                    matchedTextureNames.Add(matchedName);
-                    return 0;
-                }
-
-                BackupOriginalTexture(material, propertyName, currentTexture);
-                CopyTextureSettings(currentTexture, replacement);
-                material.SetTexture(propertyName, replacement);
-                matchedTextureNames.Add(matchedName);
-                return 1;
-            }
-            catch (Exception ex)
-            {
-                CoreConsole.Warning($"[{Name}] Skipped material '{material.name}' during texture replacement: {ex.Message}");
-                return 0;
-            }
-        }
-
-        private int ApplyScreenOverlayTextures()
-        {
-            if (replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
-                return 0;
-
-            MonoBehaviour[] behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
-            if (behaviours == null || behaviours.Length == 0)
-                return 0;
-
-            int applied = 0;
-            for (int i = 0; i < behaviours.Length; i++)
-            {
-                MonoBehaviour behaviour = behaviours[i];
-                if (IsUnityObjectNull(behaviour) || IsUnityObjectNull(behaviour.gameObject))
-                    continue;
-
-                try
-                {
-                    Type type = behaviour.GetType();
-                    if (type == null || type.FullName != ScreenOverlayTypeName)
-                        continue;
-
-                    FieldInfo textureField = type.GetField(
-                        ScreenOverlayTextureFieldName,
-                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    if (textureField == null)
-                        continue;
-
-                    Texture currentTexture = textureField.GetValue(behaviour) as Texture;
-                    if (IsUnityObjectNull(currentTexture))
-                        continue;
-
-                    Texture2D replacement;
-                    string matchedName;
-                    if (!TryGetReplacementTexture(currentTexture.name, out replacement, out matchedName)
-                        || IsUnityObjectNull(replacement))
-                    {
-                        continue;
-                    }
-
-                    if (ReferenceEquals(currentTexture, replacement))
-                    {
-                        matchedTextureNames.Add(matchedName);
-                        continue;
-                    }
-
-                    BackupOriginalOverlayTexture(behaviour, textureField, currentTexture);
-                    CopyTextureSettings(currentTexture, replacement);
-                    textureField.SetValue(behaviour, replacement);
-                    matchedTextureNames.Add(matchedName);
-                    applied++;
-                }
-                catch (Exception ex)
-                {
-                    CoreConsole.Warning($"[{Name}] Skipped ScreenOverlay during texture replacement: {ex.Message}");
-                }
-            }
-
-            return applied;
-        }
-
-        private bool TryGetReplacementTexture(string sourceTextureName, out Texture2D replacement, out string matchedName)
-        {
-            return TryGetReplacementTexture(sourceTextureName, null, out replacement, out matchedName);
-        }
-
-        private bool TryGetReplacementTexture(
-            string sourceTextureName,
-            string textureKeySuffix,
-            out Texture2D replacement,
-            out string matchedName)
-        {
-            replacement = null;
-            matchedName = null;
-
-            string normalizedName = NormalizeTextureName(sourceTextureName);
-            if (string.IsNullOrEmpty(normalizedName))
-                return false;
-
-            if (!string.IsNullOrEmpty(textureKeySuffix))
-                normalizedName += textureKeySuffix;
-
-            if (replacementTextures.TryGetValue(normalizedName, out replacement))
-            {
-                matchedName = normalizedName;
-                return true;
-            }
-
-            if (!string.IsNullOrEmpty(textureKeySuffix))
-            {
-                return false;
-            }
-
-            for (int i = 0; i < cachedReplacementKeys.Length; i++)
-            {
-                string key = cachedReplacementKeys[i];
-                if (StartsWithTextureKey(normalizedName, key)
-                    && replacementTextures.TryGetValue(key, out replacement))
-                {
-                    matchedName = key;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void UpdateReplacementCache()
-        {
-            if (replacementTextures.Count == 0)
-            {
-                cachedReplacementKeys = new string[0];
-                return;
-            }
-
-            List<string> keys = new List<string>(replacementTextures.Keys);
-            keys.Sort((a, b) => b.Length.CompareTo(a.Length));
-            cachedReplacementKeys = keys.ToArray();
         }
 
         private List<TextureFileSource> GetTextureSourcesForScene(string sceneName)
@@ -803,7 +329,7 @@ namespace MWC_Localization_Core
             {
                 if (!ZipFile.IsZipFile(zipFile))
                 {
-                    CoreConsole.Warning($"[TextureReplacementSurface] Invalid texture ZIP: {zipFile}");
+                    CoreConsole.Warning($"[{Name}] ZIP de texturas inválido: {zipFile}");
                     return;
                 }
 
@@ -829,11 +355,523 @@ namespace MWC_Localization_Core
                 }
 
                 if (totalPngCount > 0)
-                    ModConsole.Print($"[MWC_LC] [{Name}] Loaded texture ZIP '{Path.GetFileName(zipFile)}' with {totalPngCount} PNG texture replacement(s)");
+                    CoreConsole.Print($"[{Name}] Carregou ZIP de texturas '{Path.GetFileName(zipFile)}' com {totalPngCount} substituição(ões) PNG");
             }
             catch (Exception ex)
             {
-                CoreConsole.Warning($"[TextureReplacementSurface] Failed reading texture ZIP '{zipFile}': {ex.Message}");
+                CoreConsole.Warning($"[{Name}] Falha ao ler ZIP de texturas '{zipFile}': {ex.Message}");
+            }
+        }
+
+        private static Texture2D LoadPng(byte[] bytes, string textureName, string displayName)
+        {
+            if (bytes == null || bytes.Length == 0)
+            {
+                CoreConsole.Warning($"[TextureReplacementSurface] Dados PNG vazios: {displayName}");
+                return null;
+            }
+
+            try
+            {
+                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+                if (!texture.LoadImage(bytes))
+                {
+                    UnityEngine.Object.Destroy(texture);
+                    CoreConsole.Warning($"[TextureReplacementSurface] Falha ao decodificar PNG: {displayName}");
+                    return null;
+                }
+
+                texture.name = textureName;
+                return texture;
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Warning($"[TextureReplacementSurface] Falha ao carregar PNG '{displayName}': {ex.Message}");
+                return null;
+            }
+        }
+
+        private int ApplyMaterialTextures()
+        {
+            if (replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
+                return 0;
+
+            Material[] materials = GetMaterialTargets();
+            if (materials == null || materials.Length == 0)
+                return 0;
+
+            int applied = 0;
+            for (int i = 0; i < materials.Length; i++)
+            {
+                Material material = materials[i];
+                if (ShouldSkipMaterial(material))
+                    continue;
+
+                for (int j = 0; j < TexturePropertyNames.Length; j++)
+                    applied += ApplyMaterialProperty(material, TexturePropertyNames[j], null);
+            }
+
+            return applied;
+        }
+
+        private int ApplyMaterialProperty(Material material, string propertyName, string textureKeySuffix)
+        {
+            try
+            {
+                if (!material.HasProperty(propertyName))
+                    return 0;
+
+                Texture currentTexture = material.GetTexture(propertyName);
+                if (IsUnityObjectNull(currentTexture))
+                    return 0;
+
+                Texture2D replacement;
+                string matchedName;
+                if (!TryGetRallyCoverReplacement(material, propertyName, currentTexture, out replacement, out matchedName)
+                    && !TryGetReplacementTexture(currentTexture.name, textureKeySuffix, out replacement, out matchedName))
+                {
+                    return 0;
+                }
+
+                if (IsUnityObjectNull(replacement))
+                    return 0;
+
+                if (ReferenceEquals(currentTexture, replacement))
+                {
+                    matchedTextureNames.Add(matchedName);
+                    return 0;
+                }
+
+                BackupOriginalMaterialTexture(material, propertyName, currentTexture);
+                CopyTextureSettings(currentTexture, replacement);
+                material.SetTexture(propertyName, replacement);
+                matchedTextureNames.Add(matchedName);
+
+                CoreConsole.Print($"[{Name}] Substituiu {propertyName} '{currentTexture.name}' no material '{material.name}'");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Warning($"[{Name}] Pulou material '{material.name}' durante substituição de textura: {ex.Message}");
+                return 0;
+            }
+        }
+
+        private int ApplyCameraOverlays()
+        {
+            if (replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
+                return 0;
+
+            ScreenOverlay[] overlays = GetOverlayTargets();
+            if (overlays == null || overlays.Length == 0)
+                return 0;
+
+            int applied = 0;
+            for (int i = 0; i < overlays.Length; i++)
+            {
+                ScreenOverlay overlay = overlays[i];
+                if (IsUnityObjectNull(overlay) || IsUnityObjectNull(overlay.texture))
+                    continue;
+
+                Texture2D replacement;
+                string matchedName;
+                if (!TryGetReplacementTexture(overlay.texture.name, out replacement, out matchedName) || IsUnityObjectNull(replacement))
+                    continue;
+
+                if (ReferenceEquals(overlay.texture, replacement))
+                {
+                    matchedTextureNames.Add(matchedName);
+                    continue;
+                }
+
+                if (!originalOverlayTextures.ContainsKey(overlay))
+                    originalOverlayTextures.Add(overlay, overlay.texture);
+
+                CopyTextureSettings(overlay.texture, replacement);
+                string oldName = overlay.texture.name;
+                overlay.texture = replacement;
+                matchedTextureNames.Add(matchedName);
+                applied++;
+
+                CoreConsole.Print($"[{Name}] Substituiu ScreenOverlay '{oldName}'");
+            }
+
+            return applied;
+        }
+
+        private int ApplyImageSprites()
+        {
+            if (replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
+                return 0;
+
+            Image[] images = GetImageTargets();
+            if (images == null || images.Length == 0)
+                return 0;
+
+            int applied = 0;
+            for (int i = 0; i < images.Length; i++)
+            {
+                Image image = images[i];
+                if (IsUnityObjectNull(image))
+                    continue;
+
+                try
+                {
+                    Sprite currentSprite = image.sprite;
+                    if (IsUnityObjectNull(currentSprite) || IsReplacementSprite(currentSprite))
+                        continue;
+
+                    Texture2D replacementTexture;
+                    string matchedName;
+                    if (!TryGetReplacementTextureForSprite(currentSprite, out replacementTexture, out matchedName)
+                        || IsUnityObjectNull(replacementTexture))
+                    {
+                        continue;
+                    }
+
+                    if (!originalImageSprites.ContainsKey(image))
+                        originalImageSprites.Add(image, currentSprite);
+
+                    CopyTextureSettings(currentSprite.texture, replacementTexture);
+                    Sprite replacementSprite = GetReplacementSprite(currentSprite, replacementTexture);
+                    if (IsUnityObjectNull(replacementSprite))
+                        continue;
+
+                    image.sprite = replacementSprite;
+                    matchedTextureNames.Add(matchedName);
+                    applied++;
+
+                    CoreConsole.Print($"[{Name}] Substituiu sprite de UI Image '{currentSprite.name}' pela textura '{matchedName}'");
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning($"[{Name}] Pulou UI Image durante substituição de textura: {ex.Message}");
+                }
+            }
+
+            return applied;
+        }
+
+        private int InstallRallyRefreshHook(string sceneName)
+        {
+            if (sceneName != GameSceneName || replacementTextures.Count == 0 || sceneTextureKeys.Count == 0)
+                return 0;
+
+            GameObject go = FindGameObject(RallyRegistrationObjectPath);
+            if (IsUnityObjectNull(go))
+                return 0;
+
+            PlayMakerFSM fsm = FindFsmByName(go, RallyRegistrationFsmName);
+            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
+                return 0;
+
+            HutongGames.PlayMaker.FsmState state = FindState(fsm, RallyRegistrationStateName);
+            if (state == null || hasInstalledRallyRefreshHook)
+                return 0;
+
+            bool injected = MSCLoader.PlayMakerExtensions.FsmInject(
+                go,
+                RallyRegistrationFsmName,
+                RallyRegistrationStateName,
+                (Action)delegate
+                {
+                    ApplyTexturesOnObject(go, "card");
+                },
+                false,
+                -1,
+                false);
+
+            if (injected)
+            {
+                hasInstalledRallyRefreshHook = true;
+                ApplyTexturesOnObject(go, "card");
+                CoreConsole.Print($"[{Name}] Instalou hook de atualização de textura do rally");
+            }
+
+            return injected ? 1 : 0;
+        }
+
+        private int ApplyTexturesOnObject(GameObject obj, string textureKeySuffix)
+        {
+            if (IsUnityObjectNull(obj))
+                return 0;
+
+            int applied = 0;
+            Renderer renderer = obj.GetComponent<Renderer>();
+            if (!IsUnityObjectNull(renderer))
+                applied += ApplyRendererTextures(renderer, textureKeySuffix);
+
+            Renderer[] childRenderers = obj.GetComponentsInChildren<Renderer>(true);
+            if (childRenderers == null)
+                return applied;
+
+            for (int i = 0; i < childRenderers.Length; i++)
+            {
+                Renderer child = childRenderers[i];
+                if (IsUnityObjectNull(child) || child == renderer)
+                    continue;
+
+                applied += ApplyRendererTextures(child, textureKeySuffix);
+            }
+
+            return applied;
+        }
+
+        private int ApplyRendererTextures(Renderer renderer, string textureKeySuffix)
+        {
+            if (IsUnityObjectNull(renderer) || IsUnityObjectNull(renderer.sharedMaterial))
+                return 0;
+
+            int applied = 0;
+            Material material = renderer.sharedMaterial;
+            if (ShouldSkipMaterial(material))
+                return 0;
+
+            for (int i = 0; i < TexturePropertyNames.Length; i++)
+                applied += ApplyMaterialProperty(material, TexturePropertyNames[i], textureKeySuffix);
+
+            return applied;
+        }
+
+        private bool TryGetReplacementTexture(string sourceTextureName, out Texture2D replacement, out string matchedName)
+        {
+            return TryGetReplacementTexture(sourceTextureName, null, out replacement, out matchedName);
+        }
+
+        private bool TryGetReplacementTexture(
+            string sourceTextureName,
+            string textureKeySuffix,
+            out Texture2D replacement,
+            out string matchedName)
+        {
+            replacement = null;
+            matchedName = null;
+
+            string textureName = NormalizeTextureName(sourceTextureName);
+            if (string.IsNullOrEmpty(textureName))
+                return false;
+
+            if (!string.IsNullOrEmpty(textureKeySuffix))
+                textureName += textureKeySuffix;
+
+            if (replacementTextures.TryGetValue(textureName, out replacement))
+            {
+                matchedName = textureName;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TryGetReplacementTextureForSprite(Sprite sprite, out Texture2D replacement, out string matchedName)
+        {
+            replacement = null;
+            matchedName = null;
+
+            if (IsUnityObjectNull(sprite))
+                return false;
+
+            if (TryGetReplacementTexture(sprite.name, out replacement, out matchedName))
+                return true;
+
+            Texture2D sourceTexture = sprite.texture;
+            return !IsUnityObjectNull(sourceTexture)
+                && TryGetReplacementTexture(sourceTexture.name, out replacement, out matchedName);
+        }
+
+        private Sprite GetReplacementSprite(Sprite sourceSprite, Texture2D replacementTexture)
+        {
+            Sprite replacementSprite;
+            if (replacementSprites.TryGetValue(sourceSprite, out replacementSprite) && !IsUnityObjectNull(replacementSprite))
+                return replacementSprite;
+
+            Rect sourceRect = sourceSprite.rect;
+            Vector2 pivot = new Vector2(0.5f, 0.5f);
+            if (sourceRect.width > 0f && sourceRect.height > 0f)
+                pivot = new Vector2(sourceSprite.pivot.x / sourceRect.width, sourceSprite.pivot.y / sourceRect.height);
+
+            Rect replacementRect = new Rect(0f, 0f, replacementTexture.width, replacementTexture.height);
+            Texture2D sourceTexture = sourceSprite.texture;
+            if (!IsUnityObjectNull(sourceTexture)
+                && sourceTexture.width == replacementTexture.width
+                && sourceTexture.height == replacementTexture.height)
+            {
+                replacementRect = sourceRect;
+            }
+
+            replacementSprite = Sprite.Create(
+                replacementTexture,
+                replacementRect,
+                pivot,
+                sourceSprite.pixelsPerUnit,
+                0,
+                SpriteMeshType.FullRect,
+                sourceSprite.border);
+            if (IsUnityObjectNull(replacementSprite))
+                return null;
+
+            replacementSprite.name = sourceSprite.name;
+            replacementSprites[sourceSprite] = replacementSprite;
+            replacementSpriteSet.Add(replacementSprite);
+            return replacementSprite;
+        }
+
+        private bool TryGetRallyCoverReplacement(
+            Material material,
+            string propertyName,
+            Texture currentTexture,
+            out Texture2D replacement,
+            out string matchedName)
+        {
+            replacement = null;
+            matchedName = null;
+
+            if (propertyName != "_MainTex")
+                return false;
+            if (IsUnityObjectNull(material) || IsUnityObjectNull(currentTexture))
+                return false;
+            if (NormalizeTextureName(material.name) != RallyCoverMaterialName)
+                return false;
+            if (!replacementTextures.TryGetValue(RallyCoverReplacementTextureName, out replacement))
+                return false;
+
+            matchedName = RallyCoverReplacementTextureName;
+            return true;
+        }
+
+        private void BackupOriginalMaterialTexture(Material material, string propertyName, Texture originalTexture)
+        {
+            List<MaterialTextureBackup> backups;
+            if (!originalMaterialTextures.TryGetValue(material, out backups))
+            {
+                backups = new List<MaterialTextureBackup>();
+                originalMaterialTextures.Add(material, backups);
+            }
+
+            for (int i = 0; i < backups.Count; i++)
+            {
+                if (backups[i].PropertyName == propertyName)
+                    return;
+            }
+
+            backups.Add(new MaterialTextureBackup(propertyName, originalTexture));
+        }
+
+        private void RestoreOriginalTextures()
+        {
+            foreach (KeyValuePair<Material, List<MaterialTextureBackup>> pair in originalMaterialTextures)
+            {
+                Material material = pair.Key;
+                if (IsUnityObjectNull(material))
+                    continue;
+
+                List<MaterialTextureBackup> backups = pair.Value;
+                for (int i = 0; i < backups.Count; i++)
+                {
+                    MaterialTextureBackup backup = backups[i];
+                    try
+                    {
+                        if (material.HasProperty(backup.PropertyName))
+                            material.SetTexture(backup.PropertyName, backup.OriginalTexture);
+                    }
+                    catch (Exception ex)
+                    {
+                        CoreConsole.Warning($"[{Name}] Pulou restauração de textura em '{material.name}': {ex.Message}");
+                    }
+                }
+            }
+
+            originalMaterialTextures.Clear();
+
+            foreach (KeyValuePair<ScreenOverlay, Texture2D> pair in originalOverlayTextures)
+            {
+                ScreenOverlay overlay = pair.Key;
+                if (IsUnityObjectNull(overlay))
+                    continue;
+
+                overlay.texture = pair.Value;
+            }
+
+            originalOverlayTextures.Clear();
+        }
+
+        private void RestoreOriginalImageSprites()
+        {
+            foreach (KeyValuePair<Image, Sprite> pair in originalImageSprites)
+            {
+                Image image = pair.Key;
+                if (IsUnityObjectNull(image))
+                    continue;
+
+                try
+                {
+                    image.sprite = pair.Value;
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning($"[{Name}] Pulou restauração de sprite de UI Image: {ex.Message}");
+                }
+            }
+
+            originalImageSprites.Clear();
+        }
+
+        private void DestroyReplacementSprites()
+        {
+            foreach (KeyValuePair<Sprite, Sprite> pair in replacementSprites)
+            {
+                if (IsUnityObjectNull(pair.Value))
+                    continue;
+
+                try
+                {
+                    UnityEngine.Object.Destroy(pair.Value);
+                }
+                catch
+                {
+                }
+            }
+
+            replacementSprites.Clear();
+            replacementSpriteSet.Clear();
+        }
+
+        private void DestroyReplacementTextures()
+        {
+            foreach (KeyValuePair<string, Texture2D> pair in replacementTextures)
+            {
+                if (IsUnityObjectNull(pair.Value))
+                    continue;
+
+                try
+                {
+                    UnityEngine.Object.Destroy(pair.Value);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private static void CopyTextureSettings(Texture source, Texture2D replacement)
+        {
+            if (IsUnityObjectNull(source) || IsUnityObjectNull(replacement))
+                return;
+
+            replacement.wrapMode = source.wrapMode;
+            replacement.filterMode = source.filterMode;
+            replacement.anisoLevel = source.anisoLevel;
+            replacement.mipMapBias = source.mipMapBias;
+        }
+
+        private void LogUnmatchedTextures()
+        {
+            foreach (string textureName in sceneTextureKeys)
+            {
+                if (matchedTextureNames.Contains(textureName))
+                    continue;
+
+                CoreConsole.Print($"[{Name}] PNG não correspondeu a nenhuma textura carregada em {loadedSceneName}: {textureName}.png");
             }
         }
 
@@ -848,12 +886,23 @@ namespace MWC_Localization_Core
             return string.IsNullOrEmpty(path) ? path : path.Replace('/', Path.DirectorySeparatorChar);
         }
 
+        private static bool ShouldApplyInScene(string sceneName)
+        {
+            return sceneName == MainMenuSceneName || sceneName == GameSceneName;
+        }
+
         private static bool ShouldLoadTextureInScene(string textureName, string sceneName)
         {
+            bool isMenuOnlyTexture = IsMenuOnlyTexture(textureName);
             if (sceneName == MainMenuSceneName)
-                return IsMenuOnlyTexture(textureName);
+                return isMenuOnlyTexture;
 
-            return !IsMenuOnlyTexture(textureName);
+            return !isMenuOnlyTexture;
+        }
+
+        private static bool IsMenuOnlyTexture(string textureName)
+        {
+            return string.Equals(textureName, DriversLicenceTextureName, StringComparison.OrdinalIgnoreCase);
         }
 
         private static string NormalizeTextureName(string textureName)
@@ -862,29 +911,6 @@ namespace MWC_Localization_Core
                 return textureName;
 
             return textureName.Replace(" (Instance)", string.Empty).Trim();
-        }
-
-        private static bool StartsWithTextureKey(string textureName, string key)
-        {
-            if (string.IsNullOrEmpty(textureName) || string.IsNullOrEmpty(key))
-                return false;
-            if (!textureName.StartsWith(key, StringComparison.OrdinalIgnoreCase))
-                return false;
-            if (textureName.Length == key.Length)
-                return true;
-
-            char next = textureName[key.Length];
-            return char.IsWhiteSpace(next) || next == '_' || next == '-' || next == '(';
-        }
-
-        private static bool IsMenuOnlyTexture(string textureName)
-        {
-            return string.Equals(textureName, DriversLicenceTextureName, StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static bool ShouldApplyInScene(string sceneName)
-        {
-            return sceneName == GameSceneName || sceneName == MainMenuSceneName;
         }
 
         private static bool ShouldSkipMaterial(Material material)
@@ -909,174 +935,78 @@ namespace MWC_Localization_Core
             return false;
         }
 
-        private bool TryGetRallyCoverReplacement(
-            Material material,
-            string propertyName,
-            Texture currentTexture,
-            string textureKeySuffix,
-            out Texture2D replacement,
-            out string matchedName)
+        private static GameObject FindGameObject(string path)
         {
-            replacement = null;
-            matchedName = null;
+            if (string.IsNullOrEmpty(path))
+                return null;
 
-            if (!string.IsNullOrEmpty(textureKeySuffix))
-                return false;
-            if (propertyName != "_MainTex")
-                return false;
-            if (IsUnityObjectNull(material) || IsUnityObjectNull(currentTexture))
-                return false;
+            GameObject found = GameObject.Find(path);
+            if (!IsUnityObjectNull(found))
+                return found;
 
-            if (NormalizeTextureName(material.name) != "cover 1"
-                || NormalizeTextureName(currentTexture.name) != "rally_register")
-                return false;
-
-            if (!replacementTextures.TryGetValue("rally_registercard", out replacement))
-                return false;
-
-            matchedName = "rally_registercard";
-            return true;
-        }
-
-        private void BackupOriginalTexture(Material material, string propertyName, Texture originalTexture)
-        {
-            List<MaterialTextureBackup> backups;
-            if (!originalTextures.TryGetValue(material, out backups))
+            string leafName = path.Substring(path.LastIndexOf('/') + 1);
+            bool exactPathRequired = path.IndexOf('/') >= 0;
+            Transform[] all = Resources.FindObjectsOfTypeAll<Transform>();
+            for (int i = 0; i < all.Length; i++)
             {
-                backups = new List<MaterialTextureBackup>();
-                originalTextures.Add(material, backups);
-            }
-
-            for (int i = 0; i < backups.Count; i++)
-            {
-                if (backups[i].PropertyName == propertyName)
-                    return;
-            }
-
-            backups.Add(new MaterialTextureBackup(propertyName, originalTexture));
-        }
-
-        private void BackupOriginalOverlayTexture(MonoBehaviour behaviour, FieldInfo textureField, Texture originalTexture)
-        {
-            if (IsUnityObjectNull(behaviour) || textureField == null || IsUnityObjectNull(originalTexture))
-                return;
-
-            if (!originalOverlayTextures.ContainsKey(behaviour))
-                originalOverlayTextures.Add(behaviour, new OverlayTextureBackup(textureField, originalTexture));
-        }
-
-        private static void CopyTextureSettings(Texture source, Texture2D replacement)
-        {
-            if (IsUnityObjectNull(source) || IsUnityObjectNull(replacement))
-                return;
-
-            replacement.wrapMode = source.wrapMode;
-            replacement.filterMode = source.filterMode;
-            replacement.anisoLevel = source.anisoLevel;
-            replacement.mipMapBias = source.mipMapBias;
-        }
-
-        private void RestoreOriginalTextures()
-        {
-            foreach (KeyValuePair<Material, List<MaterialTextureBackup>> pair in originalTextures)
-            {
-                Material material = pair.Key;
-                if (IsUnityObjectNull(material))
+                Transform t = all[i];
+                if (t == null || t.name != leafName)
                     continue;
 
-                List<MaterialTextureBackup> backups = pair.Value;
-                for (int i = 0; i < backups.Count; i++)
-                {
-                    MaterialTextureBackup backup = backups[i];
-                    try
-                    {
-                        if (material.HasProperty(backup.PropertyName))
-                            material.SetTexture(backup.PropertyName, backup.OriginalTexture);
-                    }
-                    catch (Exception ex)
-                    {
-                        CoreConsole.Warning($"[{Name}] Skipped restoring texture on '{material.name}': {ex.Message}");
-                    }
-                }
+                if (!exactPathRequired)
+                    return t.gameObject;
+
+                if (LocalizationUtils.GetGameObjectPath(t.gameObject) == path)
+                    return t.gameObject;
             }
 
-            originalTextures.Clear();
-
-            foreach (KeyValuePair<MonoBehaviour, OverlayTextureBackup> pair in originalOverlayTextures)
-            {
-                MonoBehaviour behaviour = pair.Key;
-                OverlayTextureBackup backup = pair.Value;
-                if (IsUnityObjectNull(behaviour) || backup == null || backup.TextureField == null)
-                    continue;
-
-                try
-                {
-                    backup.TextureField.SetValue(behaviour, backup.OriginalTexture);
-                }
-                catch (Exception ex)
-                {
-                    CoreConsole.Warning($"[{Name}] Skipped restoring a ScreenOverlay texture: {ex.Message}");
-                }
-            }
-
-            originalOverlayTextures.Clear();
+            return null;
         }
 
-        private void DestroyReplacementTextures()
+        private static PlayMakerFSM FindFsmByName(GameObject go, string fsmName)
         {
-            foreach (KeyValuePair<string, Texture2D> pair in replacementTextures)
+            if (IsUnityObjectNull(go))
+                return null;
+
+            PlayMakerFSM[] fsms = go.GetComponents<PlayMakerFSM>();
+            for (int i = 0; i < fsms.Length; i++)
             {
-                if (!IsUnityObjectNull(pair.Value))
-                {
-                    try
-                    {
-                        UnityEngine.Object.Destroy(pair.Value);
-                    }
-                    catch
-                    {
-                    }
-                }
+                PlayMakerFSM fsm = fsms[i];
+                if (!IsUnityObjectNull(fsm) && FsmUtils.GetFsmName(fsm) == fsmName)
+                    return fsm;
             }
+
+            return null;
         }
 
-        private void LogUnmatchedTextures()
+        private static HutongGames.PlayMaker.FsmState FindState(PlayMakerFSM fsm, string stateName)
         {
-            foreach (string textureName in sceneTextureKeys)
+            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
+                return null;
+
+            HutongGames.PlayMaker.FsmState[] states = fsm.FsmStates;
+            for (int i = 0; i < states.Length; i++)
             {
-                if (matchedTextureNames.Contains(textureName))
-                    continue;
-
-                CoreConsole.Warning($"[{Name}] PNG did not match any loaded texture in {loadedSceneName}: {textureName}.png");
+                if (states[i] != null && states[i].Name == stateName)
+                    return states[i];
             }
-        }
 
-        public class ReplaceSetMaterialTexturesInStateAction : HutongGames.PlayMaker.FsmStateAction
-        {
-            public TextureReplacementSurface owner;
-            public GameObject target;
-            public string fsmName;
-            public string stateName;
-            public string label;
-
-            public override void OnEnter()
-            {
-                try
-                {
-                    if (owner != null)
-                        owner.ReplaceSetMaterialTexturesInState(target, fsmName, stateName, label);
-                }
-                catch (Exception ex)
-                {
-                    CoreConsole.Warning($"[TextureReplacementSurface] Dynamic SetMaterialTexture action failed ({label}): {ex.Message}");
-                }
-
-                Finish();
-            }
+            return null;
         }
 
         private static bool IsUnityObjectNull(UnityEngine.Object obj)
         {
             return ReferenceEquals(obj, null) || obj == null;
+        }
+
+        private bool IsReplacementSprite(Sprite sprite)
+        {
+            return !IsUnityObjectNull(sprite) && replacementSpriteSet.Contains(sprite);
+        }
+
+        private static int Count(Array values)
+        {
+            return values != null ? values.Length : 0;
         }
     }
 }

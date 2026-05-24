@@ -93,8 +93,8 @@ namespace MWC_Localization_Core
 
             if (!File.Exists(configPath))
             {
-                CoreConsole.Warning($"[LocalizationConfig] Config file not found: {configPath}");
-                CoreConsole.Warning("[LocalizationConfig] Using default configuration (no font mappings)");
+                CoreConsole.Warning($"[LocalizationConfig] Arquivo de configuração não encontrado: {configPath}");
+                CoreConsole.Warning("[LocalizationConfig] Usando configuração padrão (sem mapeamentos de fonte)");
                 return false;
             }
 
@@ -141,15 +141,15 @@ namespace MWC_Localization_Core
                     }
                 }
 
-                CoreConsole.Print($"[LocalizationConfig] Configuration loaded: {LanguageName} ({LanguageCode})");
-                CoreConsole.Print($"[LocalizationConfig] Font mappings: {FontMappings.Count}");
-                CoreConsole.Print($"[LocalizationConfig] Position adjustments: {TextAdjustments.Count} TextMesh, {GameObjectAdjustments.Count} GameObject");
+                CoreConsole.Print($"[LocalizationConfig] Configuração carregada: {LanguageName} ({LanguageCode})");
+                CoreConsole.Print($"[LocalizationConfig] Mapeamentos de fonte: {FontMappings.Count}");
+                CoreConsole.Print($"[LocalizationConfig] Ajustes de posição: {TextAdjustments.Count} TextMesh, {GameObjectAdjustments.Count} GameObject");
 
                 return true;
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Error($"[LocalizationConfig] Failed to load config: {ex.Message}");
+                CoreConsole.Error($"[LocalizationConfig] Falha ao carregar configuração: {ex.Message}");
                 return false;
             }
         }
@@ -222,7 +222,7 @@ namespace MWC_Localization_Core
             string[] parts = offsetString.Split(',');
             if (parts.Length < 3)
             {
-                CoreConsole.Warning($"[LocalizationConfig] Invalid adjustment format: '{offsetString}'. Expected at least X,Y,Z");
+                CoreConsole.Warning($"[LocalizationConfig] Formato de ajuste inválido: '{offsetString}'. Esperado pelo menos X,Y,Z");
                 return;
             }
 
@@ -262,7 +262,7 @@ namespace MWC_Localization_Core
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Warning($"[LocalizationConfig] Failed to parse position adjustment '{line}': {ex.Message}");
+                CoreConsole.Warning($"[LocalizationConfig] Falha ao interpretar ajuste de posição '{line}': {ex.Message}");
             }
         }
 
@@ -315,7 +315,7 @@ namespace MWC_Localization_Core
                     GameObject go = LocalizationUtils.FindGameObjectIncludingInactive(cond.Value);
                     if (go == null)
                     {
-                        CoreConsole.Print($"[LocalizationConfig] GameObjectEquals: '{cond.Value}' not present in this scene, skipping");
+                        CoreConsole.Print($"[LocalizationConfig] GameObjectEquals: '{cond.Value}' não está presente nesta cena, pulando");
                         continue;
                     }
 

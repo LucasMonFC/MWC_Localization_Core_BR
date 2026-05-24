@@ -122,7 +122,7 @@ namespace MWC_Localization_Core
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Error($"[FsmArrayTranslator] Error processing paths: {ex.Message}");
+                CoreConsole.Error($"[FsmArrayTranslator] Erro ao processar caminhos: {ex.Message}");
                 return 0;
             }
         }
@@ -147,7 +147,7 @@ namespace MWC_Localization_Core
 
                     int injected = SpliceTranslationActionsInto(state, go);
                     if (injected > 0)
-                        CoreConsole.Print($"[FsmArrayTranslator] Injected {injected} translate action(s) into {fsm.FsmName}/{state.Name}");
+                        CoreConsole.Print($"[FsmArrayTranslator] Injetou {injected} ação(ões) de tradução em {fsm.FsmName}/{state.Name}");
                 }
             }
         }
@@ -249,7 +249,7 @@ namespace MWC_Localization_Core
                 int translated = TranslateArrayListInPlace(proxies[i]._arrayList, teletextTranslations, sharedTranslations, objectPath);
                 if (translated > 0)
                 {
-                    CoreConsole.Print($"[FsmArrayTranslator] Translated live '{refName}' with {translated} items");
+                    CoreConsole.Print($"[FsmArrayTranslator] Traduziu '{refName}' ao vivo com {translated} itens");
                     totalTranslated += translated;
                 }
             }
@@ -322,12 +322,12 @@ namespace MWC_Localization_Core
                     {
                         int n = TranslateArrayListInPlace(target._arrayList, teletextTranslations, sharedTranslations, path);
                         if (n > 0)
-                            CoreConsole.Print($"[FsmArrayTranslator] '{label}' post-split: translated {n} entries");
+                            CoreConsole.Print($"[FsmArrayTranslator] '{label}' pós-divisão: traduziu {n} entradas");
                     }
                 }
                 catch (System.Exception ex)
                 {
-                    CoreConsole.Error($"[FsmArrayTranslator] OnEnter error ({label}): {ex.Message}");
+                    CoreConsole.Error($"[FsmArrayTranslator] Erro no OnEnter ({label}): {ex.Message}");
                 }
                 Finish();
             }
