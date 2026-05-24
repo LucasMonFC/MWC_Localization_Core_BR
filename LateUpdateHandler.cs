@@ -68,7 +68,7 @@ namespace MSC_Localization_Core
                 {
                     if (!loggedRetired[i])
                     {
-                        CoreConsole.Print($"[LateUpdateHandler] {s.Name} complete; retiring");
+                        CoreConsole.Print($"[LateUpdateHandler] {s.Name} completo; aposentando");
                         loggedRetired[i] = true;
                     }
                     continue;
@@ -90,7 +90,7 @@ namespace MSC_Localization_Core
                         {
                             int translated = s.MonitorTick(dt);
                             if (translated > 0)
-                                CoreConsole.Print($"[LateUpdateHandler] {s.Name}: translated {translated} item(s)");
+                                CoreConsole.Print($"[LateUpdateHandler] {s.Name}: traduziu {translated} itens");
                             nextTickTimes[i] = now + LocalizationConstants.ARRAY_MONITOR_INTERVAL;
                         }
                         break;
@@ -103,7 +103,7 @@ namespace MSC_Localization_Core
 
             if (allSlowRetired && !loggedAllRetired)
             {
-                CoreConsole.Print("[LateUpdateHandler] All Slow-cadence surfaces complete; scheduler retired for this scene");
+                CoreConsole.Print("[LateUpdateHandler] Todas as superfícies de cadência lenta concluídas; agendador aposentado para esta cena");
                 loggedAllRetired = true;
             }
         }

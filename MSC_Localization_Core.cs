@@ -11,8 +11,8 @@ namespace MSC_Localization_Core
         public override string ID => "MSC_Localization_Core_BR";
         public override string Name => "MSC_Localization_Core";
         public override string Author => "LucasMonOficial";
-        public override string Version => "1.0.9";
-        public override string Description => "Multi-language core localization framework for My Summer Car";
+        public override string Version => "1.1.0";
+        public override string Description => "Núcleo de localização multilíngue para My Summer Car";
         public override Game SupportedGames => Game.MySummerCar;
 
         private static readonly string[] MainTranslationFiles = new string[]
@@ -46,29 +46,33 @@ namespace MSC_Localization_Core
         private SettingsKeybind reloadKey;
         private SettingsCheckBox showDebugLogs;
         private SettingsCheckBox showWarningLogs;
+        private SettingsCheckBox loadTextureMods;
+        private TextureReplacementSurface textureReplacementSurface;
 
         public override void ModSetup()
         {
             SetupFunction(Setup.ModSettings, Mod_Settings);
             SetupFunction(Setup.OnMenuLoad, Mod_OnMenuLoad);
             SetupFunction(Setup.OnNewGame, Mod_OnNewGame);
+            SetupFunction(Setup.PreLoad, Mod_PreLoad);
             SetupFunction(Setup.PostLoad, Mod_PostLoad);
             SetupFunction(Setup.Update, Mod_Update);
         }
 
         private void Mod_Settings()
         {
-            Keybind.AddHeader("Localization Plugin Hotkeys");
-            reloadKey = Keybind.Add("reloadKey", "Reload Translations", KeyCode.F8);
+            Keybind.AddHeader("Atalhos do plugin de localização");
+            reloadKey = Keybind.Add("reloadKey", "Recarregar traduções", KeyCode.F8);
 
-            Settings.AddHeader("Miscellaneous Options");
-            showDebugLogs = Settings.AddCheckBox("showDebugLogs", "Show debug messages in console", false);
-            showWarningLogs = Settings.AddCheckBox("showWarningLogs", "Show warning / error messages in console", false);
+            Settings.AddHeader("Opções diversas");
+            showDebugLogs = Settings.AddCheckBox("showDebugLogs", "Mostrar mensagens de depuração no console", false);
+            showWarningLogs = Settings.AddCheckBox("showWarningLogs", "Mostrar avisos / erros no console", false);
+            loadTextureMods = Settings.AddCheckBox("loadTextureMods", "Carregar texturas de mods", false);
         }
 
         private void Mod_OnMenuLoad()
         {
-            ModConsole.Print($"[{Name}] Main Menu loaded - initializing localization core...");
+            ModConsole.Print($"[{Name}] Menu principal carregado - inicializando núcleo de localização...");
 
             translations = new TranslationDictionary();
             customFonts = new Dictionary<string, Font>();
@@ -94,6 +98,8 @@ namespace MSC_Localization_Core
                 translator,
                 ModLoader.GetModAssetsFolder(this));
 
+            textureReplacementSurface = new TextureReplacementSurface(() => loadTextureMods != null && loadTextureMods.GetValue());
+
             surfaces = new List<ITranslationSurface>
             {
                 new FsmGuiTranslator(),
@@ -102,13 +108,13 @@ namespace MSC_Localization_Core
                 new ArrayListProxyHandler(),
                 new FsmTextHook(),
                 new SubtitleTimingHandler(),
-                new TextureReplacementSurface(),
+                textureReplacementSurface,
             };
 
             for (int i = 0; i < surfaces.Count; i++)
                 surfaces[i].Initialize(ctx);
 
-            CoreConsole.Print($"[{Name}] Translating Main Menu...");
+            CoreConsole.Print($"[{Name}] Traduzindo Menu Principal...");
             TranslateScene();
             MarkSceneTranslated("MainMenu");
             RunSurfaceInitialPasses(null);
@@ -120,7 +126,7 @@ namespace MSC_Localization_Core
             if (!hasLoadedTranslations || translator == null)
                 return;
 
-            CoreConsole.Print($"[{Name}] New game started - translating available intro/loading text...");
+            CoreConsole.Print($"[{Name}] Novo jogo iniciado - traduzindo textos disponíveis da intro/carregamento...");
             LocalizationUtils.PruneCaches();
             translator.ClearRuntimeCaches();
             TranslateScene();
@@ -128,9 +134,15 @@ namespace MSC_Localization_Core
             config.ApplyGameObjectAdjustments();
         }
 
+        private void Mod_PreLoad()
+        {
+            if (textureReplacementSurface != null)
+                textureReplacementSurface.CaptureTextureTargetsBeforeMods();
+        }
+
         private void Mod_PostLoad()
         {
-            ModConsole.Print($"[{Name}] Game fully loaded - translating...");
+            ModConsole.Print($"[{Name}] Jogo totalmente carregado - traduzindo...");
             LocalizationUtils.PruneCaches();
             TranslateScene();
             MarkSceneTranslated("GAME");
@@ -179,14 +191,14 @@ namespace MSC_Localization_Core
                     lateUpdateHandler = null;
                 }
 
-                CoreConsole.Print($"[{Name}] Scene changed to '{sceneName}' - cleared caches");
+                CoreConsole.Print($"[{Name}] Cena alterada para '{sceneName}' - caches limpos");
             }
 
             // Initial translation pass for the current scene (covers hot reloads where
             // OnMenuLoad / PostLoad already fired but the scene was reset).
             if (sceneName == "MainMenu" && ShouldTranslateScene("MainMenu"))
             {
-                CoreConsole.Print($"[{Name}] Translating Main Menu...");
+                CoreConsole.Print($"[{Name}] Traduzindo Menu Principal...");
                 TranslateScene();
                 MarkSceneTranslated("MainMenu");
                 RunSurfaceInitialPasses(null);
@@ -194,15 +206,15 @@ namespace MSC_Localization_Core
             }
             else if (sceneName == "GAME" && ShouldTranslateScene("GAME"))
             {
-                CoreConsole.Print($"[{Name}] Translating Game scene...");
+                CoreConsole.Print($"[{Name}] Traduzindo cena do jogo...");
                 TranslateScene();
                 MarkSceneTranslated("GAME");
-                RunSurfaceInitialPasses("Initial ");
+                RunSurfaceInitialPasses("Inicial ");
                 config.ApplyGameObjectAdjustments();
             }
             else if (sceneName == "Ending" && ShouldTranslateScene("Ending"))
             {
-                CoreConsole.Print($"[{Name}] Translating Ending scene...");
+                CoreConsole.Print($"[{Name}] Traduzindo cena final...");
                 TranslateScene();
                 MarkSceneTranslated("Ending");
                 config.ApplyGameObjectAdjustments();
@@ -234,7 +246,7 @@ namespace MSC_Localization_Core
             {
                 int count = surfaces[i].InitialPass();
                 if (count > 0)
-                    CoreConsole.Print($"[{Name}] {logPrefix ?? string.Empty}{surfaces[i].Name}: translated {count}");
+                    CoreConsole.Print($"[{Name}] {logPrefix ?? string.Empty}{surfaces[i].Name}: traduziu {count}");
             }
         }
 
@@ -249,7 +261,7 @@ namespace MSC_Localization_Core
                     continue;
 
                 if (hook.ApplyForScene(sceneName))
-                    CoreConsole.Print($"[{Name}] FsmTextHook: applied hardcoded FSM translations in {sceneName}");
+                    CoreConsole.Print($"[{Name}] FsmTextHook: aplicou traduções FSM fixas em {sceneName}");
             }
         }
 
@@ -261,7 +273,7 @@ namespace MSC_Localization_Core
                 string path = Path.Combine(assets, fileName);
                 if (!File.Exists(path))
                 {
-                    CoreConsole.Warning($"[{Name}] Translation file not found: {path}");
+                    CoreConsole.Warning($"[{Name}] Arquivo de tradução não encontrado: {path}");
                     continue;
                 }
 
@@ -273,17 +285,17 @@ namespace MSC_Localization_Core
                 translations.LoadPatternsFromFile(path);
 
                 hasLoadedTranslations = true;
-                CoreConsole.Print($"[{Name}] Loaded {loaded.Count} translations from {fileName} ({translations.Count} total)");
+                CoreConsole.Print($"[{Name}] Carregou {loaded.Count} traduções de {fileName} ({translations.Count} no total)");
             }
         }
 
         bool LoadCustomFonts()
         {
-            CoreConsole.Print($"[{Name}] Loading fonts...");
+            CoreConsole.Print($"[{Name}] Carregando fontes...");
 
             if (config.FontMappings.Count == 0)
             {
-                CoreConsole.Print($"[{Name}] No font mappings configured - using default fonts");
+                CoreConsole.Print($"[{Name}] Nenhum mapeamento de fonte configurado - usando fontes padrão");
                 return false;
             }
 
@@ -292,12 +304,12 @@ namespace MSC_Localization_Core
                 if (fontBundle == null)
                 {
                     fontBundle = LoadAssets.LoadBundle(this, "fonts.unity3d");
-                    CoreConsole.Print($"[{Name}] Bundle loaded, result: {(fontBundle == null ? "NULL" : "NOT NULL")}");
+                    CoreConsole.Print($"[{Name}] Bundle carregado, resultado: {(fontBundle == null ? "NULL" : "NOT NULL")}");
                 }
 
                 if (fontBundle == null)
                 {
-                    CoreConsole.Warning($"[{Name}] Failed to load font bundle");
+                    CoreConsole.Warning($"[{Name}] Falha ao carregar bundle de fontes");
                     return false;
                 }
 
@@ -310,33 +322,33 @@ namespace MSC_Localization_Core
                     if (font != null)
                     {
                         customFonts[pair.Key] = font;
-                        CoreConsole.Print($"[{Name}] Loaded font: {pair.Value} for {pair.Key}");
+                        CoreConsole.Print($"[{Name}] Fonte carregada: {pair.Value} para {pair.Key}");
                     }
                     else
                     {
-                        CoreConsole.Warning($"[{Name}] Failed to load font asset: {pair.Value}");
+                        CoreConsole.Warning($"[{Name}] Falha ao carregar asset de fonte: {pair.Value}");
                     }
                 }
 
                 if (customFonts.Count > 0)
                 {
-                    CoreConsole.Print($"[{Name}] Loaded {customFonts.Count} custom fonts");
+                    CoreConsole.Print($"[{Name}] Carregou {customFonts.Count} fontes customizadas");
                     return true;
                 }
 
-                CoreConsole.Warning($"[{Name}] No fonts loaded from bundle");
+                CoreConsole.Warning($"[{Name}] Nenhuma fonte carregada do bundle");
                 return false;
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Error($"[{Name}] Font loading failed: {ex.Message}");
+                CoreConsole.Error($"[{Name}] Falha ao carregar fontes: {ex.Message}");
                 return false;
             }
         }
 
         void ReloadTranslations()
         {
-            CoreConsole.Print($"[{Name}] [F8] Reloading translations...");
+            CoreConsole.Print($"[{Name}] [F8] Recarregando traduções...");
 
             // Drop translation data
             translations.Clear();
@@ -382,7 +394,7 @@ namespace MSC_Localization_Core
                 currentScene = sceneName;
                 MarkSceneTranslated(sceneName);
                 if (sceneName != "Ending")
-                    RunSurfaceInitialPasses("Reload ");
+                    RunSurfaceInitialPasses("Recarregar ");
                 config.ApplyGameObjectAdjustments();
             }
 
@@ -393,7 +405,7 @@ namespace MSC_Localization_Core
                 lateUpdateHandler.Initialize(surfaces, () => HasSceneBeenTranslated("GAME"));
             }
 
-            CoreConsole.Print($"[{Name}] [F8] Reloaded {translations.Count} translations. Reapplied fonts/adjustments to {reappliedCount} TextMeshes.");
+            CoreConsole.Print($"[{Name}] [F8] Recarregou {translations.Count} traduções. Reaplicou fontes/ajustes em {reappliedCount} TextMeshes.");
         }
 
         void TranslateScene()
@@ -420,7 +432,7 @@ namespace MSC_Localization_Core
                     forcedFontAppliedCount++;
             }
 
-            CoreConsole.Print($"[{Name}] Scene translation complete: {translatedCount}/{allTextMeshes.Length} TextMesh objects translated, forced font pass: {forcedFontAppliedCount}");
+            CoreConsole.Print($"[{Name}] Tradução da cena concluída: {translatedCount}/{allTextMeshes.Length} objetos TextMesh traduzidos, passe de fonte forçada: {forcedFontAppliedCount}");
         }
     }
 }

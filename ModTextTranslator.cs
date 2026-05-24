@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -27,7 +28,6 @@ namespace MSC_Localization_Core
         private const string DeliveryJobsCanvasPath = "DeliveryJobs Canvas";
         private const string DeliveryJobsAccentFontName = "Alphabetized";
         private const string DeliveryJobsDestinationSignKeyPrefix = "DeliveryJobs|DestinationSign|";
-        private const int DeliveryJobsPackageTextMaxAttempts = 120;
 
         private sealed class TextMeshGroup
         {
@@ -87,16 +87,16 @@ namespace MSC_Localization_Core
         private int modsShopAttachAttempts;
         private int deliveryJobsAttachAttempts;
         private int deliveryJobsSignAttachAttempts;
-        private int deliveryJobsPackageTextAttempts;
+        private int deliveryJobsPackagePrefabHookAttempts;
         private bool dirtTrackAttached;
         private bool mscModApiShopAttached;
         private bool modsShopAttached;
         private bool deliveryJobsAttached;
         private bool deliveryJobsUiAttached;
         private bool deliveryJobsSignTextAttached;
-        private bool deliveryJobsPackageTextComplete;
+        private bool deliveryJobsPackagePrefabHooked;
         private bool hasSupportedModAssemblyLoaded;
-        private readonly HashSet<int> translatedDeliveryJobsPackageInfoText = new HashSet<int>();
+        private readonly Dictionary<int, float> deliveryJobsPackageInfoBaseCharacterSizes = new Dictionary<int, float>();
 
         public string Name { get { return "ModTextTranslator"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Slow; } }
@@ -122,12 +122,12 @@ namespace MSC_Localization_Core
 
         public int InitialPass()
         {
-            return TryAttach();
+            return TryAttach(true);
         }
 
         public int MonitorTick(float deltaTime)
         {
-            return TryAttach();
+            return TryAttach(false);
         }
 
         public void Reset()
@@ -144,16 +144,16 @@ namespace MSC_Localization_Core
             modsShopAttachAttempts = 0;
             deliveryJobsAttachAttempts = 0;
             deliveryJobsSignAttachAttempts = 0;
-            deliveryJobsPackageTextAttempts = 0;
+            deliveryJobsPackagePrefabHookAttempts = 0;
             dirtTrackAttached = false;
             mscModApiShopAttached = false;
             modsShopAttached = false;
             deliveryJobsAttached = false;
             deliveryJobsUiAttached = false;
             deliveryJobsSignTextAttached = false;
-            deliveryJobsPackageTextComplete = false;
+            deliveryJobsPackagePrefabHooked = false;
             hasSupportedModAssemblyLoaded = false;
-            translatedDeliveryJobsPackageInfoText.Clear();
+            deliveryJobsPackageInfoBaseCharacterSizes.Clear();
         }
 
         public void ClearTranslations()
@@ -161,7 +161,7 @@ namespace MSC_Localization_Core
             Reset();
         }
 
-        private int TryAttach()
+        private int TryAttach(bool includeDeliveryJobsPackageInfo)
         {
             string sceneName = Application.loadedLevelName;
             bool isGameScene = sceneName == "GAME";
@@ -181,7 +181,7 @@ namespace MSC_Localization_Core
                 attached += TryAttachDirtTrackUi();
                 attached += TryAttachMscModApiShopUi();
                 attached += TryAttachModsShopUi();
-                attached += TryAttachDeliveryJobsUi();
+                attached += TryAttachDeliveryJobsUi(includeDeliveryJobsPackageInfo);
             }
             return attached;
         }
@@ -359,7 +359,7 @@ namespace MSC_Localization_Core
             return attached;
         }
 
-        private int TryAttachDeliveryJobsUi()
+        private int TryAttachDeliveryJobsUi(bool includePackageInfo)
         {
             if (translations == null || !deliveryJobsAssemblyLoaded)
                 return 0;
@@ -367,8 +367,10 @@ namespace MSC_Localization_Core
             int attached = 0;
             attached += TryAttachDeliveryJobsCanvasUi();
             attached += TryAttachDeliveryJobsSignTextMeshes();
-            attached += TranslateDeliveryJobsPackageInfoText();
-            deliveryJobsAttached = deliveryJobsUiAttached && deliveryJobsSignTextAttached;
+            attached += TryHookDeliveryJobsPackagePrefab();
+            if (includePackageInfo)
+                attached += TranslateDeliveryJobsPackageInfoText();
+            deliveryJobsAttached = deliveryJobsUiAttached && deliveryJobsSignTextAttached && deliveryJobsPackagePrefabHooked;
             return attached;
         }
 
@@ -461,17 +463,61 @@ namespace MSC_Localization_Core
             return attached;
         }
 
-        private int TranslateDeliveryJobsPackageInfoText()
+        private int TryHookDeliveryJobsPackagePrefab()
         {
             if (translations == null
-                || deliveryJobsPackageTextComplete
-                || deliveryJobsPackageTextAttempts >= DeliveryJobsPackageTextMaxAttempts
+                || deliveryJobsPackagePrefabHooked
+                || deliveryJobsPackagePrefabHookAttempts >= MaxAttachAttempts
                 || !deliveryJobsAssemblyLoaded)
             {
                 return 0;
             }
 
-            deliveryJobsPackageTextAttempts++;
+            deliveryJobsPackagePrefabHookAttempts++;
+
+            Type storageType = FindLoadedType(DeliveryJobsAssemblyName, DeliveryJobsAssemblyName + ".Storage");
+            if (storageType == null)
+                return 0;
+
+            FieldInfo boxesSrcField = storageType.GetField("boxesSrc", BindingFlags.Public | BindingFlags.Static);
+            if (boxesSrcField == null)
+                return 0;
+
+            GameObject boxesSrc = boxesSrcField.GetValue(null) as GameObject;
+            if (boxesSrc == null || boxesSrc.transform == null)
+                return 0;
+
+            DeliveryJobsPackageInfoTranslator.Configure(translations);
+
+            int attached = 0;
+            for (int i = 0; i < boxesSrc.transform.childCount; i++)
+            {
+                Transform child = boxesSrc.transform.GetChild(i);
+                if (child == null || child.gameObject == null)
+                    continue;
+
+                DeliveryJobsPackageInfoTranslator component =
+                    child.gameObject.GetComponent<DeliveryJobsPackageInfoTranslator>();
+                if (component != null)
+                    continue;
+
+                child.gameObject.AddComponent<DeliveryJobsPackageInfoTranslator>();
+                attached++;
+            }
+
+            if (attached > 0)
+                deliveryJobsPackagePrefabHooked = true;
+
+            return attached;
+        }
+
+        private int TranslateDeliveryJobsPackageInfoText()
+        {
+            if (translations == null
+                || !deliveryJobsAssemblyLoaded)
+            {
+                return 0;
+            }
 
             MonoBehaviour[] behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
             if (behaviours == null || behaviours.Length == 0)
@@ -494,22 +540,18 @@ namespace MSC_Localization_Core
                 if (additionalInfo == null || additionalInfo.gameObject == null)
                     continue;
 
-                int instanceId = additionalInfo.GetInstanceID();
-                if (translatedDeliveryJobsPackageInfoText.Contains(instanceId))
-                    continue;
-
                 if (!ShouldTranslateDeliveryJobsPackageInfoText(additionalInfo))
+                {
+                    AdjustDeliveryJobsPackageInfoLayout(additionalInfo, behaviour.transform);
                     continue;
+                }
 
                 if (TranslateDeliveryJobsPackageInfoText(additionalInfo))
                 {
-                    translatedDeliveryJobsPackageInfoText.Add(instanceId);
+                    AdjustDeliveryJobsPackageInfoLayout(additionalInfo, behaviour.transform);
                     translatedCount++;
                 }
             }
-
-            if (translatedDeliveryJobsPackageInfoText.Count > 0)
-                deliveryJobsPackageTextComplete = true;
 
             return translatedCount;
         }
@@ -530,8 +572,19 @@ namespace MSC_Localization_Core
 
         private bool TranslateDeliveryJobsPackageInfoText(TextMesh textMesh)
         {
+            return TranslateDeliveryJobsPackageInfoText(textMesh, translations);
+        }
+
+        private static bool TranslateDeliveryJobsPackageInfoText(TextMesh textMesh, TranslationDictionary translations)
+        {
+            if (translations == null)
+                return false;
+
             string current = textMesh.text ?? string.Empty;
-            string translated = TranslateDeliveryJobsPackageInfoLines(current, LocalizationUtils.GetGameObjectPath(textMesh.gameObject));
+            string translated = TranslateDeliveryJobsPackageInfoLines(
+                current,
+                LocalizationUtils.GetGameObjectPath(textMesh.gameObject),
+                translations);
             if (translated == current)
                 return false;
 
@@ -539,7 +592,74 @@ namespace MSC_Localization_Core
             return true;
         }
 
-        private string TranslateDeliveryJobsPackageInfoLines(string text, string path)
+        private void AdjustDeliveryJobsPackageInfoLayout(TextMesh textMesh, Transform packageTransform)
+        {
+            if (textMesh == null)
+                return;
+
+            int instanceId = textMesh.GetInstanceID();
+            float baseCharacterSize;
+            if (!deliveryJobsPackageInfoBaseCharacterSizes.TryGetValue(instanceId, out baseCharacterSize))
+            {
+                baseCharacterSize = textMesh.characterSize;
+                deliveryJobsPackageInfoBaseCharacterSizes[instanceId] = baseCharacterSize;
+            }
+
+            if (packageTransform != null && packageTransform.parent != null)
+            {
+                textMesh.characterSize = baseCharacterSize;
+                return;
+            }
+
+            int longestLineLength = GetLongestPlainLineLength(textMesh.text);
+            float scale = 1f;
+            if (longestLineLength > 18)
+                scale = Mathf.Max(0.62f, 18f / longestLineLength);
+
+            textMesh.characterSize = baseCharacterSize * scale;
+        }
+
+        private static int GetLongestPlainLineLength(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return 0;
+
+            int longest = 0;
+            int current = 0;
+            bool insideTag = false;
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+                if (c == '<')
+                {
+                    insideTag = true;
+                    continue;
+                }
+                if (c == '>')
+                {
+                    insideTag = false;
+                    continue;
+                }
+                if (insideTag || c == '\r')
+                    continue;
+                if (c == '\n')
+                {
+                    if (current > longest)
+                        longest = current;
+                    current = 0;
+                    continue;
+                }
+
+                current++;
+            }
+
+            return current > longest ? current : longest;
+        }
+
+        private static string TranslateDeliveryJobsPackageInfoLines(
+            string text,
+            string path,
+            TranslationDictionary translations)
         {
             if (string.IsNullOrEmpty(text))
                 return text;
@@ -591,11 +711,11 @@ namespace MSC_Localization_Core
             bool deliveryJobsSignTextComplete = deliveryJobsSignTextAttached
                 || deliveryJobsSignAttachAttempts >= MaxAttachAttempts;
 
-            bool deliveryJobsPackageTextDone = deliveryJobsPackageTextComplete
-                || deliveryJobsPackageTextAttempts >= DeliveryJobsPackageTextMaxAttempts;
+            bool deliveryJobsPackagePrefabComplete = deliveryJobsPackagePrefabHooked
+                || deliveryJobsPackagePrefabHookAttempts >= MaxAttachAttempts;
 
             bool deliveryJobsComplete = !deliveryJobsAssemblyLoaded
-                || (deliveryJobsUiComplete && deliveryJobsSignTextComplete && deliveryJobsPackageTextDone);
+                || (deliveryJobsUiComplete && deliveryJobsSignTextComplete && deliveryJobsPackagePrefabComplete);
 
             return textMeshComplete && dirtTrackComplete && mscModApiShopComplete && modsShopComplete && deliveryJobsComplete;
         }
@@ -733,8 +853,62 @@ namespace MSC_Localization_Core
                 }
                 catch (Exception ex)
                 {
-                    CoreConsole.Warning("[ModTextTranslator] Failed translating " + path + ": " + ex.Message);
+                    CoreConsole.Warning("[ModTextTranslator] Falha ao traduzir " + path + ": " + ex.Message);
                 }
+            }
+        }
+
+        public sealed class DeliveryJobsPackageInfoTranslator : MonoBehaviour
+        {
+            private static TranslationDictionary translations;
+
+            public static void Configure(TranslationDictionary activeTranslations)
+            {
+                translations = activeTranslations;
+            }
+
+            private IEnumerator Start()
+            {
+                yield return null;
+                TranslateNow();
+            }
+
+            private void TranslateNow()
+            {
+                try
+                {
+                    if (translations == null)
+                        return;
+
+                    TextMesh additionalInfo = ResolveAdditionalInfo();
+                    if (additionalInfo == null || !ShouldTranslateDeliveryJobsPackageInfoText(additionalInfo))
+                        return;
+
+                    TranslateDeliveryJobsPackageInfoText(additionalInfo, translations);
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning("[ModTextTranslator] Falha ao traduzir etiqueta do DeliveryJobs: " + ex.Message);
+                }
+            }
+
+            private TextMesh ResolveAdditionalInfo()
+            {
+                MonoBehaviour[] behaviours = GetComponents<MonoBehaviour>();
+                for (int i = 0; i < behaviours.Length; i++)
+                {
+                    MonoBehaviour behaviour = behaviours[i];
+                    if (behaviour == null)
+                        continue;
+
+                    Type type = behaviour.GetType();
+                    if (!IsComponentType(type, DeliveryJobsPackageComponentName))
+                        continue;
+
+                    return GetFieldValue<TextMesh>(behaviour, type, "additionalInfo");
+                }
+
+                return null;
             }
         }
 

@@ -104,7 +104,7 @@ namespace MSC_Localization_Core
                         continue;
 
                     if (injected > 0)
-                        CoreConsole.Print($"[FsmArrayTranslator] Injected {injected} teletext translate action(s) under {path}");
+                        CoreConsole.Print($"[FsmArrayTranslator] Injetou {injected} ação(ões) de tradução do teletexto em {path}");
 
                     totalTranslated += TranslatePopulatedProxies(go);
                     processedPaths.Add(path);
@@ -114,7 +114,7 @@ namespace MSC_Localization_Core
             }
             catch (System.Exception ex)
             {
-                CoreConsole.Error($"[FsmArrayTranslator] Error processing teletext paths: {ex.Message}");
+                CoreConsole.Error($"[FsmArrayTranslator] Erro ao processar caminhos do teletexto: {ex.Message}");
                 return 0;
             }
         }
@@ -258,7 +258,7 @@ namespace MSC_Localization_Core
                 int translated = TranslateArrayListInPlace(proxy._arrayList, teletextTranslations, sharedTranslations);
                 if (translated > 0)
                 {
-                    CoreConsole.Print($"[FsmArrayTranslator] Translated live '{proxy.referenceName}' with {translated} items");
+                    CoreConsole.Print($"[FsmArrayTranslator] Traduziu ao vivo '{proxy.referenceName}' com {translated} itens");
                     totalTranslated += translated;
                 }
             }
@@ -328,12 +328,12 @@ namespace MSC_Localization_Core
                     {
                         int translated = TranslateArrayListInPlace(target._arrayList, teletextTranslations, sharedTranslations);
                         if (translated > 0)
-                            CoreConsole.Print($"[FsmArrayTranslator] '{label}' post-split: translated {translated} entries");
+                            CoreConsole.Print($"[FsmArrayTranslator] '{label}' após split: traduziu {translated} entradas");
                     }
                 }
                 catch (System.Exception ex)
                 {
-                    CoreConsole.Error($"[FsmArrayTranslator] OnEnter error ({label}): {ex.Message}");
+                    CoreConsole.Error($"[FsmArrayTranslator] Erro no OnEnter ({label}): {ex.Message}");
                 }
 
                 Finish();

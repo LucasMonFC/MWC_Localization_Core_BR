@@ -129,7 +129,7 @@ namespace MSC_Localization_Core
             int colonIndex = arrayKey.LastIndexOf(':');
             if (colonIndex <= 0)
             {
-                CoreConsole.Warning($"Invalid array key format (expected 'path:index'): {arrayKey}");
+                CoreConsole.Warning($"Formato de chave de array inválido (esperado 'path:index'): {arrayKey}");
                 return 0;
             }
 
@@ -142,7 +142,7 @@ namespace MSC_Localization_Core
 
                 if (!int.TryParse(arrayKey.Substring(colonIndex + 1), out componentIndex))
                 {
-                    CoreConsole.Warning($"Invalid component index in array key: {arrayKey}");
+                    CoreConsole.Warning($"Índice de componente inválido na chave de array: {arrayKey}");
                     return 0;
                 }
 
@@ -158,7 +158,7 @@ namespace MSC_Localization_Core
                 PlayMakerArrayListProxy[] proxies = obj.GetComponents<PlayMakerArrayListProxy>();
                 if (proxies == null || componentIndex >= proxies.Length)
                 {
-                    CoreConsole.Warning($"PlayMakerArrayListProxy[{componentIndex}] not found at {objectPath}");
+                    CoreConsole.Warning($"PlayMakerArrayListProxy[{componentIndex}] não encontrado em {objectPath}");
                     return 0;
                 }
 
@@ -194,7 +194,7 @@ namespace MSC_Localization_Core
 
             if (translatedCount > 0)
             {
-                CoreConsole.Print($"[ArrayListProxyHandler] Translated {translatedCount}/{arrayList.Count} items in {arrayKey}");
+                CoreConsole.Print($"[ArrayListProxyHandler] Traduziu {translatedCount}/{arrayList.Count} itens em {arrayKey}");
             }
 
             return translatedCount;
@@ -333,7 +333,7 @@ namespace MSC_Localization_Core
 
             if (fontsApplied > 0)
             {
-                CoreConsole.Print($"[ArrayListProxyHandler] Applied Custom font to {fontsApplied} TextMesh components ({completedParentPaths.Count}/{parentSearchPaths.Count} paths complete)");
+                CoreConsole.Print($"[ArrayListProxyHandler] Aplicou fonte customizada em {fontsApplied} componentes TextMesh ({completedParentPaths.Count}/{parentSearchPaths.Count} caminhos completos)");
             }
 
             return fontsApplied;
