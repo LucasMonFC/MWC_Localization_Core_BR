@@ -1124,7 +1124,17 @@ namespace MSC_Localization_Core
             if (translations.TryGetExact(current, out translated))
                 return translated;
 
-            translated = translations.TryMatchPattern(current, GetPath(text));
+            string path = GetPath(text);
+            if (current.IndexOf('\n') >= 0)
+            {
+                translated = TryTranslateUiTextByLines(current, path, translations);
+                if (translated != null)
+                    return translated;
+
+                return null;
+            }
+
+            translated = TryTranslateUiLine(current, path, translations);
             if (translated != null)
                 return translated;
 
@@ -1132,28 +1142,21 @@ namespace MSC_Localization_Core
             if (translated != null)
                 return translated;
 
-            translated = TryTranslateUiTextByLines(current, text, translations);
-            if (translated != null)
-                return translated;
-
             return null;
         }
 
-        private static string TryTranslateUiTextByLines(string current, Text text, TranslationDictionary translations)
+        private static string TryTranslateUiTextByLines(string current, string path, TranslationDictionary translations)
         {
             if (string.IsNullOrEmpty(current) || current.IndexOf('\n') < 0)
                 return null;
 
             string[] lines = current.Split('\n');
             bool changed = false;
-            string path = GetPath(text);
 
             for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i].Replace("\r", string.Empty);
-                string translated;
-                if (!translations.TryGetExact(line, out translated))
-                    translated = translations.TryMatchPattern(line, path);
+                string translated = TryTranslateUiLine(line, path, translations);
 
                 if (translated == null || translated == line)
                     continue;
@@ -1163,6 +1166,43 @@ namespace MSC_Localization_Core
             }
 
             return changed ? string.Join("\n", lines) : null;
+        }
+
+        private static string TryTranslateUiLine(string line, string path, TranslationDictionary translations)
+        {
+            if (string.IsNullOrEmpty(line) || translations == null)
+                return null;
+
+            string translated;
+            if (translations.TryGetExact(line, out translated))
+                return translated;
+
+            translated = TryTranslateColonPrefix(line, translations);
+            if (translated != null)
+                return translated;
+
+            return translations.TryMatchPattern(line, path);
+        }
+
+        private static string TryTranslateColonPrefix(string line, TranslationDictionary translations)
+        {
+            int colonIndex = line.IndexOf(':');
+            if (colonIndex <= 0)
+                return null;
+
+            string prefix = line.Substring(0, colonIndex).TrimEnd();
+            if (string.IsNullOrEmpty(prefix))
+                return null;
+
+            string translatedPrefix;
+            if (!translations.TryGetExact(prefix, out translatedPrefix)
+                || string.IsNullOrEmpty(translatedPrefix)
+                || translatedPrefix == prefix)
+            {
+                return null;
+            }
+
+            return translatedPrefix + line.Substring(colonIndex);
         }
 
         private static string TryTranslateRichQuantity(string current, Text text, TranslationDictionary translations)

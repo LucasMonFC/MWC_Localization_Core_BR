@@ -154,12 +154,14 @@ Delivery = Entrega
 <color\=magenta>Waiting for delivery...</color> = <color=magenta>Aguardando entrega...</color>
 You delivered required package. Here are some stats = Você entregou o pacote necessário. Aqui estão alguns dados
 Damage: <b><color\=red>{0}</color>%</b> = Dano: <b><color=red>{0}</color>%</b>
-Est. Payment: <color\=green>{0}</color> MK = Pagamento estimado: <color=green>{0}</color> MK
 Fine: <color\=Red>-{0}</color> MK (Missing Boxes) = Multa: <color=Red>-{0}</color> MK (Caixas faltando)
 Fine: <color\=Red>-{0}</color> MK (Damage) = Multa: <color=Red>-{0}</color> MK (Dano)
 Fine: <color\=Red>-{0}</color> MK (P. Tax) = Multa: <color=Red>-{0}</color> MK (Taxa postal)
 Payment: <color\=green>{0}</color> MK = Pagamento: <color=green>{0}</color> MK
 Payment: <color\=red>{0}</color> MK = Pagamento: <color=red>{0}</color> MK
+Est. Payment: <color\=green>{0}</color> MK = Pagamento estimado: <color=green>{0}</color> MK
+Payment: {0} MK = Pagamento: {0} MK
+Est. Payment: {0} MK = Pagamento estimado: {0} MK
 Good job = Bom trabalho
 <color\=orange>Be a little more careful next time</color> = <color=orange>Tenha um pouco mais de cuidado da próxima vez</color>
 <color\=red>Start taking out the money, you're paying for that.</color> = <color=red>Vá tirando o dinheiro, você vai pagar por isso.</color>
@@ -177,6 +179,7 @@ SCREW CAP = TAMPA DO COMBUSTÍVEL
 TANGERINE PHONE HOLDER = SUPORTE DO TELEFONE
 AND CAR KEYS = E CHAVE DO CARRO
 Sunvisor = QUEBRA-SOL
+TAKE MONEY {0} MK AND CAR KEYS = PEGUE O DINHEIRO {0} MK E AS CHAVES DO CARRO
 
 //Trailer Hitch System
 Connect = CONECTAR
@@ -2212,7 +2215,7 @@ YOU LOST YOUR BAIT... = VOCÊ PERDEU A ISCA...
 YOU CAUGHT ONE! = VOCÊ PEGOU UM!
 IT'S EMPTY = ESTÁ VAZIO
 Perch = PERCA
-Pike = LÚCIO
+Pike = PEIXE
 Trout = TRUTA
 Salmon = SALMÃO
 Bottle = GARRAFA
@@ -2223,11 +2226,11 @@ perch = PERCA
 trout = TRUTA
 salmon = SALMÃO
 Trophy Perch[{0}kg] = PERCA TROFÉU [{0} kg]
-Trophy Pike[{0}kg] = LÚCIO TROFÉU [{0} kg]
+Trophy Pike[{0}kg] = PEIXE TROFÉU [{0} kg]
 Trophy Trout[{0}kg] = TRUTA TROFÉU [{0} kg]
 Trophy Salmon[{0}kg] = SALMÃO TROFÉU [{0} kg]
 Perch[{0}kg] = PERCA [{0} kg]
-Pike[{0}kg] = LÚCIO [{0} kg]
+Pike[{0}kg] = PEIXE [{0} kg]
 Trout[{0}kg] = TRUTA [{0} kg]
 Salmon[{0}kg] = SALMÃO [{0} kg]
 Cooked Perch[{0}kg] = PERCA COZIDA [{0} kg]
@@ -2247,36 +2250,36 @@ Sold {0} for {1}MK = Vendeu {0} por {1} MK
 Won the derby with {0} and got {1}MK! = Venceu o derby com {0} e ganhou {1} MK!
 {0} did not win the derby. Got {1}MK = {0} não venceu o derby. Recebeu {1} MK
 Caught a Perch[{0}kg]! = Você pescou uma perca de {0} kg!
-Caught a Pike[{0}kg]! = Você pescou um lúcio de {0} kg!
+Caught a Pike[{0}kg]! = Você pescou um peixe de {0} kg!
 Caught a Trout[{0}kg]! = Você pescou uma truta de {0} kg!
 Caught a Salmon[{0}kg]! = Você pescou um salmão de {0} kg!
 Caught a Trophy Perch[{0}kg]! = Você pescou uma perca troféu de {0} kg!
-Caught a Trophy Pike[{0}kg]! = Você pescou um lúcio troféu de {0} kg!
+Caught a Trophy Pike[{0}kg]! = Você pescou um peixe troféu de {0} kg!
 Caught a Trophy Trout[{0}kg]! = Você pescou uma truta troféu de {0} kg!
 Caught a Trophy Salmon[{0}kg]! = Você pescou um salmão troféu de {0} kg!
 Caught a Empty Bottle! = Você pescou uma garrafa vazia!
 Sold Perch[{0}kg] for {1}MK = Vendeu uma perca de {0} kg por {1} MK
-Sold Pike[{0}kg] for {1}MK = Vendeu um lúcio de {0} kg por {1} MK
+Sold Pike[{0}kg] for {1}MK = Vendeu um peixe de {0} kg por {1} MK
 Sold Trout[{0}kg] for {1}MK = Vendeu uma truta de {0} kg por {1} MK
 Sold Salmon[{0}kg] for {1}MK = Vendeu um salmão de {0} kg por {1} MK
 Sold Trophy Perch[{0}kg] for {1}MK = Vendeu uma perca troféu de {0} kg por {1} MK
-Sold Trophy Pike[{0}kg] for {1}MK = Vendeu um lúcio troféu de {0} kg por {1} MK
+Sold Trophy Pike[{0}kg] for {1}MK = Vendeu um peixe troféu de {0} kg por {1} MK
 Sold Trophy Trout[{0}kg] for {1}MK = Vendeu uma truta troféu de {0} kg por {1} MK
 Sold Trophy Salmon[{0}kg] for {1}MK = Vendeu um salmão troféu de {0} kg por {1} MK
 Won the derby with Perch[{0}kg] and got {1}MK! = Venceu o derby com uma perca de {0} kg e ganhou {1} MK!
-Won the derby with Pike[{0}kg] and got {1}MK! = Venceu o derby com um lúcio de {0} kg e ganhou {1} MK!
+Won the derby with Pike[{0}kg] and got {1}MK! = Venceu o derby com um peixe de {0} kg e ganhou {1} MK!
 Won the derby with Trout[{0}kg] and got {1}MK! = Venceu o derby com uma truta de {0} kg e ganhou {1} MK!
 Won the derby with Salmon[{0}kg] and got {1}MK! = Venceu o derby com um salmão de {0} kg e ganhou {1} MK!
 Won the derby with Trophy Perch[{0}kg] and got {1}MK! = Venceu o derby com uma perca troféu de {0} kg e ganhou {1} MK!
-Won the derby with Trophy Pike[{0}kg] and got {1}MK! = Venceu o derby com um lúcio troféu de {0} kg e ganhou {1} MK!
+Won the derby with Trophy Pike[{0}kg] and got {1}MK! = Venceu o derby com um peixe troféu de {0} kg e ganhou {1} MK!
 Won the derby with Trophy Trout[{0}kg] and got {1}MK! = Venceu o derby com uma truta troféu de {0} kg e ganhou {1} MK!
 Won the derby with Trophy Salmon[{0}kg] and got {1}MK! = Venceu o derby com um salmão troféu de {0} kg e ganhou {1} MK!
 Perch[{0}kg] did not win the derby. Got {1}MK = A perca de {0} kg não venceu o derby. Recebeu {1} MK
-Pike[{0}kg] did not win the derby. Got {1}MK = O lúcio de {0} kg não venceu o derby. Recebeu {1} MK
+Pike[{0}kg] did not win the derby. Got {1}MK = O peixe de {0} kg não venceu o derby. Recebeu {1} MK
 Trout[{0}kg] did not win the derby. Got {1}MK = A truta de {0} kg não venceu o derby. Recebeu {1} MK
 Salmon[{0}kg] did not win the derby. Got {1}MK = O salmão de {0} kg não venceu o derby. Recebeu {1} MK
 Trophy Perch[{0}kg] did not win the derby. Got {1}MK = A perca troféu de {0} kg não venceu o derby. Recebeu {1} MK
-Trophy Pike[{0}kg] did not win the derby. Got {1}MK = O lúcio troféu de {0} kg não venceu o derby. Recebeu {1} MK
+Trophy Pike[{0}kg] did not win the derby. Got {1}MK = O peixe troféu de {0} kg não venceu o derby. Recebeu {1} MK
 Trophy Trout[{0}kg] did not win the derby. Got {1}MK = A truta troféu de {0} kg não venceu o derby. Recebeu {1} MK
 Trophy Salmon[{0}kg] did not win the derby. Got {1}MK = O salmão troféu de {0} kg não venceu o derby. Recebeu {1} MK
 OPEN = ABERTO
@@ -2294,7 +2297,7 @@ Winning Catch: = Captura vencedora:
 1000mk bonus = Bônus de 1000 mk
 5 am - 9 pm = 5h - 21h
 Perch:     40mk = Perca:      40 mk
-Pike:        65mk = Lúcio:       65 mk
+Pike:        65mk = Peixe:       65 mk
 Trout:      90mk = Truta:       90 mk
 Salmon:  120mk = Salmão:   120 mk
 Prices may vary = Os preços variam
@@ -2523,6 +2526,10 @@ Temperature set to: Cool. = "Temperatura: Resfriar.
 
 //Final Lista de MODs
 
-//Tradução de pagamentos para MODs
+//Tradução de pagamentos
 BUY {0} MK = PAGAR {0} MK
-PAY {0} MK = PAGUE {0} MK
+PRICE TOTAL: {0} MK = PREÇO TOTAL: {0} MK
+AD DELIVERY PAYMENT {0} MK = PAGAMENTO DE ENTREGA DE ANÚNCIOS {0} MK
+CONDITION {0} = CONDIÇÃO {0}
+TAKE MONEY {0} MK  = PEGUE O DINHEIRO {0} MK
+PRICE MONEY {0} MK = DINHEIRO DO PRÊMIO {0} MK

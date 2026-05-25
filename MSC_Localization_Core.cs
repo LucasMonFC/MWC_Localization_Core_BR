@@ -11,7 +11,7 @@ namespace MSC_Localization_Core
         public override string ID => "MSC_Localization_Core_BR";
         public override string Name => "MSC_Localization_Core";
         public override string Author => "LucasMonOficial";
-        public override string Version => "1.1.0";
+        public override string Version => "1.1.1";
         public override string Description => "Núcleo de localização multilíngue para My Summer Car";
         public override Game SupportedGames => Game.MySummerCar;
 
