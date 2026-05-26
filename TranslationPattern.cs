@@ -121,6 +121,62 @@ namespace MSC_Localization_Core
             return parts.ToArray();
         }
 
+        public bool TryGetSingleSlotPieceTranslation(string sourceLeft, string sourceRight, out string translationLeft, out string translationRight)
+        {
+            translationLeft = null;
+            translationRight = null;
+
+            if (Mode != TranslationMode.FsmPattern && Mode != TranslationMode.FsmPatternWithTranslation)
+                return false;
+
+            if (originalParts == null || originalParts.Length != 2)
+                return false;
+
+            if (CountOccurrences(OriginalPattern, "{0}") != 1 || CountOccurrences(TranslatedTemplate, "{0}") != 1)
+                return false;
+
+            if (OriginalPattern.IndexOf("{1}", System.StringComparison.Ordinal) >= 0
+                || OriginalPattern.IndexOf("{2}", System.StringComparison.Ordinal) >= 0
+                || TranslatedTemplate.IndexOf("{1}", System.StringComparison.Ordinal) >= 0
+                || TranslatedTemplate.IndexOf("{2}", System.StringComparison.Ordinal) >= 0)
+            {
+                return false;
+            }
+
+            if (!PieceMatches(sourceLeft, originalParts[0]) || !PieceMatches(sourceRight, originalParts[1]))
+                return false;
+
+            int translationSlot = TranslatedTemplate.IndexOf("{0}", System.StringComparison.Ordinal);
+            translationLeft = TranslatedTemplate.Substring(0, translationSlot).Trim();
+            translationRight = TranslatedTemplate.Substring(translationSlot + 3).Trim();
+            return true;
+        }
+
+        private static bool PieceMatches(string source, string patternPart)
+        {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(patternPart))
+                return false;
+
+            return LocalizationUtils.FormatUpperKey(source.Trim())
+                == LocalizationUtils.FormatUpperKey(patternPart.Trim());
+        }
+
+        private static int CountOccurrences(string haystack, string needle)
+        {
+            if (string.IsNullOrEmpty(haystack) || string.IsNullOrEmpty(needle))
+                return 0;
+
+            int count = 0;
+            int index = 0;
+            while ((index = haystack.IndexOf(needle, index, System.StringComparison.Ordinal)) >= 0)
+            {
+                count++;
+                index += needle.Length;
+            }
+
+            return count;
+        }
+
         /// <summary>
         /// Check if this pattern matches the given text and path
         /// </summary>

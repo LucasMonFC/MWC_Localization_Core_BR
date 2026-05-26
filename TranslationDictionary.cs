@@ -99,6 +99,23 @@ namespace MSC_Localization_Core
             return entries.TryGetValue(normalizedKey, out value);
         }
 
+        public bool TryGetPatternPieceTranslation(string sourceLeft, string sourceRight, out string translationLeft, out string translationRight)
+        {
+            translationLeft = null;
+            translationRight = null;
+
+            if (string.IsNullOrEmpty(sourceLeft) || string.IsNullOrEmpty(sourceRight))
+                return false;
+
+            for (int i = 0; i < patterns.Count; i++)
+            {
+                if (patterns[i].TryGetSingleSlotPieceTranslation(sourceLeft, sourceRight, out translationLeft, out translationRight))
+                    return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Pattern-only lookup. Returns null on miss.
         /// </summary>

@@ -449,6 +449,8 @@ namespace MSC_Localization_Core
             HutongGames.PlayMaker.FsmString[] parts = stringPartsValue as HutongGames.PlayMaker.FsmString[];
             if (parts != null)
             {
+                changed |= TranslateBuildStringPatternPieces(parts);
+
                 for (int i = 0; i < parts.Length; i++)
                 {
                     changed |= TranslateFsmString(parts[i], target);
@@ -460,6 +462,8 @@ namespace MSC_Localization_Core
             string[] literalParts = stringPartsValue as string[];
             if (literalParts == null)
                 return false;
+
+            changed |= TranslateBuildStringPatternPieces(literalParts);
 
             for (int i = 0; i < literalParts.Length; i++)
             {
@@ -474,6 +478,118 @@ namespace MSC_Localization_Core
                 stringPartsField.SetValue(action, literalParts);
 
             return changed;
+        }
+
+        private bool TranslateBuildStringPatternPieces(HutongGames.PlayMaker.FsmString[] parts)
+        {
+            if (parts == null || translations == null)
+                return false;
+
+            bool changed = false;
+            bool[] translatedParts = new bool[parts.Length];
+
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (translatedParts[i] || parts[i] == null || string.IsNullOrEmpty(parts[i].Value))
+                    continue;
+
+                for (int j = i + 1; j < parts.Length; j++)
+                {
+                    if (translatedParts[j] || parts[j] == null || string.IsNullOrEmpty(parts[j].Value))
+                        continue;
+
+                    string translationLeft;
+                    string translationRight;
+                    if (!translations.TryGetPatternPieceTranslation(parts[i].Value, parts[j].Value, out translationLeft, out translationRight))
+                        continue;
+
+                    string newLeft = PreserveOuterWhitespace(parts[i].Value, translationLeft);
+                    string newRight = PreserveOuterWhitespace(parts[j].Value, translationRight);
+
+                    if (parts[i].Value != newLeft)
+                    {
+                        parts[i].Value = newLeft;
+                        changed = true;
+                    }
+
+                    if (parts[j].Value != newRight)
+                    {
+                        parts[j].Value = newRight;
+                        changed = true;
+                    }
+
+                    translatedParts[i] = true;
+                    translatedParts[j] = true;
+                    break;
+                }
+            }
+
+            return changed;
+        }
+
+        private bool TranslateBuildStringPatternPieces(string[] parts)
+        {
+            if (parts == null || translations == null)
+                return false;
+
+            bool changed = false;
+            bool[] translatedParts = new bool[parts.Length];
+
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (translatedParts[i] || string.IsNullOrEmpty(parts[i]))
+                    continue;
+
+                for (int j = i + 1; j < parts.Length; j++)
+                {
+                    if (translatedParts[j] || string.IsNullOrEmpty(parts[j]))
+                        continue;
+
+                    string translationLeft;
+                    string translationRight;
+                    if (!translations.TryGetPatternPieceTranslation(parts[i], parts[j], out translationLeft, out translationRight))
+                        continue;
+
+                    string newLeft = PreserveOuterWhitespace(parts[i], translationLeft);
+                    string newRight = PreserveOuterWhitespace(parts[j], translationRight);
+
+                    if (parts[i] != newLeft)
+                    {
+                        parts[i] = newLeft;
+                        changed = true;
+                    }
+
+                    if (parts[j] != newRight)
+                    {
+                        parts[j] = newRight;
+                        changed = true;
+                    }
+
+                    translatedParts[i] = true;
+                    translatedParts[j] = true;
+                    break;
+                }
+            }
+
+            return changed;
+        }
+
+        private static string PreserveOuterWhitespace(string original, string replacement)
+        {
+            if (string.IsNullOrEmpty(original) || replacement == null)
+                return replacement;
+
+            int leading = 0;
+            while (leading < original.Length && char.IsWhiteSpace(original[leading]))
+                leading++;
+
+            int trailing = original.Length - 1;
+            while (trailing >= leading && char.IsWhiteSpace(original[trailing]))
+                trailing--;
+
+            string prefix = leading > 0 ? original.Substring(0, leading) : string.Empty;
+            string suffix = trailing < original.Length - 1 ? original.Substring(trailing + 1) : string.Empty;
+            return prefix + replacement + suffix;
         }
 
         private bool TranslateArrayListGetProxy(object action, FsmTarget target)
