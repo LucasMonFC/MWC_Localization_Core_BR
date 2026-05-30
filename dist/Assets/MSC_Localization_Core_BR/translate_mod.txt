@@ -731,7 +731,7 @@ REMOVE HEADLAMP = REMOVER LANTERNA DE CABEÇA
 "Damn, I was kinda scared you'll sell me smelly meat, But turns out it was the best meat I’ve ever eaten. Good job my friend!" = "Droga, eu estava com medo de você me vender carne estragada, mas descobri que foi a melhor carne que já comi. Bom trabalho, meu amigo!"
 "The bag had everything I asked for, thank you! Here's the money." = "A bolsa tinha tudo que eu pedi, obrigado! Aqui está o dinheiro."
 "Wow, is that the shop for me? Thank you so much! Wait, I'll get you a reward." = "Uau, esta compra e para mim? Muito obrigado! Espere, vou te dar uma recompensa."
-"I usually take food with myself, but today I forgot. Is there any chance you could go and buy me some sausages, macarons and chips? I would really appreciate that" = "Costumo levar comida comigo, mas hoje esqueci. Existe alguma chance de você ir me \ncomprar algumas salsichas, macarrão e batatas fritas? Eu realmente apreciaria isso."
+"I usually take food with myself, but today I forgot. Is there any chance you could go and buy me some sausages, macarons and chips? I would really appreciate that" = "Costumo levar comida comigo, mas hoje esqueci. Existe alguma chance de você ir me \ncomprar algumas salsichas, macarrão e batata chips? Eu realmente apreciaria isso."
 "You know, I'm here only on weekends, and since I have opened as long as Teimo has, I can't go shopping there." = "Sabe, só estou aqui nos finais de semana e como estou aberto há tanto tempo quanto o Teimo, não posso fazer compras lá."
 "You bought me some extra stuff, thank you, I really appreciate that! Here you have some bigger reward" = "Você me comprou algumas coisas extras, obrigado, eu realmente aprecio isso! Aqui você tem uma recompensa maior"
 "Eh, you didn't quite get what I asked for. Take it back, I don't want it." = "Eh, você não conseguiu o que eu pedi. Retire, eu não quero."
@@ -2538,8 +2538,4 @@ Temperature set to: Cool. = "Temperatura: Resfriar.
 
 //Tradução de pagamentos
 BUY {0} MK = PAGAR {0} MK
-PRICE TOTAL: {0} MK = PREÇO TOTAL: {0} MK
-AD DELIVERY PAYMENT {0} MK = PAGAMENTO DE ENTREGA DE ANÚNCIOS {0} MK
-CONDITION {0} = CONDIÇÃO {0}
 TAKE MONEY {0} MK  = PEGUE O DINHEIRO {0} MK
-PRICE MONEY {0} MK = DINHEIRO DO PRÊMIO {0} MK

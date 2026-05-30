@@ -118,6 +118,44 @@ namespace MSC_Localization_Core
             AddTargetRule(byKey, "Sheets/Arrestwarrant/Texts/Description", "", "State 1", 2, "n. 180cm,");
             AddTargetRule(byKey, "Sheets/Arrestwarrant/Texts/Description", "", "State 1", 2, "kg / likainen");
 
+            // Payment
+            AddTargetRule(byKey, "STORE/StoreCashRegister/Register", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "REPAIRSHOP/LOD/Store/ShopCashRegister/Register", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "INSPECTION/LOD/inspection_desk/InspectionCashRegister/Register", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/PayMoneyAdvert", "", "", -1, "AD DELIVERY PAYMENT");
+            AddTargetRule(byKey, "PLAYER/Pivot/AnimPivot/Camera/FPSCamera/2Spanner/Pivot/Ruler", "", "", -1, "CONDITION");
+            AddTargetRule(byKey, "RALLY/Sunday/FinishArea/Stuff/PayMoney", "", "", -1, "PRICE MONEY");
+            AddTargetRule(byKey, "JOBS/Farm/Farmer/Walker/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/Mummola/LOD/GrannyTalking/Granny/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit1/LOD/ShitNPC/ShitMan1/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit2/LOD/ShitNPC/ShitMan2/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit3/LOD/ShitNPC/ShitMan3/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit4/LOD/ShitNPC/ShitMan4/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit5/LOD/ShitNPC/ShitMan5/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseDrunk/Moving/JokkeHiker1/Pivot/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "KILJUGUY/HikerPivot/JokkeHiker2/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseDrunk/BeerCampOld/BeerCamp/KiljuBuyer/Char/skeleton/pelvis/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseWood1/LOD/NPC/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "YARD/UNCLE/UncleWalking/Uncle/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "REPAIRSHOP/JunkYardJob/PayMoney", "", "", -1, "MONEY");
+            AddTargetRule(byKey, "JOBS/StrawberryField/LOD/Functions/Money", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "CABIN/Cabin/Ventti/Table/GAME/Gamestuff/Stand", "", "", -1, "STAND AT");
+            AddTargetRule(byKey, "CABIN/Cabin/Ventti/Table/GAME/Gamestuff/Bet", "", "", -1, "CURRENT BET");
+
+            // STORE: product prices
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/Sausages", "", "Init", 6, "SAUSAGES");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/Beer", "", "Init", 6, "BEER");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/MacaronBox", "", "Init", 6, "MACARON BOX");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/Pizza", "", "Init", 6, "PIZZA");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/Chips", "", "Init", 6, "CHIPS");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/Juice", "", "Init", 6, "JUICE CONCENTRATE");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/Yeast", "", "Init", 6, "YEAST");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/Sugar", "", "Init", 6, "SUGAR");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/Coffee", "", "Init", 6, "COFFEE");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/FoodProducts/Milk", "", "Init", 6, "MILK");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/CarProducts/TwoStroke", "", "Init", 6, "TWO STROKE FUEL");
+            AddTargetRule(byKey, "STORE/LOD/ActivateStore/CarProducts/Sparkplugs", "", "Init", 6, "SPARK PLUGS");
+
             // COMPUTER: POS boot / shell command output
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/BootSequence", "", "State 1", 0, "Starting RS-POS...");
             AddTargetRule(byKey, "YARD/Building/BEDROOM1/COMPUTER/SYSTEM/POS/BootSequence", "", "State 3", 0, "HIMEM is testing extended memory...done.");

@@ -1097,10 +1097,35 @@ namespace MSC_Localization_Core
                 if (!HasTranslationBoundary(value, index, rule.Source))
                     continue;
 
+                if (IsAlreadyTranslatedOccurrence(value, index, rule))
+                    continue;
+
                 return rule;
             }
 
             return null;
+        }
+
+        private static bool IsAlreadyTranslatedOccurrence(string value, int sourceIndex, FsmRule rule)
+        {
+            if (string.IsNullOrEmpty(value) || rule == null || string.IsNullOrEmpty(rule.Source) || string.IsNullOrEmpty(rule.Translation))
+                return false;
+
+            int translationSourceIndex = 0;
+            while ((translationSourceIndex = rule.Translation.IndexOf(rule.Source, translationSourceIndex, System.StringComparison.OrdinalIgnoreCase)) >= 0)
+            {
+                int translationStart = sourceIndex - translationSourceIndex;
+                if (translationStart >= 0
+                    && translationStart + rule.Translation.Length <= value.Length
+                    && string.Compare(value, translationStart, rule.Translation, 0, rule.Translation.Length, System.StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    return true;
+                }
+
+                translationSourceIndex += rule.Source.Length;
+            }
+
+            return false;
         }
 
         private static bool MatchesAt(string value, int index, string source)
@@ -1390,6 +1415,7 @@ namespace MSC_Localization_Core
                 || name == "fsmName"
                 || name == "variableName"
                 || name == "stringVariable"
+                || name == "stringParts"
                 || name == "result"
                 || name == "storeResult"
                 || name == "output"
