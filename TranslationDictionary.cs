@@ -206,11 +206,8 @@ namespace MSC_Localization_Core
             if (equalsIndex <= 0)
                 return false;
 
-            string original = line.Substring(0, equalsIndex).Trim().ToUpperInvariant();
-            string translation = line.Substring(equalsIndex + 1).Trim();
-
-            original = TranslationFileParser.UnescapeString(original);
-            translation = TranslationFileParser.UnescapeString(translation);
+            string original = TranslationFileParser.UnescapeString(line.Substring(0, equalsIndex).Trim()).ToUpperInvariant();
+            string translation = TranslationFileParser.UnescapeString(line.Substring(equalsIndex + 1).Trim());
 
             if (string.IsNullOrEmpty(original) || string.IsNullOrEmpty(translation))
                 return false;

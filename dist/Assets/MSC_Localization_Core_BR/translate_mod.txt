@@ -2100,7 +2100,7 @@ I earned {0} mk for filling {1} boxes. It's a pretty unprofitable job, don't you
 I earned {0} mk for filling 1 box. It's a pretty unprofitable job, don't you think? =  Eu ganhei {0} mk por encher 1 caixa. É um trabalho bem pouco lucrativo, você não acha?
 
 //Homura's Tweaks and Additions Pack
-YOUR HAND: {0} OPPONENT'S HAND: {1} = SUA MÃO: {0} \nMÃO DO OPONENTE: {1}
+YOUR HAND: {0}\nOPPONENT'S HAND: {1} = SUA MÃO: {0}\nMÃO DO OPONENTE: {1}
 
 //Installable Under Glow Kit
 Ne = Neon
