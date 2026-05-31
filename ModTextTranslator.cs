@@ -412,49 +412,64 @@ namespace MSC_Localization_Core
 
             deliveryJobsSignAttachAttempts++;
 
-            MonoBehaviour[] behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
-            if (behaviours == null || behaviours.Length == 0)
+            Type signType = FindLoadedType(DeliveryJobsAssemblyName, DeliveryJobsDestinationSignComponentName);
+            if (signType == null)
+                return 0;
+
+            UnityEngine.Object[] signs = UnityEngine.Object.FindObjectsOfType(signType);
+            if (signs == null || signs.Length == 0)
                 return 0;
 
             int attached = 0;
-            for (int i = 0; i < behaviours.Length; i++)
+            for (int i = 0; i < signs.Length; i++)
             {
-                MonoBehaviour behaviour = behaviours[i];
-                if (behaviour == null || behaviour.gameObject == null)
-                    continue;
-
-                Type behaviourType = behaviour.GetType();
-                if (!IsComponentType(behaviourType, DeliveryJobsDestinationSignComponentName))
-                    continue;
-
-                Transform transform = behaviour.transform;
-                if (transform == null || transform.childCount == 0)
-                    continue;
-
-                TextMesh textMesh = transform.GetChild(0).GetComponent<TextMesh>();
-                if (textMesh == null || textMesh.gameObject == null)
-                    continue;
-
-                string key = DeliveryJobsDestinationSignKeyPrefix + textMesh.GetInstanceID();
-                DirectTextMeshTranslator existing;
-                if (attachedTextMeshComponents.TryGetValue(key, out existing))
+                try
                 {
-                    if (existing != null)
+                    UnityEngine.Object signObject = signs[i];
+                    if (IsUnityObjectMissing(signObject))
                         continue;
 
-                    attachedTextMeshComponents.Remove(key);
-                }
+                    Component sign = signObject as Component;
+                    if (ReferenceEquals(sign, null))
+                        continue;
 
-                DirectTextMeshTranslator component = textMesh.gameObject.GetComponent<DirectTextMeshTranslator>();
-                if (component == null)
+                    Transform transform = sign.transform;
+                    if (IsUnityObjectMissing(transform) || transform.childCount == 0)
+                        continue;
+
+                    TextMesh textMesh = transform.GetChild(0).GetComponent<TextMesh>();
+                    if (IsUnityObjectMissing(textMesh))
+                        continue;
+
+                    GameObject textObject = textMesh.gameObject;
+                    if (IsUnityObjectMissing(textObject))
+                        continue;
+
+                    string key = DeliveryJobsDestinationSignKeyPrefix + textMesh.GetInstanceID();
+                    DirectTextMeshTranslator existing;
+                    if (attachedTextMeshComponents.TryGetValue(key, out existing))
+                    {
+                        if (!IsUnityObjectMissing(existing))
+                            continue;
+
+                        attachedTextMeshComponents.Remove(key);
+                    }
+
+                    DirectTextMeshTranslator component = textObject.GetComponent<DirectTextMeshTranslator>();
+                    if (IsUnityObjectMissing(component))
+                    {
+                        component = textObject.AddComponent<DirectTextMeshTranslator>();
+                        attached++;
+                    }
+
+                    component.Configure(textMesh, LocalizationUtils.GetGameObjectPath(textObject), textMeshTranslator);
+                    component.TranslateNow();
+                    attachedTextMeshComponents[key] = component;
+                }
+                catch (Exception ex)
                 {
-                    component = textMesh.gameObject.AddComponent<DirectTextMeshTranslator>();
-                    attached++;
+                    CoreConsole.Warning("[ModTextTranslator] Pulou placa do DeliveryJobs durante injeção: " + ex.Message);
                 }
-
-                component.Configure(textMesh, LocalizationUtils.GetGameObjectPath(textMesh.gameObject), textMeshTranslator);
-                component.TranslateNow();
-                attachedTextMeshComponents[key] = component;
             }
 
             if (attachedTextMeshComponents.Count > 0)
@@ -484,25 +499,49 @@ namespace MSC_Localization_Core
                 return 0;
 
             GameObject boxesSrc = boxesSrcField.GetValue(null) as GameObject;
-            if (boxesSrc == null || boxesSrc.transform == null)
+            if (IsUnityObjectMissing(boxesSrc))
+                return 0;
+
+            Transform boxesTransform;
+            try
+            {
+                boxesTransform = boxesSrc.transform;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+
+            if (IsUnityObjectMissing(boxesTransform))
                 return 0;
 
             DeliveryJobsPackageInfoTranslator.Configure(translations);
 
             int attached = 0;
-            for (int i = 0; i < boxesSrc.transform.childCount; i++)
+            for (int i = 0; i < boxesTransform.childCount; i++)
             {
-                Transform child = boxesSrc.transform.GetChild(i);
-                if (child == null || child.gameObject == null)
-                    continue;
+                try
+                {
+                    Transform child = boxesTransform.GetChild(i);
+                    if (IsUnityObjectMissing(child))
+                        continue;
 
-                DeliveryJobsPackageInfoTranslator component =
-                    child.gameObject.GetComponent<DeliveryJobsPackageInfoTranslator>();
-                if (component != null)
-                    continue;
+                    GameObject childObject = child.gameObject;
+                    if (IsUnityObjectMissing(childObject))
+                        continue;
 
-                child.gameObject.AddComponent<DeliveryJobsPackageInfoTranslator>();
-                attached++;
+                    DeliveryJobsPackageInfoTranslator component =
+                        childObject.GetComponent<DeliveryJobsPackageInfoTranslator>();
+                    if (!IsUnityObjectMissing(component))
+                        continue;
+
+                    childObject.AddComponent<DeliveryJobsPackageInfoTranslator>();
+                    attached++;
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Warning("[ModTextTranslator] Pulou prefab de pacote do DeliveryJobs durante injeção: " + ex.Message);
+                }
             }
 
             if (attached > 0)
@@ -519,37 +558,47 @@ namespace MSC_Localization_Core
                 return 0;
             }
 
-            MonoBehaviour[] behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
-            if (behaviours == null || behaviours.Length == 0)
+            Type packageType = FindLoadedType(DeliveryJobsAssemblyName, DeliveryJobsPackageComponentName);
+            if (packageType == null)
                 return 0;
 
-            int packageCount = 0;
+            UnityEngine.Object[] packages = UnityEngine.Object.FindObjectsOfType(packageType);
+            if (packages == null || packages.Length == 0)
+                return 0;
+
             int translatedCount = 0;
-            for (int i = 0; i < behaviours.Length; i++)
+            for (int i = 0; i < packages.Length; i++)
             {
-                MonoBehaviour behaviour = behaviours[i];
-                if (behaviour == null || behaviour.gameObject == null)
+                UnityEngine.Object packageObject = packages[i];
+                if (IsUnityObjectMissing(packageObject))
                     continue;
 
-                Type behaviourType = behaviour.GetType();
-                if (!IsComponentType(behaviourType, DeliveryJobsPackageComponentName))
+                Component package = packageObject as Component;
+                if (ReferenceEquals(package, null))
                     continue;
 
-                packageCount++;
-                TextMesh additionalInfo = GetFieldValue<TextMesh>(behaviour, behaviourType, "additionalInfo");
-                if (additionalInfo == null || additionalInfo.gameObject == null)
-                    continue;
-
-                if (!ShouldTranslateDeliveryJobsPackageInfoText(additionalInfo))
+                try
                 {
-                    AdjustDeliveryJobsPackageInfoLayout(additionalInfo, behaviour.transform);
-                    continue;
+                    TextMesh additionalInfo = GetFieldValue<TextMesh>(package, packageType, "additionalInfo");
+                    if (ReferenceEquals(additionalInfo, null) || IsUnityObjectMissing(additionalInfo))
+                        continue;
+
+                    Transform packageTransform = package.transform;
+                    if (!ShouldTranslateDeliveryJobsPackageInfoText(additionalInfo))
+                    {
+                        AdjustDeliveryJobsPackageInfoLayout(additionalInfo, packageTransform);
+                        continue;
+                    }
+
+                    if (TranslateDeliveryJobsPackageInfoText(additionalInfo))
+                    {
+                        AdjustDeliveryJobsPackageInfoLayout(additionalInfo, packageTransform);
+                        translatedCount++;
+                    }
                 }
-
-                if (TranslateDeliveryJobsPackageInfoText(additionalInfo))
+                catch (Exception ex)
                 {
-                    AdjustDeliveryJobsPackageInfoLayout(additionalInfo, behaviour.transform);
-                    translatedCount++;
+                    CoreConsole.Warning("[ModTextTranslator] Pulou pacote do DeliveryJobs durante tradução: " + ex.Message);
                 }
             }
 
@@ -558,7 +607,7 @@ namespace MSC_Localization_Core
 
         private static bool ShouldTranslateDeliveryJobsPackageInfoText(TextMesh textMesh)
         {
-            if (textMesh == null || textMesh.gameObject == null)
+            if (IsUnityObjectMissing(textMesh))
                 return false;
 
             string current = textMesh.text;
@@ -577,13 +626,26 @@ namespace MSC_Localization_Core
 
         private static bool TranslateDeliveryJobsPackageInfoText(TextMesh textMesh, TranslationDictionary translations)
         {
-            if (translations == null)
+            if (translations == null || IsUnityObjectMissing(textMesh))
+                return false;
+
+            GameObject textObject;
+            try
+            {
+                textObject = textMesh.gameObject;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            if (IsUnityObjectMissing(textObject))
                 return false;
 
             string current = textMesh.text ?? string.Empty;
             string translated = TranslateDeliveryJobsPackageInfoLines(
                 current,
-                LocalizationUtils.GetGameObjectPath(textMesh.gameObject),
+                LocalizationUtils.GetGameObjectPath(textObject),
                 translations);
             if (translated == current)
                 return false;
@@ -594,7 +656,7 @@ namespace MSC_Localization_Core
 
         private void AdjustDeliveryJobsPackageInfoLayout(TextMesh textMesh, Transform packageTransform)
         {
-            if (textMesh == null)
+            if (IsUnityObjectMissing(textMesh))
                 return;
 
             int instanceId = textMesh.GetInstanceID();
@@ -741,7 +803,7 @@ namespace MSC_Localization_Core
             int count = 0;
             foreach (KeyValuePair<string, DirectTextMeshTranslator> pair in attachedTextMeshComponents)
             {
-                if (pair.Value != null)
+                if (!IsUnityObjectMissing(pair.Value))
                     count++;
             }
 
@@ -785,7 +847,7 @@ namespace MSC_Localization_Core
             foreach (KeyValuePair<string, DirectTextMeshTranslator> pair in attachedTextMeshComponents)
             {
                 if (pair.Key.StartsWith(DeliveryJobsDestinationSignKeyPrefix, StringComparison.Ordinal)
-                    && pair.Value != null)
+                    && !IsUnityObjectMissing(pair.Value))
                 {
                     return true;
                 }
@@ -825,7 +887,7 @@ namespace MSC_Localization_Core
             {
                 try
                 {
-                    if (target == null || target.gameObject == null || translator == null)
+                    if (IsUnityObjectMissing(target) || translator == null)
                         return;
 
                     string current = target.text;
@@ -881,7 +943,7 @@ namespace MSC_Localization_Core
                         return;
 
                     TextMesh additionalInfo = ResolveAdditionalInfo();
-                    if (additionalInfo == null || !ShouldTranslateDeliveryJobsPackageInfoText(additionalInfo))
+                    if (IsUnityObjectMissing(additionalInfo) || !ShouldTranslateDeliveryJobsPackageInfoText(additionalInfo))
                         return;
 
                     TranslateDeliveryJobsPackageInfoText(additionalInfo, translations);
@@ -1354,9 +1416,15 @@ namespace MSC_Localization_Core
             GameObject[] objects = Resources.FindObjectsOfTypeAll<GameObject>();
             for (int i = 0; i < objects.Length; i++)
             {
-                GameObject go = objects[i];
-                if (go != null && go.name == name)
-                    return go;
+                try
+                {
+                    GameObject go = objects[i];
+                    if (!IsUnityObjectMissing(go) && go.name == name)
+                        return go;
+                }
+                catch (Exception)
+                {
+                }
             }
 
             return null;
@@ -1364,26 +1432,48 @@ namespace MSC_Localization_Core
 
         private static GameObject FindDeliveryJobsAdvertUi()
         {
-            MonoBehaviour[] behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
-            if (behaviours == null || behaviours.Length == 0)
+            Type jobMapType = FindLoadedType(DeliveryJobsAssemblyName, DeliveryJobsJobMapComponentName);
+            if (jobMapType == null)
                 return null;
 
-            for (int i = 0; i < behaviours.Length; i++)
+            UnityEngine.Object[] jobMaps = UnityEngine.Object.FindObjectsOfType(jobMapType);
+            if (jobMaps == null || jobMaps.Length == 0)
+                return null;
+
+            for (int i = 0; i < jobMaps.Length; i++)
             {
-                MonoBehaviour behaviour = behaviours[i];
-                if (behaviour == null || behaviour.gameObject == null)
+                UnityEngine.Object jobMapObject = jobMaps[i];
+                if (IsUnityObjectMissing(jobMapObject))
                     continue;
 
-                Type behaviourType = behaviour.GetType();
-                if (!IsComponentType(behaviourType, DeliveryJobsJobMapComponentName))
-                    continue;
-
-                GameObject advertUi = GetFieldValue<GameObject>(behaviour, behaviourType, "advertJobUI");
-                if (advertUi != null)
-                    return advertUi;
+                try
+                {
+                    GameObject advertUi = GetFieldValue<GameObject>(jobMapObject, jobMapType, "advertJobUI");
+                    if (!IsUnityObjectMissing(advertUi))
+                        return advertUi;
+                }
+                catch (Exception)
+                {
+                }
             }
 
             return null;
+        }
+
+        private static bool IsUnityObjectMissing(UnityEngine.Object obj)
+        {
+            if (ReferenceEquals(obj, null))
+                return true;
+
+            try
+            {
+                obj.GetInstanceID();
+                return false;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
         }
 
         private static void ApplyFallbackFontIfNeeded(Text text, Font fallbackFont, bool onlyForNonAscii, Font originalFont, bool hasOriginalFont)
