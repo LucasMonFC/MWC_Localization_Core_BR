@@ -2131,9 +2131,6 @@ BUY BOOZE 600 MK = COMPRAR VODKA 600 MK
 "My neighbor is a dick." = "Meu vizinho estrangeiro... ele tem um belo carro, meu vizinho estrangeiro tem, e ele não vai passar \npor uma inspeção porque é um idiota. Sim, porque nossas relações interpessoais não combinam."
 "This is what human relationships are, you live with it." = "Nosso entendimento mútuo não dá certo. Lutamos por décadas e passamos por tribunais diferentes, \ne... e um após o outro perdemos, então a relação entre eu e ele nunca será resolvida."
 TAX STICKER, 500 MK = ADESIVO DE IMPOSTO, 500 MK
-PRICE TOTAL: 325.00 MK = PREÇO TOTAL: 325.00 MK
-PRICE TOTAL: 500.00 MK = PREÇO TOTAL: 500.00 MK
-PRICE TOTAL: 825.00 MK = PREÇO TOTAL: 825.00 MK
 
 //sewege guy
 "Hello there." = "Olá."
