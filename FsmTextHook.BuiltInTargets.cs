@@ -155,6 +155,10 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "Sheets/TrafficTicket/TicketData", "Data", "45kmh", 5, "Speeding.");
             AddTargetRule(byKey, "Sheets/TrafficTicket/TicketData", "Data", "45kmh", 5, "km/h at 45km/h vehicle limit.");
 
+            // Sheets: Arrest warrant dynamic description
+            AddTargetRule(byKey, "Sheets/Arrestwarrant/Texts/Description", "Data", "State 1", 0, "n. 180cm,");
+            AddTargetRule(byKey, "Sheets/Arrestwarrant/Texts/Description", "Data", "State 1", 0, "kg / likainen");
+
             // Sheets: Enviro Crime ticket
             AddTargetRule(byKey, "Sheets/EnviroCrime/TicketData", "Data", "Calc fine 5", 7, "litraa lietett\u00e4 kaadettu maastoon.");
             AddTargetRule(byKey, "Sheets/EnviroCrime/TicketData", "Data", "Calc fine 5", 8, "Illegal dumping of waste,");
@@ -176,6 +180,59 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "PERAPORTTI/Building/LOD300/FuelPumps_1-2/Pump2", "Functions", "Update account", 3, "PSKPerajarviAutom");
             AddTargetRule(byKey, "PERAPORTTI/Building/LOD300/FuelPumps_1-2/Pump1", "Functions", "Update account", 3, "PSK Pera Autom.");
             AddTargetRule(byKey, "PERAPORTTI/Building/LOD300/FuelPumps_1-2/Pump2", "Functions", "Update account", 3, "PSK Pera Autom.");
+
+            // Payment and variable value prompts
+            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/Store/Cashier/StoreCashRegister/CashRegisterLogic", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/Store/PostOffice/PostCashRegister/cash_register_screen/CashRegisterLogic", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "INSPECTION/LOD/inspection_desk/CashRegister/InspectionCashRegister/cash_register/cash_register_screen/CashRegisterLogic", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD100/Restaurant/BurgerCashRegister/CashRegisterLogic", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD100/Restaurant/AlaCarteRegister/CashRegisterLogic", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "FleaMarket/LOD/FleaCashRegister/CashRegisterLogic", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "REPAIRSHOP/LOD/Store/CashRegister/FleetariCashRegister/cash_register/cash_register_screen/CashRegisterLogic", "", "", -1, "PRICE TOTAL:");
+            AddTargetRule(byKey, "PERAPORTTI/ActiveFunctions/Store/PostOffice/NotificationsPile", "", "", -1, "PAY POST ORDER");
+            AddTargetRule(byKey, "HOMENEW/Functions/FunctionsDisable/Fines", "", "", -1, "UNPAID FINES,");
+            AddTargetRule(byKey, "FleaMarket/LOD/OpenHours/MoneyFlea", "", "", -1, "SALES");
+            AddTargetRule(byKey, "REPAIRSHOP/LOD/Office/Fleetari/ScrapMoney", "", "", -1, "SCRAP PAYMENT");
+            AddTargetRule(byKey, "PLAYER/Pivot/AnimPivot/Camera/FPSCamera/2Spanner/Pivot/Ruler", "", "", -1, "CONDITION");
+            AddTargetRule(byKey, "PERAJARVI/Kunnalliskoti/Functions/RoomVenttiPig/Ventti/Table/GAME/Gamestuff/Bet", "", "", -1, "CURRENT BET");
+            AddTargetRule(byKey, "PERAJARVI/Kunnalliskoti/Functions/RoomVenttiPig/Ventti/Table/GAME/Gamestuff/Stand", "", "", -1, "STAND AT");
+            AddTargetRule(byKey, "RACES/ICERACE/TentContents/Prices/PriceMoneyRace", "", "", -1, "PRICE MONEY");
+            AddTargetRule(byKey, "RACES/RALLY/SS3/FinishArea/Stuff/PriceMoneyRally", "", "", -1, "PRICE MONEY");
+            AddTargetRule(byKey, "JOBS/Farm/Farmer/Walker/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit1/LOD/ShitNPC/Man/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit2/LOD/ShitNPC/Man/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit3/LOD/ShitNPC/Man/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit4/LOD/ShitNPC/Man/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseShit5/LOD/ShitNPC/Man/skeleton/pelvis/RotationPivot/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/finger_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseWood1/LOD/CarPos/NPCWood/WoodCaller1/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseWood2/LOD/NPCWood/WoodCaller2/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseWood3/LOD/NPCWood/WoodCaller3/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/HouseWood4/LOD/NPCWood/WoodCaller4/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/TAXIJOB/Customer1/TaxiWalker/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/KILJUGUY/HikerPivot/Hitchhiker/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/JOKKE/HouseDrunkNew/KiljuBuyer/Char/skeleton/pelvis/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "PERAPORTTI/Building/LOD100/ATM/Automat/MoneyTrigger", "", "", -1, "TAKE MONEY");
+
+            // Flea market variable product prices
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/FurDices/TriggerFlea", "", "", -1, "FUR DICES");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/386Peripherals/TriggerFlea", "", "", -1, "KEYBOARD AND MOUSE");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/386Monitor/TriggerFlea", "", "", -1, "PC MONITOR");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/386Speakers/TriggerFlea", "", "", -1, "PC SPEAKERS");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/386Case/TriggerFlea", "", "", -1, "PC CASE");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Diskette1/TriggerFlea", "", "", -1, "DISKETTE");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Diskette2/TriggerFlea", "", "", -1, "DISKETTE");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Diskette3/TriggerFlea", "", "", -1, "DISKETTE");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Diskette4/TriggerFlea", "", "", -1, "DISKETTE");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/SportWheel/TriggerFlea", "", "", -1, "STEERING WHEEL");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Camera/TriggerFlea", "", "", -1, "CAMERA");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/AlarmClock/TriggerFlea", "", "", -1, "ALARM CLOCK");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Fabric1/TriggerFlea", "", "", -1, "FABRIC ROLL");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Fabric2/TriggerFlea", "", "", -1, "FABRIC ROLL");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Fabric3/TriggerFlea", "", "", -1, "FABRIC ROLL");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Fabric4/TriggerFlea", "", "", -1, "FABRIC ROLL");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/FireworksBag/TriggerFlea", "", "", -1, "FIREWORKS BAG");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Scale/TriggerFlea", "", "", -1, "SCALE");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/RadarBuster/TriggerFlea", "", "", -1, "RADAR BUSTER");
 
             // COMPUTER: POS boot / shell command output
             AddTargetRule(byKey, "COMPUTER/SYSTEM/POS/BootSequence", "Use", "State 1", 0, "Starting RS-POS...");

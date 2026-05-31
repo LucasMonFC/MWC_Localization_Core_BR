@@ -28,6 +28,7 @@ FRIDAY = SEXTA
 SATURDAY = SÁBADO
 SUNDAY = DOMINGO
 MORTAL = MORTAL
+THIRST = SEDE
 HUNGER = FOME
 STRESS = ESTRESSE
 URINE = URINA
@@ -119,7 +120,7 @@ BLINKER RIGHT = SETA DIREITA
 BOOST/LINELOCK = NITRO / BLOQ.
 SETTINGS = CONFIGURAÇÕES
 H-SHIFTER = CÂMBIO H
-BRAKE SMOOTHING  = SUAVISAR FREIO
+BRAKE SMOOTHING = SUAVISAR FREIO
 THROTTLE SMOOTHING = SUAVISAR ACELERADOR
 CLUTCH SMOOTHING = SUAVISAR EMBREAGEM
 CLUTCH BITE POINT = PONTO DE EMBREAGEM
@@ -408,6 +409,11 @@ PICK 100 MK = PEGAR 100 MK
 BROWSE RESULTS = VERIFICAR RESULTADOS
 ARREST WARRANT = ORDEM DE PRISÃO
 PAY POST ORDER = PAGAR PÓS-PEDIDO
+PRICE TOTAL: = PREÇO TOTAL:
+TAKE MONEY = PEGUE O DINHEIRO
+UNPAID FINES, = MULTAS NÃO PAGAS,
+CONDITION = CONDIÇÃO
+PRICE MONEY = PRÊMIO EM DINHEIRO
 DETACH TRAILER = RETIRAR TRAILER
 DRINK COFFEE = BEBER CAFÉ
 TAKE BOX = PEGAR A CAIXA
@@ -444,6 +450,8 @@ YOU WON THIS CABIN = VOCÊ GANHOU ESTA CABANA
 YOU WON A CAR = VOCÊ GANHOU UM CARRO
 YOU LOST THE SATSUMA = VOCÊ PERDEU O CORRIS
 YOU LOST YOUR HOME = VOCÊ PERDEU SUA CASA
+CURRENT BET = APOSTA ATUAL
+STAND AT = FIQUE EM
 
 //Other
 PICK FIRE WOOD = PEGAR LENHA
@@ -549,6 +557,8 @@ Reckless or dangerous driving, using non-registered motor vehicle, without drivi
 Liikenteen vaarantaminen rekisteröimättömällä moottoriajoneuvolla ilman ajo-oikeutta. = Colocar em risco o trânsito com um veículo motorizado não registrado e sem carteira de motorista.
 Vehicle taxation offence. Tax sticker missing. = Violação do imposto veicular. Sem selo de imposto.
 Ajoneuvoverorikkomus. Tuulilasin verotarra puuttuu. = Violação do imposto veicular. Sem selo de imposto.
+n. 180cm, = aprox. 180 cm,
+kg / likainen = kg / sujo
 
 //Wiring
 AMPLIFIER POWER = POTÊNCIA DO AMPLIFICADOR
@@ -844,7 +854,7 @@ UKKOSTA = TROVÃO
 SELKEÄÄ = ENSOLARADO
 LOTTO ........................... 301 = LOTERIA ......................... 301
 LOTTO = LOTERIA
-OIKEAT NUMEROT: =  NÚMEROS CERTOS:
+OIKEAT NUMEROT: = NÚMEROS CERTOS:
 LISÄNUMEROT: = NÚMEROS EXTRAS:
 Voitonjako:       kpl             mk = Premiados:      QUANT         MARCOS
 Lottoarvonta aina lauantaisin klo 21. = Loteria sempre aos sábados às 21h.
