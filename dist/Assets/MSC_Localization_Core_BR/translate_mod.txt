@@ -1,4 +1,8 @@
-//Tractor Hydraulic Controls
+//MSC Control Keys
+ACC = CHAVE CONTATO
+LIGHTS OFF = DESLIGAR LUZ 
+LIGHTS PARK = LUZ POSIÇÃO
+LIGHTS DRIVE = LUZ CONDUÇÃO
 ASSIGN TRACTOR CONTROLS = ATRIBUIR CONTROLE DO TRATOR
 ARM 1+ = BRAÇO 1+
 ARM 1- = BRAÇO 1-
@@ -1820,7 +1824,7 @@ Friend, could you give me 5 mk for food? = Amigo, você pode me dar 5 mk para co
 God bless you good man. Good health. = Deus te abençoe, bom homem. Muita saúde.
 GIVE 5 MK = DAR 5 MK
 KISS = BEIJAR
-PUT DOWN THE FLASHLIGHT = ABAIXE A LANTERNA
+PUT DOWN THE FLASHLIGHT = SOLTAR A LANTERNA
 TAKE {0} MK = PEGUE {0} MK
 TAKE 1 CIGARETTE = PEGUE 1 CIGARRO
 TAKE {0} CIGARETTES = PEGUE {0} CIGARROS
