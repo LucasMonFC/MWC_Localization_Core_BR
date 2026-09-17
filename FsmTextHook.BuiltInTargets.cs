@@ -210,7 +210,7 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "JOBS/HouseWood4/LOD/NPCWood/WoodCaller4/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
             AddTargetRule(byKey, "JOBS/TAXIJOB/Customer1/TaxiWalker/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
             AddTargetRule(byKey, "JOBS/KILJUGUY/HikerPivot/Hitchhiker/Char/skeleton/pelvis/spine_middle/spine_upper/collar_right/shoulder_right/arm_right/hand_right/PayMoney", "", "", -1, "TAKE MONEY");
-            AddTargetRule(byKey, "JOBS/JOKKE/HouseDrunkNew/KiljuBuyer/Char/skeleton/pelvis/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/PayMoney", "", "", -1, "TAKE MONEY");
+            AddTargetRule(byKey, "JOBS/JOKKEHOME/HouseDrunkNew/KiljuBuyer/Char/skeleton/pelvis/spine_middle/spine_upper/collar_left/shoulder_left/arm_left/hand_left/PayMoney", "", "", -1, "TAKE MONEY");
             AddTargetRule(byKey, "PERAPORTTI/Building/LOD100/ATM/Automat/MoneyTrigger", "", "", -1, "TAKE MONEY");
 
             // Flea market variable product prices
@@ -230,6 +230,7 @@ namespace MWC_Localization_Core
             AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Fabric2/TriggerFlea", "", "", -1, "FABRIC ROLL");
             AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Fabric3/TriggerFlea", "", "", -1, "FABRIC ROLL");
             AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Fabric4/TriggerFlea", "", "", -1, "FABRIC ROLL");
+            AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Fabric5/TriggerFlea", "", "", -1, "FABRIC ROLL");
             AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/FireworksBag/TriggerFlea", "", "", -1, "FIREWORKS BAG");
             AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/Scale/TriggerFlea", "", "", -1, "SCALE");
             AddTargetRule(byKey, "FleaMarket/LOD/SHELFS/Buyables/RadarBuster/TriggerFlea", "", "", -1, "RADAR BUSTER");
