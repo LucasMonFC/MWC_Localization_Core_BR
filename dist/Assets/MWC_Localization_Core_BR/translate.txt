@@ -99,6 +99,7 @@ MOTOR OIL 5W-40 109 MK = ÓLEO DE MOTOR 5W-40 109 MK
 MOTOR OIL 10W-60 89 MK = ÓLEO DE MOTOR 10W-60 89 MK
 MOTOR OIL 0W-30 125 MK = ÓLEO DE MOTOR 0W-30 125 MK
 Ice Scraper 39.95 MK = RASPADOR DE GELO 39,95 MK
+Lug Wrench 35 MK = CHAVE DE RODA 35 MK
 
 energy drink = BEBIDA ENERGÉTICA
 automatic transmission fluid = FLUIDO DE TRANSMISSÃO AUTOMÁTICA
@@ -128,7 +129,6 @@ dead moose = ALCE MORTO
 Steering Wheel Cover = CAPA DE VOLANTE
 car fabric roll = ROLO DE TECIDO
 ice scraper = RASPADOR DE GELO
-
 SCRAPE WINDOW = RASPAR VIDRO
 BLOWER = CONTROLE DE VENTILAÇÃO
 WINDOW HEATER = DESEMBAÇADOR DO VIDRO
@@ -138,6 +138,9 @@ REAR HITCH = ENGATE TRASEIRO
 PTO = TOMADA DE FORÇA
 HAND BRAKE = FREIO DE MÃO
 WIPER = LIMPADOR DE PARA-BRISA
+LUG WRENCH = CHAVE DE RODA
+compression tester = TESTADOR DE COMPRESSÃO
+Heater Controls = CONTROLES DO AQUECEDOR
 
 2 BRL CARBURETOR 1225 MK = CARBURADOR DE 2 CORPOS 1225 MK
 4 BRL RACE CARBURETOR 7900 MK = CARBURADOR DE 4 CORPOS DE CORRIDA 7900 MK
@@ -379,6 +382,10 @@ subbari sarja = módulo com alto-falantes
 4 piste kilpavyöt = cintos de corrida de 4 pontas.
 kuppi penkit = banco concha 2 un.
 alumiini jäähdytin = radiador de alumínio
+race-mittaristo = medidor de corrida
+peltinen kojetaulu = painel de controle
+puristuspainemittari = testador de compressão
+kiekkamittari halpa = tacômetro barato
 
 //Death Screen
 Man found dead from hypothermia = Homem\né achado\nmorto por\nfrio
@@ -389,6 +396,8 @@ Peräjärveläinen mies sai surmansa klapikoneessa = Homem morreu em uma\nmáqui
 Dead man found inside of log cutter = Morto foi\nencontrado\ndentro de\nmáquina de\ncortar lenha
 Häkämyrkytys tappoi miehen Peräjärvellä = Envenenamento por CO\nmata homem em Peräjärvi
 Man found dead from carbon poisoning = Monóxido\nde carbono\nmata\nhomem em\nperäjärvi
+Nuori mies kuoli juotuaan energiajuomia = Jovem morre após beber\nbebidas energéticas
+Energy drinks killed local male = Local\nmorre\napós beber\nenergético
 
 //ATM
 INSERT BANK CARD = INSERIR CARTÃO BANCÁRIO
@@ -910,6 +919,18 @@ salmon soup = SOPA DE SALMÃO
 "The waitresses here are very nice. But not like Raija for sure. They try to hit me, but I belong to Raija!" = "As garçonetes aqui são muito simpáticas. Mas com certeza não são como a Raija. Elas tentam dar em cima de mim, mas eu pertenço à Raija!"
 "Tenu and I sometimes watch the rally from TV. Not sure if he can see anything though. You should come to watch too." = "O Tenu e eu às vezes assistimos ao rali pela TV. Não tenho certeza se ele consegue ver alguma coisa, mas você devia vir assistir também."
 
+"Oh oh... A car seat. I have missed a car seat so much." = "Ai, ai... Um banco de carro. Senti tanta falta de um banco de carro."
+"What do you say if we drive to my old house? I would like to see how things are around there." = "Que tal se formos de carro até minha antiga casa? Gostaria de ver como estão as coisas por lá."
+"So my old mother died then... Imagine, before me, considering my condition. She is gone now and I am here instead." = "Então, minha velha mãe morreu... Imagine só: antes de mim, levando em conta a minha condição. Ela se foi, e agora sou eu quem está aqui."
+"I guess we can leave now. I can't fix this stuff here. At least everything is fixed and fine at my current place." = Acho que podemos ir embora agora. Não consigo consertar essas coisas aqui. Pelo menos está tudo consertado e em ordem onde moro atualmente.
+"When the spring comes and snow melts, I wonder if something useful gets exposed. I might not bet on that though." = "Quando chegar a primavera e a neve derreter, fico pensando se algo útil será revelado. Mas talvez eu não apostasse nisso."
+"That I could have fixed, but I didn't. That I fixed, but it was not a good idea. That I tried to fix, but it got messed up. That one I gave up." = "Aquilo eu poderia ter consertado, mas não o fiz. Aquilo eu consertei, mas não foi uma boa ideia.\nAquilo eu tentei consertar, mas acabou dando errado. Daquilo ali eu desisti."
+"It sounds like I have car sized fly in my ear. I guess that fly is going to work. Kepa once missed work for three weeks. Get your stuff and leave, they said." = "Parece que tem uma mosca do tamanho de um carro dentro do meu ouvido. Acho que essa mosca vai trabalhar. \nO Kepa uma vez faltou ao trabalho por três semanas. 'Pegue suas coisas e vá embora', disseram a ele."
+"I meant to repair that van always tomorrow. However I had some bad cough and here I am. I don't think I can fix it anymore." = Eu sempre planejava consertar aquela van "amanhã irei". Mas tive uma tosse forte e aqui estou eu. Acho que não consigo mais consertá-la.
+"This house was great, I did not experience cold, EVER. We used to laugh at Pauno's stories. He never laughed. Maybe thats why he was first to go." = "Essa casa era ótima; não passei frio, nunca. A gente ria das histórias do Pauno. Ele nunca ria. Talvez tenha sido por isso que ele foi o primeiro a ir embora."
+"I wonder if this house is still worth saving. At least fresh water can be melted from the snow." = Será que ainda vale a pena salvar esta casa? Pelo menos dá para obter água fresca derretendo a neve.
+"One could cover the ground with white plastic sheet, so it would look like snow. In winter you could take it off and now it is summer under it. Too late." = "Daria para cobrir o chão com uma lona plástica branca, assim pareceria neve. No\ninverno, você poderia tirá-la e, por baixo dela, agora seria verão. Tarde demais."
+
 //Factory Job
 SHOW TAG CARD = MOSTRAR CARTÃO DE IDENTIFICAÇÃO
 PUNCH IN = REGISTRAR ENTRADA
@@ -1165,3 +1186,14 @@ Mittatilausjouset / Coil spring order    = Pedido de molas helicoidais
 "Am I in a candid camera? Which of these clowns invited you here?" = "Será que estou sendo filmado sem autorização? Qual desses palhaços te convidou para vir aqui?"
 "This smell... I know this guy. The spirit of sewage." = "Esse cheiro... Eu conheço esse cara. O espírito do esgoto."
 "Look at yourself. You look like a lost tourist. But hey, this is not a place for sightseeings." = "Olhe para você. Você parece um turista perdido. Mas ei, este não é um lugar para passeios turísticos."
+
+//Jouko (drunk guy)
+"Here you go for all your troubles!" = "Aqui está, como recompensa por todos os seus problemas!"
+"What's wrong when money does not excite." = "Qual o problema quando o dinheiro não empolga?"
+"Do you have a jerry can with fuel in it? If not, get one. Then drive me to the bird watching tower. Dont worry, you are just a taxi driver minding your own business." = "Você tem um galão de combustível? Se não, pegue um. Depois, me leve até a torre de observação de pássaros. Não se preocupe, você é apenas um taxista cuidando da sua vida."
+"Hand me the jerry can." = "Me dê o galão de combustível."
+"Lets go to the old place. I want to check something." = "Vamos até o lugar antigo. Quero verificar uma coisa."
+"Look at it. That has been healthy building! Koistinen has painted it with polyurethane paint and it started to rot the underlying wood." = "Veja só. Que prédio saudável! Koistinen pintou-o com tinta de poliuretano e isso começou a apodrecer a madeira por baixo."
+"I think I need to eat something, take me to the PSK." = "Acho que preciso comer alguma coisa, leve-me ao PSK."
+"He got it with fair price. I did not want any extra share for my ex-wife who went with that tomato farmer. Small tomatoes, small farmer." = "Ele conseguiu um preço justo. Eu não queria nenhuma parte extra para minha ex-esposa, que ficou com aquele produtor de tomates. Tomates pequenos, produtor pequeno."
+"You know what, I will burn that hut down. There will be nothing left to argue about. That place has been always miserable." = "Sabe de uma coisa? Vou queimar aquela cabana. Não vai sobrar nada para discutir. Aquele lugar sempre foi miserável."

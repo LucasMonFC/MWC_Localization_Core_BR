@@ -158,6 +158,7 @@ kampipyö. = polia
 mainbrng. = mancal
 runkolakr = mancal
 heater = aquec
+heaterc. = c.aquec
 lämppäri = aquec
 clutchd. = embreag.
 kytkinle. = embreag.

@@ -879,3 +879,19 @@ SORBET SUBWOOFER L = SUBWOOFER SORBET ESQUERDA
 SEATBELT ALARM = ALARME DE CINTO DE SEGURANÇA
 LEFT LIGHT = LUZ ESQUERDA
 RIGHT LIGHT = LUZ DIREITA
+
+//Hayosiko Pace
+BUY HAYOSIKO PACE - {0} MK = COMPRE HAYOSIKO PACE - {0} MK
+BUYING A VAN... = COMPRANDO UMA VAN...
+You are too poor for this purchase. = Você é muito pobre para esta compra.
+You bought a 1980 Hayosiko Pace! = Você comprou um Hayosiko Pace de 1980!
+You stole a 1980 Hayosiko Pace! ...was that a siren? = Você roubou um Hayosiko Pace de 1980! ...aquilo era uma sirene?
+
+//Perajarvi Outskirt Estate
+Pay Rent - 1,200 mk = Pagar aluguel - 1.200 mk
+Buy House - 22,500 mk = Comprar casa - 22.500 mk
+Not enough money! = Não há dinheiro suficiente!
+Garage Remote = Controle Remoto da Garagem
+Close garage = Fechar garagem
+Open garage = Abrir garagem
+TV Remote = Controle remoto da TV
