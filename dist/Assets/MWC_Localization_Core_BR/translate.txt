@@ -1,5 +1,7 @@
 //My Winter Car Strings
 NOW LOADING YEAR 1999... = AGORA CARREGANDO O ANO 1999...
+PERÄJÄRVI CHURCH, 1998 = IGREJA DE PERÄJÄRVI, 1998
+Grandmother funeral = Funeral da vovó
 PROBLEM = PROBLEMA
 CASH = DINHEIRO
 WELCOME = Bem-Vindo
