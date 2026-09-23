@@ -557,6 +557,8 @@ Reckless or dangerous driving, using non-registered motor vehicle, without drivi
 Liikenteen vaarantaminen rekisteröimättömällä moottoriajoneuvolla ilman ajo-oikeutta. = Colocar em risco o trânsito com um veículo motorizado não registrado e sem carteira de motorista.
 Vehicle taxation offence. Tax sticker missing. = Violação do imposto veicular. Sem selo de imposto.
 Ajoneuvoverorikkomus. Tuulilasin verotarra puuttuu. = Violação do imposto veicular. Sem selo de imposto.
+n. 180cm, = aprox. 180 cm,
+kg / likainen = kg / sujo
 
 //Wiring
 AMPLIFIER POWER = POTÊNCIA DO AMPLIFICADOR

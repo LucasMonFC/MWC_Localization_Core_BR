@@ -918,7 +918,7 @@ salmon soup = SOPA DE SALMÃO
 "Would you mind to drive me to Kittilä one day? I would like to see Raija again. Could be fun road trip just between us dudes." = "Você se importaria de me levar de carro até Kittilä algum dia? Eu gostaria de ver a Raija de novo. Poderia ser uma viagem divertida só entre nós, caras."
 "The waitresses here are very nice. But not like Raija for sure. They try to hit me, but I belong to Raija!" = "As garçonetes aqui são muito simpáticas. Mas com certeza não são como a Raija. Elas tentam dar em cima de mim, mas eu pertenço à Raija!"
 "Tenu and I sometimes watch the rally from TV. Not sure if he can see anything though. You should come to watch too." = "O Tenu e eu às vezes assistimos ao rali pela TV. Não tenho certeza se ele consegue ver alguma coisa, mas você devia vir assistir também."
-
+"Would you mind taking me for a ride? There is nothing to see here. I would like to go somewhere for while." = Você se importaria de me levar para dar uma volta? Não há nada para ver aqui. Gostaria de ir a algum lugar por um tempo.
 "Oh oh... A car seat. I have missed a car seat so much." = "Ai, ai... Um banco de carro. Senti tanta falta de um banco de carro."
 "What do you say if we drive to my old house? I would like to see how things are around there." = "Que tal se formos de carro até minha antiga casa? Gostaria de ver como estão as coisas por lá."
 "So my old mother died then... Imagine, before me, considering my condition. She is gone now and I am here instead." = "Então, minha velha mãe morreu... Imagine só: antes de mim, levando em conta a minha condição. Ela se foi, e agora sou eu quem está aqui."
@@ -1206,3 +1206,6 @@ Mittatilausjouset / Coil spring order    = Pedido de molas helicoidais
 "So how is the salary in this job?" = "Então, como é o salário neste emprego?"
 "How much is your net gain from ten kilometers?" = "Qual é o seu ganho líquido em dez quilômetros?"
 "I would not mind to have a Machtwagen as my office." = Eu não me importaria de ter um Machtwagen como meu escritório.
+"So you are a taxi driver these days? Seems to be the old car of Harvanen. It is a good job. I could have been taxi driver as well." = "Então você é taxista agora? Parece ser o carro antigo do Harvanen. É um bom trabalho. Eu também poderia ter sido taxista."
+"So... that Koistinen who bought my old house. He is trying to sue me for the house being rotten. The Koistinen is a fool, there is no way that house is rotten!" = "Então... aquele Koistinen que comprou minha antiga casa. Ele está tentando me processar dizendo que a casa está podre. O Koistinen é um idiota, não tem como aquela casa estar podre!"
+"He is not man enough to settle the issue personally, instead goes directly to court! That's what they are, dummies that understand only written word." = "Ele não tem coragem de resolver a questão pessoalmente, e vai direto ao tribunal! É isso que eles são, uns idiotas que só entendem de palavras escritas."
