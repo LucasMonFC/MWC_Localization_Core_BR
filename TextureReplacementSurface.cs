@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using HutongGames.PlayMaker.Actions;
 using Ionic.Zip;
 using UnityEngine;
 using UnityStandardAssets.ImageEffects;
@@ -18,6 +17,11 @@ namespace MWC_Localization_Core
         private const string RallyRegistrationStateName = "Init";
         private const string RallyCoverMaterialName = "cover 1";
         private const string RallyCoverReplacementTextureName = "rally_registercard";
+
+        // The rally FSM swaps textures onto the registration card at runtime. Renderers
+        // under RallyRegistration look up "<original texture name>card", so pack authors
+        // can target the card variant separately from same-named textures elsewhere.
+        private const string RallyCardTextureSuffix = "card";
 
         private static readonly string[] TexturePropertyNames = new string[]
         {
@@ -51,20 +55,6 @@ namespace MWC_Localization_Core
             }
         }
 
-        private sealed class TextureFileSource
-        {
-            public readonly string TextureKey;
-            public readonly string DisplayName;
-            public readonly byte[] Bytes;
-
-            public TextureFileSource(string textureKey, string displayName, byte[] bytes)
-            {
-                TextureKey = textureKey;
-                DisplayName = displayName;
-                Bytes = bytes;
-            }
-        }
-
         private readonly Dictionary<string, Texture2D> replacementTextures =
             new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
 
@@ -84,7 +74,11 @@ namespace MWC_Localization_Core
         private string loadedSceneName;
         private bool hasApplied;
         private bool hasLoadedReplacementTextures;
-        private bool hasInstalledRallyRefreshHook;
+
+        // FSM instance the rally hook was injected into. Deliberately not cleared by
+        // ResetRuntimeState: F8 reuses the same FSM, and re-injecting would stack a
+        // duplicate action on every reload. A new GAME load yields a new FSM instance.
+        private PlayMakerFSM rallyHookedFsm;
 
         public string Name { get { return "TextureReplacementSurface"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.OncePerScene; } }
@@ -121,6 +115,7 @@ namespace MWC_Localization_Core
 
         public void Reset()
         {
+            PruneDestroyedBackups();
             ResetRuntimeState();
         }
 
@@ -137,7 +132,6 @@ namespace MWC_Localization_Core
             loadedSceneName = null;
             hasApplied = false;
             hasLoadedReplacementTextures = false;
-            hasInstalledRallyRefreshHook = false;
             sceneTextureKeys.Clear();
             matchedTextureNames.Clear();
         }
@@ -161,41 +155,12 @@ namespace MWC_Localization_Core
             if (string.IsNullOrEmpty(assetsFolder) || !Directory.Exists(assetsFolder))
                 return;
 
-            List<TextureFileSource> sources = GetTextureSourcesForScene(sceneName);
-            for (int i = 0; i < sources.Count; i++)
-            {
-                TextureFileSource source = sources[i];
-                if (source == null || string.IsNullOrEmpty(source.TextureKey))
-                    continue;
-
-                sceneTextureKeys.Add(source.TextureKey);
-
-                if (replacementTextures.ContainsKey(source.TextureKey))
-                    continue;
-
-                Texture2D texture = LoadPng(source.Bytes, source.TextureKey, source.DisplayName);
-                if (IsUnityObjectNull(texture))
-                    continue;
-
-                replacementTextures.Add(source.TextureKey, texture);
-            }
-        }
-
-        private List<TextureFileSource> GetTextureSourcesForScene(string sceneName)
-        {
-            List<TextureFileSource> sources = new List<TextureFileSource>();
-            AddTextureSourcesFromZipFiles(sources, sceneName);
-            return sources;
-        }
-
-        private void AddTextureSourcesFromZipFiles(List<TextureFileSource> sources, string sceneName)
-        {
             string[] zipFiles = Directory.GetFiles(assetsFolder, "*.zip", SearchOption.TopDirectoryOnly);
             for (int i = 0; i < zipFiles.Length; i++)
-                AddTextureSourcesFromZip(sources, zipFiles[i], sceneName);
+                LoadTexturesFromZip(zipFiles[i], sceneName);
         }
 
-        private void AddTextureSourcesFromZip(List<TextureFileSource> sources, string zipFile, string sceneName)
+        private void LoadTexturesFromZip(string zipFile, string sceneName)
         {
             try
             {
@@ -215,14 +180,25 @@ namespace MWC_Localization_Core
 
                         totalPngCount++;
                         string textureName = Path.GetFileNameWithoutExtension(NormalizeZipPath(entry.FileName));
-                        if (!ShouldLoadTextureInScene(textureName, sceneName))
+                        if (string.IsNullOrEmpty(textureName) || !ShouldLoadTextureInScene(textureName, sceneName))
                             continue;
 
+                        sceneTextureKeys.Add(textureName);
+
+                        // Already decoded by an earlier scene (or an earlier ZIP) — skip the extract.
+                        if (replacementTextures.ContainsKey(textureName))
+                            continue;
+
+                        byte[] bytes;
                         using (MemoryStream stream = new MemoryStream())
                         {
                             entry.Extract(stream);
-                            sources.Add(new TextureFileSource(textureName, zipFile + "::" + entry.FileName, stream.ToArray()));
+                            bytes = stream.ToArray();
                         }
+
+                        Texture2D texture = LoadPng(bytes, textureName, zipFile + "::" + entry.FileName);
+                        if (!IsUnityObjectNull(texture))
+                            replacementTextures.Add(textureName, texture);
                     }
                 }
 
@@ -245,7 +221,8 @@ namespace MWC_Localization_Core
 
             try
             {
-                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+                // Mipmapped so world-space replacements don't shimmer at distance.
+                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
                 if (!texture.LoadImage(bytes))
                 {
                     UnityEngine.Object.Destroy(texture);
@@ -254,6 +231,8 @@ namespace MWC_Localization_Core
                 }
 
                 texture.name = textureName;
+                // Rebuild mips and drop the CPU-side pixel copy; nothing reads pixels back.
+                texture.Apply(true, true);
                 return texture;
             }
             catch (Exception ex)
@@ -381,11 +360,15 @@ namespace MWC_Localization_Core
                 return 0;
 
             PlayMakerFSM fsm = FindFsmByName(go, RallyRegistrationFsmName);
-            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
+            if (IsUnityObjectNull(fsm))
                 return 0;
 
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, RallyRegistrationStateName);
-            if (state == null || hasInstalledRallyRefreshHook)
+            // Already hooked (F8 reload): the live hook reads replacementTextures at fire
+            // time, so just re-apply against the freshly loaded textures.
+            if (ReferenceEquals(fsm, rallyHookedFsm))
+                return ApplyTexturesOnObject(go, RallyCardTextureSuffix);
+
+            if (!HasState(fsm, RallyRegistrationStateName))
                 return 0;
 
             bool injected = MSCLoader.PlayMakerExtensions.FsmInject(
@@ -394,20 +377,19 @@ namespace MWC_Localization_Core
                 RallyRegistrationStateName,
                 (Action)delegate
                 {
-                    ApplyTexturesOnObject(go, "card");
+                    ApplyTexturesOnObject(go, RallyCardTextureSuffix);
                 },
                 false,
                 -1,
                 false);
 
-            if (injected)
-            {
-                hasInstalledRallyRefreshHook = true;
-                ApplyTexturesOnObject(go, "card");
-                CoreConsole.Print($"[{Name}] Installed rally texture refresh hook");
-            }
+            if (!injected)
+                return 0;
 
-            return injected ? 1 : 0;
+            rallyHookedFsm = fsm;
+            ApplyTexturesOnObject(go, RallyCardTextureSuffix);
+            CoreConsole.Print($"[{Name}] Installed rally texture refresh hook");
+            return 1;
         }
 
         private int ApplyTexturesOnObject(GameObject obj, string textureKeySuffix)
@@ -561,6 +543,28 @@ namespace MWC_Localization_Core
             originalOverlayTextures.Clear();
         }
 
+        // Scene change: drop backups whose material/overlay was unloaded with the old scene.
+        private void PruneDestroyedBackups()
+        {
+            List<Material> deadMaterials = new List<Material>();
+            foreach (Material material in originalMaterialTextures.Keys)
+            {
+                if (IsUnityObjectNull(material))
+                    deadMaterials.Add(material);
+            }
+            for (int i = 0; i < deadMaterials.Count; i++)
+                originalMaterialTextures.Remove(deadMaterials[i]);
+
+            List<ScreenOverlay> deadOverlays = new List<ScreenOverlay>();
+            foreach (ScreenOverlay overlay in originalOverlayTextures.Keys)
+            {
+                if (IsUnityObjectNull(overlay))
+                    deadOverlays.Add(overlay);
+            }
+            for (int i = 0; i < deadOverlays.Count; i++)
+                originalOverlayTextures.Remove(deadOverlays[i]);
+        }
+
         private void DestroyReplacementTextures()
         {
             foreach (KeyValuePair<string, Texture2D> pair in replacementTextures)
@@ -704,19 +708,19 @@ namespace MWC_Localization_Core
             return null;
         }
 
-        private static HutongGames.PlayMaker.FsmState FindState(PlayMakerFSM fsm, string stateName)
+        private static bool HasState(PlayMakerFSM fsm, string stateName)
         {
             if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
-                return null;
+                return false;
 
             HutongGames.PlayMaker.FsmState[] states = fsm.FsmStates;
             for (int i = 0; i < states.Length; i++)
             {
                 if (states[i] != null && states[i].Name == stateName)
-                    return states[i];
+                    return true;
             }
 
-            return null;
+            return false;
         }
 
         private static bool IsUnityObjectNull(UnityEngine.Object obj)
