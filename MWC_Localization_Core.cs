@@ -200,6 +200,15 @@ namespace MWC_Localization_Core
                 RunSurfaceInitialPasses("Initial ");
                 config.ApplyGameObjectAdjustments();
             }
+            else if (sceneName == "Intro" && ShouldTranslateScene("Intro"))
+            {
+                // Intro only has static TextMeshes (title card + loading text);
+                // surfaces target MainMenu/GAME objects, so their passes are skipped.
+                CoreConsole.Print($"[{Name}] Translating Intro scene...");
+                TranslateScene();
+                MarkSceneTranslated("Intro");
+                config.ApplyGameObjectAdjustments();
+            }
         }
 
         // Scene tracking (formerly SceneTranslationManager). Leaving a known scene

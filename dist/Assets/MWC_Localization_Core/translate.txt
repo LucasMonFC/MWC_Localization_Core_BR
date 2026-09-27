@@ -1,5 +1,7 @@
 ﻿// My Winter Car Strings
 NOW LOADING YEAR 1999... = 1999년 불러오는 중...
+PERÄJÄRVI CHURCH, 1998 = PERAJARVI 교회, 1998
+Grandmother funeral = 할머니 장례식
 PROBLEM = 문제
 THIRST = 갈증
 CASH = 돈
