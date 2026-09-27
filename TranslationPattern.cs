@@ -89,7 +89,9 @@ namespace MSC_Localization_Core
             int lastIndex = 0;
             
             // Find sequential placeholders {0}, {1}, {2}, ... in the pattern.
-            for (int i = 0; i < 10; i++)
+            // more than ten values. Keep a generous cap while avoiding unbounded
+            // placeholder probing for malformed translation entries.
+            for (int i = 0; i < 20; i++)
             {
                 string placeholder = "{" + i + "}";
                 int index = pattern.IndexOf(placeholder, lastIndex);
@@ -278,62 +280,39 @@ namespace MSC_Localization_Core
         {
             if (originalParts == null || originalParts.Length == 0)
                 return null;
-            
+
+            // originalParts holds the static text before {0}, between every
+            // placeholder, and after the final one. Extract one value for every
+            // separator, even if that value is empty: dynamic HUD strings can have
+            // optional segments (for example, reputation stars between "mk" and a
+            // newline). Omitting an empty segment shifts all later placeholders.
+            string firstPart = originalParts[0];
+            if (!input.StartsWith(firstPart))
+                return null;
+
             List<string> values = new List<string>();
-            string remaining = input;
-            
-            for (int i = 0; i < originalParts.Length; i++)
+            string remaining = input.Substring(firstPart.Length);
+
+            for (int i = 1; i < originalParts.Length; i++)
             {
                 string part = originalParts[i];
-                
-                // Skip empty parts in the middle (consecutive placeholders like {0}{1})
-                if (string.IsNullOrEmpty(part) && i < originalParts.Length - 1)
-                {
-                    // Empty part between placeholders - no static text to match
-                    continue;
-                }
-                
+
                 if (i == originalParts.Length - 1)
                 {
-                    // Last part - must end with this
                     if (!remaining.EndsWith(part))
                         return null;
-                    
-                    // Extract everything before this last part (only if part is non-empty)
-                    if (part.Length > 0)
-                    {
-                        if (remaining.Length > part.Length)
-                        {
-                            values.Add(remaining.Substring(0, remaining.Length - part.Length));
-                        }
-                    }
-                    else
-                    {
-                        // Pattern ends with placeholder - remaining text IS the last value
-                        if (!string.IsNullOrEmpty(remaining))
-                        {
-                            values.Add(remaining);
-                        }
-                    }
+                    values.Add(remaining.Substring(0, remaining.Length - part.Length));
                 }
                 else
                 {
-                    // Middle part - find this part in remaining string
                     int idx = remaining.IndexOf(part);
                     if (idx < 0)
                         return null;
-                    
-                    // Extract value before this part (if any)
-                    if (idx > 0)
-                    {
-                        values.Add(remaining.Substring(0, idx));
-                    }
-                    
-                    // Move past this part
+                    values.Add(remaining.Substring(0, idx));
                     remaining = remaining.Substring(idx + part.Length);
                 }
             }
-            
+
             return values.ToArray();
         }
     }
