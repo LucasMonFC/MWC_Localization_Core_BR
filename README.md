@@ -38,6 +38,7 @@ See the wiki: [Setting up development environment](https://github.com/potatosala
 **Magazine Translations** - Special handling for Yellow Pages magazine  
 **Configurable Fonts** - Map game fonts to localized custom fonts  
 **Position Adjustments** - Fine-tune text placement per language  
+**Texture Replacement** - Swap in-game textures (signs, cards, overlays) with localized PNGs  
 **Live Reload** - Press F8 to test changes without restarting  
 **Non-Latin Support** - Korean, Japanese, Chinese, Cyrillic, etc.  
 **My Summer Car Compatibility** - Use previous MSC translation as basis
@@ -53,7 +54,8 @@ BepInEx/plugins/dist/
 │   ├── translate_teletext.txt      # TV/Teletext content translations
 │   ├── translate_msc.txt           # Optional: My Summer Car compatibility
 │   ├── translate_mod.txt           # Optional: Mod content translations
-│   └── fonts.unity3d               # Optional: Custom font asset bundle
+│   ├── fonts.unity3d               # Optional: Custom font asset bundle
+│   └── *.zip                       # Optional: Replacement texture PNGs
 └── MWC_Localization_Core.dll       # Core plugin module
 ```
 
@@ -252,6 +254,22 @@ For languages requiring special font support (better readability, special charac
 **Unity Setup Notes:**
 - Unity 5.0.0f4 has broken licensing - install 5.6.7f1 first to activate, then run 5.0.0f4
 - AssetBundle build target must match game (typically Windows Standalone)
+
+## Texture Replacement (Optional)
+
+Some text in the game is baked into textures (driver's licence, rally registration card, signs, screen overlays). You can replace these with localized images:
+
+1. **Name each PNG after the game texture** it replaces, e.g. `drivers_lincence.png` (the name must match the game's texture name exactly, including its typos; case-insensitive).
+2. **Zip them** — any `.zip` file in the top level of the assets folder is scanned. Folders inside the ZIP are fine; only the file name matters.
+3. **Press F8** or reload the scene. The console logs each replacement, plus every PNG that didn't match any loaded texture.
+
+Matching is global: every material (and camera `ScreenOverlay`) in the scene using a texture with that name gets the replacement. The original texture's wrap/filter settings are copied over.
+
+Special cases:
+- `drivers_lincence` is only applied in the Main Menu; every other texture is only applied in-game.
+- **Rally registration card**: the card's textures are swapped at runtime, so renderers under `RallyRegistration` look up `<texture name>card` instead (e.g. `rally_registercard.png`). `rally_registercard` is also applied to any material named `cover 1`.
+
+Keep ZIPs that aren't texture packs out of the assets folder root — they'll be opened and scanned too.
 
 ## Testing & Development
 
