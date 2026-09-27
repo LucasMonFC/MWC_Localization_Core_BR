@@ -89,7 +89,9 @@ namespace MWC_Localization_Core
             int lastIndex = 0;
             
             // Find sequential placeholders {0}, {1}, {2}, ... in the pattern.
-            for (int i = 0; i < 10; i++)
+            // more than ten values. Keep a generous cap while avoiding unbounded
+            // placeholder probing for malformed translation entries.
+            for (int i = 0; i < 20; i++)
             {
                 string placeholder = "{" + i + "}";
                 int index = pattern.IndexOf(placeholder, lastIndex);

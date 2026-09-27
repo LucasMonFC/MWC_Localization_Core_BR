@@ -1188,6 +1188,7 @@ Mittatilausjouset / Coil spring order    = Pedido de molas helicoidais
 "Look at yourself. You look like a lost tourist. But hey, this is not a place for sightseeings." = "Olhe para você. Você parece um turista perdido. Mas ei, este não é um lugar para passeios turísticos."
 
 //Jouko (drunk guy)
+"Jokke here! Come pick me up at my place." = "Jokke aqui! Venha me buscar na minha casa."
 "Here you go for all your troubles!" = "Aqui está, como recompensa por todos os seus problemas!"
 "What's wrong when money does not excite." = "Qual o problema quando o dinheiro não empolga?"
 "Do you have a jerry can with fuel in it? If not, get one. Then drive me to the bird watching tower. Dont worry, you are just a taxi driver minding your own business." = "Você tem um galão de combustível? Se não, pegue um. Depois, me leve até a torre de observação de pássaros. Não se preocupe, você é apenas um taxista cuidando da sua vida."
