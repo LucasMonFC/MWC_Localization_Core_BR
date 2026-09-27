@@ -108,6 +108,7 @@ SAUSAGE + COFFEE 20 MK = 소세지 + 커피 20 MK
 COFFEE 10 MK = 커피 10 MK
 SAUSAGE 15 MK = 소세지 15 MK
 SAUSAGES 10,95 MK = 소세지 10.95 MK
+Lug Wrench 35 MK = 휠 너트 렌치 35 MK
 
 wiener schnitzel = 비너 슈니첼
 greek salad = 그릭 샐러드
@@ -147,6 +148,8 @@ dead moose = 죽은 사슴
 ice scraper = 성에 제거기
 Computer Case = 컴퓨터 케이스
 scale = 체중계
+LUG WRENCH = 휠 너트 렌치
+compression tester = 공기압 테스터
 
 SCRAPE WINDOW = 창문 긁어내기
 BLOWER = 풍량 조절
@@ -306,6 +309,7 @@ Rev Limiter = RPM 리미터
 coil springs box = 코일 스프링 상자
 grille cover = 그릴 커버
 BRAKE BIAS REGULATOR = 브레이크 바이어스 조절기
+Heater Controls = 히터 조작 장치
 
 RADIO CHANNEL = 라디오 채널
 BATTERY NEGATIVE = 배터리 음극
@@ -375,6 +379,10 @@ seepra kangas = 지브라 원단
 tiikeri kangas = 타이거 원단
 suomi kangas = 핀란드 원단
 pinkki kangas = 핑크 원단
+race-mittaristo = 레이싱 계기판
+peltinen kojetaulu = 레이싱 메탈 대시보드
+puristuspainemittari = 공기압 테스터
+kiekkamittari halpa = 보급형 타코미터
 
 //// Death Screen
 Peräjärveläinen mies paleltui kuoliaaksi = 저체온증으로\n남성 1명 사망
@@ -385,6 +393,8 @@ Peräjärveläinen mies sai surmansa klapikoneessa = 통나무 절단기 사고�
 Dead man found inside of log cutter = 통나무 절단기에서\n사망한 남성\n뒤늦게 발견
 Häkämyrkytys tappoi miehen Peräjärvellä = 일산화탄소 중독으로\n사망한 남성\n뒤늦게 발견
 Man found dead from carbon poisoning = 일산화탄소 중독으로\n사망한 남성\n뒤늦게 발견
+Nuori mies kuoli juotuaan energiajuomia = 에너지 드링크\n과다 음용으로\n남성 사망
+Energy drinks killed local male = 에너지 드링크\n과다 음용으로\n남성 사망
 
 //// ATM
 INSERT BANK CARD = 은행 카드 삽입하기
@@ -824,6 +834,51 @@ COULD NOT CONNECT = 연결할 수 없습니다
 "Would you mind to drive me to Kittilä one day? I would like to see Raija again. Could be fun road trip just between us dudes." = "나중에 시간 나면 나 좀 Kittila까지 태워다 줄 수 있나? Raija 그 사람을 다시 한번 보고 싶어서 그래. 우리 사나이들끼리 드라이브도 하고 가면 얼마나 좋아, 안 그래?"
 "The waitresses here are very nice. But not like Raija for sure. They try to hit me, but I belong to Raija!" = "여기 식당 양반들이 참 친절하긴 해. 그래도 Raija만 한 사람이 없지. 다들 나한테 눈독을 들이는 것 같긴 한데, 난 일편단심 Raija뿐이라고!"
 "Tenu and I sometimes watch the rally from TV. Not sure if he can see anything though. You should come to watch too." = "가끔 Tenu랑 같이 TV로 랠리 경기를 보곤 해. 사실 그 양반 눈으로 뭐가 뵈이긴 하는지 모르겠다만... 너도 시간 되면 같이 와서 구경해. 꽤 볼만하다니까."
+
+"Would you mind taking me for a ride? There is nothing to see here. I would like to go somewhere for while." = "혹시 네 차로 세상 구경 좀 시켜줄 수 있겠니? 여긴 볼 게 아무것도 없어. 잠깐 바람이나 쐬고 싶구나."
+"Hello. We should drive to the Kittilä. Get the van... Waitress turned the light on. I can't see anything here. So bright indeed." = "안녕. Kittila에 잠깐 드라이브 가는거 어때? 밴을 타고 말이지... 아주머니가 또 불을 켜셨네. 너무 밝아서 아무것도 안 보이네."
+"Can you drive me to the old house? I need to check something." = "혹시 옛날 집으로 데려다줄 수 있겠니? 뭔가 확인할 게 있어서 그래."
+"Oh oh... A car seat. I have missed a car seat so much." = "어우... 시트가 참... 시트에 앉아보는게 정말 그리웠단 말이지."
+"What do you say if we drive to my old house? I would like to see how things are around there." = "내 옛날 집으로 가보는건 어떻게 생각하니? 요즘은 거기 주변이 어떤지 한 번 보고 싶구나."
+"So my old mother died then... Imagine, before me, considering my condition. She is gone now and I am here instead." = "그래, 우리 노모가 그렇게 돌아가셨지... 생각해 봐라, 내 몸 상태로 보면 내가 먼저 갔어야 했는데 말이야.\n어머니는 떠나시고, 대신 내가 이렇게 남아 있구나."
+"I guess we can leave now. I can't fix this stuff here. At least everything is fixed and fine at my current place." = "이제 그만 가도 되겠다. 여기 있는 것들은 내가 고칠 수가 없어. 그래도 지금 사는 곳은 멀쩡하니 다행이지 뭐."
+
+"That I could have fixed, but I didn't. That I fixed, but it was not a good idea. That I tried to fix, but it got messed up. That one I gave up." = "저건 고칠 수 있었는데 안 고쳤고. 저건 고치긴 했는데 괜히 손댔지.\n저건 고치려다 망쳐 버렸고. 저건... 그냥 포기했어."
+"It sounds like I have car sized fly in my ear. I guess that fly is going to work. Kepa once missed work for three weeks. Get your stuff and leave, they said." = "귓속에 자동차만 한 파리가 들어앉은 것처럼 윙윙거리는구나. 그 파리는 출근하는 길인가 보다.\nKepa 그 친구는 예전에 3주 동안 출근을 안 한 적이 있었지. 짐 싸서 나가라고 하더라."
+"When the spring comes and snow melts, I wonder if something useful gets exposed. I might not bet on that though." = "봄이 와서 눈이 녹으면, 뭔가 쓸 만한 게 드러나려나 모르겠다. 뭐, 거기에 돈을 걸진 않겠지만."
+"I meant to repair that van always tomorrow. However I had some bad cough and here I am. I don't think I can fix it anymore." = "저 밴은 늘 '내일 고쳐야지' 하고 미뤘었지. 그러다 지독한 기침에 걸려서 이 꼴이 됐고. 이제는 못 고칠 것 같구나."
+"This house was great, I did not experience cold, EVER. We used to laugh at Pauno's stories. He never laughed. Maybe thats why he was first to go." = "이 집 참 좋았지. 추위 같은 건 단 한 번도 몰랐다니까. 다들 Pauno 얘기에 배꼽을 잡곤 했는데, 정작 그 친구는 한 번도 웃질 않았어.\n그래서 제일 먼저 간 건지도 모르지."
+"I wonder if this house is still worth saving. At least fresh water can be melted from the snow." = "이 집을 아직 살릴 가치가 있을지 모르겠다. 그래도 눈만 녹이면 깨끗한 물은 얻을 수 있으니 다행이지."
+"One could cover the ground with white plastic sheet, so it would look like snow. In winter you could take it off and now it is summer under it. Too late." = "땅바닥을 하얀 비닐로 덮어 두면 눈처럼 보이겠지. 겨울에 그걸 걷어 내면, 그 밑은 여름인 거야.\n...이제 와선 너무 늦었지만."
+
+//Jouko (drunk guy)
+"Here you go for all your troubles!" = "옜다, 그동안 고생한 값이다!"
+"Hello." = "안녕."
+"What's wrong when money does not excite." = "돈을 줘도 시큰둥하다니, 뭐가 문제야?"
+"Do you have a jerry can with fuel in it? If not, get one. Then drive me to the bird watching tower. Dont worry, you are just a taxi driver minding your own business." = "기름 든 연료통 있냐? 없으면 하나 구해 와. 그다음에 나 좀 조류 관찰탑까지 태워다 줘.\n걱정 마, 넌 그냥 자기 일만 하는 택시 기사일 뿐이니까."
+"Hand me the jerry can." = "연료통 이리 줘 봐."
+"Lets go to the old place. I want to check something." = "옛날 집에 좀 가 보자. 확인할 게 있어."
+"Look at it. That has been healthy building! Koistinen has painted it with polyurethane paint and it started to rot the underlying wood." = "저것 좀 봐라. 멀쩡하던 건물이었다고! 그런데 Koistinen 놈이 폴리우레탄 페인트를 처발라 놔서 속에 있는 나무가 썩기 시작했잖아."
+"I think I need to eat something, take me to the PSK." = "뭐 좀 먹어야겠다. PSK로 데려다 줘."
+"He got it with fair price. I did not want any extra share for my ex-wife who went with that tomato farmer. Small tomatoes, small farmer." = "그 녀석은 적당한 값에 사 간 거야. 토마토 농부랑 눈 맞아 떠난 전처한테 한 푼이라도 더 떼어 주기 싫었거든.\n토마토도 쪼끄만 게, 농부도 쪼끄만 놈이지."
+"You know what, I will burn that hut down. There will be nothing left to argue about. That place has been always miserable." = "있잖아, 저 오두막 그냥 불 질러 버릴 거야. 그럼 더 싸울 거리도 안 남겠지. 저긴 원래부터 지긋지긋한 곳이었어."
+"Sun was coming up so it did not work." = "해가 슬슬 뜰 시간이야. 이거 안 되겠네."
+"It was too cold so I had to come back!" = "너무 추워서 그냥 돌아올 수밖에 없었다고!"
+"The Jerry can was empty, idiot!" = "연료통이 텅 비어 있잖아, 이 멍청아!"
+"It just caught fire, I did not do anything." = "그냥 저절로 불이 붙어버렸어. 난 아무것도 안 했다고."
+"It did not work because I was leaving trails behind." = "발자국이 남아 있길래 그냥 관뒀어."
+"That house is so rotten I could not get it light up!" = "집이 얼마나 썩었는지 불이 붙지를 않더라니까!"
+"I think I saw that Koistinen in the window." = "창문에 그 Koistinen 놈이 보인 것 같더라고."
+"What have I become... Why do I do this." = "내가 어쩌다 이렇게 됐을까... 대체 왜 이러고 사는 건지."
+"Koistinen deserves a fricking whooping. He is a chump." = "Koistinen 그 놈은 아주 흠씬 두들겨 맞아야 돼. 멍청한 자식 같으니."
+"I am so stressed out for this. Hard to get a sleep at nights." = "이것 때문에 스트레스가 이만저만이 아니야. 밤에 잠도 제대로 못 잔다고."
+"Dummies buying houses without understanding a thing. Previous owner is always to blame." = "쥐뿔도 모르는 멍청이들이 집을 사 가지고는. 탓하는 건 맨날 전 주인이지."
+"The ride in Machtwagen is perfect." = "택시 승차감이 아주 완벽하구만."
+"So how have you liked this job?" = "그래, 이 일은 할 만하냐?"
+"You must see all sorts of people when doing this job." = "이 일 하다 보면 별의별 사람을 다 보겠구만."
+"So how is the salary in this job?" = "그래서, 이 일은 벌이가 좀 되냐?"
+"How much is your net gain from ten kilometers?" = "10킬로미터 뛰면 순수하게 얼마나 남나?"
+"I would not mind to have a Machtwagen as my office." = "나도 이런 택시를 사무실로 삼으면 딱 좋겠구만."
 
 //// Factory Job
 SHOW TAG CARD = 근무 카드 보여주기

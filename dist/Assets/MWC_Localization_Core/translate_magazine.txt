@@ -169,6 +169,7 @@ mainbrng. = 메인베어링
 runkolakr = 메인베어링
 heater = 히터
 lämppäri = 히터
+heaterc. = 히터패널
 clutchd. = 클.디스크
 kytkinle. = 클.디스크
 ins.panel = 계기패널
