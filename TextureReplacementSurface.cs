@@ -11,6 +11,7 @@ namespace MWC_Localization_Core
     {
         private const string MainMenuSceneName = "MainMenu";
         private const string GameSceneName = "GAME";
+        private const string TextureFolderName = "texture";
         private const string DriversLicenceTextureName = "drivers_lincence";
         private const string RallyRegistrationObjectPath = "RallyRegistration";
         private const string RallyRegistrationFsmName = "Setup";
@@ -70,7 +71,7 @@ namespace MWC_Localization_Core
         private readonly HashSet<string> matchedTextureNames =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        private string assetsFolder;
+        private string textureFolder;
         private string loadedSceneName;
         private bool hasApplied;
         private bool hasLoadedReplacementTextures;
@@ -84,9 +85,20 @@ namespace MWC_Localization_Core
         public SurfaceCadence Cadence { get { return SurfaceCadence.OncePerScene; } }
         public bool IsComplete { get { return hasApplied; } }
 
+        // Read lazily so toggling the mod setting takes effect on the next F8 / scene load
+        // (F8 already restores originals in ClearTranslations before InitialPass runs).
+        private readonly Func<bool> isEnabled;
+
+        public TextureReplacementSurface(Func<bool> isEnabled)
+        {
+            this.isEnabled = isEnabled;
+        }
+
         public void Initialize(TranslationContext ctx)
         {
-            assetsFolder = ctx != null ? ctx.AssetsFolder : null;
+            textureFolder = ctx != null && !string.IsNullOrEmpty(ctx.AssetsFolder)
+                ? Path.Combine(ctx.AssetsFolder, TextureFolderName)
+                : null;
             ResetRuntimeState();
         }
 
@@ -95,6 +107,12 @@ namespace MWC_Localization_Core
             string sceneName = Application.loadedLevelName;
             if (!ShouldApplyInScene(sceneName) || hasApplied)
                 return 0;
+
+            if (isEnabled != null && !isEnabled())
+            {
+                hasApplied = true;
+                return 0;
+            }
 
             EnsureReplacementTexturesLoaded(sceneName);
 
@@ -152,10 +170,10 @@ namespace MWC_Localization_Core
             loadedSceneName = sceneName;
             hasLoadedReplacementTextures = true;
 
-            if (string.IsNullOrEmpty(assetsFolder) || !Directory.Exists(assetsFolder))
+            if (string.IsNullOrEmpty(textureFolder) || !Directory.Exists(textureFolder))
                 return;
 
-            string[] zipFiles = Directory.GetFiles(assetsFolder, "*.zip", SearchOption.TopDirectoryOnly);
+            string[] zipFiles = Directory.GetFiles(textureFolder, "*.zip", SearchOption.TopDirectoryOnly);
             for (int i = 0; i < zipFiles.Length; i++)
                 LoadTexturesFromZip(zipFiles[i], sceneName);
         }

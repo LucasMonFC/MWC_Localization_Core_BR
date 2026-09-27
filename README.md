@@ -55,7 +55,8 @@ BepInEx/plugins/dist/
 │   ├── translate_msc.txt           # Optional: My Summer Car compatibility
 │   ├── translate_mod.txt           # Optional: Mod content translations
 │   ├── fonts.unity3d               # Optional: Custom font asset bundle
-│   └── *.zip                       # Optional: Replacement texture PNGs
+│   └── texture/
+│       └── *.zip                   # Optional: Replacement texture PNGs
 └── MWC_Localization_Core.dll       # Core plugin module
 ```
 
@@ -260,7 +261,7 @@ For languages requiring special font support (better readability, special charac
 Some text in the game is baked into textures (driver's licence, rally registration card, signs, screen overlays). You can replace these with localized images:
 
 1. **Name each PNG after the game texture** it replaces, e.g. `drivers_lincence.png` (the name must match the game's texture name exactly, including its typos; case-insensitive).
-2. **Zip them** — any `.zip` file in the top level of the assets folder is scanned. Folders inside the ZIP are fine; only the file name matters.
+2. **Zip them** and put the `.zip` in the `texture/` subfolder of the assets folder. Every `.zip` there is scanned; folders inside the ZIP are fine, only the file name matters.
 3. **Press F8** or reload the scene. The console logs each replacement, plus every PNG that didn't match any loaded texture.
 
 Matching is global: every material (and camera `ScreenOverlay`) in the scene using a texture with that name gets the replacement. The original texture's wrap/filter settings are copied over.
@@ -269,7 +270,7 @@ Special cases:
 - `drivers_lincence` is only applied in the Main Menu; every other texture is only applied in-game.
 - **Rally registration card**: the card's textures are swapped at runtime, so renderers under `RallyRegistration` look up `<texture name>card` instead (e.g. `rally_registercard.png`). `rally_registercard` is also applied to any material named `cover 1`.
 
-Keep ZIPs that aren't texture packs out of the assets folder root — they'll be opened and scanned too.
+Players can turn this off with **Enable texture replacement** in the mod settings. The change takes effect on F8 or the next scene load; F8 restores the original textures.
 
 ## Testing & Development
 
