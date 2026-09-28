@@ -13,6 +13,7 @@ namespace MSC_Localization_Core
     {
         private const string MainMenuSceneName = "MainMenu";
         private const string GameSceneName = "GAME";
+        private const string TextureFolderName = "texture";
         private const string DriversLicenceTextureName = "drivers_lincence";
         private const string RallySheetMainTextureProperty = "_MainTex";
         private const int ModTextureDelayFrames = 1;
@@ -61,20 +62,6 @@ namespace MSC_Localization_Core
             }
         }
 
-        private sealed class TextureFileSource
-        {
-            public readonly string TextureKey;
-            public readonly string DisplayName;
-            public readonly byte[] Bytes;
-
-            public TextureFileSource(string textureKey, string displayName, byte[] bytes)
-            {
-                TextureKey = textureKey;
-                DisplayName = displayName;
-                Bytes = bytes;
-            }
-        }
-
         private readonly Dictionary<string, Texture2D> replacementTextures =
             new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
 
@@ -100,10 +87,11 @@ namespace MSC_Localization_Core
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         private readonly Func<bool> getLoadTextureMods;
+        private readonly Func<bool> isEnabled;
         private Material[] capturedMaterials;
         private ScreenOverlay[] capturedOverlays;
         private Image[] capturedImages;
-        private string assetsFolder;
+        private string textureFolder;
         private string loadedSceneName;
         private bool hasApplied;
         private bool hasLoadedReplacementTextures;
@@ -111,13 +99,14 @@ namespace MSC_Localization_Core
         private int modTextureDelayFramesRemaining;
 
         public TextureReplacementSurface()
-            : this(null)
+            : this(null, null)
         {
         }
 
-        public TextureReplacementSurface(Func<bool> getLoadTextureMods)
+        public TextureReplacementSurface(Func<bool> getLoadTextureMods, Func<bool> isEnabled)
         {
             this.getLoadTextureMods = getLoadTextureMods;
+            this.isEnabled = isEnabled;
         }
 
         public string Name { get { return "TextureReplacementSurface"; } }
@@ -126,7 +115,9 @@ namespace MSC_Localization_Core
 
         public void Initialize(TranslationContext ctx)
         {
-            assetsFolder = ctx != null ? ctx.AssetsFolder : null;
+            textureFolder = ctx != null && !string.IsNullOrEmpty(ctx.AssetsFolder)
+                ? Path.Combine(ctx.AssetsFolder, TextureFolderName)
+                : null;
             ResetRuntimeState();
         }
 
@@ -135,6 +126,12 @@ namespace MSC_Localization_Core
             string sceneName = Application.loadedLevelName;
             if (!ShouldApplyInScene(sceneName) || hasApplied)
                 return 0;
+
+            if (isEnabled != null && !isEnabled())
+            {
+                hasApplied = true;
+                return 0;
+            }
 
             EnsureReplacementTexturesLoaded(sceneName);
             if (sceneName == GameSceneName && ShouldLoadTextureMods())
@@ -192,6 +189,7 @@ namespace MSC_Localization_Core
 
         public void Reset()
         {
+            PruneDestroyedBackups();
             ResetRuntimeState();
         }
 
@@ -287,47 +285,15 @@ namespace MSC_Localization_Core
             loadedSceneName = sceneName;
             hasLoadedReplacementTextures = true;
 
-            if (string.IsNullOrEmpty(assetsFolder) || !Directory.Exists(assetsFolder))
+            if (string.IsNullOrEmpty(textureFolder) || !Directory.Exists(textureFolder))
                 return;
 
-            List<TextureFileSource> sources = GetTextureSourcesForScene(sceneName);
-            for (int i = 0; i < sources.Count; i++)
-            {
-                TextureFileSource source = sources[i];
-                if (source == null || string.IsNullOrEmpty(source.TextureKey))
-                    continue;
-
-                sceneTextureKeys.Add(source.TextureKey);
-
-                if (replacementTextures.ContainsKey(source.TextureKey))
-                    continue;
-
-                Texture2D texture = LoadPng(source.Bytes, source.TextureKey, source.DisplayName);
-                if (IsUnityObjectNull(texture))
-                    continue;
-
-                replacementTextures.Add(source.TextureKey, texture);
-            }
-        }
-
-        private List<TextureFileSource> GetTextureSourcesForScene(string sceneName)
-        {
-            List<TextureFileSource> sources = new List<TextureFileSource>();
-            AddTextureSourcesFromZipFiles(sources, sceneName);
-            return sources;
-        }
-
-        private void AddTextureSourcesFromZipFiles(List<TextureFileSource> sources, string sceneName)
-        {
-            if (string.IsNullOrEmpty(assetsFolder) || !Directory.Exists(assetsFolder))
-                return;
-
-            string[] zipFiles = Directory.GetFiles(assetsFolder, "*.zip", SearchOption.TopDirectoryOnly);
+            string[] zipFiles = Directory.GetFiles(textureFolder, "*.zip", SearchOption.TopDirectoryOnly);
             for (int i = 0; i < zipFiles.Length; i++)
-                AddTextureSourcesFromZip(sources, zipFiles[i], sceneName);
+                LoadTexturesFromZip(zipFiles[i], sceneName);
         }
 
-        private void AddTextureSourcesFromZip(List<TextureFileSource> sources, string zipFile, string sceneName)
+        private void LoadTexturesFromZip(string zipFile, string sceneName)
         {
             try
             {
@@ -347,14 +313,24 @@ namespace MSC_Localization_Core
 
                         totalPngCount++;
                         string textureName = Path.GetFileNameWithoutExtension(NormalizeZipPath(entry.FileName));
-                        if (!ShouldLoadTextureInScene(textureName, sceneName))
+                        if (string.IsNullOrEmpty(textureName) || !ShouldLoadTextureInScene(textureName, sceneName))
                             continue;
 
+                        sceneTextureKeys.Add(textureName);
+
+                        if (replacementTextures.ContainsKey(textureName))
+                            continue;
+
+                        byte[] bytes;
                         using (MemoryStream stream = new MemoryStream())
                         {
                             entry.Extract(stream);
-                            sources.Add(new TextureFileSource(textureName, zipFile + "::" + entry.FileName, stream.ToArray()));
+                            bytes = stream.ToArray();
                         }
+
+                        Texture2D texture = LoadPng(bytes, textureName, zipFile + "::" + entry.FileName);
+                        if (!IsUnityObjectNull(texture))
+                            replacementTextures.Add(textureName, texture);
                     }
                 }
 
@@ -377,7 +353,7 @@ namespace MSC_Localization_Core
 
             try
             {
-                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
                 if (!texture.LoadImage(bytes))
                 {
                     UnityEngine.Object.Destroy(texture);
@@ -386,6 +362,7 @@ namespace MSC_Localization_Core
                 }
 
                 texture.name = textureName;
+                texture.Apply(true, true);
                 return texture;
             }
             catch (Exception ex)
@@ -835,6 +812,27 @@ namespace MSC_Localization_Core
             }
 
             originalOverlayTextures.Clear();
+        }
+
+        private void PruneDestroyedBackups()
+        {
+            List<Material> deadMaterials = new List<Material>();
+            foreach (Material material in originalMaterialTextures.Keys)
+            {
+                if (IsUnityObjectNull(material))
+                    deadMaterials.Add(material);
+            }
+            for (int i = 0; i < deadMaterials.Count; i++)
+                originalMaterialTextures.Remove(deadMaterials[i]);
+
+            List<ScreenOverlay> deadOverlays = new List<ScreenOverlay>();
+            foreach (ScreenOverlay overlay in originalOverlayTextures.Keys)
+            {
+                if (IsUnityObjectNull(overlay))
+                    deadOverlays.Add(overlay);
+            }
+            for (int i = 0; i < deadOverlays.Count; i++)
+                originalOverlayTextures.Remove(deadOverlays[i]);
         }
 
         private void RestoreOriginalImageSprites()

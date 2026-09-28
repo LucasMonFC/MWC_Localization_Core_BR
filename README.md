@@ -34,7 +34,7 @@ The project references My Summer Car managed assemblies from the path configured
 **Long Subtitle Timing** - Applies selected long subtitles at their source FSM/ArrayList and uses the matching audio clip length for subtitle/UI timing.
 **Configurable Fonts** - Maps original game fonts to localized custom fonts.
 **Non-ASCII Support** - Custom fonts and forced-font paths keep accented text and other non-ASCII glyphs readable on surfaces that the game rebuilds dynamically.
-**PNG Texture Replacements** - Replaces loaded material textures with language-pack PNG files by matching the original Unity texture name.
+**PNG Texture Replacements** - Replaces loaded material textures with PNG files inside language-pack ZIPs by matching the original Unity texture name.
 **Position Adjustments** - Fine-tunes text placement per language.
 **Live Reload** - Press F8 to reload config, translations, and runtime caches without restarting the game.
 
@@ -49,7 +49,8 @@ dist/
 |       |-- translate_teletext.txt
 |       |-- translate_mod.txt
 |       |-- fonts.unity3d
-|       `-- textures/
+|       `-- texture/
+|           `-- *.zip
 `-- MSC_Localization_Core.dll
 ```
 
@@ -87,13 +88,13 @@ Font assets must exist in `fonts.unity3d` with names matching the right side val
 
 ### PNG Texture Replacements
 
-Place replacement PNGs under `Mods/Assets/MSC_Localization_Core_BR/textures/`. The file name must match the original Unity texture object name, without extension:
+Place ZIP texture packs under `Mods/Assets/MSC_Localization_Core_BR/texture/`. Each PNG inside the ZIP must match the original Unity texture object name, without extension:
 
 ```text
-Mods/Assets/MSC_Localization_Core_BR/textures/my_original_texture.png
+Mods/Assets/MSC_Localization_Core_BR/texture/portuguese_textures.zip
 ```
 
-The loader scans material texture slots such as `_MainTex`, `_BumpMap`, `_EmissionMap`, and related Unity shader properties. It also handles UI sprites and `ScreenOverlay` textures such as camera helmet overlays. It runs on GAME scene load and again on F8 reload. The menu-only `drivers_lincence.png` replacement is applied during MainMenu load instead.
+The loader scans material texture slots such as `_MainTex`, `_BumpMap`, `_EmissionMap`, and related Unity shader properties. It also handles UI sprites and `ScreenOverlay` textures such as camera helmet overlays. It runs on GAME scene load and again on F8 reload. The menu-only `drivers_lincence.png` replacement is applied during MainMenu load instead. You can disable texture replacement in the mod settings; the change takes effect after F8 or on the next scene.
 
 ## Translation Files
 
