@@ -20,7 +20,7 @@ See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
    - `translate_teletext.txt` - TV/Teletext content
    - `translate_mod.txt (optional)` - Mod content
 4. **(Optional)** Create custom fonts in `fonts.unity3d`
-5. **(Optional)** Place PNG texture replacements in `textures/`
+5. **(Optional)** Place ZIP texture packs in `texture/`
 6. **Test in-game with F8 reload!**
 
 ### For Developers
@@ -88,13 +88,13 @@ Font assets must exist in `fonts.unity3d` with matching names (right side values
 
 ### Texture Replacements
 
-Place optional PNG replacements under `Mods/Assets/MWC_Localization_Core_BR/textures/`. A PNG replaces a loaded Unity texture when the file name matches the original texture name:
+Place optional ZIP texture packs under `Mods/Assets/MWC_Localization_Core_BR/texture/`. Each PNG inside a ZIP replaces a loaded Unity texture when its file name matches the original texture name:
 
 ```text
-Mods/Assets/MWC_Localization_Core_BR/textures/ATLAS_GROCERIES.png
+Mods/Assets/MWC_Localization_Core_BR/texture/portuguese_textures.zip
 ```
 
-The loader scans material texture slots such as `_MainTex`, `_EmissionMap`, `_BumpMap`, `_MetallicGlossMap`, `_OcclusionMap`, and `_SpecGlossMap`. It also re-applies matching PNGs when known PlayMaker-driven screens swap their textures after load, such as order/payment sheets. File names must match the original texture name. The menu-only `drivers_lincence.png` replacement is applied during MainMenu load instead of GAME load.
+The loader scans material texture slots such as `_MainTex`, `_EmissionMap`, `_BumpMap`, `_MetallicGlossMap`, `_OcclusionMap`, and `_SpecGlossMap`. It also re-applies matching PNGs when known PlayMaker-driven screens swap their textures after load, such as order/payment sheets. File names must match the original texture name. The menu-only `drivers_lincence.png` replacement is applied during MainMenu load instead of GAME load. You can disable texture replacement in the mod settings; the change takes effect after F8 or on the next scene.
 
 ## Translation Files
 

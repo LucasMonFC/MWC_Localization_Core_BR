@@ -19,7 +19,7 @@ namespace MWC_Localization_Core
         public override string ID => "MWC_Localization_Core_BR";
         public override string Name => "MWC_Localization_Core";
         public override string Author => "potatosalad775&LucasMonOficial";
-        public override string Version => "1.5.3";
+        public override string Version => "1.5.4";
         public override string Description => "Núcleo de localização multilíngue para My Winter Car";
         public override Game SupportedGames => Game.MyWinterCar;
 
@@ -70,6 +70,7 @@ namespace MWC_Localization_Core
         private string lastReloadKeyLabel = string.Empty;
         private SettingsCheckBox showDebugLogs;
         private SettingsCheckBox showWarningLogs;
+        private SettingsCheckBox enableTextureReplacement;
         private SettingsCheckBox loadTextureMods;
         private TextureReplacementSurface textureReplacementSurface;
 
@@ -92,10 +93,13 @@ namespace MWC_Localization_Core
             reloadKeyDisplay = Settings.AddText(ReloadKeyDisplayPrefix + GetReloadKeybindLabel());
             UpdateReloadKeyDisplay();
 
+            Settings.AddHeader("Texturas");
+            enableTextureReplacement = Settings.AddCheckBox("enableTextureReplacement", "Ativar substituição de texturas", true);
+            loadTextureMods = Settings.AddCheckBox("loadTextureMods", "Carregar texturas de mods", false);
+
             Settings.AddHeader("Opções diversas");
             showDebugLogs = Settings.AddCheckBox("showDebugLogs", "Mostrar mensagens de depuração no console", false);
             showWarningLogs = Settings.AddCheckBox("showWarningLogs", "Mostrar avisos / erros no console", false);
-            loadTextureMods = Settings.AddCheckBox("loadTextureMods", "Carregar texturas de mods", false);
         }
 
         private void Mod_SettingsLoaded()
@@ -132,7 +136,9 @@ namespace MWC_Localization_Core
                 translator,
                 ModLoader.GetModAssetsFolder(this));
 
-            textureReplacementSurface = new TextureReplacementSurface(() => loadTextureMods != null && loadTextureMods.GetValue());
+            textureReplacementSurface = new TextureReplacementSurface(
+                () => loadTextureMods != null && loadTextureMods.GetValue(),
+                () => enableTextureReplacement == null || enableTextureReplacement.GetValue());
 
             surfaces = new List<ITranslationSurface>
             {

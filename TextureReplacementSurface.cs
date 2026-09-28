@@ -13,12 +13,14 @@ namespace MWC_Localization_Core
     {
         private const string MainMenuSceneName = "MainMenu";
         private const string GameSceneName = "GAME";
+        private const string TextureFolderName = "texture";
         private const string DriversLicenceTextureName = "drivers_lincence";
         private const string RallyRegistrationObjectPath = "RallyRegistration";
         private const string RallyRegistrationFsmName = "Setup";
         private const string RallyRegistrationStateName = "Init";
         private const string RallyCoverMaterialName = "cover 1";
         private const string RallyCoverReplacementTextureName = "rally_registercard";
+        private const string RallyCardTextureSuffix = "card";
         private const int ModTextureDelayFrames = 1;
 
         private static readonly string[] TexturePropertyNames = new string[]
@@ -53,20 +55,6 @@ namespace MWC_Localization_Core
             }
         }
 
-        private sealed class TextureFileSource
-        {
-            public readonly string TextureKey;
-            public readonly string DisplayName;
-            public readonly byte[] Bytes;
-
-            public TextureFileSource(string textureKey, string displayName, byte[] bytes)
-            {
-                TextureKey = textureKey;
-                DisplayName = displayName;
-                Bytes = bytes;
-            }
-        }
-
         private readonly Dictionary<string, Texture2D> replacementTextures =
             new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
 
@@ -92,25 +80,27 @@ namespace MWC_Localization_Core
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         private readonly Func<bool> getLoadTextureMods;
+        private readonly Func<bool> isEnabled;
         private Material[] capturedMaterials;
         private ScreenOverlay[] capturedOverlays;
         private Image[] capturedImages;
-        private string assetsFolder;
+        private string textureFolder;
         private string loadedSceneName;
         private bool hasApplied;
         private bool hasLoadedReplacementTextures;
-        private bool hasInstalledRallyRefreshHook;
+        private PlayMakerFSM rallyHookedFsm;
         private bool pendingModTextureApply;
         private int modTextureDelayFramesRemaining;
 
         public TextureReplacementSurface()
-            : this(null)
+            : this(null, null)
         {
         }
 
-        public TextureReplacementSurface(Func<bool> getLoadTextureMods)
+        public TextureReplacementSurface(Func<bool> getLoadTextureMods, Func<bool> isEnabled)
         {
             this.getLoadTextureMods = getLoadTextureMods;
+            this.isEnabled = isEnabled;
         }
 
         public string Name { get { return "TextureReplacementSurface"; } }
@@ -119,7 +109,9 @@ namespace MWC_Localization_Core
 
         public void Initialize(TranslationContext ctx)
         {
-            assetsFolder = ctx != null ? ctx.AssetsFolder : null;
+            textureFolder = ctx != null && !string.IsNullOrEmpty(ctx.AssetsFolder)
+                ? Path.Combine(ctx.AssetsFolder, TextureFolderName)
+                : null;
             ResetRuntimeState();
         }
 
@@ -128,6 +120,12 @@ namespace MWC_Localization_Core
             string sceneName = Application.loadedLevelName;
             if (!ShouldApplyInScene(sceneName) || hasApplied)
                 return 0;
+
+            if (isEnabled != null && !isEnabled())
+            {
+                hasApplied = true;
+                return 0;
+            }
 
             EnsureReplacementTexturesLoaded(sceneName);
             if (sceneName == GameSceneName && ShouldLoadTextureMods())
@@ -187,6 +185,7 @@ namespace MWC_Localization_Core
 
         public void Reset()
         {
+            PruneDestroyedBackups();
             ResetRuntimeState();
         }
 
@@ -216,7 +215,6 @@ namespace MWC_Localization_Core
             loadedSceneName = null;
             hasApplied = false;
             hasLoadedReplacementTextures = false;
-            hasInstalledRallyRefreshHook = false;
             pendingModTextureApply = false;
             modTextureDelayFramesRemaining = 0;
             sceneTextureKeys.Clear();
@@ -283,47 +281,15 @@ namespace MWC_Localization_Core
             loadedSceneName = sceneName;
             hasLoadedReplacementTextures = true;
 
-            if (string.IsNullOrEmpty(assetsFolder) || !Directory.Exists(assetsFolder))
+            if (string.IsNullOrEmpty(textureFolder) || !Directory.Exists(textureFolder))
                 return;
 
-            List<TextureFileSource> sources = GetTextureSourcesForScene(sceneName);
-            for (int i = 0; i < sources.Count; i++)
-            {
-                TextureFileSource source = sources[i];
-                if (source == null || string.IsNullOrEmpty(source.TextureKey))
-                    continue;
-
-                sceneTextureKeys.Add(source.TextureKey);
-
-                if (replacementTextures.ContainsKey(source.TextureKey))
-                    continue;
-
-                Texture2D texture = LoadPng(source.Bytes, source.TextureKey, source.DisplayName);
-                if (IsUnityObjectNull(texture))
-                    continue;
-
-                replacementTextures.Add(source.TextureKey, texture);
-            }
-        }
-
-        private List<TextureFileSource> GetTextureSourcesForScene(string sceneName)
-        {
-            List<TextureFileSource> sources = new List<TextureFileSource>();
-            AddTextureSourcesFromZipFiles(sources, sceneName);
-            return sources;
-        }
-
-        private void AddTextureSourcesFromZipFiles(List<TextureFileSource> sources, string sceneName)
-        {
-            if (string.IsNullOrEmpty(assetsFolder) || !Directory.Exists(assetsFolder))
-                return;
-
-            string[] zipFiles = Directory.GetFiles(assetsFolder, "*.zip", SearchOption.TopDirectoryOnly);
+            string[] zipFiles = Directory.GetFiles(textureFolder, "*.zip", SearchOption.TopDirectoryOnly);
             for (int i = 0; i < zipFiles.Length; i++)
-                AddTextureSourcesFromZip(sources, zipFiles[i], sceneName);
+                LoadTexturesFromZip(zipFiles[i], sceneName);
         }
 
-        private void AddTextureSourcesFromZip(List<TextureFileSource> sources, string zipFile, string sceneName)
+        private void LoadTexturesFromZip(string zipFile, string sceneName)
         {
             try
             {
@@ -343,14 +309,24 @@ namespace MWC_Localization_Core
 
                         totalPngCount++;
                         string textureName = Path.GetFileNameWithoutExtension(NormalizeZipPath(entry.FileName));
-                        if (!ShouldLoadTextureInScene(textureName, sceneName))
+                        if (string.IsNullOrEmpty(textureName) || !ShouldLoadTextureInScene(textureName, sceneName))
                             continue;
 
+                        sceneTextureKeys.Add(textureName);
+
+                        if (replacementTextures.ContainsKey(textureName))
+                            continue;
+
+                        byte[] bytes;
                         using (MemoryStream stream = new MemoryStream())
                         {
                             entry.Extract(stream);
-                            sources.Add(new TextureFileSource(textureName, zipFile + "::" + entry.FileName, stream.ToArray()));
+                            bytes = stream.ToArray();
                         }
+
+                        Texture2D texture = LoadPng(bytes, textureName, zipFile + "::" + entry.FileName);
+                        if (!IsUnityObjectNull(texture))
+                            replacementTextures.Add(textureName, texture);
                     }
                 }
 
@@ -373,7 +349,7 @@ namespace MWC_Localization_Core
 
             try
             {
-                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
                 if (!texture.LoadImage(bytes))
                 {
                     UnityEngine.Object.Destroy(texture);
@@ -382,6 +358,7 @@ namespace MWC_Localization_Core
                 }
 
                 texture.name = textureName;
+                texture.Apply(true, true);
                 return texture;
             }
             catch (Exception ex)
@@ -562,11 +539,13 @@ namespace MWC_Localization_Core
                 return 0;
 
             PlayMakerFSM fsm = FindFsmByName(go, RallyRegistrationFsmName);
-            if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
+            if (IsUnityObjectNull(fsm))
                 return 0;
 
-            HutongGames.PlayMaker.FsmState state = FindState(fsm, RallyRegistrationStateName);
-            if (state == null || hasInstalledRallyRefreshHook)
+            if (ReferenceEquals(fsm, rallyHookedFsm))
+                return ApplyTexturesOnObject(go, RallyCardTextureSuffix);
+
+            if (!HasState(fsm, RallyRegistrationStateName))
                 return 0;
 
             bool injected = MSCLoader.PlayMakerExtensions.FsmInject(
@@ -575,20 +554,19 @@ namespace MWC_Localization_Core
                 RallyRegistrationStateName,
                 (Action)delegate
                 {
-                    ApplyTexturesOnObject(go, "card");
+                    ApplyTexturesOnObject(go, RallyCardTextureSuffix);
                 },
                 false,
                 -1,
                 false);
 
-            if (injected)
-            {
-                hasInstalledRallyRefreshHook = true;
-                ApplyTexturesOnObject(go, "card");
-                CoreConsole.Print($"[{Name}] Instalou hook de atualização de textura do rally");
-            }
+            if (!injected)
+                return 0;
 
-            return injected ? 1 : 0;
+            rallyHookedFsm = fsm;
+            ApplyTexturesOnObject(go, RallyCardTextureSuffix);
+            CoreConsole.Print($"[{Name}] Instalou hook de atualização de textura do rally");
+            return 1;
         }
 
         private int ApplyTexturesOnObject(GameObject obj, string textureKeySuffix)
@@ -795,6 +773,27 @@ namespace MWC_Localization_Core
             originalOverlayTextures.Clear();
         }
 
+        private void PruneDestroyedBackups()
+        {
+            List<Material> deadMaterials = new List<Material>();
+            foreach (Material material in originalMaterialTextures.Keys)
+            {
+                if (IsUnityObjectNull(material))
+                    deadMaterials.Add(material);
+            }
+            for (int i = 0; i < deadMaterials.Count; i++)
+                originalMaterialTextures.Remove(deadMaterials[i]);
+
+            List<ScreenOverlay> deadOverlays = new List<ScreenOverlay>();
+            foreach (ScreenOverlay overlay in originalOverlayTextures.Keys)
+            {
+                if (IsUnityObjectNull(overlay))
+                    deadOverlays.Add(overlay);
+            }
+            for (int i = 0; i < deadOverlays.Count; i++)
+                originalOverlayTextures.Remove(deadOverlays[i]);
+        }
+
         private void RestoreOriginalImageSprites()
         {
             foreach (KeyValuePair<Image, Sprite> pair in originalImageSprites)
@@ -979,19 +978,19 @@ namespace MWC_Localization_Core
             return null;
         }
 
-        private static HutongGames.PlayMaker.FsmState FindState(PlayMakerFSM fsm, string stateName)
+        private static bool HasState(PlayMakerFSM fsm, string stateName)
         {
             if (IsUnityObjectNull(fsm) || fsm.FsmStates == null)
-                return null;
+                return false;
 
             HutongGames.PlayMaker.FsmState[] states = fsm.FsmStates;
             for (int i = 0; i < states.Length; i++)
             {
                 if (states[i] != null && states[i].Name == stateName)
-                    return states[i];
+                    return true;
             }
 
-            return null;
+            return false;
         }
 
         private static bool IsUnityObjectNull(UnityEngine.Object obj)
