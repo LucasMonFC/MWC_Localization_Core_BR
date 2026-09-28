@@ -78,7 +78,6 @@ namespace MWC_Localization_Core
             SetupFunction(Setup.ModSettings, Mod_Settings);
             SetupFunction(Setup.ModSettingsLoaded, Mod_SettingsLoaded);
             SetupFunction(Setup.OnMenuLoad, Mod_OnMenuLoad);
-            SetupFunction(Setup.OnNewGame, Mod_OnNewGame, "Traduzindo textos da intro...");
             SetupFunction(Setup.PreLoad, Mod_PreLoad, "Capturando texturas originais...");
             SetupFunction(Setup.PostLoad, Mod_PostLoad, "Aplicando localização...");
             SetupFunction(Setup.Update, Mod_Update);
@@ -153,19 +152,6 @@ namespace MWC_Localization_Core
             TranslateScene();
             MarkSceneTranslated("MainMenu");
             RunSurfaceInitialPasses(null);
-            config.ApplyGameObjectAdjustments();
-        }
-
-        private void Mod_OnNewGame()
-        {
-            if (!hasLoadedTranslations || translator == null)
-                return;
-
-            CoreConsole.Print($"[{Name}] Novo jogo iniciado - traduzindo textos disponíveis da intro/carregamento...");
-            LocalizationUtils.PruneCaches();
-            translator.ClearRuntimeCaches();
-            TranslateScene();
-            RunFsmTextHookForScene("Intro");
             config.ApplyGameObjectAdjustments();
         }
 
@@ -246,6 +232,13 @@ namespace MWC_Localization_Core
                 TranslateScene();
                 MarkSceneTranslated("GAME");
                 RunSurfaceInitialPasses("Initial ");
+                config.ApplyGameObjectAdjustments();
+            }
+            else if (sceneName == "Intro" && ShouldTranslateScene("Intro"))
+            {
+                CoreConsole.Print($"[{Name}] Traduzindo cena da introdução...");
+                TranslateScene();
+                MarkSceneTranslated("Intro");
                 config.ApplyGameObjectAdjustments();
             }
         }
@@ -355,21 +348,6 @@ namespace MWC_Localization_Core
                 int count = surfaces[i].InitialPass();
                 if (count > 0)
                     CoreConsole.Print($"[{Name}] {logPrefix ?? string.Empty}{surfaces[i].Name}: traduziu {count}");
-            }
-        }
-
-        private void RunFsmTextHookForScene(string sceneName)
-        {
-            if (surfaces == null) return;
-
-            for (int i = 0; i < surfaces.Count; i++)
-            {
-                FsmTextHook hook = surfaces[i] as FsmTextHook;
-                if (hook == null)
-                    continue;
-
-                if (hook.ApplyForScene(sceneName))
-                    CoreConsole.Print($"[{Name}] FsmTextHook: aplicou traduções FSM fixas em {sceneName}");
             }
         }
 

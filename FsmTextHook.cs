@@ -22,11 +22,6 @@ namespace MWC_Localization_Core
             return 0;
         }
 
-        public bool ApplyForScene(string sceneName)
-        {
-            return UpdateForScene(sceneName);
-        }
-
         // FsmTextHook runs at OncePerScene cadence, so LateUpdateHandler never ticks it.
         public int MonitorTick(float deltaTime)
         {
@@ -112,8 +107,7 @@ namespace MWC_Localization_Core
 
             bool isMainMenu = currentScene == "MainMenu";
             bool isGame = currentScene == "GAME";
-            bool isIntro = currentScene == "Intro";
-            if (!isMainMenu && !isGame && !isIntro)
+            if (!isMainMenu && !isGame)
                 return false;
 
             bool changed = ApplySceneTargets(currentScene);
@@ -942,26 +936,13 @@ namespace MWC_Localization_Core
                 return false;
 
             bool mainMenuTarget = target.ObjectPath.StartsWith("Radio/", System.StringComparison.Ordinal);
-            bool introTarget = IsSceneRootTarget(target, "Intro");
             if (currentScene == "MainMenu")
                 return mainMenuTarget;
 
             if (currentScene == "GAME")
-                return !mainMenuTarget && !introTarget;
-
-            if (currentScene == "Intro")
-                return introTarget;
+                return !mainMenuTarget;
 
             return false;
-        }
-
-        private static bool IsSceneRootTarget(FsmTarget target, string sceneRoot)
-        {
-            if (target == null || string.IsNullOrEmpty(target.ObjectPath) || string.IsNullOrEmpty(sceneRoot))
-                return false;
-
-            return target.ObjectPath == sceneRoot
-                || target.ObjectPath.StartsWith(sceneRoot + "/", System.StringComparison.Ordinal);
         }
 
         private bool TranslateFsmString(HutongGames.PlayMaker.FsmString fsmString, FsmTarget target)
