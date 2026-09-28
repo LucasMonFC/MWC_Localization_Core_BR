@@ -930,6 +930,8 @@ salmon soup = SOPA DE SALMÃO
 "This house was great, I did not experience cold, EVER. We used to laugh at Pauno's stories. He never laughed. Maybe thats why he was first to go." = "Essa casa era ótima; não passei frio, nunca. A gente ria das histórias do Pauno. Ele nunca ria. Talvez tenha sido por isso que ele foi o primeiro a ir embora."
 "I wonder if this house is still worth saving. At least fresh water can be melted from the snow." = Será que ainda vale a pena salvar esta casa? Pelo menos dá para obter água fresca derretendo a neve.
 "One could cover the ground with white plastic sheet, so it would look like snow. In winter you could take it off and now it is summer under it. Too late." = "Daria para cobrir o chão com uma lona plástica branca, assim pareceria neve. No\ninverno, você poderia tirá-la e, por baixo dela, agora seria verão. Tarde demais."
+"Hello. We should drive to the Kittilä. Get the van... Waitress turned the light on. I can't see anything here. So bright indeed." = "Olá. Deveríamos ir de carro até Kittilä. Pegue a van... A garçonete acendeu a luz. Não consigo ver nada aqui. Está muito claro mesmo."
+"Can you drive me to the old house? I need to check something." = Você pode me levar à casa antiga? Preciso verificar uma coisa.
 
 //Factory Job
 SHOW TAG CARD = MOSTRAR CARTÃO DE IDENTIFICAÇÃO
@@ -1188,6 +1190,7 @@ Mittatilausjouset / Coil spring order    = Pedido de molas helicoidais
 "Look at yourself. You look like a lost tourist. But hey, this is not a place for sightseeings." = "Olhe para você. Você parece um turista perdido. Mas ei, este não é um lugar para passeios turísticos."
 
 //Jouko (drunk guy)
+"Hello." = "Olá."
 "Jokke here! Come pick me up at my place." = "Jokke aqui! Venha me buscar na minha casa."
 "Here you go for all your troubles!" = "Aqui está, como recompensa por todos os seus problemas!"
 "What's wrong when money does not excite." = "Qual o problema quando o dinheiro não empolga?"
@@ -1210,3 +1213,11 @@ Mittatilausjouset / Coil spring order    = Pedido de molas helicoidais
 "So you are a taxi driver these days? Seems to be the old car of Harvanen. It is a good job. I could have been taxi driver as well." = "Então você é taxista agora? Parece ser o carro antigo do Harvanen. É um bom trabalho. Eu também poderia ter sido taxista."
 "So... that Koistinen who bought my old house. He is trying to sue me for the house being rotten. The Koistinen is a fool, there is no way that house is rotten!" = "Então... aquele Koistinen que comprou minha antiga casa. Ele está tentando me processar dizendo que a casa está podre. O Koistinen é um idiota, não tem como aquela casa estar podre!"
 "He is not man enough to settle the issue personally, instead goes directly to court! That's what they are, dummies that understand only written word." = "Ele não tem coragem de resolver a questão pessoalmente, e vai direto ao tribunal! É isso que eles são, uns idiotas que só entendem de palavras escritas."
+"Sun was coming up so it did not work." = O sol estava nascendo, então não funcionou.
+"It was too cold so I had to come back!" = Estava frio demais, então tive que voltar!
+"The Jerry can was empty, idiot!" = O galão estava vazio, seu idiota!
+"It just caught fire, I did not do anything." = Simplesmente pegou fogo, eu não fiz nada.
+"It did not work because I was leaving trails behind." = Não funcionou porque eu estava deixando rastros pelo caminho.
+"That house is so rotten I could not get it light up!" = Aquela casa está tão podre que não consegui acender a luz!
+"I think I saw that Koistinen in the window." = Acho que vi aquele Koistinen na janela.
+"What have I become... Why do I do this." = "No que eu me tornei... Por que fiz isso?"
