@@ -67,7 +67,6 @@ namespace MSC_Localization_Core
             SetupFunction(Setup.ModSettings, Mod_Settings);
             SetupFunction(Setup.ModSettingsLoaded, Mod_SettingsLoaded);
             SetupFunction(Setup.OnMenuLoad, Mod_OnMenuLoad);
-            SetupFunction(Setup.OnNewGame, Mod_OnNewGame, "Traduzindo textos da intro...");
             SetupFunction(Setup.PreLoad, Mod_PreLoad, "Capturando texturas originais...");
             SetupFunction(Setup.PostLoad, Mod_PostLoad, "Aplicando localização...");
             SetupFunction(Setup.Update, Mod_Update);
@@ -142,19 +141,6 @@ namespace MSC_Localization_Core
             TranslateScene();
             MarkSceneTranslated("MainMenu");
             RunSurfaceInitialPasses(null);
-            config.ApplyGameObjectAdjustments();
-        }
-
-        private void Mod_OnNewGame()
-        {
-            if (!hasLoadedTranslations || translator == null)
-                return;
-
-            CoreConsole.Print($"[{Name}] Novo jogo iniciado - traduzindo textos disponíveis da intro/carregamento...");
-            LocalizationUtils.PruneCaches();
-            translator.ClearRuntimeCaches();
-            TranslateScene();
-            RunFsmTextHookForScene("Intro");
             config.ApplyGameObjectAdjustments();
         }
 
@@ -236,6 +222,14 @@ namespace MSC_Localization_Core
                 TranslateScene();
                 MarkSceneTranslated("GAME");
                 RunSurfaceInitialPasses("Inicial ");
+                config.ApplyGameObjectAdjustments();
+            }
+            else if (sceneName == "Intro" && ShouldTranslateScene("Intro"))
+            {
+                CoreConsole.Print($"[{Name}] Traduzindo cena da introdução...");
+                TranslateScene();
+                MarkSceneTranslated("Intro");
+                RunFsmTextHookForScene("Intro");
                 config.ApplyGameObjectAdjustments();
             }
             else if (sceneName == "Ending" && ShouldTranslateScene("Ending"))
