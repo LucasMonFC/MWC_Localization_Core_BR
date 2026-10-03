@@ -970,6 +970,11 @@ namespace MWC_Localization_Core
 
             string result = ApplyRules(value, target.Rules);
             translationCache[cacheKey] = result;
+
+            // Cache our output too, so a later poll won't apply the rules again.
+            if (result != value)
+                translationCache[target.Key + "\n" + result] = result;
+
             translated = result;
             return result != value;
         }
