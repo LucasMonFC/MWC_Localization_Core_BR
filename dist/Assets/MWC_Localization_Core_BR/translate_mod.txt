@@ -905,3 +905,9 @@ Collect Payment — {0} mk\nFEED -> Cattle {1}/50 | Chicken {2}/50 | Manure {3}/
 ⚠ Sick Animals — 2x Price! = ⚠ ANIMAIS DOENTES — PREÇO EM DOBRO!
 ⚠ Sick Animals — 2x Price!\nFarmer (Delivered Sacks & Raw Produce)\nFEED -> Cattle {0}/50 | Chicken {1}/50 | Manure {2}/50\nPRODUCE -> Beef {3}/30 | Chicken {4}/30 | Tomatoes {5}/30 | Milk {6}/30 = ⚠ ANIMAIS DOENTES — PREÇO EM DOBRO!\nFAZENDEIRO (SACOS ENTREGUES E PRODUTOS CRUS)\nRAÇÃO -> GADO {0}/50 | GALINHA {1}/50 | ESTERCO {2}/50\nPRODUÇÃO -> CARNE BOVINA {3}/30 | FRANGO {4}/30 | TOMATES {5}/30 | LEITE {6}/30
 ⚠ Sick Animals — 2x Price!\nCollect Payment — {0} mk\nFEED -> Cattle {1}/50 | Chicken {2}/50 | Manure {3}/50\nPRODUCE -> Beef {4}/30 | Chicken {5}/30 | Tomatoes {6}/30 | Milk {7}/30 = ⚠ ANIMAIS DOENTES — PREÇO EM DOBRO!\nCOLETAR PAGAMENTO — {0} MK\nRAÇÃO -> GADO {1}/50 | GALINHA {2}/50 | ESTERCO {3}/50\nPRODUÇÃO -> CARNE BOVINA {4}/30 | FRANGO {5}/30 | TOMATES {6}/30 | LEITE {7}/30
+
+//Futufon Delivery Job
+TAKE JOB = ACEITAR TRABALHO
+ChargerBox = CAIXA DE CARREGADORES
+"Hello. My name is Kunto. Director Teffelgren ordered me to come here and hand over boxes of chargers to a good driver." = "Olá. Meu nome é Kunto. O diretor Teffelgren me mandou vir até aqui e entregar caixas de carregadores a um bom motorista."
+"Your task is to take them to the Futufon store in the Perajarvi near flea market and leave them there. After a while, you will receive payment for job on your bank balance." = "Você deve levar as caixas até a loja Futufon, em Peräjärvi, perto do mercado de pulgas, e deixá-las lá. Depois de um tempo, você receberá o pagamento pelo trabalho em sua conta bancária."
