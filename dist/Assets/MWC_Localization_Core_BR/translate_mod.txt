@@ -798,6 +798,7 @@ Kauppakuljetus = Transporte comercial
 RAISE/LOWER LEGS = LEVANTAR/ABAIXAR AS PERNAS
 Hand Crank = MANIVELA
 GromAZ Wheel Worn = RODA GROMAZ DESGASTADA
+GromAZ Wheel = RODA GROMAZ
 Horn = BUZINA
 GromAZ Wind Deflector = DEFLETOR DE VENTO GROMAZ
 GromAZ Bullbar = BARRA DE PROTEÇÃO GROMAZ
