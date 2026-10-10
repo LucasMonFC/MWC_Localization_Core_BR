@@ -2389,14 +2389,6 @@ Fan Speed: 3 = "Velocidade do ventilador: 3"
 Temperature set to: Heat. = "Temperatura: Aquecer."
 Temperature set to: Cool. = "Temperatura: Resfriar.
 
-//Final Lista de MODs
-
-//Tradução de pagamentos
-BUY {0} MK = COMPRAR {0} MK
-PAY {0} MK = PAGAR {0} MK
-TAKE MONEY {0} MK  = PEGUE O DINHEIRO {0} MK
-PRICE TOTAL: {0} MK = PREÇO TOTAL: {0} MK
-
 //Uncle Walking Again
 Mind if I catch a ride to home? = Posso pegar uma carona até em casa?
 Mind if I catch a ride to Teimo's? = Posso pegar uma carona até a loja do Teimo?
@@ -2419,3 +2411,30 @@ I'm walking here. = Tô passando!
 All right. = Tudo bem.
 Never mind. = Deixa pra lá.
 This is it. Thanks. = É aqui. Obrigado.
+
+//Hyttynen
+BUY HYTTYNEN HF (12000 MK) = COMPRAR HYTTYNEN HF (12000 MK)
+TALK = FALAR
+Deal! She's yours. The wings are over there, 13 mm bolts. = Fechado! Ela é sua. As asas estão ali, e usa parafusos de 13mm.
+Twelve thousand marks, no less. Come back when you have the money. = Doze mil marcos, nada menos. Volte quando tiver o dinheiro.
+Use the Kekmet flatbed to move it on the road. The wings go along the boom. = Use a carreta plataforma da Kekmet para transportá-la na estrada. As asas acompanham a lança.
+Tighten the wing bolts every time. A loose wing comes off in the air, not on the ground. = Aperte sempre os parafusos da asa. Uma asa solta se desprende no ar, não no chão.
+Two-stroke mix only. Plain gasoline and the Rotox seizes. = Somente mistura para motores dois tempos. Gasolina pura e o Rotox trava.
+Wear a helmet. Saved my head twice. = Use capacete. Salvou minha vida duas vezes.
+PUSHING = EMPURRANDO
+HYTTYNEN WING LEFT = ASA ESQUERDA HYTTYNEN
+LEFT WING = ASA ESQUERDA
+HYTTYNEN WING RIGHT = ASA DIREITA HYTTYNEN
+RIGHT WING = ASA DIREITA
+ENTER PLANE = ENTRAR NO AVIÃO
+IGNITION ON = LIGAR IGNIÇÃO
+IGNITION OFF = DESLIGAR IGNIÇÃO
+PUSH/PULL = EMPURRAR/P﻿UXAR
+
+//Final Lista de MODs
+
+//Tradução de pagamentos
+BUY {0} MK = COMPRAR {0} MK
+PAY {0} MK = PAGAR {0} MK
+TAKE MONEY {0} MK  = PEGUE O DINHEIRO {0} MK
+PRICE TOTAL: {0} MK = PREÇO TOTAL: {0} MK
