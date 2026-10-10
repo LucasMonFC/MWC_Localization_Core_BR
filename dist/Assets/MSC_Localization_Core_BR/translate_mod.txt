@@ -2396,3 +2396,26 @@ BUY {0} MK = COMPRAR {0} MK
 PAY {0} MK = PAGAR {0} MK
 TAKE MONEY {0} MK  = PEGUE O DINHEIRO {0} MK
 PRICE TOTAL: {0} MK = PREÇO TOTAL: {0} MK
+
+//Uncle Walking Again
+Mind if I catch a ride to home? = Posso pegar uma carona até em casa?
+Mind if I catch a ride to Teimo's? = Posso pegar uma carona até a loja do Teimo?
+Easy with the car! = Vai com calma!
+That's enough. I'm getting out. = Já chega. Vou descer.
+Slow down! = Devagar!
+Car's done. I'll walk. = O carro parou. Vou a pé.
+Hey! Stop that! = Ei! Para com isso!
+Heading home. = Estou indo para casa.
+Going to Teimo's. = Estou indo à loja do Teimo.
+Give me some space. = Me dá um tempo.
+Need to buy a few things. = Preciso comprar algumas coisas.
+Don't drive too fast. = Não corra demais.
+Nice day for walking. = Dia bom para caminhar.
+Morning. = Bom dia.
+Watch it. = Cuidado!
+Stop messing around. = Para com isso.
+I'm walking here. = Tô passando!
+*cough* = *COF*
+All right. = Tudo bem.
+Never mind. = Deixa pra lá.
+This is it. Thanks. = É aqui. Obrigado.
