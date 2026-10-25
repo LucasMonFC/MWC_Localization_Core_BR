@@ -1635,7 +1635,7 @@ payment of electricity bill = Pagamento da conta de energia
 payment of a fine = Pagamento de multa
 payment of an environmental crime = Pagamento de crime ambiental
 Cannot be screwed on with a socket wrench = Não pode ser parafusado com chave soquete
-parts magazine = Revista de peças
+parts magazine = REVISTA DE PEÇAS
 Sit here. = Sente-se aqui.
 Come with me. = Venha comigo.
 Stay here, I'll be right back. = Fique aqui, eu já volto.
@@ -2430,6 +2430,23 @@ ENTER PLANE = ENTRAR NO AVIÃO
 IGNITION ON = LIGAR IGNIÇÃO
 IGNITION OFF = DESLIGAR IGNIÇÃO
 PUSH/PULL = EMPURRAR/P﻿UXAR
+
+//Nokka Impact Wrench
+NOKKA IMPACT CASE = MALETA NOKKA
+SOCKET 5MM = SOQUETE (5)
+SOCKET 6MM = SOQUETE (6)
+SOCKET 7MM = SOQUETE (7)
+SOCKET 8MM = SOQUETE (8)
+SOCKET 9MM = SOQUETE (9)
+SOCKET 10MM = SOQUETE (10)
+SOCKET 11MM = SOQUETE (11)
+SOCKET 12MM = SOQUETE (12)
+SOCKET 13MM = SOQUETE (13)
+SOCKET 14MM = SOQUETE (14)
+SOCKET 15MM = SOQUETE (15)
+AKKU ISKUAVAIN = CHAVE DE IMPACTO NOKKA
+NOKKA BATTERY PACK = BATERIA NOKKA
+REMOVE BATTERY = REMOVER BATERIA
 
 //Final Lista de MODs
 

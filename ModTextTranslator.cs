@@ -60,6 +60,11 @@ namespace MSC_Localization_Core
                 "comptext"),
 
             new TextMeshGroup(
+                "PowerDrill",
+                "GAME",
+                "Sheets/Magazine/Products/nokka impact(Clone)"),
+
+            new TextMeshGroup(
                 "BetterMSC",
                 "GAME",
                 "GUI/Indicators/AnswerHint",
