@@ -14,6 +14,11 @@ namespace MSC_Localization_Core
     public sealed class ModTextTranslator : ITranslationSurface
     {
         private const int MaxAttachAttempts = 15;
+        private const string PowerDrillAssemblyName = "PowerDrill";
+        private const string PowerDrillCatalogueTypeName = "PowerDrill.Catalogue";
+        private const string PowerDrillCatalogueHostName = "Nokka Impact Wrench";
+        private const string PowerDrillProductPath = "Sheets/Magazine/Products/nokka impact(Clone)";
+        private const string PowerDrillOrderLine = "akku iskuavain";
         private const string DirtTrackAssemblyName = "DirtTrackRacing";
         private const string DirtTrackRootPath = "DIRTTRACK_UI";
         private const string MscModApiAssemblyName = "MscModApi";
@@ -60,11 +65,6 @@ namespace MSC_Localization_Core
                 "comptext"),
 
             new TextMeshGroup(
-                "PowerDrill",
-                "GAME",
-                "Sheets/Magazine/Products/nokka impact(Clone)"),
-
-            new TextMeshGroup(
                 "BetterMSC",
                 "GAME",
                 "GUI/Indicators/AnswerHint",
@@ -86,6 +86,10 @@ namespace MSC_Localization_Core
         private bool mscModApiShopAssemblyLoaded;
         private bool modsShopAssemblyLoaded;
         private bool deliveryJobsAssemblyLoaded;
+        private bool powerDrillAssemblyLoaded;
+        private Component powerDrillCatalogue;
+        private bool powerDrillTranslationApplied;
+        private int powerDrillAttachAttempts;
         private int textMeshAttachAttempts;
         private int dirtTrackAttachAttempts;
         private int mscModApiShopAttachAttempts;
@@ -143,6 +147,10 @@ namespace MSC_Localization_Core
             mscModApiShopAssemblyLoaded = false;
             modsShopAssemblyLoaded = false;
             deliveryJobsAssemblyLoaded = false;
+            powerDrillAssemblyLoaded = false;
+            powerDrillCatalogue = null;
+            powerDrillTranslationApplied = false;
+            powerDrillAttachAttempts = 0;
             textMeshAttachAttempts = 0;
             dirtTrackAttachAttempts = 0;
             mscModApiShopAttachAttempts = 0;
@@ -181,6 +189,7 @@ namespace MSC_Localization_Core
 
             int attached = 0;
             attached += TryAttachTextMeshes(sceneName);
+            attached += TryAttachPowerDrillTextMesh();
             if (isGameScene)
             {
                 attached += TryAttachDirtTrackUi();
@@ -218,22 +227,29 @@ namespace MSC_Localization_Core
 
         private bool TryAttachTextMeshPath(string assemblyName, string path)
         {
-            string key = assemblyName + "|" + path;
+            GameObject go = LocalizationUtils.FindGameObjectIncludingInactive(path);
+            if (go == null)
+                return false;
+
+            return TryAttachTextMeshTarget(assemblyName + "|" + path, go.GetComponent<TextMesh>(), path);
+        }
+
+        private bool TryAttachTextMeshTarget(string key, TextMesh textMesh, string path)
+        {
+            if (textMesh == null)
+                return false;
+
             DirectTextMeshTranslator existing;
             if (attachedTextMeshComponents.TryGetValue(key, out existing))
             {
-                if (existing != null)
+                if (!IsUnityObjectMissing(existing))
                     return false;
 
                 attachedTextMeshComponents.Remove(key);
             }
 
-            GameObject go = LocalizationUtils.FindGameObjectIncludingInactive(path);
-            if (go == null)
-                return false;
-
-            TextMesh textMesh = go.GetComponent<TextMesh>();
-            if (textMesh == null)
+            GameObject go = textMesh.gameObject;
+            if (IsUnityObjectMissing(go))
                 return false;
 
             DirectTextMeshTranslator component = go.GetComponent<DirectTextMeshTranslator>();
@@ -244,6 +260,50 @@ namespace MSC_Localization_Core
             component.TranslateNow();
             attachedTextMeshComponents[key] = component;
             return true;
+        }
+
+        private int TryAttachPowerDrillTextMesh()
+        {
+            if (!powerDrillAssemblyLoaded
+                || textMeshTranslator == null
+                || powerDrillTranslationApplied
+                || powerDrillAttachAttempts >= MaxAttachAttempts)
+            {
+                return 0;
+            }
+
+            powerDrillAttachAttempts++;
+
+            Type catalogueType = FindLoadedType(PowerDrillAssemblyName, PowerDrillCatalogueTypeName);
+            if (catalogueType == null)
+                return 0;
+
+            if (IsUnityObjectMissing(powerDrillCatalogue))
+            {
+                GameObject host = GameObject.Find(PowerDrillCatalogueHostName);
+                if (host == null)
+                    return 0;
+
+                powerDrillCatalogue = host.GetComponent(catalogueType) as Component;
+                if (IsUnityObjectMissing(powerDrillCatalogue))
+                    return 0;
+            }
+
+            GameObject product = GetFieldValue<GameObject>(powerDrillCatalogue, catalogueType, "product");
+            if (IsUnityObjectMissing(product))
+                return 0;
+
+            TextMesh textMesh = product.GetComponent<TextMesh>();
+            if (IsUnityObjectMissing(textMesh))
+                return 0;
+
+            // Catalogue.Start writes this source text once before the first monitor tick.
+            // Reapply it here so an F8 reload can use the newly loaded dictionary.
+            textMesh.text = PowerDrillOrderLine;
+            bool translated = textMeshTranslator.TranslateAndApplyFont(textMesh, PowerDrillProductPath);
+            textMeshTranslator.ApplyCustomFont(textMesh, PowerDrillProductPath);
+            powerDrillTranslationApplied = true;
+            return translated ? 1 : 0;
         }
 
         private int TryAttachDirtTrackUi()
@@ -783,8 +843,16 @@ namespace MSC_Localization_Core
 
             bool deliveryJobsComplete = !deliveryJobsAssemblyLoaded
                 || (deliveryJobsUiComplete && deliveryJobsSignTextComplete && deliveryJobsPackagePrefabComplete);
+            bool powerDrillComplete = !powerDrillAssemblyLoaded
+                || powerDrillTranslationApplied
+                || powerDrillAttachAttempts >= MaxAttachAttempts;
 
-            return textMeshComplete && dirtTrackComplete && mscModApiShopComplete && modsShopComplete && deliveryJobsComplete;
+            return textMeshComplete
+                && powerDrillComplete
+                && dirtTrackComplete
+                && mscModApiShopComplete
+                && modsShopComplete
+                && deliveryJobsComplete;
         }
 
         private void RefreshActiveModState(string sceneName)
@@ -796,7 +864,9 @@ namespace MSC_Localization_Core
                 && IsAssemblyLoaded(SatsumaTurboChargerAssemblyName);
             modsShopAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(ModsShopAssemblyName);
             deliveryJobsAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(DeliveryJobsAssemblyName);
+            powerDrillAssemblyLoaded = sceneName == "GAME" && IsAssemblyLoaded(PowerDrillAssemblyName);
             hasSupportedModAssemblyLoaded = activeTextMeshTargetCount > 0
+                || powerDrillAssemblyLoaded
                 || dirtTrackAssemblyLoaded
                 || mscModApiShopAssemblyLoaded
                 || modsShopAssemblyLoaded
