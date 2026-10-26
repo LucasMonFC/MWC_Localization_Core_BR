@@ -40,3 +40,6 @@ Contains(Systems/TV/Teletext/VKTekstiTV/PAGES/172/Texts/Newsline) = 0,0.2,0
 ## Parts Magazine Product List
 Contains(Sheets/Magazine/Products) = 0,0,0,0.0024
 GameObjectEquals(Sheets/Magazine/List) = 0,-0.002,0
+## Rentable Garage form: inset the translated Week value from the left edge
+Contains(Functions/DataBase/Sheets/RentLetter/9) = 0.008,0,0
+Contains(Functions/DataBase/Sheets/RentLetter/10) = -0.008,0,0

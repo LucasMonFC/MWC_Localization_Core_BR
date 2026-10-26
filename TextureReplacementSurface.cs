@@ -424,7 +424,6 @@ namespace MWC_Localization_Core
                 material.SetTexture(propertyName, replacement);
                 matchedTextureNames.Add(matchedName);
 
-                CoreConsole.Print($"[{Name}] Substituiu {propertyName} '{currentTexture.name}' no material '{material.name}'");
                 return 1;
             }
             catch (Exception ex)
@@ -465,12 +464,9 @@ namespace MWC_Localization_Core
                     originalOverlayTextures.Add(overlay, overlay.texture);
 
                 CopyTextureSettings(overlay.texture, replacement);
-                string oldName = overlay.texture.name;
                 overlay.texture = replacement;
                 matchedTextureNames.Add(matchedName);
                 applied++;
-
-                CoreConsole.Print($"[{Name}] Substituiu ScreenOverlay '{oldName}'");
             }
 
             return applied;
@@ -517,8 +513,6 @@ namespace MWC_Localization_Core
                     image.sprite = replacementSprite;
                     matchedTextureNames.Add(matchedName);
                     applied++;
-
-                    CoreConsole.Print($"[{Name}] Substituiu sprite de UI Image '{currentSprite.name}' pela textura '{matchedName}'");
                 }
                 catch (Exception ex)
                 {
@@ -865,13 +859,26 @@ namespace MWC_Localization_Core
 
         private void LogUnmatchedTextures()
         {
+            List<string> unmatched = new List<string>();
             foreach (string textureName in sceneTextureKeys)
             {
                 if (matchedTextureNames.Contains(textureName))
                     continue;
 
-                CoreConsole.Print($"[{Name}] PNG não correspondeu a nenhuma textura carregada em {loadedSceneName}: {textureName}.png");
+                unmatched.Add(textureName + ".png");
             }
+
+            if (unmatched.Count == 0)
+                return;
+
+            const int sampleLimit = 5;
+            int sampleCount = Math.Min(unmatched.Count, sampleLimit);
+            string[] sample = new string[sampleCount];
+            for (int i = 0; i < sampleCount; i++)
+                sample[i] = unmatched[i];
+
+            string suffix = unmatched.Count > sampleCount ? ", ..." : string.Empty;
+            CoreConsole.Print($"[{Name}] {unmatched.Count} PNG(s) sem textura correspondente em {loadedSceneName}: {string.Join(", ", sample)}{suffix}");
         }
 
         private static bool IsPngPath(string path)
