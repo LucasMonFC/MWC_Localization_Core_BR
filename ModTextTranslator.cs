@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Harmony;
 using UnityEngine;
@@ -8,8 +9,8 @@ namespace MWC_Localization_Core
     /// <summary>
     /// Hooks mod-owned text generation points that bypass the normal FSM/TextMesh
     /// translation pipeline. MagazineAPI product names are localized before they
-    /// are stored, and hooks the Ruscko brochure where its confirmation and service
-    /// lines are written.
+    /// are stored, the Ruscko brochure is translated at its write points, and the
+    /// Rivett computer catalog is translated as it builds terminal rows/notices.
     /// </summary>
     public sealed class ModTextTranslator : ITranslationSurface
     {
@@ -17,39 +18,59 @@ namespace MWC_Localization_Core
         private const string MagazineOrderFormTypeName = "MagazineAPI.OrderFormManager";
         private const string RusckoControllerTypeName = "RusckoValnikPickup.RusckoBrochureController";
         private const string PoolGameTypeName = "MiniPool.MiniPoolMod";
+        private const string RivettTerminalTypeName = "RivettPartsService.TerminalCatalog";
+        private const string RivettComputerApiTypeName = "RivettPartsService.ComputerApi";
         private static readonly string HarmonyId = "MWC_Localization_Core_BR.ModTextTranslator";
         private static TranslationDictionary activeTranslations;
         private static FieldInfo displayNameField;
         private static FieldInfo slotTextMeshesField;
         private static FieldInfo rusckoConfirmationTextField;
         private static FieldInfo rusckoReceiptLinesField;
+        private static FieldInfo rivettMessageField;
+        private static FieldInfo rivettPhoneSearchField;
+        private static FieldInfo rivettPhoneProductsField;
+        private static FieldInfo rivettTerminalScreenField;
+        private static PropertyInfo rivettProductLabelProperty;
+        private static PropertyInfo rivettProductGroupProperty;
+        private static MethodInfo rivettGroupNameMethod;
+        private static readonly List<string> rivettPhonePartSourceNames = new List<string>();
+        private static readonly HashSet<string> rivettPhonePartSourceNameSet = new HashSet<string>(StringComparer.Ordinal);
+        private static readonly Dictionary<string, List<string>> rivettPhoneTranslatedSearchNames = new Dictionary<string, List<string>>();
+        private static readonly Dictionary<string, bool> rivettPhoneSearchGroupCache = new Dictionary<string, bool>();
+        private static string rivettPhoneSearchCacheQuery;
         private static Type rusckoControllerType;
         private static object rusckoControllerInstance;
         private static HarmonyInstance harmony;
         private static bool magazineApiResolved;
         private static bool rusckoResolved;
         private static bool poolGameResolved;
+        private static bool rivettResolved;
+        private static bool rivettTerminalCatalogBuilding;
         private static bool magazineApiHookFailureLogged;
         private static bool rusckoHookFailureLogged;
+        private static bool rivettPhoneWindowDrawing;
 
         public string Name { get { return "ModTextTranslator"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Fast; } }
         // Harmony hooks keep translating future writes after this polling surface retires.
-        public bool IsComplete { get { return magazineApiResolved && rusckoResolved && poolGameResolved; } }
+        public bool IsComplete { get { return magazineApiResolved && rusckoResolved && poolGameResolved && rivettResolved; } }
 
         public void Initialize(TranslationContext ctx)
         {
             activeTranslations = ctx != null ? ctx.Translations : null;
+            RebuildRivettPhoneSearchIndex();
         }
 
         public int InitialPass()
         {
-            return TryInstallMagazineApiHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks();
+            return TryInstallMagazineApiHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks()
+                + TryInstallRivettHooks();
         }
 
         public int MonitorTick(float deltaTime)
         {
             return TryInstallMagazineApiHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks()
+                + TryInstallRivettHooks()
                 + TranslateCurrentRusckoText(rusckoControllerInstance);
         }
 
@@ -57,12 +78,17 @@ namespace MWC_Localization_Core
         {
             // Harmony patches survive scene changes and keep translating future writes.
             rusckoControllerInstance = null;
+            rivettPhoneWindowDrawing = false;
+            rivettTerminalCatalogBuilding = false;
+            ClearRivettPhoneSearchCache();
         }
 
         public void ClearTranslations()
         {
             activeTranslations = null;
             rusckoControllerInstance = null;
+            rivettPhoneTranslatedSearchNames.Clear();
+            ClearRivettPhoneSearchCache();
         }
 
         private static int TryInstallMagazineApiHooks()
@@ -210,6 +236,212 @@ namespace MWC_Localization_Core
             }
         }
 
+        private static int TryInstallRivettHooks()
+        {
+            if (rivettResolved)
+                return 0;
+
+            Type terminalType = FindLoadedType(RivettTerminalTypeName);
+            if (terminalType == null)
+                return ResolveMissingMod(
+                    ref rivettResolved,
+                    "Rivett Parts Service não está carregado; sem tradução do catálogo do computador nesta sessão.");
+
+            try
+            {
+                const BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+                MethodInfo addRow = terminalType.GetMethod("Add", instanceFlags);
+                MethodInfo textEntry = terminalType.GetMethod("TextEntry", instanceFlags);
+                MethodInfo render = terminalType.GetMethod("Render", instanceFlags, null, Type.EmptyTypes, null);
+                MethodInfo renderColored = terminalType.GetMethod("RenderColored", instanceFlags, null, Type.EmptyTypes, null);
+                MethodInfo key = terminalType.GetMethod("Key", instanceFlags);
+                MethodInfo translateRow = typeof(ModTextTranslator).GetMethod(
+                    "BeforeRivettTerminalText", BindingFlags.Static | BindingFlags.NonPublic);
+                MethodInfo translateRender = typeof(ModTextTranslator).GetMethod(
+                    "AfterRivettTerminalRender", BindingFlags.Static | BindingFlags.NonPublic);
+                MethodInfo translateMessage = typeof(ModTextTranslator).GetMethod(
+                    "AfterRivettTerminalKey", BindingFlags.Static | BindingFlags.NonPublic);
+
+                rivettMessageField = terminalType.GetField("message", instanceFlags);
+                if (addRow == null || textEntry == null || render == null || renderColored == null || key == null
+                    || rivettMessageField == null || translateRow == null || translateRender == null || translateMessage == null)
+                    return LogRivettHookFailure("Métodos de texto do catálogo do computador não encontrados.");
+
+                EnsureHarmony();
+                HarmonyMethod beforeText = new HarmonyMethod(translateRow);
+                harmony.Patch(addRow, prefix: beforeText);
+                harmony.Patch(textEntry, prefix: new HarmonyMethod(translateRow));
+                harmony.Patch(render, postfix: new HarmonyMethod(translateRender));
+                harmony.Patch(renderColored, postfix: new HarmonyMethod(translateRender));
+                harmony.Patch(key, postfix: new HarmonyMethod(translateMessage));
+
+                InstallRivettPhoneWindowHooks(terminalType.Assembly);
+                InstallRivettComputerSearchHooks(terminalType.Assembly);
+
+                Type computerApiType = FindLoadedType(RivettComputerApiTypeName);
+                MethodInfo notice = computerApiType != null ? computerApiType.GetMethod("Notice", instanceFlags) : null;
+                if (notice != null)
+                    harmony.Patch(notice, prefix: new HarmonyMethod(translateRow));
+
+                rivettResolved = true;
+                CoreConsole.Print("[ModTextTranslator] Hooks instalados no terminal e no painel do Rivett Parts Service");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return LogRivettHookFailure("Falha ao instalar hook do catálogo do Rivett Parts Service: " + ex.Message);
+            }
+        }
+
+        private static void InstallRivettPhoneWindowHooks(Assembly assembly)
+        {
+            Type windowType = assembly.GetType("RivettPartsService.CatalogWindow", false);
+            if (windowType == null)
+                throw new MissingMemberException("CatalogWindow não encontrado no Rivett Parts Service.");
+
+            const BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            MethodInfo draw = windowType.GetMethod("Draw", instanceFlags, null, Type.EmptyTypes, null);
+            MethodInfo contents = windowType.GetMethod("Contents", instanceFlags, null, new Type[] { typeof(int) }, null);
+            Type productType = assembly.GetType("RivettPartsService.Product", false);
+            MethodInfo matches = productType != null
+                ? windowType.GetMethod("Matches", instanceFlags, null, new Type[] { productType }, null)
+                : null;
+            MethodInfo beginDraw = typeof(ModTextTranslator).GetMethod(
+                "BeforeRivettPhoneWindowDraw", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo endDraw = typeof(ModTextTranslator).GetMethod(
+                "AfterRivettPhoneWindowDraw", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo guiText = typeof(ModTextTranslator).GetMethod(
+                "BeforeRivettPhoneWindowText", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo guiControlText = typeof(ModTextTranslator).GetMethod(
+                "BeforeRivettPhoneGuiControlText", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo modalTitle = typeof(ModTextTranslator).GetMethod(
+                "BeforeRivettPhoneWindowTitle", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo localizedMatches = typeof(ModTextTranslator).GetMethod(
+                "AfterRivettPhoneMatches", BindingFlags.Static | BindingFlags.NonPublic);
+            if (draw == null || contents == null || matches == null || beginDraw == null || endDraw == null || guiText == null
+                || guiControlText == null || modalTitle == null)
+                throw new MissingMemberException("Métodos de desenho do painel por telefone não encontrados.");
+
+            EnsureHarmony();
+            CaptureRivettPhonePartNames(assembly);
+            harmony.Patch(draw, prefix: new HarmonyMethod(beginDraw), postfix: new HarmonyMethod(endDraw));
+            // Unity may invoke the ModalWindow callback after Draw has returned.
+            // Keep the text hooks scoped to the callback that actually emits the panel.
+            harmony.Patch(contents, prefix: new HarmonyMethod(beginDraw), postfix: new HarmonyMethod(endDraw));
+            if (localizedMatches == null)
+                throw new MissingMemberException("Hook de busca traduzida do painel por telefone não encontrado.");
+            harmony.Patch(matches, postfix: new HarmonyMethod(localizedMatches));
+
+            int guiTextCandidates = 0;
+            int patchedGuiTextMethods = 0;
+            MethodInfo[] layoutMethods = typeof(GUILayout).GetMethods(BindingFlags.Public | BindingFlags.Static);
+            for (int i = 0; i < layoutMethods.Length; i++)
+            {
+                MethodInfo method = layoutMethods[i];
+                if (method.Name != "Label" && method.Name != "Button")
+                    continue;
+                ParameterInfo[] parameters = method.GetParameters();
+                if (parameters.Length == 0 || parameters[0].ParameterType != typeof(string))
+                    continue;
+
+                guiTextCandidates++;
+                try
+                {
+                    harmony.Patch(method, prefix: new HarmonyMethod(guiText));
+                    patchedGuiTextMethods++;
+                }
+                catch (Exception)
+                {
+                    // Some Unity overloads can be native-backed on certain game builds.
+                    // Keep the managed overloads that remain patchable.
+                }
+            }
+
+            int modalTitleCandidates = 0;
+            int patchedModalTitles = 0;
+            MethodInfo[] guiMethods = typeof(GUI).GetMethods(BindingFlags.Public | BindingFlags.Static);
+            for (int i = 0; i < guiMethods.Length; i++)
+            {
+                MethodInfo method = guiMethods[i];
+                if (method.Name != "ModalWindow")
+                    continue;
+                ParameterInfo[] parameters = method.GetParameters();
+                if (parameters.Length <= 3 || parameters[3].ParameterType != typeof(string))
+                    continue;
+
+                modalTitleCandidates++;
+                try
+                {
+                    harmony.Patch(method, prefix: new HarmonyMethod(modalTitle));
+                    patchedModalTitles++;
+                }
+                catch (Exception)
+                {
+                    // The catalog text hooks still work if a native title overload cannot be patched.
+                }
+            }
+
+            if (patchedGuiTextMethods == 0)
+                throw new MissingMemberException("Métodos Label/Button da Unity não aceitaram hook.");
+
+            if (patchedGuiTextMethods < guiTextCandidates || patchedModalTitles < modalTitleCandidates)
+                CoreConsole.Warning("[ModTextTranslator] Algumas sobrecargas nativas da janela Rivett não aceitaram hook; as demais foram instaladas.");
+
+            int guiControlCandidates = 0;
+            int patchedGuiControls = 0;
+            for (int i = 0; i < guiMethods.Length; i++)
+            {
+                MethodInfo method = guiMethods[i];
+                if (method.Name != "Label" && method.Name != "Button")
+                    continue;
+                ParameterInfo[] parameters = method.GetParameters();
+                if (parameters.Length <= 1 || parameters[1].ParameterType != typeof(string))
+                    continue;
+
+                guiControlCandidates++;
+                try
+                {
+                    harmony.Patch(method, prefix: new HarmonyMethod(guiControlText));
+                    patchedGuiControls++;
+                }
+                catch (Exception)
+                {
+                    // GUILayout ultimately draws through GUI.Label/Button on Unity versions
+                    // where those managed entry points are patchable.
+                }
+            }
+
+            if (patchedGuiControls == 0)
+                CoreConsole.Warning("[ModTextTranslator] Nenhuma sobrecarga de GUI.Label/Button aceitou hook.");
+        }
+
+        private static void InstallRivettComputerSearchHooks(Assembly assembly)
+        {
+            Type terminalType = assembly.GetType(RivettTerminalTypeName, false);
+            Type productType = assembly.GetType("RivettPartsService.Product", false);
+            if (terminalType == null || productType == null)
+                throw new MissingMemberException("TerminalCatalog/Product não encontrado para habilitar a busca traduzida.");
+
+            const BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            MethodInfo build = terminalType.GetMethod("Build", instanceFlags, null, Type.EmptyTypes, null);
+            PropertyInfo label = productType.GetProperty("Label", instanceFlags);
+            MethodInfo labelGetter = label != null ? label.GetGetMethod(true) : null;
+            MethodInfo beginBuild = typeof(ModTextTranslator).GetMethod(
+                "BeforeRivettTerminalBuild", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo endBuild = typeof(ModTextTranslator).GetMethod(
+                "AfterRivettTerminalBuild", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo includeTranslation = typeof(ModTextTranslator).GetMethod(
+                "AfterRivettTerminalProductLabel", BindingFlags.Static | BindingFlags.NonPublic);
+            rivettTerminalScreenField = terminalType.GetField("screen", instanceFlags);
+            if (build == null || labelGetter == null || beginBuild == null || endBuild == null || includeTranslation == null
+                || rivettTerminalScreenField == null)
+                throw new MissingMemberException("Membros de pesquisa do terminal Rivett não encontrados.");
+
+            EnsureHarmony();
+            harmony.Patch(build, prefix: new HarmonyMethod(beginBuild), postfix: new HarmonyMethod(endBuild));
+            harmony.Patch(labelGetter, postfix: new HarmonyMethod(includeTranslation));
+        }
+
         private static Type FindLoadedType(string typeName)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -266,6 +498,13 @@ namespace MWC_Localization_Core
         private static int LogPoolGameHookFailure(string message)
         {
             poolGameResolved = true;
+            CoreConsole.Warning("[ModTextTranslator] " + message);
+            return 0;
+        }
+
+        private static int LogRivettHookFailure(string message)
+        {
+            rivettResolved = true;
             CoreConsole.Warning("[ModTextTranslator] " + message);
             return 0;
         }
@@ -347,6 +586,556 @@ namespace MWC_Localization_Core
                 return;
 
             __0 = TranslatePoolGameText(__0, translations);
+        }
+
+        private static void BeforeRivettTerminalText(ref string __0)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (string.IsNullOrEmpty(__0) || translations == null)
+                return;
+
+            string source = __0;
+            string translated = TranslateRivettText(source, translations);
+            if (IsRivettPhonePartLine(source))
+                translated = FormatRivettPartCasing(translated);
+            __0 = translated;
+        }
+
+        private static void BeforeRivettPhoneWindowDraw()
+        {
+            rivettPhoneWindowDrawing = true;
+        }
+
+        private static void AfterRivettPhoneWindowDraw()
+        {
+            rivettPhoneWindowDrawing = false;
+        }
+
+        private static void BeforeRivettPhoneWindowText(ref string __0)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (!rivettPhoneWindowDrawing || string.IsNullOrEmpty(__0) || translations == null)
+                return;
+
+            __0 = TranslateRivettPhoneText(__0, translations);
+        }
+
+        private static void BeforeRivettPhoneWindowTitle(ref string __3)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (!rivettPhoneWindowDrawing || string.IsNullOrEmpty(__3) || translations == null)
+                return;
+
+            __3 = TranslateRivettText(__3, translations);
+        }
+
+        private static void BeforeRivettPhoneGuiControlText(ref string __1)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (!rivettPhoneWindowDrawing || string.IsNullOrEmpty(__1) || translations == null)
+                return;
+
+            __1 = TranslateRivettPhoneText(__1, translations);
+        }
+
+        private static string TranslateRivettPhoneText(string source, TranslationDictionary translations)
+        {
+            string translated = TranslateRivettText(source, translations);
+            if (translated == source || !IsRivettPhonePartName(source))
+                return translated;
+
+            translated = translated.ToLowerInvariant();
+            return translated.Length == 0 ? translated : char.ToUpperInvariant(translated[0]) + translated.Substring(1);
+        }
+
+        private static bool IsRivettPhonePartName(string source)
+        {
+            return !string.IsNullOrEmpty(source) && rivettPhonePartSourceNameSet.Contains(source);
+        }
+
+        private static void CaptureRivettPhonePartNames(Assembly assembly)
+        {
+            rivettPhonePartSourceNames.Clear();
+            rivettPhonePartSourceNameSet.Clear();
+            const BindingFlags staticFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+            const BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+            Type productType = assembly.GetType("RivettPartsService.Product", false);
+            Type catalogType = assembly.GetType("RivettPartsService.Catalog", false);
+            Type presentationType = assembly.GetType("RivettPartsService.CatalogPresentation", false);
+            Type windowType = assembly.GetType("RivettPartsService.CatalogWindow", false);
+            if (productType == null || catalogType == null || presentationType == null || windowType == null)
+                return;
+
+            FieldInfo productsField = catalogType.GetField("Products", staticFlags);
+            FieldInfo nameField = productType.GetField("Name", instanceFlags);
+            PropertyInfo labelProperty = productType.GetProperty("Label", instanceFlags);
+            PropertyInfo groupProperty = productType.GetProperty("Group", instanceFlags);
+            MethodInfo groupNameMethod = presentationType.GetMethod("GroupName", staticFlags, null, new Type[] { productType }, null);
+            rivettPhoneSearchField = windowType.GetField("search", instanceFlags);
+            rivettPhoneProductsField = productsField;
+            rivettProductLabelProperty = labelProperty;
+            rivettProductGroupProperty = groupProperty;
+            rivettGroupNameMethod = groupNameMethod;
+            Array products = productsField != null ? productsField.GetValue(null) as Array : null;
+            if (products == null || nameField == null || labelProperty == null || groupProperty == null || groupNameMethod == null)
+                return;
+
+            for (int i = 0; i < products.Length; i++)
+            {
+                object product = products.GetValue(i);
+                if (product == null)
+                    continue;
+
+                AddRivettPhonePartName(nameField.GetValue(product) as string);
+                AddRivettPhonePartName(labelProperty.GetValue(product, null) as string);
+                AddRivettPhonePartName(groupNameMethod.Invoke(null, new object[] { product }) as string);
+            }
+
+            RebuildRivettPhoneSearchIndex();
+        }
+
+        private static void AddRivettPhonePartName(string name)
+        {
+            if (string.IsNullOrEmpty(name) || !rivettPhonePartSourceNameSet.Add(name))
+                return;
+
+            rivettPhonePartSourceNames.Add(name);
+        }
+
+        private static void AfterRivettTerminalRender(ref string __result)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (string.IsNullOrEmpty(__result) || translations == null)
+                return;
+
+            try
+            {
+                string[] lines = __result.Split('\n');
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    string line = lines[i];
+                    if (string.IsNullOrEmpty(line))
+                        continue;
+
+                    // RenderColored wraps status messages in one color tag. Translate
+                    // the original message while retaining its terminal formatting.
+                    const string colorStart = "<color=#FFFF00>";
+                    const string colorEnd = "</color>";
+                    if (line.StartsWith(colorStart, StringComparison.Ordinal)
+                        && line.EndsWith(colorEnd, StringComparison.Ordinal))
+                    {
+                        string inner = line.Substring(colorStart.Length, line.Length - colorStart.Length - colorEnd.Length);
+                        string translatedInner = TranslateRivettText(inner, translations);
+                        if (translatedInner != inner)
+                            lines[i] = colorStart + translatedInner + colorEnd;
+                    }
+                    else
+                    {
+                        string translatedLine = TranslateRivettText(line, translations);
+                        if (IsRivettPhonePartLine(line))
+                            translatedLine = FormatRivettPartCasing(translatedLine);
+                        lines[i] = translatedLine;
+                    }
+                }
+                __result = string.Join("\n", lines)
+                    .Replace("Factory: ", "Fábrica: ")
+                    .Replace(" / verified parts", " / peças verificadas");
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Warning("[ModTextTranslator] Falha ao traduzir a tela do computador do Rivett: " + ex.Message);
+            }
+        }
+
+        private static void AfterRivettTerminalKey(object __instance)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (__instance == null || translations == null || rivettMessageField == null)
+                return;
+
+            try
+            {
+                string message = rivettMessageField.GetValue(__instance) as string;
+                if (string.IsNullOrEmpty(message))
+                    return;
+
+                string translated = TranslateRivettText(message, translations);
+                if (translated != message)
+                    rivettMessageField.SetValue(__instance, translated);
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Warning("[ModTextTranslator] Falha ao traduzir mensagem do terminal Rivett: " + ex.Message);
+            }
+        }
+
+        private static string TranslateRivettText(string source, TranslationDictionary translations)
+        {
+            if (string.IsNullOrEmpty(source) || translations == null)
+                return source;
+
+            const string coloredPlusPrefix = "<color=#00FFFF>[+]</color> ";
+            const string coloredMinusPrefix = "<color=#00FFFF>[-]</color> ";
+            if (source.StartsWith(coloredPlusPrefix, StringComparison.Ordinal))
+                return coloredPlusPrefix + TranslateRivettCategory(source.Substring(coloredPlusPrefix.Length), translations);
+            if (source.StartsWith(coloredMinusPrefix, StringComparison.Ordinal))
+                return coloredMinusPrefix + TranslateRivettCategory(source.Substring(coloredMinusPrefix.Length), translations);
+            if (source.StartsWith("[+] ", StringComparison.Ordinal))
+                return "[+] " + TranslateRivettCategory(source.Substring(4), translations);
+            if (source.StartsWith("[-] ", StringComparison.Ordinal))
+                return "[-] " + TranslateRivettCategory(source.Substring(4), translations);
+
+            string fieldPrefix = null;
+            if (source.StartsWith("Variant: ", StringComparison.Ordinal))
+                fieldPrefix = "Variant: ";
+            else if (source.StartsWith("Colour: ", StringComparison.Ordinal))
+                fieldPrefix = "Colour: ";
+            else if (source.StartsWith("Upholstery: ", StringComparison.Ordinal))
+                fieldPrefix = "Upholstery: ";
+            if (fieldPrefix != null)
+            {
+                string translatedValue = TranslateRivettLabel(source.Substring(fieldPrefix.Length), translations);
+                if (translatedValue != source.Substring(fieldPrefix.Length))
+                {
+                    string translatedPrefix;
+                    if (translations.TryGetExact(fieldPrefix.TrimEnd(), "RivettPartsService/TerminalCatalog", out translatedPrefix))
+                        fieldPrefix = translatedPrefix + " ";
+                    return fieldPrefix + translatedValue;
+                }
+            }
+
+            int quantitySeparator = source.IndexOf(" x ", StringComparison.Ordinal);
+            if (quantitySeparator > 0 && IsDigits(source.Substring(0, quantitySeparator).Trim()))
+            {
+                string prefix = source.Substring(0, quantitySeparator + 3);
+                string itemText = source.Substring(quantitySeparator + 3);
+                const string incompatible = "! INCOMPATIBLE ";
+                if (itemText.StartsWith(incompatible, StringComparison.Ordinal))
+                    itemText = itemText.Substring(incompatible.Length);
+                string translatedItem = TranslateRivettLabel(itemText, translations);
+                if (translatedItem != itemText)
+                    return prefix + (source.Substring(quantitySeparator + 3).StartsWith(incompatible, StringComparison.Ordinal) ? incompatible : "") + translatedItem;
+            }
+
+            if (source.StartsWith("Added: ", StringComparison.Ordinal))
+            {
+                int itemSeparator = source.IndexOf(" x ", StringComparison.Ordinal);
+                if (itemSeparator > 6)
+                {
+                    string count = source.Substring(7, itemSeparator - 7);
+                    string item = source.Substring(itemSeparator + 3);
+                    string translatedItem = TranslateRivettLabel(item, translations);
+                    if (translatedItem != item)
+                        return "Adicionado: " + count + " x " + translatedItem;
+                }
+            }
+
+            string translated;
+            if (translations.TryTranslate(source, "RivettPartsService/TerminalCatalog", out translated)
+                && !string.IsNullOrEmpty(translated))
+            {
+                return translated;
+            }
+
+            string translatedComposite = TranslateRivettLabel(source, translations);
+            if (translatedComposite != source)
+                return translatedComposite;
+
+            // Catalog rows append dynamic prices after two spaces. Translate the
+            // product/category label before the terminal truncates the row to 60 columns.
+            int priceSeparator = source.LastIndexOf("  ", StringComparison.Ordinal);
+            if (priceSeparator >= 0)
+            {
+                string price = source.Substring(priceSeparator + 2);
+                if (price.EndsWith(" MK", StringComparison.OrdinalIgnoreCase)
+                    && price.Length > 3)
+                {
+                    string amount = price.Substring(0, price.Length - 3).Trim();
+                    if (IsDigits(amount))
+                    {
+                        string label = source.Substring(0, priceSeparator);
+                        int leading = 0;
+                        while (leading < label.Length && char.IsWhiteSpace(label[leading]))
+                            leading++;
+                        string labelText = label.Substring(leading);
+                        string translatedLabel = TranslateRivettLabel(labelText, translations);
+                        if (translatedLabel != labelText)
+                        {
+                            return label.Substring(0, leading) + translatedLabel + source.Substring(priceSeparator);
+                        }
+                    }
+                }
+            }
+
+            // Translate product variants and basket lines component by component,
+            // keeping their part codes, quantities and prices intact.
+            int variantSeparator = source.IndexOf(" — ", StringComparison.Ordinal);
+            if (variantSeparator >= 0)
+            {
+                string left = source.Substring(0, variantSeparator);
+                string right = source.Substring(variantSeparator + 3);
+                string translatedLeft;
+                string translatedRight;
+                bool leftChanged = translations.TryTranslate(left, "RivettPartsService/TerminalCatalog", out translatedLeft)
+                    && !string.IsNullOrEmpty(translatedLeft);
+                bool rightChanged = translations.TryTranslate(right, "RivettPartsService/TerminalCatalog", out translatedRight)
+                    && !string.IsNullOrEmpty(translatedRight);
+                if (leftChanged || rightChanged)
+                    return (leftChanged ? translatedLeft : left) + " — " + (rightChanged ? translatedRight : right);
+            }
+
+            return source;
+        }
+
+        private static string TranslateRivettCategory(string source, TranslationDictionary translations)
+        {
+            int countStart = source.LastIndexOf(" (", StringComparison.Ordinal);
+            if (countStart >= 0 && source.EndsWith(")", StringComparison.Ordinal))
+            {
+                string count = source.Substring(countStart + 2, source.Length - countStart - 3);
+                if (IsDigits(count))
+                {
+                    string category = source.Substring(0, countStart);
+                    return TranslateRivettLabel(category, translations) + source.Substring(countStart);
+                }
+            }
+
+            return TranslateRivettLabel(source, translations);
+        }
+
+        private static bool IsRivettPhonePartLine(string source)
+        {
+            if (string.IsNullOrEmpty(source))
+                return false;
+
+            string candidate = source.TrimStart();
+            for (int i = 0; i < rivettPhonePartSourceNames.Count; i++)
+            {
+                string partName = rivettPhonePartSourceNames[i];
+                if (!candidate.StartsWith(partName, StringComparison.Ordinal))
+                    continue;
+
+                if (candidate.Length == partName.Length || char.IsWhiteSpace(candidate[partName.Length])
+                    || candidate[partName.Length] == '\u2014')
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static string FormatRivettPartCasing(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
+
+            string formatted = text.ToLowerInvariant();
+            int firstLetter = 0;
+            while (firstLetter < formatted.Length && !char.IsLetter(formatted[firstLetter]))
+                firstLetter++;
+            if (firstLetter >= formatted.Length)
+                return formatted;
+
+            return formatted.Substring(0, firstLetter)
+                + char.ToUpperInvariant(formatted[firstLetter])
+                + formatted.Substring(firstLetter + 1);
+        }
+
+        private static void AfterRivettPhoneMatches(object __instance, object __0, ref bool __result)
+        {
+            if (__result || __instance == null || __0 == null || activeTranslations == null
+                || rivettPhoneSearchField == null || rivettProductGroupProperty == null)
+                return;
+
+            try
+            {
+                string search = rivettPhoneSearchField.GetValue(__instance) as string;
+                if (string.IsNullOrEmpty(search))
+                    return;
+
+                if (!string.Equals(search, rivettPhoneSearchCacheQuery, StringComparison.Ordinal))
+                {
+                    rivettPhoneSearchCacheQuery = search;
+                    rivettPhoneSearchGroupCache.Clear();
+                }
+
+                string group = rivettProductGroupProperty.GetValue(__0, null) as string;
+                if (string.IsNullOrEmpty(group))
+                    return;
+
+                bool matches;
+                if (rivettPhoneSearchGroupCache.TryGetValue(group, out matches))
+                {
+                    if (matches)
+                        __result = true;
+                    return;
+                }
+
+                List<string> translatedNames;
+                matches = rivettPhoneTranslatedSearchNames.TryGetValue(group, out translatedNames)
+                    && RivettPhoneSearchMatches(translatedNames, search);
+                rivettPhoneSearchGroupCache[group] = matches;
+                if (matches)
+                    __result = true;
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Warning("[ModTextTranslator] Falha ao pesquisar peças traduzidas do Rivett: " + ex.Message);
+            }
+        }
+
+        private static bool RivettPhoneSearchMatches(List<string> names, string search)
+        {
+            if (names == null || string.IsNullOrEmpty(search))
+                return false;
+
+            for (int i = 0; i < names.Count; i++)
+            {
+                if (names[i].IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return true;
+            }
+            return false;
+        }
+
+        private static void RebuildRivettPhoneSearchIndex()
+        {
+            rivettPhoneTranslatedSearchNames.Clear();
+            ClearRivettPhoneSearchCache();
+            if (activeTranslations == null || rivettPhoneProductsField == null
+                || rivettProductLabelProperty == null || rivettProductGroupProperty == null
+                || rivettGroupNameMethod == null)
+                return;
+
+            try
+            {
+                Array products = rivettPhoneProductsField.GetValue(null) as Array;
+                if (products == null)
+                    return;
+
+                for (int i = 0; i < products.Length; i++)
+                {
+                    object product = products.GetValue(i);
+                    if (product == null)
+                        continue;
+
+                    string group = rivettProductGroupProperty.GetValue(product, null) as string;
+                    if (string.IsNullOrEmpty(group))
+                        continue;
+
+                    string label = rivettProductLabelProperty.GetValue(product, null) as string;
+                    AddRivettPhoneSearchName(group, TranslateRivettPhoneText(label, activeTranslations));
+                    string groupName = rivettGroupNameMethod.Invoke(null, new object[] { product }) as string;
+                    AddRivettPhoneSearchName(group, TranslateRivettPhoneText(groupName, activeTranslations));
+                }
+            }
+            catch (Exception ex)
+            {
+                rivettPhoneTranslatedSearchNames.Clear();
+                CoreConsole.Warning("[ModTextTranslator] Falha ao montar o índice de busca do telefone Rivett: " + ex.Message);
+            }
+        }
+
+        private static void AddRivettPhoneSearchName(string group, string name)
+        {
+            if (string.IsNullOrEmpty(group) || string.IsNullOrEmpty(name))
+                return;
+
+            List<string> names;
+            if (!rivettPhoneTranslatedSearchNames.TryGetValue(group, out names))
+            {
+                names = new List<string>();
+                rivettPhoneTranslatedSearchNames.Add(group, names);
+            }
+
+            if (!names.Contains(name))
+                names.Add(name);
+        }
+
+        private static void ClearRivettPhoneSearchCache()
+        {
+            rivettPhoneSearchGroupCache.Clear();
+            rivettPhoneSearchCacheQuery = null;
+        }
+
+        private static void BeforeRivettTerminalBuild(object __instance)
+        {
+            rivettTerminalCatalogBuilding = false;
+            if (__instance == null || rivettTerminalScreenField == null)
+                return;
+
+            try
+            {
+                string screen = rivettTerminalScreenField.GetValue(__instance) as string;
+                rivettTerminalCatalogBuilding = string.Equals(screen, "catalog", StringComparison.Ordinal);
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Warning("[ModTextTranslator] Falha ao identificar a tela do catálogo do Rivett: " + ex.Message);
+            }
+        }
+
+        private static void AfterRivettTerminalBuild()
+        {
+            rivettTerminalCatalogBuilding = false;
+        }
+
+        private static void AfterRivettTerminalProductLabel(ref string __result)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (!rivettTerminalCatalogBuilding || string.IsNullOrEmpty(__result) || translations == null)
+                return;
+
+            string translated = TranslateRivettPhoneText(__result, translations);
+            if (!string.Equals(translated, __result, StringComparison.Ordinal))
+                __result = __result + " | " + translated;
+        }
+
+        private static string TranslateRivettLabel(string source, TranslationDictionary translations)
+        {
+            string translated;
+            if (translations.TryTranslate(source, "RivettPartsService/TerminalCatalog", out translated)
+                && !string.IsNullOrEmpty(translated))
+            {
+                return translated;
+            }
+
+            // Try the last suffix first so labels that already contain slashes
+            // (for example, instrument-panel variants) can still match as a whole.
+            int slashSeparator = source.LastIndexOf(" / ", StringComparison.Ordinal);
+            if (slashSeparator >= 0)
+            {
+                string leftOfSlash = source.Substring(0, slashSeparator);
+                string rightOfSlash = source.Substring(slashSeparator + 3);
+                string translatedLeftOfSlash = TranslateRivettLabel(leftOfSlash, translations);
+                string translatedRightOfSlash = TranslateRivettLabel(rightOfSlash, translations);
+                if (translatedLeftOfSlash != leftOfSlash || translatedRightOfSlash != rightOfSlash)
+                    return translatedLeftOfSlash + " / " + translatedRightOfSlash;
+            }
+
+            int separator = source.IndexOf(" — ", StringComparison.Ordinal);
+            if (separator < 0)
+                return source;
+
+            string left = source.Substring(0, separator);
+            string right = source.Substring(separator + 3);
+            string translatedLeft = TranslateRivettLabel(left, translations);
+            string translatedRight = TranslateRivettLabel(right, translations);
+            if (translatedLeft == left && translatedRight == right)
+                return source;
+
+            return translatedLeft + " — " + translatedRight;
+        }
+
+        private static bool IsDigits(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return false;
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (!char.IsDigit(value[i]))
+                    return false;
+            }
+            return true;
         }
 
         private static string TranslatePoolGameText(string source, TranslationDictionary translations)
