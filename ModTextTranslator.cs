@@ -16,6 +16,7 @@ namespace MWC_Localization_Core
         private const string MagazineApiAssemblyName = "MagazineAPI";
         private const string MagazineOrderFormTypeName = "MagazineAPI.OrderFormManager";
         private const string RusckoControllerTypeName = "RusckoValnikPickup.RusckoBrochureController";
+        private const string PoolGameTypeName = "MiniPool.MiniPoolMod";
         private static readonly string HarmonyId = "MWC_Localization_Core_BR.ModTextTranslator";
         private static TranslationDictionary activeTranslations;
         private static FieldInfo displayNameField;
@@ -27,13 +28,14 @@ namespace MWC_Localization_Core
         private static HarmonyInstance harmony;
         private static bool magazineApiResolved;
         private static bool rusckoResolved;
+        private static bool poolGameResolved;
         private static bool magazineApiHookFailureLogged;
         private static bool rusckoHookFailureLogged;
 
         public string Name { get { return "ModTextTranslator"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Fast; } }
         // Harmony hooks keep translating future writes after this polling surface retires.
-        public bool IsComplete { get { return magazineApiResolved && rusckoResolved; } }
+        public bool IsComplete { get { return magazineApiResolved && rusckoResolved && poolGameResolved; } }
 
         public void Initialize(TranslationContext ctx)
         {
@@ -42,12 +44,12 @@ namespace MWC_Localization_Core
 
         public int InitialPass()
         {
-            return TryInstallMagazineApiHooks() + TryInstallRusckoHooks();
+            return TryInstallMagazineApiHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks();
         }
 
         public int MonitorTick(float deltaTime)
         {
-            return TryInstallMagazineApiHooks() + TryInstallRusckoHooks()
+            return TryInstallMagazineApiHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks()
                 + TranslateCurrentRusckoText(rusckoControllerInstance);
         }
 
@@ -156,6 +158,58 @@ namespace MWC_Localization_Core
             }
         }
 
+        private static int TryInstallPoolGameHooks()
+        {
+            if (poolGameResolved)
+                return 0;
+
+            Type poolGameType = FindLoadedType(PoolGameTypeName);
+            if (poolGameType == null)
+                return ResolveMissingMod(
+                    ref poolGameResolved,
+                    "PoolGame não está carregado; sem tradução da mesa de sinuca nesta sessão.");
+
+            try
+            {
+                const BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+                MethodInfo shadowLabel = null;
+                MethodInfo colorLabel = null;
+                MethodInfo say = null;
+                MethodInfo[] methods = poolGameType.GetMethods(instanceFlags);
+                for (int i = 0; i < methods.Length; i++)
+                {
+                    MethodInfo method = methods[i];
+                    if (method.Name == "ShadowLabel" && method.GetParameters().Length == 3)
+                        shadowLabel = method;
+                    else if (method.Name == "ColorLabel" && method.GetParameters().Length == 4)
+                        colorLabel = method;
+                    else if (method.Name == "Say" && method.GetParameters().Length == 2)
+                        say = method;
+                }
+
+                MethodInfo translateLabel = typeof(ModTextTranslator).GetMethod(
+                    "BeforePoolGameLabel", BindingFlags.Static | BindingFlags.NonPublic);
+                MethodInfo translateMessage = typeof(ModTextTranslator).GetMethod(
+                    "BeforePoolGameSay", BindingFlags.Static | BindingFlags.NonPublic);
+                if (shadowLabel == null || colorLabel == null || say == null
+                    || translateLabel == null || translateMessage == null)
+                    return LogPoolGameHookFailure("Métodos de texto da interface do PoolGame não encontrados.");
+
+                EnsureHarmony();
+                HarmonyMethod prefix = new HarmonyMethod(translateLabel);
+                harmony.Patch(shadowLabel, prefix: prefix);
+                harmony.Patch(colorLabel, prefix: new HarmonyMethod(translateLabel));
+                harmony.Patch(say, prefix: new HarmonyMethod(translateMessage));
+                poolGameResolved = true;
+                CoreConsole.Print("[ModTextTranslator] Hooks instalados na interface do PoolGame");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return LogPoolGameHookFailure("Falha ao instalar hooks do PoolGame: " + ex.Message);
+            }
+        }
+
         private static Type FindLoadedType(string typeName)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -206,6 +260,13 @@ namespace MWC_Localization_Core
                 rusckoHookFailureLogged = true;
                 CoreConsole.Warning("[ModTextTranslator] " + message);
             }
+            return 0;
+        }
+
+        private static int LogPoolGameHookFailure(string message)
+        {
+            poolGameResolved = true;
+            CoreConsole.Warning("[ModTextTranslator] " + message);
             return 0;
         }
 
@@ -268,6 +329,70 @@ namespace MWC_Localization_Core
             {
                 __0 = translated;
             }
+        }
+
+        private static void BeforePoolGameLabel(ref string __1)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (string.IsNullOrEmpty(__1) || translations == null)
+                return;
+
+            __1 = TranslatePoolGameText(__1, translations);
+        }
+
+        private static void BeforePoolGameSay(ref string __0)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (string.IsNullOrEmpty(__0) || translations == null)
+                return;
+
+            __0 = TranslatePoolGameText(__0, translations);
+        }
+
+        private static string TranslatePoolGameText(string source, TranslationDictionary translations)
+        {
+            string translated;
+            if (translations.TryTranslate(source, "PoolGame/MiniPoolMod", out translated)
+                && !string.IsNullOrEmpty(translated))
+            {
+                return translated;
+            }
+
+            // Bet result toasts combine a rule message and a money result with a
+            // vertical bar. Translate each side so dynamic rule text still works.
+            int separator = source.IndexOf('|');
+            if (separator < 0)
+                return source;
+
+            string left = source.Substring(0, separator);
+            string right = source.Substring(separator + 1);
+            string leftTrimmed = left.Trim();
+            string rightTrimmed = right.Trim();
+            string leftTranslated;
+            string rightTranslated;
+            bool leftChanged = translations.TryTranslate(leftTrimmed, "PoolGame/MiniPoolMod", out leftTranslated)
+                && !string.IsNullOrEmpty(leftTranslated) && leftTranslated != leftTrimmed;
+            bool rightChanged = translations.TryTranslate(rightTrimmed, "PoolGame/MiniPoolMod", out rightTranslated)
+                && !string.IsNullOrEmpty(rightTranslated) && rightTranslated != rightTrimmed;
+            if (!leftChanged && !rightChanged)
+                return source;
+
+            return (leftChanged ? RestoreOuterWhitespace(left, leftTranslated) : left)
+                + "|"
+                + (rightChanged ? RestoreOuterWhitespace(right, rightTranslated) : right);
+        }
+
+        private static string RestoreOuterWhitespace(string original, string translated)
+        {
+            int start = 0;
+            while (start < original.Length && char.IsWhiteSpace(original[start]))
+                start++;
+
+            int end = original.Length;
+            while (end > start && char.IsWhiteSpace(original[end - 1]))
+                end--;
+
+            return original.Substring(0, start) + translated + original.Substring(end);
         }
 
         private static void AfterRusckoUpdatePageVisibility(object __instance)
