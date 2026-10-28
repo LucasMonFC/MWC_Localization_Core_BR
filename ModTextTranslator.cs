@@ -440,6 +440,8 @@ namespace MWC_Localization_Core
                     string prefix = lines[i].Substring(0, leading);
                     if (i386OutputContext == 2)
                         prefix = RecenterClassifiedsLine(prefix, body, translated);
+                    else if (i386OutputContext == 1)
+                        prefix = RecenterBillsLine(prefix, body, translated);
                     lines[i] = prefix + translated + lines[i].Substring(trailing);
                 }
             }
@@ -524,6 +526,28 @@ namespace MWC_Localization_Core
                 return prefix;
 
             return prefix.Substring(0, paddingStart) + new string(' ', newPaddingLength);
+        }
+
+        private static string RecenterBillsLine(string prefix, string originalBody, string translatedBody)
+        {
+            // BillsOnline centers status and prompt lines by adding leading
+            // spaces. Keep the same visual center after the translated text
+            // changes width; leave tabular rows and other prefixed content alone.
+            if (prefix.Length == 0 || prefix.IndexOf('\t') >= 0)
+                return prefix;
+
+            for (int i = 0; i < prefix.Length; i++)
+            {
+                if (prefix[i] != ' ')
+                    return prefix;
+            }
+
+            int adjustment = (originalBody.Length - translatedBody.Length) / 2;
+            int newPaddingLength = Math.Max(0, prefix.Length + adjustment);
+            if (newPaddingLength == prefix.Length)
+                return prefix;
+
+            return new string(' ', newPaddingLength);
         }
 
         private static string CapitalizePartName(string value)
