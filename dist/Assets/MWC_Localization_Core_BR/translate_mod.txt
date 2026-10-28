@@ -1111,7 +1111,7 @@ Mods magazine = REVISTA MODS
 //JVC XL-G2500 CD Player
 JVC CD Player = LEITOR DE CD JVC
 
-// Rivett Parts Service
+//Rivett Parts Service
 Rivett Parts Service. Factory spare parts by post. Phone: 08-961234. Mon-Fri, 08:00-16:00. = Serviço de peças Rivett. Peças de reposição originais de fábrica por correio. Telefone: 08-961234. De segunda a sexta, das 8h às 16h.
 RIVETT PARTS SERVICE  /  TELEBBS = SERVIÇO DE PEÇAS RIVETT  /  TELEBBS
 Full catalog / manual specifications = Catálogo completo / especificações manuais
@@ -1372,12 +1372,58 @@ Choose a part. Telephone service supplies L pre-FL specifications. = Escolha uma
 {0} mk / set = {0} mk / jogo
 Order accepted: {0} — {1} mk. Await postal notification, then pay and collect at the post office. = Pedido aceito: {0} — {1} mk. Aguarde o aviso postal, depois pague e retire na agência.
 
-//PoolGame
+//Bills Online
+Bills Online = Contas on-line
+House Phone Bill = Conta telefônica da casa
+Apartment Phone Bill = Conta telefônica do apartamento
+House Electricity Bill = Conta de energia da casa
+Apartment Electricity Bill = Conta de energia do apartamento
+Definition Quantity Price MK Total MK = Descrição Quantidade Preço MK Total MK
+Basic subscription fee: = Taxa básica da assinatura:
+Local calls (min): = Chamadas locais (min):
+Local calls (number): = Chamadas locais (quantidade):
+Long distance calls (min): = Chamadas de longa distância (min):
+Long distance calls (number): = Chamadas de longa distância (quantidade):
+Consumption = Consumo
+++ Basic subscription fee:{0} = ++ Taxa de assinatura:{0}
+++ Local calls (min):{0} = ++ Lig. locais (min):{0}
+++ Local calls (number):{0} = ++ Lig. locais (nº):{0}
+++ Long distance calls (min):{0} = ++ Lig. interurbanas (min):{0}
+++ Long distance calls (number):{0} = ++ Lig. interurbanas (nº):{0}
+++ Consumption{0} = ++ Consumo{0}
+Overdue = Em atraso
+Invoice not ready = Fatura indisponível
+Due: = Vencimento:
+[PAY NOW] = [PAGAR AGORA]
+Not Connected = Sem conexão
+Press Space to Connect = Pressione Espaço para conectar
+Connecting... = Conectando...
+Processing Payment... = Processando pagamento...
+Payment Success = Pagamento realizado
+Payment Failed = Falha no pagamento
+
+//Classifieds Online Catalogue
+Classifieds Online Catalogue = Catálogo de classificados on-line
+New magazine available for download = Nova revista disponível para baixar
+Press Space to Download = Pressione Espaço para baixar
+Downloading.... = Baixando...
+Download Finished - = Download concluído -
+Download Error = Erro no download
+Press Space to Continue = Pressione Espaço para continuar
+Press Space to Retry = Pressione Espaço para tentar novamente
+Not Connected = Sem conexão
+Press Space to Connect = Pressione Espaço para conectar
+Connecting... = Conectando...
+[ERROR] = [ERRO]
+[BUY] = [COMPRAR]
+[ON ORDER] = [ENCOMENDADO]
+Clutch Disc = Disco de embreagem
+
+//Pool Game
 Easy = Fácil
 Easy + = Fácil +
 Normal = Normal
 Hard = Difícil
-PRO = Pro
 PRO = Pro
 Play pool = Jogar sinuca
 Press K to bet on a game of pool = Pressione K para apostar na partida

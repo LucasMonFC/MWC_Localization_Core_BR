@@ -9,8 +9,9 @@ namespace MWC_Localization_Core
     /// <summary>
     /// Hooks mod-owned text generation points that bypass the normal FSM/TextMesh
     /// translation pipeline. MagazineAPI product names are localized before they
-    /// are stored, the Ruscko brochure is translated at its write points, and the
-    /// Rivett computer catalog is translated as it builds terminal rows/notices.
+    /// are stored, the Ruscko brochure is translated at its write points, and
+    /// computer panels from Rivett, Bills Online and Classifieds are translated
+    /// at their I386 text output points.
     /// </summary>
     public sealed class ModTextTranslator : ITranslationSurface
     {
@@ -20,6 +21,9 @@ namespace MWC_Localization_Core
         private const string PoolGameTypeName = "MiniPool.MiniPoolMod";
         private const string RivettTerminalTypeName = "RivettPartsService.TerminalCatalog";
         private const string RivettComputerApiTypeName = "RivettPartsService.ComputerApi";
+        private const string BillsOnlineTypeName = "BillsOnline.Bills";
+        private const string ClassifiedsOnlineTypeName = "ClassifiedsOnlineCatalogue.Cat";
+        private const string I386TypeName = "I386API.I386";
         private static readonly string HarmonyId = "MWC_Localization_Core_BR.ModTextTranslator";
         private static TranslationDictionary activeTranslations;
         private static FieldInfo displayNameField;
@@ -30,6 +34,7 @@ namespace MWC_Localization_Core
         private static FieldInfo rivettPhoneSearchField;
         private static FieldInfo rivettPhoneProductsField;
         private static FieldInfo rivettTerminalScreenField;
+        private static int i386OutputContext;
         private static PropertyInfo rivettProductLabelProperty;
         private static PropertyInfo rivettProductGroupProperty;
         private static MethodInfo rivettGroupNameMethod;
@@ -45,6 +50,9 @@ namespace MWC_Localization_Core
         private static bool rusckoResolved;
         private static bool poolGameResolved;
         private static bool rivettResolved;
+        private static bool billsOnlineResolved;
+        private static bool classifiedsOnlineResolved;
+        private static bool i386OutputHooksInstalled;
         private static bool rivettTerminalCatalogBuilding;
         private static bool magazineApiHookFailureLogged;
         private static bool rusckoHookFailureLogged;
@@ -53,7 +61,8 @@ namespace MWC_Localization_Core
         public string Name { get { return "ModTextTranslator"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Fast; } }
         // Harmony hooks keep translating future writes after this polling surface retires.
-        public bool IsComplete { get { return magazineApiResolved && rusckoResolved && poolGameResolved && rivettResolved; } }
+        public bool IsComplete { get { return magazineApiResolved && rusckoResolved && poolGameResolved && rivettResolved
+            && billsOnlineResolved && classifiedsOnlineResolved; } }
 
         public void Initialize(TranslationContext ctx)
         {
@@ -64,13 +73,14 @@ namespace MWC_Localization_Core
         public int InitialPass()
         {
             return TryInstallMagazineApiHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks()
-                + TryInstallRivettHooks();
+                + TryInstallRivettHooks() + TryInstallBillsOnlineHooks() + TryInstallClassifiedsOnlineHooks();
         }
 
         public int MonitorTick(float deltaTime)
         {
             return TryInstallMagazineApiHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks()
                 + TryInstallRivettHooks()
+                + TryInstallBillsOnlineHooks() + TryInstallClassifiedsOnlineHooks()
                 + TranslateCurrentRusckoText(rusckoControllerInstance);
         }
 
@@ -80,6 +90,7 @@ namespace MWC_Localization_Core
             rusckoControllerInstance = null;
             rivettPhoneWindowDrawing = false;
             rivettTerminalCatalogBuilding = false;
+            i386OutputContext = 0;
             ClearRivettPhoneSearchCache();
         }
 
@@ -291,6 +302,296 @@ namespace MWC_Localization_Core
             {
                 return LogRivettHookFailure("Falha ao instalar hook do catálogo do Rivett Parts Service: " + ex.Message);
             }
+        }
+
+        private static int TryInstallBillsOnlineHooks()
+        {
+            if (billsOnlineResolved)
+                return 0;
+
+            Type billsType = FindLoadedType(BillsOnlineTypeName);
+            if (billsType == null)
+                return ResolveMissingMod(ref billsOnlineResolved,
+                    "BillsOnline não está carregado; sem tradução do painel de contas do computador nesta sessão.");
+
+            try
+            {
+                const BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+                MethodInfo update = billsType.GetMethod("command_update", instanceFlags, null, Type.EmptyTypes, null);
+                MethodInfo begin = typeof(ModTextTranslator).GetMethod("BeforeBillsOnlineUpdate", BindingFlags.Static | BindingFlags.NonPublic);
+                MethodInfo end = typeof(ModTextTranslator).GetMethod("AfterBillsOnlineUpdate", BindingFlags.Static | BindingFlags.NonPublic);
+                if (update == null || begin == null || end == null)
+                    return LogOnlineModHookFailure(ref billsOnlineResolved, "Métodos de exibição do BillsOnline não encontrados.");
+
+                EnsureI386OutputHooks();
+                EnsureHarmony().Patch(update, prefix: new HarmonyMethod(begin), postfix: new HarmonyMethod(end));
+                billsOnlineResolved = true;
+                CoreConsole.Print("[ModTextTranslator] Hook instalado para BillsOnline");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return LogOnlineModHookFailure(ref billsOnlineResolved, "Falha ao instalar hook do BillsOnline: " + ex.Message);
+            }
+        }
+
+        private static int TryInstallClassifiedsOnlineHooks()
+        {
+            if (classifiedsOnlineResolved)
+                return 0;
+
+            Type catalogueType = FindLoadedType(ClassifiedsOnlineTypeName);
+            if (catalogueType == null)
+                return ResolveMissingMod(ref classifiedsOnlineResolved,
+                    "ClassifiedsOnlineCatalogue não está carregado; sem tradução do catálogo de classificados nesta sessão.");
+
+            try
+            {
+                const BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+                MethodInfo update = catalogueType.GetMethod("update", instanceFlags, null, Type.EmptyTypes, null);
+                MethodInfo begin = typeof(ModTextTranslator).GetMethod("BeforeClassifiedsOnlineUpdate", BindingFlags.Static | BindingFlags.NonPublic);
+                MethodInfo end = typeof(ModTextTranslator).GetMethod("AfterClassifiedsOnlineUpdate", BindingFlags.Static | BindingFlags.NonPublic);
+                if (update == null || begin == null || end == null)
+                    return LogOnlineModHookFailure(ref classifiedsOnlineResolved, "Métodos de exibição do ClassifiedsOnlineCatalogue não encontrados.");
+
+                EnsureI386OutputHooks();
+                EnsureHarmony().Patch(update, prefix: new HarmonyMethod(begin), postfix: new HarmonyMethod(end));
+                classifiedsOnlineResolved = true;
+                CoreConsole.Print("[ModTextTranslator] Hook instalado para ClassifiedsOnlineCatalogue");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return LogOnlineModHookFailure(ref classifiedsOnlineResolved,
+                    "Falha ao instalar hook do ClassifiedsOnlineCatalogue: " + ex.Message);
+            }
+        }
+
+        private static void EnsureI386OutputHooks()
+        {
+            if (i386OutputHooksInstalled)
+                return;
+
+            Type i386Type = FindLoadedType(I386TypeName);
+            if (i386Type == null)
+                throw new MissingMemberException("I386API.I386 não está carregado.");
+
+            const BindingFlags staticFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+            MethodInfo write = i386Type.GetMethod("POS_Write", staticFlags, null, new Type[] { typeof(string) }, null);
+            MethodInfo writeNewLine = i386Type.GetMethod("POS_WriteNewLine", staticFlags, null, new Type[] { typeof(string) }, null);
+            MethodInfo translate = typeof(ModTextTranslator).GetMethod("BeforeOnlineComputerOutput", BindingFlags.Static | BindingFlags.NonPublic);
+            if (write == null || writeNewLine == null || translate == null)
+                throw new MissingMemberException("Métodos de saída de texto do I386 não encontrados.");
+
+            EnsureHarmony().Patch(write, prefix: new HarmonyMethod(translate));
+            EnsureHarmony().Patch(writeNewLine, prefix: new HarmonyMethod(translate));
+            i386OutputHooksInstalled = true;
+        }
+
+        private static int LogOnlineModHookFailure(ref bool resolved, string message)
+        {
+            resolved = true;
+            CoreConsole.Warning("[ModTextTranslator] " + message);
+            return 0;
+        }
+
+        private static void BeforeBillsOnlineUpdate()
+        {
+            i386OutputContext = 1;
+        }
+
+        private static void AfterBillsOnlineUpdate()
+        {
+            i386OutputContext = 0;
+        }
+
+        private static void BeforeClassifiedsOnlineUpdate()
+        {
+            i386OutputContext = 2;
+        }
+
+        private static void AfterClassifiedsOnlineUpdate()
+        {
+            i386OutputContext = 0;
+        }
+
+        private static void BeforeOnlineComputerOutput(ref string __0)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (i386OutputContext == 0 || string.IsNullOrEmpty(__0) || translations == null)
+                return;
+
+            string[] lines = __0.Split('\n');
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (lines[i].Length == 0)
+                    continue;
+
+                int leading = 0;
+                while (leading < lines[i].Length && char.IsWhiteSpace(lines[i][leading]))
+                    leading++;
+                int trailing = lines[i].Length;
+                while (trailing > leading && char.IsWhiteSpace(lines[i][trailing - 1]))
+                    trailing--;
+                string body = lines[i].Substring(leading, trailing - leading);
+                string translated = TranslateOnlineComputerLine(body, translations, i386OutputContext);
+                if (translated != body)
+                {
+                    string prefix = lines[i].Substring(0, leading);
+                    if (i386OutputContext == 2)
+                        prefix = RecenterClassifiedsLine(prefix, body, translated);
+                    lines[i] = prefix + translated + lines[i].Substring(trailing);
+                }
+            }
+
+            __0 = string.Join("\n", lines);
+        }
+
+        private static string TranslateOnlineComputerLine(string source, TranslationDictionary translations, int context)
+        {
+            if (context == 1)
+            {
+                string dueDate = TranslateBillsDueDate(source, translations);
+                if (dueDate != source)
+                    return dueDate;
+
+                string duration = TranslateBillsDuration(source, translations);
+                if (duration != source)
+                    return duration;
+
+            }
+            else if (context == 2)
+            {
+                const string partPrefix = "++ ";
+                if (source.StartsWith(partPrefix, StringComparison.Ordinal))
+                {
+                    string partName = source.Substring(partPrefix.Length);
+                    string translatedPart;
+                    if (translations.TryTranslate(partName, null, out translatedPart) && !string.IsNullOrEmpty(translatedPart))
+                        return partPrefix + CapitalizePartName(translatedPart);
+                }
+
+                const string downloadingPrefix = "Downloading.... ";
+                const string errorPrefix = "[ERROR] - ";
+                const string buyPrefix = "[BUY] - ";
+                if (source.StartsWith(downloadingPrefix, StringComparison.Ordinal))
+                    return "Baixando... " + source.Substring(downloadingPrefix.Length);
+                if (source.StartsWith(errorPrefix, StringComparison.Ordinal))
+                    return "[ERRO] - " + source.Substring(errorPrefix.Length);
+                if (source.StartsWith(buyPrefix, StringComparison.Ordinal))
+                    return "[COMPRAR] - " + source.Substring(buyPrefix.Length);
+            }
+
+            string translated;
+            if (!translations.TryTranslate(source, null, out translated) || string.IsNullOrEmpty(translated))
+                return source;
+
+            return context == 1 ? PreserveBillsTabColumns(source, translated) : translated;
+        }
+
+        private static string PreserveBillsTabColumns(string source, string translated)
+        {
+            int sourceTab = source.IndexOf('\t');
+            int translatedTab = translated.IndexOf('\t');
+            if (sourceTab < 0 || translatedTab < 0 || translatedTab >= sourceTab)
+                return translated;
+
+            return translated.Insert(translatedTab, new string(' ', sourceTab - translatedTab));
+        }
+
+        private static string RecenterClassifiedsLine(string prefix, string originalBody, string translatedBody)
+        {
+            // ClassifiedsOnlineCatalogue centers its POS text with a fixed run of
+            // spaces after the leading tabs. Compensate for changed Portuguese
+            // string lengths so those lines remain visually centered.
+            int lastTab = prefix.LastIndexOf('\t');
+            if (lastTab < 0)
+                return prefix;
+
+            int paddingStart = lastTab + 1;
+            int paddingLength = prefix.Length - paddingStart;
+            if (paddingLength == 0)
+                return prefix;
+
+            for (int i = paddingStart; i < prefix.Length; i++)
+            {
+                if (prefix[i] != ' ')
+                    return prefix;
+            }
+
+            int adjustment = (originalBody.Length - translatedBody.Length) / 2;
+            int newPaddingLength = Math.Max(0, paddingLength + adjustment);
+            if (newPaddingLength == paddingLength)
+                return prefix;
+
+            return prefix.Substring(0, paddingStart) + new string(' ', newPaddingLength);
+        }
+
+        private static string CapitalizePartName(string value)
+        {
+            string lowercase = value.ToLowerInvariant();
+            for (int i = 0; i < lowercase.Length; i++)
+            {
+                if (!char.IsLetter(lowercase[i]))
+                    continue;
+
+                return lowercase.Substring(0, i) + char.ToUpperInvariant(lowercase[i]) + lowercase.Substring(i + 1);
+            }
+
+            return lowercase;
+        }
+
+        private static string TranslateBillsDueDate(string source, TranslationDictionary translations)
+        {
+            int at = source.IndexOf(" at ", StringComparison.Ordinal);
+            if (at <= 0)
+                return source;
+
+            string due = source.Substring(0, at);
+            string time = source.Substring(at + 4);
+            string translatedDue;
+            if (due == "Today")
+                translatedDue = "Hoje";
+            else if (due == "Tomorrow")
+                translatedDue = "Amanhã";
+            else if (due.StartsWith("Next week on ", StringComparison.Ordinal))
+                translatedDue = "Na próxima semana, " + TranslateBillsWeekday(due.Substring(13), translations);
+            else if (due.StartsWith("In ", StringComparison.Ordinal) && due.IndexOf(" week(s) on ", StringComparison.Ordinal) >= 0)
+            {
+                int on = due.IndexOf(" week(s) on ", StringComparison.Ordinal);
+                string weeks = due.Substring(3, on - 3);
+                string unit = weeks == "1" ? "semana" : "semanas";
+                translatedDue = "Em " + weeks + " " + unit + ", " + TranslateBillsWeekday(due.Substring(on + 12), translations);
+            }
+            else if (IsBillsWeekday(due))
+                translatedDue = TranslateBillsWeekday(due, translations);
+            else
+                return source;
+
+            return translatedDue + " às " + time;
+        }
+
+        private static string TranslateBillsWeekday(string source, TranslationDictionary translations)
+        {
+            string translated;
+            if (translations.TryTranslate(source, null, out translated) && !string.IsNullOrEmpty(translated))
+                return "na " + translated.ToLowerInvariant();
+            return "na " + source.ToLowerInvariant();
+        }
+
+        private static bool IsBillsWeekday(string value)
+        {
+            return value == "Monday" || value == "Tuesday" || value == "Wednesday"
+                || value == "Thursday" || value == "Friday" || value == "Saturday" || value == "Sunday";
+        }
+
+        private static string TranslateBillsDuration(string source, TranslationDictionary translations)
+        {
+            if (source.EndsWith(" (real time)", StringComparison.Ordinal))
+                return source.Substring(0, source.Length - 12) + " (tempo real)";
+            if (source.EndsWith(" (game time)", StringComparison.Ordinal))
+                return source.Substring(0, source.Length - 12) + " (tempo de jogo)";
+            return source;
         }
 
         private static void InstallRivettPhoneWindowHooks(Assembly assembly)
