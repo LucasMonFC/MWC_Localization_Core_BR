@@ -454,11 +454,6 @@ namespace MWC_Localization_Core
                 string dueDate = TranslateBillsDueDate(source, translations);
                 if (dueDate != source)
                     return dueDate;
-
-                string duration = TranslateBillsDuration(source, translations);
-                if (duration != source)
-                    return duration;
-
             }
             else if (context == 2)
             {
@@ -471,15 +466,6 @@ namespace MWC_Localization_Core
                         return partPrefix + CapitalizePartName(translatedPart);
                 }
 
-                const string downloadingPrefix = "Downloading.... ";
-                const string errorPrefix = "[ERROR] - ";
-                const string buyPrefix = "[BUY] - ";
-                if (source.StartsWith(downloadingPrefix, StringComparison.Ordinal))
-                    return "Baixando... " + source.Substring(downloadingPrefix.Length);
-                if (source.StartsWith(errorPrefix, StringComparison.Ordinal))
-                    return "[ERRO] - " + source.Substring(errorPrefix.Length);
-                if (source.StartsWith(buyPrefix, StringComparison.Ordinal))
-                    return "[COMPRAR] - " + source.Substring(buyPrefix.Length);
             }
 
             string translated;
@@ -491,12 +477,25 @@ namespace MWC_Localization_Core
 
         private static string PreserveBillsTabColumns(string source, string translated)
         {
-            int sourceTab = source.IndexOf('\t');
-            int translatedTab = translated.IndexOf('\t');
-            if (sourceTab < 0 || translatedTab < 0 || translatedTab >= sourceTab)
-                return translated;
+            int sourceSearch = 0;
+            int translatedSearch = 0;
+            while (true)
+            {
+                int sourceTab = source.IndexOf('\t', sourceSearch);
+                int translatedTab = translated.IndexOf('\t', translatedSearch);
+                if (sourceTab < 0 || translatedTab < 0)
+                    return translated;
 
-            return translated.Insert(translatedTab, new string(' ', sourceTab - translatedTab));
+                if (translatedTab < sourceTab)
+                {
+                    int padding = sourceTab - translatedTab;
+                    translated = translated.Insert(translatedTab, new string(' ', padding));
+                    translatedTab += padding;
+                }
+
+                sourceSearch = sourceTab + 1;
+                translatedSearch = translatedTab + 1;
+            }
         }
 
         private static string RecenterClassifiedsLine(string prefix, string originalBody, string translatedBody)
@@ -550,48 +549,71 @@ namespace MWC_Localization_Core
             string due = source.Substring(0, at);
             string time = source.Substring(at + 4);
             string translatedDue;
-            if (due == "Today")
-                translatedDue = "Hoje";
-            else if (due == "Tomorrow")
-                translatedDue = "Amanhã";
-            else if (due.StartsWith("Next week on ", StringComparison.Ordinal))
-                translatedDue = "Na próxima semana, " + TranslateBillsWeekday(due.Substring(13), translations);
+            if (due.StartsWith("Next week on ", StringComparison.Ordinal))
+            {
+                string nextWeekPrefix;
+                string weekday;
+                if (!TryGetBillsDateText(translations, "Bills Date Next Week Prefix", out nextWeekPrefix)
+                    || !TryTranslateBillsWeekday(due.Substring(13), translations, out weekday))
+                    return source;
+
+                translatedDue = nextWeekPrefix + " " + weekday;
+            }
             else if (due.StartsWith("In ", StringComparison.Ordinal) && due.IndexOf(" week(s) on ", StringComparison.Ordinal) >= 0)
             {
                 int on = due.IndexOf(" week(s) on ", StringComparison.Ordinal);
                 string weeks = due.Substring(3, on - 3);
-                string unit = weeks == "1" ? "semana" : "semanas";
-                translatedDue = "Em " + weeks + " " + unit + ", " + TranslateBillsWeekday(due.Substring(on + 12), translations);
+                string inPrefix;
+                string unit;
+                string weekday;
+                string unitKey = weeks == "1" ? "Bills Date Week Singular" : "Bills Date Week Plural";
+                if (!TryGetBillsDateText(translations, "Bills Date In Prefix", out inPrefix)
+                    || !TryGetBillsDateText(translations, unitKey, out unit)
+                    || !TryTranslateBillsWeekday(due.Substring(on + 12), translations, out weekday))
+                    return source;
+
+                translatedDue = inPrefix + " " + weeks + " " + unit + ", " + weekday;
             }
             else if (IsBillsWeekday(due))
-                translatedDue = TranslateBillsWeekday(due, translations);
+            {
+                if (!TryTranslateBillsWeekday(due, translations, out translatedDue))
+                    return source;
+            }
             else
                 return source;
 
-            return translatedDue + " às " + time;
+            string timeConnector;
+            if (!TryGetBillsDateText(translations, "Bills Date Time Connector", out timeConnector))
+                return source;
+
+            return translatedDue + " " + timeConnector + " " + time;
         }
 
-        private static string TranslateBillsWeekday(string source, TranslationDictionary translations)
+        private static bool TryTranslateBillsWeekday(string source, TranslationDictionary translations, out string result)
         {
+            result = null;
             string translated;
-            if (translations.TryTranslate(source, null, out translated) && !string.IsNullOrEmpty(translated))
-                return "na " + translated.ToLowerInvariant();
-            return "na " + source.ToLowerInvariant();
+            string weekdayPrefix;
+            if (!translations.TryTranslate(source, null, out translated) || string.IsNullOrEmpty(translated)
+                || !TryGetBillsDateText(translations, "Bills Date Weekday Prefix", out weekdayPrefix))
+                return false;
+
+            result = weekdayPrefix + " " + translated.ToLowerInvariant();
+            return true;
+        }
+
+        private static bool TryGetBillsDateText(TranslationDictionary translations, string key, out string value)
+        {
+            value = null;
+            return translations != null
+                && translations.TryGetExact(key, null, out value)
+                && !string.IsNullOrEmpty(value);
         }
 
         private static bool IsBillsWeekday(string value)
         {
             return value == "Monday" || value == "Tuesday" || value == "Wednesday"
                 || value == "Thursday" || value == "Friday" || value == "Saturday" || value == "Sunday";
-        }
-
-        private static string TranslateBillsDuration(string source, TranslationDictionary translations)
-        {
-            if (source.EndsWith(" (real time)", StringComparison.Ordinal))
-                return source.Substring(0, source.Length - 12) + " (tempo real)";
-            if (source.EndsWith(" (game time)", StringComparison.Ordinal))
-                return source.Substring(0, source.Length - 12) + " (tempo de jogo)";
-            return source;
         }
 
         private static void InstallRivettPhoneWindowHooks(Assembly assembly)
@@ -1039,9 +1061,7 @@ namespace MWC_Localization_Core
                         lines[i] = translatedLine;
                     }
                 }
-                __result = string.Join("\n", lines)
-                    .Replace("Factory: ", "Fábrica: ")
-                    .Replace(" / verified parts", " / peças verificadas");
+                __result = string.Join("\n", lines);
             }
             catch (Exception ex)
             {
