@@ -1132,7 +1132,6 @@ Upholstery = Estofamento
 Quantity = Quantidade
 Add to basket = Adicionar à cesta
 Confirm order = Confirmar pedido
-Cancel = Cancelar
 Place order = Fazer pedido
 Return to main menu = Voltar ao menu principal
 Only verified factory specifications are offered. = Somente especificações de fábrica verificadas estão disponíveis.
