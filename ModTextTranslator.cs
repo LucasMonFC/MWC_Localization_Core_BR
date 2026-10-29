@@ -8,8 +8,8 @@ namespace MWC_Localization_Core
 {
     /// <summary>
     /// Hooks mod-owned text generation points that bypass the normal FSM/TextMesh
-    /// translation pipeline. MagazineAPI product names are localized before they
-    /// are stored, the Ruscko brochure is translated at its write points, and
+    /// translation pipeline. Karhu subtitles and MagazineAPI product names are
+    /// localized before they are stored, the Ruscko brochure is translated at its write points, and
     /// computer panels from Rivett, Bills Online and Classifieds are translated
     /// at their I386 text output points.
     /// </summary>
@@ -17,6 +17,7 @@ namespace MWC_Localization_Core
     {
         private const string MagazineApiAssemblyName = "MagazineAPI";
         private const string MagazineOrderFormTypeName = "MagazineAPI.OrderFormManager";
+        private const string KarhuSubtitlesTypeName = "NivaDevelopment.NivaSubtitles";
         private const string RusckoControllerTypeName = "RusckoValnikPickup.RusckoBrochureController";
         private const string PoolGameTypeName = "MiniPool.MiniPoolMod";
         private const string RivettTerminalTypeName = "RivettPartsService.TerminalCatalog";
@@ -47,6 +48,7 @@ namespace MWC_Localization_Core
         private static object rusckoControllerInstance;
         private static HarmonyInstance harmony;
         private static bool magazineApiResolved;
+        private static bool karhuResolved;
         private static bool rusckoResolved;
         private static bool poolGameResolved;
         private static bool rivettResolved;
@@ -61,7 +63,7 @@ namespace MWC_Localization_Core
         public string Name { get { return "ModTextTranslator"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.Fast; } }
         // Harmony hooks keep translating future writes after this polling surface retires.
-        public bool IsComplete { get { return magazineApiResolved && rusckoResolved && poolGameResolved && rivettResolved
+        public bool IsComplete { get { return magazineApiResolved && karhuResolved && rusckoResolved && poolGameResolved && rivettResolved
             && billsOnlineResolved && classifiedsOnlineResolved; } }
 
         public void Initialize(TranslationContext ctx)
@@ -72,13 +74,13 @@ namespace MWC_Localization_Core
 
         public int InitialPass()
         {
-            return TryInstallMagazineApiHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks()
+            return TryInstallMagazineApiHooks() + TryInstallKarhuHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks()
                 + TryInstallRivettHooks() + TryInstallBillsOnlineHooks() + TryInstallClassifiedsOnlineHooks();
         }
 
         public int MonitorTick(float deltaTime)
         {
-            return TryInstallMagazineApiHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks()
+            return TryInstallMagazineApiHooks() + TryInstallKarhuHooks() + TryInstallRusckoHooks() + TryInstallPoolGameHooks()
                 + TryInstallRivettHooks()
                 + TryInstallBillsOnlineHooks() + TryInstallClassifiedsOnlineHooks()
                 + TranslateCurrentRusckoText(rusckoControllerInstance);
@@ -142,6 +144,38 @@ namespace MWC_Localization_Core
             catch (Exception ex)
             {
                 return LogHookFailure("Falha ao instalar hooks da MagazineAPI: " + ex.Message);
+            }
+        }
+
+        private static int TryInstallKarhuHooks()
+        {
+            if (karhuResolved)
+                return 0;
+
+            Type subtitlesType = FindLoadedType(KarhuSubtitlesTypeName);
+            if (subtitlesType == null)
+                return ResolveMissingMod(
+                    ref karhuResolved,
+                    "Karhu4x4 não está carregado; sem tradução das legendas nesta sessão.");
+
+            try
+            {
+                const BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+                MethodInfo say = subtitlesType.GetMethod("Say", instanceFlags, null, new Type[] { typeof(string) }, null);
+                MethodInfo translateSubtitle = typeof(ModTextTranslator).GetMethod(
+                    "BeforeKarhuSubtitle", BindingFlags.Static | BindingFlags.NonPublic);
+                if (say == null || translateSubtitle == null)
+                    return LogKarhuHookFailure("Método de exibição das legendas do Karhu não encontrado.");
+
+                EnsureHarmony();
+                harmony.Patch(say, prefix: new HarmonyMethod(translateSubtitle));
+                karhuResolved = true;
+                CoreConsole.Print("[ModTextTranslator] Hook instalado em NivaSubtitles.Say do Karhu4x4");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return LogKarhuHookFailure("Falha ao instalar hook das legendas do Karhu4x4: " + ex.Message);
             }
         }
 
@@ -842,6 +876,13 @@ namespace MWC_Localization_Core
             return 0;
         }
 
+        private static int LogKarhuHookFailure(string message)
+        {
+            karhuResolved = true;
+            CoreConsole.Warning("[ModTextTranslator] " + message);
+            return 0;
+        }
+
         private static int LogPoolGameHookFailure(string message)
         {
             poolGameResolved = true;
@@ -866,6 +907,17 @@ namespace MWC_Localization_Core
             isResolved = true;
             CoreConsole.Print("[ModTextTranslator] " + message);
             return 0;
+        }
+
+        private static void BeforeKarhuSubtitle(ref string __0)
+        {
+            TranslationDictionary translations = activeTranslations;
+            if (translations == null || string.IsNullOrEmpty(__0))
+                return;
+
+            string translated;
+            if (translations.TryTranslate(__0, null, out translated) && !string.IsNullOrEmpty(translated))
+                __0 = translated;
         }
 
         private static void BeforeMagazineApiToggleProduct(object __0)

@@ -936,8 +936,7 @@ ChargerBox = CAIXA DE CARREGADORES
 "Your task is to take them to the Futufon store in the Perajarvi near flea market and leave them there. After a while, you will receive payment for job on your bank balance." = "Você deve levar as caixas até a loja Futufon, em Peräjärvi, perto do mercado de pulgas, e deixá-las lá. Depois de um tempo, você receberá o pagamento pelo trabalho em sua conta bancária."
 
 // Karhu 4x4
-Ice Scraper = RASPADOR DE GELO
-SCRAPE WINDOW = RASPAR JANELA
+Indicators = INDICADORES
 Your uncle's old Karhu. Visit him and sit down to ask about it. = O velho karhu do seu tio. visite-o e sente-se para perguntar sobre o carro.
 Uncle: I haven't been feeling so well lately. I don't need my old car anymore. = Tio: Não tenho me sentido muito bem ultimamente. Não preciso mais do meu carro antigo.
 You can have the Karhu. It's parked in front of my shed, beside my house. = Você pode ficar com o Karhu. Ele está estacionado em frente ao meu galpão, ao lado da casa.
