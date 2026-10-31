@@ -1043,8 +1043,7 @@ namespace MWC_Localization_Core
             if (translated == source || !IsRivettPhonePartName(source))
                 return translated;
 
-            translated = translated.ToLowerInvariant();
-            return translated.Length == 0 ? translated : char.ToUpperInvariant(translated[0]) + translated.Substring(1);
+            return FormatRivettPartCasing(translated);
         }
 
         private static bool IsRivettPhonePartName(string source)
@@ -1324,6 +1323,12 @@ namespace MWC_Localization_Core
         private static string FormatRivettPartCasing(string text)
         {
             if (string.IsNullOrEmpty(text))
+                return text;
+
+            // Shared vanilla translations are intentionally uppercase. Keep that
+            // style when the Rivett catalog reuses them; only normalize mod-only
+            // sentence-case translations.
+            if (string.Equals(text, text.ToUpperInvariant(), StringComparison.Ordinal))
                 return text;
 
             string formatted = text.ToLowerInvariant();
