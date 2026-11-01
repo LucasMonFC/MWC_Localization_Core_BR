@@ -563,28 +563,6 @@ CLIP|KaliaKaliakaliaaLaulu|0.2|0|Cerveja, cerveja, cerveja, cerveja, porra de ce
 CLIP|01_Petski_Teffelgren_puhelimessa_et_keskeyttänyt_mitään_tärkeää|0.2|0|Petski Teffelgren falando. Não, você não interrompeu nada importante. Hmm. Certo. Sim, sim, sim, sim.
 CLIP|02_hmm_joo_hmm_vaikka_niin_mhhh_joo|0.2|0|Uhum. Sim.
 CLIP|02_hmm_joo_hmm_vaikka_niin_mhhh_joo|2.92|0|Uhum. Uhum. Tudo bem. É, vamos fazer assim. Uhum.
-CLIP|16_Faffu_ja_pasianssi|13.06|0|Certo, estou ouvindo um zumbido. Há alguma luz de energia acesa no monitor? No canto inferior. Geralmente é verde ou laranja.
-CLIP|16_Faffu_ja_pasianssi|23.92|0|Não? Então não está recebendo sinal ou nem está ligado.
-CLIP|16_Faffu_ja_pasianssi|27.64|0|Aperte o botão de energia do monitor. Ali na lateral, está vendo? É um botão separado, não é o do computador. Certo.
-CLIP|16_Faffu_ja_pasianssi|36.22|0|Agora vamos ao computador. Olhe a frente daquele gabinete. O botão de energia está apertado?
-CLIP|16_Faffu_ja_pasianssi|43.42|0|Se tiver um botão grande, redondo ou quadrado, aperte uma vez.
-CLIP|16_Faffu_ja_pasianssi|48.5|0|Ótimo.
-CLIP|16_Faffu_ja_pasianssi|50|0|Ótimo, o sistema está iniciando. Espere um pouco e não aperte nada.
-CLIP|16_Faffu_ja_pasianssi|54.44|0|Apareceu alguma mensagem como “Iniciando o Windows” ou “MS-DOS”?
-CLIP|16_Faffu_ja_pasianssi|59.9|0|Excelente! Espere a área de trabalho carregar por completo.
-CLIP|16_Faffu_ja_pasianssi|64.14|0|Avise quando aparecer o fundo azul e os ícones pequenos. Isso, esses mesmos.
-CLIP|16_Faffu_ja_pasianssi|70.22|0|Perfeito! Vamos abrir o Paciência. Aperte uma vez o botão Iniciar, no canto inferior esquerdo.
-CLIP|16_Faffu_ja_pasianssi|82.4|0|Agora procure a opção “Programas”.
-CLIP|16_Faffu_ja_pasianssi|85.6|0|Geralmente há uma setinha para a direita. Passe o mouse por cima, sem clicar. Isso, deve abrir outra lista.
-CLIP|16_Faffu_ja_pasianssi|94.04|0|Procure “Acessórios”. Talvez apareça como “Accessories”. Na versão finlandesa costuma ser “Apuohjelmat”. Certo.
-CLIP|16_Faffu_ja_pasianssi|104.4|0|O Paciência deve estar ali. Clique uma vez com o botão esquerdo. Isso. Sabe jogar?
-CLIP|16_Faffu_ja_pasianssi|117.32|0|Nunca jogou? Primeiro, clique no canto superior esquerdo. É dali que você compra as cartas.
-CLIP|16_Faffu_ja_pasianssi|124.08|0|Ótimo. Agora é só mover... Você já deve conhecer as regras do Paciência, claro.
-CLIP|16_Faffu_ja_pasianssi|132.26|0|Acho que não dá para aumentar a fonte, mas podemos ampliar a janela.
-CLIP|16_Faffu_ja_pasianssi|137.24|0|Está vendo o quadradinho no canto superior direito? Clique nele para ocupar a tela inteira.
-CLIP|16_Faffu_ja_pasianssi|145|0|Se fizer uma jogada errada e se atrapalhar, clique em “Jogo” lá em cima e depois em “Novo”. Isso.
-CLIP|16_Faffu_ja_pasianssi|151.3|0|Se o computador travar algum dia, não tire o cabo da tomada de imediato. Espere um pouco.
-CLIP|16_Faffu_ja_pasianssi|159.62|0|Tudo bem, pode jogar à vontade. Ligue se a tela ficar preta ou se travar. Bom jogo! Tchau!
 CLIP|17_Fammu_ja_VHS|0.8|0|Oi, vovó! Não está incomodando. Claro que tenho um tempinho para ajudar com essa fita VHS.
 CLIP|17_Fammu_ja_VHS|7.04|0|Calma, vovó, respire fundo. É só um videocassete, não vai morder. Olhe o painel da frente.
 CLIP|17_Fammu_ja_VHS|15.76|0|No meio há uma portinhola. Geralmente está escrito VHS ou há uma abertura comprida. Está vendo? Ótimo.
@@ -1131,8 +1109,6 @@ CLIP|14_Oulun_energiakriisi|18.2|0|se o pessoal do laboratório poderia montar u
 CLIP|14_Oulun_energiakriisi|24.12|0|carregadores, para que as pessoas carreguem os telefones por ele. Pois é.
 CLIP|14_Oulun_energiakriisi|31.28|0|Depois poderíamos até empacotar carregadores para esses carregadores de emergência...
 CLIP|14_Oulun_energiakriisi|38.76|0|Negócio é negócio! Pense nisso e voltamos a conversar. Até mais!
-CLIP|16_Faffu_ja_pasianssi|1|0|Oi, vovô! Claro que tenho tempo. Vou ajudar você com o Paciência.
-CLIP|16_Faffu_ja_pasianssi|8|0|Onde está a carta agora? Consegue ver alguma coisa na tela?
 CLIP|29_skaalataan_yritystä|5|0|Ah, certo. Era um assunto interessante. Ainda bem que ligou, eu também queria falar com você.
 CLIP|29_skaalataan_yritystä|14.58|0|Leu aquele artigo do fim do ano passado, dizendo que no futuro os finlandeses teriam três telefones cada?
 CLIP|29_skaalataan_yritystä|22.58|0|O número de telefones vai aumentar centenas por cento. É exatamente isso.
@@ -1493,3 +1469,1190 @@ CLIP|simppa30|0|0|Você parou porque te ex... expulsaram de lá...
 CLIP|Luuli_saavansa_hyvän_työn|0.5|0|Não entendo por que fiz o ensino médio e uma pós-graduação. Achei que conseguiria um bom emprego, mas nada.
 CLIP|Luuli_saavansa_hyvän_työn|7.3|0|Fico aqui vendendo comida ruim para essa ralé miserável...
 CLIP|Penan_hurjastelu|0.9|0|É um escândalo o Pena ainda ter carteira de motorista. Adivinha quem bateu na lateral do nosso restaurante?
+
+# Makkaramyyjä sausage seller
+CLIP|makkaramyyjä_kauko01|0|2.70|Café e linguiça: revigoram e sustentam!
+CLIP|makkaramyyjä_kauko01|2.90|2.88|Café fumegante e linguiça suculenta!
+CLIP|makkaramyyjä_kauko01|5.78|3.64|É só abrir a carteira e encher o bucho!
+CLIP|makkaramyyjä_kauko02|0|4.28|Tem linguiça, salsicha e embutidos de todo tipo,
+CLIP|makkaramyyjä_kauko02|4.40|4.36|até pedaços e orelhas na mistura!
+CLIP|makkaramyyjä_kauko02|9.02|3.86|O mesmo produto tem vários nomes, e todos são bons.
+CLIP|makkaramyyjä_kauko02|13.02|7.78|Vai carne, farinha, gordura e sal, tudo num pacote prático e saboroso.
+CLIP|makkaramyyjä_kauko03|0|3.80|Venham com toda a família comer aqui na barraca!
+CLIP|makkaramyyjä_kauko03|3.80|3.94|Tem coisa gostosa para todos, do bebê ao vovô.
+CLIP|makkaramyyjä_kauko03|8.23|4.05|A linguiça é tão lisinha que não tem pedaços.
+CLIP|makkaramyyjä_kauko03|12.71|4.55|É tão macia que até o vovô banguela consegue mastigar.
+CLIP|makkaramyyjä_kauko03|17.78|6.02|E os gourmets podem finalizar com temperos finos, como mostarda e ketchup.
+CLIP|makkaramyyjä_kauko04|0|3.28|Alguém venha comprar linguiça aqui na barraca, porra!
+CLIP|makkaramyyjä_kauko04|3.62|2.36|Não consigo comer tudo isso sozinho!
+CLIP|makkaramyyjä_kauko04|6.64|2.14|Lá vem você, seu bundão!
+CLIP|makkaramyyjä_kauko04|8.86|2.56|Pelo jeito, você já provou antes.
+CLIP|makkaramyyjä_kauko04|11.60|1.58|Vem pra cá, chega mais!
+CLIP|makkaramyyjä_kauko04|13.68|4.98|O senhor parece ter dinheiro sobrando; deve ter bastante na carteira.
+CLIP|makkaramyyjä_kauko05|0|3.58|Quando for embora, lembre-se de cobrir a barraca!
+CLIP|makkaramyyjä_kauko05|3.70|4.36|Nenhum fim de semana está completo sem uma deliciosa linguiça de verão!
+CLIP|makkaramyyjä_kauko05|8.06|3.04|E um bom café também cai bem no caminho!
+CLIP|makkaramyyjä_lähi01|0|2.30|Pelo jeito, você também está precisando de café.
+CLIP|makkaramyyjä_lähi01|2.44|6.44|Não tenho nada para misturar no café; vai ter que pôr o seu, mas garanto que ele dá uma animada.
+CLIP|makkaramyyjä_lähi01|9.00|4.74|O café é tão encorpado que quase não saía do bule ao servir.
+CLIP|makkaramyyjä_lähi01|14.04|5.08|Se beber xícaras demais, até o traseiro ronca como o escapamento do Corris.
+CLIP|makkaramyyjä_lähi02|0|4.84|E quantas você quer? Uma, duas, quatro ou dez linguiças?
+CLIP|makkaramyyjä_lähi02|5.02|5.04|Aproveite e coma agora, pra não chegar em casa e encarar a geladeira vazia.
+CLIP|makkaramyyjä_lähi03|0|2.06|Aqui tem algo quentinho para você se aquecer!
+CLIP|makkaramyyjä_lähi03|2.20|1.98|Quer café ou linguiça?
+CLIP|makkaramyyjä_lähi03|4.82|4.28|Nem vale trazer refrigerante: ele congela no frio.
+CLIP|makkaramyyjä_lähi03|9.18|3.26|Se quiser se refrescar, coma neve mesmo!
+CLIP|makkaramyyjä_lähi04|0|3.14|Droga, não dá nem vontade de ir ao banheiro com esse frio!
+CLIP|makkaramyyjä_lähi04|3.92|5.34|Em casa olho o termômetro e, se está frio, visto três ceroulas uma por cima da outra.
+CLIP|makkaramyyjä_lähi04|9.56|3.56|Depois de mexer nessas comidas malditas, bate um calor danado.
+CLIP|makkaramyyjä_lähi04|13.28|2.98|Aí fico encharcado até a bunda.
+CLIP|makkaramyyjä_lähi04|16.26|3.12|E ainda fico com as bolas congeladas nesse frio.
+CLIP|makkaramyyjä_lähi05|0|4.76|E o que te trouxe, senhor? O aroma do café ou o cheiro de gordura?
+CLIP|makkaramyyjä_lähi05|5.36|2.90|Temos os dois. Quer que eu misture tudo na mesma xícara?
+# Puhelinmyyjä 5 - Moskun Mutteri
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|1.35|0|Alô, Moskun Mutteri, boa tarde.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|3.53|0|Quer dizer, a antiga Moskun Mutteri.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|6.77|0|A verdade é que minha empresa faliu.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|14.11|0|Mas já não trabalho mais com esse nome.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|20.27|0|Na verdade, é uma situação bem complicada...
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|24.91|0|Tenho um monte de peças de carro e outras coisas, uma quantidade enorme.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|30.41|0|Mas consigo me livrar delas rapidinho...
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|36.43|0|É que, quando eu ainda era empresário e vendia peças,
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|42.35|0|acabei pagando impostos demais por isso.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|47.83|0|Aí as autoridades descobriram. Até o fiscal do imposto ficou sabendo que eu não pagava os impostos.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|54.21|0|Agora estou numa situação bem complicada.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|60.67|0|Quando eu estava no auge, peguei muitos empréstimos em vários bancos.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|67.31|0|Depois não consegui pagar de volta.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|70.93|0|Agora os cobradores estão no meu pé. Estou apavorado com o que vai acontecer.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|77.83|0|Logo vou ter que sumir daqui e destruir todas as provas...
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|85.97|0|...de que esse negócio existiu. Por isso vendo minhas peças pela metade do preço.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|91.63|0|É um ótimo negócio, viu? Sim, sim! Temos peças para o Rivett.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|98.50|0|Peças muito boas. A Moskun Mutteri é conhecida
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|104.00|0|por vender peças de qualidade a bom preço.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|108.06|0|Mas, sabe, tem uma história: eu escondia esse negócio.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|114.00|0|No verão, perto do meu ponto da Poskumutteri, passava um rio.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|120.00|0|Eu costumava jogar nele todas as peças de carro que não vendia,
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|126.00|0|sucata e outras coisas.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|133.30|0|A cheia da primavera levava tudo embora, para longe dos olhos.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|139.00|0|E, se ninguém via as peças, não havia problema.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|145.00|0|Depois pensei que ainda dava para ganhar um trocado com elas,
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|151.50|0|então deixei um anúncio no jornal de classificados
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|157.16|0|para ver se alguém comprava as peças.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|163.30|0|Não precisa jogar tudo no rio.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|166.64|0|Pois é.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|167.76|0|De qualquer forma, tenho umas peças muito boas, viu?
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|172.74|0|Diga o que quer e eu envio.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|176.92|0|Pelo rio não dá para entregar agora: é inverno e ele está congelado.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|182.00|0|Não dá para mandar pela água? A gente dá um jeito.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|186.08|0|Posso enviar anonimamente pelo correio, e aí você recebe.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|193.30|0|Quando desligarmos, fingimos que nunca tivemos esta conversa e que você nunca ouviu falar da Moskun Mutteri.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|202.20|0|Esta ligação fica entre nós.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|205.20|0|É para a nossa segurança.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|208.02|0|Assim não precisamos enfrentar aqueles caras nem as autoridades.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|214.24|0|E aquele fiscal do imposto é assustador.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|219.16|0|Nunca fale disso com ninguém.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|224.39|0|Mas ainda preciso resolver umas coisas por aqui...
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|227.39|0|Eu ia sair para pescar um pouco,
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|231.21|0|para relaxar.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|233.61|0|Quer dizer, não pescar... vamos pescar no gelo!
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|239.65|0|Obrigado por ligar para a Moskun Mutteri.
+CLIP|Puhelinmyyjä_5_Moskun_Mutteri|243.05|0|Tenha um bom resto de dia.
+
+# Expanded call: Faffu helps with Solitaire
+CLIP|16_Faffu_ja_pasianssi|0.56|0|E aí, Faffa. Sem pressa. Claro que tenho tempo para ajudar com o Paciência.
+CLIP|16_Faffu_ja_pasianssi|7.56|0|Onde está o computador agora? Aparece alguma coisa na tela?
+CLIP|16_Faffu_ja_pasianssi|12.74|0|Ah, esse zumbido já é alguma coisa. Tem alguma luz de energia acesa no monitor?
+CLIP|16_Faffu_ja_pasianssi|18.94|0|No cantinho de baixo. Geralmente é verde ou laranja.
+CLIP|16_Faffu_ja_pasianssi|23.46|0|Então ele não está recebendo imagem ou não está ligado.
+CLIP|16_Faffu_ja_pasianssi|27.33|0|Aperte o botão de energia do monitor, na lateral.
+CLIP|16_Faffu_ja_pasianssi|30.56|0|Ele é separado do computador. Certo, agora vamos olhar o computador. Isso.
+CLIP|16_Faffu_ja_pasianssi|39.05|0|Tem uma caixa na frente? O botão de energia está apertado?
+CLIP|16_Faffu_ja_pasianssi|42.84|0|Se tiver uma rodinha grande ou quatro, aperte uma vez.
+CLIP|16_Faffu_ja_pasianssi|48.92|0|Ótimo, está ligando. Não mexa em nada por um instante.
+CLIP|16_Faffu_ja_pasianssi|54.26|0|Apareceu algum texto, tipo Starting Windows ou MS-DOS?
+CLIP|16_Faffu_ja_pasianssi|59.20|0|Boa! Vamos esperar até carregar a área de trabalho.
+CLIP|16_Faffu_ja_pasianssi|63.76|0|Me avise quando aparecer o fundo azul e os ícones.
+CLIP|16_Faffu_ja_pasianssi|67.02|0|Isso, esses mesmo.
+CLIP|16_Faffu_ja_pasianssi|70.20|0|Ótimo, ótimo.
+CLIP|16_Faffu_ja_pasianssi|71.40|0|Certo, vamos abrir o Paciência.
+CLIP|16_Faffu_ja_pasianssi|74.60|0|Aperte uma vez o botão Iniciar.
+CLIP|16_Faffu_ja_pasianssi|78.76|0|No canto inferior esquerdo, isso.
+CLIP|16_Faffu_ja_pasianssi|81.70|0|Procure Programas.
+CLIP|16_Faffu_ja_pasianssi|84.96|0|Isso, geralmente há uma seta para a direita.
+CLIP|16_Faffu_ja_pasianssi|87.06|0|Passe o mouse por cima, mas não clique ainda. Vai abrir outra lista.
+CLIP|16_Faffu_ja_pasianssi|92.20|0|Procure Acessórios; pode aparecer como “Accessories”.
+CLIP|16_Faffu_ja_pasianssi|97.10|0|No Windows em português, geralmente aparece como “Acessórios”. Boa.
+CLIP|16_Faffu_ja_pasianssi|102.80|0|Ótimo, lá deve estar o Paciência.
+CLIP|16_Faffu_ja_pasianssi|106.92|0|Isso.
+CLIP|16_Faffu_ja_pasianssi|108.30|0|Sim, clique uma vez com o botão esquerdo.
+CLIP|16_Faffu_ja_pasianssi|110.80|0|Isso.
+CLIP|16_Faffu_ja_pasianssi|111.82|0|Aí está.
+CLIP|16_Faffu_ja_pasianssi|113.30|0|Pronto.
+CLIP|16_Faffu_ja_pasianssi|113.92|0|Você já conhecia esse Paciência?
+CLIP|16_Faffu_ja_pasianssi|117.06|0|Ah, não conhecia.
+CLIP|16_Faffu_ja_pasianssi|117.96|0|Então vamos ao básico. Clique no canto superior esquerdo.
+CLIP|16_Faffu_ja_pasianssi|120.72|0|Isso.
+CLIP|16_Faffu_ja_pasianssi|121.66|0|Você distribui as cartas por ali.
+CLIP|16_Faffu_ja_pasianssi|124.44|0|Muito bem.
+CLIP|16_Faffu_ja_pasianssi|125.94|0|Agora vamos mover as cartas.
+CLIP|16_Faffu_ja_pasianssi|128.12|0|Você já sabe as regras do Paciência, né?
+CLIP|16_Faffu_ja_pasianssi|130.06|0|Certo, tudo bem.
+CLIP|16_Faffu_ja_pasianssi|131.74|0|Não dá para aumentar a fonte, mas podemos ampliar a janela.
+CLIP|16_Faffu_ja_pasianssi|136.88|0|Está vendo o botão com um quadrado no canto superior direito?
+CLIP|16_Faffu_ja_pasianssi|140.66|0|Aperte nele para a janela ocupar a tela toda.
+CLIP|16_Faffu_ja_pasianssi|144.90|0|Se o jogo travar, abra o menu Jogo e escolha Novo.
+CLIP|16_Faffu_ja_pasianssi|149.48|0|Isso mesmo.
+CLIP|16_Faffu_ja_pasianssi|150.84|0|Se o computador travar, não tire o plugue da tomada logo de cara.
+CLIP|16_Faffu_ja_pasianssi|155.14|0|Isso.
+CLIP|16_Faffu_ja_pasianssi|157.62|0|Espere um instante.
+CLIP|16_Faffu_ja_pasianssi|159.04|0|Mas tudo bem, pode continuar jogando.
+CLIP|16_Faffu_ja_pasianssi|161.16|0|Ligue para mim se a tela ficar preta ou travar.
+CLIP|16_Faffu_ja_pasianssi|165.42|0|Boa partida, tchau!
+
+# Expanded English TV segments: Beyond the Unknown
+CLIP|BtU-Ep1|36.96|0|As pirâmides fascinam as pessoas há milhares de anos.
+CLIP|BtU-Ep1|55.18|0|Cheias de mistério, deram origem a inúmeras teorias sobre como foram construídas:
+CLIP|BtU-Ep1|59.70|0|desde a ideia de que foram erguidas por escravos até a de que serviam como sistema de navegação para extraterrestres.
+CLIP|BtU-Ep1|65.76|0|Um grupo de arqueólogos egípcios encontrou provas interessantes
+CLIP|BtU-Ep1|70.42|0|que podem ser a peça que faltava no quebra-cabeça.
+CLIP|BtU-Ep1|73.10|0|Entrevistamos um deles.
+CLIP|BtU-Ep1|77.58|0|Durante uma expedição pelo deserto do Saara,
+CLIP|BtU-Ep1|79.78|0|encontramos várias tábuas de pedra
+CLIP|BtU-Ep1|81.60|0|com hieróglifos antigos.
+CLIP|BtU-Ep1|83.42|0|A princípio, notamos que muitas delas
+CLIP|BtU-Ep1|85.48|0|mostravam especificamente a imagem de um pé.
+CLIP|BtU-Ep1|87.40|0|Depois de investigar melhor, percebemos
+CLIP|BtU-Ep1|89.98|0|que eram, na verdade, pernas gigantes
+CLIP|BtU-Ep1|92.20|0|sempre mostradas ao lado de uma pirâmide.
+CLIP|BtU-Ep1|94.92|0|As pirâmides eram armadilhas de estacas contra gigantes.
+CLIP|BtU-Ep1|97.88|0|Os povos antigos acreditavam que seriam pisoteados
+CLIP|BtU-Ep1|101.12|0|pelos nefilins, os gigantes.
+CLIP|BtU-Ep1|102.70|0|Por isso, construíram edifícios enormes onde pudessem se esconder.
+CLIP|BtU-Ep1|106.28|0|As pirâmides tinham aquele formato
+CLIP|BtU-Ep1|108.64|0|porque acreditavam que os gigantes evitariam pisar em algo pontudo.
+CLIP|BtU-Ep1|114.82|0|Ao investigar as provas para este programa, fizemos uma descoberta chocante.
+CLIP|BtU-Ep1|120.16|0|Outro grupo de arqueólogos, especialistas em ossos e esqueletos antigos,
+CLIP|BtU-Ep1|124.30|0|encontrou algo que vai mudar tudo o que você sabe sobre a história da humanidade.
+CLIP|BtU-Ep1|155.02|0|A pergunta é: se tudo isso for verdade, estaremos preparados quando os gigantes voltarem?
+CLIP|BtU-Ep1|162.14|0|Talvez eles só estejam esperando que todos os nossos telhados fiquem planos.
+CLIP|BtU-Ep1|168.78|0|Será que esse momento está próximo? Já se perguntou por que é tão difícil filmar um OVNI em voo,
+CLIP|BtU-Ep1|181.88|0|mesmo parecendo haver tantos por aí?
+CLIP|BtU-Ep1|186.79|0|Cientistas do Zimbábue encontraram uma explicação e uma forma de aumentar suas chances.
+CLIP|BtU-Ep1|199.94|0|Criamos equipamentos especiais para atraí-los até você.
+CLIP|BtU-Ep1|203.84|0|Você precisa de uma televisão especial, um transmissor de frequência e uma isca tecnológica para colocar no chão.
+CLIP|BtU-Ep1|210.96|0|Os OVNIs sabem quando você está olhando para eles e evitam seu campo de visão.
+CLIP|BtU-Ep1|216.00|0|Eles simplesmente se movem conforme a direção para a qual as pessoas estão olhando.
+CLIP|BtU-Ep1|219.34|0|Você pode alugar nosso equipamento e contratar nosso fotógrafo para tirar uma foto quando aparecerem.
+CLIP|BtU-Ep1|223.94|0|Quem sabe, na próxima visita ao Zimbábue, você tenha a chance de encontrar uma nave alienígena de verdade.
+CLIP|BtU-Ep1|231.73|0|Mas não podemos garantir que eles não levem você para dar uma volta.
+CLIP|BtU-Ep2|6.54|0|Tão selvagem que vai estilhaçar sua imaginação.
+CLIP|BtU-Ep2|9.86|0|Acontecimentos tão bizarros que podem reconstruir sua realidade.
+CLIP|BtU-Ep2|14.00|0|Da mente à matéria, da televisão ao seu cérebro.
+CLIP|BtU-Ep2|19.18|0|Quando as especulações do passado viram fatos do futuro,
+CLIP|BtU-Ep2|22.56|0|estamos prontos para encarar o novo mundo e uma nova realidade.
+CLIP|BtU-Ep2|27.12|0|Se estiver com medo, feche os olhos e tampe os ouvidos,
+CLIP|BtU-Ep2|31.22|0|porque você não vai acreditar no que está prestes a ouvir.
+CLIP|BtU-Ep2|36.98|0|Há lugares tão frios que as pessoas não conseguem viver neles.
+CLIP|BtU-Ep2|55.40|0|Mas exploradores encontraram vários ônibus abandonados durante uma expedição
+CLIP|BtU-Ep2|61.50|0|na Antártida. Lá não há estradas, e ninguém precisa de um ônibus comum, muito menos escolar.
+CLIP|BtU-Ep2|69.20|0|Eles não sobreviveriam àquele frio, mas estavam lá.
+CLIP|BtU-Ep2|74.40|0|Ônibus no meio do nada, na parte mais fria do mundo.
+CLIP|BtU-Ep2|80.12|0|Fomos abordados por militares de uma base próxima,
+CLIP|BtU-Ep2|84.58|0|que mandaram a gente ir embora imediatamente.
+CLIP|BtU-Ep2|86.98|0|Ligamos para uma secretária militar para pedir uma explicação.
+CLIP|BtU-Ep2|93.10|0|Sobre o quê?
+CLIP|BtU-Ep2|95.02|0|É um mistério cercado de negativas.
+CLIP|BtU-Ep2|98.72|0|O que estão escondendo?
+CLIP|BtU-Ep2|100.48|0|Talvez alguma coisa, talvez nada... mas com certeza alguma coisa.
+CLIP|BtU-Ep2|103.88|0|Ao longo de toda a história humana, as pessoas se perguntam de onde vieram.
+CLIP|BtU-Ep2|116.86|0|A Terra e a vida nela seriam apenas uma coincidência?
+CLIP|BtU-Ep2|122.40|0|Será que tudo surgiu do nada? Fomos criados por um deus sobrenatural ou por alienígenas?
+CLIP|BtU-Ep2|129.38|0|Um cientista italiano conhecido, que preferiu manter o anonimato por segurança, fez uma descoberta chocante.
+CLIP|BtU-Ep2|134.52|0|Segundo ele, fomos mesmo criados.
+CLIP|BtU-Ep2|138.90|0|Como sou viciado em trabalho e ciência, estava trabalhando em dois projetos ao mesmo tempo.
+CLIP|BtU-Ep2|146.06|0|Num computador, projetava o motor de um ônibus espacial; no outro, fazia um modelo 3D da Terra.
+CLIP|BtU-Ep2|151.58|0|Meus projetos de engenharia envolvem montar muitas peças pequenas para formar um motor funcional.
+CLIP|BtU-Ep2|157.92|0|Costumo mover essas peças e deixá-las de lado por um tempo, num espaço vazio,
+CLIP|BtU-Ep2|163.62|0|para não atrapalharem a próxima peça que vou projetar.
+CLIP|BtU-Ep2|173.46|0|Enquanto fazia uma pausa, continuei o projeto da Terra no outro computador.
+CLIP|BtU-Ep2|178.72|0|Girei o globo e notei algo muito interessante. Olhe com atenção:
+CLIP|BtU-Ep2|185.04|0|o formato da Itália e o da Nova Zelândia são, na verdade, iguais.
+CLIP|BtU-Ep2|190.98|0|A Nova Zelândia é o mesmo país...
+CLIP|BtU-Ep2|192.50|0|uma imagem espelhada da Itália, de cabeça para baixo.
+CLIP|BtU-Ep2|197.18|0|Ela fica do outro lado do globo,
+CLIP|BtU-Ep2|200.18|0|bem em cima do oceano vazio,
+CLIP|BtU-Ep2|204.20|0|como se tivesse sido colocada ali de propósito,
+CLIP|BtU-Ep2|206.98|0|afastada das outras terras,
+CLIP|BtU-Ep2|208.58|0|para ficar guardada temporariamente.
+CLIP|BtU-Ep2|214.65|0|Agora parece óbvio:
+CLIP|BtU-Ep2|216.11|0|a Nova Zelândia é um espaço reservado para a Itália,
+CLIP|BtU-Ep2|218.05|0|deixado por engano no projeto dos grandes arquitetos,
+CLIP|BtU-Ep2|222.19|0|talvez seres alienígenas.
+CLIP|BtU-Ep2|223.99|0|O que vão ouvir agora é uma gravação do cientista ligando para um funcionário do governo da Nova Zelândia.
+CLIP|BtU-Ep2|229.41|0|As descobertas foram feitas, mas as autoridades se recusaram a responder.
+CLIP|BtU-Ep2|244.60|0|Se a Nova Zelândia for temporária mesmo, será questão de tempo até os projetistas perceberem o erro?
+CLIP|BtU-Ep2|250.48|0|E o que farão? Não vão simplesmente apagá-la, né?
+
+# Expanded radio segment: parapsychology
+CLIP|PARARADIO-01|12.70|0|Programa de rádio parapsicológica.
+CLIP|PARARADIO-01|15.60|0|Um aviso antes da transmissão. No programa de hoje, faremos uma experiência pelo rádio da qual você também pode participar.
+CLIP|PARARADIO-01|31.70|0|A eficácia do rádio na comunicação é amplamente reconhecida.
+CLIP|PARARADIO-01|39.81|0|Poucos sabem que ele também é eficaz na comunicação parapsicológica.
+CLIP|PARARADIO-01|49.00|0|Este experimento, que encerra o programa, pretende testar isso.
+CLIP|PARARADIO-01|54.10|0|Nosso convidado é o ex-deputado suplente da Liga Democrática Popular,
+CLIP|PARARADIO-01|61.79|0|ativista sindical e porta-voz de outras décadas: Rauli Hannes Kulonen.
+CLIP|PARARADIO-01|69.60|0|E agora, a entrevista com Rauli Hannes Kulonen.
+CLIP|PARARADIO-01|74.20|0|Rauli Hannes Kulonen, uma pergunta direta, uma resposta direta:
+CLIP|PARARADIO-01|80.75|0|o movimento sindical finlandês é culpado por menosprezar a parapsicologia,
+CLIP|PARARADIO-01|88.52|0|apesar de sua importância histórica?
+CLIP|PARARADIO-01|92.30|0|É difícil falar disso. Quem discordaria que Tampere é a cidade mais vermelha da Finlândia?
+CLIP|PARARADIO-01|102.03|0|Lá são tão vermelhos que chega até o pescoço.
+CLIP|PARARADIO-01|106.90|0|Mas isso já acontecia há mais de vinte anos, lá nos anos 50.
+CLIP|PARARADIO-01|111.40|0|Na fábrica estatal de aviões de Tampere, dos mecânicos até a chefia,
+CLIP|PARARADIO-01|117.53|0|todos estavam envolvidos com parapsicologia.
+CLIP|PARARADIO-01|121.50|0|Como disse Niiraseväiski: dos operários aos operários.
+CLIP|PARARADIO-01|127.50|0|Na fábrica também havia greves. Às vezes o operário encarava o patrão:
+CLIP|PARARADIO-01|136.53|0|“Se o pagamento não sair logo, acabo com você e sua família.”
+CLIP|PARARADIO-01|144.40|0|Mas, quando estavam em trégua, os mesmos caras conversavam amigavelmente: “Viu a última revista Seura?
+CLIP|PARARADIO-01|151.68|0|Tinha uma matéria sobre os experimentos telepáticos de Raini.”
+CLIP|PARARADIO-01|156.10|0|A parapsicologia realmente criou pontes inesperadas entre as pessoas, até mais do que a bebida.
+CLIP|PARARADIO-01|165.00|0|A ala parapsicológica do movimento operário também teve nomes conhecidos. Por exemplo, Vesa-Matti Loiri.
+CLIP|PARARADIO-01|174.80|0|Loiri ensinava como sair do próprio corpo. E, durante o almoço,
+CLIP|PARARADIO-01|181.60|0|os velhos mecânicos do Raksala também faziam isso.
+CLIP|PARARADIO-01|187.00|0|Os chefes provavelmente não entendiam nada; achavam que os trabalhadores só descansavam os olhos por um instante.
+CLIP|PARARADIO-01|196.90|0|Acho que foi na festa dos trabalhadores de Hämeenlinna, em 1971,
+CLIP|PARARADIO-01|201.60|0|que perguntaram a Loiri o que diferenciava os sindicatos finlandeses dos outros países.
+CLIP|PARARADIO-01|208.00|0|Ele respondeu ali mesmo, no palco: “A forte presença das ciências espirituais.”
+CLIP|PARARADIO-01|217.60|0|Parte do público deve ter corado, mas aqueles velhos, marcados pelo suor e pela sujeira da vida,
+CLIP|PARARADIO-01|226.52|0|continuaram sérios.
+CLIP|PARARADIO-01|228.28|0|Você nasce trabalhador.
+CLIP|PARARADIO-01|230.40|0|Eles ficaram com a cara séria.
+CLIP|PARARADIO-01|233.00|0|Não percebi constrangimento no rosto deles. Mas por que ficariam constrangidos?
+CLIP|PARARADIO-01|238.40|0|Essas coisas não são brincadeira.
+CLIP|PARARADIO-01|240.70|0|Há cem anos, os finlandeses do interior usavam essas técnicas para sobreviver no dia a dia.
+CLIP|PARARADIO-01|248.80|0|Se o velho alferes precisasse dar água ao gado, como encontraria um poço?
+CLIP|PARARADIO-01|254.30|0|Ele pegava uma varinha bifurcada e saía à procura de água.
+CLIP|PARARADIO-01|259.50|0|Você também tem uma dessas?
+CLIP|PARARADIO-01|261.60|0|E no fim o poço era encontrado.
+CLIP|PARARADIO-01|263.90|0|Quando falei sobre as pesquisas de clarividência na União Soviética,
+CLIP|PARARADIO-01|268.40|0|a clarividência não é diferente de procurar água com uma varinha. É a mesma coisa.
+CLIP|PARARADIO-01|277.05|0|Isso não é coisa de burguês.
+CLIP|PARARADIO-01|280.00|0|Nem de gente da classe alta.
+CLIP|PARARADIO-01|281.90|0|Loiri falou sobre filosofar com um martelo; este homem nos ensina a filosofar com a foice e o martelo.
+CLIP|PARARADIO-01|295.89|0|Aí, sim, a gente se sente bem.
+
+# Expanded radio segment: parapsychology, continued
+CLIP|PARARADIO-02|0.00|0|E a postura das classes altas não era nada mais promissora, pelo visto.
+CLIP|PARARADIO-02|30.40|0|A pesquisa institucional de parapsicologia foi levada bem longe.
+CLIP|PARARADIO-02|36.90|0|E eles começaram a zombar nervosamente dos trabalhadores, chamando-os de palhaços barbudos e comunistas.
+CLIP|PARARADIO-02|46.80|0|Ali se separava o joio do trigo: quem realmente usava a foice e o martelo
+CLIP|PARARADIO-02|54.40|0|e quem só se curvava diante das imagens onde eles apareciam.
+CLIP|PARARADIO-02|58.80|0|Por que não se discutem fenômenos parapsicológicos nos tribunais ou no Parlamento?
+CLIP|PARARADIO-02|67.40|0|Por que falar dessas coisas com naturalidade e às claras seria proibido?
+CLIP|PARARADIO-02|76.50|0|É sabido que experiências parapsicológicas são comuns entre caminhoneiros.
+CLIP|PARARADIO-02|81.80|0|Conversei com um caminhoneiro sobre isso.
+CLIP|PARARADIO-02|87.00|0|Ele disse que essas ideias desafiam a noção burguesa
+CLIP|PARARADIO-02|93.00|0|de como o tempo deveria se comportar.
+CLIP|PARARADIO-02|101.70|0|A classe dominante não quer ouvir falar de percepção extrassensorial.
+CLIP|PARARADIO-02|106.80|0|Por isso, não se pode falar dessas experiências abertamente.
+CLIP|PARARADIO-02|115.83|0|Se alguém ousa contar uma, a reação é ficar constrangido.
+CLIP|PARARADIO-02|124.40|0|Os trabalhadores e os pobres talvez não entendam bem o que acontece com o tempo,
+CLIP|PARARADIO-02|132.72|0|mas sabem como é engraçado pensar que ele obedece às regras burguesas.
+CLIP|PARARADIO-02|140.00|0|E eles não querem que ninguém os lembre de que não é assim.
+CLIP|PARARADIO-02|154.40|0|Karl Marx também falou de como os burgueses usavam relógios na luta de classes
+CLIP|PARARADIO-02|159.30|0|contra os trabalhadores do campo?
+CLIP|PARARADIO-02|164.00|0|Os relógios sempre foram uma ferramenta para a burguesia manter o poder.
+CLIP|PARARADIO-02|174.40|0|Qual é sua opinião sobre a parapsicologia na Finlândia hoje?
+CLIP|PARARADIO-02|180.45|0|Até em bancas de jornal de lojas comuns se encontra a revista Ultra.
+CLIP|PARARADIO-02|187.30|0|Eles também são trabalhadores fingindo ser outra coisa.
+CLIP|PARARADIO-02|190.30|0|Alô, aqui é o Pararadio. Em instantes, Rauli Hannes Kulonen,
+CLIP|PARARADIO-02|195.65|0|deputado suplente da Liga Democrática Popular, estará no ar.
+CLIP|PARARADIO-02|201.00|0|Antes, um lembrete: no programa de hoje você pode participar de uma experiência de comunicação extrassensorial pelo rádio.
+CLIP|PARARADIO-02|215.30|0|E agora, Rauli Hannes Kulonen ao microfone.
+CLIP|PARARADIO-02|245.70|0|Os anos 60: agitação social e o sonho de uma revolução parapsicológica da classe trabalhadora.
+CLIP|PARARADIO-02|254.67|0|As contradições de classe ainda atrapalhavam quem controlava os meios de produção.
+CLIP|PARARADIO-02|262.50|0|O que achamos hoje daqueles anos loucos na Europa?
+CLIP|PARARADIO-02|268.00|0|As classes sociais ainda veem o mundo de maneiras diferentes?
+CLIP|PARARADIO-02|275.30|0|Como disse o camarada Väiski: quando o burguês fica bêbado, começa a falar a verdade.
+CLIP|PARARADIO-02|283.70|0|Já o trabalhador, quando fica bêbado, começa a mentir.
+CLIP|PARARADIO-02|289.50|0|Observo as manhas dos burgueses desde moleque, com curiosidade quase antropológica.
+CLIP|PARARADIO-02|298.90|0|Bom dia.
+
+# Expanded radio segment: parapsychology experiment
+CLIP|PARARADIO-03|0.00|0|É uma espécie, sabe? A espécie do burguês cleptomaníaco.
+CLIP|PARARADIO-03|9.50|0|Essa espécie tem uma forma peculiar de se exercitar.
+CLIP|PARARADIO-03|15.10|0|Deve ajudar a ativar a circulação e os músculos dos braços.
+CLIP|PARARADIO-03|20.10|0|É como ficar brandindo a Bíblia.
+CLIP|PARARADIO-03|23.40|0|Eu só diria: “Ei, burguês,”
+CLIP|PARARADIO-03|28.60|0|se está com vontade de ficar sacudindo esse livro, talvez pudesse lê-lo de vez em quando.
+CLIP|PARARADIO-03|37.10|0|Quando estiver nas Canárias, deitado para bronzear igualmente as duas nádegas, aproveite para ler.
+CLIP|PARARADIO-03|47.40|0|Recomendo o segundo livro do Daniel.
+CLIP|PARARADIO-03|51.00|0|É a história de um burguês que fica passeando sentado num trono dourado.
+CLIP|PARARADIO-03|57.30|0|Como hoje em dia, o burguês dorme mal.
+CLIP|PARARADIO-03|62.10|0|Ele não consegue fazer nada com isso: está cercado de bajuladores e puxa-sacos que não dizem nada sensato.
+CLIP|PARARADIO-03|71.70|0|No fim da história, eles precisam encontrar um trabalhador que diga na cara do burguês como as coisas realmente são.
+CLIP|PARARADIO-03|80.20|0|Greves acirradas, ocupações e paralisações. Muita gente ainda se lembra dos conflitos de ontem.
+CLIP|PARARADIO-03|92.10|0|Eu disse: “Ei, burguês, já reparou que se veste igualzinho a um mafioso? Essas roupas são de chefão da máfia.”
+CLIP|PARARADIO-03|106.70|0|Naquele momento, ele percebeu que o proletariado esfarrapado estava certo.
+CLIP|PARARADIO-03|116.10|0|Claro que não admitiu nem demonstrou nada. Achava que eu não sabia,
+CLIP|PARARADIO-03|122.28|0|e não percebeu que eu conseguia ler seus pensamentos. Burguês não acredita nessas coisas.
+CLIP|PARARADIO-03|130.50|0|Saí batendo a porta e disse: “Quando a revolução chegar, de manhã sou pescador, de dia operário,
+CLIP|PARARADIO-03|143.24|0|à noite filósofo e,
+CLIP|PARARADIO-03|145.76|0|à meia-noite, tiro o burguês daqui.”
+CLIP|PARARADIO-03|150.50|0|Rauli Hannes Kulonen, sindicalista e ex-deputado suplente.
+CLIP|PARARADIO-03|156.00|0|Tem algumas palavras finais para os ouvintes do Pararadio?
+CLIP|PARARADIO-03|161.50|0|Se estiverem na região de Rovaniemi, procurem Kalevi Tuorninen, instalador de saunas.
+CLIP|PARARADIO-03|174.04|0|Os trabalhos dele falam por si: ele ainda constrói saunas e sabe exatamente como dar boas vaporadas.
+CLIP|PARARADIO-03|188.80|0|Hoje ele trabalha instalando saunas. Só não deixem as crianças chegarem muito perto do Kalevi.
+CLIP|PARARADIO-03|199.00|0|Não foi isso que eu quis dizer.
+CLIP|PARARADIO-03|201.70|0|Ele é um mecânico à moda antiga: tem a boca tão suja quanto a cara.
+CLIP|PARARADIO-03|208.20|0|Às vezes conta histórias picantes, principalmente sobre ex-primeiros-ministros.
+CLIP|PARARADIO-03|216.20|0|O Kalevi instala saunas na região de Rovaniemi com ótima qualidade e por um preço acessível.
+CLIP|PARARADIO-03|224.10|0|Também mando um abraço para a Marjukka, lá para os lados de Verijärvi.
+CLIP|PARARADIO-03|230.30|0|Isso, viu? É bem assim.
+CLIP|PARARADIO-03|233.70|0|Olha só, eu consigo, droga!
+CLIP|PARARADIO-03|236.80|0|O Pararadio termina com uma experiência para medir o potencial parapsicológico das ondas de rádio.
+CLIP|PARARADIO-03|247.50|0|Quando ouvir a próxima palavra, pense por cerca de cinco minutos se pensou nela desde que acordou hoje.
+CLIP|PARARADIO-03|262.00|0|A palavra é “kaikenat”.
+CLIP|PARARADIO-03|264.80|0|Você pensou nesse assunto ou ele apareceu no seu comportamento?
+CLIP|PARARADIO-03|272.72|0|Se sim, a comunicação extrassensorial pelas ondas de rádio funcionou.
+CLIP|PARARADIO-03|281.40|0|Acompanhem a gente na próxima edição. Pararadio: juntem-se a nós.
+CLIP|PARARADIO-03|291.47|0|A rádio local é a única, literalmente, parapsicológica.
+
+# Expanded angry phone call
+CLIP|angry1|0.00|0|Já encontrei gente como você antes. Toda vez aparece um palhaço desses.
+CLIP|angry1|11.71|0|Quando voltar aqui, vai levar uma surra.
+CLIP|angry1|18.30|0|Se continuar fazendo gracinha e passar dos limites, aí a brincadeira acaba quando eu perder a paciência.
+CLIP|angry1|27.10|0|Desta vez fica só o aviso. Na próxima, não vou ser tão bonzinho quando eu te pegar.
+CLIP|angry1|41.80|0|Você não tem nada que vir aqui se não sabe se comportar.
+CLIP|angry1|48.90|0|Estou avisando: comporte-se da próxima vez.
+
+# Expanded radio segments: Luonto Kutsuu
+CLIP|LuontoKutsuu1|3.00|0|Aqui é Seppo Kävyntähkä, no programa de rádio “A natureza chama”.
+CLIP|LuontoKutsuu1|9.20|0|Uma senhora da Finlândia Oriental mandou uma carta perguntando se Seppo e Jukka podiam fazer outro programa.
+CLIP|LuontoKutsuu1|27.70|0|Depois nos levaram até Näätämö, atravessando a fronteira para a Noruega.
+CLIP|LuontoKutsuu1|34.40|0|Estamos em algum lugar por aqui...
+CLIP|LuontoKutsuu1|40.40|0|Jukka já saiu correndo para algum lado.
+CLIP|LuontoKutsuu1|44.90|0|Não sei para onde.
+CLIP|LuontoKutsuu1|48.30|0|Tem enxames de mosquitos voando por aqui.
+CLIP|LuontoKutsuu1|56.70|0|Dói quando eles acertam a gente.
+CLIP|LuontoKutsuu1|62.80|0|Na perna, na mão, na testa, na bochecha... por todo lado.
+CLIP|LuontoKutsuu1|68.80|0|Há outros insetos por aqui que irritam a pele e o corpo.
+CLIP|LuontoKutsuu1|100.10|0|Vou dar mais um passo para dentro da floresta.
+CLIP|LuontoKutsuu1|108.70|0|Parece que tem um bichinho fazendo a dança do acasalamento por ali.
+CLIP|LuontoKutsuu1|119.40|0|Está tentando encontrar uma parceira.
+CLIP|LuontoKutsuu1|125.00|0|Eu também estou tentando encontrar uma por aqui.
+CLIP|LuontoKutsuu1|127.60|0|Jukka sumiu. Olha, apareceu um bichinho aqui. Ele tem uma habilidade especial na floresta.
+CLIP|LuontoKutsuu1|146.80|0|E lá no céu tem outro pássaro que me lembra o amigo do Jukka. Será que ele foi atrás dele?
+CLIP|LuontoKutsuu1|158.80|0|Não dá para saber. Talvez esse bicho nem more por aqui. Tem outro ali, e mais um acolá.
+CLIP|LuontoKutsuu1|176.20|0|Onde será que esses animais fazem compras?
+CLIP|LuontoKutsuu1|179.40|0|Fico pensando nisso enquanto olho ao redor: será que encontram tudo de que precisam na própria natureza?
+CLIP|LuontoKutsuu1|192.10|0|Os passarinhos voam à nossa volta. Será que os animais também filosofam, como as pessoas,
+CLIP|LuontoKutsuu1|212.59|0|quando não sabem de onde vieram nem para onde vão?
+CLIP|LuontoKutsuu1|224.10|0|Não sei se eles já terminaram de estudar filosofia.
+CLIP|LuontoKutsuu1|231.80|0|Mas não sei... parece que um pássaro canta assim:
+CLIP|LuontoKutsuu1|246.50|0|Não se ouve mais nada por aqui.
+CLIP|LuontoKutsuu1|248.90|0|E aquele pássaro voando é um... passarinho.
+CLIP|LuontoKutsuu1|256.30|0|E o pica-pau faz um som assim: “crá, crá, crá”.
+CLIP|LuontoKutsuu1|269.80|0|Aquele outro pássaro ali é um... pássaro.
+CLIP|LuontoKutsuu1|275.60|0|Não era um pássaro, era um inseto! Estava perto pra caramba, droga.
+CLIP|LuontoKutsuu1|285.50|0|Mais longe, parece correr uma cachoeira ou algum curso d’água.
+CLIP|LuontoKutsuu1|295.70|0|Tem... coisas por lá.
+CLIP|LuontoKutsuu2|2.90|0|Obrigado por assistir ao vídeo!
+CLIP|LuontoKutsuu2|37.40|0|Veio da região de Kirkkoniemi, seguindo na direção da fronteira finlandesa.
+CLIP|LuontoKutsuu2|47.40|0|Turuntartto, Turunlortto, Turunlärvä...
+CLIP|LuontoKutsuu2|52.50|0|Tem um animal andando ali.
+CLIP|LuontoKutsuu2|55.30|0|Tem cascos e patas.
+CLIP|LuontoKutsuu2|60.20|0|E chifres na cabeça.
+CLIP|LuontoKutsuu2|62.30|0|Parece ser uma rena.
+CLIP|LuontoKutsuu2|70.50|0|O que mais temos por aqui?
+CLIP|LuontoKutsuu2|73.30|0|Um coelhinho! Que coelhinho bonito. Vai pulando: pum, pum!
+CLIP|LuontoKutsuu2|84.40|0|Tem borboletas pequenas voando. Aquela ali tem as asas bem curiosas.
+CLIP|LuontoKutsuu2|92.00|0|Outra borboleta voa por aqui. Que nome esquisito tem essa espécie!
+CLIP|LuontoKutsuu2|122.00|0|E aquela borboleta ali... tem amoras por aqui, além de outras frutinhas marrons.
+CLIP|LuontoKutsuu2|150.90|0|Essa fruta não tem folhas nem raiz presa no chão. Vou provar... É gostosa.
+CLIP|LuontoKutsuu2|177.50|0|Que outros pássaros será que aparecem por aqui?
+CLIP|LuontoKutsuu2|185.80|0|Tem cocô de passarinho e mais um bicho que não faz bem para nada.
+CLIP|LuontoKutsuu2|197.00|0|E tem um passarinho e outro bicho que não conheço. O Jukka talvez conheça.
+CLIP|LuontoKutsuu2|210.30|0|Meu Deus, ele está ali? Jukka, onde você se meteu?
+CLIP|LuontoKutsuu2|221.30|0|Por onde você andou?
+CLIP|LuontoKutsuu2|224.30|0|Você não pode beber isso.
+CLIP|LuontoKutsuu2|227.90|0|Não pode. Estamos trabalhando.
+CLIP|LuontoKutsuu2|232.10|0|Estamos trabalhando. Não pode beber.
+CLIP|LuontoKutsuu2|238.30|0|Onde você encontrou isso?
+CLIP|LuontoKutsuu2|240.60|0|O quê?
+CLIP|LuontoKutsuu2|242.90|0|Trouxe um pouco para mim também?
+CLIP|LuontoKutsuu2|246.10|0|Para mim também?
+CLIP|LuontoKutsuu2|248.20|0|Não trouxe nada para mim.
+CLIP|LuontoKutsuu2|251.00|0|Aonde vai? Não vá embora. Pode beber um pouco enquanto estiver por aqui.
+CLIP|LuontoKutsuu2|258.10|0|Esse foi o programa “A natureza chama”. Estou atrasado, preciso correr!
+
+# Expanded call-in game: Juuso the Goblin, ski game
+CLIP|juuso-peikko_laskettelupeli1|32.20|0|Kaikkonen falando! E agora, mais uma aventura de Juuso, o Duende.
+CLIP|juuso-peikko_laskettelupeli1|35.60|0|Vocês aí em casa também podem jogar ao vivo, usando o telefone.
+CLIP|juuso-peikko_laskettelupeli1|41.90|0|Eu consigo ver o que acontece na tela, e seu amigo Kortsu está aqui para ajudar.
+CLIP|juuso-peikko_laskettelupeli1|46.00|0|Vamos orientar você a cada passo.
+CLIP|juuso-peikko_laskettelupeli1|48.40|0|Todo mundo já conhece o número, não preciso repetir.
+CLIP|juuso-peikko_laskettelupeli1|51.20|0|Ligue para participar da eliminatória. Depois escolhemos quem vem jogar ao vivo no nosso programa.
+CLIP|juuso-peikko_laskettelupeli1|58.70|0|Vamos ver quem está primeiro na linha.
+CLIP|juuso-peikko_laskettelupeli1|61.50|0|Alô?
+CLIP|juuso-peikko_laskettelupeli1|63.80|0|É o Kortsu?
+CLIP|juuso-peikko_laskettelupeli1|65.10|0|Quem fala?
+CLIP|juuso-peikko_laskettelupeli1|67.20|0|Teemu!
+CLIP|juuso-peikko_laskettelupeli1|68.40|0|Você é o Teemu?
+CLIP|juuso-peikko_laskettelupeli1|70.40|0|De onde você é, Teemu?
+CLIP|juuso-peikko_laskettelupeli1|73.10|0|De Pieksämäki.
+CLIP|juuso-peikko_laskettelupeli1|74.50|0|Pieksämäki? Conheço esse lugar.
+CLIP|juuso-peikko_laskettelupeli1|76.80|0|Tem todo tipo de figura por lá.
+CLIP|juuso-peikko_laskettelupeli1|78.70|0|Eu sempre ia brigar lá em Suonijoki.
+CLIP|juuso-peikko_laskettelupeli1|81.00|0|Isso faz tempo. O pessoal era daquele jeito...
+CLIP|juuso-peikko_laskettelupeli1|83.40|0|Quantos anos você tem, Teemu?
+CLIP|juuso-peikko_laskettelupeli1|87.00|0|Oito.
+CLIP|juuso-peikko_laskettelupeli1|88.40|0|Oito? Está na segunda ou na terceira série?
+CLIP|juuso-peikko_laskettelupeli1|95.40|0|Qual é sua matéria favorita na escola?
+CLIP|juuso-peikko_laskettelupeli1|101.10|0|Trabalhos manuais com madeira? Legal. O que está fazendo agora?
+CLIP|juuso-peikko_laskettelupeli1|108.30|0|Uma tábua de cortar? Você é mesmo um grande artesão!
+CLIP|juuso-peikko_laskettelupeli1|111.30|0|Lembro que, quando estava na escola, eu esculpia um pino e o professor perguntava o que eu estava fazendo.
+CLIP|juuso-peikko_laskettelupeli1|116.90|0|Eu dizia: “Um tampão pro rabo!”
+CLIP|juuso-peikko_laskettelupeli1|119.50|0|Essa é uma história antiga. Melhor deixar isso para lá, mas...
+CLIP|juuso-peikko_laskettelupeli1|124.00|0|Vamos jogar um pouco de Juuso, o Duende?
+CLIP|juuso-peikko_laskettelupeli1|127.70|0|Você já conhece esse jogo?
+CLIP|juuso-peikko_laskettelupeli1|131.40|0|Tudo bem, vou explicar rapidinho.
+CLIP|juuso-peikko_laskettelupeli1|133.30|0|Na primeira fase, Juuso desce esta pista de esqui.
+CLIP|juuso-peikko_laskettelupeli1|137.40|0|Vêm ursos, pedras e árvores pelo caminho.
+CLIP|juuso-peikko_laskettelupeli1|141.10|0|Temos que desviar deles.
+CLIP|juuso-peikko_laskettelupeli1|143.70|0|A tecla 4 desvia para a esquerda e a 6 para a direita.
+CLIP|juuso-peikko_laskettelupeli1|148.30|0|A tecla 2 faz pular quando aparece um obstáculo,
+CLIP|juuso-peikko_laskettelupeli1|151.80|0|tipo uma rampa ou algo assim. Não se preocupe, eu aviso quando aparecer.
+CLIP|juuso-peikko_laskettelupeli1|158.50|0|Aperte o 5 para testar o som.
+CLIP|juuso-peikko_laskettelupeli1|163.90|0|Isso basta, não precisa segurar. Estou com um zumbido terrível no ouvido.
+CLIP|juuso-peikko_laskettelupeli1|167.30|0|Esse som está bem alto para mim.
+CLIP|juuso-peikko_laskettelupeli1|170.20|0|Vamos começar o jogo e experimentar.
+CLIP|juuso-peikko_laskettelupeli1|173.80|0|E aí, vamos nessa!
+CLIP|juuso-peikko_laskettelupeli1|176.40|0|Juuso calça as botas e os esquis, e parte descendo a montanha.
+CLIP|juuso-peikko_laskettelupeli1|181.80|0|Lá vem uma árvore! Aperte!
+CLIP|juuso-peikko_laskettelupeli1|184.40|0|Foi um pouco tarde demais...
+CLIP|juuso-peikko_laskettelupeli1|187.20|0|Tem que apertar antes de chegar na árvore.
+CLIP|juuso-peikko_laskettelupeli1|189.70|0|Aperte o 4 quando a árvore aparecer, mas...
+CLIP|juuso-peikko_laskettelupeli1|192.90|0|Você ainda tem duas vidas. Continue e veja no que dá.
+CLIP|juuso-peikko_laskettelupeli1|197.00|0|Não, pode crer.
+CLIP|juuso-peikko_laskettelupeli1|198.30|0|Você consegue ao menos?
+CLIP|juuso-peikko_laskettelupeli1|200.20|0|Lá vai de novo! Tem uma árvore: tente mais uma vez.
+CLIP|juuso-peikko_laskettelupeli1|202.30|0|Isso, agora foi bem melhor.
+CLIP|juuso-peikko_laskettelupeli1|204.40|0|Aí vem outra árvore e...
+CLIP|juuso-peikko_laskettelupeli1|206.40|0|Ai, ai, ai! De novo...
+CLIP|juuso-peikko_laskettelupeli1|208.90|0|Bateu mais uma vez, mas tudo bem.
+CLIP|juuso-peikko_laskettelupeli1|212.10|0|Ainda temos uma vida.
+CLIP|juuso-peikko_laskettelupeli1|213.30|0|Vamos conseguir avançar.
+CLIP|juuso-peikko_laskettelupeli1|216.00|0|Ei, Spide, vamos levar isso até o fim!
+CLIP|juuso-peikko_laskettelupeli1|219.20|0|Vamos continuar, isso mesmo.
+CLIP|juuso-peikko_laskettelupeli1|221.20|0|Agora vem uma árvore pela direita. Aperte 4!
+CLIP|juuso-peikko_laskettelupeli1|223.60|0|Isso, outra vez o 4!
+CLIP|juuso-peikko_laskettelupeli1|225.60|0|Assim, muito bem!
+CLIP|juuso-peikko_laskettelupeli1|227.50|0|Agora vem um salto. Aperte 2!
+CLIP|juuso-peikko_laskettelupeli1|229.50|0|Ai, ai! Caiu lá embaixo!
+CLIP|juuso-peikko_laskettelupeli1|232.40|0|Ah, que pena!
+CLIP|juuso-peikko_laskettelupeli1|234.20|0|Era sua última vida, mas...
+CLIP|juuso-peikko_laskettelupeli1|236.50|0|Tudo bem, Teemu. Não tem problema.
+CLIP|juuso-peikko_laskettelupeli1|238.80|0|Vamos mandar uma camiseta como prêmio de consolação.
+CLIP|juuso-peikko_laskettelupeli1|242.60|0|Fique na linha para anotarmos seus dados rapidinho
+CLIP|juuso-peikko_laskettelupeli1|246.90|0|e enviarmos a camiseta para o endereço certo.
+CLIP|juuso-peikko_laskettelupeli1|249.40|0|Muito bem, obrigado!
+CLIP|juuso-peikko_laskettelupeli1|251.30|0|Tchau!
+CLIP|juuso-peikko_laskettelupeli1|252.90|0|Próxima ligação! Quem está na linha?
+CLIP|juuso-peikko_laskettelupeli1|256.70|0|Esa.
+CLIP|juuso-peikko_laskettelupeli1|258.10|0|Esa? É você mesmo?
+CLIP|juuso-peikko_laskettelupeli1|261.20|0|De onde você está ligando, Esa?
+CLIP|juuso-peikko_laskettelupeli1|263.40|0|De Kouhula.
+CLIP|juuso-peikko_laskettelupeli1|264.60|0|Kouvola? Um lugar conhecido pela beleza natural e pela arquitetura impressionante.
+CLIP|juuso-peikko_laskettelupeli1|274.20|0|Certo, deixa isso para lá. Quantos anos você tem?
+CLIP|juuso-peikko_laskettelupeli1|279.30|0|Na verdade, isso não importa. Você conhece o Juuso, o Duende?
+CLIP|juuso-peikko_laskettelupeli1|285.60|0|Já jogou antes?
+CLIP|juuso-peikko_laskettelupeli1|287.20|0|Você tem a versão para computador em casa?
+CLIP|juuso-peikko_laskettelupeli1|289.70|0|Então já conhece bem o jogo.
+CLIP|juuso-peikko_laskettelupeli1|295.40|0|Nem preciso explicar as teclas; você já sabe de cor.
+CLIP|juuso-peikko_laskettelupeli1|298.90|0|Vamos lá, pode começar!
+
+# Expanded call-in game: Juuso the Goblin, rope game
+CLIP|juuso-peikko_laskettelupeli2|30.00|0|Lá vem outro 4, e agora um salto!
+CLIP|juuso-peikko_laskettelupeli2|32.90|0|Êêê!
+CLIP|juuso-peikko_laskettelupeli2|33.80|0|Era para apertar o 2!
+CLIP|juuso-peikko_laskettelupeli2|36.40|0|Você não joga tão bem quanto disse, hein...
+CLIP|juuso-peikko_laskettelupeli2|40.80|0|Estou um pouco decepcionado com você, Esa.
+CLIP|juuso-peikko_laskettelupeli2|43.50|0|Você podia se sair melhor, mas ainda tem uma vida. Lá vem uma árvore: aperte 4!
+CLIP|juuso-peikko_laskettelupeli2|48.80|0|Isso, muito bom!
+CLIP|juuso-peikko_laskettelupeli2|49.80|0|E vem outra árvore!
+CLIP|juuso-peikko_laskettelupeli2|52.00|0|Boa escolha!
+CLIP|juuso-peikko_laskettelupeli2|53.10|0|Agora vem um salto: aperte 2!
+CLIP|juuso-peikko_laskettelupeli2|55.40|0|Outra árvore, isso!
+CLIP|juuso-peikko_laskettelupeli2|57.70|0|E agora outro salto.
+CLIP|juuso-peikko_laskettelupeli2|59.40|0|Isso, assim mesmo.
+CLIP|juuso-peikko_laskettelupeli2|60.40|0|Muito bem.
+CLIP|juuso-peikko_laskettelupeli2|61.60|0|Você passou a primeira fase, assim, numa boa!
+CLIP|juuso-peikko_laskettelupeli2|64.60|0|Mandou bem!
+CLIP|juuso-peikko_laskettelupeli2|65.60|0|Pronto, passou!
+CLIP|juuso-peikko_laskettelupeli2|67.40|0|Como está se sentindo?
+CLIP|juuso-peikko_laskettelupeli2|69.00|0|Muito bem.
+CLIP|juuso-peikko_laskettelupeli2|69.80|0|Ótimo!
+CLIP|juuso-peikko_laskettelupeli2|70.70|0|Você se concentrou bem. No começo foi meio desajeitado, mas no fim deu tudo certo.
+CLIP|juuso-peikko_laskettelupeli2|77.50|0|O que isso quer dizer?
+CLIP|juuso-peikko_laskettelupeli2|79.00|0|Agora vem a segunda fase.
+CLIP|juuso-peikko_laskettelupeli2|81.00|0|É o sorteio de puxar a corda.
+CLIP|juuso-peikko_laskettelupeli2|83.60|0|Tem três cordas na sua frente. Escolha a 1, a 2 ou a 3 para ver o que acontece.
+CLIP|juuso-peikko_laskettelupeli2|91.70|0|Escolhe uma. A três! Juuso puxa a corda e...
+CLIP|juuso-peikko_laskettelupeli2|96.60|0|Ai, não! Caiu um piano na cabeça dele! Sangue para todo lado... ainda bem que vocês não estão vendo.
+CLIP|juuso-peikko_laskettelupeli2|108.10|0|Parece que o jogo e a vida do Juuso acabaram ali, mas...
+CLIP|juuso-peikko_laskettelupeli2|112.20|0|Tudo bem, você foi muito bem mesmo assim.
+CLIP|juuso-peikko_laskettelupeli2|115.70|0|Você vai ganhar um prêmio de consolação. Não chegou ao fim, e o grande prêmio continua esperando.
+CLIP|juuso-peikko_laskettelupeli2|124.50|0|E ainda ganhei um estojo do Juuso, o Duende, de brinde!
+CLIP|juuso-peikko_laskettelupeli2|129.60|0|Não parece ótimo?
+CLIP|juuso-peikko_laskettelupeli2|132.10|0|Também acho. Obrigado, Esa. Vamos em frente.
+CLIP|juuso-peikko_laskettelupeli2|138.50|0|Próxima ligação.
+CLIP|juuso-peikko_laskettelupeli2|139.90|0|Alô?
+CLIP|juuso-peikko_laskettelupeli2|140.20|0|Oi, Marko!
+CLIP|juuso-peikko_laskettelupeli2|146.00|0|Consegui ligar de novo.
+CLIP|juuso-peikko_laskettelupeli2|149.30|0|Isso virou meu passatempo!
+CLIP|juuso-peikko_laskettelupeli2|156.80|0|Quais são os objetivos de uma pessoa na vida?
+CLIP|juuso-peikko_laskettelupeli2|170.20|0|Se você conseguir sair do porão da sua mãe, já vai ser ótimo.
+CLIP|juuso-peikko_laskettelupeli2|173.60|0|Vamos começar o jogo...
+CLIP|juuso-peikko_laskettelupeli2|175.90|0|Espera só um instante.
+CLIP|juuso-peikko_laskettelupeli2|176.80|0|Você já conhece bem esse lugar. Vou sair para fumar...
+CLIP|juuso-peikko_laskettelupeli2|180.60|0|Pode jogar aí e depois vemos o que aconteceu com a corda.
+CLIP|juuso-peikko_laskettelupeli2|184.70|0|Isso, é o lugar da corda.
+CLIP|juuso-peikko_laskettelupeli2|227.10|0|Pronto, o Marko chegou ao final!
+CLIP|juuso-peikko_laskettelupeli2|229.90|0|É hora de puxar a corda de novo. Escolha 1, 2 ou 3 para ver o que acontece.
+CLIP|juuso-peikko_laskettelupeli2|236.50|0|A número um.
+CLIP|juuso-peikko_laskettelupeli2|237.70|0|E o que apareceu?
+CLIP|juuso-peikko_laskettelupeli2|240.40|0|Foi parar na delegacia, e a polícia desceu o cacete no Juuso! Ai, ai... e o grande prêmio não veio.
+CLIP|juuso-peikko_laskettelupeli2|248.50|0|Marko, você já ganhou tantas camisetas nossas que não vai levar mais nenhuma.
+CLIP|juuso-peikko_laskettelupeli2|252.70|0|Na semana que vem, pode deixar de ligar para cá e dar uma chance aos outros.
+CLIP|juuso-peikko_laskettelupeli2|258.60|0|Por hoje é só com o Juuso. Semana que vem veremos o que ele apronta...
+CLIP|juuso-peikko_laskettelupeli2|265.50|0|Tenham um bom resto de dia. Até mais!
+
+# Expanded call-in game: Juuso the Goblin, UFO game
+CLIP|juuso-peikko_ufopeli1|8.40|0|Muito bem, muito bem. Aqui é o Kortsu Kaikkonen de novo.
+CLIP|juuso-peikko_ufopeli1|11.70|0|Agora, mais uma aventura de Juuso, o Duende.
+CLIP|juuso-peikko_ufopeli1|14.50|0|Vocês em casa também podem jogar ao vivo usando o telefone.
+CLIP|juuso-peikko_ufopeli1|20.80|0|Eu vejo o que acontece na tela, e seu amigo Kortsu vai orientar você a cada passo.
+CLIP|juuso-peikko_ufopeli1|28.90|0|Todo mundo já conhece o número, não preciso repetir.
+CLIP|juuso-peikko_ufopeli1|31.50|0|Ligue para participar das eliminatórias. Depois escolhemos quem joga ao vivo no nosso programa.
+CLIP|juuso-peikko_ufopeli1|38.80|0|Vamos ver quem está primeiro na linha.
+CLIP|juuso-peikko_ufopeli1|42.90|0|Alô, alô! Aqui é o Kortsu. Quem está falando?
+CLIP|juuso-peikko_ufopeli1|45.70|0|Oi, Liisa! De onde você está ligando?
+CLIP|juuso-peikko_ufopeli1|53.90|0|De Oulu. Certo. E o que você gosta de fazer?
+CLIP|juuso-peikko_ufopeli1|62.20|0|Patinação artística? Então faz piruetas e todo tipo de giro, né?
+CLIP|juuso-peikko_ufopeli1|69.00|0|E seus pais, o que fazem?
+CLIP|juuso-peikko_ufopeli1|77.70|0|Entendi, sua mãe fica bastante tempo sozinha em casa.
+CLIP|juuso-peikko_ufopeli1|80.30|0|Será que ela não precisa de companhia para o café da tarde?
+CLIP|juuso-peikko_ufopeli1|82.70|0|Ah, certo, certo...
+CLIP|juuso-peikko_ufopeli1|84.30|0|Vamos dar uma olhada no Juuso, o Duende?
+CLIP|juuso-peikko_ufopeli1|88.50|0|Hoje temos um jogo mais interessante: Juuso, o Duende, vai para o espaço!
+CLIP|juuso-peikko_ufopeli1|93.70|0|No futuro, em 2025, uma raça alienígena ameaça a Terra. Juuso vai tentar impedir os planos deles.
+CLIP|juuso-peikko_ufopeli1|105.00|0|Este jogo é um pouco mais complicado. Segure o telefone assim.
+CLIP|juuso-peikko_ufopeli1|111.90|0|Está pronto?
+CLIP|juuso-peikko_ufopeli1|113.00|0|Isso!
+CLIP|juuso-peikko_ufopeli1|113.50|0|Juuso anda sozinho e para quando encontra alguma coisa. Aí aparecem alienígenas que você precisa atirar.
+CLIP|juuso-peikko_ufopeli1|121.00|0|Use 1, 2 ou 3 para atirar para cima: à esquerda, reto ou à direita.
+CLIP|juuso-peikko_ufopeli1|130.00|0|A tecla 4 atira para a esquerda, a 6 para a direita e a 5 esfaqueia bem à frente.
+CLIP|juuso-peikko_ufopeli1|140.40|0|Se aparecerem monstros no chão, aperte 8 para pisoteá-los.
+CLIP|juuso-peikko_ufopeli1|146.00|0|Se ficar em apuros, aperte 0: é o botão de pânico e acaba com tudo que estiver na tela.
+CLIP|juuso-peikko_ufopeli1|152.10|0|Mas guarde para uma emergência; só dá para usar uma vez.
+CLIP|juuso-peikko_ufopeli1|157.80|0|É simples. Vamos começar o jogo e ver no que dá. Nem sei o que vai acontecer!
+CLIP|juuso-peikko_ufopeli1|166.60|0|Olha a abertura. Que imagens bonitas!
+CLIP|juuso-peikko_ufopeli1|180.60|0|Lá vamos nós!
+CLIP|juuso-peikko_ufopeli1|183.50|0|Abriu a primeira porta e Juuso está entrando no corredor.
+CLIP|juuso-peikko_ufopeli1|187.40|0|Está bem escuro aqui. Não dá para ver quase nada.
+CLIP|juuso-peikko_ufopeli1|189.70|0|Já já deve aparecer alguma coisa.
+CLIP|juuso-peikko_ufopeli1|191.60|0|Vem vindo de cima! Aperte 2 para atirar.
+CLIP|juuso-peikko_ufopeli1|196.00|0|Segure o 2.
+CLIP|juuso-peikko_ufopeli1|198.00|0|Agora está indo para a direita. Aperte 3!
+CLIP|juuso-peikko_ufopeli1|200.90|0|Ai, não! Levou bastante dano, mas ainda tem energia. Olha, restam 60% de vida.
+CLIP|juuso-peikko_ufopeli1|211.60|0|Apanhou um pouco, mas continua!
+CLIP|juuso-peikko_ufopeli1|214.50|0|Tem uma barata no chão. Aperte 8 para pisoteá-la. Isso, muito bem!
+CLIP|juuso-peikko_ufopeli1|222.30|0|Aí vem uma bifurcação. Escolha esquerda ou direita: aperte 4 ou 6.
+CLIP|juuso-peikko_ufopeli1|231.20|0|Isso, você foi por esse caminho.
+CLIP|juuso-peikko_ufopeli1|235.80|0|Tem baratas no chão. Aperte 8 e continue pisoteando!
+CLIP|juuso-peikko_ufopeli1|239.60|0|Tem dezenas delas!
+CLIP|juuso-peikko_ufopeli1|241.40|0|Ai, ai, ai! Que horror!
+CLIP|juuso-peikko_ufopeli1|243.20|0|Um alienígena está caindo! Aperte 1, rápido!
+CLIP|juuso-peikko_ufopeli1|246.80|0|Agora ele está no chão. Chute com a tecla 4!
+CLIP|juuso-peikko_ufopeli1|250.50|0|Não, vem outro pela direita! Mais alienígenas!
+CLIP|juuso-peikko_ufopeli1|253.20|0|Ai, ai, ai! Agora complicou!
+CLIP|juuso-peikko_ufopeli1|258.30|0|Os alienígenas ficaram presos no meio. Era uma boa hora para usar o botão de pânico,
+CLIP|juuso-peikko_ufopeli1|268.69|0|mas Juuso acabou morrendo.
+CLIP|juuso-peikko_ufopeli1|271.90|0|Tudo bem. Você não vai sair de mãos vazias: vai ganhar uma camiseta do Juuso como prêmio de consolação.
+CLIP|juuso-peikko_ufopeli1|279.60|0|Deixe seus dados. Vou levar a camiseta pessoalmente para sua mãe, assim ela chega no endereço certo.
+CLIP|juuso-peikko_ufopeli1|286.00|0|Obrigado, e vamos em frente!
+CLIP|juuso-peikko_ufopeli1|289.80|0|Quem está na linha agora?
+CLIP|juuso-peikko_ufopeli1|292.50|0|Oi, sou o Marko.
+CLIP|juuso-peikko_ufopeli1|293.90|0|A ligação está falhando um pouco...
+CLIP|juuso-peikko_ufopeli1|296.90|0|Espere, vou tentar outra vez.
+CLIP|juuso-peikko_ufopeli1|298.80|0|Muito bem, quem está aí...?
+
+# Expanded call-in game: Juuso the Goblin, UFO game continued
+CLIP|juuso-peikko_ufopeli2|0.00|0|É o Pekka?
+CLIP|juuso-peikko_ufopeli2|8.00|0|Você é de Nänni-Mäki?
+CLIP|juuso-peikko_ufopeli2|16.00|0|Estou na Lapônia.
+CLIP|juuso-peikko_ufopeli2|30.00|0|Acabo indo para algum lugar perto de Rovaniemi ou Ranua.
+CLIP|juuso-peikko_ufopeli2|33.20|0|Mas chega de geografia.
+CLIP|juuso-peikko_ufopeli2|35.20|0|Depois você pode olhar no mapa em casa para ver onde fica.
+CLIP|juuso-peikko_ufopeli2|38.30|0|O que mais tem por aí na Lapônia?
+CLIP|juuso-peikko_ufopeli2|40.70|0|Eu gosto de jogar.
+CLIP|juuso-peikko_ufopeli2|42.50|0|No computador?
+CLIP|juuso-peikko_ufopeli2|44.50|0|Ah, jogos de computador?
+CLIP|juuso-peikko_ufopeli2|45.70|0|Sim, sim.
+CLIP|juuso-peikko_ufopeli2|46.40|0|Qual é o jogo mais popular do momento?
+CLIP|juuso-peikko_ufopeli2|50.30|0|É o Juuso, o Duende?
+CLIP|juuso-peikko_ufopeli2|52.80|0|Não, é Parkkari Rally.
+CLIP|juuso-peikko_ufopeli2|56.40|0|Bem legal.
+CLIP|juuso-peikko_ufopeli2|57.10|0|Ah, jogos de rali. Também são bons.
+CLIP|juuso-peikko_ufopeli2|63.10|0|Vamos olhar o jogo do Juuso.
+CLIP|juuso-peikko_ufopeli2|67.10|0|Você ouviu as instruções há pouco, então não vou repetir tudo.
+CLIP|juuso-peikko_ufopeli2|75.10|0|É só atirar nos monstros quando aparecerem. Tomara que desta vez você avance mais.
+CLIP|juuso-peikko_ufopeli2|82.10|0|Você é nossa última esperança!
+CLIP|juuso-peikko_ufopeli2|112.10|0|Agora ele vai para o chão. Aperte 4, 4... Isso, muito bem.
+CLIP|juuso-peikko_ufopeli2|117.10|0|O primeiro alienígena só te arranhou. Ainda tem 80% de vida, está ótimo.
+CLIP|juuso-peikko_ufopeli2|123.10|0|Tem baratas no chão. Aperte 8, só o 8.
+CLIP|juuso-peikko_ufopeli2|127.10|0|Elas ainda nem conseguiram te morder. Muito bom.
+CLIP|juuso-peikko_ufopeli2|131.10|0|A jornada continua. Aí vem outra bifurcação.
+CLIP|juuso-peikko_ufopeli2|136.10|0|Vai seguir na mesma direção ou...
+CLIP|juuso-peikko_ufopeli2|138.30|0|Isso, escolheu o outro caminho.
+CLIP|juuso-peikko_ufopeli2|140.30|0|Talvez seja melhor. No outro caminho apareceram muitos monstros.
+CLIP|juuso-peikko_ufopeli2|144.60|0|E agora, o que temos aqui?
+CLIP|juuso-peikko_ufopeli2|146.80|0|Está bem escuro.
+CLIP|juuso-peikko_ufopeli2|148.30|0|É um jogo bem assustador...
+CLIP|juuso-peikko_ufopeli2|150.70|0|Ainda bem que vocês não conseguem ver a tela.
+CLIP|juuso-peikko_ufopeli2|151.70|0|Senão, já teriam se borrado de medo!
+CLIP|juuso-peikko_ufopeli2|154.70|0|Certo, agora as portas estão abrindo.
+CLIP|juuso-peikko_ufopeli2|157.20|0|Vem um inimigo do teto, à direita! Aperte 3!
+CLIP|juuso-peikko_ufopeli2|159.90|0|Isso, muito bem! Caiu ali.
+CLIP|juuso-peikko_ufopeli2|163.80|0|Está ficando ainda mais escuro.
+CLIP|juuso-peikko_ufopeli2|165.10|0|Esse clima de ficção científica está muito legal.
+CLIP|juuso-peikko_ufopeli2|169.00|0|Agora aperte 4, 4, 4!
+CLIP|juuso-peikko_ufopeli2|170.80|0|Tem um Erkki mordendo à esquerda!
+CLIP|juuso-peikko_ufopeli2|172.40|0|Não... isso não foi bom.
+CLIP|juuso-peikko_ufopeli2|173.80|0|Isso!
+CLIP|juuso-peikko_ufopeli2|175.30|0|Vamos em frente.
+CLIP|juuso-peikko_ufopeli2|177.00|0|Outra porta se abrindo.
+CLIP|juuso-peikko_ufopeli2|178.50|0|E agora vem um monte de tentáculos nojentos.
+CLIP|juuso-peikko_ufopeli2|180.50|0|Aperte o 5 para atacar pelas costas!
+CLIP|juuso-peikko_ufopeli2|182.80|0|Isso aí.
+CLIP|juuso-peikko_ufopeli2|183.80|0|Sim, aperte 5.
+CLIP|juuso-peikko_ufopeli2|184.70|0|Muito bem.
+CLIP|juuso-peikko_ufopeli2|185.90|0|Ele morreu. Vamos continuar.
+CLIP|juuso-peikko_ufopeli2|188.20|0|Tem baratas no chão.
+CLIP|juuso-peikko_ufopeli2|189.10|0|Baratas no chão!
+CLIP|juuso-peikko_ufopeli2|190.10|0|Aperte 8, só o 8.
+CLIP|juuso-peikko_ufopeli2|191.40|0|Isso, muito bem.
+CLIP|juuso-peikko_ufopeli2|192.10|0|Olha, o Erkki está vindo do teto.
+CLIP|juuso-peikko_ufopeli2|193.90|0|Agora aperte 2...
+CLIP|juuso-peikko_ufopeli2|195.20|0|Derrube esse desgraçado!
+CLIP|juuso-peikko_ufopeli2|197.20|0|Muito bem!
+CLIP|juuso-peikko_ufopeli2|198.50|0|Ufa!
+CLIP|juuso-peikko_ufopeli2|199.30|0|Esse jogo...
+CLIP|juuso-peikko_ufopeli2|200.20|0|Queria que desse para pausar. A situação está tensa.
+CLIP|juuso-peikko_ufopeli2|203.80|0|Na verdade, chegamos à sala do reator.
+CLIP|juuso-peikko_ufopeli2|206.10|0|Você ainda tem 25% de vida.
+CLIP|juuso-peikko_ufopeli2|208.20|0|Está indo muito bem, droga!
+CLIP|juuso-peikko_ufopeli2|209.40|0|Ainda tem alguma coisa?
+CLIP|juuso-peikko_ufopeli2|210.60|0|Certo, agora você tem duas opções.
+CLIP|juuso-peikko_ufopeli2|213.30|0|Pode morrer como herói e salvar o mundo explodindo o reator que está à sua frente.
+CLIP|juuso-peikko_ufopeli2|220.10|0|Ou enfrentar o chefão alienígena.
+CLIP|juuso-peikko_ufopeli2|222.30|0|Pode tentar resolver na diplomacia e dizer: “Isso não é legal. Você pode ir embora?”
+CLIP|juuso-peikko_ufopeli2|229.60|0|Escolha a opção 1 ou 2...
+CLIP|juuso-peikko_ufopeli2|234.60|0|Certo, decidiu tentar a diplomacia. Vamos ver no que dá.
+CLIP|juuso-peikko_ufopeli2|238.50|0|Ei, seu alienígena! Vai para o inferno!
+CLIP|juuso-peikko_ufopeli2|243.80|0|Ai, não! O alienígena não veio em paz. Pegou o Juuso!
+CLIP|juuso-peikko_ufopeli2|249.60|0|Agora o Juuso está preso num tubo nojento. A diplomacia não funcionou.
+CLIP|juuso-peikko_ufopeli2|261.40|0|Mesmo assim, você foi muito melhor que o participante anterior.
+CLIP|juuso-peikko_ufopeli2|268.80|0|Além da camiseta, vai ganhar um gorro para manter a cabeça quentinha.
+CLIP|juuso-peikko_ufopeli2|276.00|0|Obrigado por ligar, Pekka. Um bom resto de viagem aí na Lapônia!
+CLIP|juuso-peikko_ufopeli2|280.00|0|Por hoje é só. Não temos mais tempo para jogar, mas semana que vem continuamos.
+CLIP|juuso-peikko_ufopeli2|290.10|0|Tchauzinho!
+
+# Expanded Marko Kahjo monologue: monkey predictions and weather
+CLIP|kahjon_toinen_tuleminen1|4.90|0|Esse som não veio do sino do jantar. Começa agora “Um momento com Marko Kahjo”.
+CLIP|kahjon_toinen_tuleminen1|13.10|0|Peço desculpas a todos que estavam com fome e se enganaram.
+CLIP|kahjon_toinen_tuleminen1|20.40|0|Macaco!
+CLIP|kahjon_toinen_tuleminen1|23.80|0|Sabiam que já testaram isso? Um macaco prevê o futuro tão bem quanto um vidente profissional, seja homem,
+CLIP|kahjon_toinen_tuleminen1|33.65|0|mulher ou qualquer outra pessoa da mídia.
+CLIP|kahjon_toinen_tuleminen1|37.50|0|O que fazemos com essa informação? Nada. Ninguém, em lugar nenhum, faz coisa alguma.
+CLIP|kahjon_toinen_tuleminen1|46.30|0|Mas será que dá para aproveitar essa habilidade dos macacos?
+CLIP|kahjon_toinen_tuleminen1|51.00|0|Podíamos criar uma linha telefônica em que um médium responde como será o futuro.
+CLIP|kahjon_toinen_tuleminen1|61.50|0|Por exemplo, um locutor de rádio fictício, cansado da vida, liga para lá:
+CLIP|kahjon_toinen_tuleminen1|67.20|0|“Alô, aqui é um locutor de rádio fictício e exausto.”
+CLIP|kahjon_toinen_tuleminen1|72.40|0|“Devo continuar nesta carreira ou virar pintor ou sapateiro?”
+CLIP|kahjon_toinen_tuleminen1|79.90|0|Do outro lado, só se ouve o macaco falando a língua dele...
+CLIP|kahjon_toinen_tuleminen1|87.90|0|...mas talvez o conselho fosse tão preciso quanto o de qualquer médium.
+CLIP|kahjon_toinen_tuleminen1|110.80|0|E se colocássemos um macaco no lugar de meteorologista para interpretar os mapas do tempo?
+CLIP|kahjon_toinen_tuleminen1|117.80|0|Pelo menos deixaria a previsão do tempo na televisão mais interessante.
+CLIP|kahjon_toinen_tuleminen1|123.50|0|Vai que ele começa a se balançar nas luzes do estúdio ou bebe a própria urina, como já vi alguns fazerem.
+CLIP|kahjon_toinen_tuleminen1|133.90|0|E o diretor sussurra ao fundo: “Não, não faça xixi! Preveja o tempo, Simppa, preveja!”
+CLIP|kahjon_toinen_tuleminen1|143.70|0|Mas ele só faz uma careta e continua com as macaquices.
+CLIP|kahjon_toinen_tuleminen1|150.00|0|Seria um ótimo programa de televisão.
+CLIP|kahjon_toinen_tuleminen1|153.30|0|Se previsse tempo bom e chovesse no dia seguinte, poderíamos dizer: “Esse macaco desgraçado errou de novo.”
+CLIP|kahjon_toinen_tuleminen1|164.50|0|Mas é melhor não dizer isso na frente dele: pode ficar bravo e jogar cocô em você.
+CLIP|kahjon_toinen_tuleminen1|180.40|0|Droga de gato!
+CLIP|kahjon_toinen_tuleminen1|182.90|0|Esse gato é danado.
+CLIP|kahjon_toinen_tuleminen1|185.30|0|Às vezes ele vomita no chão e não é nada divertido limpar.
+CLIP|kahjon_toinen_tuleminen1|191.90|0|Por isso fico com o jornal Valppanan à mão, caso ele comece a passar mal.
+CLIP|kahjon_toinen_tuleminen1|198.50|0|No começo da semana, eu fazia um sanduíche de patê de fígado com pepino — que delícia!
+CLIP|kahjon_toinen_tuleminen1|207.70|0|— quando vi o gato engasgar.
+CLIP|kahjon_toinen_tuleminen1|210.70|0|Entrei em pânico. Normalmente há algum folheto na mesa da cozinha, mas dessa vez não tinha nenhum.
+CLIP|kahjon_toinen_tuleminen1|218.20|0|Minha esposa tinha tirado tudo porque receberíamos visitas.
+CLIP|kahjon_toinen_tuleminen1|221.60|0|Corri até a caixa de papéis no corredor, agarrei um monte de jornal e voltei voando para a cozinha.
+CLIP|kahjon_toinen_tuleminen1|232.30|0|Quando coloquei o papel na frente do gato, que ainda estava engasgado, não saiu nada.
+CLIP|kahjon_toinen_tuleminen1|238.30|0|O desgraçado só ficou me olhando, como se perguntasse se eu queria acender a sauna ou por que estava oferecendo gravetos.
+CLIP|kahjon_toinen_tuleminen1|247.90|0|Falando em tempo...
+CLIP|kahjon_toinen_tuleminen1|262.00|0|Quanto tempo os finlandeses passam falando do clima por ano?
+CLIP|kahjon_toinen_tuleminen1|267.90|0|É um assunto que provavelmente comentam quase tanto quanto gostam de tomar café.
+CLIP|kahjon_toinen_tuleminen1|277.90|0|Dá cerca de nove quilos de conversa sobre o tempo por ano.
+CLIP|kahjon_toinen_tuleminen1|282.90|0|É uma quantidade enorme.
+CLIP|kahjon_toinen_tuleminen1|284.70|0|Convertendo para horas, são cerca de cinco horas por ano para cada cidadão.
+CLIP|kahjon_toinen_tuleminen1|294.10|0|Principalmente se a conversa acontecer no meio do expediente, aí...
+
+# Expanded Marko Kahjo monologue: weather and gingerbread
+CLIP|kahjon_toinen_tuleminen2|0.00|0|Esse enorme desperdício prejudica o PIB da Finlândia. Poderíamos usar esse tempo de forma muito mais útil.
+CLIP|kahjon_toinen_tuleminen2|11.10|0|Proponho que o governo contrate alguém em cada município para falar do tempo.
+CLIP|kahjon_toinen_tuleminen2|18.80|0|Economizaríamos tempo e dinheiro com uma pessoa cuidando disso para a cidade inteira.
+CLIP|kahjon_toinen_tuleminen2|27.30|0|Esse comentarista do tempo poderia ficar na praça com um café térmico e contar suas observações a quem passa.
+CLIP|kahjon_toinen_tuleminen2|41.30|0|“Nossa, quanta neve! Que frio congelante!”
+CLIP|kahjon_toinen_tuleminen2|48.70|0|“Agora esquentou e virou lama. Ai, voltou a congelar, e a lama virou um campo de batatas gelado.”
+CLIP|kahjon_toinen_tuleminen2|65.20|0|As pessoas só concordariam com a cabeça e seguiriam caminho.
+CLIP|kahjon_toinen_tuleminen2|73.10|0|Alguém vai dizer que já temos meteorologistas, mas não é a mesma coisa.
+CLIP|kahjon_toinen_tuleminen2|84.30|0|O meteorologista fala dos fatos dos últimos dias e prevê o futuro,
+CLIP|kahjon_toinen_tuleminen2|93.29|0|mas raramente reclama do tempo exatamente como está, bem onde você está.
+CLIP|kahjon_toinen_tuleminen2|103.10|0|Precisamos de alguém assim. Lembrem-se de mim quando forem escolher os indicados ao Nobel da Paz.
+CLIP|kahjon_toinen_tuleminen2|116.50|0|Fica a dica e uma piscadinha.
+CLIP|kahjon_toinen_tuleminen2|120.50|0|Biscoito de gengibre.
+CLIP|kahjon_toinen_tuleminen2|155.60|0|Sabem qual doce muda de nome de uma língua para outra?
+CLIP|kahjon_toinen_tuleminen2|161.30|0|O nosso biscoito de gengibre de Natal.
+CLIP|kahjon_toinen_tuleminen2|164.80|0|Hoje em dia não leva pimenta, e certamente não é um bolo.
+CLIP|kahjon_toinen_tuleminen2|171.70|0|É um biscoito.
+CLIP|kahjon_toinen_tuleminen2|173.30|0|Se fizer um bolo com sabor de biscoito de gengibre, aí vira um bolo de biscoito de gengibre.
+CLIP|kahjon_toinen_tuleminen2|181.40|0|Que coisa sem sentido! O nome vem de antigamente, quando usavam pimenta-da-jamaica na receita.
+CLIP|kahjon_toinen_tuleminen2|193.46|0|Duvido que muita gente ainda use.
+CLIP|kahjon_toinen_tuleminen2|197.70|0|Por que manter um nome que não tem nada a ver com o produto? Não podiam inventar outro nome?
+CLIP|kahjon_toinen_tuleminen2|211.40|0|Nos Estados Unidos também não é muito melhor.
+CLIP|kahjon_toinen_tuleminen2|216.80|0|Lá chamam isso de gingerbread, ou “pão de gengibre”.
+CLIP|kahjon_toinen_tuleminen2|223.50|0|A parte do gengibre faz sentido, porque ele ainda aparece nas receitas atuais.
+CLIP|kahjon_toinen_tuleminen2|231.00|0|Mas é um formato bem estranho para um pão.
+CLIP|kahjon_toinen_tuleminen2|235.20|0|Se a ideia é dizer “pãozinho”, então devia se chamar ginger small bread, não é?
+CLIP|kahjon_toinen_tuleminen2|246.80|0|Talvez faça parte do sonho americano. Já cortam o pão em fatias,
+CLIP|kahjon_toinen_tuleminen2|271.82|0|assim sobra tempo para as donas de casa aspirarem e cuidarem da família.
+
+# Expanded magazine subscription sales call
+CLIP|kumppani|0.00|0|Olá, aqui é Simo, da revista Kumppani. Tenho uma oferta exclusiva para você.
+CLIP|kumppani|6.70|0|Essa oferta incrível vale só esta semana e é só para você.
+CLIP|kumppani|13.10|0|Os primeiros três meses são totalmente grátis.
+CLIP|kumppani|16.80|0|Nos dois meses seguintes, a assinatura custa só 9,95 marcos, mais o frete.
+CLIP|kumppani|23.70|0|Depois, por mais dois meses, fica por apenas 19,95 marcos, mais o frete.
+CLIP|kumppani|31.35|0|Em seguida, continua por 29,95 marcos, mais o frete, nosso preço especial para membros.
+CLIP|kumppani|40.60|0|Mas não é só isso! Se assinar agora, ganha de graça um conjunto de três peças de roupa íntima de lã,
+CLIP|kumppani|48.59|0|nas cores da moda: marrom, amarelo ou azul-claro.
+CLIP|kumppani|52.50|0|E ainda leva uma trena prática, um ímã de geladeira,
+CLIP|kumppani|58.40|0|uma caneca vermelha da revista e uma pinça superútil com lupa e luz.
+CLIP|kumppani|64.06|0|Só paga o frete!
+CLIP|kumppani|65.60|0|Vamos fazer a assinatura? O que acha dessa oferta incrível?
+CLIP|kumppani|72.70|0|Assine para você e alegre um amigo com uma assinatura de presente. É fácil!
+CLIP|kumppani|77.00|0|Alô? O que você disse? Ainda está aí?
+CLIP|kumppani|84.00|0|Eu não venderia para você nem se implorasse, seu pobre desgraçado.
+
+# Expanded radio quiz: guess the animal
+CLIP|kysy&arvaa1|4.00|0|Muito bem, bem-vindos de volta! Aqui é o Kortsu Kaikkonen.
+CLIP|kysy&arvaa1|8.28|0|Hoje temos mais um dia emocionante de “Pergunte e adivinhe”.
+CLIP|kysy&arvaa1|12.70|0|Mas, antes de começar, a pedido do produtor, preciso pedir desculpas pela semana passada.
+CLIP|kysy&arvaa1|18.80|0|O Kortsu se empolgou demais e falou alguns palavrões. Isso é muito feio! Que vergonha, Kortsu!
+CLIP|kysy&arvaa1|26.90|0|Aprendemos a lição e agora vamos seguir em frente numa boa, certo?
+CLIP|kysy&arvaa1|34.00|0|Crianças em casa, liguem para o estúdio e façam uma pergunta. Depois, deem um palpite.
+CLIP|kysy&arvaa1|44.10|0|Quem acertar ganha uma mochila da rádio local de Alivieska, cheia de surpresas, guloseimas, barras,
+CLIP|kysy&arvaa1|54.00|0|salgadinhos e outras coisas legais.
+CLIP|kysy&arvaa1|57.50|0|Todo mundo já conhece o número.
+CLIP|kysy&arvaa1|58.90|0|Vamos à charada de hoje.
+CLIP|kysy&arvaa1|69.80|0|Vou dar a primeira dica para começarmos.
+CLIP|kysy&arvaa1|73.70|0|É um animal.
+CLIP|kysy&arvaa1|77.00|0|Vamos tentar adivinhar que animal é.
+CLIP|kysy&arvaa1|79.80|0|Liguem para cá e tentem descobrir qual é o animal.
+CLIP|kysy&arvaa1|87.70|0|Vamos atender a primeira ligação.
+CLIP|kysy&arvaa1|89.60|0|Alô?
+CLIP|kysy&arvaa1|91.50|0|Alô? Quem está falando?
+CLIP|kysy&arvaa1|93.40|0|Oi, Sakke! De onde você liga?
+CLIP|kysy&arvaa1|98.50|0|De Kärsämäki. Pelo nome, parece um lugar cheio de sofrimento.
+CLIP|kysy&arvaa1|102.50|0|Qual é seu palpite? Faça uma pergunta sobre o animal.
+CLIP|kysy&arvaa1|112.70|0|Dá para comer?
+CLIP|kysy&arvaa1|114.10|0|Na Finlândia não comemos esse animal, mas em algumas partes do mundo infelizmente comem.
+CLIP|kysy&arvaa1|123.82|0|Em geral, eu diria que não.
+CLIP|kysy&arvaa1|126.80|0|Qual é seu palpite?
+CLIP|kysy&arvaa1|128.90|0|Pica-pau-preto.
+CLIP|kysy&arvaa1|137.10|0|Pica-pau-preto? Não era esse o animal.
+CLIP|kysy&arvaa1|140.30|0|Obrigado por ligar e dar seu palpite.
+CLIP|kysy&arvaa1|142.70|0|Vamos ao próximo.
+CLIP|kysy&arvaa1|143.90|0|Quem fala? De onde está ligando?
+CLIP|kysy&arvaa1|148.90|0|Lauri, de Tampere.
+CLIP|kysy&arvaa1|150.30|0|Ora, ora! O que me diz, Lauri?
+CLIP|kysy&arvaa1|152.30|0|O que gostaria de me perguntar?
+CLIP|kysy&arvaa1|157.10|0|Quantas pernas esse bicho tem?
+CLIP|kysy&arvaa1|158.80|0|Tem quatro patas.
+CLIP|kysy&arvaa1|161.00|0|Que animal dá para comer, não se come na Finlândia e tem quatro patas?
+CLIP|kysy&arvaa1|170.90|0|Uma mesa.
+CLIP|kysy&arvaa1|171.90|0|Gostei do seu raciocínio, Lauri. Uma mesa tem quatro pernas, mas que tipo de animal seria uma mesa?
+CLIP|kysy&arvaa1|181.40|0|Não sabe? Eu já desconfiava pelo seu palpite, mas gostei do seu jeito.
+CLIP|kysy&arvaa1|189.70|0|Continue assim, aí em Tampere. Vamos para o próximo. Quem está na linha?
+CLIP|kysy&arvaa1|196.00|0|Antti, de Suonijoki. E aí, Antti? Antti, o pantti de Karvalantti!
+CLIP|kysy&arvaa1|203.80|0|Ele voa?
+CLIP|kysy&arvaa1|209.80|0|Que animal não voa, então?
+CLIP|kysy&arvaa1|215.00|0|Uma brema? Ela não voa, mas não é o animal da charada.
+CLIP|kysy&arvaa1|220.10|0|Obrigado, Antti. Próximo! Quem está falando?
+CLIP|kysy&arvaa1|226.10|0|Oi, Roni! De onde está ligando?
+CLIP|kysy&arvaa1|229.80|0|De Savonlinna.
+CLIP|kysy&arvaa1|231.80|0|Savonlinna, certo.
+CLIP|kysy&arvaa1|233.90|0|Qual é o palpite do Roni, de Savonlinna?
+CLIP|kysy&arvaa1|236.30|0|Quer dizer, primeiro faça uma pergunta.
+CLIP|kysy&arvaa1|239.80|0|Até agora sabemos que é um animal com quatro patas, que não voa e que pode ser comido.
+CLIP|kysy&arvaa1|250.50|0|O que mais você quer perguntar?
+CLIP|kysy&arvaa1|259.80|0|Ah, você não come batata?
+CLIP|kysy&arvaa1|262.70|0|Esse animal não come batatas...
+CLIP|kysy&arvaa1|267.30|0|Que animal será que não come batatas?
+CLIP|kysy&arvaa1|274.50|0|Um bisão? Certo...
+CLIP|kysy&arvaa1|278.40|0|Não sei se bisão come batata...
+CLIP|kysy&arvaa1|280.20|0|É.
+CLIP|kysy&arvaa1|281.20|0|Não é um bisão.
+CLIP|kysy&arvaa1|283.00|0|Obrigado, Roni. Vamos em frente.
+CLIP|kysy&arvaa1|284.90|0|Próximo! Quem está aí?
+CLIP|kysy&arvaa1|290.20|0|Oi, Laura!
+CLIP|kysy&arvaa1|291.80|0|Oi!
+CLIP|kysy&arvaa1|293.00|0|Faça uma pergunta, Laura.
+CLIP|kysy&arvaa1|299.10|0|Então, ele come...?
+
+# Expanded radio quiz: guessing the animal, continued
+CLIP|kysy&arvaa2|0.00|0|É um animal que não se come na Finlândia, mas em outros lugares sim.
+CLIP|kysy&arvaa2|2.10|0|Tem quatro patas, não voa
+CLIP|kysy&arvaa2|4.00|0|e não come batatas.
+CLIP|kysy&arvaa2|6.60|0|O que mais você gostaria
+CLIP|kysy&arvaa2|7.80|0|de descobrir sobre ele?
+CLIP|kysy&arvaa2|9.20|0|Vamos reduzir as possibilidades.
+CLIP|kysy&arvaa2|12.10|0|Que categoria de animal é?
+CLIP|kysy&arvaa2|21.10|0|Você consegue pensar em alguma coisa.
+CLIP|kysy&arvaa2|23.20|0|Até agora já sugeriram
+CLIP|kysy&arvaa2|27.50|0|pica-pau-preto, mesa, brema
+CLIP|kysy&arvaa2|30.00|0|e bisão.
+CLIP|kysy&arvaa2|31.60|0|Não é nenhum desses...
+CLIP|kysy&arvaa2|33.30|0|Que animal será então?
+CLIP|kysy&arvaa2|42.70|0|Ele sabe nadar?
+CLIP|kysy&arvaa2|44.40|0|Sabe, mas não gosta muito. Dá para dizer que odeia água.
+CLIP|kysy&arvaa2|50.40|0|Ou pelo menos é o que dizem.
+CLIP|kysy&arvaa2|53.10|0|Na verdade, existe até um estilo de natação associado a ele.
+CLIP|kysy&arvaa2|56.80|0|Mais uma dica.
+CLIP|kysy&arvaa2|58.10|0|E não é um peixe.
+CLIP|kysy&arvaa2|60.70|0|Vou dar mais uma pista.
+CLIP|kysy&arvaa2|62.20|0|Já dei bastante dica. Qual é seu palpite?
+CLIP|kysy&arvaa2|73.70|0|Emu!
+CLIP|kysy&arvaa2|75.50|0|Boa, pelo menos lembrou de um pássaro, embora já tenhamos descartado os que voam.
+CLIP|kysy&arvaa2|80.00|0|Emus não voam, mas também não é esse o animal.
+CLIP|kysy&arvaa2|84.00|0|Próximo!
+CLIP|kysy&arvaa2|85.50|0|Vamos ouvir outro participante.
+CLIP|kysy&arvaa2|87.00|0|Oi! Hoje as ligações estão vindo de longe. O que gostaria de perguntar?
+CLIP|kysy&arvaa2|94.90|0|Então, ele não tem bico e não voa...
+CLIP|kysy&arvaa2|99.00|0|Diga o nome de algum animal.
+CLIP|kysy&arvaa2|104.60|0|Canguru? Não. Próximo!
+CLIP|kysy&arvaa2|107.40|0|Alô?
+CLIP|kysy&arvaa2|108.00|0|Sim, sim. Qual é o seu palpite?
+CLIP|kysy&arvaa2|110.50|0|Quer dizer, o que você quer perguntar?
+CLIP|kysy&arvaa2|115.70|0|De que cor ele é?
+CLIP|kysy&arvaa2|116.70|0|Pode ser de várias cores: preto, branco, listrado, com listras de tigre...
+CLIP|kysy&arvaa2|125.30|0|E costuma ser bem peludo. Já dei pistas demais! O que você acha?
+CLIP|kysy&arvaa2|138.70|0|Uma vaca?
+CLIP|kysy&arvaa2|139.70|0|Você está vendo vacas peludas com listras de tigre?
+CLIP|kysy&arvaa2|143.20|0|É melhor olhar os livros da escola e ver como são as vacas de verdade.
+CLIP|kysy&arvaa2|149.90|0|Vamos ver se alguém da outra linha é mais esperto.
+CLIP|kysy&arvaa2|152.80|0|Alô?
+CLIP|kysy&arvaa2|156.40|0|Oi, Simo.
+CLIP|kysy&arvaa2|158.10|0|Você deve saber, mas primeiro faça uma boa pergunta.
+CLIP|kysy&arvaa2|165.70|0|Essa pergunta sobre batatas já fizeram.
+CLIP|kysy&arvaa2|167.40|0|Pergunte outra coisa.
+CLIP|kysy&arvaa2|169.30|0|Vou dar mais uma pista: ele é carnívoro.
+CLIP|kysy&arvaa2|172.50|0|Gosta de comer ratos e camundongos.
+CLIP|kysy&arvaa2|174.80|0|Adora caçá-los. Que animal é esse?
+CLIP|kysy&arvaa2|185.80|0|Um cachorro? Não é cachorro, Simo.
+CLIP|kysy&arvaa2|189.30|0|Foi o palpite mais próximo até agora. Se não é cachorro, então o que é?
+CLIP|kysy&arvaa2|197.90|0|Diga alguma coisa!
+CLIP|kysy&arvaa2|199.20|0|Chega de perguntas! O programa está quase acabando. Agora só quero respostas. O que é?
+CLIP|kysy&arvaa2|209.10|0|Não é isso. Próximo!
+CLIP|kysy&arvaa2|211.20|0|Também não. Vamos, quem tem outro palpite?
+CLIP|kysy&arvaa2|217.90|0|Não.
+CLIP|kysy&arvaa2|219.50|0|Próximo!
+CLIP|kysy&arvaa2|221.20|0|Não.
+CLIP|kysy&arvaa2|222.10|0|Próximo.
+CLIP|kysy&arvaa2|226.00|0|Também não.
+CLIP|kysy&arvaa2|226.90|0|Vamos!
+CLIP|kysy&arvaa2|228.20|0|Não é esse.
+CLIP|kysy&arvaa2|229.40|0|Próximo!
+CLIP|kysy&arvaa2|232.60|0|Ah, essa é nova. Vamos ouvir.
+CLIP|kysy&arvaa2|235.10|0|Droga, este dia vai ser longo.
+CLIP|kysy&arvaa2|246.40|0|Muito bem, vamos atender o próximo participante.
+CLIP|kysy&arvaa2|248.20|0|Escute com atenção: que animal doméstico gosta de comer ratos, é peludo e macio, e faz “miau”?
+CLIP|kysy&arvaa2|262.80|0|Que animal é esse?
+CLIP|kysy&arvaa2|268.80|0|Papu? O quê?
+CLIP|kysy&arvaa2|271.50|0|Ele ouviu a dica: é um gato! Gato era a resposta certa.
+CLIP|kysy&arvaa2|279.00|0|E, de novo, ninguém acertou que era um gato.
+CLIP|kysy&arvaa2|281.10|0|Droga! Neste fim de mundo só tem idiotas para ouvir!
+CLIP|kysy&arvaa2|286.10|0|Porra...
+CLIP|kysy&arvaa2|286.90|0|Acabei comendo todos os salgadinhos sozinho, droga.
+CLIP|kysy&arvaa2|289.10|0|Vão todos para o inferno!
+
+# Expanded advertising delivery job call
+CLIP|paskapostausoy|0.10|0|Entrega de porcarias na região.
+CLIP|paskapostausoy|5.30|0|Como posso ajudar?
+CLIP|paskapostausoy|7.80|0|Estou ouvindo.
+CLIP|paskapostausoy|14.30|0|Entregamos pilhas de anúncios diretamente na sua casa.
+CLIP|paskapostausoy|22.40|0|Depois você pode sair para distribuí-los.
+CLIP|paskapostausoy|26.40|0|O pagamento depende de quantos anúncios você entregar.
+CLIP|paskapostausoy|32.00|0|Se não entregar nenhum, não recebe nada.
+CLIP|paskapostausoy|33.60|0|Se não estiver com vontade de trabalhar, também não vai ter nada para distribuir.
+CLIP|paskapostausoy|44.60|0|É um sistema bem simples e automatizado.
+CLIP|paskapostausoy|49.40|0|Você faz o que quiser. Se não fizer, não precisa se preocupar com nada.
+CLIP|paskapostausoy|58.20|0|Se não tiver, fica por isso mesmo.
+CLIP|paskapostausoy|60.40|0|Pode começar assim que chegar o primeiro lote de anúncios. É isso.
+CLIP|paskapostausoy|67.80|0|Até mais!
+
+# Expanded ET-Blokku radio advertisement
+CLIP|shop_et_blocco2|10.10|0|Imagine que você está deitado à noite, de olhos fechados.
+CLIP|shop_et_blocco2|12.40|0|Respira tranquilamente, sem saber o que acontece do lado de fora.
+CLIP|shop_et_blocco2|16.90|0|Será que algo tenta entrar na sua casa sem você perceber, com más intenções?
+CLIP|shop_et_blocco2|20.40|0|Não falo de radônio nem da inofensiva radiação dos celulares, mas de uma ameaça muito mais real:
+CLIP|shop_et_blocco2|27.80|0|alienígenas do espaço.
+CLIP|shop_et_blocco2|29.50|0|Sabia que a maioria das invasões alienígenas acontece através das paredes, por infiltração osmótica?
+CLIP|shop_et_blocco2|36.20|0|As moléculas alienígenas vibram, procuram um ponto fraco e atravessam concreto, gesso e papel de parede
+CLIP|shop_et_blocco2|42.80|0|sem fazer barulho, sem permissão e, acima de tudo, sem você perceber.
+CLIP|shop_et_blocco2|47.00|0|Mas não se preocupe: tenho a solução para esse problema que os jornais ignoram.
+CLIP|shop_et_blocco2|50.80|0|ET-Blokku!
+CLIP|shop_et_blocco2|51.90|0|ET-Blokku é um revestimento macro exclusivo, aplicado à mão na parede e feito à base de polímero.
+CLIP|shop_et_blocco2|57.50|0|Ele cria uma camada protetora invisível e extremamente eficaz
+CLIP|shop_et_blocco2|61.20|0|que bloqueia a infiltração osmótica indesejada de moléculas alienígenas,
+CLIP|shop_et_blocco2|64.37|0|justamente quando você está mais vulnerável.
+CLIP|shop_et_blocco2|66.30|0|Esse revestimento manual, incrivelmente eficaz, serve para qualquer parede:
+CLIP|shop_et_blocco2|70.50|0|com papel de parede, tinta, verniz ou até sem acabamento.
+CLIP|shop_et_blocco2|74.10|0|Seja de madeira, gesso, aglomerado, pedra ou tijolo.
+CLIP|shop_et_blocco2|78.50|0|Você mesmo aplica o ET-Blokku com o aplicador manual que vem na embalagem.
+CLIP|shop_et_blocco2|82.20|0|É fácil, não danifica a superfície e ativa uma proteção contínua, sem eletricidade
+CLIP|shop_et_blocco2|86.10|0|e totalmente livre de manutenção, que funciona noite após noite,
+CLIP|shop_et_blocco2|89.80|0|sem que os alienígenas entendam por que não conseguem avançar.
+CLIP|shop_et_blocco2|93.00|0|Peça já, antes que comece a próxima noite.
+
+# Expanded Dr. Taajuus radio advice: car versus marriage
+CLIP|taajuus1_a|20.70|0|Sou quase doutor licenciado e acompanhei tudo isso durante a noite.
+CLIP|taajuus1_a|41.00|0|Hoje vamos ler cartas que vocês nos enviaram.
+CLIP|taajuus1_a|47.90|0|Com uma taxa de consulta de 500 marcos, você também recebe conselhos para a vida.
+CLIP|taajuus1_a|61.10|0|Sem mais demora, vamos à primeira carta.
+CLIP|taajuus1_a|69.20|0|Ela começa assim:
+CLIP|taajuus1_a|73.30|0|“Caro psicólogo do rádio,
+CLIP|taajuus1_a|77.30|0|escrevo esta carta sentada à mesa da cozinha,
+CLIP|taajuus1_a|82.10|0|no lugar onde nossa carteira foi vista viva pela última vez.
+CLIP|taajuus1_a|87.80|0|É 1999 e temos um novo animal de estimação em casa: um carro velho.
+CLIP|taajuus1_a|96.40|0|Não é fofo, brilhante nem econômico. Só funciona à base de dinheiro e atenção,
+CLIP|taajuus1_a|108.61|0|e às vezes faz um barulho que parece uma cafeteira morrendo.
+CLIP|taajuus1_a|118.00|0|Meu marido decidiu que ainda dá para salvar esse carro.
+CLIP|taajuus1_a|124.30|0|Eu decidi que ainda dá para salvar meu marido.
+CLIP|taajuus1_a|129.50|0|Mas sempre que sugiro economizar ou comprar um aspirador novo, ele só ouve a palavra “pastilhas de freio”.
+CLIP|taajuus1_a|142.30|0|Este mês o carro ganhou amortecedores, escapamento e bateria novos — e aparentemente uma nova identidade,
+CLIP|taajuus1_a|154.38|0|porque ele diz que está quase novo.
+CLIP|taajuus1_a|158.40|0|Para mim, quase novo quer dizer que não precisamos empurrá-lo ladeira abaixo para pegar.
+CLIP|taajuus1_a|168.10|0|Acho que usamos dicionários diferentes.
+CLIP|taajuus1_a|172.40|0|Quando pergunto o que vai consertar em seguida, ele responde, muito sério: “Só umas coisinhas.”
+CLIP|taajuus1_a|181.10|0|Essas coisinhas custam o mesmo que duas semanas de compras ou um fim de semana no chalé.
+CLIP|taajuus1_a|191.21|0|Nem lembramos como é isso, porque passamos todo o tempo livre na oficina.
+CLIP|taajuus1_a|199.60|0|Ele diz que é um hobby. Eu digo que é uma performance financeira estrelada pela ferrugem,
+CLIP|taajuus1_a|207.58|0|com meus nervos no papel coadjuvante.
+CLIP|taajuus1_a|210.90|0|Doutor Taajuus, como faço meu marido entender que um relacionamento também precisa de manutenção,
+CLIP|taajuus1_a|221.32|0|não só de uma embreagem?
+CLIP|taajuus1_a|223.90|0|Dá para reprogramar alguém para que um kit de reparo às vezes signifique férias ou pelo menos uma frigideira nova?
+CLIP|taajuus1_a|231.70|0|Ou devo cobrar por cada frase que começa com “só mais uma peça”?
+CLIP|taajuus1_a|239.20|0|Se continuar assim, teremos um carro perfeito e a conta zerada.
+CLIP|taajuus1_a|245.55|0|Vou dirigir o carro perfeito até a casa da minha mãe.
+CLIP|taajuus1_a|250.90|0|Atenciosamente, alguém que vive trocando de marcha.”
+CLIP|taajuus1_a|254.00|0|Isso parece mesmo um conflito conjugal.
+CLIP|taajuus1_a|277.90|0|A família ganhou esse assunto tão importante para ele, que agora recebe toda a atenção.
+CLIP|taajuus1_a|288.10|0|E você certamente sente que o carro é uma ameaça.
+CLIP|taajuus1_a|294.80|0|É claro que isso acaba criando um conflito.
+
+# Expanded Dr. Taajuus radio advice: relationship and beer
+CLIP|taajuus1_b|0.00|0|Entre as três partes,
+CLIP|taajuus1_b|2.30|0|pode haver um pouco de ciúme também.
+CLIP|taajuus1_b|15.10|0|Sim.
+CLIP|taajuus1_b|17.10|0|Eu sugeriria que você ajudasse seu marido a consertar o carro.
+CLIP|taajuus1_b|24.80|0|Talvez seus pais possam emprestar um dinheiro para comprar peças novas. Seu marido ficaria muito feliz.
+CLIP|taajuus1_b|42.70|0|Talvez vocês possam pensar nele como um filho dos dois.
+CLIP|taajuus1_b|55.10|0|Sim, pode ser.
+CLIP|taajuus1_b|56.60|0|Assim, o relacionamento de vocês também entra numa nova marcha, por assim dizer.
+CLIP|taajuus1_b|75.00|0|Com esses conselhos, você vai seguir em frente. Tudo de bom para vocês.
+CLIP|taajuus1_b|83.20|0|Caros ouvintes, hora do primeiro intervalo musical. Vamos ouvir “Seissemaster”, de Günther Koronen,
+CLIP|taajuus1_b|104.54|0|finlandês-alemão.
+CLIP|taajuus1_b|108.20|0|Recebemos uma carta assinada “Uma garrafa e uma bicicleta em tempestade”.
+CLIP|taajuus1_b|173.44|0|Caros doutores Taajuus, escrevo porque estou começando a ficar realmente preocupado.
+CLIP|taajuus1_b|248.50|0|Ao mesmo tempo, fico curioso sobre o que acontece no meu corpo.
+CLIP|taajuus1_b|254.30|0|O problema é: se bebo uma cerveja, não fico só um pouquinho bêbado como os outros.
+CLIP|taajuus1_b|265.10|0|Minha memória apaga como uma televisão velha quando alguém tropeça no cabo da antena.
+CLIP|taajuus1_b|272.90|0|Uma garrafa e depois só vejo chuviscos.
+CLIP|taajuus1_b|277.80|0|Minha próxima lembrança é sempre na manhã seguinte, e cada vez acordo num endereço diferente.
+CLIP|taajuus1_b|285.20|0|Nem falo de bebedeira ou de sair pelos bares. Bebo só uma garrafa
+CLIP|taajuus1_b|292.00|0|e viro uma encomenda humana despachada pelo mundo.
+
+# Expanded Dr. Taajuus radio advice: drunken blackouts
+CLIP|taajuus1_c|1.40|0|Aqui vão alguns exemplos das últimas semanas para você ter uma ideia.
+CLIP|taajuus1_c|6.00|0|Uma vez acordei num banco da rodoviária com uma passagem só de ida para Oulu.
+CLIP|taajuus1_c|13.74|0|Moro em Hämeenlinna, não conheço ninguém em Oulu e muito menos alguém perto de quem eu gostaria de acordar.
+CLIP|taajuus1_c|24.50|0|Em outra ocasião, abri os olhos e vi a plataforma de saltos da piscina bem acima de mim.
+CLIP|taajuus1_c|30.30|0|Pelo visto, tinha decidido dormir no chão do vestiário depois de me perder numa aula de natação.
+CLIP|taajuus1_c|39.80|0|No sábado passado acordei no depósito de uma floricultura, abraçado a um enorme buquê de condolências.
+CLIP|taajuus1_c|48.73|0|Na minha testa havia um bilhete: “Reservado para meio-dia”.
+CLIP|taajuus1_c|53.90|0|Não sei se era a minha hora ou a de outra pessoa, mas pelo menos cheguei pontualmente.
+CLIP|taajuus1_c|59.80|0|O que devo fazer?
+CLIP|taajuus1_c|91.10|0|Como alguém consegue manter a memória até chegar à própria porta de casa?
+CLIP|taajuus1_c|96.50|0|Antes de responder, vou considerar o que você contou.
+CLIP|taajuus1_c|112.40|0|É um problema interessante, que certamente afeta muita gente.
+CLIP|taajuus1_c|120.00|0|A primeira coisa que me veio à cabeça foi a terapia de choque, usada para tratar certos medos.
+CLIP|taajuus1_c|136.30|0|Se você tem medo de aranhas, por exemplo, vá a um lugar cheio delas para superar o medo.
+CLIP|taajuus1_c|155.90|0|Com uma dose bem intensa de ansiedade.
+CLIP|taajuus1_c|162.10|0|Talvez dê para usar a mesma abordagem aqui. Da próxima vez,
+CLIP|taajuus1_c|171.90|0|beba uma garrafa de bebida forte em vez de uma cerveja e veja o que acontece.
+CLIP|taajuus1_c|184.70|0|Outra coisa que pode tentar: prenda uma guia de cachorro em casa, talvez num radiador,
+CLIP|taajuus1_c|201.18|0|e coloque uma coleira no pescoço.
+CLIP|taajuus1_c|207.50|0|Pequenas mudanças assim podem melhorar muito sua qualidade de vida.
+CLIP|taajuus1_c|218.90|0|Depois me conte como foram esses experimentos.
+CLIP|taajuus1_c|226.10|0|Caros ouvintes, hora da próxima música.
+CLIP|taajuus1_c|235.00|0|A seguir, “House of Teimo”, de Peräjärven Perän Laulu.
+
+# Expanded Dr. Taajuus radio advice: Millennium job seeker
+CLIP|taajuus1_d|79.00|0|Recebemos uma carta assinada “Millennium Urpo”.
+CLIP|taajuus1_d|84.30|0|“Caro Doutor Taajuus, escrevo nesta virada para o ano 2000.
+CLIP|taajuus1_d|95.10|0|Todo mundo fala de computadores, internet e de como o novo milênio vai mudar tudo.
+CLIP|taajuus1_d|106.80|0|Sinceramente, isso me anima e me assusta ao mesmo tempo.
+CLIP|taajuus1_d|111.60|0|No ano passado tive um emprego comum, mas agora parece que tudo está desaparecendo.
+CLIP|taajuus1_d|120.87|0|Há oportunidades na tecnologia que não sei aproveitar.
+CLIP|taajuus1_d|126.90|0|Não sou nenhum nerd nem um jovem prodígio.
+CLIP|taajuus1_d|131.20|0|Como posso me preparar para ser realmente empregável?
+CLIP|taajuus1_d|137.70|0|Devo fazer um curso, estudar em casa ou tentar conseguir um estágio?
+CLIP|taajuus1_d|147.00|0|Por onde começo, se todo mundo já usa e-mail, sites e linguagens de programação?
+CLIP|taajuus1_d|157.90|0|Preciso encontrar um rumo e ter coragem para não ficar para trás quando o milênio chegar e o mundo do trabalho avançar?”
+CLIP|taajuus1_d|168.50|0|Essas preocupações com o trabalho podem assustar num mundo em transformação.
+CLIP|taajuus1_d|187.70|0|Mas talvez eu possa aconselhar você a entrar no IRC.
+CLIP|taajuus1_d|198.20|0|É o que se usa hoje. Há muitos canais e pessoas diferentes que podem abrir novas portas para você.
+CLIP|taajuus1_d|212.60|0|Entre nos canais grandes e escreva todos os dias
+CLIP|taajuus1_d|220.00|0|mensagens inspiradoras sobre sua vida e as coisas de que participou.
+CLIP|taajuus1_d|241.00|0|Comece cada mensagem assim: “Hoje tive a honra de participar de tal coisa.”
+CLIP|taajuus1_d|252.40|0|Isso inspira confiança e anima os outros; vão pensar que você é o talento de que a empresa precisa.
+CLIP|taajuus1_d|269.20|0|Escolha um apelido divertido para o IRC e entre com coragem nas superestradas da informação.
+CLIP|taajuus1_d|288.40|0|Caros ouvintes, a próxima música é “Seppi”.
+
+# Expanded Dr. Taajuus radio advice: missing spark in marriage
+CLIP|taajuus1_e|0.00|0|Polovi apresenta “Straight to Millennium”, enquanto esperamos a próxima carta.
+CLIP|taajuus1_e|149.90|0|“Prezado Doutor Taajuus, escrevo porque está faltando aquela faísca no meu casamento.”
+CLIP|taajuus1_e|164.80|0|“Como faço meu marido se interessar por intimidade?”
+CLIP|taajuus1_e|168.80|0|“Parece que ele prefere assistir a saltos de esqui na televisão.”
+CLIP|taajuus1_e|179.50|0|Sua vez de receber uma faísca também vai chegar.
+CLIP|taajuus1_e|186.70|0|Quando o assunto é saúde sexual, sentimentos e desejos pessoais,
+CLIP|taajuus1_e|198.30|0|podemos tentar diferentes abordagens.
+CLIP|taajuus1_e|205.00|0|Você disse que seu marido assiste a saltos de esqui.
+CLIP|taajuus1_e|210.00|0|Vou presumir que se trata mesmo de um homem.
+CLIP|taajuus1_e|215.00|0|Talvez vocês possam fazer uma encenação.
+CLIP|taajuus1_e|221.20|0|Surpreenda-o no meio de uma transmissão: entre no quarto de esquis, roupa de salto e aqueles óculos especiais.
+CLIP|taajuus1_e|243.60|0|Isso certamente pode fazer seu marido se animar.
+CLIP|taajuus1_e|257.70|0|Desejo descidas suaves e voos longos!
+CLIP|taajuus1_e|263.80|0|A última música é “Passion”, de Tellervo von Salonen.
+CLIP|taajuus1_e|282.10|0|Desejo a todos um bom fim de madrugada. Até a próxima.
+
+# Expanded Lean manufacturing meeting
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|0.20|0|Vamos colocar o Lean em prática! Nosso lema: um carregador de cada vez, rumo à excelência mundial.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|9.20|0|Para embalar carregadores de celular, nosso lema é: hoje, mais rápido, melhor e com mais organização.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|18.60|0|Nossa missão: zero erros, zero movimentos desnecessários, zero espera e 100% de satisfação dos clientes.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|25.50|0|Mesa organizada, mente organizada, resultado organizado.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|30.00|0|Primeiro: separar. Tire tudo o que não é necessário nesta etapa.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|34.40|0|Depois, coloque carregadores, capas plásticas e caixas sempre no mesmo lugar.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|40.50|0|Limpeza: um ponto de embalagem limpo reduz os erros.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|45.00|0|Padronização: um método melhor que todos saibam usar.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|49.60|0|Manutenção: mantenha tudo assim, mesmo quando estiver corrido — principalmente nessa hora.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|56.10|0|Desculpe.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|58.00|0|Pequenas melhorias, todos os dias.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|60.80|0|A meta desta semana é economizar um segundo por embalagem. No fim do dia, seremos uma linha nova em folha.
+CLIP|työpaikkakokous_LEANIÄ_kehiin_puhe - Copy|68.10|0|Anotem três ideias por turno e testem na hora, não algum dia.
+
+# Expanded film review: Viitta Vaille Film
+CLIP|viitta_vaille_filmi1|12.40|0|Aqui é o Viitta Vaille Film, e eu sou Klaus Klaffi Klaukkala.
+CLIP|viitta_vaille_filmi1|19.50|0|Apresento os filmes e vídeos mais recentes, pelo preço de sempre.
+CLIP|viitta_vaille_filmi1|26.10|0|Primeiro, um suspense político.
+CLIP|viitta_vaille_filmi1|30.80|0|“O Corvo e a Mosca sob a Sombra da Ampulheta”.
+CLIP|viitta_vaille_filmi1|34.90|0|Um jovem repórter recebe uma ligação.
+CLIP|viitta_vaille_filmi1|38.30|0|O interlocutor soube por um terceiro que anotações desaparecidas
+CLIP|viitta_vaille_filmi1|46.00|0|de um porta-voz do governo dos EUA foram encontradas perto do corpo
+CLIP|viitta_vaille_filmi1|52.00|0|de um quarto repórter, dado como morto.
+CLIP|viitta_vaille_filmi1|58.80|0|Ninguém sabe o que as anotações contêm.
+CLIP|viitta_vaille_filmi1|63.00|0|Um quinto repórter diz que são informações sigilosas.
+CLIP|viitta_vaille_filmi1|68.00|0|Segundo um sexto, sua divulgação poderia pôr em dúvida as ações
+CLIP|viitta_vaille_filmi1|75.50|0|do secretário de Estado e do chefe de gabinete dos EUA para revogar o Tratado de Luxemburgo.
+CLIP|viitta_vaille_filmi1|86.70|0|A trama política fica ainda mais tensa quando um sétimo repórter é encontrado morto no alto de um arranha-céu.
+CLIP|viitta_vaille_filmi1|99.90|0|Um oitavo repórter conta que gravaram um encontro íntimo do secretário de Estado
+CLIP|viitta_vaille_filmi1|107.00|0|e do vice-presidente dos EUA num hotel em Luxemburgo.
+CLIP|viitta_vaille_filmi1|113.50|0|A gravação seria revelada, e a pergunta chegaria ao próprio presidente.
+CLIP|viitta_vaille_filmi1|121.20|0|O diretor David William Spirk aborda, de forma simbólica e literal,
+CLIP|viitta_vaille_filmi1|130.89|0|o absurdo político da guerra e as relações tensas entre países.
+CLIP|viitta_vaille_filmi1|140.00|0|Quem está manipulando quem? Onde e quando?
+CLIP|viitta_vaille_filmi1|144.80|0|Para onde vai o dinheiro? Para um banco, mas de quem?
+CLIP|viitta_vaille_filmi1|151.20|0|Na perseguição, armas disparam e papéis voam. Um décimo repórter leva os outros, vivos e mortos,
+CLIP|viitta_vaille_filmi1|162.33|0|até a gráfica secreta do governo, num prédio abandonado do porto chuvoso.
+CLIP|viitta_vaille_filmi1|170.80|0|Quem morre em seguida? Será que alguém morreu mesmo? O banco é só fachada para algo maior?
+CLIP|viitta_vaille_filmi1|180.53|0|Quem comandou a última guerra e quem comandará a próxima?
+CLIP|viitta_vaille_filmi1|186.70|0|“O Corvo e a Mosca sob a Sombra da Ampulheta” está em cartaz. Dou meia estrela de cinco.
+CLIP|viitta_vaille_filmi1|200.20|0|Vão assistir.
+CLIP|viitta_vaille_filmi1|204.60|0|A seguir, “A Lua Escondida na Troposfera”.
+CLIP|viitta_vaille_filmi1|211.10|0|Um drama de ficção científica sobre um mundo em que deveria haver mais uma pessoa viva,
+CLIP|viitta_vaille_filmi1|220.81|0|mas ninguém consegue encontrá-la.
+CLIP|viitta_vaille_filmi1|224.50|0|Durante duas horas e meia, vemos vários lugares onde talvez alguém tenha passado... ou talvez não.
+CLIP|viitta_vaille_filmi1|236.50|0|Que rastros podemos atribuir a uma pessoa viva?
+CLIP|viitta_vaille_filmi1|241.30|0|Se alguém esteve ali, era o último ser humano do mundo ou um dos bilhões que viveram antes do fim?
+CLIP|viitta_vaille_filmi1|255.90|0|O filme mergulha nos segredos da alma quando o espectador se pergunta:
+CLIP|viitta_vaille_filmi1|263.12|0|será que o último ser vivo do mundo é mesmo uma pessoa?
+CLIP|viitta_vaille_filmi1|268.80|0|Talvez seja um animal: um elefante, um cachorro, um estorninho ou um pulgão.
+CLIP|viitta_vaille_filmi1|278.98|0|Se for um pulgão, talvez esteja cuidando da própria vida num galho seco já na primeira cena.
+CLIP|viitta_vaille_filmi1|291.30|0|Na perseguição final, os carros não saem do lugar porque ninguém está dirigindo.
+
+# Expanded film review: adult comedy
+CLIP|viitta_vaille_filmi2|0.20|0|Nunca vi uma imagem completamente parada ser apresentada com tanto dinamismo.
+CLIP|viitta_vaille_filmi2|9.10|0|O filme tem grande valor histórico e cultural.
+CLIP|viitta_vaille_filmi2|18.40|0|Uma representação da época impecável.
+CLIP|viitta_vaille_filmi2|24.70|0|Também dou meia estrela de cinco.
+CLIP|viitta_vaille_filmi2|29.20|0|O filme está nas locadoras locais.
+CLIP|viitta_vaille_filmi2|35.90|0|Vão alugar.
+CLIP|viitta_vaille_filmi2|41.30|0|Agora: “Cheerleader Bitches in Heat 13”.
+CLIP|viitta_vaille_filmi2|48.30|0|“Anal Pom Pom: política de bastidores”.
+CLIP|viitta_vaille_filmi2|53.30|0|A série, que começou há dois anos, já chegou ao décimo terceiro filme.
+CLIP|viitta_vaille_filmi2|59.70|0|Até agora vimos as animadas cheerleaders passando pela escola,
+CLIP|viitta_vaille_filmi2|70.26|0|pela sede de um motoclube e pelas obras de um rico magnata.
+CLIP|viitta_vaille_filmi2|80.30|0|Desta vez, as garotas invadem o parlamento local. Tanto elas quanto os políticos só pensam em sexo.
+CLIP|viitta_vaille_filmi2|95.80|0|As decisões políticas são tomadas a sós, em duplas, trios ou em grupo.
+CLIP|viitta_vaille_filmi2|101.50|0|Ninguém se abstém.
+CLIP|viitta_vaille_filmi2|104.70|0|Nessas sessões parlamentares, ninguém vota em branco.
+CLIP|viitta_vaille_filmi2|109.60|0|Os políticos votam “sim” quando as cheerleaders dançam tão bem que até fariam uma floresta crescer no Saara,
+CLIP|viitta_vaille_filmi2|120.05|0|com água sobrando para as crianças da África.
+CLIP|viitta_vaille_filmi2|124.40|0|Até a secretária e o presidente ficam de pernas bambas quando o parlamento inteiro se mobiliza
+CLIP|viitta_vaille_filmi2|134.00|0|para recolher a urina e acabar com a seca na África.
+CLIP|viitta_vaille_filmi2|142.00|0|Com os pompons das cheerleaders, recolhem o líquido do chão e direto da fonte.
+CLIP|viitta_vaille_filmi2|149.30|0|Na perseguição, os motores roncam e as portas batem enquanto enfiam pênis em traseiros,
+CLIP|viitta_vaille_filmi2|162.09|0|para alegria das cheerleaders.
+CLIP|viitta_vaille_filmi2|166.50|0|Se gostou dessa mensagem ecológica e favorável às mulheres,
+CLIP|viitta_vaille_filmi2|171.71|0|o filme está disponível escondido no balcão da loja erótica do Johan.
+CLIP|viitta_vaille_filmi2|177.80|0|Diga ao Johan que o Klappi mandou lembranças e você ganha um bom desconto.
+CLIP|viitta_vaille_filmi2|184.90|0|Esse foi o filme de hoje. Obrigado por ouvir. Espero que também assistam.
+CLIP|viitta_vaille_filmi2|193.80|0|Aqui é Klaus Klappi Klaukkala, do Viitta Vaille Film. Tenham um bom resto de dia.
+
+# Expanded taxi job call and scene dialogue
+CLIP|taxijob_call4|0.30|0|Bom, eu até queria ir, mas não fui.
+CLIP|taxijob_call4|2.30|0|Liguei porque tem havido muitas reclamações de que dirigir táxi é perda de tempo.
+CLIP|taxijob_call4|13.90|0|As estradas são ruins e os trajetos não valem a pena.
+CLIP|taxijob_call4|18.90|0|É buraco para todo lado.
+CLIP|taxijob_call4|21.90|0|Não há atendimento ao cliente; é uma perda de tempo.
+CLIP|taxijob_call4|25.90|0|Que situação é essa? Ninguém mais quer ir para lá.
+CLIP|taxijob_call4|32.50|0|Ele disse que não voltaria ao trabalho até terminar a corrida e que nem viria buscar o carro.
+CLIP|taxijob_call4|45.00|0|Olhei para ele e disse que não voltaria ao trabalho até terminar de dirigir, nem viria buscar o carro.
+CLIP|topless_gun|72.60|0|Achei que o Mercedes tinha parado ali.
+CLIP|topless_gun|92.50|0|O carro parou e perguntou o que você estava fazendo ali.
+CLIP|topless_gun|95.50|0|“Provavelmente estou filmando o senhor!”
