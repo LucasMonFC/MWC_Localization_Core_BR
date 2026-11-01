@@ -54,6 +54,7 @@ namespace MWC_Localization_Core
         private readonly List<AudioSource> relevantSources = new List<AudioSource>();
         private readonly List<AudioListener> activeListeners = new List<AudioListener>();
         private readonly List<OverheadTrack> overheadTracks = new List<OverheadTrack>();
+        private readonly Func<bool> isEnabled;
 
         private string assetsFolder;
         private TextMesh subtitleMesh;
@@ -65,8 +66,15 @@ namespace MWC_Localization_Core
         private float currentSegmentEnd;
         private string currentCaption;
         private bool sourceScanComplete;
+        private bool wasEnabled;
+        private bool subtitleDataLoaded;
         private bool warnedMissingFile;
         private bool warnedMissingHud;
+
+        public ExpandedAudioSubtitleSurface(Func<bool> isEnabled)
+        {
+            this.isEnabled = isEnabled;
+        }
 
         public string Name { get { return "ExpandedAudioSubtitleSurface"; } }
         public SurfaceCadence Cadence { get { return SurfaceCadence.PerFrame; } }
@@ -85,17 +93,32 @@ namespace MWC_Localization_Core
             currentSegments = null;
             ClearOverheadTracks();
             sourceScanComplete = false;
+            subtitleDataLoaded = false;
             warnedMissingFile = false;
             warnedMissingHud = false;
 
-            int segmentCount = LoadSubtitleFile();
-            int scriptCount = clipSubtitles.Count + objectSubtitles.Count;
-            if (segmentCount > 0)
-                CoreConsole.Print("[ExpandedAudioSubtitleSurface] Carregou " + scriptCount + " roteiros de áudio e " + segmentCount + " trechos");
+            wasEnabled = IsEnabled();
+            if (wasEnabled)
+                LoadSubtitleData();
         }
 
         public int InitialPass()
         {
+            if (!IsEnabled())
+            {
+                if (wasEnabled)
+                    DisableFeature();
+                wasEnabled = false;
+                return 0;
+            }
+
+            if (!wasEnabled)
+            {
+                wasEnabled = true;
+                sourceScanComplete = false;
+            }
+            LoadSubtitleData();
+
             if (Application.loadedLevelName != "GAME")
                 return 0;
 
@@ -107,6 +130,21 @@ namespace MWC_Localization_Core
 
         public int MonitorTick(float deltaTime)
         {
+            if (!IsEnabled())
+            {
+                if (wasEnabled)
+                    DisableFeature();
+                wasEnabled = false;
+                return 0;
+            }
+
+            if (!wasEnabled)
+            {
+                wasEnabled = true;
+                sourceScanComplete = false;
+            }
+            LoadSubtitleData();
+
             if (Application.loadedLevelName != "GAME")
                 return 0;
 
@@ -178,6 +216,7 @@ namespace MWC_Localization_Core
             subtitleMesh = null;
             shadowMesh = null;
             sourceScanComplete = false;
+            subtitleDataLoaded = false;
         }
 
         private int LoadSubtitleFile()
@@ -267,6 +306,39 @@ namespace MWC_Localization_Core
             SortScripts(clipSubtitles);
             SortScripts(objectSubtitles);
             return loaded;
+        }
+
+        private bool IsEnabled()
+        {
+            return isEnabled == null || isEnabled();
+        }
+
+        private void LoadSubtitleData()
+        {
+            if (subtitleDataLoaded || !IsEnabled())
+                return;
+
+            int segmentCount = LoadSubtitleFile();
+            subtitleDataLoaded = true;
+            int scriptCount = clipSubtitles.Count + objectSubtitles.Count;
+            if (segmentCount > 0)
+                CoreConsole.Print("[ExpandedAudioSubtitleSurface] Carregou " + scriptCount + " roteiros de áudio e " + segmentCount + " trechos");
+        }
+
+        private void DisableFeature()
+        {
+            StopCurrentTrack();
+            ClearOverheadTracks();
+            clipSubtitles.Clear();
+            objectSubtitles.Clear();
+            overheadClipTargets.Clear();
+            overheadObjectTargets.Clear();
+            relevantSources.Clear();
+            activeListeners.Clear();
+            subtitleMesh = null;
+            shadowMesh = null;
+            sourceScanComplete = false;
+            subtitleDataLoaded = false;
         }
 
         private static void SortScripts(Dictionary<string, List<SubtitleSegment>> scripts)

@@ -72,6 +72,7 @@ namespace MWC_Localization_Core
         private SettingsCheckBox showWarningLogs;
         private SettingsCheckBox enableTextureReplacement;
         private SettingsCheckBox loadTextureMods;
+        private SettingsCheckBox enableExpandedAudioSubtitles;
         private TextureReplacementSurface textureReplacementSurface;
 
         public override void ModSetup()
@@ -96,6 +97,12 @@ namespace MWC_Localization_Core
             Settings.AddHeader("Texturas");
             enableTextureReplacement = Settings.AddCheckBox("enableTextureReplacement", "Ativar substituição de texturas", true);
             loadTextureMods = Settings.AddCheckBox("loadTextureMods", "Carregar texturas de mods", false);
+
+            Settings.AddHeader("Legendas");
+            enableExpandedAudioSubtitles = Settings.AddCheckBox(
+                "enableExpandedAudioSubtitles",
+                "Ativar legendas expandidas",
+                true);
 
             Settings.AddHeader("Opções diversas");
             showDebugLogs = Settings.AddCheckBox("showDebugLogs", "Mostrar mensagens de depuração no console", false);
@@ -148,7 +155,8 @@ namespace MWC_Localization_Core
                 new HashTableProxyHandler(),
                 new FsmTextHook(),
                 new ModTextTranslator(),
-                new ExpandedAudioSubtitleSurface(),
+                new ExpandedAudioSubtitleSurface(
+                    () => enableExpandedAudioSubtitles == null || enableExpandedAudioSubtitles.GetValue()),
                 textureReplacementSurface,
             };
 
