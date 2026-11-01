@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="ArrayListProxyHandler.cs" />
     <Compile Include="CoreConsole.cs" />
+    <Compile Include="ExpandedAudioSubtitleSurface.cs" />
     <Compile Include="LateUpdateHandler.cs" />
     <Compile Include="LocalizationConfig.cs" />
     <Compile Include="LocalizationUtils.cs" />

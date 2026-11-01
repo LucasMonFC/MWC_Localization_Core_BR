@@ -19,7 +19,7 @@ namespace MWC_Localization_Core
         public override string ID => "MWC_Localization_Core_BR";
         public override string Name => "MWC_Localization_Core";
         public override string Author => "potatosalad775&LucasMonOficial";
-        public override string Version => "1.5.9";
+        public override string Version => "1.6.0";
         public override string Description => "Núcleo de localização multilíngue para My Winter Car";
         public override Game SupportedGames => Game.MyWinterCar;
 
@@ -148,6 +148,7 @@ namespace MWC_Localization_Core
                 new HashTableProxyHandler(),
                 new FsmTextHook(),
                 new ModTextTranslator(),
+                new ExpandedAudioSubtitleSurface(),
                 textureReplacementSurface,
             };
 

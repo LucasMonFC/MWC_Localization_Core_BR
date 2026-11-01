@@ -1,0 +1,1495 @@
+# Expanded audio subtitles, separate from ordinary key=value translations.
+# Caption formats: CLIP|AudioClip.name|timestampSeconds|durationSeconds|Portuguese text
+#                 OBJECT|GameObject.name|timestampSeconds|durationSeconds|Portuguese text
+# Overhead format: OVERHEAD|CLIP or OBJECT|name (PL-style caption above source, 7 m range)
+# A duration of 0 uses the next timestamp, or the clip end for the final segment.
+# All timestamps are relative to AudioSource.time. Keep one segment per line.
+
+# Parts phone calls
+# Overhead targets follow the PL mod: position above the source, visible within 7 m.
+OVERHEAD|CLIP|arsyttava_cityjabaB
+OVERHEAD|CLIP|viinaautomaatti
+OVERHEAD|CLIP|olotilat1
+OVERHEAD|CLIP|olotilat2
+OVERHEAD|CLIP|olotilat3
+OVERHEAD|CLIP|olotilat4
+OVERHEAD|CLIP|olotilat6
+OVERHEAD|CLIP|olotilat7
+OVERHEAD|CLIP|olotilat8
+OVERHEAD|CLIP|olotilat9
+OVERHEAD|CLIP|olotilat10
+OVERHEAD|CLIP|olotilat11
+OVERHEAD|CLIP|KaliaKaliakaliaaLaulu
+OVERHEAD|CLIP|01_Petski_Teffelgren_puhelimessa_et_keskeyttänyt_mitään_tärkeää
+OVERHEAD|CLIP|02_hmm_joo_hmm_vaikka_niin_mhhh_joo
+OVERHEAD|CLIP|03_Petski_teffelgren_puhelimessa_Kyllä_koitin_soittaa_teille_kiveksessä_luomi
+OVERHEAD|CLIP|04_juu_tilataan_lisää_varastointilaatikoita
+OVERHEAD|CLIP|05_Petski_teffelgren_puhelimessa_Minkälaista_sähkösopimusta_tarjoatte_ei_ole_kiire
+OVERHEAD|CLIP|06_langaton_lataus_huhu
+OVERHEAD|CLIP|07_Ollila_moro
+OVERHEAD|CLIP|08_muovikuorikot_myöhässä
+OVERHEAD|CLIP|09_investointilaina
+OVERHEAD|CLIP|10_puhelu_englanniksi_alihankkijalle
+OVERHEAD|CLIP|11_kilpailijan_puolta_pienempi_pakkaus
+OVERHEAD|CLIP|12_puhelu_kotoa
+OVERHEAD|CLIP|13_puhelu_kotoa_2
+OVERHEAD|CLIP|14_Oulun_energiakriisi
+OVERHEAD|CLIP|16_Faffu_ja_pasianssi
+OVERHEAD|CLIP|17_Fammu_ja_VHS
+OVERHEAD|CLIP|18_Tet_harjoittelijat
+OVERHEAD|CLIP|19_edustusmökki_Leviltä_verovähennyksiin
+OVERHEAD|CLIP|20_Alfaurokset_punttisalilla_lehden_peruutus
+OVERHEAD|CLIP|21_Hello_George
+OVERHEAD|CLIP|22_uutta_soittoääntä_puhelimeen
+OVERHEAD|CLIP|23_Petskin_elämänkerta
+OVERHEAD|CLIP|24_kaverin_soittaa_eilisestä
+OVERHEAD|CLIP|25_firmalle_internetsivut
+OVERHEAD|CLIP|26_EDM_verovähennyksiin
+OVERHEAD|CLIP|27_zumbaa_työntekijöille
+OVERHEAD|CLIP|29_skaalataan_yritystä
+OVERHEAD|CLIP|30_participating_to_seminar
+OVERHEAD|CLIP|31_phonechargers_not_fitting_in_phone
+OVERHEAD|CLIP|32_conquer_asian_markets
+OVERHEAD|CLIP|33_Seppo_työväenopistoon_japania_lukemaan
+OVERHEAD|CLIP|34_nigerialaiskirjepuhelu
+OVERHEAD|CLIP|35_palkan_sitominen_tuotantotavoitteisiin
+OVERHEAD|CLIP|ontamakyllaniipaskaa
+OVERHEAD|CLIP|ontamakyllaniipaskaa2
+OVERHEAD|CLIP|ontamakyllaniipaskaa3
+OVERHEAD|CLIP|RojolanAnsaXD
+OVERHEAD|CLIP|taiteenymmarrys
+OVERHEAD|CLIP|OviAukiTokaisuPERKELE
+OVERHEAD|CLIP|optimaalinen
+OVERHEAD|CLIP|optimaalisinolotila
+OVERHEAD|CLIP|kirous
+OVERHEAD|CLIP|kirous2
+OVERHEAD|CLIP|kirous3
+OVERHEAD|CLIP|tulipatammostakitehtya
+OVERHEAD|CLIP|olisEEsViinaa
+OVERHEAD|CLIP|AikaSilmukka
+OVERHEAD|CLIP|chilit
+OVERHEAD|CLIP|AinaTätäPaskaa
+OVERHEAD|CLIP|EiTästäTuuVittuukaa
+OVERHEAD|CLIP|HaistanToivon
+OVERHEAD|CLIP|KusisiaPaketteja
+OVERHEAD|CLIP|kahvit
+OVERHEAD|CLIP|bisnespuhelu
+OVERHEAD|CLIP|hyvatpilleet
+OVERHEAD|CLIP|hyvavitsi
+OVERHEAD|CLIP|hyvavitsi2
+OVERHEAD|CLIP|hyvavitsi3
+OVERHEAD|CLIP|JaniaVittuttaaJAeiJaksa
+OVERHEAD|CLIP|konejumisa
+OVERHEAD|CLIP|KukkuuNukkuu
+OVERHEAD|CLIP|tulisjokutautijatappais
+OVERHEAD|CLIP|kukaeivejaponttoa
+OVERHEAD|CLIP|40litraadiisselia
+OVERHEAD|CLIP|eihantasaoomittaanjarkia
+OVERHEAD|CLIP|eiihmisenhommaa
+OVERHEAD|CLIP|eiperkele
+OVERHEAD|CLIP|eitatajaksa
+OVERHEAD|CLIP|eitatajaksaerkkikkaan
+OVERHEAD|CLIP|eivalojaautosa
+OVERHEAD|CLIP|elamaihmisenparastaaikaa
+OVERHEAD|CLIP|elamalyhenee
+OVERHEAD|CLIP|entarviylleisoa
+OVERHEAD|CLIP|flunssa
+OVERHEAD|CLIP|flunssa2
+OVERHEAD|CLIP|hermomenneesaatana
+OVERHEAD|CLIP|hirvitulleetielle
+OVERHEAD|CLIP|jaapitaskomennatauolle
+OVERHEAD|CLIP|jokohanpaasiskotia
+OVERHEAD|CLIP|jokupaskantanu
+OVERHEAD|CLIP|josoispaljorahhaa
+OVERHEAD|CLIP|kahavitauonpaikka
+OVERHEAD|CLIP|kattoikkoviikonloppuna
+OVERHEAD|CLIP|kavelenympyraa
+OVERHEAD|CLIP|kavinhelsingisa
+OVERHEAD|CLIP|kellonoinpaljo
+OVERHEAD|CLIP|kellonoinpaljo2
+OVERHEAD|CLIP|kellonoinpaljo3
+OVERHEAD|CLIP|kellonoinpaljo4
+OVERHEAD|CLIP|kellonoinpaljo5
+OVERHEAD|CLIP|kiljutkaymaan
+OVERHEAD|CLIP|kuhantastapaivastaselviaa
+OVERHEAD|CLIP|kukakeittaapaskaakahvia
+OVERHEAD|CLIP|lahekkotupakille
+OVERHEAD|CLIP|loppupaivavittumaisin
+OVERHEAD|CLIP|meinastullatappelu
+OVERHEAD|CLIP|minaenkyllajaksayhtaantammosta
+OVERHEAD|CLIP|minaentajuaainakkaan
+OVERHEAD|CLIP|minatykkaankuonpimia
+OVERHEAD|CLIP|moottorivalo
+OVERHEAD|CLIP|nainkujaniksethassi
+OVERHEAD|CLIP|nuuskaaylaasteella
+OVERHEAD|CLIP|oispakaljaajatupakkia
+OVERHEAD|CLIP|oispanaisiataieesmiehia
+OVERHEAD|CLIP|oispaviinatauko
+OVERHEAD|CLIP|oljyvalo
+OVERHEAD|CLIP|onpimiaa
+OVERHEAD|CLIP|onsetyoomapalkkansa
+OVERHEAD|CLIP|ontamakyllaperseestavoisaatana
+OVERHEAD|CLIP|ontamaperkelehommaa
+OVERHEAD|CLIP|osipataalaeesnaisia
+OVERHEAD|CLIP|paskantammaan
+OVERHEAD|CLIP|porttikieltoteimolle
+OVERHEAD|CLIP|priimaa
+OVERHEAD|CLIP|propilkki
+OVERHEAD|CLIP|riittaatamapaska
+OVERHEAD|CLIP|ruokatunti
+OVERHEAD|CLIP|ruokatunti2
+OVERHEAD|CLIP|ruokatunti3
+OVERHEAD|CLIP|ruokatunti4
+OVERHEAD|CLIP|ruokatunti5
+OVERHEAD|CLIP|ruokatunti6
+OVERHEAD|CLIP|saatana
+OVERHEAD|CLIP|saatanaeiperkele
+OVERHEAD|CLIP|saistehapyoratelineen
+OVERHEAD|CLIP|seonilimojapielly
+OVERHEAD|CLIP|tastaviikostakuselviaa
+OVERHEAD|CLIP|tupakanmittanentauko
+OVERHEAD|CLIP|tyopaivavoitonpuolella
+OVERHEAD|CLIP|tyopaivavoitonpuolella2
+OVERHEAD|CLIP|ulkonahappea
+OVERHEAD|CLIP|vessaanpaskantanu
+OVERHEAD|CLIP|vielaoismontatuntia
+OVERHEAD|CLIP|vihanneksiapoytaan
+OVERHEAD|CLIP|vittu
+OVERHEAD|CLIP|vittu2
+OVERHEAD|CLIP|voisinkayakusella
+OVERHEAD|CLIP|voisinmennatauolle
+OVERHEAD|CLIP|voismennakuselle
+OVERHEAD|CLIP|voivittujenkevat
+OVERHEAD|CLIP|critic1
+OVERHEAD|CLIP|critic2
+OVERHEAD|CLIP|critic3
+OVERHEAD|CLIP|critic4
+OVERHEAD|CLIP|critic5
+OVERHEAD|CLIP|critic6
+OVERHEAD|CLIP|critic7
+OVERHEAD|CLIP|critic8
+OVERHEAD|CLIP|critic9
+OVERHEAD|CLIP|critic10
+OVERHEAD|CLIP|critic11
+OVERHEAD|CLIP|critic12
+OVERHEAD|CLIP|critic13
+OVERHEAD|CLIP|critic14
+OVERHEAD|CLIP|critic15
+OVERHEAD|CLIP|critic16
+OVERHEAD|CLIP|critic17
+OVERHEAD|CLIP|critic18
+OVERHEAD|CLIP|critic19
+OVERHEAD|CLIP|critic20
+OVERHEAD|CLIP|critic21
+OVERHEAD|CLIP|critic22
+OVERHEAD|CLIP|critic23
+OVERHEAD|CLIP|critic24
+OVERHEAD|CLIP|critic25
+OVERHEAD|CLIP|critic26
+OVERHEAD|CLIP|critic27
+OVERHEAD|CLIP|critic28
+OVERHEAD|CLIP|critic29
+OVERHEAD|CLIP|critic30
+OVERHEAD|CLIP|critic31
+OVERHEAD|CLIP|critic32
+OVERHEAD|CLIP|critic33
+OVERHEAD|CLIP|critic34
+OVERHEAD|CLIP|critic35
+OVERHEAD|CLIP|critic36
+OVERHEAD|CLIP|critic37
+OVERHEAD|CLIP|critic38
+OVERHEAD|CLIP|jokke02
+OVERHEAD|CLIP|jokke03
+OVERHEAD|CLIP|jokke04
+OVERHEAD|CLIP|jokke05
+OVERHEAD|CLIP|jokke06
+OVERHEAD|CLIP|jokke07
+OVERHEAD|CLIP|jokke08
+OVERHEAD|CLIP|jokke09
+OVERHEAD|CLIP|jokke10
+OVERHEAD|CLIP|jokke11
+OVERHEAD|CLIP|jokke13
+OVERHEAD|CLIP|jokke14
+OVERHEAD|CLIP|jokke15
+OVERHEAD|CLIP|jokke16
+OVERHEAD|CLIP|jokke17
+OVERHEAD|CLIP|jokke18
+OVERHEAD|CLIP|jokke19
+OVERHEAD|CLIP|jokke20
+OVERHEAD|CLIP|jokke22
+OVERHEAD|CLIP|jokke23
+OVERHEAD|CLIP|jokke24
+OVERHEAD|CLIP|jokke25
+OVERHEAD|CLIP|jokke27
+OVERHEAD|CLIP|jokke28
+OVERHEAD|CLIP|jokke29
+OVERHEAD|CLIP|jokke30
+OVERHEAD|CLIP|jokke31
+OVERHEAD|CLIP|jokke32
+OVERHEAD|CLIP|jokke33
+OVERHEAD|CLIP|jokke34
+OVERHEAD|CLIP|jokke35
+OVERHEAD|CLIP|jokke37
+OVERHEAD|CLIP|jokke38
+OVERHEAD|CLIP|jokke39
+OVERHEAD|CLIP|simppa01
+OVERHEAD|CLIP|simppa04
+OVERHEAD|CLIP|simppa05
+OVERHEAD|CLIP|simppa06
+OVERHEAD|CLIP|simppa07
+OVERHEAD|CLIP|simppa08
+OVERHEAD|CLIP|simppa09
+OVERHEAD|CLIP|simppa10
+OVERHEAD|CLIP|simppa11
+OVERHEAD|CLIP|simppa12
+OVERHEAD|CLIP|simppa13
+OVERHEAD|CLIP|simppa14
+OVERHEAD|CLIP|simppa15
+OVERHEAD|CLIP|simppa16
+OVERHEAD|CLIP|simppa17
+OVERHEAD|CLIP|simppa18
+OVERHEAD|CLIP|simppa19
+OVERHEAD|CLIP|simppa20
+OVERHEAD|CLIP|simppa21
+OVERHEAD|CLIP|simppa22
+OVERHEAD|CLIP|simppa23
+OVERHEAD|CLIP|simppa24
+OVERHEAD|CLIP|simppa25
+OVERHEAD|CLIP|simppa26
+OVERHEAD|CLIP|simppa27
+OVERHEAD|CLIP|simppa28
+OVERHEAD|CLIP|simppa29
+OVERHEAD|CLIP|simppa30
+OVERHEAD|CLIP|Luuli_saavansa_hyvän_työn
+OVERHEAD|CLIP|Penan_hurjastelu
+OVERHEAD|CLIP|Simppa_ja_Jokke
+OVERHEAD|CLIP|Tohvakka_navetasta
+OVERHEAD|CLIP|drunk_speak_1
+OVERHEAD|CLIP|drunk_speak_2
+OVERHEAD|CLIP|drunk_speak_3
+OVERHEAD|CLIP|drunk_speak_4
+OVERHEAD|OBJECT|topic1_1
+OVERHEAD|OBJECT|topic1_2
+OVERHEAD|OBJECT|topic1_3
+OVERHEAD|OBJECT|topic1_4
+OVERHEAD|OBJECT|topic1_5
+OVERHEAD|OBJECT|topic1_6
+OVERHEAD|OBJECT|topic2_1
+OVERHEAD|OBJECT|topic2_2
+OVERHEAD|OBJECT|topic2_3
+OVERHEAD|OBJECT|topic2_4
+OVERHEAD|OBJECT|topic2_5
+OVERHEAD|OBJECT|topic2_6
+OVERHEAD|OBJECT|topic3_1
+OVERHEAD|OBJECT|topic3_2
+OVERHEAD|OBJECT|topic3_3
+OVERHEAD|OBJECT|topic3_4
+OVERHEAD|OBJECT|topic3_5
+OVERHEAD|OBJECT|topic3_6
+
+CLIP|Puhelinmyyjä_2_Pikiniemen_Raili|0|18.2|Aqui é a Raili, de Pikiniemi. Alô! Boa noite. Estou muito doente... mal consigo respirar. Você ligou por causa das peças, não foi?
+CLIP|Puhelinmyyjä_2_Pikiniemen_Raili|18|16.2|Droga, está fazendo um frio danado aqui em casa. Acho que tenho alguma coisa. Espere um pouco, vou ver o que ainda sobrou para o Corris Rivett.
+CLIP|Puhelinmyyjä_2_Pikiniemen_Raili|34|16.2|Estão boas. Eu mesma verifiquei e testei há algum tempo. Funcionam. Tudo isso está me deixando exausta, não tenho forças...
+CLIP|Puhelinmyyjä_2_Pikiniemen_Raili|50|15.2|Estou vendendo essas peças para conseguir comprar um cantinho, porque não dá mais para ficar aqui. Preciso me mudar para um lugar mais quente.
+CLIP|Puhelinmyyjä_2_Pikiniemen_Raili|65|21.2|Se você comprar essas peças, finalmente vou poder sair daqui. Meu carro... ele também congelou, assim como eu estou congelando...
+CLIP|Puhelinmyyjä_2_Pikiniemen_Raili|86|14.2|Ele não precisa mais das peças. Certo... espere a encomenda pelo correio. Obrigada por ligar. Espero sair daqui em breve. Tchau.
+CLIP|01_varaosapuhelu|0|0|Termola falando. Oi! Então você está ligando por causa daquelas peças.
+CLIP|01_varaosapuhelu|9.8|0|Sim, anunciei no jornal. Tenho umas peças velhas aqui comigo.
+CLIP|01_varaosapuhelu|19.4|0|Espere um pouquinho, preciso olhar os papéis. Um instante.
+CLIP|01_varaosapuhelu|25.86|0|Sim, tenho em estoque. Já está tudo embalado e pronto para enviar. Está tudo aí...
+CLIP|01_varaosapuhelu|34.2|0|...aguardando. Se tiver interesse, me passe seu endereço que eu envio o pacote.
+CLIP|01_varaosapuhelu|47.44|0|Então ficou combinado. Obrigado, até mais.
+CLIP|02_varaosapuhelu|0|0|Aqui é o Ten-Tenkkunen. Ah, oi, oi!
+CLIP|02_varaosapuhelu|7.72|0|Uma ajudinha sempre cai bem. Entende, preciso arranjar dinheiro para a bebida de algum jeito, hehe.
+CLIP|02_varaosapuhelu|17.9|0|(Acabe logo com essa ligação!)
+CLIP|02_varaosapuhelu|20.08|0|(Vai embora, mulher, e pare de gritar. Sempre que gente séria está falando de negócios, você aparece.)
+CLIP|02_varaosapuhelu|31.48|0|Então... o pacote vai ser enviado para o seu endereço de sempre.
+CLIP|02_varaosapuhelu|41.6|0|Certo, tudo bem. Então, o-obrigado pela compra. Até mais!
+CLIP|03_varaosapuhelu|0|0|Lyrppynen falando.
+CLIP|03_varaosapuhelu|6.46|0|Oi. Oi, oi!
+CLIP|03_varaosapuhelu|11.9|0|Então... sim. Coloquei as peças à venda...
+CLIP|03_varaosapuhelu|26.34|0|Sim... claro que posso enviá-las depois.
+CLIP|03_varaosapuhelu|39.4|0|Você me passa... o endereço?...
+CLIP|03_varaosapuhelu|49.98|0|Certo, então... vou enviar depois... tchau!
+CLIP|04_varaosapuhelu|0|0|Aqui é o Ristola. Oi! Sim, tenho peças disponíveis para vender.
+CLIP|04_varaosapuhelu|10.1|0|Você teria interesse?... Certo, aguarde um instante.
+CLIP|04_varaosapuhelu|20.28|0|Sim, ainda está tudo disponível. Para qual endereço quer que eu envie?
+CLIP|04_varaosapuhelu|31.76|0|Tudo bem... Você pode buscar depois. Certo. Muito obrigado! Até mais!
+CLIP|05_varaosapuhelu|0|0|Oi, aqui é o Seppo... Oi!
+CLIP|05_varaosapuhelu|5.46|0|Claro que temos. São peças velhas tiradas de um carro antigo. Esse carro já era da época de Jesus.
+CLIP|05_varaosapuhelu|15.38|0|Não, não literalmente. Só é muito velho... É.
+CLIP|05_varaosapuhelu|22.56|0|Então combinado. Só me passe o endereço para o envio.
+CLIP|05_varaosapuhelu|29.68|0|Obrigado! Fique com Deus e tudo de bom. Tchau!
+CLIP|06_varaosapuhelu|0|0|Então... sim, oi!... É sobre o anúncio? Oi!
+CLIP|06_varaosapuhelu|9.16|0|Sim... temos o mesmo sobrenome. Desculpe, estou enrolando a língua. É, e esse bigode atrapalha.
+CLIP|06_varaosapuhelu|22.42|0|Vou tentar falar mais claramente. Certo, me passe o endereço para o envio.
+CLIP|06_varaosapuhelu|30.88|0|Então obrigado e até a próxima ligação. Tchau!
+CLIP|07_varaosapuhelu|0|0|Aqui é o Messele. Hmm, oi!
+CLIP|07_varaosapuhelu|5.96|0|Você está ligando por causa das peças. Hmm, sim.
+CLIP|07_varaosapuhelu|12.88|0|Então você tem interesse? Hmm, acho que sim... Posso anotar.
+CLIP|07_varaosapuhelu|24.44|0|Você vai me passar o endereço? Aham...
+CLIP|07_varaosapuhelu|30.5|0|É... um amigo meu está vendendo. Quando ele me trouxer as peças, eu as envio para você. Você poderá buscá-las?
+CLIP|07_varaosapuhelu|43.24|0|Não é assim que funciona... Elas não vão desaparecer. Vou vendê-las para você normalmente, já que pretende comprá-las.
+CLIP|07_varaosapuhelu|51.48|0|Ótimo, melhor para você. Depois você pega no correio. Certo, sem problema. Tchau, tchau!
+
+# Firewood phone calls and delivery conversations
+CLIP|livaloinen_wood_call|0|0|Ah, olá! Escuta, eu queria comprar essa lenha de você. Se tiver um tempinho, pode trazer até agora, sabe como é.
+CLIP|livaloinen_wood_call|9.64|0|Vou pagar bem, você sabe que não crio problema. Sempre pago certinho. Venha com o reboque de lenha e acertamos. Se cuida!
+CLIP|livaloinen_wood_thanks|0|0|Obrigado mesmo! Aqui tem um dinheiro pelo trabalho, dá até para comprar linguiça. O que mais um rapaz precisa para ser feliz, né...
+CLIP|livaloinen_wood_thanks|9.62|0|Aliás, provavelmente vou comprar mais lenha neste inverno, está congelando de assustar.
+CLIP|livaloinen_wood_thanks|16.58|0|Às vezes dá uma esquentada, mas continua um frio desgraçado e temos que manter o fogão aceso, senão o frio entra nos ossos. E outra...
+CLIP|livaloinen_wood_thanks|26.52|0|Vou ligar quando precisar de mais lenha. Obrigado e se cuida!
+CLIP|puuostaja2_soitto|0|0|Olá! Estou ligando por causa da lenha. Eu posso encomendar lenha com você, certo?
+CLIP|puuostaja2_soitto|11.86|0|Se puder entregar direto na minha casa, eu ficaria muito agradecido. Obrigado. Então fico aguardando. Valeu!
+CLIP|puuostaja2_osto|0|0|Olá. Vejo que você trouxe bastante lenha. Muito bem, muito bem.
+CLIP|puuostaja2_osto|8.62|0|Aqui está o pagamento pela lenha. Muito obrigado.
+CLIP|puuostaja3_soitto|0|0|Oi, sou eu. Você consegue trazer lenha aqui para mim? Está tão frio lá fora que dá pena até do cachorro. Certo, venha para cá. Até já.
+CLIP|puuostaja3_osto|0|0|Oi! Que bom que você conseguiu vir. Tem lenha de sobra aqui!
+CLIP|puuostaja3_osto|10.32|0|Aqui tem um dinheiro para você. Até mais!
+CLIP|puuostaja4_soitto|0|0|Bom dia! Preciso de uma coisa. Eu gostaria de um pouco de lenha para aquecer a casa. Seria ótimo se pudesse passar aqui.
+CLIP|puuostaja4_soitto|10.66|0|Certo, vou sair e esperar na frente de casa, então não demore. Até logo!
+CLIP|puuostaja4_osto|0|0|Olha só, rapaz! Você trouxe bastante lenha. Bom trabalho. Aqui está o dinheiro; espero te ver de novo!
+
+# Additional parts phone calls
+CLIP|Puhelinmyyjä_1|0|0|Alô, alô. Ah, sim, claro... *pigarra* Espere um segundo... Você está ligando por causa das peças do Rivett?
+CLIP|Puhelinmyyjä_1|14.94|0|Vamos ver... *barulho* Droga, não estão aqui. ((Pertti, onde você enfiou aquelas peças do Rivett? Ah, aqui estão.))
+CLIP|Puhelinmyyjä_1|29.82|0|É... sim... *pigarra* Claro que temos essas peças. Tudo certo, vou empacotar e enviar se você está com tanta pressa.
+CLIP|Puhelinmyyjä_1|43.98|0|Droga... Tudo bem... Até mais.
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|0|0|*Miau!* *Miau!* Espere um pouco. Kille, saia daí! Você fica andando entre meus pés nesta oficina como se não tivesse juízo...
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|10.35|0|Não acredito, esse telefone está tocando de novo. Meu Deus! Jari Pakkosilla falando. Ah, você está procurando peças para o Rivett? Claro.
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|22.4|0|Você ligou na hora certa, tenho uma pilha delas lá nos fundos da oficina.
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|29.4|0|Guardei e acumulei tudo isso por anos. Sabia que alguém acabaria ligando. Pelo visto, a notícia se espalhou.
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|39.8|0|Certo, espere um instante enquanto confiro o que tenho no estoque. Só um momento... Pronto! *Miau*, *miau*.
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|58.8|0|*Barulho ao fundo* Achei! Meus tesouros. Isto é material de primeira! Tenho peças de ótima qualidade, sabe?
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|74.3|0|Qualidade tem seu preço, então o valor é fixo. Nem pense em tentar algum truque.
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|82.2|0|Olha só! Ainda querem que eu entregue tudo quase de graça, droga!
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|90.6|0|Não tem desconto. Entendeu?! Aqui não é supermercado para ter promoção! Vendo pelo preço que eu disser. Certo?!
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|110|0|*Miau* KURWA, KILLE, SAI DAQUI! ESTOU TENTANDO FECHAR UM NEGÓCIO E VOCÊ FICA ANDANDO POR AÍ COMO UM DOIDO!
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|118.7|0|Não aguento mais! Escute... Espere: se continuar me irritando, vou te carregar pela cauda!
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|130.6|0|Decida logo: vai comprar ou não? Não tenho o dia todo.
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|138.3|0|Certo. *Miau* Kille, larga isso. Saia da frente, pulguento, você está me deixando maluco!
+CLIP|Puhelinmyyjä_3_Paskasillan_Jari|145|0|Droga! Até mais e... *Miau*, *miau!*
+CLIP|Puhelinmyyjä_6_Karhea_Tero|0|0|Droga! Quem está ligando a esta hora? Você sabe que horas são?!
+CLIP|Puhelinmyyjä_6_Karhea_Tero|19.24|0|O que foi? Está ligando por causa das peças? Claro, droga! Quero me livrar delas de uma vez; estão jogadas no meu quintal há uma eternidade.
+CLIP|Puhelinmyyjä_6_Karhea_Tero|42.06|0|Só vendo o lote completo. Leve essa sucata daqui!
+CLIP|Puhelinmyyjä_6_Karhea_Tero|54.2|0|Ainda não desligou? Ah, quer comprar. Então podia ter dito isso logo! Caramba, você deve estar sem nada para fazer!
+CLIP|Puhelinmyyjä_6_Karhea_Tero|67.56|0|Então fica o preço do anúncio. Mande o dinheiro e envio pelo correio. Ou venha buscar, droga, lá no outro lado de Alivieska! É que agora eu...
+CLIP|Puhelinmyyjä_6_Karhea_Tero|91.28|0|Hoje estou de folga, então não vou mexer um dedo.
+CLIP|Puhelinmyyjä_6_Karhea_Tero|106.72|0|Eu agora não... Que enviem pela estação, não estou a fim.
+CLIP|Puhelinmyyjä_6_Karhea_Tero|118.52|0|Tudo bem... já estou indo para a estação...
+CLIP|Puhelinmyyjä_6_Karhea_Tero|124.9|0|((Preciso passar no bar... Ah, era aquele meu mecânico, Juhapoika.))
+CLIP|Puhelinmyyjä_6_Karhea_Tero|133.72|0|((Droga... Então... é isso.))
+CLIP|Puhelinmyyjä_7_Tervamäen_Erkki|0|0|Erkki Tervamäki... Sim... Acho que aquela peça está em algum lugar do armazém...
+CLIP|Puhelinmyyjä_7_Tervamäen_Erkki|16.82|0|Qual era mesmo a marca? Rivett Corris, ano 71... Sim, está aqui. É... e...
+CLIP|Puhelinmyyjä_7_Tervamäen_Erkki|30.92|0|O quê?! Por que não funcionaria?! Quem você pensa que eu sou?! Droga! Está dizendo que estou tentando empurrar uma porcaria quebrada para você?!
+CLIP|Puhelinmyyjä_7_Tervamäen_Erkki|43.96|0|Lá vamos nós de novo com gente assim. É sempre problema com essas peças. Desculpe o palavreado. É...
+CLIP|Puhelinmyyjä_7_Tervamäen_Erkki|55.24|0|Tudo bem, fechamos num preço justo. Não vou baixar o valor; as peças estão boas. Combinado. Até mais. ((seu desgraçado...))
+
+# TV video audio topics
+OBJECT|topic1_1|0.3|0|Caros funcionários.
+OBJECT|topic1_1|1.68|0|Estamos reunidos hoje para tratar de um assunto muito importante: o crescimento das nossas vendas e as questões organizacionais relacionadas.
+OBJECT|topic1_1|8.84|0|O fim dos anos 1990 tem sido muito favorável para nós, e vemos as vendas crescerem claramente a cada trimestre.
+OBJECT|topic1_1|15.14|0|Mas precisamos analisar esse crescimento com atenção e consistência,
+OBJECT|topic1_1|19.84|0|para lidar com seriedade com os possíveis riscos envolvidos.
+OBJECT|topic1_2|0.4|0|Quero chamar a atenção de vocês para os resultados detalhados de vendas exibidos neste gráfico bastante complexo.
+OBJECT|topic1_2|7.46|0|Como podem ver, o crescimento ocorreu principalmente nos setores três e quatro, o que nos obrigou a acelerar o ritmo nas linhas de produção.
+OBJECT|topic1_2|15.06|0|Isso, por sua vez, exigiu mais coordenação, especialmente na etapa de embalagem, como está descrito na documentação que receberam.
+OBJECT|topic1_3|0.4|0|Agora vamos falar dos riscos operacionais relacionados ao crescimento das vendas.
+OBJECT|topic1_3|4.62|0|Cada mudança no chão de fábrica é cuidadosamente planejada, mas ainda pode trazer problemas de qualidade e atrasos nas entregas.
+OBJECT|topic1_3|11.52|0|Alguns de vocês já participaram de reuniões específicas em que discutimos modelos de gestão de riscos.
+OBJECT|topic1_4|0.6|0|Precisamos dar atenção especial à melhoria da comunicação interna entre os diferentes departamentos.
+OBJECT|topic1_4|6.74|0|Com o aumento das vendas, esperamos um fluxo de informações mais eficiente por parte das pessoas que coordenam a cadeia logística.
+OBJECT|topic1_4|11.4|0|Por isso, ainda este ano pedi que os protocolos de comunicação fossem atualizados, como vocês podem ver nos relatórios mensais recebidos.
+OBJECT|topic1_5|0.3|0|Quero lembrar a todos da importância da opinião dos clientes. Já conhecemos bem o processo de coleta de avaliações, mas gostaria de reforçar
+OBJECT|topic1_5|7.1|0|que esse é um indicador importante: ele mostra claramente em que etapa podemos melhorar nossa eficiência durante este período de crescimento contínuo.
+OBJECT|topic1_6|0.5|0|Obrigado a todos pela atenção e pelo cuidado com esses detalhes discretos, mas tão importantes.
+OBJECT|topic1_6|6.98|0|Só trabalhando juntos vamos transformar o aumento das vendas em qualidade concreta e sucesso duradouro para a empresa.
+OBJECT|topic1_6|14.06|0|Desejo a todos um dia de trabalho produtivo e bem organizado.
+OBJECT|topic2_1|0.5|0|Caros funcionários.
+OBJECT|topic2_1|1.84|0|Sejam muito bem-vindos a esta importante reunião de equipe,
+OBJECT|topic2_1|5.3|0|em que vamos discutir os detalhes do processo de embalagem dos carregadores e os procedimentos que vocês seguem no dia a dia.
+OBJECT|topic2_1|15.08|0|A chegada do novo milênio traz algumas mudanças que quero discutir com vocês em detalhes.
+OBJECT|topic2_2|0.2|0|Vamos começar discutindo os materiais usados no processo de embalagem.
+OBJECT|topic2_2|4.14|0|Quero destacar a importância de usar matérias-primas renováveis e recicladas na etapa de encaixotamento.
+OBJECT|topic2_2|10.18|0|Isso ajuda nossa empresa a cumprir as normas ambientais em vigor.
+OBJECT|topic2_2|14.08|0|E cada peça de papelão ou plástico deve ser inspecionada cuidadosamente antes e depois do uso.
+OBJECT|topic2_3|0.4|0|O próximo assunto é a divisão do processo de embalagem em etapas. São três partes: preparação, embalagem e acabamento.
+OBJECT|topic2_3|10.64|0|É fundamental seguir as instruções de trabalho estabelecidas. Assim, padronizamos todas as etapas da produção e da embalagem.
+OBJECT|topic2_3|19.24|0|Desse modo, buscamos eliminar os erros, uma prioridade para todos nós.
+OBJECT|topic2_4|0.4|0|Também quero destacar a importância do armazenamento. Distribuir os carregadores corretamente no depósito é essencial,
+OBJECT|topic2_4|7.74|0|pois aproveita melhor o espaço e facilita localizar e enviar os produtos aos clientes.
+OBJECT|topic2_4|13.34|0|Leiam estas instruções para se manterem atualizados sobre os procedimentos em vigor.
+OBJECT|topic2_5|0.5|0|Quero lembrar a todos da importância de receber opiniões continuamente. As sugestões de vocês são valiosas para aperfeiçoar os processos,
+OBJECT|topic2_5|8.08|0|para que possamos melhorar nosso trabalho um pouco a cada dia.
+OBJECT|topic2_6|0.3|0|Obrigado a todos por me acompanharem durante esta apresentação.
+OBJECT|topic2_6|4.58|0|Vamos continuar juntos em busca da melhor qualidade na embalagem dos carregadores. Tenham todos um dia produtivo e excelente!
+OBJECT|topic3_1|0.7|0|Caros funcionários.
+OBJECT|topic3_1|2|0|Hoje vamos tratar de um tema empolgante, mas também sério:
+OBJECT|topic3_1|5.72|0|o crescimento das vendas da empresa e os riscos relacionados no mercado de tecnologia do novo milênio.
+OBJECT|topic3_1|11.8|0|Sei que todos acompanhamos com interesse as barras de vendas subindo. Vamos parar um instante para pensar no que esse crescimento significa para cada um de nós.
+OBJECT|topic3_2|0.2|0|Quero compartilhar com vocês os dados detalhados das estatísticas de vendas do último trimestre.
+OBJECT|topic3_2|5.82|0|Observando os números do primeiro e do segundo trimestre que aparecem no gráfico atrás de mim,
+OBJECT|topic3_2|12.82|0|vemos uma tendência clara de crescimento. Isso é motivo para comemorar, mas, como podem imaginar, também há questões que precisamos considerar.
+OBJECT|topic3_3|0.3|0|Agora vou falar dos riscos operacionais relacionados a esse crescimento. É importante mencionar
+OBJECT|topic3_3|5.82|0|que o crescimento pressiona a capacidade de produção e os cronogramas logísticos. Cada etapa da embalagem e do transporte dos produtos está sendo muito exigida,
+OBJECT|topic3_3|14.5|0|por isso é essencial seguir rigorosamente as orientações de gestão de riscos enviadas no relatório do mês passado.
+OBJECT|topic3_4|0.4|0|Agora vamos falar da gestão de pessoas. O aumento das vendas exige que avaliemos a estrutura da nossa equipe.
+OBJECT|topic3_4|8.84|0|Definimos três pilares fundamentais de recrutamento para nos prepararmos para o aumento necessário de pessoal.
+OBJECT|topic3_4|15.78|0|Vocês têm aqui um documento que explica detalhadamente as atualizações do sistema de rodízio de funcionários.
+OBJECT|topic3_5|0.3|0|Quero que agora se concentrem no acompanhamento analítico, que esperamos de todos os departamentos.
+OBJECT|topic3_5|5.64|0|Assim poderemos identificar possíveis desvios e ajustar nossa estratégia quando necessário.
+OBJECT|topic3_5|12.36|0|Isso nos leva de volta ao relatório semanal de indicadores: todos devem participar ativamente da sua distribuição e implementação.
+OBJECT|topic3_6|0.3|0|Agradeço pela atenção e pelo empenho durante esta apresentação. Com a colaboração de todos, vamos superar os desafios trazidos por esse crescimento.
+OBJECT|topic3_6|8|0|Vamos seguir em frente com a mesma dedicação e entusiasmo. Obrigado pelo tempo e pelo trabalho de vocês. Desejo a todos um restante de dia produtivo e organizado.
+
+# Additional timed audio subtitles (translated from the original mod transcript)
+CLIP|levanter|0|0|Ah, entendi. Sim, tenho tudo aqui. Certo, vou enviar para o senhor. Então... até logo!
+CLIP|urea|0|0|Droga! Alô? Do que está falando? Ah, sim... é sobre aquelas peças, claro, agora me lembrei.
+CLIP|urea|14|0|Espera, eu tenho essas peças aqui? Ah, sim, estavam em algum lugar. Já estou meio desligado.
+CLIP|urea|23|0|Ah, então vai ficar com elas? Certo, vou enviá-las pelo correio. Então... até mais!
+CLIP|samppa|0|0|Oi... Alô? O que foi? O quê? Como assim? Ah, isso... sim. Papai... isso está à venda?
+CLIP|samppa|20|0|O anúncio do papai ainda está valendo? Sim, está, está... bom, está à venda.
+CLIP|samppa|36|0|Papai anunciou porque... ele tem esse desejo... de não morrer por causa desse desejo.
+CLIP|samppa|50|0|Para o papai não morrer, quando vender isso... aí então...
+CLIP|samppa|57|0|Isso. Certo, vamos enviar para o senhor, vamos mandar para lá. Sim, sim. Tchau! Até, até...
+CLIP|jortikka2|0|0|Jortikka! Isso mesmo! Sim, está à venda. O preço é exatamente o que está no anúncio.
+CLIP|jortikka2|12|0|O preço é fixo, não aceito negociação. Nem um centavo a menos.
+CLIP|jortikka2|19|0|Mande seu endereço e envio pelo correio. Certo, certo, envie os dados. Até mais.
+CLIP|mulkkunen|0|0|Mulkkunen falando. Sim. Sim, tenho algumas; estão aqui comigo.
+CLIP|mulkkunen|9.5|0|Certo, então vou despachar para o senhor... Até... tchau!
+CLIP|mustonen|0|0|Aqui é Mustanen. Hum, claro. Entendi. Então vou despachar a encomenda. Tchau, tchau!
+CLIP|myynti3|0|0|Alô! Sim, o anúncio é meu... Tudo bem, vou enviar as peças. Só não venha reclamar depois que há algo errado.
+CLIP|myynti3|11|0|Pode até levar isso para a floresta e deixar lá, desde que pare de me incomodar. Até mais.
+CLIP|huttunen3|0|0|Olá! Sei de quais peças está falando. Certo, vou avisar para enviarem esse pacote.
+CLIP|huttunen3|13.3|0|Ah, certo... Espere aí com paciência, já estou saindo para despachar. Certo, estou indo. Até mais!
+CLIP|pornanen|0|0|Pornanen falando. Sim, isso mesmo, tenho no estoque. Certo. Claro, vou enviar pelo correio.
+CLIP|lihasula3|0|0|Peças da carroceria? Sim, tenho. Certo, vou empacotar e já levo. Por nada, droga!
+CLIP|huttunen2|0|0|Huttunen falando. Então, é... eu vou... vou mandar essas peças para você. Será pagamento na entrega. Certo. Obrigado.
+CLIP|lihasula|0|0|Lihasula falando. Sim, sim. Tenho, claro que tenho. Estão aqui comigo. É... espere um pouco, vou resolver isso hoje.
+CLIP|lihasula|11.82|0|Droga. Derramei um pouco... Espere aí, eu... certo, vou pegar mais papel.
+CLIP|lihasula|20.92|0|Certo, certo, me passe o endereço. É... bom.
+CLIP|lihasula|30.36|0|Ah, sim. O que o senhor disse? ((O primeiro não deu certo...)) Sim, sim.
+CLIP|lihasula|36.82|0|Então tá. Vou enviar para o senhor. É isso mesmo que faremos. Claro. Fique bem, até mais!
+CLIP|urea2|0|0|Droga... O quê? Alô? Não consigo ouvir direito.
+CLIP|urea2|12.36|0|É... sim. O-o quê? Ah, sim, isso... nem me lembro. Eu ia vender, mas...
+CLIP|urea2|22.18|0|Então acho que está à venda. Certo, passe... passe os dados para eu anotar. Pronto. Até mais!
+CLIP|porsaala|0|0|Porsaala no telefone. Sim, isso mesmo. Certo. Claro. Que seja assim. Tchau.
+CLIP|porsaala2|0|0|Porsaala no telefone... Estou aqui. Sim, tenho... Ah, é para o senhor? Nem sei mais para que alguém precisa de tanta sucata...
+CLIP|porsaala2|17.38|0|Pois é, não digo nada... mas isso é uma porcaria...
+CLIP|porsaala2|29.18|0|Mas, se o senhor quer, envio pelo correio. Certo, tenha um bom dia!
+CLIP|mattinen|0|0|Henri Mattinen falando. Estou em casa... Vou enviar para o senhor agora. Claro. Até mais!
+CLIP|manila|0|0|Mannila falando. O quê... Sim, eu tinha as peças... ainda estão por aí. Claro. Vou enviá-las. Tchau.
+CLIP|mulkkunen2|0|0|Mulkkunen falando. Sim. Claro. Vou enviar para o senhor agora. Tchau, tchau!
+CLIP|myynti1|0|0|Claro... Ah, é sobre as peças do carro? Ainda tenho, sim. Certo, negócio fechado. Vou enviar para o senhor. Até mais!
+CLIP|granny_tutorial|3.8|0|Cuidado com essa bebida. Não vá acabar se afundando nela...
+CLIP|granny_tutorial|10|0|Tantos homens e mulheres já morreram por causa disso... seria triste ver você acabar do mesmo jeito.
+CLIP|livaloinen_car_show|0.24|0|Ora, olá, olá!
+CLIP|livaloinen_car_show|3.6|0|Aquele carro está ali. É um projeto que ficou do meu irmão. Ele queria restaurá-lo, mas...
+CLIP|livaloinen_car_show|13.3|0|Aí meu irmão se mudou para o outro lado do mundo e não quis levar o carro com ele.
+CLIP|livaloinen_car_show|22.08|0|Então comprei o carro dele. Paguei só cem marcos. Pensei em recuperar pelo menos o que restou. E...
+CLIP|livaloinen_car_show|31.44|0|A ideia era vender o carro inteiro em peças. E vou dizer: as peças saíram como pão quente.
+CLIP|livaloinen_car_show|38.34|0|Não vou negar, consegui bem mais do que aqueles cem marcos.
+CLIP|livaloinen_car_show|44.4|0|Quer dizer, com as peças. No fim, tive um bom lucro.
+CLIP|livaloinen_car_show|48.78|0|Agora seria bom vender o resto. A carroceria está inteira, o bloco do motor e o cabeçote também estão aqui,
+CLIP|livaloinen_car_show|58.26|0|e está tudo funcionando perfeitamente, em ótimo estado, sem problema algum.
+CLIP|livaloinen_car_show|61.74|0|Mas preciso me livrar disso, está ocupando meu quintal. Já não me importo muito com o carro; ele só fica aqui atrapalhando.
+CLIP|livaloinen_car_show|73.6|0|Não é comigo, sozinho não vou conseguir fazer nada. Seria bom alguém que entende de carros ficar com ele.
+CLIP|livaloinen_car_show|82.6|0|Lembro que você tinha aquele carrinho japonês e o deixou muito bonito. Pensei que alguém da vila pudesse comprá-lo e fazer o mesmo.
+CLIP|livaloinen_car_call|0|0|Aqui é Livaloinen. Bom dia, bom dia! Sim,
+CLIP|livaloinen_car_call|7.08|0|o carro está no meu celeiro; pode vir dar uma olhada. O preço é o do anúncio e não aceito negociação, mas...
+CLIP|livaloinen_car_call|19.72|0|Você não vai encontrar mais barato. É verdade que está meio desmontado, mas...
+CLIP|livaloinen_car_call|28.8|0|Estou vendendo por quase nada. Venha dar uma olhada, você sabe onde moro. Já comprei lenha de você, e...
+CLIP|livaloinen_car_call|37.1|0|Provavelmente vou encomendar mais para este inverno, porque está esfriando bastante. Mas venha me visitar. Estou em casa, aí você vê que carro é esse.
+CLIP|livaloinen_car_call|50.68|0|Então até mais, a gente se vê!
+CLIP|livaloinen_car_sold|0|0|Muito obrigado! Ainda bem que apareceu alguém interessado nesse carro.
+CLIP|livaloinen_car_sold|7.12|0|Vou falar com você de novo, porque com certeza vou precisar de lenha quando vier o frio.
+CLIP|arsyttava_cityjabaB|41.58|0|É, até que sim, mas eles não estão nem aí, entende? Não se esforçaram nem um pouco. É verdade que aqui também deixam tudo na minha mão...
+CLIP|arsyttava_cityjabaB|47.3|0|Mas tem que ser feito direito! Hoje ninguém, porra, sabe o que isso significa. E eu fico preso num fim de mundo qualquer.
+CLIP|arsyttava_cityjabaB|54.72|0|Num PSK desgraçado, um lixo aberto 24 horas no meio do nada. E fede como um estábulo.
+CLIP|arsyttava_cityjabaB|65.6|0|Aqui tudo é uma merda. Essa comida é um desastre completo. No começo pensei: olha, têm pratos à la carte, talvez sirvam algo decente,
+CLIP|arsyttava_cityjabaB|75.68|0|algo que pelo menos desça pela garganta sem me fazer cagar o dia inteiro amanhã, entende? Mas não. Fui inventar de pedir um schnitzel.
+CLIP|arsyttava_cityjabaB|86.14|0|É simples. Schnitzel à moda vienense. É vitela frita de um jeito específico. Vem de Viena, que fica na Áustria. E a Áustria fica na Europa.
+CLIP|arsyttava_cityjabaB|95.96|0|Dá para acreditar que esses caras ainda acham que estamos no Império Austro-Húngaro? Pois é.
+CLIP|arsyttava_cityjabaB|101.3|0|Porque isso não chega nem perto de um schnitzel vienense. É porco comum com um molho de cranberry desgraçado. Exatamente.
+CLIP|arsyttava_cityjabaB|108.58|0|Isso não é schnitzel vienense coisa nenhuma. Podiam ao menos chamar de especialidade do chef ou algo assim.
+CLIP|arsyttava_cityjabaB|117.02|0|Isso me tira do sério, de verdade. E ainda dirigi umas seis horas seguidas desde aquele fim de mundo.
+CLIP|arsyttava_cityjabaB|123.94|0|Minha velha reclama de qualquer coisa. Deixei ela no carro com as crianças porque só quero, porra, respirar um pouco.
+CLIP|arsyttava_cityjabaB|132.88|0|Nada dá certo! Os funcionários reclamam que ganham pouco, que têm poucas férias, que não conseguem falar comigo...
+CLIP|arsyttava_cityjabaB|143.04|0|E você fica jogando golfe sem parar ou sabe-se lá o quê. Pensa só: minha secretária, a secretária que eu mesmo contratei,
+CLIP|arsyttava_cityjabaB|150.64|0|a quem paguei uma fortuna pelas unhas, começou a reclamar que eu não posso mais agarrá-la pela bunda,
+CLIP|arsyttava_cityjabaB|156.9|0|porque isso seria, supostamente, machista. Agora ainda reclama que nunca estou ao telefone porque vivo de férias.
+CLIP|arsyttava_cityjabaB|165.4|0|Pensa bem. É isso mesmo. Se ela tivesse terminado a escola, talvez também estivesse numa posição
+CLIP|arsyttava_cityjabaB|175.5|0|em que um homem rico a levaria para férias de luxo, em vez de escolher um artista idiota.
+CLIP|arsyttava_cityjabaB|184.4|0|Falando sério, acho que deviam acabar com todos esses subsídios, porra. Não servem para nada nem para ninguém.
+CLIP|arsyttava_cityjabaB|192.66|0|Só dão bebida para eles beberem sem parar. E, quando não estão bebendo... Pois é. Nem beber direito eles sabem,
+CLIP|arsyttava_cityjabaB|206.32|0|e depois acham que são autênticos, porque são uns boêmios, está na moda e é cultural, já que só eles entendem disso.
+CLIP|arsyttava_cityjabaB|217.88|0|É isso, porra. Me irrita demais, porque aquilo não é schnitzel vienense. Eu devia ir ao balcão e pedir meu dinheiro de volta, mas aposto
+CLIP|arsyttava_cityjabaB|227.86|0|que esses caipiras idiotas nem sabem a diferença entre schnitzel vienense e uma costeleta de porco comum.
+CLIP|arsyttava_cityjabaB|236.98|0|Só fritar de um jeito específico não transforma isso em schnitzel vienense; continua sendo apenas um schnitzel. Pois é.
+CLIP|arsyttava_cityjabaB|247.6|0|Enfim, não vale a pena discutir. Meu carro vale mais do que todos os apartamentos deles juntos.
+CLIP|arsyttava_cityjabaB|255.29|0|É. É. É, é, é, é.
+CLIP|arsyttava_cityjabaB|263.24|0|Mas falando sério, porra, não aguento mais. Simplesmente não aguento mais.
+CLIP|arsyttava_cityjabaB|271.1|0|Vou comer essa porcaria e pronto. Queria tomar alguma coisa, porra... Mas nem posso, tenho que continuar dirigindo. Pois é.
+CLIP|arsyttava_cityjabaB|284.36|0|Porque se eu sair de novo agora por um ano...
+CLIP|arsyttava_cityjabaB|286.98|0|Não posso.
+CLIP|arsyttava_cityjabaB|288.86|0|Claro que estou com vontade. Mas nem sei. Certo, vou ao banheiro, porra.
+CLIP|arsyttava_cityjabaB|293.76|0|É, é.
+CLIP|arsyttava_cityjabaB|296.48|0|Vamos aguentar isso agora, dar um jeito até a noite e finalmente chegar à civilização. Porra, mal posso esperar,
+CLIP|arsyttava_cityjabaB|304.62|0|porque esses caipiras olham para mim como se nunca tivessem visto um chuveiro.
+CLIP|arsyttava_cityjabaB|310.5|0|Certo, preciso ir. Tchau, tchau, tchau, tchau, tchau!
+CLIP|viinaautomaatti|0|0|Meu amigo estuda na universidade. Não seria útil instalar lá uma máquina automática de bebida? Hehe, porra!
+CLIP|olotilat1|0.2|0|Estou de ressaca de novo, nem sei explicar como é ruim. Quando eu era jovem, aguentava muito mais bebida.
+CLIP|olotilat1|16.9|0|No dia seguinte me sentia ótimo, mas agora, com a idade, dá para perceber que já não me recupero como antes depois de beber à noite. Então...
+CLIP|olotilat1|34.36|0|Não dá para negar: o que passou na juventude não volta. Mas...
+CLIP|olotilat1|43.56|0|também não é um trabalho tão difícil que eu não consiga fazer de ressaca. Nem precisa usar muito o cérebro aqui.
+CLIP|olotilat1|57.02|0|O trabalho continua andando, mesmo quando a gente não está se sentindo bem.
+CLIP|olotilat2|0|0|Lá vem outra ressaca. Ontem tomei algumas cervejas enquanto assistia ao jogo e...
+CLIP|olotilat3|0|0|Estou com uma ressaca tão forte que acho que hoje não vou conseguir trabalhar tanto quanto deveria.
+CLIP|olotilat3|9.88|0|Compenso no fim da semana, quando isso passar um pouco. Aí vocês vão ver que ainda tenho energia.
+CLIP|olotilat4|0.2|0|No fim de semana tive uma ressaca tão forte que precisei ir até aquele lugar comprar alguma comida.
+CLIP|olotilat4|9.6|0|Primeiro devorei três pratos com bacon e depois ainda comi uma pizza de sobremesa, então...
+CLIP|olotilat4|21.34|0|no caminho para casa tive que parar no Teimo para comprar salsicha com batata frita, porque ainda estava com fome.
+CLIP|olotilat6|0.8|0|Quando acordei de manhã, a ressaca ainda estava tão forte que precisei tomar duas cervejas no café da manhã,
+CLIP|olotilat6|11.84|0|só para começar o dia. Aí finalmente começou a passar.
+CLIP|olotilat7|0.2|0|Quando me preparei para ir trabalhar de manhã, a ressaca ainda estava tão forte que fiquei com medo de...
+CLIP|olotilat7|9.94|0|a polícia estar na estrada com o bafômetro. Fiquei com receio de acusar alguma coisa, porque eu tinha bebido um pouco...
+CLIP|olotilat7|24.44|0|a ressaca ainda está bem forte.
+CLIP|olotilat8|0.2|0|Estou tremendo de novo. Será que estou ficando doente ou ainda é a ressaca de ontem?
+CLIP|olotilat9|6.3|0|Estou com tanta azia que nem sei se vai sair por cima ou por baixo.
+CLIP|olotilat10|0.2|0|Estou tremendo tanto que até dá medo de soltar um pum. Ainda vai sair junto com a carga toda.
+CLIP|olotilat11|0.2|0|Estou tremendo tanto que nem sei se devo pular o almoço e passar o dia só fumando.
+CLIP|olotilat11|14.18|0|Estou num estado lastimável. Com certeza vou vomitar se tentar comer qualquer coisa agora.
+CLIP|KaliaKaliakaliaaLaulu|0.2|0|Cerveja, cerveja, cerveja, cerveja, porra de cerveja! Alguém me traz logo uma cerveja gelada!
+CLIP|01_Petski_Teffelgren_puhelimessa_et_keskeyttänyt_mitään_tärkeää|0.2|0|Petski Teffelgren falando. Não, você não interrompeu nada importante. Hmm. Certo. Sim, sim, sim, sim.
+CLIP|02_hmm_joo_hmm_vaikka_niin_mhhh_joo|0.2|0|Uhum. Sim.
+CLIP|02_hmm_joo_hmm_vaikka_niin_mhhh_joo|2.92|0|Uhum. Uhum. Tudo bem. É, vamos fazer assim. Uhum.
+CLIP|16_Faffu_ja_pasianssi|13.06|0|Certo, estou ouvindo um zumbido. Há alguma luz de energia acesa no monitor? No canto inferior. Geralmente é verde ou laranja.
+CLIP|16_Faffu_ja_pasianssi|23.92|0|Não? Então não está recebendo sinal ou nem está ligado.
+CLIP|16_Faffu_ja_pasianssi|27.64|0|Aperte o botão de energia do monitor. Ali na lateral, está vendo? É um botão separado, não é o do computador. Certo.
+CLIP|16_Faffu_ja_pasianssi|36.22|0|Agora vamos ao computador. Olhe a frente daquele gabinete. O botão de energia está apertado?
+CLIP|16_Faffu_ja_pasianssi|43.42|0|Se tiver um botão grande, redondo ou quadrado, aperte uma vez.
+CLIP|16_Faffu_ja_pasianssi|48.5|0|Ótimo.
+CLIP|16_Faffu_ja_pasianssi|50|0|Ótimo, o sistema está iniciando. Espere um pouco e não aperte nada.
+CLIP|16_Faffu_ja_pasianssi|54.44|0|Apareceu alguma mensagem como “Iniciando o Windows” ou “MS-DOS”?
+CLIP|16_Faffu_ja_pasianssi|59.9|0|Excelente! Espere a área de trabalho carregar por completo.
+CLIP|16_Faffu_ja_pasianssi|64.14|0|Avise quando aparecer o fundo azul e os ícones pequenos. Isso, esses mesmos.
+CLIP|16_Faffu_ja_pasianssi|70.22|0|Perfeito! Vamos abrir o Paciência. Aperte uma vez o botão Iniciar, no canto inferior esquerdo.
+CLIP|16_Faffu_ja_pasianssi|82.4|0|Agora procure a opção “Programas”.
+CLIP|16_Faffu_ja_pasianssi|85.6|0|Geralmente há uma setinha para a direita. Passe o mouse por cima, sem clicar. Isso, deve abrir outra lista.
+CLIP|16_Faffu_ja_pasianssi|94.04|0|Procure “Acessórios”. Talvez apareça como “Accessories”. Na versão finlandesa costuma ser “Apuohjelmat”. Certo.
+CLIP|16_Faffu_ja_pasianssi|104.4|0|O Paciência deve estar ali. Clique uma vez com o botão esquerdo. Isso. Sabe jogar?
+CLIP|16_Faffu_ja_pasianssi|117.32|0|Nunca jogou? Primeiro, clique no canto superior esquerdo. É dali que você compra as cartas.
+CLIP|16_Faffu_ja_pasianssi|124.08|0|Ótimo. Agora é só mover... Você já deve conhecer as regras do Paciência, claro.
+CLIP|16_Faffu_ja_pasianssi|132.26|0|Acho que não dá para aumentar a fonte, mas podemos ampliar a janela.
+CLIP|16_Faffu_ja_pasianssi|137.24|0|Está vendo o quadradinho no canto superior direito? Clique nele para ocupar a tela inteira.
+CLIP|16_Faffu_ja_pasianssi|145|0|Se fizer uma jogada errada e se atrapalhar, clique em “Jogo” lá em cima e depois em “Novo”. Isso.
+CLIP|16_Faffu_ja_pasianssi|151.3|0|Se o computador travar algum dia, não tire o cabo da tomada de imediato. Espere um pouco.
+CLIP|16_Faffu_ja_pasianssi|159.62|0|Tudo bem, pode jogar à vontade. Ligue se a tela ficar preta ou se travar. Bom jogo! Tchau!
+CLIP|17_Fammu_ja_VHS|0.8|0|Oi, vovó! Não está incomodando. Claro que tenho um tempinho para ajudar com essa fita VHS.
+CLIP|17_Fammu_ja_VHS|7.04|0|Calma, vovó, respire fundo. É só um videocassete, não vai morder. Olhe o painel da frente.
+CLIP|17_Fammu_ja_VHS|15.76|0|No meio há uma portinhola. Geralmente está escrito VHS ou há uma abertura comprida. Está vendo? Ótimo.
+CLIP|17_Fammu_ja_VHS|23.94|0|Não tente colocar a fita em nenhuma abertura lateral. Ela entra direto pela abertura da frente. Isso mesmo.
+CLIP|17_Fammu_ja_VHS|30.3|0|É parecido com o vovô. Pegue a fita e vire-a com a parte mais grossa para baixo e a etiqueta virada para você.
+CLIP|17_Fammu_ja_VHS|41.4|0|Isso. Agora a parte em que dá para ver a fita marrom entra primeiro.
+CLIP|17_Fammu_ja_VHS|48.12|0|Muito bem. Empurre devagar para dentro. Não force. Quando encaixar no ângulo certo, o aparelho vai puxá-la sozinho.
+CLIP|17_Fammu_ja_VHS|58.18|0|Pronto. Quando a fita entrar, você vai ouvir um zumbido baixinho. Se não ouvir nada, tire-a e vire para o outro lado.
+CLIP|17_Fammu_ja_VHS|66.84|0|Certo, já está dentro. Agora vamos conferir a televisão. Está no canal certo?
+CLIP|17_Fammu_ja_VHS|74.46|0|Aperte no controle o botão zero, AV ou TV-Video. Depende do que está escrito no seu.
+CLIP|17_Fammu_ja_VHS|81.82|0|Se a tela estiver cheia de chuviscos ou mostrar um canal normal, ainda não mudou para o vídeo. Muito bem, vovó.
+CLIP|17_Fammu_ja_VHS|90.82|0|Quando estiver no canal certo, deve aparecer uma tela azul ou a palavra PLAY ao começar.
+CLIP|17_Fammu_ja_VHS|101.26|0|Pegue o controle do videocassete e aperte PLAY, o botão com o triângulo apontando para a direita. Uma vez, sem bater nele.
+CLIP|17_Fammu_ja_VHS|112.26|0|Se nada acontecer, veja se o aparelho não está em STOP. Aperte STOP primeiro e depois PLAY.
+CLIP|17_Fammu_ja_VHS|120.88|0|Isso, PLAY. Se aparecer REV ou o aparelho apitar, a fita chegou ao fim. Aperte REV para rebobiná-la.
+CLIP|17_Fammu_ja_VHS|131.28|0|É o botão com dois triângulos apontando para a esquerda. Achou? Deixe rebobinar até o começo, caso ainda não tenha feito isso.
+CLIP|17_Fammu_ja_VHS|139.6|0|Quando parar, aperte STOP e depois PLAY. Certo.
+CLIP|17_Fammu_ja_VHS|146.2|0|Se quiser fazer uma pausa, aperte o botão com duas linhas verticais.
+CLIP|17_Fammu_ja_VHS|155.1|0|Só não deixe pausado por horas. Quando o filme acabar, aperte STOP e depois EJECT. Isso, EJECT.
+CLIP|17_Fammu_ja_VHS|165.16|0|É um triângulo com uma linha ou está escrito EJECT. A fita vai sair pela mesma abertura.
+CLIP|17_Fammu_ja_VHS|173.24|0|Pronto, tudo certo. O filme está passando. A gente se fala em breve. Cuide-se, vovó!
+CLIP|18_Tet_harjoittelijat|0.7|0|Petski Teffelgren falando.
+CLIP|18_Tet_harjoittelijat|3.84|0|Ah, oi!
+CLIP|18_Tet_harjoittelijat|6.4|0|Sim, claro, teremos prazer em receber estudantes para estágio. Assim eles podem conhecer a variedade do trabalho de...
+CLIP|18_Tet_harjoittelijat|14.88|0|...embalar carregadores de celular.
+CLIP|18_Tet_harjoittelijat|22.42|0|Isso mesmo. Assim eles aprendem como é o trabalho e como pode ser gratificante.
+CLIP|18_Tet_harjoittelijat|33.18|0|Sim, aqui só trabalham pessoas educadas. Com certeza.
+CLIP|18_Tet_harjoittelijat|40.28|0|Não precisam se preocupar: ninguém vai ver ou ouvir nada impróprio aqui.
+CLIP|18_Tet_harjoittelijat|49.28|0|Combinado. Entrem em contato quando estiver perto da data de enviar os estagiários. Ótimo, obrigado! Até mais!
+CLIP|19_edustusmökki_Leviltä_verovähennyksiin|0.2|0|Petski Teffelgren falando. Oi, Liisa! Preciso da sua ajuda com algumas questões contábeis.
+CLIP|19_edustusmökki_Leviltä_verovähennyksiin|8.46|0|Seria uma ideia completamente maluca a empresa comprar uma cabana em Levi? Uma cabana para receber clientes, sabe...
+CLIP|19_edustusmökki_Leviltä_verovähennyksiin|22.9|0|Isso.
+CLIP|19_edustusmökki_Leviltä_verovähennyksiin|24.84|0|Dá para lançar isso como despesa depois? Está vendo? É uma ótima ideia,
+CLIP|19_edustusmökki_Leviltä_verovähennyksiin|30.62|0|para levar os figurões até lá, esquiar um pouco e fazer um after. Festa, festa. Isso.
+CLIP|19_edustusmökki_Leviltä_verovähennyksiin|39.18|0|Pesquise isso. Se Levi não der certo, talvez possamos comprar em outro lugar,
+CLIP|19_edustusmökki_Leviltä_verovähennyksiin|47.36|0|não sei, talvez em Lanzarote. Certo.
+CLIP|19_edustusmökki_Leviltä_verovähennyksiin|51.3|0|Então ficamos em contato. Tchau.
+CLIP|20_Alfaurokset_punttisalilla_lehden_peruutus|0.5|0|Petski Teffelgren falando.
+CLIP|20_Alfaurokset_punttisalilla_lehden_peruutus|3.62|0|Oi! Estou tentando falar com vocês. Quero cancelar a assinatura da revista.
+CLIP|20_Alfaurokset_punttisalilla_lehden_peruutus|11.74|0|Sim, a revista “Machões na Academia”. Minha esposa encontrou uma na caixa de correio e não sei quem assinou isso.
+CLIP|20_Alfaurokset_punttisalilla_lehden_peruutus|19.8|0|Pois é, minha esposa encontrou a revista e não sei quem a encomendou.
+CLIP|20_Alfaurokset_punttisalilla_lehden_peruutus|28.98|0|Eu não assinei, embora esteja no meu nome. Não assinei, não.
+CLIP|20_Alfaurokset_punttisalilla_lehden_peruutus|35.62|0|Também não queremos outras revistas parecidas. Cancele, assim minha esposa fica feliz. Ótimo. Muito obrigado, tchau!
+CLIP|21_Hello_George|0.5|0|Oi, George. Como você está?
+CLIP|21_Hello_George|4.52|0|Que bom ouvir sua voz! Sim, sim.
+CLIP|21_Hello_George|8.9|0|Fico feliz em saber. Sim, os negócios vão muito bem.
+CLIP|21_Hello_George|15.02|0|Sim.
+CLIP|21_Hello_George|17.02|0|Estou vivendo um conto de fadas. O trabalho dos meus sonhos, sem parar. Sim.
+CLIP|21_Hello_George|25.88|0|E como estão sua esposa e as crianças?
+CLIP|21_Hello_George|30.4|0|Treinos de futebol? Entendi.
+CLIP|21_Hello_George|34.42|0|É, agora você é o chefe da família. Sim.
+CLIP|21_Hello_George|39.36|0|Certo, eu também preciso voltar ao trabalho.
+CLIP|21_Hello_George|46.42|0|Vamos deixar para outra hora. A gente se liga depois.
+CLIP|21_Hello_George|50.98|0|Certo. Tchau!
+CLIP|22_uutta_soittoääntä_puhelimeen|0.9|0|E aí, Seppo! Como vai, meu velho? Estava tentando falar com você. Tive uma ideia!
+CLIP|22_uutta_soittoääntä_puhelimeen|10.5|0|Precisamos criar um toque novo para os telefones da empresa. Vamos fazer algo assim.
+CLIP|22_uutta_soittoääntä_puhelimeen|18.82|0|Também serve como marketing. Pensei em algo do tipo: tidititit tidititit tidititit...
+CLIP|22_uutta_soittoääntä_puhelimeen|33.32|0|Entendeu? Um ritmo marcante. Você entende dessas coisas.
+CLIP|22_uutta_soittoääntä_puhelimeen|40.32|0|Traga algumas ideias para ouvirmos. A gente já toma uma cerveja enquanto isso.
+CLIP|22_uutta_soittoääntä_puhelimeen|45.94|0|Isso mesmo. Rumo ao futuro! Se cuida!
+CLIP|23_Petskin_elämänkerta|0.2|0|Petski falando.
+CLIP|23_Petskin_elämänkerta|2.64|0|Oi, Marjatta! Estou bem, sim. *tosse* Desculpe... E você, como está?
+CLIP|23_Petskin_elämänkerta|10.32|0|E seu avô de oitenta anos, como vai? A herança não vai cair no colo sozinha. É mesmo? Olha só.
+CLIP|23_Petskin_elämänkerta|19.4|0|Depois você me passa uma parte por fora. Isso mesmo, é um ótimo negócio! Sobre aquela biografia que comentamos, eu estava pensando...
+CLIP|23_Petskin_elämänkerta|29.3|0|em algumas ideias. Que tal começar pelo título “Empresário sobre Rodas”? O que acha?
+CLIP|23_Petskin_elämänkerta|40.88|0|Hoje em dia tudo gira em torno da tecnologia. Pois é.
+CLIP|23_Petskin_elämänkerta|46.34|0|A história poderia começar com um telefone, um carregador e o Petski. Algo assim...
+CLIP|23_Petskin_elämänkerta|57.68|0|Comece a desenvolver essa ideia e depois me mande uma proposta para eu ler. Combinado. Obrigado, tchau!
+CLIP|24_kaverin_soittaa_eilisestä|0.8|0|Pauli, meu irmão! E aí, meu velho? Ontem você estava bêbado pra caramba no bar.
+CLIP|24_kaverin_soittaa_eilisestä|11.4|0|Ficou sem camisa atrás da mesa do DJ fazendo uma bagunça. Disse que agora ia tocar polca tradicional.
+CLIP|24_kaverin_soittaa_eilisestä|20.7|0|Mas você não ficou lá muito tempo. Depois chegou a hora de ir embora. Isso mesmo.
+CLIP|24_kaverin_soittaa_eilisestä|30.06|0|Foi uma noite inesquecível, como sempre. Não se preocupe, não tem problema. Preciso ir, está uma correria aqui,
+CLIP|24_kaverin_soittaa_eilisestä|39.84|0|mas vamos repetir a dose. Só não tire a camisa desta vez e se comporte, Pauli. Foi ótimo! Obrigado! Se cuida!
+CLIP|25_firmalle_internetsivut|0.2|0|E aí, Seppo! O próprio mestre! O Petski teve uma ideia: precisamos de um site para a empresa.
+CLIP|25_firmalle_internetsivut|11.14|0|As pessoas navegam na internet, e isso seria uma ótima propaganda. Assim teremos mais coisas para embalar.
+CLIP|25_firmalle_internetsivut|21.72|0|Com certeza. Pensei em colocar várias imagens bonitas e animadas no site.
+CLIP|25_firmalle_internetsivut|32.04|0|Chamas, claro. E depois aqueles efeitos que aparecem... você sabe do que estou falando.
+CLIP|25_firmalle_internetsivut|38.34|0|Isso é incrível, sensacional! A ideia é prender a atenção visual de quem visitar o site.
+CLIP|25_firmalle_internetsivut|48.2|0|Aí ninguém vai sair. E também colocamos um contador de visitas para acompanhar as estatísticas.
+CLIP|25_firmalle_internetsivut|55.66|0|Vou mostrar alguns gráficos na reunião. Faça um esboço e depois vemos juntos. Ótimo! Obrigado, Seppo!
+CLIP|26_EDM_verovähennyksiin|0.4|0|Petski Teffelgren falando.
+CLIP|26_EDM_verovähennyksiin|2.92|0|Liisa, minha contadora favorita! Estou com outra pergunta. Saiu um novo modelo de EDM e pensei que seria
+CLIP|26_EDM_verovähennyksiin|13.26|0|um ótimo carro para representar a empresa.
+CLIP|26_EDM_verovähennyksiin|23.56|0|Dá para lançar como despesa e deduzir dos impostos, se você cuidar disso para mim de novo?
+CLIP|26_EDM_verovähennyksiin|30.84|0|É, talvez eu também use o carro para algumas coisas pessoais.
+CLIP|26_EDM_verovähennyksiin|35.2|0|Preciso levar a família para vários lugares.
+CLIP|26_EDM_verovähennyksiin|40.88|0|Exatamente. Certo... você resolve isso? Liisa, trabalhar com você é maravilhoso.
+CLIP|26_EDM_verovähennyksiin|40.88|0|Você sempre consegue coisas incríveis. Confira isso e voltamos a conversar. Se cuida, tchau!
+CLIP|27_zumbaa_työntekijöille|0.3|0|Petski Teffelgren falando.
+CLIP|27_zumbaa_työntekijöille|2.7|0|Oi, Teija!
+CLIP|27_zumbaa_työntekijöille|4.96|0|Você conhece uma instrutora de zumba, não conhece?
+CLIP|27_zumbaa_työntekijöille|11.4|0|É mesmo? É dela que estou falando. Pensei se sua amiga poderia vir à empresa
+CLIP|27_zumbaa_työntekijöille|21.22|0|dar uma aula de zumba para os nossos funcionários. Acho que faria bem para eles.
+CLIP|27_zumbaa_työntekijöille|29.82|0|Seria bom fazer o pessoal se mexer um pouco. Temos vários funcionários em boa forma,
+CLIP|27_zumbaa_työntekijöille|40.4|0|então com certeza eles iam gostar. Uma aula de zumba, sabe?
+CLIP|27_zumbaa_työntekijöille|45.92|0|Veja quando ela tem um horário livre e me avise. Muito obrigado. Falamos depois. Tchau!
+CLIP|29_skaalataan_yritystä|0.2|0|E aí, Seppo! Como vai, meu velho?
+CLIP|35_palkan_sitominen_tuotantotavoitteisiin|36.38|0|É, para o salário não ser pago até que uma certa quantidade
+CLIP|35_palkan_sitominen_tuotantotavoitteisiin|41.12|0|dessas metas seja atingida. Certo.
+CLIP|35_palkan_sitominen_tuotantotavoitteisiin|43.62|0|É uma ideia interessante. Pesquise isso e me ligue quando descobrir como funciona. Ótimo. Até mais!
+CLIP|ontamakyllaniipaskaa|0.2|0|Pega esse microfone. Olha só, que porcaria, porra... Droga!
+CLIP|ontamakyllaniipaskaa2|0.2|0|Dê essa porcaria para nós!
+CLIP|ontamakyllaniipaskaa3|0.2|0|Isso é uma merda, porra... Não é possível...
+CLIP|RojolanAnsaXD|0.2|0|Porra, essa maldita área de embalagem virou outro chiqueiro desgraçado. Puta merda!
+CLIP|taiteenymmarrys|0|0|Heh. Vi um programa sobre arte na televisão neste fim de semana.
+CLIP|taiteenymmarrys|5.58|0|Era chato pra caralho, mas depois o artista começou a pintar mulheres nuas e ficou bem mais interessante. Agora até eu entendo de arte. Hehehe.
+CLIP|OviAukiTokaisuPERKELE|0|0|Porra, que macaco desgraçado deixou essa maldita porta aberta de novo? Estou congelando!
+CLIP|optimaalinen|0|0|Heh! Dizem que sou preguiçoso, mas só trabalho de forma eficiente. Heh!
+CLIP|optimaalisinolotila|0.2|0|Gosto quando tudo corre sem problemas.
+CLIP|optimaalisinolotila|5.26|0|Esse é o sistema de trabalho ideal.
+CLIP|kirous|0.2|0|Droga!
+CLIP|kirous2|0.2|0|Caramba, porra!
+CLIP|kirous3|0|0|Porra. Será que essa maldita caixa vai fechar de uma vez?
+CLIP|tulipatammostakitehtya|0|0|Já pensou que um dia todos vamos morrer e passamos a vida fazendo só esse tipo de porcaria?
+CLIP|tulipatammostakitehtya|6.72|0|Pelo menos teremos histórias para contar quando ficarmos velhos. A gente faz cada bobagem na vida.
+CLIP|olisEEsViinaa|0.2|0|Se pelo menos isso virasse vodca, porra.
+CLIP|AikaSilmukka|0.2|0|Porra, acho que esse relógio parou. Faz quase duas horas que fico olhando para ele.
+CLIP|AikaSilmukka|7.82|0|O ponteiro mal se mexeu. Parece um maldito loop temporal, um inferno do qual nunca vou voltar para casa.
+CLIP|chilit|0.2|0|Minha pimenteira deu uma boa colheita de novo, então experimentei algumas para ver como ficaram.
+CLIP|chilit|10.62|0|Podiam ser um pouco mais ardidas; ficaram suaves, mas são um bom petisco para acompanhar uma cerveja.
+CLIP|chilit|25.8|0|Com um pouco de Tabasco para ajudar a descer, dá para comer sem problema.
+CLIP|chilit|32.9|0|Mas agora estou com uma azia que está queimando. Acho que exagerei. Nem sei se vai sair por cima ou por baixo.
+CLIP|AinaTätäPaskaa|0.2|0|Porra, a mesma merda de novo. Que o diabo leve isso!
+CLIP|EiTästäTuuVittuukaa|0.2|0|Ah, porra! Não vai sair nada dessa merda. Nada funciona, absolutamente nada! Puta que pariu!
+CLIP|HaistanToivon|0.2|0|Que cheiro é esse? Estou sentindo alguma coisa... Meu Deus, será que é esperança? Não, é desesperança, porra.
+CLIP|KusisiaPaketteja|0|0|Não é possível, todo santo dia essas malditas encomendas mijadas!
+CLIP|kahvit|0.2|0|Porra, que água suja horrível sai dessa máquina.
+CLIP|kahvit|6.74|0|Isso nem dá para chamar de café, porra.
+CLIP|kahvit|12.3|0|Quando faço um café forte em casa, a colher fica em pé na caneca. Isso sim é café de verdade!
+CLIP|bisnespuhelu|0.66|0|E aí, olá! Como vai, doutor?
+CLIP|bisnespuhelu|6.08|0|Estou por aí, num fim de mundo qualquer. Nem sei onde, porra. Estou sentado aqui.
+CLIP|bisnespuhelu|17.7|0|Espere, tive uma ideia. Certo, conversamos depois. Você vai receber, sim.
+CLIP|bisnespuhelu|22.9|0|Escuta, a ideia é ótima. Você sabe como é. Olha só,
+CLIP|bisnespuhelu|30.44|0|sabe como esses caras se comportam nos bares, restaurantes e lugares de festa.
+CLIP|bisnespuhelu|40|0|Todo mundo quer transar. Tudo gira em torno de buceta. Alguns preferem dar a bunda, mas todos querem transar. E...
+CLIP|bisnespuhelu|50.82|0|...um jeito de esses galos se exibirem é esbanjar dinheiro.
+CLIP|bisnespuhelu|58.12|0|É uma loucura. Todo mundo se acha o dono do mundo.
+CLIP|bisnespuhelu|63.68|0|Pedem champanhe em balde de gelo para a mesa, mesmo sem entender nada de champanhe. Isso é outra conversa, falamos depois.
+CLIP|bisnespuhelu|73.02|0|Mas é tudo pose: querem bancar os poderosos, exibir a bebida e mostrar que têm dinheiro.
+CLIP|bisnespuhelu|82.72|0|O salário acabou de cair, não importa se amanhã já não sobrou nada. Mas caiu.
+CLIP|bisnespuhelu|87.6|0|Usam Ray-Ban, uma camisa mais bonita e por aí vai.
+CLIP|bisnespuhelu|92.82|0|E tive uma ideia. Isso tudo é legal, todo mundo faz, você sabe. Mas...
+CLIP|bisnespuhelu|105.08|0|...nem todos têm dinheiro para sustentar a pose até o fim. Uma hora a farsa desmorona.
+CLIP|bisnespuhelu|111.86|0|Uma hora descobrem que o gosto é barato, que moram num lugar barato ou que não podem pagar um hotel.
+CLIP|bisnespuhelu|121.84|0|E, quando podem, escolhem o hotel errado. Acham que uma rede no centro é luxo. Não é.
+CLIP|bisnespuhelu|131.04|0|Talvez funcione para algumas pessoas. Mas pensei num serviço de aluguel junto com orientação...
+CLIP|bisnespuhelu|142.98|0|...para caras comuns. Poderíamos alugar coisas legais para eles, como celulares.
+CLIP|bisnespuhelu|155.44|0|Pensa só: estou falando ao celular agora, tenho um aqui comigo e mais ninguém nesta vila tem um. Nunca viram um desses!
+CLIP|bisnespuhelu|164.28|0|Eles pensam: “Que idiota, falando sozinho!”. E eu fico pensando quem foi que se cagou nas calças, porque está fedendo tanto.
+CLIP|bisnespuhelu|172.14|0|De qualquer forma, deve ser essa comida. “À la carte”! Isso nem chega perto de à la carte. Enfim...
+CLIP|bisnespuhelu|181.76|0|...vamos alugar coisas que normalmente só pessoas instruídas e empregadas podem ter.
+CLIP|bisnespuhelu|191.36|0|Vamos cobrar uma boa margem, ficar com o lucro e criar um sistema
+CLIP|bisnespuhelu|202.31|0|que tire dinheiro desses idiotas. É isso! Exatamente.
+CLIP|bisnespuhelu|211.84|0|Idiotas assim não deviam ter dinheiro; não sabem usar! Gastam com bobagens.
+CLIP|bisnespuhelu|224.47|0|Eles não têm... não têm... Não faz sentido. Não sabem gastar com algo útil.
+CLIP|bisnespuhelu|228.13|0|Em vez disso, ficam bêbados como porcos e aos cinquenta anos acabam num hospital qualquer com cirrose, paga por nós.
+CLIP|bisnespuhelu|238.56|0|Isso também não é justo. Mas o problema não vai desaparecer. Não vai a lugar nenhum.
+CLIP|hermomenneesaatana|0|0|Estou ficando puto da vida, porra.
+CLIP|hirvitulleetielle|0|0|Estava dirigindo no fim de semana e pensei: “Porra, um alce na estrada!” Mas era só uma maldita caixa de correio. Hehe!
+CLIP|jaapitaskomennatauolle|0|0|Acho que precisamos fazer uma pausa.
+CLIP|jokohanpaasiskotia|0|0|Será que já está na hora de ir para casa?
+CLIP|jokupaskantanu|0|0|Algum desgraçado cagou no banheiro e foi embora logo depois. Heh.
+CLIP|josoispaljorahhaa|0|0|Heh. Se eu tivesse muita grana, comprava tudo, porra.
+CLIP|kahavitauonpaikka|0|0|Finalmente chegou a hora da pausa para o café.
+CLIP|kattoikkoviikonloppuna|0|0|Ha! Assisti àquele rali na televisão no fim de semana. Foi incrível pra caralho.
+CLIP|kattoikkoviikonloppuna|7.34|0|Gravei numa fita. Posso emprestar para você algum dia; ainda está aqui comigo.
+CLIP|kavelenympyraa|0|0|Porra, minhas pernas devem ter encurtado; só consigo andar em círculos.
+CLIP|kavinhelsingisa|0|0|Heh! Fui a Helsinque outro dia, mas voltei logo, porra.
+CLIP|kellonoinpaljo|0|0|Nossa, o tempo voa... Já se passaram tantas horas.
+CLIP|kellonoinpaljo2|0|0|Olha só que horas são.
+CLIP|kellonoinpaljo3|0|0|Caramba, veja que horas são.
+CLIP|kellonoinpaljo4|0|0|Olha só, exatamente a mesma hora de ontem.
+CLIP|kellonoinpaljo5|0|0|O tempo passa rápido demais; já se passaram tantas horas.
+CLIP|kiljutkaymaan|0|0|Hehe! Fiz kilju seguindo uma receita no fim de semana. Só um pacote de fermento, porra. Certo, vou tomar um pouco.
+CLIP|kuhantastapaivastaselviaa|0|0|Só preciso aguentar até o fim do turno. Meu Deus! Heh!
+CLIP|kukakeittaapaskaakahvia|0|0|Quem fez esse café horrível? Isso é um desastre.
+CLIP|lahekkotupakille|0|0|Hee! Vamos fumar um cigarro?
+CLIP|loppupaivavittumaisin|0|0|Até o fim do turno vou enlouquecer aqui, porra. Ninguém aguenta essa merda.
+CLIP|meinastullatappelu|0.2|0|O trabalho está indo mal esta semana, mas pelo menos logo vou embora daqui.
+CLIP|minaenkyllajaksayhtaantammosta|0|0|Porra, não aguento mais isso.
+CLIP|minaentajuaainakkaan|0|0|Não entendo absolutamente nada disso.
+CLIP|minatykkaankuonpimia|0|0|Ah, para com isso. Está escuro pra caramba aqui. Heh!
+CLIP|moottorivalo|0|0|A luz do motor acendeu no carro, então vou cobri-la com fita. Assim não vai mais aparecer. Hehe!
+CLIP|nainkujaniksethassi|0|0|Hehe! Não, não, não... Hehehehehe!
+CLIP|nainkujaniksethassi|5.94|0|Não, não antes do fim de semana. Acabou o expediente, hora de ir para casa. Hehehe!
+CLIP|nuuskaaylaasteella|0|0|Hehe. Quando era moleque, usei tanto snus na escola que fiquei enjoado. Hehe!
+CLIP|oispakaljaajatupakkia|0|0|Uma cerveja e uns cigarros cairiam bem... e um pouco de paz.
+CLIP|oispanaisiataieesmiehia|0|0|Se ao menos tivesse umas mulheres por aqui... ou alguns homens para ajudar.
+CLIP|oispaviinatauko|0|0|Hehe! Bem que podia ter uma pausa para uma dose. Isso seria ótimo.
+CLIP|oljyvalo|0|0|Heh! O óleo estava vazando, então vedei o cárter com fita. Heh!
+CLIP|onpimiaa|0|0|Vou trabalhar no escuro e volto para casa no escuro. Isso anima qualquer um.
+CLIP|onsetyoomapalkkansa|0|0|É... e esse é o salário inteiro.
+CLIP|ontamakyllaperseestavoisaatana|0|0|Isso é um desastre completo, porra...
+CLIP|ontamaperkelehommaa|0|0|Que trabalho maravilhoso... dá até vontade de vomitar.
+CLIP|osipataalaeesnaisia|0|0|Hee! Se tivesse umas mulheres por aqui para admirar... Hehe!
+CLIP|paskantammaan|0|0|He! Vou dar uma cagada. Hehe! Assim o turno passa mais rápido.
+CLIP|porttikieltoteimolle|0|0|Heh... O Teimo fechou a loja o fim de semana inteiro de novo.
+CLIP|priimaa|0|0|Heh... É mole pra caramba, mas a qualidade é de primeira!
+CLIP|propilkki|0|0|Fiquei jogando Pro Pilkki. Só de olhar para o gelo comecei a tremer; precisei de uma sauna quente.
+CLIP|riittaatamapaska|0|0|Que se dane a Riitta, aquela maldita vagabunda, porra...
+CLIP|ruokatunti|0|0|Finalmente, pausa para o almoço!
+CLIP|ruokatunti2|0|0|Enfim chegou a pausa para o almoço!
+CLIP|ruokatunti3|0|0|Finalmente, hora de comer alguma coisa!
+CLIP|ruokatunti4|0|0|Cadê a pausa para o almoço, porra?
+CLIP|ruokatunti5|0|0|Até que enfim, hora de matar a fome!
+CLIP|ruokatunti6|0|0|Droga, já temos que voltar ao trabalho...
+CLIP|saatana|0|0|Porra...
+CLIP|saatanaeiperkele|0|0|Puta que pariu!
+CLIP|saistehapyoratelineen|0|0|Podiam instalar um bicicletário decente na fábrica.
+CLIP|seonilimojapielly|0|0|Ugh... está frio pra caramba lá fora.
+CLIP|tastaviikostakuselviaa|0|0|Só preciso sobreviver a esta semana...
+CLIP|tupakanmittanentauko|0|0|Agora eu precisava de uma pausa para fumar.
+CLIP|tyopaivavoitonpuolella|0|0|A maior parte do dia já passou. Agora é só esperar o fim do expediente.
+CLIP|tyopaivavoitonpuolella2|0|0|O pior já passou; agora é ladeira abaixo até o fim do turno.
+CLIP|ulkonahappea|0.5|0|Heh! Não posso sair da fábrica e ficar parado sem fazer nada,
+CLIP|ulkonahappea|4.4|0|senão o pessoal do estacionamento vai achar que sou algum maluco parado aqui fora à toa.
+CLIP|vessaanpaskantanu|0|0|Porra, toda vez que vou ao banheiro alguém deixou uma merda enorme lá. Justo quando preciso entrar, está ocupado!
+CLIP|drunk_speak_1|407.55|0|Não dá para explicar para eles. Não ouvem, não entendem o idioma que você fala.
+CLIP|drunk_speak_1|418.75|0|— É a língua dos patrões! — E nós não entendemos nada dessa língua deles.
+CLIP|drunk_speak_1|423.89|0|— A gente sabe quem está chegando. — Pois é, eles são assim... é toda essa burocracia.
+CLIP|drunk_speak_1|431.01|0|— O problema está nessa língua. E ninguém sofreu mais com tudo isso do que o Elppa.
+CLIP|drunk_speak_1|440.65|0|— Conheci o Elppa por anos. E agora... o Elppa morreu.
+CLIP|drunk_speak_1|447.51|0|— Você acha que ele também teria morrido se não tivesse sido demitido? — Claro, só que um pouco mais tarde.
+CLIP|drunk_speak_1|453.19|0|— Ou teria acabado com ele antes. — Também é possível.
+CLIP|drunk_speak_1|457.75|0|— Ah, deixa para lá. — É isso.
+CLIP|drunk_speak_1|460.85|0|— Só lembro disso do Elppa. — Eu não lembro de nada dele, mas sei com certeza que fui ao funeral.
+CLIP|drunk_speak_1|470.91|0|— Espera, por que diabos você foi ao funeral do Elppa?
+CLIP|drunk_speak_1|475.05|0|— Sei lá. Resolvi ir. Tentaram me explicar que eu não devia aparecer lá.
+CLIP|drunk_speak_1|481.19|0|— Ligaram para você dizendo para não ir. — Ficaram falando: “Não venha. Jokke, não apareça aqui”.
+CLIP|drunk_speak_1|488.77|0|— Eram todos uns engravatados, uns figurões. — Que nada, eram todos conhecidos.
+CLIP|drunk_speak_1|494.43|0|— Amigos do Elppa. Só queriam me poupar do jeito deles. Repetiam: “Jokke, não venha ao funeral”.
+CLIP|drunk_speak_1|505.95|0|— Então disseram que... — ...dava para ir ao funeral do Elppa...
+CLIP|drunk_speak_1|509.77|0|— Disseram: “Não venha, vai ser melhor para você”. Mas decidi ir mesmo assim... embora eu não tenha terno.
+CLIP|drunk_speak_1|523.75|0|Não tenho terno. Quer dizer, tenho um terno para caixão. Pensei em comprar pelo menos uma camisa.
+CLIP|drunk_speak_1|529.53|0|Consegui uma camisa com estampa de funeral. E mais uma azul.
+CLIP|drunk_speak_1|537.25|0|— Uma camisa de funeral? — É, com estampa de cemitério. — Foi uma ótima compra, hein.
+CLIP|drunk_speak_1|542.11|0|É literalmente uma camisa de cemitério. Tem uma lápide estampada aqui e outra ali do lado.
+CLIP|drunk_speak_1|549.01|0|— Não sei... — E tem uma terceira lápide, com uma linda rosa azul diante do túmulo.
+CLIP|drunk_speak_1|555.93|0|— Acho que sei por que não queriam você lá. — Por quê?
+CLIP|drunk_speak_1|562.23|0|Como assim, por quê? Olha para essa camisa.
+CLIP|drunk_speak_1|567.27|0|— O que tem de errado? — Rosas azuis... — Rosas azuis?
+CLIP|drunk_speak_1|571.99|0|— O Elppa passou a vida fazendo salsichas e depois foi jogado na rua para se virar sozinho.
+CLIP|drunk_speak_1|581.23|0|— E você ainda aparece no funeral dele com uma rosa azul na camisa.
+CLIP|drunk_speak_1|586.45|0|Porra, a camisa inteira tem essa estampa. No funeral estavam a viúva, os filhos e os colegas do Elppa...
+CLIP|drunk_speak_1|592.33|0|— A esposa do Elppa nem estava lá. — Talvez estivesse perto do túmulo.
+CLIP|drunk_speak_1|595.03|0|— Ela não estava lá. — Então onde estava?
+CLIP|drunk_speak_1|598.41|0|— Viajou para algum lugar. — Para a Madeira? — É.
+CLIP|drunk_speak_1|600.03|0|— Bem que eu precisava de uns trocados. — O dinheiro do Elppa acabou.
+CLIP|drunk_speak_2|0.58|0|— Não sei. Ganhou dinheiro fácil e foi embora assim que teve oportunidade.
+CLIP|drunk_speak_2|6.22|0|— Mal enterraram o marido e ela já foi embora para o mundo. — Acho que já tinha fugido antes.
+CLIP|drunk_speak_2|13.24|0|— Mas ela sabia que o marido seria enterrado. — Quando viajou para outro país, virou um funeral no exterior; é diferente.
+CLIP|drunk_speak_2|26.5|0|— Para alguém, o Elppa era um amigo. — Para MIM ele era amigo. Meu companheiro das salsichas. Era mesmo.
+CLIP|drunk_speak_2|37.12|0|— O Elppa dedicou a vida às salsichas e à fábrica... quer dizer, talvez não a vida toda. — Não exagera, não foi tudo.
+CLIP|drunk_speak_2|44.66|0|— Ninguém manda alguém trabalhar até morrer. — Exato, mas o intestino de porco não se enfiava sozinho nas salsichas.
+CLIP|drunk_speak_2|51.82|0|— O intestino de porco não... — Intestino grosso para fazer salsicha. Puta merda.
+CLIP|drunk_speak_2|59.52|0|— Era um bom produto. O próprio Elppa dizia.
+CLIP|drunk_speak_2|67.22|0|— Eu e o Elppa já nos divertimos muito juntos...
+CLIP|drunk_speak_2|72.86|0|— Andávamos juntos por aquelas trilhas. — Isso sim era amizade entre homens.
+CLIP|drunk_speak_2|77.88|0|— Eu andava com ele enquanto ainda conseguia caminhar. Naquela época ainda não estava no hospi... *tosse* ainda não estava no hospital.
+CLIP|drunk_speak_2|90|0|— Quem estava no hospital? — Ele teve uma inflamação.
+CLIP|drunk_speak_2|94.42|0|— Ele ficou assim? Eu o vi aguentar por muito tempo. — Foi por causa daquela inflamação.
+CLIP|drunk_speak_2|104.66|0|— Disseram que ele se recuperou... mas não se recuperou, não.
+CLIP|drunk_speak_2|111.8|0|— Chegou a hora dele. Mas preciso dizer: ele era um cara muito legal.
+CLIP|drunk_speak_2|117.08|0|— Parar de trabalhar é uma libertação. Mas o Elppa era diferente, feito de outra matéria.
+CLIP|drunk_speak_2|126.02|0|— O problema era que ele achava que, enquanto estivesse vivo, o trabalho precisava ser feito.
+CLIP|drunk_speak_2|134.78|0|— E levou muito a sério terem demitido ele. — Ele ganhava para o pão de cada dia mais do que todos os outros.
+CLIP|drunk_speak_2|142.58|0|— Talvez a tristeza tenha causado aquela inflamação nas pernas. — Pode ser. Vai saber se foi isso mesmo.
+CLIP|drunk_speak_2|155.4|0|— Você acha que foi isso? — Não.
+CLIP|drunk_speak_2|158.3|0|— Então ele morreu assim, sem mais nem menos? — A jornada dele chegou ao fim.
+CLIP|drunk_speak_2|167.4|0|— Sabe... não importa se a pessoa estava triste ou feliz.
+CLIP|drunk_speak_2|173.42|0|— É, mas... — Quando a jornada já começou...
+CLIP|drunk_speak_2|179.22|0|— Dizem que a jornada importa mais do que chegar ao destino. — É.
+CLIP|drunk_speak_2|184.9|0|— Mas se ele nem sabia que tinha começado uma jornada, como poderia chegar ao destino?
+CLIP|drunk_speak_2|191.68|0|— É justamente isso: você não precisa ficar triste durante a jornada se nem sabe que está nela.
+CLIP|drunk_speak_2|205.22|0|— A questão é que... já nem sei. Acho que sim, não é?
+CLIP|drunk_speak_2|218.76|0|— Acho que está acabando. — Quem?
+CLIP|drunk_speak_2|225.92|0|— A cerveja. — As cervejas estão acabando...
+CLIP|drunk_speak_2|647.35|0|— Não tinha, não tinha cerveja. Não tinha nada. Só mij... só porcaria...
+CLIP|drunk_speak_2|656.55|0|— Nunca houve um dia tão difícil quanto passar um ou dois, até três dias sem cerveja.
+CLIP|drunk_speak_2|667.25|0|— Pelo menos era fácil até 1998. Depois...
+CLIP|drunk_speak_2|674.17|0|— Antes de tudo isso...
+CLIP|drunk_speak_3|3.14|0|— Essa máquina já sofreu bastante, e mais de uma vez. — É.
+CLIP|drunk_speak_3|15.78|0|— Não tinha nada em vila nenhuma. Achei que a gente fosse atirar um pouco.
+CLIP|drunk_speak_3|25.06|0|— Atirar nos animais com um rifle.
+CLIP|drunk_speak_3|29.08|0|— Não deu certo. Não havia nada disso lá. Aí um oficial, um babaca qualquer, veio perguntar...
+CLIP|drunk_speak_3|39.5|0|...se eu sabia segurar aquela arma e puxar o gatilho.
+CLIP|drunk_speak_3|44.08|0|— Eu disse que qualquer um consegue, se precisar. Aí acabou. Depois foi só aquele tédio de quartel.
+CLIP|drunk_speak_3|55.5|0|— Nem vale a pena falar. — Pois é...
+CLIP|drunk_speak_3|59.62|0|— Eu nem precisava ir para o serviço militar. Não me deram dispensa... — De onde?
+CLIP|drunk_speak_3|68.62|0|— Do... do treinamento da reserva. — Então não precisava ir? Por quê? — Porque eu...
+CLIP|drunk_speak_3|81.48|0|...dei um jeito para não precisar ir.
+CLIP|drunk_speak_3|86.32|0|— Por que não me contou como fazer isso? — Bem, eu...
+CLIP|drunk_speak_3|90.32|0|— Sabia que estavam atrás de mim e não disse uma palavra. Eu teria economizado doze euros em vez de comprar cerveja para você.
+CLIP|drunk_speak_3|104.48|0|Com esse dinheiro eu podia ao menos ter cortado o cabelo.
+CLIP|drunk_speak_3|109.42|0|Por que não me contou que existia um jeito de escapar?
+CLIP|drunk_speak_3|118.34|0|— Era uma coisa tão complicada que até eu mal consegui entender... Quer dizer...
+CLIP|drunk_speak_3|131.62|0|— Como você conseguiu? — Nem sei. Dei um jeito de não precisar ir. E não fui.
+CLIP|drunk_speak_3|140.32|0|— Você não foi mesmo? — Não fui.
+CLIP|drunk_speak_3|144.36|0|— Arrumei um jeito de nem precisar aparecer lá.
+CLIP|drunk_speak_3|147.36|0|— Sério que não foi? — Não fui.
+CLIP|drunk_speak_3|151.56|0|— Vieram até a minha porta. Eu fiquei quietinho. — Quietinho.
+CLIP|drunk_speak_3|157.74|0|— Fiquei quieto como um rato. Ouvi eles gritarem do lado de fora: “Abra a porta!”
+CLIP|drunk_speak_3|166.62|0|— Eu disse que não abriria de jeito nenhum, mas felizmente não ouviram; falei baixinho. Por isso...
+CLIP|drunk_speak_3|178.14|0|— Você teve sorte. — Saí pela janela dos fundos e nunca mais me viram.
+CLIP|drunk_speak_3|187.34|0|— Não conseguiram me pegar. — Podia ter me contado antes! Era só ficar quieto e pronto, sem serviço militar.
+CLIP|drunk_speak_3|198.9|0|— Você teria ido correndo assim que chamassem.
+CLIP|drunk_speak_3|203.52|0|— Eu precisava ir. — Eu não fui. É só ignorar e não precisa mexer um dedo.
+CLIP|drunk_speak_3|213.58|0|— Pois é, mas eu cheguei lá um dia antes.
+CLIP|drunk_speak_3|224.12|0|— Você ficou lá quase uma semana inteira, porra!
+CLIP|drunk_speak_3|228.84|0|— Não exagere. Eu só fiquei bebendo cerveja.
+CLIP|drunk_speak_3|232.18|0|— Até esqueci de aparecer lá. Esqueci completamente. — Onde?
+CLIP|drunk_speak_3|239.22|0|— No alistamento. — Claro, esqueceu. Se tivesse saído de casa, lembraria.
+CLIP|drunk_speak_3|244.88|0|— No começo eu só esqueci. Depois de uma semana eles apareceram do nada...
+CLIP|drunk_speak_3|251.64|0|...perguntando se eu pretendia me apresentar ao serviço militar. Respondi que deviam estar brincando.
+CLIP|drunk_speak_3|256.52|0|— Você não teria esquecido se tivesse ido. — Estou dizendo que esqueci logo no começo.
+CLIP|drunk_speak_3|263.3|0|— Claro, você ficou uma semana lá só por esporte, né?
+CLIP|drunk_speak_3|268.54|0|— No ano que vem eu ia começar um negócio agrícola. — Então vou te dizer uma coisa...
+CLIP|drunk_speak_3|279|0|— Foi um esforço inútil. Se tivesse ido, pelo menos teria feito bem para você.
+CLIP|drunk_speak_3|291.52|0|— Pelo menos economizou uns doze euros. — E economizei com muito estilo!
+CLIP|drunk_speak_3|300.84|0|— Você derramou comida na mesa? — Estou vendo. Depois limpo com água.
+CLIP|drunk_speak_3|312.02|0|— Limpe a mesa.
+CLIP|drunk_speak_3|316.52|0|— Lembra de quando eu estava... em 1985?
+CLIP|drunk_speak_3|326.36|0|— Você não é tão velho assim, porra. — Ah, vai se ferrar.
+CLIP|drunk_speak_3|331.78|0|— Em 1985 eu fazia estágio com o Mikko atrás do bar, naquele lugar em Kokemäki.
+CLIP|drunk_speak_3|345.88|0|— O Mikko estava lá? — Quem? — O Mikko, o barman.
+CLIP|drunk_speak_3|356.96|0|— Eu estava lá. — Você estava, mas e o Mikko, porra?
+CLIP|drunk_speak_3|359.52|0|— Passei o tempo todo achando que o Mikko estava lá! Nunca entrei naquele bar.
+CLIP|drunk_speak_3|365.16|0|— Como assim? Está falando do bar do Rasta? — Isso. Nunca fui porque achei que o Mikko era o dono.
+CLIP|drunk_speak_3|373.92|0|— Eu trabalhava lá, não havia Mikko nenhum. — Você estava lá! Eu podia ter aparecido e ensinado umas coisas.
+CLIP|drunk_speak_3|384.7|0|— Claro. — Pode apostar.
+CLIP|drunk_speak_3|387.54|0|— Pelo menos no Boss era um pouco mais barato. — É, naquela época...
+CLIP|drunk_speak_3|392.32|0|— De onde você tirou esse Mikko imaginário? — Que imaginário? O Mikko estava tão bêbado quanto eu.
+CLIP|drunk_speak_3|401.54|0|— Ah, entendi. Achou que ele trabalhava lá. — Isso. Deixei para lá, pensei que ele estava pelos bares.
+CLIP|drunk_speak_3|410.44|0|— Pois é, não tinha Mikko nenhum. Só eu.
+CLIP|drunk_speak_3|417.58|0|— Que Mikko?
+CLIP|drunk_speak_3|428.84|0|— Porra, não lembro... Ele tinha um sobrenome estrangeiro. — Ah, um sobrenome estrangeiro?
+CLIP|drunk_speak_3|435.82|0|— Era um cara qualquer... — Hörtsiläinen?
+CLIP|drunk_speak_4|302.92|0|— Para gente assim, o melhor seria construir clubes privados, porra, para as festas de sauna deles.
+CLIP|drunk_speak_4|315.16|0|— Queria que soubessem que o Elppa morreu por causa deles. Isso me deixa fervendo de raiva.
+CLIP|drunk_speak_4|328.64|0|— As mãos deles estão sujas até os cotovelos. — Pois é...
+CLIP|drunk_speak_4|338.74|0|— E para onde vai todo esse dinheiro? Para os Mercedes e aquele cheiro de couro novo. Até a boca deles fede a isso.
+CLIP|drunk_speak_4|353.46|0|— Não trabalho desde aquela época... E agora, o que fazemos?
+CLIP|drunk_speak_4|363.58|0|— Já estive em lugares onde alguém trabalha duro hoje. Eu não. É a vontade desses figurões; não vou para lá.
+CLIP|drunk_speak_4|374.16|0|— No fim a gente acaba cedendo, né? — É. Por isso estamos aqui bebendo vodca.
+CLIP|drunk_speak_4|381.52|0|— Neste paraíso fiscal de verdade...
+CLIP|drunk_speak_4|386.08|0|— Aqui na nossa vila esquecida, nem Deus põe os pés. — Mas o jornal da capital já mete as mãos por aqui! Que tragédia.
+CLIP|drunk_speak_4|395.7|0|— Porra, o seu Pekka traz esse jornal para cá. Isso é toque do diabo, não de Deus!
+CLIP|drunk_speak_4|405.3|0|— Vai à merda com esse seu Mercedes. Olha só o figurão... — E você ganhou um carro novo, porra!
+CLIP|drunk_speak_4|412.48|0|— Claro, a mão de Deus nos protege... deve ser a mão do arado.
+CLIP|drunk_speak_4|417.9|0|— Esse jornal também é para gente comum, que vive o dia de hoje, não daqui a dois anos, porra.
+CLIP|drunk_speak_4|430.84|0|— É...
+CLIP|drunk_speak_4|433.86|0|— É a pura verdade, porra. — Exatamente isso.
+CLIP|drunk_speak_4|441.22|0|— A gente tenta ajudar as pessoas, ser amigo delas...
+CLIP|drunk_speak_4|446.54|0|— ...quero fazer o bem enquanto puder. Mas sou só um bêbado qualquer. Eu...
+CLIP|drunk_speak_4|454.64|0|— ...entendo tudo. Quero dar o melhor de mim... — É, até a última camisa.
+CLIP|drunk_speak_4|463.1|0|— Quero dividir o que tem valor para mim. — É...
+CLIP|drunk_speak_4|469.1|0|— Se eu visse um figurão aqui, mandaria ele embora na mesma hora. Fora daqui, suma!
+CLIP|drunk_speak_4|479.38|0|— Filho da puta, ainda vem falar essas bobagens. — Ah, vai se ferrar...
+CLIP|drunk_speak_4|486.1|0|— Disseram que nosso lugar é no inferno. — Posso dizer quem vai parar lá...
+CLIP|drunk_speak_4|495.44|0|— Todos esses figurões vão para lá. — Vão queimar no inferno.
+CLIP|drunk_speak_4|498.02|0|— Vão acabar no inferno com os Mercedes deles. — É uma máfia desgraçada, combinaram tudo para nos expulsar daqui.
+CLIP|drunk_speak_4|507.12|0|— Depois dizem: “Vão para o inferno!”. Nem imaginam que estaremos esperando por eles lá.
+CLIP|drunk_speak_4|514.74|0|— Aquele desgraçado vai chegar no Mercedes dizendo: “Venham para o inferno!”. Vamos ver quem encara quem e quanto vocês valem.
+CLIP|drunk_speak_4|529.98|0|— Quem vai servir vocês lá? — Quem vai buscar uma cerveja?
+CLIP|drunk_speak_4|535.28|0|— É assim mesmo. Vão ter que servir uns aos outros no inferno. Quem somos nós?
+CLIP|drunk_speak_4|547.16|0|— Lá não tem ninguém além dos que mandaram a gente para o inferno e dos figurões que fizeram isso. É um absurdo.
+CLIP|drunk_speak_4|564.46|0|— Porra... Só pensam no próprio rabo e no próprio umbigo. Não percebem isso.
+CLIP|drunk_speak_4|571.34|0|— Porra... Só pensam no próprio rabo e no próprio umbigo. Não percebem isso. — É...
+CLIP|drunk_speak_3|441.62|0|— Não, era um cara de Pihäry. — Rotsilainen?
+CLIP|drunk_speak_3|446.64|0|— Sei lá quem era aquele sujeito. Nem sei que língua era, mas o nome parecia Bergström ou algo assim.
+CLIP|drunk_speak_3|455.46|0|— Mikko. — O que ele fez para você?
+CLIP|drunk_speak_3|458.38|0|— Nada. Só pensei que talvez ele aprontasse alguma coisa se eu ficasse por perto.
+CLIP|drunk_speak_3|464.06|0|— Nunca se sabe. — É verdade, nunca se sabe.
+CLIP|drunk_speak_3|468.9|0|— Talvez tenha sido melhor você não ir ao Rastas. Podia descobrir que o Mikko estava lá.
+CLIP|drunk_speak_3|475.52|0|— É. — Mas era eu. — Isso, você.
+CLIP|drunk_speak_3|480.12|0|— Fiquei por lá uns dois dias, mais ou menos.
+CLIP|drunk_speak_3|490.24|0|— Foi tempo demais para uma pausa. — É, ainda mais porque eu gostava daquele trabalho.
+CLIP|drunk_speak_3|499.3|0|— Gostava... — Então por que não ficou mais tempo?
+CLIP|drunk_speak_3|505.84|0|— Aconteceu o que tinha que acontecer. Eu fazia uns bicos à noite e...
+CLIP|drunk_speak_3|511.74|0|— O dinheiro que ganhava no Rastas era uma piada.
+CLIP|drunk_speak_3|518.04|0|— Sempre que trabalhava lá? — Sempre.
+CLIP|drunk_speak_3|523.7|0|— O lucro era sempre ridículo. — Pois é...
+CLIP|drunk_speak_3|529.94|0|— E a culpa é minha? Não decido quando as pessoas bebem nem quanto.
+CLIP|drunk_speak_3|536.64|0|— É. — O quê?
+CLIP|drunk_speak_3|538.94|0|— Você gastava todo aquele dinheiro por aí, porra.
+CLIP|drunk_speak_3|542.28|0|— Pensei: se ninguém vem beber, eu mesmo bebo para não desperdiçar tudo aquilo.
+CLIP|drunk_speak_3|548.94|0|— É... — Eu dizia... — No fim, fez certo.
+CLIP|drunk_speak_3|552.96|0|— O Rastas abria às cinco, quer dizer, às dezessete horas, às cinco da tarde.
+CLIP|drunk_speak_4|1|0|— Espera, que horas eram? Às sete ou às cinco? Tanto faz.
+CLIP|drunk_speak_4|9.34|0|— Ou talvez à uma?
+CLIP|drunk_speak_4|11.92|0|— A que horas o Rastas abria? — Sei lá, à uma, às sete, às cinco ou nunca.
+CLIP|drunk_speak_4|21.2|0|— Enfim, fui até lá e abri o bar. Não havia ninguém na porta.
+CLIP|drunk_speak_4|33.52|0|— Fiquei esperando um tempão. Pensei que, se ninguém viesse beber aquilo, seria tudo desperdiçado.
+CLIP|drunk_speak_4|46.36|0|— Sabe como dói ver uma cerveja boa ser desperdiçada? — Sei, meu velho.
+CLIP|drunk_speak_4|54.68|0|— Ainda bem que eu estava lá. — Nada se desperdiça comigo. Sou sempre o primeiro a pegar a garrafa.
+CLIP|drunk_speak_4|62.62|0|— Tem que beber logo para não desperdiçar. É isso, entende?
+CLIP|drunk_speak_4|67.18|0|— Senão temos que buscar em outro lugar. — Exatamente. É preciso valorizar e respeitar isso...
+CLIP|drunk_speak_4|74.48|0|— Meu Deus... não deixemos... É como uma garrafa de cerveja, só que parece feita de couro.
+CLIP|drunk_speak_4|85.06|0|— Para que os jovens não deixem isso... não deixem tudo ir para o lixo.
+CLIP|drunk_speak_4|91.72|0|— E quando isso se perde... — É que...
+CLIP|drunk_speak_4|95.5|0|— Temos que usar esse método para não desperdiçar nada. — Pois é.
+CLIP|drunk_speak_4|103.38|0|— Decidi que, enquanto eu estivesse no comando, nenhuma cerveja seria desperdiçada. Pode apostar. Não vou permitir.
+CLIP|drunk_speak_4|115.4|0|— Você fez isso... — Bebi tudo o que consegui. O máximo que coube em mim. — Pelo Rastas...
+CLIP|drunk_speak_4|118.78|0|— Sim, fiz isso pelo Rastas. E, além de tudo...
+CLIP|drunk_speak_4|125.52|0|— Bebi o máximo que pude. Fiz de tudo para esvaziar o estoque.
+CLIP|drunk_speak_4|133.98|0|— Aí apaguei, fiquei acabado. Estava cansado... — Cansado pra caralho...
+CLIP|drunk_speak_4|140.3|0|— Apaguei e devo ter dormido em pé. Saí do trabalho como se tivesse caído de cara em outro lugar.
+CLIP|drunk_speak_4|149.78|0|— Eu só queria ir para casa dormir. Mas estava no meio do expediente... trabalhei assim por dois dias.
+CLIP|drunk_speak_4|158.98|0|— Fiz isso pelo bem maior, para não desperdiçar a cerveja. — É...
+CLIP|drunk_speak_4|164.42|0|— Pegue, esconda isso rápido. — Não tenho mais nada para esconder. Já levaram tudo...
+CLIP|drunk_speak_4|169.56|0|— Esconda. — Igual ao que aconteceu com o Elppa. — Não dá...
+CLIP|drunk_speak_4|172.84|0|— Aqueles figurões não são gente como nós. Vão de Mercedes com os faróis acesos e ficam dançando por aí.
+CLIP|drunk_speak_4|184.1|0|— Ficam indo e voltando sem parar. — Para onde? — Entre o Parlamento e Lanzarote.
+CLIP|drunk_speak_4|190.1|0|— Uma pessoa sensata não precisa ir a lugar nenhum se tudo fica entre o caixa eletrônico e a geladeira.
+CLIP|drunk_speak_4|201.12|0|— Às vezes gosto de passear entre o caixa eletrônico, a geladeira e algum bar.
+CLIP|drunk_speak_4|210.22|0|— A elite decidiu que produtos vencidos servem para as pessoas comuns. Para elas, qualquer coisa pode ser vendida.
+CLIP|drunk_speak_4|223|0|— Eles nem percebem a diferença. — Não estão nem aí.
+CLIP|drunk_speak_4|227.3|0|— Não ligam para nada. — Eu sei, mas alguém se importa e presta atenção.
+CLIP|drunk_speak_4|233.46|0|— Faz diferença correr ao banheiro na hora ou só algumas horas depois.
+CLIP|drunk_speak_4|239.24|0|— É completamente diferente. Quando um homem comum bebe, logo precisa correr... — Na hora ou horas depois.
+CLIP|drunk_speak_4|247.48|0|— Claro que ele bebe tudo de uma vez. — Mas a elite talvez não. O que esses figurões fazem?
+CLIP|drunk_speak_4|255.18|0|— Andam por aí nos carrões. — É, como sempre.
+CLIP|drunk_speak_4|257.76|0|— Vão de Mercedes ao caixa eletrônico, só para estacionar o carrão bem na frente,
+CLIP|drunk_speak_4|265.3|0|— depois voltam ao carro e tornam a ir ao caixa. — Não faz o menor sentido.
+CLIP|drunk_speak_4|272.24|0|— Isso não tem lógica nenhuma. E de quem é o dinheiro? De quem?
+CLIP|drunk_speak_4|278.92|0|— Das pessoas comuns, claro! — Isso mesmo, roubam o nosso dinheiro.
+CLIP|drunk_speak_4|283.08|0|— O dinheiro da gente daqui! — Do trabalhador comum!
+CLIP|drunk_speak_4|285|0|— Nosso dinheiro. E ainda se acham grandes figurões. Pensam que podem nos vender cerveja choca e a gente vai ficar quieto!
+CLIP|livaloinen_car_sold|15.08|0|Ainda não sei se vai esquentar ou esfriar, mas quando fizer trinta ou quarenta graus negativos,
+CLIP|livaloinen_car_sold|24.02|0|vou precisar de lenha como água. Vou ligar para você.
+CLIP|livaloinen_car_sold|29.34|0|Sempre que precisar, vou ligar e você traz lenha. Muito obrigado e...
+CLIP|livaloinen_car_sold|41.98|0|bom trabalho com o carro. A gente se fala de novo. Boa viagem, obrigado!
+CLIP|livaloinen_car_price|0|0|Sobre o preço... até fico sem jeito de pedir mais. Aceito quinhentos marcos, e...
+CLIP|livaloinen_car_price|11.68|0|ficaria satisfeito se conseguisse esse valor. Não queria baixar mais, mas não é muito por um carro desses.
+CLIP|perkio|0|0|Perkiö. Certo. Tudo bem. Vou tentar. Certo.
+CLIP|perkio2|0|0|Perkiö. Pode vir dar uma olhada, se quiser. Certo, vou deixar preparado.
+CLIP|perkio3|0|0|Perkiö. Eu disse para ligar no telefone fixo. Quem está falando? Ah, certo. Quando tiver um tempo, vou empacotar. Está bem.
+CLIP|jortikka|0|0|Jortikka. O quê? Ah, já sei. Sim, tenho. Claro. Vou me preparar para enviar. Certo, tchau.
+CLIP|kepola|0|0|Kepola. Ah, está ligando pelas peças. Vou empacotar e enviar para o senhor agora. Certo.
+CLIP|kepola2|0|0|Kepola. Tudo bem, ainda tenho. E também tenho as outras peças. Vou enviar agora.
+CLIP|kepola3|0|0|Qual é o motivo da ligação?
+CLIP|kepola3|7.88|0|Você está aí no telefone, porra? Ah... sim, ainda tenho.
+CLIP|kepola3|16.68|0|Certo, será pagamento na entrega. Vou despachar agora. Está bem.
+CLIP|manila2|0|0|Manila... Sim... Alô?
+CLIP|manila2|9.72|0|Você deve estar brincando. Por esse preço, não dá... Já que se enganou, tudo bem.
+CLIP|manila2|24.68|0|Vou enviar pelo correio. Até mais!
+CLIP|myynti2|0|0|Alô, alô. Sim, estou ligando por causa das peças. Claro, publiquei o anúncio no jornal. Ainda tenho algumas.
+CLIP|myynti2|8.52|0|Vou empacotar e mandar para o senhor, certo? Obrigado. Tchau.
+CLIP|myynti4|0|0|Alô, pois não? Sim, o anúncio era meu.
+CLIP|myynti4|6.48|0|As peças estão em ótimo estado, não precisa se preocupar. Vou empacotar e enviar. Obrigado, tchau!
+CLIP|myynti5|0|0|Rtsavoinen. Sim, o anúncio era meu.
+CLIP|myynti5|5.58|0|Encontrei algumas coisas na garagem. Acho que as peças estão em boas condições.
+CLIP|myynti5|10.78|0|Vou colocar tudo numa caixa e enviar para o senhor. Obrigado. Até mais!
+CLIP|teuva|0|0|Teuva... Sim...
+CLIP|teuva|5.16|0|Vou enviar. Sim, vou enviar. Mas para onde? Dite o endereço para mim. Certo...
+CLIP|teuva|19.74|0|Sim, claro. Certo, vou mandar para o senhor. Até mais!
+CLIP|vittuilupuhelin|0|0|Aqui é... porra...
+CLIP|vittuilupuhelin|2.24|0|Encomenda no nome de... pena que ainda não entupiu. Hehehe. Certo, especialista, diga seu endereço e com o que trabalha.
+CLIP|vittuilupuhelin|11.16|0|Onde? Tem desemprego em todo lugar, porra. Para de falar bobagem, seu maluco. Se quiser chegar a algum lugar na vida...
+CLIP|vittuilupuhelin|21.14|0|...é bom ter um QI maior que o número do sapato. Puta merda. Que idiota.
+CLIP|vittuilupuhelin|31.54|0|Está perdendo a paciência? Não tem dinheiro para pagar as contas, seu pobre desgraçado? Continue assim e não vai receber peça nenhuma.
+CLIP|vittuilupuhelin|38.12|0|Que se dane essa vila de caipiras. *risada* O que você quer encomendar? Tem dinheiro para pagar?
+CLIP|vittuilupuhelin|48.26|0|Quer entrega normal, prioritária ou expressa? Aposto que prefere a mais rápida.
+CLIP|vittuilupuhelin|55.84|0|E como vai pagar, porra? Tem dinheiro? *risada* Certo, vou enviar. Falou.
+CLIP|kylatie|0|0|Pois não? Certo. Tenho umas peças aqui. Se conseguir vendê-las, talvez eu finalmente pague minhas dívidas.
+CLIP|lestinen|0|0|Lestinen falando. Tudo bem, vou enviar. Tchau, tchau!
+CLIP|paakkunen|0|0|Olá. Com esse frio... vou mandar pelo correio. É a melhor opção...
+CLIP|mattinen2|0|0|Henri Mattinen falando... Pois não?
+CLIP|mattinen2|7.46|0|O que está resmungando? *pigarra* Fale, o que você quer?
+CLIP|mattinen2|26.6|0|Certo, vou enviar, se não esquecer. Até mais.
+CLIP|nakkila|0|0|Nakkila. Claro. Vou empacotar e enviar.
+CLIP|nakkila2|0|0|Nakkila. Certo... vou deixar no correio agora. Se cuida.
+CLIP|huttunen|0|0|Huttunen falando. Quem é? Ah, sim... claro. Espere, como posso ajudar?
+CLIP|huttunen|14.84|0|Qual é exatamente o modelo? Ah, claro... Eu já tive um carro desses.
+CLIP|huttunen|14.84|0|Tive um desses quando ainda estudava. Era manual, mas os vidros eram péssimos, não dava para ver nada. Isso mesmo.
+CLIP|huttunen|29.94|0|Você já colocou pneus de inverno? Caiu muita neve. É verdade.
+CLIP|huttunen|41.4|0|Certo, vou despachar agora. Enfim... deixa para lá.
+CLIP|huttunen4|0|0|Huttunen. Sim. Já vendi aquelas peças. Foi um bom negócio.
+CLIP|huttunen4|9.38|0|Vendi um monte de peças. Você já teve um carro? Qual modelo? Ah, claro...
+CLIP|huttunen4|24.04|0|Tinha uma lata velha aqui, uma Satsuma marrom, isso mesmo.
+CLIP|huttunen4|32.88|0|Espere, não era da ruiva? Não, devia ser marrom mesmo. Isso.
+CLIP|huttunen4|39.66|0|Era um bom carro, mas acho que a ferrugem acabou com ele.
+CLIP|huttunen4|49.74|0|Vou tentar encontrar mais algumas peças e talvez envie. Se cuida, até mais.
+CLIP|arsyttava_cityjabaB|0|0|Mas que isso! Estávamos na Lapônia! Ficamos lá duas semanas com as crianças, esquiando.
+CLIP|arsyttava_cityjabaB|11.76|0|Agora o Tino começou a andar de snowboard. Virou moda esses moleques de calça caída, mas se ele gosta, tudo bem.
+CLIP|arsyttava_cityjabaB|19.24|0|Deixe ele se divertir enquanto pode. Talvez em dois anos enjoe dessa palhaçada e faça algo útil.
+CLIP|arsyttava_cityjabaB|26.92|0|Mas é sempre a mesma coisa com os jovens: são uns inúteis. Não têm a mesma fibra que a gente.
+CLIP|arsyttava_cityjabaB|32.96|0|Agora só pensam em joguinhos, invenções e aparelhos. Querem tudo servido numa bandeja.
+CLIP|03_Petski_teffelgren_puhelimessa_Kyllä_koitin_soittaa_teille_kiveksessä_luomi|0.5|0|Petski Teffelgren falando.
+CLIP|03_Petski_teffelgren_puhelimessa_Kyllä_koitin_soittaa_teille_kiveksessä_luomi|3.44|0|Eu tentei ligar para vocês. Estou com um problema numa pinta no testículo. Uhum. Certo. Sim. Uhum.
+CLIP|04_juu_tilataan_lisää_varastointilaatikoita|0.2|0|Precisamos de mais caixas para embalar e depois organizar o transporte dos carregadores.
+CLIP|05_Petski_teffelgren_puhelimessa_Minkälaista_sähkösopimusta_tarjoatte_ei_ole_kiire|0.2|0|Petski Teffelgren falando.
+CLIP|05_Petski_teffelgren_puhelimessa_Minkälaista_sähkösopimusta_tarjoatte_ei_ole_kiire|3.24|0|Olá, que tipos de contrato de energia elétrica vocês oferecem? Uhum. Certo, pode continuar. Não tenho pressa nenhuma.
+CLIP|06_langaton_lataus_huhu|0.2|0|Petski Teffelgren falando. E aí, Seppo! Sem pressa. A única coisa para a qual alguém tem pressa é a cova.
+CLIP|06_langaton_lataus_huhu|8.04|0|Tentei ligar antes. Ouviu o boato de que alguém inventou de carregar o telefone sem fio?
+CLIP|06_langaton_lataus_huhu|18.92|0|Que absurdo. Também acho. Telefone não é escova de dentes elétrica. Sem cabo? Só pode ser piada.
+CLIP|06_langaton_lataus_huhu|27.7|0|É, eu disse a mesma coisa. Vamos continuar empacotando carregadores por muitos anos.
+CLIP|06_langaton_lataus_huhu|35.38|0|Isso. Não precisa se preocupar. Era só isso. Mantemos contato. Se cuida.
+CLIP|07_Ollila_moro|0.2|0|Petski Teffelgren falando.
+CLIP|07_Ollila_moro|2.98|0|Ollila, olá! Como vai, meu velho?
+CLIP|07_Ollila_moro|6.38|0|Que ótimo! Os negócios vão muito bem e o dinheiro está entrando sem parar.
+CLIP|07_Ollila_moro|13.42|0|Não sujo as mãos; deixo os trabalhadores fazerem o serviço pesado. Exatamente.
+CLIP|07_Ollila_moro|20.08|0|É trabalho duro, eles são resistentes, não vou negar. Ótimo, então mantemos contato!
+CLIP|08_muovikuorikot_myöhässä|0.7|0|Oi, Seppo! O carregamento de Salo parece ter ficado preso no caminho. Você já ligou para a transportadora?
+CLIP|08_muovikuorikot_myöhässä|8.7|0|A linha inteira vai parar se não colocarmos essas bandejas de plástico na máquina.
+CLIP|08_muovikuorikot_myöhässä|14.32|0|Não...
+CLIP|08_muovikuorikot_myöhässä|15.68|0|Pista escorregadia não é desculpa. Ligue de novo e diga
+CLIP|08_muovikuorikot_myöhässä|19.82|0|que, se as bandejas não chegarem até a tarde, vamos rever o contrato do próximo ano.
+CLIP|08_muovikuorikot_myöhässä|25.78|0|Nesse ritmo nunca vamos cumprir as metas de pedidos. Certo, se cuida.
+CLIP|09_investointilaina|0.5|0|Petski Teffelgren falando.
+CLIP|09_investointilaina|3.02|0|Estou ligando sobre o empréstimo para investimento. Precisamos instalar a segunda linha automatizada antes de janeiro do ano que vem.
+CLIP|09_investointilaina|15.12|0|São as novas versões, menores e mais leves. Sim, as garantias estão todas certas.
+CLIP|09_investointilaina|20.92|0|Pelas encomendas, parece que todo finlandês vai carregar dois telefones no bolso. Posso ligar sobre os documentos à tarde?
+CLIP|09_investointilaina|29.54|0|Perfeito. Então nos falamos. Até mais.
+CLIP|10_puhelu_englanniksi_alihankkijalle|0|0|Alô?
+CLIP|10_puhelu_englanniksi_alihankkijalle|2.2|0|Aqui é Teffelgren.
+CLIP|10_puhelu_englanniksi_alihankkijalle|5.88|0|Temos um problema com o último lote de componentes.
+CLIP|10_puhelu_englanniksi_alihankkijalle|11.4|0|A qualidade não está de acordo com o que combinamos.
+CLIP|10_puhelu_englanniksi_alihankkijalle|15.48|0|Não podemos enviar isso ao nosso principal cliente. “Quase bom” não é suficiente.
+CLIP|10_puhelu_englanniksi_alihankkijalle|22.04|0|Preciso que garanta que o próximo lote siga cem por cento as especificações,
+CLIP|10_puhelu_englanniksi_alihankkijalle|29.54|0|ou teremos que procurar outro fornecedor. Obrigado. Tchau.
+CLIP|11_kilpailijan_puolta_pienempi_pakkaus|0.5|0|Petski Teffelgren falando. Claro, tenho tempo para conversar.
+CLIP|11_kilpailijan_puolta_pienempi_pakkaus|5.32|0|Ouvi um boato de que a concorrência vai lançar uma embalagem com metade do tamanho da nossa.
+CLIP|11_kilpailijan_puolta_pienempi_pakkaus|12.06|0|Tem alguma confirmação?
+CLIP|11_kilpailijan_puolta_pienempi_pakkaus|14.76|0|Precisamos acelerar o desenvolvimento e dar o nosso melhor.
+CLIP|11_kilpailijan_puolta_pienempi_pakkaus|18.3|0|Se reduzirem o revestimento plástico antes de nós, estamos perdidos.
+CLIP|11_kilpailijan_puolta_pienempi_pakkaus|22.76|0|Peça ao pessoal do laboratório para acelerar. Vamos mostrar o protótipo à diretoria mesmo que ainda não esteja pronto.
+CLIP|11_kilpailijan_puolta_pienempi_pakkaus|29.36|0|O design é fundamental hoje. Certo, falamos depois. Até mais!
+CLIP|12_puhelu_kotoa|0.5|0|Oi, querida! Tenho um tempinho, sim. Estou numa correria que você nem imagina.
+CLIP|12_puhelu_kotoa|7.38|0|Hoje vou me atrasar no trabalho. Que tal comermos algo gostoso no fim de semana?
+CLIP|12_puhelu_kotoa|12.52|0|Prometo deixar o telefone no silencioso pelo menos no domingo à noite. Prometo! Até logo. Beijos!
+CLIP|13_puhelu_kotoa_2|0.3|0|Oi, querida! Claro que posso conversar, não tenho nada urgente agora.
+CLIP|13_puhelu_kotoa_2|6.16|0|Liguei mais cedo sobre nossas férias em Kittilä.
+CLIP|13_puhelu_kotoa_2|14.4|0|Talvez pudéssemos escolher outro lugar. Em Kittilä está fazendo mais de cinquenta graus negativos!
+CLIP|13_puhelu_kotoa_2|21.12|0|Registraram lá o frio mais intenso. Pensei que poderíamos ir para Lanzarote.
+CLIP|13_puhelu_kotoa_2|27.14|0|Imagine você de biquíni enquanto eu tomo alguma coisa no bar da piscina. Isso mesmo!
+CLIP|13_puhelu_kotoa_2|36.98|0|Pode procurar minhas sandálias, as meias brancas e aquela pochete de couro?
+CLIP|13_puhelu_kotoa_2|47.54|0|Seria ótimo. Conversamos melhor quando eu chegar em casa. Perfeito! Tchau, beijos!
+CLIP|14_Oulun_energiakriisi|0.6|0|E aí, Seppo!
+CLIP|14_Oulun_energiakriisi|2.68|0|Sim, posso conversar. Não tenho pressa nenhuma.
+CLIP|14_Oulun_energiakriisi|6.92|0|Tentei ligar antes: Oulu está passando por uma crise de energia.
+CLIP|14_Oulun_energiakriisi|12.34|0|As usinas já ativaram os sistemas de emergência. Pensei...
+CLIP|14_Oulun_energiakriisi|18.2|0|se o pessoal do laboratório poderia montar um sistema de reserva para os nossos
+CLIP|14_Oulun_energiakriisi|24.12|0|carregadores, para que as pessoas carreguem os telefones por ele. Pois é.
+CLIP|14_Oulun_energiakriisi|31.28|0|Depois poderíamos até empacotar carregadores para esses carregadores de emergência...
+CLIP|14_Oulun_energiakriisi|38.76|0|Negócio é negócio! Pense nisso e voltamos a conversar. Até mais!
+CLIP|16_Faffu_ja_pasianssi|1|0|Oi, vovô! Claro que tenho tempo. Vou ajudar você com o Paciência.
+CLIP|16_Faffu_ja_pasianssi|8|0|Onde está a carta agora? Consegue ver alguma coisa na tela?
+CLIP|29_skaalataan_yritystä|5|0|Ah, certo. Era um assunto interessante. Ainda bem que ligou, eu também queria falar com você.
+CLIP|29_skaalataan_yritystä|14.58|0|Leu aquele artigo do fim do ano passado, dizendo que no futuro os finlandeses teriam três telefones cada?
+CLIP|29_skaalataan_yritystä|22.58|0|O número de telefones vai aumentar centenas por cento. É exatamente isso.
+CLIP|29_skaalataan_yritystä|32.96|0|Sabe o que isso significa? Possibilidades infinitas de crescimento. Isso é só o começo.
+CLIP|29_skaalataan_yritystä|42.08|0|Acho que cada pessoa terá ainda mais de três telefones. Talvez cinco. Sim!
+CLIP|29_skaalataan_yritystä|47.68|0|Exatamente. Vamos pensar no futuro e crescer, crescer, crescer!
+CLIP|29_skaalataan_yritystä|54.46|0|Vamos expandir e aumentar a escala da empresa. Ótimo! Falamos depois. Até mais!
+CLIP|30_participating_to_seminar|0.6|0|Petski Teffelgren.
+CLIP|30_participating_to_seminar|3.64|0|Ah, sim. Obrigado por retornar a ligação.
+CLIP|30_participating_to_seminar|7.44|0|Sim.
+CLIP|30_participating_to_seminar|9.38|0|Estamos interessados em participar da Feira Internacional de Operadoras de Telefonia Móvel e Telecomunicações para Novos Clientes.
+CLIP|30_participating_to_seminar|23.74|0|Isso. Ela acontece em setembro, no Alasca.
+CLIP|30_participating_to_seminar|30|0|Eu sei. Esse frio desgraçado não importa. Somos finlandeses.
+CLIP|30_participating_to_seminar|36.16|0|Hum...
+CLIP|30_participating_to_seminar|37.48|0|Queremos um estande no pavilhão de exposições. Sim, somos exibicionistas.
+CLIP|30_participating_to_seminar|44.94|0|Teffelgren, parceiro profissional em telecomunicações.
+CLIP|30_participating_to_seminar|51.46|0|Empacotamos carregadores de telefone. Sim, acessórios.
+CLIP|30_participating_to_seminar|57.66|0|Temos uma equipe excelente e um processo de embalagem muito eficiente.
+CLIP|30_participating_to_seminar|63.14|0|Uhum...
+CLIP|30_participating_to_seminar|64.86|0|Certo. Avise se houver espaço para nos acomodar.
+CLIP|30_participating_to_seminar|72.94|0|Conversamos novamente. Até mais.
+CLIP|31_phonechargers_not_fitting_in_phone|0.3|0|Petski Teffelgren.
+CLIP|31_phonechargers_not_fitting_in_phone|3.02|0|Oi, Joanna. Recebi seu e-mail.
+CLIP|31_phonechargers_not_fitting_in_phone|8.14|0|Não entendi direito o que você quis dizer.
+CLIP|31_phonechargers_not_fitting_in_phone|13.94|0|Pode explicar como nossos carregadores não servem no telefone? Enviamos quinhentas unidades.
+CLIP|31_phonechargers_not_fitting_in_phone|31.02|0|Está dizendo que nenhuma serviu?
+CLIP|31_phonechargers_not_fitting_in_phone|35.42|0|Não entendo. Joanna, talvez você precise trocar de telefone.
+CLIP|31_phonechargers_not_fitting_in_phone|44.32|0|Aí poderia usar os carregadores que enviamos. Acho que é uma ótima ideia de negócio.
+CLIP|31_phonechargers_not_fitting_in_phone|57.46|0|Certo, pense nisso e me ligue depois. Vamos resolver, Joanna. Não precisa ficar nervosa. Tchau.
+CLIP|32_conquer_asian_markets|0.2|0|Petski Teffelgren.
+CLIP|32_conquer_asian_markets|2.84|0|Oi, obrigado por retornar. Preciso da sua ajuda. Estamos muito interessados no mercado asiático, mas não temos contatos.
+CLIP|32_conquer_asian_markets|18.4|0|Ficaríamos muito felizes se pudéssemos aproveitar seus contatos. Uhum.
+CLIP|32_conquer_asian_markets|28.92|0|Sim.
+CLIP|32_conquer_asian_markets|30.46|0|Também tem o problema de eu não falar japonês muito bem. Sei dizer “arigato” e “debu rekōdā”, mas...
+CLIP|32_conquer_asian_markets|42.78|0|“Debu rekōdā” é como um gravador, acho. Fora isso, não sei mais nada.
+CLIP|32_conquer_asian_markets|52.92|0|Podemos marcar uma reunião, fazer um plano e conquistar os mercados asiáticos.
+CLIP|32_conquer_asian_markets|65.16|0|Certo. Mande um e-mail com uma data possível. Obrigado. Tchau.
+CLIP|33_Seppo_työväenopistoon_japania_lukemaan|0.2|0|Oi, Seppo! Você recebeu meu e-mail?
+CLIP|33_Seppo_työväenopistoon_japania_lukemaan|5.72|0|Inscrevi você num curso de japonês no centro de educação de adultos.
+CLIP|33_Seppo_työväenopistoon_japania_lukemaan|12.56|0|Assim vai aprender japonês e participar das nossas teleconferências com os países asiáticos.
+CLIP|33_Seppo_työväenopistoon_japania_lukemaan|24.96|0|Esse é o plano. Precisamos aproveitar enquanto a oportunidade está quente.
+CLIP|33_Seppo_työväenopistoon_japania_lukemaan|31.92|0|Vá à primeira aula na semana que vem. Depois da primeira já vai saber alguma coisa.
+CLIP|33_Seppo_työväenopistoon_japania_lukemaan|38.8|0|Ótimo. Avise quando terminar a primeira aula. Até mais!
+CLIP|34_nigerialaiskirjepuhelu|0.7|0|Petski.
+CLIP|34_nigerialaiskirjepuhelu|3.44|0|Alô. Aqui é Petski Teffelgren.
+CLIP|34_nigerialaiskirjepuhelu|8.5|0|Sim, tenho tempo. Diga o que precisa.
+CLIP|34_nigerialaiskirjepuhelu|14.96|0|Uhum.
+CLIP|34_nigerialaiskirjepuhelu|16.52|0|Certo.
+CLIP|34_nigerialaiskirjepuhelu|18.92|0|Que situação triste.
+CLIP|34_nigerialaiskirjepuhelu|21.28|0|Não...
+CLIP|34_nigerialaiskirjepuhelu|24.28|0|Entendo... Tenho interesse em ajudar.
+CLIP|34_nigerialaiskirjepuhelu|30.66|0|Mas, então...
+CLIP|34_nigerialaiskirjepuhelu|33.58|0|Entendi que, se eu enviar vinte mil marcos,
+CLIP|34_nigerialaiskirjepuhelu|44.02|0|vocês me devolvem vinte e cinco mil quando começarem a viagem? Certo.
+CLIP|34_nigerialaiskirjepuhelu|52.4|0|Vou falar com minha secretária e pedir que ela cuide disso.
+CLIP|34_nigerialaiskirjepuhelu|64.6|0|Vamos ajudar vocês, claro. Certo. Tchau!
+CLIP|35_palkan_sitominen_tuotantotavoitteisiin|0.4|0|Petski Teffelgren falando.
+CLIP|35_palkan_sitominen_tuotantotavoitteisiin|2.72|0|Oi, Lasse! Ainda bem que ligou. Queria perguntar uma coisa: precisamos aumentar um pouco a produção.
+CLIP|35_palkan_sitominen_tuotantotavoitteisiin|13.94|0|Será que, do ponto de vista legal, poderíamos contornar as regras e entrar de leve numa zona cinzenta?
+CLIP|35_palkan_sitominen_tuotantotavoitteisiin|25.58|0|Dá para vincular o salário dos funcionários ao cumprimento de alguma meta de produção?
+CLIP|bisnespuhelu|248.55|0|Também podemos lucrar com isso. Alugamos roupas legais, celulares e até transporte com motorista,
+CLIP|bisnespuhelu|260.3|0|ou um carro alugado incluído no pacote. Seria um serviço premium de verdade.
+CLIP|bisnespuhelu|268.82|0|Eles poderiam parecer melhores e fingir que são mais ricos do que realmente são.
+CLIP|bisnespuhelu|274.82|0|O serviço custaria caro, mas colocaríamos o preço bem no limite.
+CLIP|bisnespuhelu|284.52|0|No limite do que conseguem pagar: um pouco acima do que dói, para doer só um pouco. Mas...
+CLIP|bisnespuhelu|288.58|0|...as pessoas iam querer. Imagine: você tem vinte e poucos anos, está num bar com um bife malpassado no prato,
+CLIP|bisnespuhelu|297.92|0|tira o celular do bolso e fala alto. Todo mundo olha: “Caramba, aquele cara tem um celular!”
+CLIP|bisnespuhelu|308.12|0|Depois você sai e um sujeito espera: “Senhor, quer que eu traga o Mercedes da garagem?”
+CLIP|bisnespuhelu|316.56|0|Esse tipo de coisa. Há potencial. Um clima descontraído e bem legal.
+CLIP|bisnespuhelu|330.44|0|E o melhor: quando o negócio crescer e as pessoas nos conhecerem, poderemos aumentar um pouco os preços.
+CLIP|bisnespuhelu|341.58|0|Por exemplo, um risco no telefone custaria quinhentos marcos de multa. Tudo estaria no contrato e eles assinam sem ler. Nem olham, porra.
+CLIP|bisnespuhelu|354.88|0|Você sabe como é fácil conseguir a assinatura de um rapaz quando ele só pensa numa coisa.
+CLIP|bisnespuhelu|363.16|0|Eles só pensam naquela garota loira do bar, completamente fora do alcance deles. Não têm a menor chance com ela.
+CLIP|bisnespuhelu|373.96|0|Ela fica vendo os caras jogarem hóquei e acaba nos braços de algum jogador.
+CLIP|bisnespuhelu|383.4|0|Mas nosso cliente ganha uma chance de ir para a cama com ela e quer impressioná-la. Depois podem passar a noite num hotel.
+CLIP|bisnespuhelu|397.88|0|Faríamos parceria com hotéis e reservaríamos quartos em várias cidades. Primeiro em Helsinque, depois poderíamos expandir para Tampere ou Turku...
+CLIP|bisnespuhelu|411.44|0|Por que não Kouvola? Eu não iria para lá. Acabei de voltar da Lapônia, que viagem desgraçada.
+CLIP|bisnespuhelu|422.82|0|Dirigem oito, dez, doze horas para cada lado, com as crianças gritando no carro. Enfim, voltando ao assunto...
+CLIP|bisnespuhelu|428.66|0|E aí, boa ideia? O preço precisa ficar no limite do que conseguem suportar.
+CLIP|bisnespuhelu|439.18|0|Os custos iniciais serão enormes, mas o lucro de verdade estará nas letrinhas miúdas do contrato.
+CLIP|bisnespuhelu|447.5|0|Sim. Sim.
+CLIP|bisnespuhelu|450.44|0|Também poderíamos fazer parcerias com celebridades. Já imagino os comerciais: homens de terno elegante com mulheres lindas ao lado.
+CLIP|bisnespuhelu|462.28|0|Eles saem, o cara pisca para a câmera e aparece o logotipo. Isso é marketing de imagem.
+CLIP|bisnespuhelu|473.92|0|É isso, no melhor estilo. Vai dar certo. E na manhã seguinte... bem, o dia seguinte não é problema nosso.
+CLIP|bisnespuhelu|487.88|0|Claro que não, porra. Quando ela acorda de ressaca e percebe a farsa, só podemos dizer: “Tchau! Sayonara!”
+CLIP|bisnespuhelu|504.28|0|É aí que dizemos: “Falou! Sayonara!”
+CLIP|bisnespuhelu|510.8|0|Também podíamos criar um serviço falso, com cartões de visita e um número de escritório. Se alguém ligar, atendemos e dizemos:
+CLIP|bisnespuhelu|526.24|0|“Desculpe, acontece.”
+CLIP|bisnespuhelu|530.68|0|Certo, vamos pensar nisso. Preciso ir. Estou sentado neste carro há quase uma hora e meia. Acho que vou pegar a estrada.
+CLIP|bisnespuhelu|541.68|0|É...
+CLIP|bisnespuhelu|543.74|0|Então, tchau!
+CLIP|hyvatpilleet|0.14|0|Hum. Não lembro absolutamente nada da última festa. Acho que foi uma bebedeira daquelas. Hehehe.
+CLIP|hyvavitsi|0.22|0|Hee, ouviram essa?
+CLIP|hyvavitsi|3.08|0|Tinha um sueco e um finlandês... enfim, tinha um finlandês e depois um sueco. A piada era ótima porque ele não contou. Porra!
+CLIP|hyvavitsi|17.5|0|Não lembro direito, mas era uma boa piada. Deve ter soado assim.
+CLIP|hyvavitsi2|0.3|0|Já ouviu essa?
+CLIP|hyvavitsi2|4.12|0|Como distinguir o fazendeiro do porco no chiqueiro?
+CLIP|hyvavitsi2|7.46|0|O fazendeiro usa boné. Hehehe.
+CLIP|hyvavitsi3|0.8|0|Sabe o que o piloto diz quando o avião bate no chão?
+CLIP|hyvavitsi3|4.12|0|Nada, porque morreu, porra. Hehehehehe.
+CLIP|JaniaVittuttaaJAeiJaksa|0|0|Porra, isso não vai dar em nada. Estou completamente farto. Não aguento mais essa merda.
+CLIP|konejumisa|0.5|0|Porra, o computador travou. Só estou baixando... fotos da internet!
+CLIP|konejumisa|5.6|0|Hehehehe.
+CLIP|konejumisa|7.94|0|Não vai conseguir ligar isso de novo.
+CLIP|KukkuuNukkuu|0|0|Hehe, surpresa! Adivinha quem vai dormir daqui a pouco?
+CLIP|tulisjokutautijatappais|0|0|Não é que seja tão velho, é só que...
+CLIP|kukaeivejaponttoa|0|0|Quem já ouviu falar em ir ao banheiro, não fazer nada e nem dar descarga? Que paranoia desgraçada. Hehehe.
+CLIP|40litraadiisselia|1.1|0|Neste fim de semana coloquei quarenta litros de diesel no carro. Que vergonha. Pelo menos paguei menos do que pela gasolina comum. Heh!
+CLIP|eihantasaoomittaanjarkia|0|0|Como é que alguém entende essa merda? Não dá, Jyrki.
+CLIP|eiihmisenhommaa|0.2|0|Isso não é trabalho para seres humanos.
+CLIP|eiperkele|0|0|Ah, porra...
+CLIP|eitatajaksa|0.7|0|Se pelo menos isso fizesse algum sentido...
+CLIP|eitatajaksa|2.9|0|Não aguento mais.
+CLIP|eitatajaksaerkkikkaan|0|0|Nem um santo aguentaria isso.
+CLIP|eivalojaautosa|0|0|Heh! Não é para mim. Não tem jeito.
+CLIP|elamaihmisenparastaaikaa|0.6|0|É... até um animal pode surgir dentro da gente.
+CLIP|elamalyhenee|0|0|Hoje a vida parece um inferno sem fim.
+CLIP|entarviylleisoa|0.4|0|Mal dá para pagar as contas, porra.
+CLIP|flunssa|0|0|*tosse* Olha só. *tosse* Essa porcaria desgraçada não funciona de novo.
+CLIP|flunssa2|0|0|*tosse* Mas... olha só. Essa porcaria desgraçada não funciona de novo. *tosse*
+CLIP|Penan_hurjastelu|9.76|0|Porra, Pena! Disse que não estava bêbado e veio comer. O churrasco só abre às dez da manhã!
+CLIP|Simppa_ja_Jokke|1|0|É, já vou tomar uma cerveja com o Simppajauko.
+CLIP|Tohvakka_navetasta|0.6|0|O Tohvakainen é um babaca. Já falei tantas vezes
+CLIP|Tohvakka_navetasta|7.1|0|para não vir comer aqui com a roupa suja do estábulo. O cara fede a merda a um quilômetro!
+CLIP|drunk_speak_1|2.2|0|— Sabe como está o Elppa? — Elppa? Não entendi nada.
+CLIP|drunk_speak_1|9.34|0|— O Elppa morreu, porra! — Mas por quê? Como assim?
+CLIP|drunk_speak_1|13.44|0|— Um dia ele simplesmente morreu. — Mas morreu de quê?
+CLIP|drunk_speak_1|17.94|0|— É que... *sons de engasgo*
+CLIP|drunk_speak_1|33.04|0|— Ele comprou, comprou, comprou...
+CLIP|drunk_speak_1|38.78|0|— Comprou um monte de comida na loja.
+CLIP|drunk_speak_1|43.06|0|— Pelo menos uma vez ele... — O Elppa era meio...
+CLIP|drunk_speak_1|45.6|0|— O Elppa comprou aquilo. Quando não conseguiu cerveja, disse que não tinha. Aí o amigo dele foi até a casa.
+CLIP|drunk_speak_1|59.2|0|— O Elppa morreu. — O que isso tem a ver com comida?
+CLIP|drunk_speak_1|65.02|0|— Ele tinha um monte de comida no armário. — Comida para comer?
+CLIP|drunk_speak_1|71.84|0|— Mas do que ele morreu? — Em casa. Não, espere... quer dizer, qual foi a causa da morte?
+CLIP|drunk_speak_1|82.7|0|— Ele parou de respirar.
+CLIP|drunk_speak_1|88.24|0|— É...
+CLIP|drunk_speak_1|92.56|0|— O Elppa era um bom homem.
+CLIP|drunk_speak_1|98.16|0|— Eu vi o Elppa outro dia...
+CLIP|drunk_speak_1|102.16|0|— Em 1998. Estávamos lá, sabe...
+CLIP|drunk_speak_1|107.02|0|— Lembra quando levamos aquilo para lá?
+CLIP|drunk_speak_1|114.1|0|— Sim, jogamos no quintal naquela vez.
+CLIP|drunk_speak_1|117.42|0|— Quinze pessoas da fábrica de salsicha. Lembra? — Meu Deus, o Elppa trabalhava numa fábrica de salsicha!
+CLIP|drunk_speak_1|123.42|0|Ele trabalhava lá. Uma vez, saiu da fábrica, ligou de um telefone público e disse: “Simppa, escuta...
+CLIP|drunk_speak_1|134.2|0|vamos tomar uma cerveja, mas não coma salsicha”. Aí perguntei...
+CLIP|drunk_speak_1|145.28|0|Como assim, beber cerveja sem comer salsicha da fábrica? — Isso era a cara do Elppa.
+CLIP|drunk_speak_1|151.52|0|Um cara da fábrica de salsicha liga dizendo que vamos beber cerveja, mas sem salsicha.
+CLIP|drunk_speak_1|161.64|0|O Elppa sempre oferecia salsicha. Vários tipos, e sempre tinha cerveja.
+CLIP|drunk_speak_1|169.72|0|Então o Elppa me ligou de um telefone público e disse:
+CLIP|drunk_speak_1|174.66|0|“Simppa, vamos beber cerveja, mas sem salsicha nenhuma”.
+CLIP|drunk_speak_1|181.1|0|— E eu pensei... — Fico com o coração apertado.
+CLIP|drunk_speak_1|185.78|0|— O quê? — O Elppa até devolveu o troco para você.
+CLIP|drunk_speak_1|192|0|— O quê? Para casa. Não, era pelo preço da cerveja?
+CLIP|drunk_speak_1|199.92|0|Eu e o Elppa tomamos umas cervejas e...
+CLIP|drunk_speak_1|206.44|0|bebemos muito, para falar a verdade. Nunca bebi tanto na vida.
+CLIP|drunk_speak_1|213.08|0|Só duas semanas atrás.
+CLIP|drunk_speak_1|216.88|0|É. Bebemos e fomos à sauna com o Elppa. Sauna, fogão e água quente. Cerveja, mas nem uma salsicha. Aí pensei...
+CLIP|drunk_speak_1|234.8|0|Sabe que situação estranha? Estávamos na casa do Elppa,
+CLIP|drunk_speak_1|240.46|0|com uma caixa de cerveja, na casa do cara da fábrica de salsicha, e não havia salsicha em nenhum armário.
+CLIP|drunk_speak_1|248.44|0|Não tinha salsicha nenhuma, porra. — E depois...
+CLIP|drunk_speak_1|251.54|0|Talvez ele tenha comido tudo sozinho. Mas continue. — Conta.
+CLIP|drunk_speak_1|256.66|0|O Elppa percebeu que eu estava estranhando, mas fiquei com vergonha de perguntar. Ele disse: “Sabe, Simppa...”
+CLIP|drunk_speak_1|270.88|0|“Sabe por que não vou oferecer salsicha?” Perguntei: por quê?
+CLIP|drunk_speak_1|277.8|0|— Fala, Simppa, por que não tinha?
+CLIP|drunk_speak_1|280.92|0|— O Elppa disse que aconteceu o seguinte:
+CLIP|drunk_speak_1|285.58|0|ele saiu da fábrica.
+CLIP|drunk_speak_1|290.56|0|Perguntei por que sairia se gostava de lá e tinha salsicha.
+CLIP|drunk_speak_1|299.68|0|Ele não queria sair, foi demitido. — Mandaram ele embora!
+CLIP|drunk_speak_1|307.96|0|Mandaram o Elppa e mais quatro, cinco, quinze pessoas embora.
+CLIP|drunk_speak_1|307.96|0|Todos foram demitidos. — E sabe o que aconteceu? — Conta.
+CLIP|drunk_speak_1|320.98|0|Naquele mês... — Sim. — Quando foram demitidos da fábrica,
+CLIP|drunk_speak_1|327.96|0|Turku vendeu menos salsicha do que nunca.
+CLIP|drunk_speak_1|336.86|0|E sabe por quê?
+CLIP|drunk_speak_1|340.06|0|Nenhum deles comprou salsicha. Os amigos e as famílias também pararam de comprar.
+CLIP|drunk_speak_1|351.18|0|Boicotaram a fábrica por demitir um homem que dedicou a vida às salsichas.
+CLIP|drunk_speak_1|363.06|0|Ele tem casa e carro, uma casinha para as crianças, balanço, jardim, e a esposa tem...
+CLIP|drunk_speak_1|374.61|0|duas cortadoras de grama, uma quebrada. E ainda dizem: “Saia da fábrica!”.
+CLIP|drunk_speak_1|384.21|0|Foi assim que chutaram o Elppa para fora! Que diretor desgraçado fala uma coisa dessas?
+CLIP|drunk_speak_1|393.53|0|Hoje há figurões lá em cima com quem não podemos falar. E nós somos a gente comum aqui embaixo.
+CLIP|drunk_speak_1|404.13|0|Quer saber? Eu posso falar com eles! Vou gritar e falar bobagem até minha voz sair pelo rabo!
+CLIP|drunk_speak_2|232.3|0|— Quer uma dose de vodca junto com a cerveja?
+CLIP|drunk_speak_2|240.6|0|— Não. — Beber junto quer dizer tomar uma dose de vodca com a cerveja.
+CLIP|drunk_speak_2|245.1|0|— Estou sem dinheiro. — Minha carteira está aqui, mas não consigo comprar.
+CLIP|drunk_speak_2|253.36|0|— Não vou comprar. — Não compra, mas sabe implorar por uma garrafa.
+CLIP|drunk_speak_2|256.76|0|— De você? — Das pessoas. — Do que está falando?
+CLIP|drunk_speak_2|261.92|0|— Do garçom.
+CLIP|drunk_speak_2|265.6|0|— Do garçom? — O Simppa deve ter cerveja.
+CLIP|drunk_speak_2|270.3|0|— Eu precisava de uma. Onde está o garçom?
+CLIP|drunk_speak_2|278.94|0|— Que porcaria é essa? Não entendo esse seu resmungo.
+CLIP|drunk_speak_2|287.08|0|— Estão rindo da gente.
+CLIP|drunk_speak_2|290.56|0|— Olha só. — Estão rindo da gente!
+CLIP|drunk_speak_2|296.08|0|— Quem convidou vocês para cá, porra?!
+CLIP|drunk_speak_2|303.76|0|— O Elppa não está aqui. Mas vocês parecem estar.
+CLIP|drunk_speak_2|310|0|— Ora, é o Elppa.
+CLIP|drunk_speak_2|313.08|0|— Eu também podia sentar ali. — Se fosse o Elppa, eu pegava aquela cerveja.
+CLIP|drunk_speak_2|320.46|0|— O Elppa está trabalhando. — É.
+CLIP|drunk_speak_2|324.64|0|— Mas talvez esse dinheiro tenha ido para comprar outro pão desgraçado.
+CLIP|drunk_speak_2|330.28|0|Não entendo o Elppa. Eu paguei do meu bolso e pedi: “Traga uma cerveja gelada, porra”.
+CLIP|drunk_speak_2|338.7|0|E o Elppa comprou um pão integral com malte. Mandei ele comer, porque estava tentando parar de beber.
+CLIP|drunk_speak_2|351.26|0|— O Elppa estava tentando parar de beber? — Ele dizia que tinha chegado ao ponto de comer pão.
+CLIP|drunk_speak_2|358.9|0|— É triste ver os amigos olhando enquanto ele bebe. — É...
+CLIP|drunk_speak_2|365.67|0|Não basta todo esse sofrimento de ele finalmente largar a bebida?
+CLIP|drunk_speak_2|370.53|0|Ele não largou nada. Bebia aquela água imunda. Não entendo por que precisava de água.
+CLIP|drunk_speak_2|381.49|0|— Talvez estivesse fingindo? — Era vodca pura!
+CLIP|drunk_speak_2|386.55|0|— Era feita... — Era bebida clandestina.
+CLIP|drunk_speak_2|388.95|0|— Saía direto daquela torneira... — Ele ligou um destilador ao aquecedor.
+CLIP|drunk_speak_2|399.61|0|Que sistema incrível para fazer bebida! E ainda fingia que não bebia nada!
+CLIP|drunk_speak_2|408.81|0|— Que nada. Que sujeito esperto. — Truque antigo!
+CLIP|drunk_speak_2|414.83|0|Moleza. Um velho amigo desgraçado. Ele me passaria a perna na primeira oportunidade!
+CLIP|drunk_speak_2|421.33|0|É, passaria mesmo.
+CLIP|drunk_speak_2|422.41|0|Nunca nos serviu nada daquela torneira. Lembra? Ele bebia tudo sozinho e nunca pagou uma rodada.
+CLIP|drunk_speak_2|431.97|0|Foi uma noite e tanto. — E eu nem precisei pedir nada.
+CLIP|drunk_speak_2|435.57|0|Eu não pediria, por que beberia aquela água da torneira?
+CLIP|drunk_speak_2|441.89|0|E eu achava mesmo que era água comum. — Pois é.
+CLIP|drunk_speak_2|447.61|0|Nem me passou pela cabeça.
+CLIP|drunk_speak_2|460.83|0|Truque velho. Você sabe onde estamos? Num barco em Helsinque ou em algum lugar para onde fomos levados?
+CLIP|drunk_speak_2|466.09|0|— Estamos na Letônia. — Onde?!
+CLIP|drunk_speak_2|470.83|0|Na Letônia ou na Li... Lituânia. Estamos em um desses lugares.
+CLIP|drunk_speak_2|479.11|0|— Bielorrússia. — Fomos parar tão longe assim?
+CLIP|drunk_speak_2|486.77|0|Como viemos parar aqui?
+CLIP|drunk_speak_2|498.67|0|— Você... — Certo, vou indo. — Vou dormir.
+CLIP|drunk_speak_2|502.79|0|Devia ter tomado só um golinho. Enfim... tenha uma boa noite.
+CLIP|drunk_speak_2|511.13|0|Que noite? Ainda nem anoiteceu! — Está cansado? Quer que eu acenda a luz?
+CLIP|drunk_speak_2|520.03|0|Apague a luz. Vou pegar o quarto das garotas. Tem uns fios aqui, mas não sei se estão ligados.
+CLIP|drunk_speak_2|531.35|0|Você saiu direto da sauna? É por isso que está... — Isso não está conectado a nada.
+CLIP|drunk_speak_2|538.91|0|É uma sauna antiga. Acho que já não existem dessas na Finlândia.
+CLIP|drunk_speak_2|544.99|0|Vou prender isso na parede para a eletricidade chegar até lá. — Faça isso, porra.
+CLIP|drunk_speak_2|554.11|0|Até o diabo vai cortar seu cabelo e deixar mais curto. — Não fale mais do meu cabelo.
+CLIP|drunk_speak_2|562.23|0|Pensei que, quando chamassem para o treinamento, precisaria raspar a cabeça. E agora?
+CLIP|drunk_speak_2|571.51|0|Tem um monte de hippies cabeludos por aí. Vou cortar seu cabelo para você.
+CLIP|drunk_speak_2|581.17|0|Preciso aparar essa cabeleira. Adivinha quanto custa cortar o cabelo agora?
+CLIP|drunk_speak_2|588.31|0|— Quanto? — Vinte euros. — Puta merda.
+CLIP|drunk_speak_2|590.39|0|Sobrou bastante. Quatro, três, cinco garrafas... Eu estava pensando em cortar o cabelo.
+CLIP|drunk_speak_2|593.55|0|Tinha sobrado bastante. Quatro, três, cinco garrafas... Eu estava pensando em cortar o cabelo.
+CLIP|drunk_speak_2|603.47|0|E você achava que...
+CLIP|drunk_speak_2|604.35|0|Só aparei. Ela disse, quando fui visitá-la no fim de semana, que eu precisava cortar mais e...
+CLIP|drunk_speak_2|617.17|0|Você chega lá e só tem cabeludos comendo pizza e falando de inteligência artificial.
+CLIP|drunk_speak_2|635.11|0|— Parece uma floresta. — Que nada, não tinha nada disso.
+CLIP|drunk_speak_2|637.87|0|— Não era de graça. Tinha que ficar e pagar. — Não precisava pagar.
+CLIP|drunk_speak_2|641.89|0|Tinha que ficar e pagar. Toda vez que aparece cerveja, porra...
+CLIP|vielaoismontatuntia|0|0|Ainda falta uma eternidade para o fim do expediente. Tantas horas pela frente.
+CLIP|vihanneksiapoytaan|0|0|Eu disse no almoço que ia dormir aqui. Pelo menos vai ter um legume na mesa. Hehehe.
+CLIP|vittu|0|0|Porra!
+CLIP|vittu2|0|0|Puta merda...
+CLIP|voisinkayakusella|0|0|Acho que vou ao banheiro rapidinho.
+CLIP|voisinmennatauolle|0|0|Talvez seja hora de fazer uma pausa.
+CLIP|voismennakuselle|0|0|Preciso mijar, mas só de pensar em voltar ao trabalho já fico irritado.
+CLIP|voivittujenkevat|0|0|Que se dane essa merda toda!
+CLIP|critic1|0.2|0|O que é isso? Isso não é arte.
+CLIP|critic2|0.1|0|Para mim isso não é composição nenhuma, seja lá como você chama.
+CLIP|critic3|0.1|0|A questão é manter esse único ritmo de algum jeito!
+CLIP|critic4|0.06|0|Você não está ouvindo nada!
+CLIP|critic5|0.1|0|Está dizendo que ele toca piano? Ele é surdo!
+CLIP|critic6|0.1|0|O Wallate também está gritando com você! Se vai tocar assim, toque melhor ou pare, já que não consegue ouvir!
+CLIP|critic7|0.1|0|Escuta só isso!...
+CLIP|critic8|0.1|0|Como ele maltrata esse piano! Isso, muito bem... morram todos!
+CLIP|critic9|0.12|0|Inacreditável! Aquele palhaço está tocando de novo. Quem diabos escuta isso?
+CLIP|critic10|0.18|0|Não tem ninguém aqui que toque piano melhor?
+CLIP|critic11|0.1|0|Inacreditável, só tem esse concerto aqui, se é que isso é um concerto!
+CLIP|critic12|0.12|0|Caramba, que barulho!
+CLIP|critic13|0.06|0|Ouçam isso!
+CLIP|critic14|0.1|0|Você é ótimo!
+CLIP|critic15|0.1|0|Que piano está tocando? Ele não ouve nada. Eu já disse que ele é surdo; pode continuar tocando sozinho.
+CLIP|critic15|9.96|0|Eu disse para ele parar de tocar o tempo todo. Ele nem escuta o próprio piano. O que diabos está tocando?
+CLIP|critic16|0.28|0|Que jeito de tocar é esse? Ele não escuta nada! Olha para ele, não ouve coisa alguma!
+CLIP|critic17|0.08|0|Não sou tão burra assim.
+CLIP|critic18|0.14|0|Ele é pianista, mas não escuta nada. O que se pode fazer?
+CLIP|critic19|0.1|0|Pergunte à Katju! É outra história, outro músico. Ele ouvia e...
+CLIP|critic19|10.3|0|O Kari veio contar isso, e a Katju ouviu!
+CLIP|critic20|0.22|0|Você consegue ouvir alguma coisa?
+CLIP|critic21|0.12|0|Seu velho surdo e idiota!
+CLIP|critic22|0.1|0|Você é burro demais se não consegue ouvir nada!
+CLIP|critic23|0.1|0|Olha como ele toca, mesmo sem ouvir nada!
+CLIP|critic23|5.04|0|Ele fica tocando sem parar, mas é surdo como uma porta.
+CLIP|critic24|0.08|0|Estamos ouvindo você tocar. Se ouvisse o que está tocando, continuaria?
+CLIP|critic25|0.22|0|Não vai dar em nada se ficar tocando assim todos os dias!
+CLIP|critic26|0.1|0|Vai, toca mais um pouco nesse piano...
+CLIP|critic27|0.2|0|Ouvi isso tantas vezes este ano...
+CLIP|critic27|3.18|0|Ouço esse piano há anos. Não aguento mais.
+CLIP|critic28|0.1|0|Você é incrível!
+CLIP|critic29|0.16|0|Talvez ele seja simplesmente idiota.
+CLIP|critic30|0.08|0|Como alguém pode ser tão surdo?!
+CLIP|critic31|0.1|0|E ele continua tocando a mesma coisa...
+CLIP|critic32|0.08|0|Escutem que maravilha!
+CLIP|critic33|0.1|0|O Hannu é surdo pra caramba...
+CLIP|critic34|0.08|0|Faz quase um ano que peço para tocar outra coisa, mas ele não escuta. Nem ouve o que toca.
+CLIP|critic34|12.66|0|Nós ouvimos o que ele toca, mas ele não escuta ninguém pedindo outra música. Só toca do jeito dele!
+CLIP|critic35|0.1|0|Como ele deve ser burro.
+CLIP|critic36|0.06|0|Ele não ouve nada!
+CLIP|critic37|0.1|0|Como está o som? Estou dizendo que você não escuta nada!
+CLIP|critic38|0.16|0|Por que estou falando se você não ouve nada?
+CLIP|jokke02|0|0|Só... mais alguns testes... antes da entrega...
+CLIP|jokke03|0|0|Eu sou... é... o Jokke...
+CLIP|jokke04|0|0|É... agggheheh... eeese...
+CLIP|jokke05|0|0|Nossa...
+CLIP|jokke06|0|0|Foi... foi... foi...
+CLIP|jokke07|0|0|Deeeixa disso...
+CLIP|jokke08|0|0|A Rapala vai nos dar uma surra se... fizermos o pedido...
+CLIP|jokke09|0|0|Estou sol... soltando isso...
+CLIP|jokke10|0|0|Uma garraaaafa...
+CLIP|jokke11|0|0|Caaaiu no colo das criançass...
+CLIP|jokke13|0|0|Rantakivi... para tomar café...
+CLIP|jokke14|0|0|Uma foca do lago Saimaa... tão sozinha...
+CLIP|jokke15|0|0|A água está cooorrendo...
+CLIP|jokke16|0|0|Simppaaa...
+CLIP|jokke17|0|0|Se você não sentisse mais nada por causa da bebida...
+CLIP|jokke17|4.26|0|cerveja... isso seria bom, porque...
+CLIP|jokke17|9.54|0|isso incomoda quando você acorda desse sonho?
+CLIP|jokke17|14.32|0|É bom beber cerveja até nos sonhos?
+CLIP|jokke18|0|0|Beber cerveja nos sonhos é uma coisa boa para mim...
+CLIP|jokke19|0|0|Ah, que... que rock...
+CLIP|jokke20|0|0|Você chegou aqui abatido... está tão triste assim?
+CLIP|jokke22|0|0|No peito... uma pontada estranha... Ah...
+CLIP|jokke23|0|0|Quando... quando tento dormir... não precisa, não precisa pensar em... respirar...
+CLIP|jokke24|0|0|Fico pensando em estar num barco...
+CLIP|jokke25|0|0|Naquela festa... tem cerveja... e no restaurante também tem cerveja.
+CLIP|jokke27|0|0|É, eu também... não é bem assim...
+CLIP|jokke28|0|0|Eu... já tive esposas e essas coisas...
+CLIP|jokke29|0|0|Hum... este momento... daqui tenho... uma vista para o mar...
+CLIP|jokke30|0|0|É que... estou apertado...
+CLIP|jokke31|0|0|E eu nem... desci... e vieram sete pessoas falar comigo...
+CLIP|jokke32|0|0|Eu nem sei... se isso... faz algum sentido...
+CLIP|jokke33|0|0|Kalle e o peixe... mongadrua, é...
+CLIP|jokke34|0|0|Estou bebendo vodca... mais do que... cerveja...
+CLIP|jokke35|0|0|Arttu... Arthur... é dos nossos...
+CLIP|jokke37|0|0|É verdade... eu até poderia ficar aqui...
+CLIP|jokke38|0|0|Me expulsaram... me mandaram embora de lá...
+CLIP|jokke39|0|0|Ah... não aconteceu nada... nada...
+CLIP|simppa01|0|0|Droga...
+CLIP|simppa04|0|0|Ainda precisamos conferir isso...
+CLIP|simppa05|0|0|Mais um dia está passando...
+CLIP|simppa06|0|0|Porra...
+CLIP|simppa07|0|0|É... você podia... sabe como é...
+CLIP|simppa08|0|0|Ah... durma...
+CLIP|simppa09|0|0|Que diabos... droga...
+CLIP|simppa10|0|0|O quê? Que bobagem é essa? O que você disse?
+CLIP|simppa11|0|0|Não... não dá. Eu já... não consigo mais lidar com isso.
+CLIP|simppa12|0|0|Jokke... para com isso, porra... Já faz uns dezessete anos... Para de repetir a mesma coisa...
+CLIP|simppa13|0|0|Não é nada... não tem ninguém...
+CLIP|simppa14|0|0|Mzd... mdrz... mud4zm3n.
+CLIP|simppa15|0|0|Hum... eu tenho... jzda mxm tu14j...
+CLIP|simppa16|0|0|Isso fica aqui... ninguém vai mexer nisso...
+CLIP|simppa17|0|0|Onde está...
+CLIP|simppa18|0|0|Paaara ooonde vaaai daqui?
+CLIP|simppa19|0|0|Nããão... nesse estado, não...
+CLIP|simppa20|0|0|Nããão... cara... você não pode simplesmente... se mudar para lá.
+CLIP|simppa21|0|0|É, eu vi ele... desmoronando. Da praia, achei que ele ia morrer, porra...
+CLIP|simppa21|9.44|0|E... depois ele se levantou todo... e gritou: “EU NÃO MORRI!”
+CLIP|simppa22|0|0|Eu lembro... você dizia que precisava de algum tipo de pele...
+CLIP|simppa23|0|0|Aquela cerveja que você me deu... foi algo enorme...
+CLIP|simppa24|0|0|O que esse filho da puta está dizendo, porra?
+CLIP|simppa25|0|0|Cara, me dá isso, porra... minhas pernas estão até ficando fracas...
+CLIP|simppa26|0|0|Pouca cerveja...
+CLIP|simppa27|0|0|O que foi?.. 
+CLIP|simppa28|0|0|Você não lembra de nada... Já faz uns dez anos...
+CLIP|simppa29|0|0|Você continua bebendo igual naquela festa do sanduíche... até hoje! Nunca fica sóbrio...
+CLIP|simppa30|0|0|Você parou porque te ex... expulsaram de lá...
+CLIP|Luuli_saavansa_hyvän_työn|0.5|0|Não entendo por que fiz o ensino médio e uma pós-graduação. Achei que conseguiria um bom emprego, mas nada.
+CLIP|Luuli_saavansa_hyvän_työn|7.3|0|Fico aqui vendendo comida ruim para essa ralé miserável...
+CLIP|Penan_hurjastelu|0.9|0|É um escândalo o Pena ainda ter carteira de motorista. Adivinha quem bateu na lateral do nosso restaurante?

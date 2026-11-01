@@ -5,7 +5,7 @@ A MSCLoader plugin system for My Winter Car that enables automatic localization 
 See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
 
 > [!NOTE]
-> If you are looking for a My Summer Car version of this plugin, please refer to [here](https://github.com/potatosalad775/MWC_Localization_Core/tree/msc)
+> If you are looking for a My Summer Car version of this plugin, please refer to [here](https://github.com/LucasMonFC/MWC_Localization_Core_BR/tree/MSC_Localization_Core_BR)
 
 ## Quick Start
 
@@ -19,6 +19,7 @@ See at [NexusMods](https://www.nexusmods.com/mywintercar/mods/197)
    - `translate_magazine.txt` - Classified Magazine keywords and price/phone format label
    - `translate_teletext.txt` - TV/Teletext content
    - `translate_mod.txt (optional)` - Mod content
+   - `expanded_subtitles.txt (optional)` - Timed expanded audio subtitles
 4. **(Optional)** Create custom fonts in `fonts.unity3d`
 5. **(Optional)** Place ZIP texture packs in `texture/`
 6. **Test in-game with F8 reload!**
@@ -54,6 +55,7 @@ BepInEx/plugins/dist/
 │   ├── translate_teletext.txt      # TV/Teletext content translations
 │   ├── translate_msc.txt           # Optional: My Summer Car compatibility
 │   ├── translate_mod.txt           # Optional: Mod content translations
+│   ├── expanded_subtitles.txt      # Optional: Timed expanded audio subtitles
 │   └── fonts.unity3d               # Optional: Custom font asset bundle
 └── MWC_Localization_Core.dll       # Core plugin module
 ```
@@ -182,6 +184,22 @@ Please note that few TV lines might not 'look translated' due to the reason ment
 You can reuse translation files from My Summer Car as a base. Many UI texts are shared between games.
 
 Contents from `translate.txt` (MWC-specific) will override `translate_msc.txt` entries.
+
+### expanded_subtitles.txt - Expanded Audio Subtitles (Optional)
+
+This file stores transcript segments synchronized to a game's audio clip. Each record
+uses the audio clip name and a timestamp in seconds. The duration can be `0` to keep
+the segment visible until the next timestamp, or until the audio clip ends for the
+last segment.
+
+```text
+# TYPE|name|timestamp|duration|localized text
+CLIP|example_audio_clip|0|2.5|First translated segment
+CLIP|example_audio_clip|2.5|0|Second translated segment
+```
+
+`CLIP` matches `AudioClip.name`; `OBJECT` matches the `AudioSource` GameObject name.
+Text after the fourth `|` is kept as the subtitle text.
 
 ## Text Adjustments (Optional)
 
