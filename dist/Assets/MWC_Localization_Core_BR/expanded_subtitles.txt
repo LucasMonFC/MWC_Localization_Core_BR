@@ -2656,3 +2656,1220 @@ CLIP|taxijob_call4|45.00|0|Olhei para ele e disse que não voltaria ao trabalho 
 CLIP|topless_gun|72.60|0|Achei que o Mercedes tinha parado ali.
 CLIP|topless_gun|92.50|0|O carro parou e perguntou o que você estava fazendo ali.
 CLIP|topless_gun|95.50|0|“Provavelmente estou filmando o senhor!”
+
+# Radio advertisements and station jingles
+CLIP|ad_tuiskula|0.00|2.22|Você não pode perder essa festa!
+CLIP|ad_tuiskula|2.22|2.78|Na Tuiskula, em Nivala, dia 15 de julho.
+CLIP|ad_tuiskula|5.16|2.54|E-type, DJ Movo e Captain Jack.
+CLIP|ad_tuiskula|8.06|2.32|A atração de abertura é Rauski, filho da terra de Alavieska.
+CLIP|ad_tuiskula|10.44|4.04|Reserve seu ingresso pelo telefone 0700 523 4523.
+CLIP|ad_tuiskula|15.10|1.30|Nos vemos em Tuiskula!
+CLIP|ad_alivieskan-paikallisradion-tunnari|0.00|3.40|Tomar café juntos, sentados à mesa,
+CLIP|ad_alivieskan-paikallisradion-tunnari|3.40|3.80|pôr a conversa em dia
+CLIP|ad_alivieskan-paikallisradion-tunnari|7.20|6.70|e ouvir o rádio. Uma rádio para todos!
+CLIP|ad_alivieskan-paikallisradion-tunnari|24.33|1.84|Do bebê ao vovô, para todo mundo.
+CLIP|ad_alivieskan-ufokontaktihenkilot-ry|0.00|5.02|A Associação de Contatos com OVNIs de Alavieska finalmente foi fundada.
+CLIP|ad_alivieskan-ufokontaktihenkilot-ry|5.47|2.21|Você já foi abduzido por um OVNI?
+CLIP|ad_alivieskan-ufokontaktihenkilot-ry|7.83|2.45|Ou teve sonhos assustadores com OVNIs?
+CLIP|ad_alivieskan-ufokontaktihenkilot-ry|10.73|7.41|Seja qual for sua experiência, compartilhe-a com pessoas como você.
+CLIP|ad_alivieskan-ufokontaktihenkilot-ry|18.14|4.54|Ligue para nós pelo número 245-283.
+CLIP|ad_alivieskan-ufokontaktihenkilot-ry|24.98|4.56|Ou envie seus dados pelo correio para a associação:
+CLIP|ad_alivieskan-ufokontaktihenkilot-ry|29.54|1.78|Alivieskan Ufokontaktit ry,
+CLIP|ad_alivieskan-ufokontaktihenkilot-ry|31.58|5.12|Koivistankuja 4, 92500 Alavieska.
+CLIP|ad_amisauto1|3.47|2.10|Tudo de que você precisa para o carro. Amis-Auto KY.
+CLIP|ad_amisauto1|5.81|4.24|Perärykkimäentie, 82, 49212 Nulju.
+CLIP|ad_amisauto1|10.15|2.62|Amis-Auto: dirige para frente e para trás!
+CLIP|ad_amisauto2|1.90|2.12|Seu carro não aguenta mais ir à oficina?
+CLIP|ad_amisauto2|4.10|2.84|Sem problema: peça novos kits de carroceria com a gente.
+CLIP|ad_amisauto2|7.00|2.34|Amis-Auto: dirige para frente e para trás!
+CLIP|ad_amisauto2|9.34|2.08|Fibra de vidro de alta qualidade.
+CLIP|ad_amisauto3|1.78|2.50|Volante de rali: 349 mk.
+CLIP|ad_amisauto3|4.42|3.12|Medidor extra: 299 mk. Medidor de mistura: 549 mk.
+CLIP|ad_amisauto3|7.94|2.84|Amis-Auto: dirige para frente e para trás!
+CLIP|ad_amisauto4|8.62|1.48|Então peça já!
+CLIP|ad_amisauto4|10.54|0.86|Amis-Auto KY!
+CLIP|ad_amisauto4|11.58|1.36|Dirige para frente e para trás!
+CLIP|ad_amisauto5|2.06|3.04|Procurando peças para o carro? Temos o que você precisa!
+CLIP|ad_amisauto5|7.25|2.52|Kit de peças em oferta por apenas 6,5 mil mk.
+CLIP|ad_amisauto5|10.23|2.54|Amis-Auto: dirige para frente e para trás!
+CLIP|ad_amisauto6|5.23|2.00|Potência direto da terra do sol nascente!
+CLIP|ad_amisauto6|7.49|3.08|Carburador duplo, coletor de escape de aço e silencioso esportivo.
+CLIP|ad_amisauto6|10.63|2.38|Amis-Auto: dirige para frente e para trás!
+CLIP|ad_amisauto7|9.79|2.00|Dirige para frente e para trás!
+CLIP|ad_erkki-armas-hokkanen|0.00|1.74|Seu touro precisa ser ordenhado?
+CLIP|ad_erkki-armas-hokkanen|1.74|1.72|Sua vaca precisa de inseminação?
+CLIP|ad_erkki-armas-hokkanen|3.54|5.96|Erkki Armas Hokkanen está à sua disposição, com 40 anos de experiência.
+CLIP|ad_erkki-armas-hokkanen|9.60|4.36|Mãos firmes, noites puxadas: Erkki Armas vence qualquer dificuldade!
+CLIP|ad_folkradio_jingle|3.44|1.36|Eu ouço a Toive Radio.
+CLIP|ad_folkradio_jingle|5.22|2.40|Tocamos suas músicas favoritas
+CLIP|ad_folkradio_jingle|7.62|3.52|24 horas por dia, toda semana, o ano inteiro.
+CLIP|ad_hapytai|0.24|1.88|Coceira nas partes íntimas?
+CLIP|ad_hapytai|2.26|1.30|Está com piolhos pubianos?
+CLIP|ad_hapytai|3.72|1.22|Sem problema! Compre Pubisil,
+CLIP|ad_hapytai|4.94|2.46|o removedor de piolhos pubianos.
+CLIP|ad_hapytai|7.50|4.04|Peça já pelo telefone 0700 525 625.
+CLIP|ad_hapytai|11.80|2.16|Pubisil, contra piolhos pubianos.
+CLIP|ad_hapytai|14.42|2.74|Pubisil, Pubisil: piolhos pubianos, rua!
+CLIP|ad_kjar_jaatelo|0.08|1.78|O sorvete Beleza e Poder, famoso na TV,
+CLIP|ad_kjar_jaatelo|1.86|1.12|já chegou às lojas.
+CLIP|ad_kjar_jaatelo|3.26|1.88|Nos sabores moka com chocolate e cheesecake,
+CLIP|ad_kjar_jaatelo|5.14|1.46|ao estilo americano.
+CLIP|ad_kjar_jaatelo|7.78|3.88|Ah, que delícia! Até a Ritke vai gostar.
+CLIP|ad_ojutkangas_sairaala|2.67|1.36|Dor de cabeça e ressaca brava?
+CLIP|ad_ojutkangas_sairaala|5.19|4.72|Sem problema: Ilokaasu Ojutkangas abriu uma nova clínica em Oulu.
+CLIP|ad_ojutkangas_sairaala|9.99|2.82|Agora você não precisa mais viajar até Helsinque;
+CLIP|ad_ojutkangas_sairaala|12.81|3.54|a ajuda está na nova clínica de Oulu,
+CLIP|ad_ojutkangas_sairaala|16.35|4.90|onde nossa equipe especializada cuida até das ressacas mais fortes rapidinho.
+CLIP|ad_ojutkangas_sairaala|21.33|2.36|Venha à clínica Ojutkangas em Oulu.
+CLIP|ad_ojutkangas_sairaala|23.73|2.88|Alegria com o gás hilariante de Ojutkangas!
+CLIP|ad_radio_teimo|0.00|3.34|Alimentos e produtos para o dia a dia,
+CLIP|ad_radio_teimo|3.34|1.86|tudo na loja Teimo.
+CLIP|ad_radio_teimo|5.30|1.62|Na rua Alipiskantie.
+CLIP|ad_radio_teimo|7.22|2.70|Venham de perto ou de longe:
+CLIP|ad_radio_teimo|9.92|1.94|pastores e turistas são bem-vindos!
+CLIP|ad_suomi-mongolia_seura|0.00|1.12|Associação Finlândia-Mongólia.
+CLIP|ad_suomi-mongolia_seura|9.38|3.58|Celebre o Dia da Mongólia!
+CLIP|ad_suomi-mongolia_seura|13.14|2.82|Vamos unir nossos povos
+CLIP|ad_suomi-mongolia_seura|15.96|1.80|mais uma vez. Obrigado!
+
+# Fleetari phone calls
+CLIP|call_fleetari01|0.24|1.70|Aqui é o Fleetari. Oi!
+CLIP|call_fleetari01|1.94|2.66|O serviço do seu carro já ficou pronto.
+CLIP|call_fleetari01|4.60|5.72|Venha buscar as peças para eu poder seguir com os outros serviços.
+CLIP|call_fleetari02|0.00|5.28|Oi, Fleetari, aqui é da oficina. Terminei o seu pedido; pode vir buscar.
+CLIP|call_fleetari03|0.11|2.02|Oi, aqui é o Fleetari, da oficina.
+CLIP|call_fleetari03|2.19|2.44|Seu pedido já está pronto.
+CLIP|call_fleetari03|4.63|1.84|Venha buscar quando puder.
+CLIP|call_fleetari04|0.78|4.42|Caramba, cara! Não acredito nisso!
+CLIP|call_fleetari04|5.20|5.72|Sério, não acredito que você venceu o Suvi Sprint!
+CLIP|call_fleetari04|18.18|6.78|Que cara incrível! Que coragem! Tenho que admitir: você é muito corajoso.
+CLIP|call_fleetari04|25.76|2.62|Quando você chegou em primeiro, nunca imaginei que fosse vencer.
+CLIP|call_fleetari04|28.38|5.56|Achei que você tinha ido parar no meio do nada e não voltaria.
+CLIP|call_fleetari04|37.88|1.44|Você venceu!
+CLIP|call_fleetari04|40.68|4.70|Desculpa ligar a essa hora, mas foi incrível você vencer o sprint.
+CLIP|call_fleetari04|47.14|1.82|Eu nunca teria imaginado!
+CLIP|call_fleetari04|49.78|4.80|Vou pegar umas bebidas e comemorar sua vitória!
+CLIP|call_fleetari05|0.11|1.74|Aqui é o Fleetari. Oi!
+CLIP|call_fleetari05|2.61|1.76|Que porra você está fazendo?
+CLIP|call_fleetari05|4.39|2.26|Você ainda não devolveu meu carro.
+CLIP|call_fleetari05|8.11|1.42|Sabe que ele é meu, né?
+CLIP|call_fleetari05|10.09|2.48|Tem que devolver, seu idiota!
+CLIP|call_fleetari05|13.61|1.96|Que merda é essa? Se você não devolver logo,
+CLIP|call_fleetari05|15.57|2.42|essa sua carroça vai acabar se arrebentando.
+CLIP|call_fleetari05|18.05|2.04|Devolva meu carro, porra!
+CLIP|call_fleetari05|20.11|1.72|Que merda você pensa que está fazendo?
+CLIP|call_fleetari05|21.83|1.58|Você é um completo idiota!
+CLIP|call_fleetari05|23.75|3.42|Não pode pegar o carro dos outros e sair dirigindo por aí
+CLIP|call_fleetari05|27.17|1.46|com garotas a bordo, porra!
+CLIP|call_fleetari05|30.11|2.40|Que atrevimento! Não tem um pingo de vergonha?
+CLIP|call_fleetari05|32.51|2.96|Todo mundo sabe que você tem seu próprio carro imundo.
+CLIP|call_fleetari05|35.51|3.84|Por que está se exibindo por aí no meu carro, porra?
+CLIP|call_fleetari05|39.53|2.48|Traga esse carro de volta agora!
+CLIP|call_fleetari05|42.13|3.48|Seu idiota! Dá vontade de te dar um soco!
+CLIP|call_fleetari05|45.73|2.64|Mas sei que algo vai acontecer com seu Satsuma.
+CLIP|call_fleetari05|48.39|2.58|E aí você vai voltar com o meu carro.
+CLIP|call_fleetari05|51.71|1.94|Seu desgraçado, eu ainda vou pegar você!
+CLIP|call_fleetari06|0.05|1.40|Aqui é o Fleetari. Oi!
+CLIP|call_fleetari06|1.45|3.68|Ei, preciso dizer: vai se ferrar, cara!
+CLIP|call_fleetari06|5.13|2.26|Por que não devolveu meu carro?
+CLIP|call_fleetari06|8.45|3.98|Como você tem coragem de sair por aí com o carro dos outros?
+CLIP|call_fleetari06|12.43|3.50|Já está na hora de devolver essa merda.
+CLIP|call_fleetari06|16.27|1.73|Ah, seu desgraçado!
+CLIP|call_fleetari06|18.37|4.56|Se não aparecer logo no meu quintal, algo vai acontecer com seu Satsuma.
+CLIP|call_fleetari06|23.03|3.52|E o que poderia acontecer com essa porcaria? O carro inteiro é uma droga.
+CLIP|call_fleetari06|26.55|3.54|Devolva logo meu carro, porra!
+
+# Car comments
+CLIP|car_comment01|0.00|4.26|É um Rivett. Raramente se vê um desses hoje em dia.
+CLIP|car_comment02|0.00|5.54|Ei, esse é aquele estranho... Eu tinha um desses antigamente, sim.
+CLIP|car_comment03b|0.00|4.64|É um carro de museu. Quer um autógrafo com a chave de fenda?
+CLIP|car_comment05b|0.00|2.74|É só por alguns minutos; as placas ficam aqui.
+
+# Fleetari car loans and insults
+CLIP|carloan01|0.00|2.24|Isso é meio constrangedor para mim, mas...
+CLIP|carloan01|2.24|5.56|pode pegar meu Ferndale emprestado enquanto conserto seu carro.
+CLIP|carloan01|7.98|3.28|Depois você devolve e fazemos a troca.
+CLIP|carloan02|0.00|2.58|Pegue meu Ferndale para conseguir chegar em casa.
+CLIP|carloan02|2.58|5.10|Mas não pise fundo no acelerador, porra.
+CLIP|carloan02|7.68|4.44|Esse motor bebe muita gasolina.
+CLIP|carloan03|0.00|3.18|Pode pegar meu Ferndale emprestado para chegar em casa.
+CLIP|carloan03|3.18|1.70|Mas vá com cuidado:
+CLIP|carloan03|4.88|4.28|ele tem um V8 de sete litros e vai comer suas economias rapidinho.
+CLIP|carloan03|9.16|4.46|Não pise fundo como você faz com esse seu carrinho.
+CLIP|carloan04|0.00|2.18|Pegue meu Ferndale para conseguir chegar em casa.
+CLIP|carloan04|2.18|4.84|Depois devolva quando vier buscar seu carro e abasteça, por favor.
+CLIP|carloan04|7.16|1.94|Não sei se você tem dinheiro para abastecer;
+CLIP|carloan04|9.10|2.68|o tanque leva 70 litros de gasolina.
+CLIP|carloan04|12.08|1.90|Quanto está custando no Teimo hoje?
+CLIP|carloan05|0.00|1.62|Isso, pegue meu Ferndale emprestado.
+CLIP|carloan05|1.62|3.18|Mas cuidado: ele tem bem mais potência que essa sua carroça.
+CLIP|carloan05|7.28|4.26|Vá com calma no acelerador. Sabe dirigir carro automático?
+CLIP|carfuck04|0.00|5.14|Isso aqui é uma porcaria horrível, olhando para esse seu pão de passas.
+CLIP|carfuck04|5.14|4.36|Mas, se acertarmos um preço,
+CLIP|carfuck04|9.50|2.74|talvez dê para melhorar isso,
+CLIP|carfuck04|12.24|2.54|deixar o pão sem passas, pelo menos.
+CLIP|carfuck05|0.00|5.64|Tem uma coisa muito brilhante aqui que está me cegando!
+CLIP|carfuck05|5.68|2.14|Não consigo olhar direito.
+CLIP|carfuck05|7.82|2.92|Ah, já sei o que é.
+CLIP|carfuck05|10.98|1.78|É o seu carro.
+CLIP|carfuck05|12.76|2.86|Será que melhora se eu colocar os óculos de solda,
+CLIP|carfuck05|15.62|2.56|para não enxergar absolutamente nada?
+CLIP|carfuck06|0.00|2.26|Isso que está brilhando aqui não é ouro.
+CLIP|carfuck06|2.26|5.64|Talvez sejam suas esperanças e seu otimismo que brilham...
+CLIP|carfuck06|7.90|1.30|porque esse carro não brilha, com certeza.
+CLIP|carfuck07|0.00|3.66|Isso é um carro ou um brinquedo?
+CLIP|carfuck07|4.10|4.88|Não tenho certeza... Espera, isso é uma mobilete, não é?
+CLIP|carfuck08|0.18|2.14|Olha, eu não conserto mobiletes.
+CLIP|carfuck08|3.92|5.78|Quer dizer... deve ser um carro. Pensei que fosse uma mobilete primeiro.
+CLIP|carfuck08|10.30|0.96|Foi mal, deixa pra lá.
+
+# Darrapaska comments
+CLIP|DarrapaskaVielkiHengis|0.00|3.36|Não entendo como essa desgraça ainda está viva.
+CLIP|DarrapaskaVielkiHengis|3.52|3.74|O sangue dela deve ser 50% etanol e 50% autopiedade.
+CLIP|DarrapaskaVielkiHengis|7.28|2.74|Se se machucasse, só ia sangrar bebida barata.
+CLIP|DarrapaskaEläinlääkäriin|0.00|3.64|Pensei em levar essa desgraça ao veterinário para sacrificá-la.
+CLIP|DarrapaskaEläinlääkäriin|3.68|4.58|Ela parece sofrer, e o pior é que me faz sofrer ainda mais.
+CLIP|DarrapaskaEläinlääkäriin|8.40|2.90|Tenho que ouvir essa maldita reclamação todo santo dia.
+CLIP|DarrapaskanHaju|0.00|3.98|Essa desgraça cheira a bebida velha, fermento e decepção;
+CLIP|DarrapaskanHaju|3.98|2.08|é um tanque de fermentação ambulante, porra.
+CLIP|DarrapaskanHaju|6.12|2.38|Fique do lado de onde o vento sopra para longe de mim,
+CLIP|DarrapaskanHaju|8.50|1.24|ou vou vomitar em você.
+CLIP|DarrapaskaOlympialaiset|0.00|2.12|Se ressaca fosse modalidade olímpica,
+CLIP|DarrapaskaOlympialaiset|2.12|4.52|essa desgraça traria o ouro para a Finlândia todo ano.
+CLIP|DarrapaskaOlympialaiset|6.70|3.14|Mas é tão preguiçosa que dormiria no pódio
+CLIP|DarrapaskaOlympialaiset|9.84|4.54|durante a cerimônia, vomitaria no hino nacional.
+CLIP|DarrapaskaOlympialaiset|14.46|1.04|Que nojo!
+
+CLIP|01_tervetuloa_kirpparille_löytämään_aarteita|0.00|4.91|Bem-vindo ao mercado de pulgas, onde você pode encontrar tesouros!
+CLIP|02_ja_maksu_tapahtuu_sitten_markoilla_ei_luonnossa|0.00|4.79|E o pagamento será feito em marcos, não em produtos da natureza.
+CLIP|03_Kiitos_ja_tervetuloa_uudestaan|0.00|1.85|Oh, puxa!
+CLIP|03_Kiitos_ja_tervetuloa_uudestaan|1.85|3.71|Obrigado, seja bem-vindo novamente!
+CLIP|25|0.00|0.94|Dois cinco.
+CLIP|850_pullo|0.00|2.56|Bom, ok, então vamos dizer 8,5.
+CLIP|Aterian_sooda|0.00|0.61|Obrigado!
+CLIP|Aterian_sooda|0.61|4.26|E toda refeição inclui um refrigerante PSK!
+CLIP|autovittuilu01|0.00|4.95|Ele provavelmente até vai cagar pela valeta.
+CLIP|autovittuilu02|0.00|7.68|Ele provavelmente fez aula de direção com o Ayrton Senna como instrutor.
+CLIP|autovittuilu02|7.68|0.64|Hahaha.
+CLIP|autovittuilu03|0.00|9.19|Se você se mete numa coisa dessas, é a mesma coisa que pegar um alicate de castração e ir cantar
+CLIP|autovittuilu03|9.19|1.84|no coral da igreja.
+CLIP|autovittuilu04|0.00|5.90|Ele provavelmente escolheria um automático em vez de um carro manual.
+CLIP|autovittuilu05|0.00|7.12|Ei, escuta, será que eu poderia pedir um táxi pra você?
+CLIP|autovittuilu05|7.12|3.88|Eu posso acabar chorando no velório!
+CLIP|autovittuilu06|0.00|8.01|Qual é a diferença entre ele e o pior motorista do mundo?
+CLIP|autovittuilu06|8.01|0.67|Nenhuma!
+CLIP|autovittuilu07|0.00|10.02|Ele é a primeira pessoa do mundo a alcançar o top 3 dos piores motoristas do mundo,
+CLIP|autovittuilu07|10.02|5.31|ficando em primeiro, segundo e terceiro ao mesmo tempo.
+CLIP|autovittuilu08|0.00|7.82|Ah, eu já estava olhando pra ver se você tinha um carro e uma piñata,
+CLIP|autovittuilu08|7.82|6.26|mas já tem um carro e um macaco lá com o Jamppi.
+CLIP|autovittuilu09|0.00|0.65|Droga!
+CLIP|autovittuilu09|0.65|8.49|Por causa de idiotas assim, o seguro do carro sobe todo santo dia!
+CLIP|autovittuilu10|0.00|5.20|Todo mundo venha olhar aqui pro barranco do macaco Apina!
+CLIP|autovittuilu11|0.00|10.08|Não teria sido melhor ir direto pra oficina do Fleetari em vez de sair dirigindo?
+CLIP|autovittuilu13|0.00|3.84|Quantas pessoas são necessárias pra ligar um carro?
+CLIP|autovittuilu13|3.84|6.71|Nenhuma, já que até um deficiente visual consegue fazer isso como dever de casa!
+CLIP|autovittuilu14|0.00|7.97|Tem algum tipo de convenção de idiotas acontecendo aqui?
+CLIP|autovittuilu15|0.00|2.93|Precisamos de um encanador aqui agora!
+CLIP|autovittuilu15|2.93|5.87|Esse aí dirige tão mal que nem o vaso dá descarga mais!
+CLIP|autovittuilu16|0.00|9.90|Ei, vem ver, aqui este é o primeiro macaco a tirar carteira de motorista!
+CLIP|autovittuilu17|0.00|6.27|Eu preferia estar passeando rumo à Estônia do que andar com você.
+CLIP|autovittuilu18|0.00|4.59|Até o capitão do Titanic dirigia melhor do que você!
+CLIP|autovittuilu19|0.00|9.45|Se eu estivesse no seu lugar, meu pé nem saberia onde ficam o freio, o acelerador e a embreagem.
+CLIP|back_problem|0.00|2.96|É, agora está complicado depois que isso clareou.
+CLIP|back_problem|2.96|1.85|Caso contrário, eu teria realmente...
+CLIP|back_problem|4.81|2.22|realmente dado uma olhada, te ajudado.
+CLIP|back_problem1|0.00|1.48|Bom dia, bom dia.
+CLIP|back_problem1|1.48|6.67|Porra, o que aconteceu foi que eu levantei a TV ali e acabei me torcendo de algum jeito.
+CLIP|back_problem1|8.15|1.11|É, sei lá.
+CLIP|back_problem1|9.26|5.19|Então, se você pudesse ajudar a carregar essas coisas pra mudança até a cidade.
+CLIP|back_problem1|14.44|2.22|Eu te mostro onde moro agora.
+CLIP|back_problem1|16.67|1.11|Eu pagaria bem.
+CLIP|biljardi|0.00|9.66|Bom, tinha aquela mesa de bilhar, que parecia uma boa compra quando encomendei, mas porra,
+CLIP|biljardi|9.66|8.37|eles não incluíram nem bolas nem taco, então agora é só decoração, porra.
+CLIP|c01A|0.00|0.73|Heltaa!
+CLIP|c01A|0.73|3.66|Só sobrou um táxi aqui!
+CLIP|c01B|0.00|1.68|BANG BANG! BANG BANG! BANG BANG! BANG BANG!
+CLIP|c01C|0.00|0.44|Mas não daqui!
+CLIP|c01C|0.44|0.30|Só faz!
+CLIP|c01C|0.74|0.44|Só da fábrica!
+CLIP|c01C|1.18|0.44|Mas não daqui!
+CLIP|c01D|0.00|3.09|Eu suspeito que você é um idiota, porra!
+CLIP|c02A|0.00|5.43|Oughh, você po- poderia chamar um táxi aqui?
+CLIP|c02C|0.00|2.08|Você é permanente!
+CLIP|c02C|2.08|0.69|Obrigado.
+CLIP|c02D|0.00|5.32|BÄDÄDÄMÄLÄÄN BÄMBÄÄÄÄÄÄ
+CLIP|c03A|0.00|0.47|Agora é isso aí!
+CLIP|c03A|0.47|0.23|Traz aqui!
+CLIP|c03A|0.70|0.35|Como foi feito?
+CLIP|c03A|1.05|0.35|Foi feito aqui?
+CLIP|c03A|1.40|0.35|Como foi feito?
+CLIP|c03A|1.74|0.35|Foi feito aqui?
+CLIP|c03A|2.09|0.70|Lembre-se de que eu gosto disso!
+CLIP|c03A|2.79|0.47|Eu gosto muito disso!
+CLIP|c03D|0.00|2.60|Não olhe para a destruição mostrada!
+CLIP|c03D|2.60|0.43|Mähä!
+CLIP|c04A|0.00|0.91|Ele tentou usar o táxi como distração.
+CLIP|c04A|0.91|1.04|E pra dar certo, funciona, esses são skatturuklutasblot.
+CLIP|c04A|1.95|1.43|E com esse táxi, ele pode verificar se é um táxi.
+CLIP|c04A|3.39|1.69|E então ele diz que tem um prato de comida de gato aqui.
+CLIP|c04A|5.08|1.82|E você, e você também como táxi, você também como käpet, esses são skatturuklutasblot.
+CLIP|c04A|6.90|1.82|E você, ele e goblins, e você também como táxi, você também como käpeti,
+CLIP|c04A|8.72|0.39|esses são skatturuklutasblot.
+CLIP|c04B|0.00|1.68|VOCÊ FICA PARADO!
+CLIP|c04C|0.00|3.04|Mais uma vez, respira fundo!
+CLIP|c04D|0.00|3.12|Bem-vindo à entrevista, e lá vamos nós.
+CLIP|c04D|3.12|0.89|Vamos ver!
+CLIP|c05A|0.00|5.40|Se ao menos tivesse um ponto de táxi aqui, se desse pra pegar um aqui.
+CLIP|c05A|5.40|1.44|Isso seria muito útil.
+CLIP|c05B|0.00|2.82|Lá vem o táxi então!
+CLIP|c05C|0.00|1.45|Teria dinheiro pra isso!
+CLIP|c05C|1.45|0.72|Pouco dinheiro!
+CLIP|c05D|0.00|0.58|Porra!
+CLIP|c05D|0.58|4.08|Isso aqui foi totalmente pro inferno agora!
+CLIP|c06A|0.00|2.65|Ah, essa situação do táxi!
+CLIP|c06A|2.65|0.53|Aqui!
+CLIP|c06A|3.18|3.18|O táxi devia vir bem aqui!
+CLIP|c06B|0.00|2.06|Olá, olá!
+CLIP|c06C|0.00|2.39|E obrigado pela carona!
+CLIP|c06D|0.00|3.23|Não, eu não estou muito bem.
+CLIP|c06D|3.23|1.61|Estou indo embora.
+CLIP|c06D|4.84|1.08|E tchau.
+CLIP|c07A|0.00|7.80|Ah, central, eu estava ligando porque preciso de um táxi, e o endereço é…
+CLIP|c07A|7.80|0.56|Ah…
+CLIP|c07A|8.36|0.56|É…
+CLIP|c07A|8.92|7.25|Bom, o endereço é esse mesmo, então é isso, é isso, por favor…
+CLIP|c07A|16.16|2.23|Só, só aqui mesmo.
+CLIP|c07C|0.27|2.70|Quanto custa uma camisa finlandesa aqui?
+CLIP|c07C|2.97|3.26|Quanto... humm... um... um...
+CLIP|c07C|6.23|3.20|No geral... no geral...
+CLIP|c07D|0.00|0.87|Porra!
+CLIP|c07D|0.87|3.47|O que é isso?
+CLIP|c07D|4.34|2.60|Vai se foder!
+CLIP|c08A|0.00|1.41|Eu gosto de você, você é meu amigo.
+CLIP|c08A|1.41|0.35|Táxi, ajuda!
+CLIP|c08A|1.76|0.70|Me segura, me segura!
+CLIP|c08A|2.46|1.76|Estou tentando ir pra sua casa, você é meu amigo.
+CLIP|c08A|4.22|0.35|Táxi, ajuda!
+CLIP|c08A|4.57|2.11|Estou tentando ir pra sua casa, estou tentando ir pra sua casa!
+CLIP|c08A|6.68|1.06|Mantém a velocidade, velocidade, velocidade, velocidade!
+CLIP|c08A|7.74|0.88|Táxis, carros, velocidade, velocidade, velocidade!
+CLIP|c08B|0.00|2.19|Deixa eu te beijar!
+CLIP|c08C|0.00|2.51|Saudações, passe o dia livremente, entorpecido no navio!
+CLIP|c08D|0.00|2.10|A bolsa vai aguentar assim, Turut?
+CLIP|c08D|2.10|2.45|A região está sofrendo, coloca isso aí.
+CLIP|c09A|0.00|7.48|Se o conselho decidisse sobre o táxi, então os votos dele iriam para os rapazes.
+CLIP|c09A|7.48|5.49|E os taxistas contaram os votos dele quando estavam na cabine.
+CLIP|c09B|0.00|1.97|Olá a todos!
+CLIP|c09B|1.97|3.29|Este táxi agora está pronto.
+CLIP|c09B|5.27|4.61|E agora podemos fazer isso de novo!
+CLIP|c09C|0.00|2.55|Você pode comprar se quiser.
+CLIP|c09C|2.55|3.57|E se tiver dinheiro, não é problema.
+CLIP|c09C|6.11|1.53|Depende de você.
+CLIP|c09C|7.64|4.08|Um táxi pode ser arranjado se você quiser.
+CLIP|c09D|0.00|8.92|Porra, o inferno se soltou de vez, mas quando você colocou o código e tentou pedir um táxi,
+CLIP|c09D|8.92|2.48|aquilo só ficou dando problema!
+CLIP|c10A|0.00|4.45|Não dá pra conseguir coisa boa desses táxis!
+CLIP|c10A|4.45|2.22|Olha ele vindo agora!
+CLIP|c10B|0.00|3.15|Ah, fazendo turismo?
+CLIP|c10C|0.00|0.28|Muito obrigado!
+CLIP|c10C|0.28|0.28|Muito obrigado!
+CLIP|c10C|0.56|0.28|Sai daí!
+CLIP|c10C|0.84|0.28|Muito obrigado!
+CLIP|c10C|1.12|0.28|Sai daí!
+CLIP|c10C|1.40|0.28|Muito obrigado!
+CLIP|c10C|1.69|0.56|Você precisa ir embora!
+CLIP|c10C|2.25|0.14|Obrigado!
+CLIP|c10D|0.00|1.00|Ok!
+CLIP|c10D|1.00|1.00|Combinado!
+CLIP|c10D|2.00|2.00|Tudo bem!
+CLIP|c10D|3.99|1.00|Obrigado!
+CLIP|c11A|0.00|3.14|Eu escolhi você como motorista de táxi, Saara!
+CLIP|c11A|3.14|1.96|Polícia, o que é possível?
+CLIP|c11B|0.00|0.52|Olá!
+CLIP|c11B|0.52|2.58|Você já chegou de táxi!
+CLIP|c11C|0.00|1.20|E foi isso.
+CLIP|c11C|1.20|1.20|Obrigado pela carona!
+CLIP|c11D|0.00|3.40|Na minha opinião, essa corrida de táxi foi completamente pro inferno.
+CLIP|c11D|3.40|1.24|Estou indo embora agora.
+CLIP|c11D|4.64|0.31|Tchau!
+CLIP|cal_lift|0.00|0.87|Olá.
+CLIP|cal_lift|0.87|7.84|Tentei ligar para todas as casas, mas ninguém atendeu.
+CLIP|cal_lift|8.71|6.09|Você poderia me pegar no Pub Nappo?
+CLIP|cal_lift|14.80|4.35|Eu preciso ir para casa.
+CLIP|cal_lift|19.15|9.58|Bebi tanto que não saberia para onde ir eu fui sozinho,
+CLIP|cal_lift|28.73|7.84|então você poderia me dar uma carona para casa?
+CLIP|cal_lift|36.57|2.61|Eu te pagarei.
+CLIP|cal_lift|39.18|2.61|Isso é tudo.
+CLIP|calculating|0.00|1.75|É, é.
+CLIP|calculating|1.75|2.62|É e é.
+CLIP|calculating|4.37|5.24|E então isso daria algo como...
+CLIP|calculating|9.61|0.87|ooo.
+CLIP|call_cheat|0.00|5.66|Oi, seu cabeça de tábua, seu moleque, porra, porra.
+CLIP|call_cheat|5.66|4.40|Você me vendeu merda, me enganou, caralho.
+CLIP|call_cheat|10.06|5.03|Eu juro que vou acertar isso em você.
+CLIP|call_cheat|15.08|2.51|Some daqui, seu merda.
+CLIP|call_fleetari07|0.00|2.98|Aqui é o Fleetari, oi!
+CLIP|call_fleetari07|2.98|4.76|Escuta, eu acabei de ter uma ideia incrível!
+CLIP|call_fleetari07|7.74|5.36|Sabe aquele carro de merda que seu tio tem?
+CLIP|call_fleetari07|13.09|0.60|Então…
+CLIP|call_fleetari07|13.69|1.79|Você toparia, escuta…
+CLIP|call_fleetari07|15.47|5.36|Eu te daria dez garrafas de bebida pelo serviço!
+CLIP|call_fleetari07|20.83|1.19|Se você…
+CLIP|call_fleetari07|22.02|2.98|levar aquele carro de merda…
+CLIP|call_fleetari07|24.99|1.19|e, caralho…
+CLIP|call_fleetari07|26.18|1.19|aquela porcaria…
+CLIP|call_fleetari07|27.37|4.76|até o pátio de inspeção veicular em Inseli!
+CLIP|call_fleetari07|32.13|6.55|Aquele cara não dá um adesivo pro meu carro há anos!
+CLIP|call_fleetari07|38.68|9.52|Ei, se você largar aquela sucata no pátio dele, eu te dou dez garrafas de aguardente!
+CLIP|call_fleetari07|48.20|3.57|Isso é um ótimo negócio, escuta!
+CLIP|call_fleetari07|51.77|1.79|Eu te conheço…
+CLIP|call_fleetari07|53.56|4.17|Eu sei que você quer fazer isso!
+CLIP|call_fleetari07|57.72|4.76|Mas ei, isso é mesmo um bom negócio!
+CLIP|call_fleetari07|62.48|1.79|Era só isso!
+CLIP|call_movinghelp|0.00|3.72|Olá, olá, sou eu.
+CLIP|call_movinghelp|3.72|4.65|Essa é a situação, droga!
+CLIP|call_movinghelp|8.37|4.65|Minha esposa ainda me deixou.
+CLIP|call_movinghelp|13.03|0.93|Droga...
+CLIP|call_movinghelp|13.96|1.86|esse demônio!
+CLIP|call_movinghelp|15.82|13.03|Agora ela está em Vaasa com um produtor de tomate fodendo como o diabo.
+CLIP|call_movinghelp|28.85|0.93|Porra!
+CLIP|call_movinghelp|29.78|11.17|Escute, eu comprei um apartamento na cidade, com vista para o lago.
+CLIP|call_movinghelp|40.94|10.24|Então você poderia vir e me ajudar a mudar para lá?
+CLIP|call_movinghelp|51.18|9.30|Colocaremos as coisas na Van, deixarei tudo pronto para você,
+CLIP|call_movinghelp|60.48|5.58|então venha me ajudar quando puder.
+CLIP|call_movinghelp|66.07|3.72|É tudo por agora.
+CLIP|check_start01|0.00|1.65|Vamos pegar isso aqui agora.
+CLIP|check_start02|0.00|1.64|Vamos dar uma olhada.
+CLIP|check_start03|0.00|2.12|Vamos verificar isso agora.
+CLIP|check_start04|0.00|1.51|Vamos dar uma olhada.
+CLIP|check_start05|0.00|1.62|A Roda do Cosmos do Garry.
+CLIP|deliver1|0.00|4.36|E esse tipo de prato foi pedido aqui.
+CLIP|deliver2|0.00|4.51|E aqui está o seu prato.
+CLIP|deliver3|0.00|2.87|Isso foi o que você pediu aqui, afinal.
+CLIP|deliver4|0.00|4.45|Aqui está sua comida, bom apetite!
+CLIP|deliver5|0.00|3.95|E aqui está o seu prato.
+CLIP|drunk01|0.00|3.32|Vamos pegar leve agora.
+CLIP|drunk02|0.00|3.43|Não, não, de jeito nenhum.
+CLIP|drunk02|3.43|1.37|Vamos exagerar.
+CLIP|drunk03|0.00|2.36|Agora isso é um bom esconderijo.
+CLIP|drunk03|2.36|0.39|Sim.
+CLIP|drunk04|0.00|7.32|Não tem muito sangue no meu álcool.
+CLIP|drunk05|0.00|4.39|Eu atravessei a água aberta uma vez.
+CLIP|drunk05|4.39|2.51|O barco do Aun.
+CLIP|drunk06|0.00|4.91|Eu ainda não bebi o suficiente.
+CLIP|drunk07|0.00|4.91|Estamos na Quênia pra caralho, mas não importa.
+CLIP|drunk08|0.00|7.18|Prezado senhor ou senhora, eu não bebi nada, nem vou beber.
+CLIP|drunk08|7.18|1.31|Estou sóbrio.
+CLIP|drunk09|0.00|3.68|Está esburacado ou liso?
+CLIP|drunk10|0.00|11.63|É fácil estar com alguém quando a vida não parece um fardo, nem estar sóbrio.
+CLIP|drunk11|0.00|5.44|Eu não consumi álcool, e não vou consumir.
+CLIP|drunk12|3.89|1.96|ta... ta... ta... ta!
+CLIP|drunk13|0.00|3.28|Os patos vieram para a beira do lago e o ouro chegou à margem.
+CLIP|drunk13|3.28|3.51|E é por isso que existe um lago dourado, porque o ouro acabou na margem.
+CLIP|edited_caller|0.00|1.02|Alô?
+CLIP|edited_caller|1.02|3.05|Quem está aí?
+CLIP|edited_caller|4.07|3.05|Desculpa, número errado.
+CLIP|Ehtoota|0.00|1.40|Ah, que dia!
+CLIP|Ehtoota|1.40|2.34|O que posso lhe servir?
+CLIP|ei sakkoa 001d|0.00|5.39|Porra, você deve ter sugado isso ou algo assim, já que a agulha não sobe mais.
+CLIP|ei sakkoa 001d|5.39|3.71|Que essa seja a última vez que você tenta me ferrar.
+CLIP|ei sakkoa 001d|9.10|0.67|Some daqui!
+CLIP|ei sakkoa 002c|0.00|6.31|Ei, vamos fazer assim desta vez: você recolhe daí esse pedal do acelerador que caiu na pista e
+CLIP|ei sakkoa 002c|6.31|4.91|vai embora, assim não preciso te multar por jogar lixo na beira da estrada.
+CLIP|ei sakkoa 003c|0.00|4.79|As pilhas acabaram ou qual diabos do motivo disso não mostrar nenhuma leitura?
+CLIP|ei sakkoa 003c|4.79|3.31|Um cara com essa aparência não pode estar sóbrio.
+CLIP|ei sakkoa 003c|8.10|4.42|Bom, vou deixar passar dessa vez já que não tenho pilhas novas.
+CLIP|ei sakkoa 003c|12.52|1.10|Pode ir embora.
+CLIP|ei sakkoa 004a|0.00|6.75|Ohohoho, o seu hálito está tão ruim, que normalmente você levaria uma multa por isso.
+CLIP|ei sakkoa 004a|6.75|6.30|Mas eu sou um cara bonzinho pra caralho, então vou deixar passar dessa vez.
+CLIP|ei sakkoa 004a|13.04|0.45|Adeus.
+CLIP|ei sakkoa 005e|0.00|3.18|Então essa é a leitura desta vez.
+CLIP|ei sakkoa 005e|3.18|2.72|Com certeza algo suspeito acontecendo aqui.
+CLIP|ei sakkoa 005e|5.90|2.72|Só não sei o quê ainda.
+CLIP|ei sakkoa 005e|8.62|2.72|Estou de olho em você, Punk.
+CLIP|ei sakkoa 005e|11.35|0.91|Não fuja.
+CLIP|enjoy1|0.00|3.19|Não sobra nada além de beber.
+CLIP|enjoy10|0.00|0.29|Certo.
+CLIP|enjoy10|0.29|0.58|E óleo.
+CLIP|enjoy10|0.87|0.58|É, eles...
+CLIP|enjoy10|1.46|0.58|É, é...
+CLIP|enjoy10|2.04|0.58|É, certo.
+CLIP|enjoy10|2.62|0.58|É, é.
+CLIP|enjoy10|3.20|0.58|É, assim.
+CLIP|enjoy10|3.79|0.58|É, é.
+CLIP|enjoy2|0.00|2.45|Bom apetite!
+CLIP|enjoy3|0.00|2.44|Aproveite os lagostins!
+CLIP|enjoy4|0.00|3.20|Não esqueça o futebol!
+CLIP|enjoy5|0.00|2.98|Certo, bom apetite.
+CLIP|enjoy6|0.00|2.55|Certo, aproveite a comida.
+CLIP|enjoy8|0.00|2.94|Certo então, vamos beber.
+CLIP|enjoy9|0.00|0.36|Levanta assim.
+CLIP|enjoy9|0.36|0.53|Ele fez assim.
+CLIP|enjoy9|0.89|0.36|Levanta assim.
+CLIP|enjoy9|1.24|0.36|Levanta assim.
+CLIP|Eno-JaajaaJuujuu|0.00|5.96|É, é, é, é, é, é mesmo.
+CLIP|Eno-JaajaaJuujuu|5.96|3.40|O Oton é muitos.
+CLIP|Eno-JaajaaJuujuu|9.36|3.40|É ou é assim.
+CLIP|Eno-JaajaaJuujuu|12.77|1.70|É, é.
+CLIP|Eno-JaajaaJuujuu|14.47|1.70|É, é.
+CLIP|Eno-JaajaaJuujuu|16.17|1.70|Sim, sim.
+CLIP|Eno-JaajaaJuujuu|17.87|4.26|É, é, é, sim, sim.
+CLIP|Eno-JaajaaJuujuu|22.13|5.11|É, você pode, é isso mesmo.
+CLIP|Eno-JaajaaJuujuu|27.23|2.55|É, é, é.
+CLIP|Eno-JaajaaJuujuu|29.79|3.40|É, é, é, é.
+CLIP|Eno-JaajaaJuujuu|33.19|2.55|Ah, sim, sim.
+CLIP|Eno-JaajaaJuujuu|35.74|4.26|Sim, sim, é isso mesmo.
+CLIP|Eno-KuskausKotiin|0.00|2.59|Você poderia levar meu amigo pra casa?
+CLIP|Eno-KuskausKotiin|2.59|1.85|Eu preciso verificar algumas coisas.
+CLIP|Eno-KäymäänKittilässä|0.00|5.09|Tomara que um dia a gente vá visitar Kittilä.
+CLIP|Eno-KäymäänKittilässä|5.09|6.79|É meio difícil pra mim dirigir, já que fico muito sem fôlego.
+CLIP|Eno-KäymäänKittilässä|11.88|9.05|Mas se você pudesse ser meu motorista, poderíamos ir a Kittilä resolver as coisas do Raiha.
+CLIP|Eno-KäymäänKittilässä|20.92|4.52|Você poderia vir me buscar aqui algum dia?
+CLIP|Eno-KäymäänKittilässä|25.45|3.39|Você sabe onde fica a chave.
+CLIP|Eno-KäymäänKittilässä|28.84|5.66|Quando o carro funcionou da última vez, funcionava muito bem.
+CLIP|Eno-KäymäänKittilässä|34.50|4.52|Agora vamos fazer uma viagem, só nós, rapazes.
+CLIP|Eno-KäymäänKittilässä|39.02|6.79|O Raiha provavelmente também gostaria de te ver depois de tanto tempo.
+CLIP|Eno-Laulaminen|0.00|3.49|Eu nem sempre consegui cantar tudo.
+CLIP|Eno-Laulaminen|3.49|4.66|Já cantei bêbado algumas vezes, mas nunca sóbrio.
+CLIP|Eno-Laulaminen|8.15|9.31|Mesmo assim, soava mais como um corvo do que como Teuvo Hoinainen, Johamat ou Steen Jarka.
+CLIP|Eno-Laulaminen|17.47|4.66|Aliás, eu já conheci o Jerkaa uma vez.
+CLIP|Eno-Laulaminen|22.12|8.73|Mas eu estava tão bêbado naquela época que todas as pequenas lembranças disso desapareceram na
+CLIP|Eno-Laulaminen|30.86|0.58|hora.
+CLIP|Eno-Laulaminen-Marjatta1|0.00|2.75|Marjatta, meu amor.
+CLIP|Eno-Laulaminen-Marjatta1|2.75|8.25|É, não vai dar certo, não vai dar certo.
+CLIP|Eno-Laulaminen-Marjatta2|0.00|4.19|Marjatta, meu amor.
+CLIP|Eno-Laulaminen-Marjatta2|4.19|12.57|E nada vai sair disso, nada vai sair disso.
+CLIP|Eno-Suolavesi|0.00|7.96|A comida deste restaurante é melhor do que a água salgada que eu consumi por tanto tempo.
+CLIP|Eno-Suolavesi|7.96|8.43|Essa comida com certeza não é a melhor, mas a água salgada também não era uma refeição gourmet.
+CLIP|Eno-Suolavesi|16.40|6.56|É preciso comer alguma coisa, não dá pra sustentar o corpo só com líquidos.
+CLIP|Eno-TakaisinRavintolaan|0.00|5.35|Vamos subir no topo do monte um pouco, um pouquinho de exercício.
+CLIP|Eno-TakaisinRavintolaan|5.35|2.68|Depois vamos voltar para o restaurante?
+CLIP|Eno-Tarjoilijat|0.00|3.94|É, essas garçonetes aqui geralmente são bem legais.
+CLIP|Eno-Tarjoilijat|3.94|6.90|Mas nenhuma delas é exatamente o que se chamaria de um time dos sonhos.
+CLIP|Eno-Tarjoilijat|10.84|5.92|Não sei o que é, mas uma delas sempre vem me cutucar.
+CLIP|Eno-Tarjoilijat|16.76|4.93|Eu sou um homem de uma mulher só, sempre fui.
+CLIP|Eno-Tarjoilijat|21.69|5.92|Às vezes você até tem que afastá-las e mandar que se afastem.
+CLIP|Eno-TenunKanssaRallia|0.00|4.34|Às vezes a gente assiste rally na TV com o Teno.
+CLIP|Eno-TenunKanssaRallia|4.34|7.50|A Taina, eu nem sei se ela realmente vê alguma coisa, mas ela sempre parece saber tudo melhor do
+CLIP|Eno-TenunKanssaRallia|11.84|1.18|que qualquer um.
+CLIP|Eno-TenunKanssaRallia|13.02|7.10|Eu já disse pra ela antes, tipo, você sabe, você nem tem carteira de motorista há pelo menos
+CLIP|Eno-TenunKanssaRallia|20.12|4.34|vinte anos, desde que eu parei com aquela implicância sem fim.
+CLIP|Eno-TenunKanssaRallia|24.46|3.55|Mas é isso, às vezes dá só pra assistir.
+CLIP|Eno-Tupakanpummaus|0.00|5.89|Eu tenho esse problema de que, se você tiver alguns cigarros sobrando...
+CLIP|Eno-Tupakanpummaus|5.89|7.86|Eu estou tentando parar de fumar há bastante tempo, mas sempre dá errado quando fico sem
+CLIP|Eno-Tupakanpummaus|13.75|0.49|cigarros.
+CLIP|Eno-Tupakanpummaus|14.24|5.40|Eu não consigo manter o compromisso quando não tenho nenhum cigarro.
+CLIP|Eno-Tupakanpummaus|19.65|5.89|E também não tenho muita vontade de ir à loja comprar mais,
+CLIP|Eno-Tupakanpummaus|25.54|6.39|já que não faz sentido comprar cigarros quando estou tentando parar de vez.
+CLIP|Eno-Tupakanpummaus|31.93|6.39|Mas se eu pudesse conseguir alguns com você, então eu poderia continuar parando.
+CLIP|Eno-Tupakanpummaus|38.31|6.39|Então, se você pudesse me dar alguns, ou quando você tiver por acaso.
+CLIP|Eno-Tupakanpummaus|44.70|4.91|Claro que eu te pagaria de volta, no seu preço.
+CLIP|Eno-Tupakanpummaus|49.61|8.84|É só que eu realmente não quero comprar cigarros eu mesmo, mas eu pagaria uma taxa de favor,
+CLIP|Eno-Tupakanpummaus|58.45|0.98|com certeza.
+CLIP|Eno-Tupakanpummaus-EI|0.00|0.84|E não...
+CLIP|Eno-Tupakanpummaus-EI|0.84|1.68|dinheiro não é suficiente?
+CLIP|Eno-Tupakanpummaus-EI|2.52|6.31|Acho que você quer que eu continue fumando pelo resto da vida até morrer, né?
+CLIP|Eno-Tupakanpummaus-EI|8.83|2.10|Bom, então deixa pra lá.
+CLIP|Eno-Tupakanpummaus-Kiitos|0.00|1.31|Certo, obrigado.
+CLIP|Eno-Tupakanpummaus-Kiitos|1.31|1.31|Aqui está.
+CLIP|Eno-Tupakanpummaus-Kiitos|2.62|9.16|Talvez eu precise pedir mais depois se eu precisar continuar parando por mais tempo.
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|0.00|3.70|Ei, aquela coisa morreu, agora surgiu a saída para Kittilä.
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|3.70|5.56|Se você puder vir com o pessoal do Pavu me buscar, a gente vai partir.
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|9.26|2.22|Eu pago a taxa do motorista.
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|11.48|1.85|Provavelmente já estamos lá esperando.
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|13.33|3.33|Tor, você quer que eu te ofereça alguma coisa?
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|16.67|1.48|Vou acender as luzes.
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|18.15|4.44|Aliás, é um botão brilhante, não dá pra dizer pra que serve.
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|22.59|2.59|Um botão desses deve ser bem caro.
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|25.19|3.33|Eu nem consigo entender como ele pode brilhar tanto.
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|28.52|3.33|Será que você poderia guardar isso em algum lugar?
+CLIP|Eno-ViimeinenPuhelinsoitto_Puhelinääni|31.85|0.37|Obrigado.
+CLIP|epaonnistunut_tinkaus|0.00|2.20|Ei achou mesmo que isso era de graça?
+CLIP|epaonnistunut_tinkaus|2.20|2.47|Vai se enforcar e pular no poço de merda!
+CLIP|fail01|0.00|3.48|Nem o Masa Mainio aceitaria esse carro.
+CLIP|fail02|0.00|3.26|Você não tem nada a ver indo para aquela estrada.
+CLIP|fail02|3.26|2.29|Esse é o ponto final deste carro.
+CLIP|fail02|5.55|1.31|Sim, não tem jeito.
+CLIP|fail03|0.00|2.53|Esse homem realmente tem a audácia de trazer uma porcaria
+CLIP|fail03|2.53|0.51|dessas aqui.
+CLIP|fail04|0.00|3.30|Esse é agora o ponto final desse carro.
+CLIP|fail04|3.30|1.65|É assim que é.
+CLIP|Grillipekoni_ehdotus|0.00|0.93|Bom, olá!
+CLIP|Grillipekoni_ehdotus|0.93|4.64|Você gostaria de um prato de bacon na grelha assim?
+CLIP|haistavittu|0.00|2.60|Vai se foder!
+CLIP|hanavetta|0.00|1.74|Ei, isso não é água da torneira.
+CLIP|haukotus|0.00|2.86|Ohohoi, vamos deixar isso pra lá.
+CLIP|haukotus2|0.00|4.95|Cara, isso aí está começando a ficar bem cansativo.
+CLIP|hello|0.00|1.80|Ola, Ola!
+CLIP|hello 001a|0.00|5.47|Olha, o Kesselinpärä e o Nassikka conseguiram a carteira de motorista com um kit de
+CLIP|hello 001a|5.47|0.36|arrombamento.
+CLIP|hello 001a|5.83|4.38|Será que atrás do kit dizia como agir num teste do bafômetro?
+CLIP|hello 002c|0.00|1.37|Você de novo!
+CLIP|hello 002c|1.37|7.31|Eu nem tenho um apito limpo pra te dar agora, mas isso nunca te incomodou antes.
+CLIP|hello 003a|0.00|0.34|Bom.
+CLIP|hello 003a|0.34|2.74|É assim que a barata está dessa vez.
+CLIP|hello 003a|3.08|6.51|Acho que você sabe que quando a polícia te oferece um tubo pra colocar na boca, é pra soprar,
+CLIP|hello 003a|9.59|1.03|não para xupar.
+CLIP|hello 004b|0.00|2.40|Olha, tinha algum moleque pequeno ao volante.
+CLIP|hello 004b|2.40|6.53|Achamos que vinha o carro do cavaleiro S., já que nem dava pra ver o motorista por cima do
+CLIP|hello 004b|8.93|0.34|volante.
+CLIP|hello 004b|9.27|3.09|E aí pronto para um longo teste do bafômetro.
+CLIP|hello 005d|0.00|6.23|Oi, a gente não já se encontrou antes, e naquela vez também você estava aprontando?
+CLIP|hello 005d|6.23|4.15|Vamos ver pelo que você vai ser multado dessa vez.
+CLIP|hello 005d|10.39|1.25|Assompra ae, garoto.
+CLIP|hello01|0.00|0.56|Olá!
+CLIP|hello01|0.56|3.89|O que você tem em mente, jovem?
+CLIP|huitominen|0.00|1.62|Ei, que porra você está acenando aí?
+CLIP|huitominen2|0.00|1.66|Estou te chamando pra cá, porra, para de choramingar!
+CLIP|huutelu2|0.00|3.82|Se você não sair agora mesmo, eu vou derrubar essa casa.
+CLIP|instructions|0.00|3.42|É, vai em frente.
+CLIP|instructions|3.42|10.26|Só dá ré até o galpão Aldonso e deixa a merda voar.
+CLIP|istualas|0.00|2.96|Vamos colocar o banco periso pra poder ir embora.
+CLIP|jaahastämmöissetmerkit|0.00|6.30|Ah, entendi, então hoje em dia esses tipos de gestos por aqui, pelo amor de Deus, sério,
+CLIP|jaahastämmöissetmerkit|6.30|4.07|logo vai dar uma merda, eu te digo, e das grandes.
+CLIP|jaaseontyopaivavoitonpuolella|0.00|3.12|O homem tem truques do lado vencedor!
+CLIP|janitor01|0.00|2.70|Não dirija neste campo de esportes!
+CLIP|janitor02|0.00|1.81|Maldito idiota!
+CLIP|janitor03|0.00|3.02|O que há com esse estilo de vida horrível?
+CLIP|janitor04|0.00|2.45|Todos os tipos de inteligência desafiaram indivíduos...
+CLIP|janitor05|0.00|5.13|Os aldeões usam muito do seu tempo para manter este campo em condições!
+CLIP|janitor06|0.00|3.43|E estes aqui são os namoradinhos da mamãe.
+CLIP|janitor07|0.00|2.86|O sentido dentro dessas cabeças não está fazendo pressão.
+CLIP|janitor08|0.00|3.64|Você gostaria se eu dirigisse em círculos no seu quintal?
+CLIP|janitor09|0.00|3.09|Não há limite para a existência de pessoas estúpidas.
+CLIP|janitor10|0.00|1.96|Para onde devo ligar?
+CLIP|janitor10|1.96|1.96|Instituição de cuidado infantil?
+CLIP|janitor10|3.91|0.98|Jardim zoológico?
+CLIP|janitor11|0.00|1.54|Agora desacelere...
+CLIP|janitor12|0.00|2.53|Você tem ideia de quanto custa consertar a superfície
+CLIP|janitor12|2.53|0.56|depois disso?
+CLIP|janitor13|0.00|2.67|É meu inferno pessoal ver isso acontecendo.
+CLIP|janitor14|0.00|1.96|Vá para casa e cresça!
+CLIP|janitor15|0.00|4.05|Que diabos está acontecendo se eu simplesmente não entendo nada?
+CLIP|jäärata|0.00|8.73|A gente deu uma olhada naquela pista de gelo que eles montam lá de vez em quando.
+CLIP|jäärata|8.73|5.65|Com certeza dava pra se divertir com isso, faz muito tempo.
+CLIP|jäärata|14.38|8.73|Eu mesmo fazia isso quando era mais novo, mas agora sendo autônomo, a vida é bem corrida.
+CLIP|jäärata|23.12|6.16|Hoje não é tão corrido, pois surgiram estações que reduziram o trabalho,
+CLIP|jäärata|29.28|6.68|mas os recursos ainda são tão limitados que sobra pouco espaço para isso.
+CLIP|jäärata|35.96|3.60|Mas seria muito bom voltar a isso.
+CLIP|kahvi|0.00|4.37|É, claro, ainda tenho umas coisas bem frescas nessa garrafa térmica.
+CLIP|kahvi|4.37|1.19|Espera um segundo.
+CLIP|kahvi2|0.00|1.94|É, é, café do bom.
+CLIP|kahvi2|1.94|0.77|Estou indo.
+CLIP|kahvi3|0.00|3.78|Certo, vamos te mandar umas zumbas boas.
+CLIP|kahvi4|0.00|2.57|E uma bebida comemorativa pra você!
+CLIP|kalja|0.00|2.41|Não tem gelo de máquina nesse saco, sim.
+CLIP|kaljavittuilu|0.00|3.70|Ah, porra, como é que você consegue beber essa merda?
+CLIP|kaljavittuilu|3.70|2.22|Isso não é nada porra nenhuma.
+CLIP|kaljavittuilu|5.93|4.44|Dá pra se fartar dessa porcaria com o Joken de qualquer jeito.
+CLIP|kaljavittuilu|10.37|1.85|Bebe aí também, seu miserável!
+CLIP|kaljavittuilua2|0.00|5.56|Jesus Cristo, sério, não existe a menor chance de alguém beber essa merda do caralho,
+CLIP|kaljavittuilua2|5.56|3.33|isso é lixo completo, joga essas cervejas fora logo.
+CLIP|Kana-ateria_ehdotus|0.00|0.70|Olá!
+CLIP|Kana-ateria_ehdotus|0.70|3.49|Vai querer um pouco frango?
+CLIP|karaoke|0.00|8.71|Eu também tentei pensar um pouco em como a gente poderia dar uma animada aqui.
+CLIP|karaoke|8.71|6.39|Talvez pudesse ter umas noites de karaokê de vez em quando.
+CLIP|karaoke|15.10|4.07|Tem cantores, homens ou mulheres, nessa vila?
+CLIP|karaoke|19.17|2.32|O que vocês acham?
+CLIP|karaoke|21.49|3.49|O dinheiro iria para os equipamentos.
+CLIP|karaoke|24.98|7.55|Eu também tive que pensar um pouco se existem recursos suficientes pra isso.
+CLIP|keskari|0.00|3.30|Agora nem pense em começar a se exibir aí!
+CLIP|keskari2|0.00|4.76|Bom, você virou exatamente o mesmo babaca que o seu pai.
+CLIP|keskari3|0.00|4.57|Se você começar a fazer merda, com certeza vai ter que sair,
+CLIP|keskari3|4.57|1.52|e não precisa voltar.
+CLIP|keskari4|0.00|2.47|Bom, foda-se, faz você mesmo!
+CLIP|kiitos|0.00|2.33|Obrigado e volte sempre!
+CLIP|kiitos2|0.00|2.62|Certo, nada além de obrigado e tchau!
+CLIP|kiitos3|0.00|2.20|É, a gente se vê.
+CLIP|kiitos3|2.20|0.44|Tchau!
+CLIP|kiitos4|0.00|2.47|Obrigado pela cooperação empresarial!
+CLIP|Kiitos_tilauksesta|0.00|3.83|Obrigado pelo seu pedido e bom apetite!
+CLIP|kiitostulossa|0.00|1.64|Obrigado por vir!
+CLIP|kilju_alc_ok|0.00|5.16|Um pouco mais forte, poderia até ser tipo uma bebida caseira.
+CLIP|kilju_alc_shit|0.00|5.65|Que inferno, o que é que você está tentando me vender?
+CLIP|kilju_alc_shit|5.65|2.57|Isso tem gosto de ág...
+CLIP|kilju_alc_shit|8.22|0.51|...água!
+CLIP|kilju_alc_shit|8.73|2.05|Tem tipo o quê?
+CLIP|kilju_alc_shit|10.79|0.51|Arolium!
+CLIP|kilju_alc_shit|11.30|1.03|Que inferno!
+CLIP|kilju_alc_shit|12.33|2.05|Você e um golpista!
+CLIP|kilju_lets_taste|0.00|7.19|Vamos ver quão bom é esse kilju feito com açúcar...
+CLIP|kilju_pay|0.00|3.66|Olha, dá pra perde um fígado com isso
+CLIP|kilju_take4|0.00|2.87|Se você pretende me vender mais, então aprenda a fazer
+CLIP|kilju_take4|2.87|0.57|isso direito.
+CLIP|kilju_take_bonus|0.00|1.23|Aí está!
+CLIP|kilju_take_bonus|1.23|0.62|Beba!
+CLIP|kilju_very_good|0.00|4.86|Isso aqui está bom demais, esse kilju, hein!
+CLIP|kilju_very_good|4.86|4.86|Porra, isso aqui está absolutamente perfeito, esse kilju!
+CLIP|kilju_vinegar_ok|0.00|4.03|Isso aqui tem um gostinho meio de vinagre.
+CLIP|kilju_vinegar_ok|4.03|2.52|Dá pra sentir o vinagre.
+CLIP|kilju_vinegar_shit|0.00|4.18|Porra, isso é como beber água de picles.
+CLIP|kilju_vinegar_shit|4.18|2.09|Gosto de vinagre demais.
+CLIP|kilju_vinegar_shit|6.27|4.70|Não tem como vender isso, não com esse negócio.
+CLIP|kilju_yeast_ok|0.00|1.46|Realmente tem isso.
+CLIP|kilju_yeast_ok|1.46|1.95|Um gosto de fermento.
+CLIP|kilju_yeast_ok|3.41|2.44|Dá pra sentir no final.
+CLIP|kisaan_haasto|0.00|2.72|Certo, vamos ver quem é o mais rápido.
+CLIP|kisajuttuja|0.00|4.07|Ah, então você quer correr com esse lixo aí seu, porra.
+CLIP|kisajuttuja|4.07|4.07|Nem pensar, você não chega nem perto dos tempos da elite.
+CLIP|kisajuttuja|8.15|5.19|Você não serve pra nada mesmo, eu nem sei se quero ir com você.
+CLIP|kisajuttuja|13.33|2.96|Esse seu carro parece uma sucata de merda.
+CLIP|kisajuttuja|16.30|2.22|Não, não, sinceramente eu não sei.
+CLIP|kisajuttuja|18.52|4.07|Preciso pensar um pouco mais no que fazer com essa porcaria.
+CLIP|kisajuttuja|22.59|2.22|Isso não vai dar certo, sério.
+CLIP|kisajuttuja|24.81|4.44|Porra, arruma um carro decente e aí a gente conversa de novo.
+CLIP|kohtpamahtaa|0.00|5.56|Agora para com essa porra de dar dedo, isso vai quebrar e vai quebrar feio!
+CLIP|kusilattialle|0.00|9.22|Ah, pelo amor de Deus, você ainda não aprendeu a se comportar dentro de casa?
+CLIP|kusilattialle|9.22|2.46|Ah, ah, ah, droga!
+CLIP|kusilattialle2|0.00|1.21|Ah, porra!
+CLIP|kusilattialle2|1.21|6.05|Todo maldita dia esses bêbados deixam o chão todo mijado.
+CLIP|kusilattialle2|7.26|3.03|Que vila desgraçada do caralho!
+CLIP|kusipaska|0.00|4.44|Ah, porra, você precisava mesmo vir pra cá fedendo desse jeito também?
+CLIP|kusipaska|4.44|7.04|Aquile ali já fede a mijo o suficiente, e agora essa merda aqui está fedendo a mijo e merda
+CLIP|kusipaska|11.48|0.37|misturados.
+CLIP|kusipaska|11.85|1.48|Bom, muito obrigado, porra.
+CLIP|kustaan_teimon_naamaan|0.00|4.32|Aff, credo, pff, pff, aff, inferno, credo, pff, credo, droga, droga,
+CLIP|kustaan_teimon_naamaan|4.32|6.28|agora esse moleque desgraçado está estragando tudo só pra me irritar e é melhor nunca mais
+CLIP|kustaan_teimon_naamaan|10.61|1.18|voltar, aff, inferno.
+CLIP|kylmä|0.00|8.44|O clima está tão frio que dá vontade de manter um perfurador de gelo dentro de casa,
+CLIP|kylmä|8.44|7.95|porque você não quer deixar os aquecedores ligados, já que a energia está cara pra caralho.
+CLIP|laitapullopois|0.00|2.28|Coloca essa garrafa ali pra fora!
+CLIP|laitetaanko muuta|0.00|0.77|E pronto!
+CLIP|laitetaanko muuta|0.77|2.30|Então, vamos acrescentar mais alguma coisa?
+CLIP|laulu|0.00|5.69|Se não for nappo pappo, então vira pupnappo.
+CLIP|laulu|5.69|6.40|Se não for nappo nappo, então vira pupnappo pappo.
+CLIP|laulu2|0.00|6.65|Essas raizinhas vão pro Norte.
+CLIP|laulu2|6.65|1.33|Mimimimimi.
+CLIP|laulu2|7.98|5.32|Eu afofo a terra.
+CLIP|laulu2|13.29|1.33|Mhmm.
+CLIP|laulu2|14.62|1.33|Mhmm.
+CLIP|lift_goodbye|0.00|1.95|Obrigado e adeus!
+CLIP|lift_hello|0.00|3.99|Bom, olá, você chegou rápido mesmo.
+CLIP|lift_nomoneythen|0.00|4.31|Eu não sou nenhum guia de jaula no meio do mato.
+CLIP|lift_nomoneythen|4.31|3.92|É assim que funciona, pega do jeito que é dado.
+CLIP|lift_pay|0.00|5.84|Aí vem um pouquinho de dinheiro do taxista e pagamento.
+CLIP|lift_rightplace|0.00|2.91|Aqui, aqui é a casa.
+CLIP|lift_rightplace|2.91|2.91|Para aqui assim um minuto.
+CLIP|lift_rightplace|5.82|0.58|Obrigado!
+CLIP|liftaus|0.00|3.33|Agora tenho mais um polegar enfiado no meu cu.
+CLIP|liftaus|3.33|2.59|Que porra eu tô fazendo aqui afinal?
+CLIP|liftaus|5.93|4.07|Eu não sou nenhum maldito taxista, vai se foder de verdade.
+CLIP|lihasula2|0.00|1.88|Tem molho?
+CLIP|lihasula2|1.88|0.94|Sim.
+CLIP|lihasula2|2.82|0.94|Parabenizar?
+CLIP|lihasula2|3.76|1.88|Sim, sim.
+CLIP|lihasula2|5.64|0.94|Ok?
+CLIP|lihasula2|6.58|1.88|Sim, sim.
+CLIP|lihasula2|8.46|1.88|Vamos lá.
+CLIP|lihasula2|10.33|1.88|Aqui começa.
+CLIP|lihasula2|12.21|1.88|Aproveite, porra.
+CLIP|Liian_kallis|0.00|3.04|Bom, você ainda não está satisfeito?
+CLIP|Liian_kallis|3.04|3.55|Por que você também não vai trabalhar!
+CLIP|maito|0.00|1.59|Ainda tem alguma validade nisso aí?
+CLIP|maito|1.59|2.92|Não seria a primeira vez que o Teimo vende leite estragado.
+CLIP|maksa_vahinko|0.00|3.46|Não mexe na tampa do poço, você vai ter que pagar por
+CLIP|maksa_vahinko|3.46|0.29|isso!
+CLIP|maksa_vahinko2|0.00|5.78|Ah, pelo amor de Deus, você não pode pegar nada antes de pagar isso aí.
+CLIP|marjatta|0.00|21.88|Marjattaaaaaa, meu amor.
+CLIP|marjatta|21.88|43.75|Você encontrou outro e me deixou.
+CLIP|marjatta|65.63|29.17|Marjatta, ó minha Marjatta.
+CLIP|marjatta|94.80|43.75|Marjatta, você é a minha lingonberry.
+CLIP|marjatta|138.56|36.46|Am, am, amm, mhm, mhm.
+CLIP|masentunut_teimo|0.00|4.50|Ai meu Deus, eu realmente não sei.
+CLIP|masentunut_teimo|4.50|9.64|Às vezes isso tudo parece tão sem sentido, tipo, como eu consegui tocar isso antes,
+CLIP|masentunut_teimo|14.13|3.21|quando nem tem clientes direito.
+CLIP|masentunut_teimo|17.34|9.64|Os mesmos ficam vindo de novo e de novo, mas não dá pra viver disso.
+CLIP|masentunut_teimo|26.98|8.35|Às vezes eu penso nisso quando vou pra cama sem conseguir dormir, tipo,
+CLIP|masentunut_teimo|35.33|7.07|o que eu fiz de errado pra merecer ser punido assim?
+CLIP|masentunut_teimo|42.39|7.71|Eu tenho boas intenções, mas aí tudo simplesmente é tirado de mim.
+CLIP|masentunut_teimo|50.10|5.14|Não acho que isso seja realmente pra mim.
+CLIP|masentunut_teimo|55.24|1.93|Eu não sei.
+CLIP|mieluumminjoisinkaljaakotona|0.00|3.86|Hmpf, eu preferia muito mais estar fora de lugar do que aqui,
+CLIP|mieluumminjoisinkaljaakotona|3.86|1.61|com esse clima de merda.
+CLIP|minaoonsitamieltaetteioojarkia|0.00|3.95|Eu acho que isso não faz sentido nenhum.
+CLIP|mitteesinäki|0.00|2.96|Bom, então por que você não está lá também?
+CLIP|Mitäs_saisi_olla|0.00|1.56|Bom dia!
+CLIP|Mitäs_saisi_olla|1.56|3.13|O que vai querer?
+CLIP|moro|0.00|1.47|E aí, e aí, como é que tá, cara?
+CLIP|moro2|0.00|1.66|Dá pra ver o Suosinta pela cidade também.
+CLIP|moro2|1.66|2.69|De Kosola, dá pra ouvir, bom, nada claramente desde que eles compraram um
+CLIP|moro2|4.35|0.21|computador.
+CLIP|mumble1|0.00|2.77|Bom, bom...
+CLIP|mumble10|0.00|8.14|Pra mim, igualdade significa que merda sai do cu de todo mundo.
+CLIP|mumble11|0.00|8.92|Você tá ouvindo, eu tô te dizendo, se alguma coisa é, isso aqui é um trabalho de merda.
+CLIP|mumble11|8.92|6.93|Não tão merda quanto o seu trabalho, mas ainda é um trabalho bem merda.
+CLIP|mumble2|0.00|9.22|E a sua carga seria merda, merda, merda, merda.
+CLIP|mumble3|0.00|7.22|Será que esse dia maldito não é nada além de merda?
+CLIP|mumble3|7.22|0.66|Mmm!
+CLIP|mumble3|7.88|0.66|Mmm!
+CLIP|mumble4|0.00|0.90|Obrigado por assistir!
+CLIP|mumble4|0.90|0.30|Tchau!
+CLIP|mumble4|1.20|0.30|Muu!
+CLIP|mumble4|1.50|0.30|Tchau.
+CLIP|mumble4|1.80|0.30|Muu.
+CLIP|mumble4|2.10|0.30|Obrigado!
+CLIP|mumble5|0.00|2.79|Então essa é a situação.
+CLIP|mumble7|0.00|2.89|Sim, sim.
+CLIP|mumble8|0.00|5.53|Não tem como ficar pior do que merda, né.
+CLIP|mumble9|0.00|5.57|Se merda fosse como ouro, eu seria um homem rico.
+CLIP|mumble9|5.57|2.23|Mas não é, né?
+CLIP|murahdus2|0.00|1.21|Tá bom, não tem.
+CLIP|murahdus3|0.00|0.59|VAI!
+CLIP|museum_fail01b|0.00|3.70|De resto até que está bom, mas foi feito errado.
+CLIP|museum_fail01b|3.70|2.96|Isso não vai virar um carro de museu.
+CLIP|museum_start01|0.00|4.27|Bom, não tem mais nada a fazer além de começar a passar por essa pilha de
+CLIP|museum_start01|4.27|0.27|pastas.
+CLIP|museum_start03|0.00|6.47|Certo, vamos tirar os artefatos dali e examinar a questão um pouco.
+CLIP|museum_start04|0.00|6.39|E é basicamente isso, vamos abrir o sarcófago e investigar o assunto.
+CLIP|museum_success01b|0.00|4.29|Eu diria que o seu carro atende aos critérios,
+CLIP|museum_success01b|4.29|3.33|então a placa histórica pode ser concedido.
+CLIP|muutkuskit|0.00|4.35|Bom, que porra é essa macaquice toda nesse trânsito maldito?
+CLIP|muutkuskit|4.35|0.87|Porra, porra!
+CLIP|nappi|0.00|2.07|Para de mexer nesse botão!
+CLIP|nappi2|0.00|2.66|Você não precisa ficar apertando esse botão.
+CLIP|nomoney01|0.00|6.65|Certo, então você vem aqui desperdiçar meu tempo e nem tem dinheiro pra pagar esse conserto.
+CLIP|nomoney01|6.65|4.15|Você podia ir arrumar um trabalho, voltar outra hora melhor,
+CLIP|nomoney01|10.80|4.57|e talvez aí tivesse algum dinheiro pra pagar isso de verdade.
+CLIP|nomoney02|0.00|3.54|Arruma o dinheiro primeiro, cara, depois a gente olha esse conserto quando
+CLIP|nomoney02|3.54|1.18|tiver mais tempo, beleza!
+CLIP|nomoney03|0.00|3.36|Você realmente não tem dinheiro suficiente pra isso agora,
+CLIP|nomoney03|3.36|5.23|então não acho que eu possa te dar mais desconto do que você merece.
+CLIP|nomoney03|8.59|4.11|Volta quando tiver o dinheiro, ou então encomenda outra coisa comigo.
+CLIP|nomoney04|0.00|4.87|Malditos pobres do caralho, eu tenho 50% de desconto em tudo aqui,
+CLIP|nomoney04|4.87|3.65|então você não pode dizer que não tem dinheiro.
+CLIP|nomoney04|8.52|3.65|Assim não funciona, eu tenho um negócio pra tocar!
+CLIP|nomoney05|0.00|5.91|Como é que você ainda tem coragem de reclamar que não tem dinheiro quando olha pra esse seu
+CLIP|nomoney05|5.91|1.64|carro que está tentando consertar?
+CLIP|nomoney05|7.55|3.94|Quero dizer, se você comprar uma fita adesiva e uma tinta spray,
+CLIP|nomoney05|11.49|1.97|já vira um carro perfeitamente aceitável!
+CLIP|norally01|0.00|5.92|Isso não vai dar certo, você não pode dirigir porque esse carro não foi inspecionado!
+CLIP|norally01|5.92|1.97|Você precisa mesmo inspecionar ele!
+CLIP|norally01|7.90|1.58|Você não vai participar!
+CLIP|norally02|0.00|5.74|Então é o seguinte: seu carro está sem a gaiola de proteção e as estruturas de segurança,
+CLIP|norally02|5.74|2.70|então não podemos deixar você entrar na pista.
+CLIP|norally02|8.45|3.72|Você vai ter que consertar o carro e voltar mais tarde.
+CLIP|norally03|0.00|3.58|Ei, como você tem a cara de pau de aparecer aqui bêbado?
+CLIP|norally03|3.58|2.39|Você não pode participar desse rali estando chapado!
+CLIP|norally03|5.97|2.09|Agora vai pra casa, porra, e rápido!
+CLIP|norally03|8.06|2.39|Como você se atreve a vir aqui assim?
+CLIP|norally04|0.00|3.94|Vamos trazer o capacete da próxima vez e tentar de novo,
+CLIP|norally04|3.94|3.58|porque não tem motivo pra andar nesse rally sem capacete.
+CLIP|norally05|0.00|2.72|Ok, esse é realmente o limite.
+CLIP|norally05|2.72|4.08|Você nem consegue pagar a taxa de participação disso.
+CLIP|norally05|6.79|2.26|Não é muito, nada absurdo.
+CLIP|norally05|9.06|4.53|Mas até essa porcaria precisa continuar funcionando de algum jeito.
+CLIP|norally05|13.58|3.62|Esse negócio não funciona com cocô de pombo.
+CLIP|norally06|0.00|7.04|É o seguinte: você tem a audácia de vir aqui sem poder pagar a taxa de participação,
+CLIP|norally06|7.04|2.07|então não pode correr agora.
+CLIP|norally06|9.11|1.66|É assim que funciona.
+CLIP|norally06|10.76|5.79|Organizar competições assim não roda com cocô de pombo, precisa de dinheiro de verdade.
+CLIP|norally06|16.56|5.38|Então arruma essas centenas em algum lugar e volta pra tentar de novo.
+CLIP|numminen|0.00|1.49|Numminen.
+CLIP|numminen|1.49|1.49|Sim.
+CLIP|numminen|2.97|2.97|Eu tenho.
+CLIP|numminen|5.94|1.49|Certo.
+CLIP|numminen|7.43|5.94|Vou enviar pelo correio.
+CLIP|numminen|13.37|2.97|Tchau tchau.
+CLIP|Näkemisiin|0.00|3.15|Obrigado e até logo!
+CLIP|näytäppäsvieläkerran|0.00|5.93|Mostra esse dedo de merda mais uma vez, e eu juro que vai ser a última.
+CLIP|odottaa_poistumista|0.00|2.91|Esse ônibus não vai a lugar nenhum enquanto você estiver a
+CLIP|odottaa_poistumista|2.91|0.26|bordo.
+CLIP|olkaahyvä|0.00|2.85|Certo, isso pode acabar ficando muito bom.
+CLIP|olkaahyvä2|0.00|1.46|Por favor, fiquem à vontade!
+CLIP|olut|0.00|3.43|Certo, assim sua sede vai ser saciada.
+CLIP|onnistunut_kauppa|0.00|0.65|Certo, obrigado.
+CLIP|onnistunut_kauppa|0.65|4.20|Não beba tudo de uma vez, isso bate como um soco no olho.
+CLIP|ootappahetki|0.00|1.80|Certo, espera só um momento.
+CLIP|Ostaja2-kiitospaljon|0.00|2.25|Muito obrigado é ótimo dia, é por isso que é do norte,
+CLIP|Ostaja2-kiitospaljon|2.25|1.31|é bom, muito obrigado, um ótimo dia!
+CLIP|paskakuskivittuilu|0.00|3.70|Olha só quem apareceu, o motorista de merda de Peräjärvi.
+CLIP|paskakuskivittuilu|3.70|5.19|E agora, porra, ele vem de novo com essa merda toda pra causar aqui.
+CLIP|paskakuskivittuilu|8.89|1.85|Vai se foder logo, sério.
+CLIP|Peremmälle_1|0.00|0.84|Olá!
+CLIP|Peremmälle_1|0.84|1.69|Entra, entra!
+CLIP|Peremmälle_1|2.53|4.22|O que posso te servir?
+CLIP|Peremmälle_2|0.00|2.98|Olá, olá, entra aí!
+CLIP|Peremmälle_2|2.98|2.98|O que vai querer?
+CLIP|perusvittuilu|0.00|6.67|Ah, vai se foder, sério, porra, por que aquele idiota do caralho está se arrastando ali de novo,
+CLIP|perusvittuilu|6.67|2.96|por que ele não vai embora logo dali.
+CLIP|perusvittuilu|9.63|2.59|Isso não faz mais sentido nenhum, porra.
+CLIP|perusvittuilu|12.22|1.48|Dia arruinado, é isso.
+CLIP|peräjärvenkovajätkä|0.00|3.33|Ei, então esse é o tal durão de Peräjärvi?
+CLIP|peräjärvenkovajätkä|3.33|5.93|Ele sabe fazer alguma coisa mesmo ou veio andando com essa sucata pra encher o saco?
+CLIP|peräjärvenkovajätkä|9.26|2.96|Porra nenhuma, a gente já teve o bastante.
+CLIP|prklkohtavittulähtee|0.00|4.44|Puta que pariu, eu estou prestes a perder a porra do controle!
+CLIP|process01|0.00|2.40|Porra, está um frio do caralho nesse galpão,
+CLIP|process01|2.40|2.70|já que a gente não consegue aquecimento nenhum aqui.
+CLIP|process01|5.09|2.40|E ainda temos que manter aquela porta aberta.
+CLIP|process02|0.00|2.14|Porra, está um frio do caralho nesse galpão,
+CLIP|process02|2.14|2.41|já que a gente não consegue aquecimento nenhum aqui!
+CLIP|process03|0.00|2.68|Que porra de montanhas nevadas você andou visitando com isso?
+CLIP|process03|2.68|2.94|Daqui a pouco toda a neve cai em cima da gente!
+CLIP|process04|0.00|2.21|Tem algum tipo de vazamento aqui.
+CLIP|process05|0.00|4.16|Você não se importaria se eu esquentasse um pouco essas mãos dormentes no
+CLIP|process05|4.16|2.24|bloco do motor do seu carro, né?
+CLIP|process06|0.00|2.77|Ai meu Deus...
+CLIP|process06|2.77|0.92|Ah...
+CLIP|process06|3.70|1.85|Puta merda...
+CLIP|process06|5.55|0.92|Ali...
+CLIP|process07b|0.00|2.26|Quando você chegar em casa pode se aquecer.
+CLIP|process07b|2.26|4.24|A não ser que a esposa esteja em casa, aí vai estar frio lá também.
+CLIP|PSK|0.00|5.74|Porra, eu ainda fico com raiva quando penso naquele posto PSK,
+CLIP|PSK|5.74|3.65|como ele veio e tirou meu sustento.
+CLIP|PSK|9.40|10.44|Puta merda, as coisas estavam indo tão bem aqui na vila e aí vem uma empresa grande do caralho e
+CLIP|PSK|19.84|2.09|monta uma coisa dessas.
+CLIP|PSK|21.92|4.18|Como é que eu vou competir com isso?
+CLIP|PSK|26.10|9.40|Não, eu não tenho, eu não tenho recursos pra esses restaurantes à la carte e essas merdas todas.
+CLIP|PSK|35.50|7.31|Bom, até tenho um pouco, claro, mas é isso, eu simplesmente não dou conta.
+CLIP|PSK2|0.00|5.40|A gente tinha um clima muito bom do lado de Peräjärvi.
+CLIP|PSK2|5.40|7.86|Mas quando você cruza a estrada de Alavieska, aquilo ali é um esgoto, falando bem direto.
+CLIP|PSK2|13.26|0.98|PSK mesmo.
+CLIP|PSK2|14.25|6.39|A gente tinha algo tão bom aqui, mas aí veio e estragou tudo.
+CLIP|PSK3|0.00|8.31|Eu também fui dar uma olhada no posto PSK, e ele é realmente bem inútil.
+CLIP|PSK3|8.31|8.86|A gente não precisa dessas bugigangas aqui, já que temos tudo o que precisamos bem aqui.
+CLIP|PSK3|17.17|3.88|Mas aí eles vieram e bagunçaram tudo.
+CLIP|PSK4|0.00|10.03|Pode anotar o que eu digo: esse posto PSK que chegou aqui é definitivamente o começo do fim
+CLIP|PSK4|10.03|1.11|dessa vila.
+CLIP|PSK4|11.15|6.13|Ele vai murchar todos esses pequenos negócios que ainda temos aqui.
+CLIP|PSK4|17.28|10.59|Já não eram muitos pra começo de conversa, mas acho que em dez anos não vai sobrar nenhum como
+CLIP|PSK4|27.87|1.67|os de agora.
+CLIP|PSK4|29.54|8.92|O futuro também não parece bom pro Pup Napokki, já que praticamente não tem mais clientes.
+CLIP|PSK4|38.46|8.36|Eles preferem ir na hamburgueria e comer essas coisas tipo sopa de salmão e afins.
+CLIP|PSK4|46.82|6.13|Então não acho que vamos conseguir continuar por muito mais tempo.
+CLIP|PSK5|0.00|6.69|Bom, é bom que você tenha vindo aqui no Napu também, e não no posto PSK.
+CLIP|PSK5|6.69|4.18|Não vá lá, porque claro, você encontra gasolina e comida,
+CLIP|PSK5|10.88|4.60|mas não encontra comida pra alma como encontra aqui no Napu.
+CLIP|PSK5|15.48|3.35|Isso você não encontra lá, então lembre disso.
+CLIP|PSK6|0.00|10.74|Quando você vai olhar aquele PSK, é um lugar tão sem alma que não tem nada que valha a pena.
+CLIP|PSK6|10.74|6.44|Tem pratos, mesas limpas e todo tipo de banheiro e essas coisas.
+CLIP|PSK6|17.18|3.76|Não tem realmente nada de valor lá.
+CLIP|PSK6|20.94|6.98|As pessoas viviam com menos antes, mas agora isso veio e estragou tudo.
+CLIP|radiokovalla|0.00|3.52|Não aumenta esse barulho maldito!
+CLIP|radiokovalla|3.52|4.93|Ninguém aguenta ouvir esse tipo de porcaria!
+CLIP|random|0.00|8.18|Estou pensando em um novo slogan de propaganda para esse pub.
+CLIP|random|8.18|11.89|O que você acha disso: Se você não pegar o Pappo, então você pega o Pup.
+CLIP|random|20.07|0.74|nappo.
+CLIP|random|20.81|7.43|Jogue a ficha – se cair um, você ganha Pup.
+CLIP|random|28.24|0.74|nappo.
+CLIP|random|28.99|6.69|Se não cair um, você ganha um mesmo assim.
+CLIP|random|35.68|6.69|Não é tão bom, mas ainda é bem bom.
+CLIP|random1|0.00|2.96|Ei, chefe, ei, vem tomar uma cerveja, ei.
+CLIP|random1|2.96|3.33|Você tem algum tipo de cerveja aí pra oferecer?
+CLIP|random1|6.30|2.22|Eu tenho essa aqui, essa "Kurjala".
+CLIP|random2|0.00|7.53|Realmente está um clima de inverno bem fresco e mais uma vez temperaturas seriamente frias estão
+CLIP|random2|7.53|0.94|a caminho.
+CLIP|random2|8.47|4.71|Eu estava olhando, e como estão prevendo geadas bem fortes,
+CLIP|random2|13.18|4.24|provavelmente vou ter que ir logo aquecer a cabana.
+CLIP|random2|17.42|5.65|Isso é meu passatempo do dia a dia também, aquecer aquela cabana.
+CLIP|random2|23.06|8.00|Praticamente todo dia tenho que fazer isso, já que as vedações das janelas já estão tão ruins
+CLIP|random2|31.07|4.71|que deveriam ser trocadas também, mas isso também custa dinheiro.
+CLIP|random2|35.77|7.06|E com esse trabalho de "pub", a gente não tem realmente condições para grandes reformas.
+CLIP|random2|42.83|1.41|É assim mesmo.
+CLIP|random3|0.00|5.87|Nevou tanto de novo, mas felizmente as estradas são limpas surpreendentemente bem,
+CLIP|random3|5.87|5.38|então parece que elas sempre já estão prontas quando eu saio.
+CLIP|random3|11.26|5.87|É definitivamente algo para se agradecer, que logo isso acaba aqui também,
+CLIP|random3|17.13|4.41|assim não preciso andar na neve até as axilas.
+CLIP|random4|0.00|4.72|Ah poxa, não consegui manter a loja do Teimo afinal.
+CLIP|random4|4.72|6.61|É realmente uma pena, mas não tinha como eu ter dado conta daqui antes.
+CLIP|random4|11.33|7.56|A concorrência é montada de um jeito que alguém pequeno como eu não teria chance alguma.
+CLIP|random4|18.89|5.67|Mas pelo menos agora eu tenho algum tipo de atividade como hobby.
+CLIP|random5|0.00|6.31|É realmente uma pena, já que eu tinha tantos bons planos para aquela loja,
+CLIP|random5|6.31|2.25|mas não tinha como continuar.
+CLIP|random5|8.56|4.51|Então é triste que esses planos não vão ser realizados.
+CLIP|random5|13.07|7.66|Mas pelo menos agora eu tenho esse projeto paralelo, então não é como se eu fosse ficar
+CLIP|random5|20.73|1.80|completamente de mãos vazias.
+CLIP|Rapula-Noise03|0.00|2.14|Obrigado por assistir!
+CLIP|roskat|0.00|3.13|Então você vai lá e pega todo esse lixo do chão!
+CLIP|sadattelua|0.00|4.53|Porra, tinha mesmo que ser hoje, porra!
+CLIP|sadattelua2|0.00|7.00|Ah porra, ah porra, agora, agora está, porra, agora está tão perto, ah porra.
+CLIP|sadattelua2|7.00|1.00|Não porra.
+CLIP|sadattelua2|8.00|1.50|É isso, não…
+CLIP|sadattelua2|9.50|6.50|Não dá, porra, faz direito pelo menos uma vez, porra, vamos lá, porra.
+CLIP|sadattelua3|0.00|6.01|Porra, porra, se eu tivesse uma arma agora, porra isso já teria acabado,
+CLIP|sadattelua3|6.01|0.46|satanas!
+CLIP|sadattelua3|6.47|0.46|Porra!
+CLIP|sakko 001c|0.00|0.84|Oi, parabéns!
+CLIP|sakko 001c|0.84|4.18|Você ganhou dinheiro, prêmios ou uma viagem para o Linnanmäki,
+CLIP|sakko 001c|5.02|2.93|e ainda pode escolher por conta própria!
+CLIP|sakko 002e|0.00|7.02|Bom, é bom que a maçã não caia longe da árvore e que você continue a tradição da família.
+CLIP|sakko 002e|7.02|5.18|Só é uma pena que essa maçã tenha caído pelo camburão direto na fossa.
+CLIP|sakko 002e|12.20|2.59|E aqui está o papel para provar.
+CLIP|sakko 003a|0.00|6.46|Parece que a multa vai ser tão grande que talvez seja melhor você ligar pra sua mãe e perguntar
+CLIP|sakko 003a|6.46|2.72|se pode pegar um dinheiro da carteira dela.
+CLIP|sakko 003a|9.18|4.42|Acho que as moedas do seu cofrinho não vão ser suficientes dessa vez.
+CLIP|sakko 004a|0.00|7.74|Bom, deu pra perceber por esses olhos avermelhados e essa pele toda detonada que hoje seria meu
+CLIP|sakko 004a|7.74|1.37|dia de sorte.
+CLIP|sakko 004a|9.11|0.91|Aqui está.
+CLIP|sakko 004a|10.02|1.37|Seja bem-vindo novamente.
+CLIP|sakko 005b|0.00|4.00|Normalmente eu já pegaria sua carteira de motorista por essas infrações,
+CLIP|sakko 005b|4.00|5.09|mas como meu bolso de trás já está cheio de carteiras que eu peguei,
+CLIP|sakko 005b|9.10|2.55|vou escrever uma multa em vez disso.
+CLIP|sakko 005b|11.64|0.73|Aqui está.
+CLIP|satasen_pudotus|0.00|2.11|Bom, é, posso baixar cem agora.
+CLIP|shitwell01_call|0.00|4.89|Nossa fossa está completamente cheia de novo.
+CLIP|shitwell01_call|4.89|2.09|Venha esvaziar imediatamente.
+CLIP|shitwell01_thanks|0.00|3.13|Certo, parece que agora está pronto.
+CLIP|shitwell01_thanks|3.13|2.09|Aqui, pegue o dinheiro.
+CLIP|shitwell02_call|0.00|3.04|Ola, como posso dizer.
+CLIP|shitwell02_call|3.04|12.94|Eu não diria isso aqui agora, mas nosso poço de lixo está cheio até a borda, que…
+CLIP|shitwell02_call|15.98|5.33|…uma merda espalhada por todo lado, que…
+CLIP|shitwell02_call|21.31|8.37|…alguém viesse arrumar isso, para que possamos continuar com nossas vidas.
+CLIP|shitwell02_call|29.68|1.52|Muito obrigado.
+CLIP|shitwell02_thanks|0.00|1.52|Bom, hm...
+CLIP|shitwell02_thanks|1.52|3.80|Muito obrigado por cuidar disso.
+CLIP|shitwell02_thanks|5.32|12.17|Pegue o dinheiro, e vamos seguir com nossas vidas daqui, cada um para o seu caminho.
+CLIP|shitwell02_thanks|17.49|0.76|Obrigado.
+CLIP|shitwell03_call|0.00|3.89|Então, nossa fossa está completamente cheia.
+CLIP|shitwell03_call|3.89|2.60|Você poderia vir limpar?
+CLIP|shitwell03_call|6.49|6.49|Então, se você pudesse vir, eu pagaria algo por isso.
+CLIP|shitwell03_call|12.98|0.65|Tchau!
+CLIP|shitwell03_thanks|0.00|4.74|Muito obrigado mesmo por tirar um tempo para fazer esse trabalho.
+CLIP|shitwell03_thanks|4.74|1.29|Estou realmente satisfeito.
+CLIP|shitwell03_thanks|6.03|2.58|Aqui está, aqui está o dinheiro.
+CLIP|shitwell03_thanks|8.61|0.43|Tchau!
+CLIP|shitwell04_call|0.00|3.07|Oi, aqui é o Samppa.
+CLIP|shitwell04_call|3.07|6.76|O pai mandou eu ligar e perguntar se você poderia vir.
+CLIP|shitwell04_call|9.83|7.37|Nossa fossa, a fossa sujo, está completamente cheio e precisa ser limpo.
+CLIP|shitwell04_call|17.20|1.84|Você poderia vir?
+CLIP|shitwell04_call|19.04|9.83|O pai não tem tempo de te ligar agora porque está no meio de uma bebedeira.
+CLIP|shitwell04_call|28.87|7.99|Ele conseguiu me dizer pra te ligar e ver se você poderia vir.
+CLIP|shitwell04_call|36.86|3.07|Você poderia vir, por favor?
+CLIP|shitwell04_call|39.93|1.84|Obrigado se puder.
+CLIP|shitwell04_call|41.77|1.23|Tchau tchau!
+CLIP|shitwell04_call_2|0.00|8.34|Olá, eu estava me perguntando se você teria um tempo para vir esvaziar aquela fossa,
+CLIP|shitwell04_call_2|8.34|6.12|eu não consigo dar conta sozinho e provavelmente nem saberia como.
+CLIP|shitwell04_call_2|14.46|6.67|Se você pudesse vir, eu te pago por isso, o que acha?
+CLIP|shitwell04_thanks|0.00|4.88|Você fez um trabalho muito bom nisso, estou realmente satisfeito.
+CLIP|shitwell04_thanks|4.88|5.37|Eu não teria conseguido fazer sozinho, pelo menos não tão rápido.
+CLIP|shitwell04_thanks|10.26|3.91|Então, obrigado, aqui está um dinheiro, tome, tchau.
+CLIP|shitwell05_call|0.00|9.05|Olá, olá, nossa fossa parece ter enchido de resíduos de novo, então você poderia vir esvaziar?
+CLIP|shitwell05_call|9.05|3.39|Eu pago, eu pago com certeza.
+CLIP|shitwell05_call|12.45|3.96|Obrigado, se você puder vim logo, obrigado.
+CLIP|shitwell05_thanks|0.00|4.51|Obrigado, a fossa parece completamente vazia, então esta aqui o pagamento.
+CLIP|shitwell05_thanks|4.51|1.23|Obrigado, esta bem.
+CLIP|shitwell05_thanks|5.75|1.23|Aqui está, obrigado.
+CLIP|shitwell06_call|0.00|8.48|Olá, hm, acho que essa fossa está completamente cheia.
+CLIP|shitwell06_call|8.48|5.66|Precisa ser esvaziada, essa área aqui.
+CLIP|shitwell06_call|14.14|9.43|Então, você poderia esvaziar tudo completamente e limpar essa sujeira?
+CLIP|shitwell06_call|23.56|6.60|Obrigado, só se puder, isso é tudo.
+CLIP|shitwell06_call|30.16|1.89|Tchau tchau.
+CLIP|shitwell06_thanks|0.00|6.53|Muito obrigado mesmo por isso, por você ter vindo até aqui, por ter se disposto,
+CLIP|shitwell06_thanks|6.53|2.61|por ter tido paciência muito obrigado.
+CLIP|sisustus|0.00|4.56|O que posso dizer sobre esse interior que eu fiz aqui.
+CLIP|sisustus|4.56|3.32|Não é algo e tanto, bem vivo, sabe…
+CLIP|sisustus|7.88|6.64|Com certeza você não vai encontrar um visual desses em nenhum posto PSK, isso é certo.
+CLIP|sormi|0.00|3.26|Enfia esse dedo bem fundo no seu cu.
+CLIP|success01|0.00|4.32|Eu não teria acreditado, mas milagres realmente acontecem.
+CLIP|success02|0.00|2.60|Mais uma nova fêmea de tetraz entre as outras.
+CLIP|success03|0.00|2.17|Carro fora e na estrada!
+CLIP|success04|0.00|2.03|Quilômetros seguros.
+CLIP|sulkemisaika|0.00|2.86|Agora é o seu horário de leitura.
+CLIP|sulkemisaika|2.86|1.63|Seja bem-vindo novamente amanhã.
+CLIP|SurvonJonku|0.00|2.61|Empacota, empacota, essa merda do caralho!
+CLIP|SurvonJonku|2.61|3.48|Todo santo dia essas porras maravilhosas de caixas!
+CLIP|SurvonJonku|6.08|3.04|Porra, estou quase enfiando alguma coisa aqui!
+CLIP|syötäntonsormes|0.00|6.30|Vem aqui e me mostra esse dedo do caralho, e eu juro que vou fazer você comer
+CLIP|syötäntonsormes|6.30|0.37|ele!
+CLIP|taaskototapaskaajuot|0.00|4.07|Porra, ele está me fazendo beber essa merda maldita de novo.
+CLIP|taaskototapaskaajuot|4.07|2.96|Teimo, há quanto tempo você vende essa porcaria?
+CLIP|taaskototapaskaajuot|7.04|5.56|Você devia mesmo perguntar pro Teimo que diabos está acontecendo com toda essa porcaria barata
+CLIP|taaskototapaskaajuot|12.59|0.74|da loja.
+CLIP|taaskototapaskaajuot|13.33|1.85|Nada disso faz sentido nenhum.
+CLIP|taaskototapaskaajuot|15.19|2.96|Ei, pega uma Kurjala e cai fora, sério.
+CLIP|taxijob_call1|0.00|3.72|No ponto de táxi, raramente.
+CLIP|taxijob_call1|3.72|1.49|Alô, alô.
+CLIP|taxijob_call1|5.21|5.21|É, agora teria tanta coisa pra fazer.
+CLIP|taxijob_call1|10.42|8.19|Então, podemos fazer assim: vamos nos encontrar no pátio da fábrica.
+CLIP|taxijob_call1|18.61|0.74|Então...
+CLIP|taxijob_call1|19.35|10.42|vamos fazer assim: no próximo dia de limpeza, ao meio-dia, no pátio da fábrica.
+CLIP|taxijob_call1|29.77|9.68|Eu vou até lá com o carro para apresentar esse pedido especial meu,
+CLIP|taxijob_call1|39.45|6.70|e aí vamos olhar os detalhes mais de perto.
+CLIP|taxijob_call1|46.15|8.19|Então, meio-dia no pátio da fábrica no próximo dia de limpeza.
+CLIP|taxijob_call1|54.34|0.74|Certo?
+CLIP|taxijob_call1|55.08|0.74|Ok.
+CLIP|taxijob_call1|55.82|2.23|Sim, tchau tchau!
+CLIP|taxijob_call2|0.00|3.00|Bom, é bem raro ele ligar.
+CLIP|taxijob_call2|3.00|5.99|Eu acabei de verificar aqui e não há nenhum sinal de urgência.
+CLIP|taxijob_call2|8.99|4.99|É que não é um acidente, ou não há motivo.
+CLIP|taxijob_call2|13.98|3.50|simplesmente não parece necessário ou divertido dirigir?
+CLIP|taxijob_call2|17.48|6.49|Eu diria, olha ali para esses carros; se ninguém mais tem urgência alguma,
+CLIP|taxijob_call2|23.97|3.99|então eu vou aí e levo seu carro.
+CLIP|taxijob_call2|27.96|6.49|Então, se você começar a sentir alguma urgência, tente dirigir um pouco mais,
+CLIP|taxijob_call2|34.46|4.49|mas você não pode simplesmente deixar o carro aqui.
+CLIP|taxijob_call2|38.95|2.00|Vamos fazer assim, certo?
+CLIP|taxijob_call2|40.95|1.00|Ok, tchau.
+CLIP|taxijob_call3|0.00|2.11|Bom, não adiantou nada, não.
+CLIP|taxijob_call3|2.11|4.64|Eu busquei o carro, busquei porque não foi feito nada nele.
+CLIP|taxijob_call3|6.75|2.95|Procurei outro pneu e ele podia dirigir.
+CLIP|taxijob_call3|9.70|8.43|Mas claro que nada dá certo, o carro só fica parado ali num pátio vazio e não dá pra dirigir.
+CLIP|taxijob_call3|18.13|5.90|Então, tudo de bom pra você e a gente volta a isso mais tarde.
+CLIP|taxijob_call3|24.03|1.26|Ok, tchau tchau!
+CLIP|taxitutorial01|0.00|4.20|Boa tarde!
+CLIP|taxitutorial02|0.00|3.52|Vamos passar pelas funcionalidades do taxímetro.
+CLIP|taxitutorial03|0.00|8.14|Quando ele está desligado, você não está em serviço e não receberá chamadas.
+CLIP|taxitutorial04|0.00|14.07|A primeira posição, a do menos, significa que você está em serviço e agora pode receber
+CLIP|taxitutorial04|14.07|0.88|chamadas.
+CLIP|taxitutorial05|0.00|14.25|Esse modo também redefine o taxímetro, então não o utilize durante uma corrida em andamento.
+CLIP|taxitutorial06|0.00|8.22|O modo 1 é a tarifa básica para dias úteis durante o período diurno.
+CLIP|taxitutorial07|0.00|6.88|O modo 2 é a tarifa básica para o período das 18 às 06 horas e para todo o fim
+CLIP|taxitutorial07|6.88|0.69|de semana.
+CLIP|taxitutorial08|0.00|9.80|O modo A mostra o total de quilômetros percorridos com o taxímetro ligado.
+CLIP|taxitutorial09|0.00|16.26|O modo B mostra sua renda bruta, que será reiniciada quando o salário for pago.
+CLIP|taxitutorial10|0.00|11.54|Este último modo é divertido, você pode gerar aleatoriamente uma linha de loteria!
+CLIP|taxitutorial11|0.00|7.20|Agora vamos ver como funciona a rotina básica do taxímetro com um passageiro.
+CLIP|taxitutorial12|0.00|5.87|Digamos que vamos usar a tarifa básica normal agora.
+CLIP|taxitutorial12|5.87|3.26|Viu a luz vermelha acesa?
+CLIP|taxitutorial13|0.00|11.28|Isso significa que a luz do táxi no teto está acesa e o taxímetro está aguardando uma corrida.
+CLIP|taxitutorial14|0.00|4.89|Você recebe uma chamada e o cliente solicita o carro para um local.
+CLIP|taxitutorial15|0.00|9.28|Agora você pode apertar o botão, a luz se apaga e o taxímetro é ativado.
+CLIP|taxitutorial15|9.28|3.71|É hora de começar a dirigir!
+CLIP|taxitutorial16|0.00|9.94|Existem duas tarifas diferentes: uma para o carro parado e aguardando,
+CLIP|taxitutorial16|9.94|6.33|e outra para quando está em movimento.
+CLIP|taxitutorial17|0.00|5.86|O taxímetro também pode ser pausado a qualquer momento, assim.
+CLIP|taxitutorial18|0.00|1.94|E ligado novamente.
+CLIP|taxitutorial19|0.00|6.89|Quando a corrida termina e o cliente chega ao destino,
+CLIP|taxitutorial19|6.89|5.51|basta apertar o botão para parar o taxímetro.
+CLIP|taxitutorial20|0.00|4.93|Agora é hora de receber o pagamento.
+CLIP|taxitutorial20|4.93|9.86|Com o taxímetro desligado, você transfere o valor total para o terminal de pagamento.
+CLIP|taxitutorial21|0.00|1.31|Assim.
+CLIP|taxitutorial22|0.00|4.74|E agora você só pega o dinheiro do cliente e imprime o recibo.
+CLIP|taxitutorial22|4.74|0.36|Assim.
+CLIP|taxitutorial22|5.10|5.83|Nem todo mundo quer recibo, mas mesmo assim, para garantir que o cliente queira um recibo,
+CLIP|taxitutorial22|10.93|1.82|sempre vale a pena imprimir.
+CLIP|taxitutorial23|0.00|2.87|É isso!
+CLIP|taxitutorial23|2.87|14.36|Lembre-se de que os recibos e a renda precisam coincidir,
+CLIP|taxitutorial23|17.23|12.92|caso contrário terei que descontar do pagamento do salário.
+CLIP|taxitutorial24|0.00|6.03|Então é isso, agora vamos fazer assim, zerar o taxímetro e esperar o próximo
+CLIP|taxitutorial24|6.03|0.43|cliente.
+CLIP|taxitutorial24|6.46|0.43|Assim.
+CLIP|taxitutorial25|0.00|12.97|Seu salário consiste em 40% da renda total somada ao adicional por quilômetro.
+CLIP|taxitutorial26|0.00|9.07|O adicional é de 3,70 MK por quilômetro.
+CLIP|taxitutorial27|0.00|11.28|Além disso, eu acompanho as leituras do hodômetro.
+CLIP|taxitutorial27|11.28|19.74|Você pode dirigir quilômetros fora de serviço até 90% da distância percorrida em serviço.
+CLIP|taxitutorial28|0.00|22.81|Se isso não for cumprido, terei que retirar o adicional do próximo salário.
+CLIP|taxitutorial29|0.00|5.74|E se você quiser usar o telefone do carro, então pode usá-lo para fazer ligações,
+CLIP|taxitutorial29|5.74|6.51|mas o problema é que eu vou descontar todos esses custos de telefone direto do seu salário.
+CLIP|taxitutorial29|12.26|5.74|Então, a menos que você realmente precise fazer uma ligação, não vale a pena ligar.
+CLIP|taxitutorial30|0.00|4.26|Você tem algum pergunta para fazer agora, depois de ter passado por tudo isso?
+CLIP|taxitutorial31|0.00|6.52|É, eu estava meio que pensando a mesma coisa, que há uma explicação tão detalhada para esse
+CLIP|taxitutorial31|6.52|0.77|serviço também.
+CLIP|taxitutorial31|7.29|2.30|Nada ficou realmente na minha cabeça.
+CLIP|taxitutorial31|9.59|3.84|Esse carro é realmente muito bom, eu gosto demais dele.
+CLIP|taxitutorial31|13.43|3.84|Tem 500.000 quilômetros no hodômetro, embora você nem pensasse isso.
+CLIP|taxitutorial31|17.26|1.92|Ele realmente serviu muito bem.
+CLIP|taxitutorial32|0.00|9.12|Mas se não houver mais nada, então dirija por perto e divirta-se trabalhando com o carro.
+CLIP|taxitutorial32|9.12|7.98|Lembre-se de ser gentil com o cliente e educado, e de se comportar bem.
+CLIP|taxitutorial32|17.10|6.27|Cuide bem das bolsas e malas, e então não haverá problemas.
+CLIP|taxitutorial32|23.37|9.12|Pegue a rota mais curta ou mais rápida, para que o cliente não tenha nenhum problema.
+CLIP|taxitutorial32|32.48|1.14|É isso.
+CLIP|taxitutorial32|33.62|1.14|Ok, tchau!
+CLIP|taxitutorial32|34.76|1.71|Estou indo agora.
+CLIP|taxitutorial32|36.47|0.57|Tchau!
+CLIP|tervehdys|0.00|4.38|Bom, olá, cuecas, e calças na máquina!
+CLIP|tervehdys2|0.00|3.21|Bom, olá pra você também!
+CLIP|tervehdys3|0.00|7.25|Bom, olá aí, você veio aqui tomar umas cervejas ou o quê, qual é?
+CLIP|tervehdys4|0.00|3.34|Bom, boa noite, o que posso te servir?
+CLIP|tervehdys5|0.00|1.60|Bom, olá aí!
+CLIP|tervehdys5|1.60|4.79|Você também veio aqui em vez daquele Posto PSK.
+CLIP|tervehdys5|6.38|2.13|Esse é o espírito!
+CLIP|tervehdys6|0.00|3.15|Bem-vindo, filhote!
+CLIP|Tervetuloa_uudestaan_1|0.00|3.52|Obrigado e seja bem-vindo novamente!
+CLIP|Tervetuloa_uudestaan_2|0.00|3.18|Obrigado e seja bem-vindo novamente!
+CLIP|thanks|0.00|2.05|E obrigado pelo pagamento!
+CLIP|thanks01|0.00|3.34|Caralho, eu não ria assim há séculos.
+CLIP|thanks01|3.34|6.69|Jesus, você foi lá e despejou 10.000 litros de merda no escritório do Lindel.
+CLIP|thanks01|10.03|4.30|Porra, aquele cara recebeu exatamente o que vinha procurando.
+CLIP|thanks01|14.33|2.39|Do nariz e do rabo.
+CLIP|thanks01|16.72|1.43|Todos esses anos.
+CLIP|thanks01|18.15|6.21|Ei, eu estou tentando aprovar aquele carro pro Leima há uns dois anos,
+CLIP|thanks01|24.36|2.87|mas nunca tá bom o suficiente.
+CLIP|thanks01|27.23|3.82|Inveja, é isso que é, porra, pura inveja!
+CLIP|thanks02|0.00|3.04|Meu Deus, eu ouvi o que você fez.
+CLIP|thanks02|3.04|4.93|Tem dez garrafas de vodka pura ali, isso é simplesmente o melhor, cara.
+CLIP|thanks02|7.97|5.69|Eu nunca teria acreditado que você teria coragem de mandar uma dessas, tão foda assim.
+CLIP|thanks02|13.66|2.66|Porra, o velho tá se sentindo ótimo.
+CLIP|thanks03|0.00|6.29|Essas dez garrafas de vodka não são nada comparadas ao que você fez, eu acho isso incrível,
+CLIP|thanks03|6.29|1.85|quando eu ouvi falar disso.
+CLIP|thanks03|8.15|0.74|Meu Deus!
+CLIP|thanks03|8.89|4.07|Eu quase devia ter ido ver e tirado uma foto, caralho!
+CLIP|tilaus_kännissä|0.00|5.11|Quanto dessa bebida de país de baixo você realmente bebe?
+CLIP|tilaus_kännissä2|0.00|4.06|Será que você não devia parar enquanto ainda consegue ficar em pe?
+CLIP|tilaus_kännissä3|0.00|4.44|Olha só, garoto, isso realmente é um poço sem fundo.
+CLIP|tilaus_kännissä4|0.00|2.59|Bom, vamos deixar a vida um pouco bagunçada.
+CLIP|tilaus_kännissä5|0.00|5.89|Pra um cara tão jovem, você realmente tem a pegada de um homem pra beber
+CLIP|tilaus_kännissä5|5.89|0.39|cerveja.
+CLIP|tilaus_kännissä6|0.00|4.55|Na minha opinião, até agora não houve nenhum resultado no que você está
+CLIP|tilaus_kännissä6|4.55|0.35|fazendo.
+CLIP|tilaus_kännissä7|0.00|4.58|Esse provavelmente vai ser a última pra você também, né?
+CLIP|tilaus_kännissä8|0.00|3.41|Ah, então você também está esperando por uma terceira
+CLIP|tilaus_kännissä8|3.41|0.38|perna.
+CLIP|tilaus_kännissä9|0.00|5.06|De jeito nenhum eu vou me envolver em algum crime se eu te der isso.
+CLIP|Tilaus_pöytään_1|0.00|0.47|Obrigado!
+CLIP|Tilaus_pöytään_1|0.47|3.75|A comida será servida na mesa em breve!
+CLIP|Tilaus_pöytään_2|0.00|0.43|Obrigado!
+CLIP|Tilaus_pöytään_2|0.43|2.13|Vai ser só um momento.
+CLIP|Tilaus_pöytään_2|2.56|3.84|O atendente vai levar até a mesa em breve.
+CLIP|Tilaus_pöytään_3|0.00|0.58|Obrigado!
+CLIP|Tilaus_pöytään_3|0.58|5.80|Por favor, sente-se e leve algumas bebidas para a mesa!
+CLIP|Tilaus_pöytään_4|0.00|0.41|Obrigado!
+CLIP|Tilaus_pöytään_4|0.41|3.67|O atendente vai levar até a mesa em breve!
+CLIP|tupakille|0.00|7.28|Talvez eu devesse ir pegar um pouco de ar com uma caminhada e um cigarro,
+CLIP|tupakille|7.28|3.88|pra ver se meu estado melhora um pouco.
+CLIP|tupakille2|0.00|5.37|Acho que é preciso fazer uma pausa de vez em quando pra ter energia pra
+CLIP|tupakille2|5.37|0.36|continuar.
+CLIP|tupakille3|0.00|5.94|Então, vou dar uma olhada pra ver se o sol ainda está brilhando por aqui.
+CLIP|tupakka|0.00|2.46|Me passa esse cigarro agora mesmo!
+CLIP|tuustännenäyttelee|0.00|2.59|Mas que porra é essa, sério, hein?
+CLIP|tuustännenäyttelee|2.59|6.30|Vem a porra aqui e mostra esse dedo maldito seu, caralho, se você tem algo a dizer,
+CLIP|tuustännenäyttelee|8.89|1.48|seu pau no cu.
+CLIP|ulosheitto|0.00|2.93|Pronto, aqui é a sua parada.
+CLIP|ulosheitto|2.93|0.98|Pode descer.
+CLIP|valomerkki|0.00|2.57|É hora do último pedido, então.
+CLIP|varasto|0.00|3.52|Bom, eu só vou dizer que a…
+CLIP|varasto|3.52|9.06|empresa de telefone, ou seja lá o que for, é bom que tenha vindo aqui pra nossa vila.
+CLIP|varasto|12.59|7.05|Esse trabalho é realmente ideal, eu ouvi um pouco quando eles estavam embalando aqueles
+CLIP|varasto|19.64|1.01|carregadores ali.
+CLIP|varasto|20.64|7.55|Esse é exatamente o tipo de trabalho adequado que essa vila logo vai poder fazer.
+CLIP|Vege_ehdotus|0.00|1.56|Olá, olá!
+CLIP|Vege_ehdotus|1.56|4.67|Você gostaria de um teriyaki vegano?
+CLIP|vessa|0.00|5.41|Porra, minha barriga está roncando de novo, eu realmente estou me sentindo
+CLIP|vessa|5.41|0.90|péssimo agora.
+CLIP|vessa2|0.00|2.90|Bom, eu tenho que ir de novo.
+CLIP|vessa3|0.00|3.98|Você não pode, tomara que o banheiro esteja livre.
+CLIP|vessa4|0.00|5.13|Acho que eu deveria ir aliviar esse peso um pouco de novo.
+CLIP|vitsi|0.00|2.12|Eu tenho uma piada.
+CLIP|vitsi|2.12|2.12|Você já ouviu essa?
+CLIP|vitsi|4.23|6.35|O Timo de Koivunselkä foi para a Itália fazer potros do interior.
+CLIP|vitsi|10.58|4.23|O nome do personagem era Pesto Bachelor Boy.
+CLIP|vitsi|14.81|2.64|Heh heh heh heh heh.
+CLIP|vitsi|17.45|1.59|Pesto Bachelor Boy.
+CLIP|vitsi|19.04|1.59|Heh heh heh.
+CLIP|vitsi2|0.00|4.68|Eu tenho uma piada pra você.
+CLIP|vitsi2|4.68|8.58|Você sabia que aquelas prostitutas ganham a vida com a bunda.
+CLIP|vittuukshuidot|0.00|3.70|Por que caralho você está balançando esse punho maldito aí?
+CLIP|vittuukshuidot|3.70|7.04|Porra, logo você vai levar um soco, e vai ser tão forte que você vai sair voando de verdade,
+CLIP|vittuukshuidot|10.74|2.59|como uma lança de amieiro do caralho.
+CLIP|vitunvittu|0.00|3.52|Ah porra, porra, porra, porra, porra, porra, porra, porra, porra!
+CLIP|vitunvittu|3.52|1.76|Ah porra, porra, porra, porra!
+CLIP|vitunvittu|5.28|0.35|Porra!
+CLIP|vitunvittu|5.63|0.70|Porra, porra!
+CLIP|vitunvittu|6.34|0.35|Pooorra!
+CLIP|vitunvittu|6.69|1.76|Ah porra, porra, porra, porra!
+CLIP|vitunvittu|8.45|0.35|Porra!
+CLIP|vitunvittu|8.80|0.70|Porra, porra!
+CLIP|vitunvittu|9.50|0.35|Pooorra!
+CLIP|welcome01|0.00|4.70|Olá, olá e bem-vindo à inspeção Nolla!
+CLIP|welcome02|0.00|2.89|Ahem, ahem, ahem, esta é a inspeção.
+CLIP|welcome02|2.89|1.65|Bom dia, bom dia.
+CLIP|welcome03|0.00|0.77|Inspeção zero.
+CLIP|welcome03|0.77|1.53|Bom dia, bom dia.
+CLIP|welcome04|0.00|3.98|Bom dia, bom dia, e bem-vindo à inspeção Nolla!
+CLIP|welcome05|0.00|3.57|Olá, olá e bem-vindo à inspeção Nolla!
+CLIP|welcome06|0.00|1.08|Inspeção zero.
+CLIP|welcome06|1.08|1.08|Bom dia.
+CLIP|welcome07|0.00|2.90|Vistoria zero, bom dia.
+CLIP|wrong number 001|0.00|0.60|Andero, Andero!
+CLIP|wrong number 001|0.60|1.81|Andero, eu tenho um jogo novo!
+CLIP|wrong number 001|2.41|2.41|Você não é o Andero, cai fora, porra!
+CLIP|älänotku|0.00|1.94|Agora não fique aí se balançando!
+CLIP|älänotku|1.94|5.17|Não tem nada de errado com a mesa, é só a sua cabeça que está torta!
